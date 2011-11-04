@@ -1,0 +1,44 @@
+#python module
+import os
+
+#Help for scons file
+Help("""
+mklepton construction file
+clean, compile then install mklepton
+scons -c; scons -Q install
+you must use mklepton_gnu.sh in tauon/tools/bin
+""")
+
+#directory
+base_dir = os.getenv('HOME') + '/tauon/'
+lib_kernel_dir = base_dir + 'sys/root/prj/scons/arch/synthetic/x86_static/bin'
+src_dir = base_dir + 'tools/mklepton/src/'
+bin_install_dir = base_dir + 'tools/bin/'
+
+#what compiler to use
+tuple_uname = os.uname()
+arch = tuple_uname[len(tuple_uname)-1]
+
+if arch.find('64') > 0:
+	mklepton_env = Environment(ENV = os.environ, CC='i386-lenny-gcc')
+else:
+	mklepton_env = Environment(ENV = os.environ)
+
+#add CFLAGS options
+mklepton_env.Append(CCFLAGS = '-g -O0 -Wall -gdwarf-2 -g3')
+
+#add LDFLAGS options
+mklepton_env.Append(LINKFLAGS = '-lexpat -L' + lib_kernel_dir + ' -lkernel -Wl,-rpath,' + lib_kernel_dir)
+
+#Make object file
+mklepton_src = src_dir + 'mklepton.c'
+mklepton_obj = mklepton_src.replace('.c','.o')
+mklepton_obj_node = mklepton_env.Object(mklepton_obj,mklepton_src)
+
+#And program
+mklepton_bin = mklepton_env.Program('mklepton_gnu', mklepton_obj_node)
+
+#We install program is right place
+mklepton_env.Install(bin_install_dir, mklepton_bin)
+mklepton_env.Alias('install', bin_install_dir)
+

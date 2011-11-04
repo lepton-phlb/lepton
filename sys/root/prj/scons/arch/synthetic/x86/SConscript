@@ -1,0 +1,81 @@
+#python module
+import os
+from tauon import *
+
+#We need common file
+#directories
+synth_x86_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
+synth_x86_prj_dir = synth_x86_base_dir + 'prj/scons/'
+
+#import common scons script
+SConscript([synth_x86_prj_dir + 'common/SConscript'])
+
+#import common src list files
+Import('common_tauon_src_list')
+
+#directories of source file
+tauon_src_dir = synth_x86_base_dir + 'src/'
+tauon_kernel_dir = tauon_src_dir + 'kernel/'
+tauon_kernel_arch_dir = tauon_kernel_dir + 'core/arch/synthetic/x86/'
+tauon_kernel_dev_dir = tauon_kernel_dir + 'dev/'
+tauon_kernel_dev_gnu32_dir = tauon_kernel_dev_dir + 'arch/gnu32/'
+tauon_kernel_fat = tauon_kernel_dir + 'fs/fat/'
+tauon_sbin_dir = tauon_src_dir + 'sbin/'
+
+#get previous files
+tauon_kernel_src_list = common_tauon_src_list
+
+#sbin special case for init
+tauon_kernel_src_list.extend([TauonSource(tauon_sbin_dir+'initd.c', '-O0', '-DUSE_NANOX')])
+
+#arch config files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_arch_dir+'dev_mkconf.c'),
+TauonSource(tauon_kernel_arch_dir+'bin_mkconf.c'),
+TauonSource(tauon_kernel_arch_dir+'dev_dskimg.c')
+])
+
+#pseudo device files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_dir+'dev_fb/dev_fb.c'),
+TauonSource(tauon_kernel_dev_dir+'dev_tty/dev_tty.c'),
+TauonSource(tauon_kernel_dev_dir+'dev_tty/tty_font-8x16.c')
+])
+
+#device files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_gnu32_dir+'common/dev_linux_virtual_cpu.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_fileflash/dev_linux_fileflash.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_filerom/dev_linux_filerom.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_rtc/dev_linux_rtc.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_serial_0/dev_linux_serial_0.c'), 
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_serial_1/dev_linux_serial_1.c'), 
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_serial_pt/dev_linux_serial_pt.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_eth/dev_linux_eth.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_screen/dev_linux_screen.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_screen/_screen_linux.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_kb/dev_linux_kb.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_sdcard/dev_linux_sdcard.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_flash/dev_linux_flash.c'),
+TauonSource(tauon_kernel_dev_gnu32_dir+'dev_linux_leds/dev_linux_leds.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/flash/flash.c')
+])
+
+#fat files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_fat+'fat16.c'),
+TauonSource(tauon_kernel_fat+'fatcore.c'),
+TauonSource(tauon_kernel_fat+'fat16_msdos.c'),
+TauonSource(tauon_kernel_fat+'fatcore_msdos.c'),
+TauonSource(tauon_kernel_fat+'fat16_vfat.c'),
+TauonSource(tauon_kernel_fat+'fatcore_vfat.c')
+])
+
+#directory to store lib
+tauon_ecos_lib_dir = synth_x86_base_dir + 'lib/arch/synthetic/x86/'
+tauon_ecos_install_dir = tauon_ecos_lib_dir + 'install/'
+
+tauon_kernel_lib_dir = tauon_ecos_lib_dir + 'bin/'
+tauon_kernel_obj_dir = synth_x86_prj_dir + 'arch/synthetic/x86/obj/'
+
+#export source files
+Export('tauon_kernel_src_list')
+Export('tauon_kernel_lib_dir')
+Export('tauon_kernel_obj_dir')
+Export('tauon_ecos_install_dir')

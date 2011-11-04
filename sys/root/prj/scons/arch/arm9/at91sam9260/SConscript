@@ -1,0 +1,62 @@
+#python module
+import os
+
+#We need common file
+#directories
+at91sam9260_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
+at91sam9260_prj_dir = at91sam9260_base_dir + 'prj/scons/'
+
+#import common scons script
+SConscript([at91sam9260_prj_dir + 'common/SConscript'])
+
+#import common src list files
+Import('common_tauon_src_list')
+
+#directories of source file
+tauon_src_dir = at91sam9260_base_dir + 'src/'
+tauon_kernel_dir = tauon_src_dir + 'kernel/'
+tauon_kernel_arch_dir = tauon_kernel_dir + 'core/arch/arm/'
+tauon_kernel_dev_dir = tauon_kernel_dir + 'dev/'
+tauon_kernel_dev_at91sam9260_dir = tauon_kernel_dev_dir + 'arch/arm9/at91sam9260/'
+
+#get previous files
+tauon_kernel_src_list = common_tauon_src_list
+
+#arch config files
+tauon_kernel_src_list.extend([tauon_kernel_arch_dir+'dev_mkconf.c',
+tauon_kernel_arch_dir+'bin_mkconf.c', tauon_kernel_arch_dir+'dev_dskimg.c'
+])
+
+#arch specific function
+tauon_kernel_src_list.extend([tauon_kernel_dir+'core/core-ecos/arch/arm/memcpy.S',
+tauon_kernel_dir+'core/core-ecos/arch/arm/memmove.S',
+tauon_kernel_dir+'core/core-ecos/arch/arm/memset.S'
+])
+
+#pseudo device files
+tauon_kernel_src_list.extend([tauon_kernel_dev_dir+'dev_fb/dev_fb.c',
+tauon_kernel_dev_dir+'dev_tty/dev_tty.c', tauon_kernel_dev_dir+'dev_tty/tty_font-8x16.c'
+])
+
+#device files
+tauon_kernel_src_list.extend([tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_uart/dev_at91sam9260_uart_x.c',
+tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_uart/dev_at91sam9260_uart_0.c',
+tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_uart/dev_at91sam9260_uart_1.c',
+tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_dbgu/dev_at91sam9260_dbgu.c',
+tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_rtt/dev_at91sam9260_rtt.c', 
+tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_emac/dev_at91sam9260_emac.c',
+tauon_kernel_dev_at91sam9260_dir+'dev_at91sam9260_emac/dev_at91sam9260_phy.c'
+])
+
+#directory to store lib
+tauon_ecos_lib_dir = at91sam9260_base_dir + 'lib/arch/arm9/at91sam9260/'
+tauon_ecos_install_dir = tauon_ecos_lib_dir + 'install/'
+
+tauon_kernel_lib_dir = tauon_ecos_lib_dir + 'bin/'
+tauon_kernel_obj_dir = at91sam9260_prj_dir + 'arch/arm9/at91sam9260/obj/'
+
+#export source files
+Export('tauon_kernel_src_list')
+Export('tauon_kernel_lib_dir')
+Export('tauon_kernel_obj_dir')
+Export('tauon_ecos_install_dir')

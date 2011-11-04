@@ -1,0 +1,82 @@
+Comment construire une application Tauon?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Prérequis :
+   -. Installation OK.
+   -. Utilisateur shiby
+   
+Exemple d'une application tauon_sampleapp
+-----------------------------------------
+Le dossier tauon/sys/user contient les applications construites à partir
+du noyau Tauon.
+Nous allons décomposer l'application tauon_sampleapp (à faire à partir
+de tauon_flnxapp).
+Une application comporte au moins les répertoires suivants :
+   -. bin. Contient les fichiers binaires utilisés pour le déboguage ou
+   pour le "flashage". On y trouve aussi les fichiers disques (fichiers
+   cachés) nécessaires à la simulation.
+   
+   -. etc. Contient les fichiers de configuration de l'application. Une
+   configuration contient en général un fichier xml et un fichier .init.
+   Ce dossier comporte aussi un répertoire scripts. Il contient tous les
+   fichiers nécessaires au déboguage (utilisation de openocd)
+   
+   -. hal. Contient les fichiers sources eCos nécessaires pour générer
+   un paquet de type architecture (HAL). Toute nouvelle cible pour une
+   application devra être ajoutée dans ce fichier.
+   
+   -. obj. Contient les fichiers objet de l'application.
+   
+   -. prj/scons. Contient les fichiers de construction propre à la
+   partie utilisateur (SConscript) ainsi que les fichiers d'options de
+   construction (.py). Un lien symbolique pointe vers le fichier
+   SConstruct situé dans sys/user/build
+   
+   -. src. Les fichiers sources de votre application organisés comme bon
+   vous semble.
+
+Création d'une nouvelle application
+-----------------------------------
+Mise en place
+'''''''''''''
+Dans un répertoire de votre choix (tauon_myapp), créez les répertoires
+bin, etc/scripts, hal, obj, prj/scons et src
+$ mkdir -p dev/tauon_apps/tauon_myapp
+$ cd dev/tauon_apps/tauon_myapp
+$ mkdir -p bin etc/scripts hal obj prj/scons src
+
+Placez vous maintenant dans le répertoire tauon/sys/user. Pour éviter
+que votre application soit écrasée à chaque mise à jour, un lien
+symbolique inclus votre application dans l'arborescence de Tauon.
+$ cd ~/tauon/sys/user
+$ sh bin_ln.sh /home/shiby/dev/tauon_apps/tauon_myapp
+$ ls 
+>>> bin_ln.sh  build  tauon_myapp  tauon_sampleapp
+
+Vous devez ajouter dans le répertoire prj/scons de votre application un 
+lien symbolique pour utiliser le fichier de construction globale.
+
+$ cd tauon_myapp/prj/scons
+$ ln -s ../../../build/SConstruct
+
+Vous devez aussi exporter la variable PYTONPATH pour utiliser le module
+de construction. Vous pouvez le copier dans le .bahsrc pour une
+utilisation future.
+
+$ export PYTHONPATH="$HOME/tauon/sys/root/prj/scons/common/module/"
+
+Création de l'application
+'''''''''''''''''''''''''
+Utilisez votre éditeur favori et entrez les lignes suivantes
+//A COMPLETER
+
+Copiez les fichiers SConscript et synthetic_opts.py de tauon_sampleapp
+$ cd tauon/sys/user/tauon_myapp
+$ cp ../tauon_sampleapp/prj/scons/SConscript prj/scons
+$ cp ../tauon_sampleapp/prj/scons/synthetic_opts.py prj/scons
+
+Copiez le fichier mkconf_tauon_sampleapp_simple.xml de tauon_sampleapp
+$ cp ../tauon_sampleapp/etc/mkconf_tauon_sampleapp_simple.xml etc
+
+Copiez le fichier de déboguage gdb_script_synth.gdb
+$ cp ../tauon_sampleapp/etc/scripts/gdb_script_synth.gdb etc/scripts
+

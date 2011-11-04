@@ -1,0 +1,65 @@
+Ce document résume la procédure de mise à jour de tauon.
+Vous devez déja posséder une installation fonctionnelle (eCos, chaine de compilation croisée,..)
+Les commandes à taper sont préfixées du symbole de prompt $.
+
+Mise à jour 3.1.0.5
+-------------------
+
+1) Récupérez les sources du noyau à partir du dépôt SVN dans le répertoire de votre choix.
+Si vous n'avez de [user] vous pouvez utilisez l'utilisateur guest (mot de passe : guest).
+$ cd /home/working_directory
+$ svn checkout svn://14.2.100.207/tags/lepton_3_1_0_5 --username [user]
+
+2) Créez le lien symbolique tauon.
+$ cd $HOME/working_directory/lepton_3_1_0_5/lepton
+$ sh tauon_ln.sh
+
+3) Compilez expat.
+$ cd $HOME/tauon/tools/expat
+$ tar zxvf expat_1.95.8.orig.tar.gz
+$ rm -rf expat-build/* expat-tools/*
+$ cd expat-build
+$ ../expat-1.95.8/configure –prefix=$HOME/tauon/tools/expat/expat-tools/
+$ make; make install
+
+4) Compilez mklepton.
+$ cd $HOME/tauon/tools/mklepton/prj/scons
+$ scons -c; scons -Q install
+
+5) Compilez virtual_cpu. Vous pouvez taper scons -h pour paramétrer le virtual_cpu.
+$ cd $HOME/tauon/tools/virtual_cpu/prj/scons
+$ scons -c; scons -Q install
+
+6) Ajoutez votre répertoire de projet à l'arborescence tauon.
+$ cd $HOME/tauon/sys/user
+$ sh bin_ln.sh /absolute/path/to/your_project
+your_project devient un lien symbolique vers votre projet.
+
+7) Ajoutez votre HAL (fichiers bas niveau eCos) à votre installation eCos.
+$ cd $HOME/tauon/sys/root/lib/arch
+$ sh install-ecos-epk.sh ~/tauon/sys/user/[your_project]/hal/[your_hal] [ECOS_PKG_HAL_ID]
+Pour l'instant ECOS_PKG_HAL_ID peut prendre les valeurs suivantes :
+   -. CYGPKG_HAL_ARM_AT91SAM9261
+   -. CYGPKG_HAL_ARM_AT91SAM9260
+   -. CYGPKG_HAL_ARM_AT91M55800A
+
+8) Compilez votre librairie eCos liée à ce HAL
+$ sh script_ecos_lib.sh ~/tauon/sys/user/[your_project]/hal/[your_hal] [plateforme]
+Pour l'instant plateforme peut prendre les valeurs suivantes :
+   -. ./arm9/at91sam9261
+   -. ./arm9/at91sam9260
+   -. ./arm7/at91m55800a
+
+9) Supprimez le SConstruct de votre répertoire projet, puis faire un lien symbolique sur le
+SConstruct général.
+$ cd $HOME/tauon/sys/user/[your_project]/prj/scons
+$ rm SConstruct
+$ ln -s  ~/tauon/sys/user/build/SConstruct SConstruct
+
+10) Adaptez votre SConscript et compilez votre projet. Vous pouvez vous inspirez des projets
+tauon-basic et tauon_flnxapp
+$ export PYTHONPATH="$HOME/tauon/sys/root/prj/scons/common/module/"
+$ scons -h
+Vous pouvez mettre la commande (export PYTHONPATH=..) dans votre .bashrc.
+La 2ème commande vous donne toutes options possibles de compilation
+ 

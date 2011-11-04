@@ -1,0 +1,54 @@
+prefix=$HOME/tauon/sys/root 
+includedir_base=${prefix}/src
+
+#include dir for flash
+includedir_flash=${includedir_base}/kernel/dev/arch/all/flash
+includedir_flash_amd=${includedir_flash}/amd
+includedir_flash_amd_lldapi=${includedir_flash_amd}/lldapi
+
+#include dir for lwip
+includedir_lwip=${includedir_base}/kernel/net/lwip
+includedir_lwip_include=${includedir_lwip}/include
+includedir_lwip_include_ipv4=${includedir_lwip_include}/ipv4
+includedir_lwip_gnu=${includedir_lwip}/ports/gnu
+includedir_lwip_gnu_include=${includedir_lwip_gnu}/include
+
+#include dir for nanox
+includedir_nanox=${includedir_base}/lib/nanox/src
+includedir_nanox_include=${includedir_nanox}/include
+includedir_nanox_drivers=${includedir_nanox}/drivers
+define_for_nanox=-DNONETWORK -DHAVE_TIMER_SUPPORT
+
+#include dir for flnx
+includedir_flnx=${includedir_base}/lib/flnx-1.1.8
+includedir_flnx_FL=${includedir_flnx}/FL
+define_for_flnx=-DNANO_X
+cflags_for_flnx=-fno-builtin-execv -fno-builtin-execve -fno-builtin-execl -fno-builtin-exit \
+	-fno-builtin-isinf -fno-builtin-isnan
+
+#include for tinyGL
+includedir_tinyGL=${includedir_base}/lib/TinyGL/include
+
+#define for tauon
+define_for_tauon=-DUSE_ECOS -DGNU_GCC -D__tauon_compiler_cpu_target__=__compiler_cpu_target_gnuc__
+cflags_for_tauon=-fdata-sections -ffunction-sections -fno-builtin
+
+#general variables to use for Cflags
+includedir_global_include=-I${includedir_base} -I${includedir_nanox_include} -I${includedir_flnx} -I${includedir_flnx_FL}
+
+includedir_global_include_iquote=-iquote${includedir_base} \
+	-iquote${includedir_flash} -iquote${includedir_flash_amd} -iquote${includedir_flash_amd_lldapi} \
+	-iquote${includedir_lwip_include} -iquote${includedir_lwip_include_ipv4} -iquote${includedir_lwip_gnu} -iquote${includedir_lwip_gnu_include} \
+	-iquote${includedir_nanox_include} -iquote${includedir_nanox_drivers} -I${includedir_tinyGL}
+
+cflags_global = ${define_for_tauon} ${cflags_for_tauon} \
+	${define_for_flnx} ${cflags_for_flnx} ${define_for_nanox}
+
+#for lib directory
+ldflags_global = -nostartfiles -nostdlib -static -lgcc -Wl,--gc-sections -Ttarget.ld
+
+Name: tauon
+Description: flags for Tauon library
+Version: 0.0.1
+Cflags: ${includedir_global_include} ${includedir_global_include_iquote} ${cflags_global}
+Libs: ${ldflags_global}

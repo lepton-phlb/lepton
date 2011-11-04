@@ -1,0 +1,148 @@
+#python module
+import os
+
+#Help for scons file
+Help("""
+libkernel.so construction file
+clean, compile then install libkernel.so in tauon/sys/root/prj/gnu/arch/synthetic/x86_static/bin
+scons -c; scons -Q install
+You must have this library to compile mklepton
+""")
+
+#directories
+base_dir = os.getenv('HOME') + '/tauon/sys/root/'
+ecos_lib_dir = base_dir + 'lib/arch/'
+pkg_install_dir = ecos_lib_dir + 'synthetic/x86/install/'
+project_dir = base_dir + 'prj/scons/arch/synthetic/x86_static/'
+base_src_dir = base_dir + 'src/'
+
+obj_dir = project_dir + 'obj/'
+bin_install_dir = project_dir + 'bin/'
+
+#what compiler to use
+#libkernel_so_env = Environment(ENV = os.environ, CC='i386-elf-gcc')
+libkernel_so_env = Environment(ENV = os.environ)
+
+#Options for CFLAGS
+libkernel_so_env.Append(CFLAGS = '-g -O0 -std=c99')
+libkernel_so_env.Append(CFLAGS = '-I'+ pkg_install_dir +'include -I'+ base_src_dir)
+libkernel_so_env.Append(CFLAGS = '-iquote '+ base_src_dir)
+libkernel_so_env.Append(CFLAGS = '-ffunction-sections -fdata-sections -fno-builtin')
+libkernel_so_env.Append(CFLAGS = '-DCPU_GNU32 -DUSE_KERNEL_STATIC -DGNU_GCC')
+
+#Options for LDFLAGS
+libkernel_so_env.Append(LDMODULEFLAGS = '-nostartfiles -nostdlib')
+
+#formatting output
+libkernel_so_env.Append(SHCCCOMSTR = '[CC] $SOURCE')
+libkernel_so_env.Append(ASPPCOMSTR = '[CC] $TARGET')
+libkernel_so_env.Append(SHLINKCOMSTR = '[SHARED] $TARGET')
+
+#directories for source files
+src_kernel_core_dir = base_src_dir + 'kernel/core/'
+src_kernel_core_ecos_dir = src_kernel_core_dir + 'core-ecos/'
+src_kernel_core_arch_dir = base_src_dir + 'kernel/core/arch/synthetic/x86_static/'
+
+src_kernel_vfs_dir = base_src_dir + 'kernel/fs/vfs/'
+src_kernel_rootfs_dir = base_src_dir + 'kernel/fs/rootfs/'
+src_kernel_ufs_dir = base_src_dir + 'kernel/fs/ufs/'
+src_kernel_kofs_dir = base_src_dir + 'kernel/fs/kofs/'
+src_kernel_fat_dir = base_src_dir + 'kernel/fs/fat/'
+
+src_libc_dir = base_src_dir + 'lib/libc/'
+src_libpthread_dir = base_src_dir + 'lib/pthread/'
+src_sbin_dir = base_src_dir + 'sbin/'
+src_kernel_drivers_dir = base_src_dir + 'kernel/dev/arch/gnu32/'
+
+#list of files to compile
+#core-ecos files
+libkernel_so_src_list = [src_kernel_core_ecos_dir+'kernel.c', src_kernel_core_ecos_dir+'fork.c',
+src_kernel_core_ecos_dir+'process.c', src_kernel_core_ecos_dir+'syscall.c',
+src_kernel_core_ecos_dir+'kernel_pthread_mutex.c', src_kernel_core_ecos_dir+'kernel_pthread.c',
+src_kernel_core_ecos_dir+'kernel_sem.c', src_kernel_core_ecos_dir+'kernel_object.c',
+src_kernel_core_ecos_dir+'signal.c', src_kernel_core_ecos_dir+'core_rttimer.c',
+src_kernel_core_ecos_dir+'kernel_timer.c', src_kernel_core_ecos_dir+'kernel_sigqueue.c',
+src_kernel_core_ecos_dir+'kernel_clock.c'
+]
+
+#core files
+libkernel_so_src_list.extend([src_kernel_core_dir+'system.c', src_kernel_core_dir+'pipe.c',
+src_kernel_core_dir+'bin.c', src_kernel_core_dir+'env.c', src_kernel_core_dir+'flock.c',
+src_kernel_core_dir+'systime.c', src_kernel_core_dir+'time.c', src_kernel_core_dir+'lib.c',
+src_kernel_core_dir+'dirent.c', src_kernel_core_dir+'statvfs.c', src_kernel_core_dir+'stat.c',
+src_kernel_core_dir+'sysctl.c', src_kernel_core_dir+'timer.c',
+src_kernel_core_dir+'truncate.c', src_kernel_core_dir+'wait.c', src_kernel_core_dir+'fcntl.c',
+src_kernel_core_dir+'devio.c', src_kernel_core_dir+'select.c',
+src_kernel_core_dir+'malloc.c'])
+
+#core arch files
+libkernel_so_src_list.extend([src_kernel_core_arch_dir+'bin_mkconf.c',
+src_kernel_core_arch_dir+'dev_mkconf.c'])
+
+#vfs files
+libkernel_so_src_list.extend([src_kernel_vfs_dir+'vfscore.c', src_kernel_vfs_dir+'vfskernel.c',
+src_kernel_vfs_dir+'vfs.c'])	
+
+#rootfs files
+libkernel_so_src_list.extend([src_kernel_rootfs_dir+'rootfscore.c', src_kernel_rootfs_dir+'rootfs.c'])
+
+#ufs files
+libkernel_so_src_list.extend([src_kernel_ufs_dir+'ufscore.c', src_kernel_ufs_dir+'ufsdriver.c',
+src_kernel_ufs_dir+'ufsdriver_1_3.c', src_kernel_ufs_dir+'ufsdriver_1_4.c',
+src_kernel_ufs_dir+'ufsdriver_1_5.c', src_kernel_ufs_dir+'ufsx.c', src_kernel_ufs_dir+'ufs.c'])
+
+#kofs files
+libkernel_so_src_list.extend([src_kernel_kofs_dir+'kofs.c'])
+
+#fat files
+libkernel_so_src_list.extend([src_kernel_fat_dir+'fat16.c',
+src_kernel_fat_dir+'fatcore.c',
+src_kernel_fat_dir+'fat16_msdos.c',
+src_kernel_fat_dir+'fatcore_msdos.c',
+src_kernel_fat_dir+'fat16_vfat.c',
+src_kernel_fat_dir+'fatcore_vfat.c'
+])
+
+#libc files
+libkernel_so_src_list.extend([src_libc_dir+'libc.c',
+src_libc_dir+'/misc/ltostr.c',
+src_libc_dir+'stdio/stdio.c', src_libc_dir+'stdio/printf.c', src_libc_dir+'stdio/scanf.c',
+src_libc_dir+'unistd/getopt.c', src_libc_dir+'unistd/unistd.c',
+src_libc_dir+'termios/termios.c',src_libc_dir+'termios/tcgetattr.c', src_libc_dir+'termios/tcsetattr.c',
+src_libc_dir+'ctype/ctype.c',
+src_libc_dir+'misc/strto_l.c', src_libc_dir+'misc/strto_ll.c', src_libc_dir+'misc/dtostr.c'])
+
+#libpthread file
+libkernel_so_src_list.extend([src_libpthread_dir+'pthread.c'])
+
+#sbin files
+libkernel_so_src_list.extend([src_sbin_dir+'initd.c', src_sbin_dir+'lsh.c', src_sbin_dir+'mkfs.c',
+src_sbin_dir+'mount.c', src_sbin_dir+'umount.c'])
+
+#driver files
+libkernel_so_src_list.extend([src_kernel_drivers_dir+'dev_linux_rtc/dev_linux_rtc.c',
+src_kernel_drivers_dir+'dev_linux_filerom/dev_linux_filerom.c',
+src_kernel_drivers_dir+'dev_linux_fileflash/dev_linux_fileflash.c',
+src_kernel_drivers_dir+'dummy_linux_syscall.S'])
+
+#list of futures .o files create the right path
+libkernel_so_obj_list = []
+for src_file in libkernel_so_src_list:
+	if src_file.find('.c') > 0:
+		libkernel_so_obj_list.append(obj_dir + os.path.basename(src_file.replace('.c','.o')))
+	elif src_file.find('.S') > 0:
+		libkernel_so_obj_list.append(obj_dir + os.path.basename(src_file.replace('.S','.o')))
+
+#make all object files
+libkernel_so_objs_node = []
+for i in range(len(libkernel_so_src_list)):
+	libkernel_so_objs_node.extend(libkernel_so_env.SharedObject(libkernel_so_obj_list[i],libkernel_so_src_list[i]))
+
+#make shared library
+libkernel_so_library = libkernel_so_env.SharedLibrary('libkernel', libkernel_so_objs_node)
+
+#We install program is right place
+libkernel_so_env.Install(bin_install_dir, libkernel_so_library)
+libkernel_so_env.Alias('install', bin_install_dir)
+
+#print libkernel_so_env.Dump()

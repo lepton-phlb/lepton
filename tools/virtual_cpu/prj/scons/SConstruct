@@ -1,0 +1,118 @@
+#python module
+import os
+
+#Help for scons file
+Help("""
+virtual_cpu construction file
+clean, compile then install virtual_cpu
+scons -c [--optfile=option_file]; scons -Q install [--optfile=option_file]
+
+**********************************
+using TRUE_COLOR by default use 24 bits
+**********************************
+scons -c; scons -Q install define=TRUE_COLOR
+
+**********************************
+you can select SCREEN_XRES and SCREEN_YRES like this
+**********************************
+scons -c; scons -Q define=TRUE_COLOR SCREEN_XRES=240 SCREEN_YRES=320 install
+""")
+
+#directories
+base_dir = os.getenv('HOME') + '/tauon/'
+src_dir = base_dir + 'tools/virtual_cpu/'
+src_hardware_dir = src_dir + 'hardware/'
+obj_dir = src_dir + 'obj/'
+bin_install_dir = base_dir + 'tools/bin/'
+
+ui_dir = src_dir + 'ui/'
+default_ui_file = ui_dir + 'x1062/x1062_gui.xml'
+default_kb_layout_file = ui_dir + 'x1062/x1062_kb_layout.c'
+default_dev_ttys0 = '/dev/ttyS0'
+default_dev_ttys1 = '/dev/ttyS1'
+default_dev_rtu0 = '/dev/ttyS0'
+default_dev_rtu1 = '/dev/ttyS1'
+
+#
+AddOption('--optfile',
+	dest='optfile',
+	type='string',
+	nargs=1,
+	action='store',
+	metavar='DIR',
+	help='option file for virtual_cpu',
+	default='virtual_cpu_opts.py')
+
+virtual_cpu_variables = Variables(GetOption('optfile'))
+virtual_cpu_variables.Add(EnumVariable('SCREEN_XRES', 'X resolution ', '480',allowed_values=('640','480','320','240')))
+virtual_cpu_variables.Add(EnumVariable('SCREEN_YRES', 'Y resolution ', '640',allowed_values=('640','480','320','240')))
+virtual_cpu_variables.Add(EnumVariable('SCREEN_BPP', 'Bits per pixel', '24',allowed_values=('24')))
+virtual_cpu_variables.Add(BoolVariable('TRUE_COLOR', 'True color aka 24 bits on', 0))
+virtual_cpu_variables.Add(PathVariable('UI_FILE', 'XML file describing interface', default_ui_file))
+virtual_cpu_variables.Add(PathVariable('KBLAYOUT_FILE', 'source file with kb_layout', default_kb_layout_file))
+virtual_cpu_variables.Add(PathVariable('DEV_TTYS0', 'serial device 0', default_dev_ttys0))
+virtual_cpu_variables.Add(PathVariable('DEV_TTYS1', 'serial device 1', default_dev_ttys1))
+virtual_cpu_variables.Add(PathVariable('DEV_RTU0', 'rtu device 0', default_dev_rtu0))
+virtual_cpu_variables.Add(PathVariable('DEV_RTU1', 'rtu device 1', default_dev_rtu1))
+
+#what compiler to use
+virtual_cpu_env = Environment(ENV = os.environ, variables = virtual_cpu_variables)
+virtual_cpu_env.ParseConfig('pkg-config --cflags --libs gtk+-2.0 gmodule-2.0')
+
+#add CFLAGS options and include path
+virtual_cpu_env.Append(CCFLAGS = '"-gdwarf-2 -g3 -O0 -Wall"')
+virtual_cpu_env.Append(CCFLAGS = '"-iquote '+ src_dir + ' -iquote ' +src_hardware_dir+'"')
+
+virtual_cpu_env.Append(CCFLAGS = '-DSCREEN_XRES=${SCREEN_XRES}')
+virtual_cpu_env.Append(CCFLAGS = '-DSCREEN_YRES=${SCREEN_YRES}')
+if virtual_cpu_env['TRUE_COLOR']:
+	virtual_cpu_env.Append(CPPDEFINES = '-DTRUE_COLOR')
+
+virtual_cpu_env.Append(CCFLAGS = '-DUI_FILE=\\"${UI_FILE}\\"')
+virtual_cpu_env.Append(CCFLAGS = '-DDEV_TTYS0=\\"${DEV_TTYS0}\\"')
+virtual_cpu_env.Append(CCFLAGS = '-DDEV_TTYS1=\\"${DEV_TTYS1}\\"')
+virtual_cpu_env.Append(CCFLAGS = '-DDEV_RTU0=\\"${DEV_RTU0}\\"')
+virtual_cpu_env.Append(CCFLAGS = '-DDEV_RTU1=\\"${DEV_RTU1}\\"')
+
+#formatting output
+#virtual_cpu_env.Append(CCCOMSTR = '[CC] $SOURCE')
+virtual_cpu_env.Append(LINKCOMSTR = '[LINK] $TARGET')
+
+#list of files to compile
+vitual_cpu_src_list = [src_dir + 'virtual_cpu_gui.c',
+src_hardware_dir + 'clock/virtual_clock.c',
+src_hardware_dir + 'serial_0/virtual_serial_0.c',
+src_hardware_dir + 'serial_1/virtual_serial_1.c',
+src_hardware_dir + 'serial_pt/virtual_serial_pt.c',
+src_hardware_dir + 'eth_0/virtual_eth_0.c',
+src_hardware_dir + 'screen/virtual_screen.c', src_hardware_dir + 'screen/virtual_palette.c',
+src_hardware_dir + 'kb/virtual_kb.c',
+src_hardware_dir + 'leds/virtual_leds.c',
+src_hardware_dir + 'rtu_0/virtual_rtu_0.c',
+src_hardware_dir + 'rtu_1/virtual_rtu_1.c'
+]
+
+#add specific keyboard layout to compile
+vitual_cpu_src_list.extend([virtual_cpu_env['KBLAYOUT_FILE']])
+
+#list of futures .o files create the right path
+vitual_cpu_obj_list = []
+for src_file in vitual_cpu_src_list:
+	vitual_cpu_obj_list.append(obj_dir + os.path.basename(src_file.replace('.c','.o')))
+
+virtual_cpu_objs_node = []
+for i in range(len(vitual_cpu_src_list)):
+	#extend because each item is a list
+	virtual_cpu_objs_node.extend(virtual_cpu_env.Object(vitual_cpu_obj_list[i],vitual_cpu_src_list[i]))
+	
+#And program
+virtual_cpu_bin = virtual_cpu_env.Program('virtual_cpu', virtual_cpu_objs_node)
+Default(virtual_cpu_bin)
+
+#Help on variable programm
+Help(virtual_cpu_variables.GenerateHelpText(virtual_cpu_env))
+
+#We install program is right place
+virtual_cpu_env.Install(bin_install_dir, virtual_cpu_bin)
+virtual_cpu_env.Alias('install', bin_install_dir)
+

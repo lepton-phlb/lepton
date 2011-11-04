@@ -1,0 +1,47 @@
+#python module
+import os
+from tauon import *
+
+#We need common file
+#directory
+tinygl_base_dir = os.getenv('HOME') + '/tauon/sys/root/src/lib/TinyGL/'
+
+#directories of source file
+tinygl_src_dir = tinygl_base_dir + 'src/'
+
+#tinygl files
+tinygl_src_list = [TauonSource(tinygl_src_dir+'api.c'),
+TauonSource(tinygl_src_dir+'list.c'),
+TauonSource(tinygl_src_dir+'vertex.c'),
+TauonSource(tinygl_src_dir+'init.c'),
+TauonSource(tinygl_src_dir+'matrix.c'),
+TauonSource(tinygl_src_dir+'texture.c'),
+TauonSource(tinygl_src_dir+'misc.c'),
+TauonSource(tinygl_src_dir+'clear.c'),
+TauonSource(tinygl_src_dir+'light.c'),
+TauonSource(tinygl_src_dir+'clip.c'),
+TauonSource(tinygl_src_dir+'select.c'),
+TauonSource(tinygl_src_dir+'get.c'),
+TauonSource(tinygl_src_dir+'error.c'),
+TauonSource(tinygl_src_dir+'zbuffer.c'),
+TauonSource(tinygl_src_dir+'zline.c'),
+TauonSource(tinygl_src_dir+'zdither.c'),
+TauonSource(tinygl_src_dir+'ztriangle.c'),
+TauonSource(tinygl_src_dir+'zmath.c'),
+TauonSource(tinygl_src_dir+'image_util.c'),
+TauonSource(tinygl_src_dir+'oscontext.c'),
+TauonSource(tinygl_src_dir+'msghandling.c'),
+TauonSource(tinygl_src_dir+'arrays.c'),
+TauonSource(tinygl_src_dir+'specbuf.c'),
+TauonSource(tinygl_src_dir+'memory.c'),
+TauonSource(tinygl_src_dir+'nglx.c')
+]
+
+#special cxxflags
+tinygl_c_flags = '-I' + tinygl_base_dir + 'include'
+#tinygl_obj_dir = tinygl_base_dir + 'obj/'
+
+#export source files
+Export('tinygl_src_list')
+Export('tinygl_c_flags')
+#Export('tinygl_obj_dir')

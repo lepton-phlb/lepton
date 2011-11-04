@@ -1,0 +1,5 @@
+# Fichier généré automatiquement - utilisez « minicom -s »
+# pour changer les paramètres
+pu port             /tmp/tauonpt
+pu baudrate         9600
+pu rtscts           No
