@@ -25,8 +25,20 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-#ifndef VIRTUAL_RTU_1_H_
-#define VIRTUAL_RTU_1_H_
+#include "kb/virtual_kb.h"
 
+#define BUTTON_1        'a'
+#define BUTTON_2        'b'
+#define BUTTON_3        'c'
+#define BUTTON_4        'd'
+#define BUTTON_5        'e'
+#define BUTTON_6        'f'
 
-#endif /* VIRTUAL_RTU_1_H_ */
+kb_layout_t kb_layout[] = {
+      BUTTON_1,
+      BUTTON_2,
+      BUTTON_3,
+      BUTTON_4,
+      BUTTON_5,
+      BUTTON_6
+};

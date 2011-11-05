@@ -7,13 +7,13 @@ Software distributed under the License is distributed on an "AS IS" basis,
 WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
 specific language governing rights and limitations under the License.
 
-The Original Code is ______________________________________.
+The Original Code is Lepton.
 
-The Initial Developer of the Original Code is ________________________.
-Portions created by ______________________ are Copyright (C) ______ _______________________.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
 All Rights Reserved.
 
-Contributor(s): ______________________________________.
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
@@ -24,6 +24,7 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under 
 either the MPL or the [eCos GPL] License."
 */
+
 #ifndef VIRTUAL_RTU_0_H_
 #define VIRTUAL_RTU_0_H_
 
