@@ -25,7 +25,7 @@
 #either the MPL or the [eCos GPL] License."
 #
 #option for virtual_cpu
-UI_FILE='/home/kvm/tauon/tools/virtual_cpu/ui/at91sam9261-ek/at91sam9261_gui.xml'
-KBLAYOUT_FILE='/home/kvm/tauon/tools/virtual_cpu/ui/at91sam9261-ek/at91sam9261_kb_layout.c'
+UI_FILE='/home/sqzwork/tauon/tools/virtual_cpu/ui/at91sam9261-ek/at91sam9261_gui.xml'
+KBLAYOUT_FILE='/home/sqzwork/tauon/tools/virtual_cpu/ui/at91sam9261-ek/at91sam9261_kb_layout.c'
 SCREEN_XRES='240'
 SCREEN_YRES='320'
