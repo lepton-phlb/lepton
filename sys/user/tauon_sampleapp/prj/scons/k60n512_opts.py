@@ -1,0 +1,18 @@
+#variable for user project
+COMPILER_CC='arm-eabi-gcc'
+COMPILER_CXX='arm-eabi-g++'
+ARCHIVER='arm-eabi-ar'
+ARCHIVE_INDEXER='arm-eabi-ranlib'
+ARCH='CPU_CORTEXM'
+PLATEFORME='cortexm/k60n512/'
+TARGET_SUFFIX='k60n512'
+OPTS_APP='-O0'
+DEBUG_LEVEL='-gdwarf-2 -g3'
+NANOX=0
+FONTS_NANOX=''
+LWIP=1
+LWIP_OPTS='-Os'
+VERBOSE=0
+STRIP=0
+TINYGL=0
+FULL_STDIO=0
