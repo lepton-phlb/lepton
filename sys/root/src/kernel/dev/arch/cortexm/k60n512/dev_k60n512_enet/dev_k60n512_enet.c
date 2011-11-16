@@ -41,6 +41,14 @@ Includes
 
 #include "dev_k60n512_enet.h"
 
+#if defined(USE_ECOS)
+#include <cyg/hal/cortexm_regs.h>
+
+#define __REV        CYGARC_REV
+#define __REV16      CYGARC_REV16
+#define __REVSH      CYGARC_REVSH
+
+#endif
 /*===========================================
 Global Declaration
 =============================================*/
@@ -71,25 +79,26 @@ dev_map_t dev_k60n512_enet_map={
 };
 
 //
-#define PHY_MII_TIMEOUT			(0x1FFFF)
-#define	REG_PHY_ADDRESS				1
-#define PHY_LINK_DELAY				500
+#define PHY_MII_TIMEOUT       (0x1FFFF)
+#define REG_PHY_ADDRESS       1
+#define PHY_LINK_DELAY        500
+#define PHY_LINK_RETRY        5000
 
 //
 #define KINETIS_ENET_VECTOR_NO				3
 #define KINETIS_ENET_VECTOR_PRIORITY		3
-#define	KINETIS_ENET_TX_IRQ					77//76
-//#define	KINETIS_ENET_TX_VECTOR				92
-#define	KINETIS_ENET_RX_IRQ					78//77
-//#define	KINETIS_ENET_RX_VECTOR				93
-#define	KINETIS_ENET_ERR_IRQ				79//78
-//#define	KINETIS_ENET_ERR_VECTOR				94
+#define KINETIS_ENET_TX_IRQ            77//76
+//#define KINETIS_ENET_TX_VECTOR       92
+#define KINETIS_ENET_RX_IRQ            78//77
+//#define KINETIS_ENET_RX_VECTOR       93
+#define KINETIS_ENET_ERR_IRQ           79//78
+//#define KINETIS_ENET_ERR_VECTOR      94
 
 //
-#define KINETIS_ENET_RX_BUFFER_SIZE			1520
-#define KINETIS_ENET_RX_BUFFER_ALIGNMENT	16
-#define KINETIS_ENET_RX_BUFS				8//1//1//4
-#define KINETIS_ENET_TX_BUFS				1
+#define KINETIS_ENET_RX_BUFFER_SIZE       1520
+#define KINETIS_ENET_RX_BUFFER_ALIGNMENT  16
+#define KINETIS_ENET_RX_BUFS              8//1//1//4
+#define KINETIS_ENET_TX_BUFS              1
 
 //
 
@@ -125,11 +134,11 @@ typedef struct board_kinetis_enet_info_st {
 	unsigned char _flag_w_irq;
 	unsigned char _flag_r_irq;
 	
-    //ethernet status
-    eth_stat_t  eth_stat;
+   //ethernet status
+   eth_stat_t  eth_stat;
 
 	cyg_handle_t  interrupt_handles[KINETIS_ENET_VECTOR_NO];
-    cyg_interrupt interrupt_objects[KINETIS_ENET_VECTOR_NO];
+   cyg_interrupt interrupt_objects[KINETIS_ENET_VECTOR_NO];
 
 } board_kinetis_enet_info_t;
 
@@ -173,8 +182,6 @@ static void _kinetis_enet_config_buffers(board_kinetis_enet_info_t *penet);
 static void _kinetis_enet_config_pins(void);
 static unsigned char _kinetis_enet_hash_addr(const unsigned char* addr);
 static void _kinetis_enet_set_mac_addr(board_kinetis_enet_info_t *penet, const unsigned char *pa);
-static unsigned int __REV(unsigned int __value__);
-static unsigned short __REVSH(unsigned short __value__);
 
 static cyg_uint32 _kinetis_enet_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void _kinetis_enet_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
@@ -281,48 +288,6 @@ int _kinetis_enet_mii_read(board_kinetis_enet_info_t *penet, unsigned int phy_ad
 }
 
 /*-------------------------------------------
-| Name:__REV
-| Description:
-| Parameters:
-| Return Type:
-| Comments:  Swap double word
-| See:
----------------------------------------------*/
-unsigned int __REV(unsigned int __value__) {
-	unsigned int swap_val=0;
-	//
-	__asm__("ldr r5,%1\n\t"
-				"rev r6,r5\n\t"
-				"str r6,%0"
-				:"m="(swap_val)
-				:"m"(__value__)
-				:
-				);
-	return swap_val;
-}
-
-/*-------------------------------------------
-| Name:__REVSH
-| Description:
-| Parameters:
-| Return Type:
-| Comments:  Swap word
-| See:
----------------------------------------------*/
-static unsigned short __REVSH(unsigned short __value__) {
-	unsigned short swap_val=0;
-	//
-	__asm__("ldr r5,%1\n\t"
-				"revsh r6,r5\n\t"
-				"str r6,%0"
-				:"m="(swap_val)
-				:"m"(__value__)
-				:
-				);
-	return swap_val;
-}
-
-/*-------------------------------------------
 | Name:_kinetis_enet_hash_addr
 | Description:
 | Parameters:
@@ -425,7 +390,7 @@ void _kinetis_enet_config_buffers(board_kinetis_enet_info_t *penet) {
 	for( i = 0; i < KINETIS_ENET_RX_BUFS; i++ ) {
 		penet->p_rx_desc[i].status = REG_ENET_RX_BD_E;
 		penet->p_rx_desc[i].length = 0;
-		penet->p_rx_desc[i].data = (unsigned char *)__REV((unsigned int)p);
+      __REV((unsigned char *)penet->p_rx_desc[i].data, (unsigned int)p);
 		
 		p += KINETIS_ENET_RX_BUFFER_SIZE;
 	}
@@ -447,6 +412,7 @@ int dev_k60n512_enet_load(void){
 	unsigned int mii_val=0;
 	unsigned int reg_val=0;
 	unsigned int *tmp;
+   volatile unsigned int phy_link_retry = PHY_LINK_RETRY;
 
 	// Enable the ENET clock.
 	//!TODO find a way to do it properly
@@ -465,7 +431,7 @@ int dev_k60n512_enet_load(void){
 	HAL_WRITE_UINT32(kinetis_enet_info.enet_base + REG_ENET_ECR, reg_val);
 
 	//Wait at least 8 clock cycles
-	cyg_thread_delay(1);//delay(1);
+	cyg_thread_delay(1);
 
 	//FSL: start MII interface
 	_kinetis_enet_mii_init(&kinetis_enet_info, CYGHWR_HAL_CORTEXM_KINETIS_CLK_PER_BUS/1000000);
@@ -473,7 +439,7 @@ int dev_k60n512_enet_load(void){
 
 	// Can we talk to the PHY? read phy ID
 	do {
-		cyg_thread_delay(PHY_LINK_DELAY);//delay(LINK_DELAY);
+		cyg_thread_delay(PHY_LINK_DELAY);
 		mii_val = 0xffff;
 		_kinetis_enet_mii_read(&kinetis_enet_info, REG_PHY_ADDRESS, REG_PHY_PHYIDR1, &mii_val);
 	} while(mii_val == 0xffff);
@@ -484,7 +450,11 @@ int dev_k60n512_enet_load(void){
 
 	// Wait for auto negotiate to complete.
 	do {
-		cyg_thread_delay(PHY_LINK_DELAY);//delay(LINK_DELAY);
+      if(!(phy_link_retry--)) {
+         return -1;
+      }
+      
+		cyg_thread_delay(PHY_LINK_DELAY);
 		_kinetis_enet_mii_read(&kinetis_enet_info, REG_PHY_ADDRESS, REG_PHY_BMSR, &mii_val);
 	} while(!(mii_val & REG_PHY_BMSR_AN_COMPLETE));
 
@@ -549,9 +519,6 @@ int dev_k60n512_enet_load(void){
 	//set normal buffer descriptor
 	reg_val = 0;
 	HAL_WRITE_UINT32(kinetis_enet_info.enet_base + REG_ENET_ECR, reg_val);
-
-	//dummy set promiscious
-	//ENET_RCR |= ENET_RCR_PROM_MASK;
 
 	//Set Rx Buffer Size
 	reg_val = KINETIS_ENET_RX_BUFFER_SIZE;
@@ -725,10 +692,10 @@ int dev_k60n512_enet_read(desc_t desc, char* buf,int size){
 	// is a new buffer received
 	if((p_net_info->p_rx_desc[p_net_info->_input_r].status & REG_ENET_RX_BD_E) == 0) {
 		//get status, packet len and copy data to buffer
-		status = __REVSH(p_net_info->p_rx_desc[p_net_info->_input_r].status);
-		cb =  __REVSH(p_net_info->p_rx_desc[p_net_info->_input_r].length);
-		rcv_buf_addr =  (unsigned char *)__REV((unsigned int)p_net_info->p_rx_desc[p_net_info->_input_r].data);
-		
+      __REVSH(status, p_net_info->p_rx_desc[p_net_info->_input_r].status);
+      __REVSH(cb, p_net_info->p_rx_desc[p_net_info->_input_r].length);
+		__REV((unsigned char *)rcv_buf_addr, (unsigned int)p_net_info->p_rx_desc[p_net_info->_input_r].data);
+
 		//copy data
 		memcpy((void *)buf, (void *)rcv_buf_addr, cb);
 		//
@@ -769,11 +736,12 @@ int dev_k60n512_enet_write(desc_t desc, const char* buf,int size){
 	//disable irq
 	cyg_interrupt_mask(KINETIS_ENET_TX_IRQ);
 
-	// To maintain the zero copy implementation, point the Tx descriptor
+   // To maintain the zero copy implementation, point the Tx descriptor
 	//to the data from the Rx buffer.
-	p_net_info->p_tx_desc->data = (unsigned char *)__REV((uint32_t)buf);
+	__REV((unsigned char *)p_net_info->p_tx_desc->data, (uint32_t)buf);
 	// Setup the buffer descriptor for transmission
-	p_net_info->p_tx_desc->length = __REVSH(size);
+	__REVSH(p_net_info->p_tx_desc->length, size);
+
 	// NB this assumes only one Tx descriptor!
 	p_net_info->p_tx_desc->status = (REG_ENET_TX_BD_R | REG_ENET_TX_BD_W |
 	REG_ENET_TX_BD_L |	REG_ENET_TX_BD_TC);
