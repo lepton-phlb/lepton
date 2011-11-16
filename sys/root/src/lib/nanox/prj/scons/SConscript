@@ -1,0 +1,91 @@
+#python module
+import os
+from tauon import *
+
+#We need common file
+#directory
+nanox_base_dir = os.getenv('HOME') + '/tauon/sys/root/src/lib/nanox/'
+
+#directories of source file
+nanox_src_dir = nanox_base_dir + 'src/'
+nanox_drivers_dir = nanox_src_dir + 'drivers/'
+nanox_engine_dir = nanox_src_dir + 'engine/'
+nanox_nanox_dir = nanox_src_dir + 'nanox/'
+nanox_fonts_dir = nanox_src_dir + 'fonts/'
+
+#drivers files
+nanox_src_list = [TauonSource(nanox_drivers_dir+'fblin1.c'),
+TauonSource(nanox_drivers_dir+'fblin2.c'),
+TauonSource(nanox_drivers_dir+'fblin4.c'),
+TauonSource(nanox_drivers_dir+'fblin8.c'),
+TauonSource(nanox_drivers_dir+'fblin16.c'),
+TauonSource(nanox_drivers_dir+'fblin24.c'),
+TauonSource(nanox_drivers_dir+'fblin32.c'),
+TauonSource(nanox_drivers_dir+'fb.c'),
+TauonSource(nanox_drivers_dir+'genmem.c'),
+TauonSource(nanox_drivers_dir+'genfont.c'),
+TauonSource(nanox_drivers_dir+'fbportrait_down.c'),
+TauonSource(nanox_drivers_dir+'fbportrait_left.c'),
+TauonSource(nanox_drivers_dir+'fbportrait_right.c')
+]
+
+#engine files
+nanox_src_list.extend([TauonSource(nanox_engine_dir+'devarc.c'),
+TauonSource(nanox_engine_dir+'devclip.c'),
+TauonSource(nanox_engine_dir+'devdraw.c'),
+TauonSource(nanox_engine_dir+'devfont.c'),
+TauonSource(nanox_engine_dir+'devimage.c'),
+TauonSource(nanox_engine_dir+'devkbd.c'),
+TauonSource(nanox_engine_dir+'devlist.c'),
+TauonSource(nanox_engine_dir+'devmouse.c'),
+TauonSource(nanox_engine_dir+'devopen.c'),
+TauonSource(nanox_engine_dir+'devpal1.c'),
+TauonSource(nanox_engine_dir+'devpal2.c'),
+TauonSource(nanox_engine_dir+'devpal4.c'),
+TauonSource(nanox_engine_dir+'devpal8.c'),
+TauonSource(nanox_engine_dir+'devpoly.c'),
+TauonSource(nanox_engine_dir+'devrgn2.c'),
+TauonSource(nanox_engine_dir+'devrgn.c'),
+TauonSource(nanox_engine_dir+'devtimer.c'),
+TauonSource(nanox_engine_dir+'error.c'),
+TauonSource(nanox_engine_dir+'selfont.c'),
+TauonSource(nanox_engine_dir+'devstipple.c'),
+TauonSource(nanox_engine_dir+'font_dbcs.c'),
+TauonSource(nanox_engine_dir+'image_bmp.c'),
+TauonSource(nanox_engine_dir+'devimage_stretch.c')
+])
+
+#nanox files
+nanox_src_list.extend([TauonSource(nanox_nanox_dir+'srvmain.c'),
+TauonSource(nanox_nanox_dir+'srvfunc.c'),
+TauonSource(nanox_nanox_dir+'srvutil.c'),
+TauonSource(nanox_nanox_dir+'srvevent.c'),
+TauonSource(nanox_nanox_dir+'srvclip.c'),
+TauonSource(nanox_nanox_dir+'nxdraw.c'),
+TauonSource(nanox_nanox_dir+'nxutil.c'),
+TauonSource(nanox_nanox_dir+'nxtransform.c')
+])
+
+#fonts files
+nanox_src_list.extend([TauonSource(nanox_fonts_dir+'winFreeSansSerif11x13.c'),
+TauonSource(nanox_fonts_dir+'X6x13.c'),
+TauonSource(nanox_fonts_dir+'rom8x16.c'),
+TauonSource(nanox_fonts_dir+'winFreeSystem14x16.c'),
+TauonSource(nanox_fonts_dir+'6x13.c'),
+TauonSource(nanox_fonts_dir+'12x13ja.c'),
+TauonSource(nanox_fonts_dir+'8x13_MetrixSymbols.c'),
+TauonSource(nanox_fonts_dir+'4x6.c'),
+TauonSource(nanox_fonts_dir+'5x7.c'),
+TauonSource(nanox_fonts_dir+'vera13.c'),
+TauonSource(nanox_fonts_dir+'vera18.c'),
+TauonSource(nanox_fonts_dir+'vera20.c'),
+TauonSource(nanox_fonts_dir+'vera24.c'),
+TauonSource(nanox_fonts_dir+'vera13Bd.c'),
+TauonSource(nanox_fonts_dir+'vera18Bd.c'),
+TauonSource(nanox_fonts_dir+'vera20Bd.c'),
+TauonSource(nanox_fonts_dir+'vera24Bd.c'),
+TauonSource(nanox_fonts_dir+'arialUnicode15.c')
+])
+
+#export source files
+Export('nanox_src_list')

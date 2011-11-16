@@ -1,0 +1,389 @@
+#
+#The contents of this file are subject to the Mozilla Public License Version 1.1 
+#(the "License"); you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at http://www.mozilla.org/MPL/
+#
+#Software distributed under the License is distributed on an "AS IS" basis, 
+#WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+#specific language governing rights and limitations under the License.
+#
+#The Original Code is Lepton.
+#
+#The Initial Developer of the Original Code is Philippe Le Boulanger.
+#Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+#All Rights Reserved.
+#
+#Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+#
+#Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+#(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+#instead of those above. If you wish to allow use of your version of this file only under the
+#terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+#the MPL, indicate your decision by deleting  the provisions above and replace 
+#them with the notice and other provisions required by the [eCos GPL] License. 
+#If you do not delete the provisions above, a recipient may use your version of this file under 
+#either the MPL or the [eCos GPL] License."
+#
+
+import os, platform, subprocess
+import urllib
+import shlex
+import shutil
+
+#
+Help("""
+Tauon installation file
+scons [--optfile=file]
+You can copy configure_opts.py and put all value to True.
+
+**********************************
+compile toolchain for arm7tdmi and arm926ejs
+**********************************
+scons BUILD_BINUTILS=True BUILD_GCC=True BUILD_GDB=True
+
+**********************************
+compile host tools for tauon
+**********************************
+scons BUILD_MKLEPTON=True BUILD_VIRTUALCPU=True
+
+**********************************
+compile default application
+**********************************
+scons BUILD_SAMPLEAPP=True
+""")
+
+#basic directories
+base_dir = os.getenv('HOME')
+tauon_dir = base_dir + '/tauon'
+host_tools_base_dir = tauon_dir + '/tools'
+host_tools_config_dir = host_tools_base_dir + '/config'
+host_tools_build_dir = host_tools_config_dir + '/build'
+host_tools_install_dir = host_tools_config_dir + '/at91-toolchain'
+
+ecos_repository_path = os.getenv('ECOS_REPOSITORY')
+
+tauon_python_module_dir = tauon_dir + '/sys/root/prj/scons/common/module'
+tauon_user_path = tauon_dir + '/sys/user'
+
+#
+bz2_extension = '.tar.bz2'
+bz2_opts = 'jxvf'
+gz_extension = '.tar.gz'
+gz_opts = 'zxvf'
+
+#
+#wget_opts = ['-c', '-tries 3 '] KO :(
+wget_opts = "-c"
+
+#global compile options
+target_compile_options = " --target=arm-eabi "
+prefix_compile_options = " --prefix=" + host_tools_install_dir + " "
+cpus_compile_options = " --with-cpu=arm926ej-s --with-cpu=arm7tdmi "
+common_compile_options = " --enable-interwork --enable-multilib"
+
+#basic utilities to compile toolchain
+binutils_url = 'http://ftp.gnu.org/gnu/binutils/'
+binutils_name = 'binutils-2.19.1'
+binutils_compile_options = target_compile_options + prefix_compile_options + \
+cpus_compile_options + common_compile_options + " --with-gnu-as --with-gnu-ld --disable-nls "
+
+#
+gcc_url = 'ftp://ftp.gnu.org/gnu/gcc/'
+gcc_name = 'gcc-4.3.3'
+gcc_compile_options= target_compile_options + prefix_compile_options + \
+cpus_compile_options + common_compile_options + " --with-gnu-as --with-gnu-ld --disable-nls " + \
+"--enable-languages=\"c,c++\" --with-newlib --disable-shared --disable-__cxa_atexit --with-float=soft "
+gcc_compile_options_stage1 = gcc_compile_options + " --without-headers"
+gcc_new_config_file='t-arm-elf'
+
+#
+newlib_url = 'ftp://sources.redhat.com/pub/newlib/'
+newlib_name = 'newlib-1.17.0'
+newlib_compile_options = target_compile_options + prefix_compile_options + \
+cpus_compile_options + common_compile_options + " --with-gnu-as --with-gnu-ld --disable-nls " + \
+"--with-float=soft"
+
+#
+gdb_url = 'ftp://ftp.gnu.org/gnu/gdb/'
+gdb_name = 'gdb-7.1a'
+gdb_unpack_name = 'gdb-7.1'
+gdb_compile_options = target_compile_options + prefix_compile_options + \
+common_compile_options
+
+#
+scripts_default_dir = tauon_dir + '/sys/root/lib/arch'
+epk_default_dir = tauon_dir + '/tools/host/debian/ecos/ports-v3.0'
+epk_list = ['/at91sam9261.epk', '/synth_tauon.epk']
+epk_list_name = ['CYGPKG_HAL_ARM_AT91SAM9261', 'CYGPKG_HAL_SYNTH_TAUON']
+epk_list_path = ['./arm9/at91sam9261', '']
+ecos_admin_cmd = ecos_repository_path + '/ecosadmin.tcl'
+
+app_default_dir = tauon_dir + '/sys/user/tauon_sampleapp'
+app_default_target = ['arm9_lepton', 'gnu32_lepton']
+app_default_target_file = ['at91sam9261ek_opts.py', 'synthetic_opts.py']
+app_config_file = app_default_dir + '/etc/mkconf_tauon_sampleapp_gnu.xml'
+
+###
+### VARIABLES AND OPTIONS ###
+#file argument to get various parameter
+AddOption('--optfile',
+	dest='optfile',
+	type='string',
+	nargs=1,
+	action='store',
+	metavar='DIR',
+	help='file to configure environment dor Tauon',
+	default='configure_opts.py')
+
+#define variable to choose arch
+tauon_configure_vars = Variables(GetOption('optfile'))
+
+#add configurable variable
+tauon_configure_vars.Add(BoolVariable('BUILD_BINUTILS', 'Build binutils.', 0))
+tauon_configure_vars.Add(BoolVariable('BUILD_GCC', 'Build gcc and newlib.', 0))
+tauon_configure_vars.Add(BoolVariable('BUILD_GDB', 'Build gdb.', 0))
+tauon_configure_vars.Add(BoolVariable('BUILD_MKLEPTON', 'Build mklepton.', 0))
+tauon_configure_vars.Add(BoolVariable('BUILD_VIRTUALCPU', 'Build virtual_cpu for synthetic target.', 0))
+tauon_configure_vars.Add(BoolVariable('BUILD_SAMPLEAPP', 'Build sample application.', 0))
+tauon_configure_vars.Add(PathVariable('APP_PATH', 'Path for sample application', app_default_dir))
+
+tauon_configure_env = Environment(ENV = os.environ, variables = tauon_configure_vars)
+###
+
+##
+def get_toolchain_part(url, name, extension):
+   """
+   Get package from url and unpack it
+   """
+   #download and unpack file
+   if subprocess.call(["wget", wget_opts, url+name+extension]) > 0:
+      print "(EE) wget : " + name+extension
+      Exit(1)
+
+   if extension == bz2_extension:
+      ext_opts = bz2_opts
+   elif extension == gz_extension:
+      ext_opts = gz_opts
+   
+   if subprocess.call(["tar", ext_opts, name + extension]) > 0:
+      print "(EE) unpack error : " + name + extension
+      Exit(2)
+
+##
+def build_toolchain_gcc_stage1(name,configure_opts):
+   """
+   gcc need special treatment for part1
+   """
+   #copie config file in gcc path
+   shutil.copy(gcc_new_config_file, name + "/gcc/config/arm/")
+   
+   shutil.rmtree(host_tools_build_dir)
+   os.mkdir(host_tools_build_dir)
+   os.chdir(host_tools_build_dir)
+   
+   print os.getcwd()
+   
+   # configure and make all things
+   configure_cmd = "../" + name + "/configure " + configure_opts
+   if subprocess.call(shlex.split(configure_cmd)) > 0:
+      print "(EE) configure error : " + name
+      Exit(3)
+
+   if subprocess.call(["make", "all-gcc"]) > 0:
+      print "(EE) make error : " + name
+      Exit(4)
+
+   if subprocess.call(["make", "install-gcc"]) > 0:
+      print "(EE) make install error : " + name
+      Exit(5)
+
+   os.chdir('..')
+   print os.getcwd()
+
+##
+def build_toolchain_part(name, configure_opts):
+   """
+   Cross compile package
+   like binutils, gcc(part 2), newlib and gdb
+   """
+   shutil.rmtree(host_tools_build_dir)
+   os.mkdir(host_tools_build_dir)
+   os.chdir(host_tools_build_dir)
+   
+   print os.getcwd()
+   
+   # configure and make all things
+   configure_cmd = "../" + name + "/configure " + configure_opts
+   if subprocess.call(shlex.split(configure_cmd)) > 0:
+      print "(EE) configure error : " + name
+      Exit(3)
+
+   if subprocess.call(["make"]) > 0:
+      print "(EE) make error : " + name
+      Exit(4)
+
+   if subprocess.call(["make", "install"]) > 0:
+      print "(EE) make install error : " + name
+      Exit(5)
+
+   os.chdir('..')
+   print os.getcwd()
+
+##
+def build_toolchain(binutils_flag, gcc_flag, gdb_flag, install_dir):
+   """
+   General compilation process
+   """
+   #make build directory and install directory
+   subprocess.call(["mkdir", "-p", host_tools_build_dir])
+   subprocess.call(["mkdir", "-p", host_tools_install_dir])
+
+   if binutils_flag:
+      #get and build binutils
+      if get_toolchain_part(binutils_url, binutils_name, bz2_extension) > 0:
+         print "(EE) get_toolchain_part : " + binutils_name
+      Exit(1)
+
+      if build_toolchain_part(binutils_name, binutils_compile_options) > 0:
+         print "(EE) build_toolchain_part : " + binutils_name
+         Exit(1)
+
+      os.environ['PATH'] = os.environ['PATH'] + ":" + install_dir + "/bin"
+
+   if gcc_flag:
+   #get and build gcc (part 1)
+      if get_toolchain_part(gcc_url+gcc_name+"/", gcc_name, bz2_extension) > 0:
+         print "(EE) get_toolchain_part : " + gcc_name
+         Exit(1)
+
+      if build_toolchain_gcc_stage1(gcc_name, gcc_compile_options_stage1) > 0:
+         print "(EE) build_toolchain_gcc_stage1 : " + binutils_name
+         Exit(1)
+
+      #get and build newlib
+      if get_toolchain_part(newlib_url, newlib_name, gz_extension) > 0:
+         print "(EE) get_toolchain_part : " + binutils_name
+         Exit(1)
+
+      if build_toolchain_part(newlib_name, newlib_compile_options) > 0:
+         print "(EE) build_toolchain_part : " + newlib_name
+         Exit(1)
+
+      #build gcc part2
+      if build_toolchain_part(gcc_name, gcc_compile_options) > 0:
+         print "(EE) build_toolchain_part : " + gcc_name
+         Exit(1)
+
+   if gdb_flag:
+      #get and build gdb
+      if get_toolchain_part(gdb_url, gdb_name, bz2_extension) > 0:
+         print "(EE) get_toolchain_part : " + binutils_name
+         Exit(1)
+
+      if build_toolchain_part(gdb_unpack_name, gdb_compile_options) > 0:
+         print "(EE) build_toolchain_part : " + newlib_name
+         Exit(1)
+
+#
+def build_tauon_tools(mklepton_build_path):
+   """
+   Build default tool for Tauon
+   """
+   os.chdir(mklepton_build_path)
+   
+   if subprocess.call(["scons", "-c"]) > 0:
+      print "(EE) clean"
+      Exit(1)
+
+   if subprocess.call(["scons", "-Q", "install"]) > 0:
+      print "(EE) build"
+      Exit(1)
+
+#
+def install_default_epk(epk_dir, epk_lst, epk_name_lst, ecos_cmd):
+   """
+   Add default eCos target packages for Tauon
+   """
+   # remove and add package in ecos database
+   for i in range(len(epk_lst)):
+      cmd = ecos_cmd + " remove " + epk_name_lst[i]
+      subprocess.call(shlex.split(cmd))
+      
+      cmd = ecos_cmd + " add " + epk_dir + epk_lst[i]
+      if subprocess.call(shlex.split(cmd)) > 0:
+         print "(EE) add : " + epk_lst[i]
+         Exit(1)
+
+#
+def build_ecos_lib(script_dir, epk_lst_name, epk_lst_path, app_path):
+   os.chdir(script_dir)
+   
+   for i in range(len(epk_lst_path)):
+      #synthetic case
+      if epk_lst_path[i] == '':
+         os.chdir('synthetic/x86')
+         if subprocess.call(["sh", "script_ecos_synth.sh"]) > 0:
+            print "(EE) build eCos synthetic library"
+            Exit(1)  
+      else:
+         # add application special package and buid it
+         cmd = "sh " + script_dir + "/install-ecos-epk.sh " + app_path + \
+         "/hal/board_atmel_at91sam9261-ek " + epk_lst_name[i]
+         print cmd
+         if subprocess.call(shlex.split(cmd)) > 0:
+            print "(EE) add application ecos package : " + epk_lst_name[i]
+            Exit(1)
+         
+         cmd = "sh " + script_dir + "/script_ecos_lib.sh " + app_path + \
+         "/hal/board_atmel_at91sam9261-ek " + epk_lst_path[i]
+         print cmd
+         if subprocess.call(shlex.split(cmd)) > 0:
+            print "(EE) build application ecos library : " + epk_lst_name[i]
+            Exit(1)
+
+#
+def build_default_app(mklepton_path, app_dir, app_config, target_list, target_opts_file):
+   
+   for i in range(len(target_list)):
+      #parse configuration file and build application
+      os.chdir(mklepton_path)
+      cmd = "sh " + mklepton_path + "/mklepton_gnu.sh " + " -t " + target_list[i] + \
+      " " + app_config
+      if subprocess.call(shlex.split(cmd)) > 0:
+         print "(EE) parse application config file : " + target_list[i]
+         Exit(1)
+      
+      os.chdir(app_dir + '/prj/scons')
+      
+      cmd = "scons -c --targetfile=" + target_opts_file[i]
+      if subprocess.call(shlex.split(cmd)) > 0:
+         print "(EE) clean application : " + target_opts_file[i]
+         Exit(1)
+      
+      cmd = "scons -Q bin --targetfile=" + target_opts_file[i]
+      if subprocess.call(shlex.split(cmd)) > 0:
+         print "(EE) build application : " + target_opts_file[i]
+         Exit(1)
+   
+
+build_toolchain(tauon_configure_env['BUILD_BINUTILS'], tauon_configure_env['BUILD_GCC'], \
+tauon_configure_env['BUILD_GDB'], host_tools_install_dir)
+
+if tauon_configure_env['BUILD_MKLEPTON']:
+   build_tauon_tools(host_tools_base_dir + "/mklepton/prj/scons")
+   os.chdir(host_tools_config_dir)
+
+if tauon_configure_env['BUILD_VIRTUALCPU']:
+   build_tauon_tools(host_tools_base_dir + "/virtual_cpu/prj/scons")
+   os.chdir(host_tools_config_dir)
+
+if tauon_configure_env['BUILD_SAMPLEAPP']:
+   install_default_epk(epk_default_dir, epk_list, epk_list_name, ecos_admin_cmd)
+   build_ecos_lib(scripts_default_dir, epk_list_name, epk_list_path, app_default_dir)
+   
+   #prepare all things to build application
+   os.chdir(app_default_dir + '/prj/scons')
+   subprocess.call(["ln", "-s", tauon_user_path + "/build/SConstruct"])
+   os.environ['PYTHONPATH'] = tauon_python_module_dir
+   build_default_app(host_tools_base_dir + '/bin', app_default_dir, \
+   app_config_file, app_default_target, app_default_target_file)

@@ -1,0 +1,21 @@
+package CYGPKG_HAL_ARM_AT91SAM9261 {
+        alias           { "Atmel AT91SAM9261 development board" hal_arm_at91sam9261 }
+        directory       hal/arm/arm9/at91sam9261
+        script          hal_arm_at91_sam9261.cdl
+        hardware
+        description "
+        The Atmel AT91SAM9261 HAL package provides the support needed to run
+        eCos on Atmel AT91SAM9261 (ARM9) based development boards."
+}
+
+target at91sam9261 {
+        alias { "Atmel AT91SAM9261 development board" at91sam9261 }
+        packages { CYGPKG_HAL_ARM
+                   CYGPKG_HAL_ARM_ARM9
+                   CYGPKG_HAL_ARM_AT91SAM9261
+        }
+        description "
+        The Atmel AT91SAM9261 HAL package provides the support needed to run eCos on Atmel
+         AT91SAM9261 (ARM926EJ) based boards."
+}
+

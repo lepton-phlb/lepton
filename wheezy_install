@@ -1,0 +1,100 @@
+#Procédure installation wheezy
+Prérequis :
+   -. Serveur X fonctionnel (Installation Paquet de Base + Environnement de Bureau)
+   -. Utilisateur kvm
+   -. Machine 32 bits (pour 64 bits déboostrapé!)
+
+### Installation de eCos
+##prérequis
+build-essential libpng-dev libjpeg-dev libtiff-dev tcl8.4-dev tk8.4-dev
+
+#Création répertoires
+mkdir -p ~/dev/ecos-v3.0
+cd ~/dev/ecos-v3.0
+mkdir archives ecos-tools ecos-build
+
+#Stockage dans archives de la version 3.O de eCos récupérée sur http://hg-pub.ecoscentric.com/ nom de branche ecos-v3_0-branch
+#Récupération en bz2 (Partie droite de la ligne)
+#Extraction
+tar jxf archives/ecos-v3_0-branch-7d8c61e6225c.tar.bz2
+mv ecos-v3_0-branch-7d8c61e6225c/ ecos
+
+#Compilation ecosconfig
+cd ecos-build
+./ecos/host/configure --prefix=/home/kvm/dev/ecos-v3.0/ecos-tools --with-tcl=/usr --with-tcl-version=8.4
+make; make install
+
+cd ..
+ls ecos-tools/bin
+>>> ecosconfig
+
+#Récupération configtool
+cd archives
+wget ftp://ftp.mirrorservice.org/sites/sources.redhat.com/pub/ecos/anoncvs/ecos-tools-bin-110209.i386linux.tar.bz2
+tar jxf archives/ecos-tools-bin-110209.i386linux.tar.bz2
+mv configtool ecos-tools/bin/
+rm -rf ecosconfig ser_filter platforms.tar
+
+#Test du configtool
+cd ecos-tools/bin
+./configtool &
+#Chemin pour dépôt eCos
+/home/kvm/dev/ecos-v3.0/ecos/packages
+
+#Ajout du chemin des binaires et du chemin vers le dépôt eCos
+#Ouvrir .bahsrc et ajouter à la fin
+export PATH="$PATH:/home/kvm/dev/ecos-v3.0/ecos-tools/bin"
+export ECOS_REPOSITORY="/home/kvm/dev/ecos-v3.0/ecos/packages"
+
+#Récupération de chaines précompilées
+mkdir -p ~/dev/toolchains
+cd ~/dev/ecos-v3.0/archives
+wget --passive-ftp ftp://ecos.sourceware.org/pub/ecos/ecos-install.tcl
+tclsh ecos-install.tcl -t
+
+#Mettre comme chemin /home/kvm/dev/toolchains
+#Choisir arm-eabi et i386-elf
+#Ajout des chemins des chaines de compilation précompilées dans .bashrc
+export PATH="$PATH:/home/kvm/dev/toolchains/gnutools/arm-eabi/bin"
+export PATH="$PATH:/home/kvm/dev/toolchains/gnutools/i386-elf/bin"
+
+### Installation tauon et génération d'applications pour cible et simulation
+##prérequis
+subversion scons libexpat-dev libgtkgl2.0-dev minicom gdb
+
+#Récupération des sources dans ~/dev/tauon (CHANGER LE CHEMIN DU DEPOT)
+mkdir -p ~/dev/tauon
+cd ~/dev/tauon
+svn co svn://14.2.100.207/tauon/branches/lepton_open_source
+sh tauon_ln.sh
+cd ~/tauon (lien symbolique sur ~/dev/tauon)
+
+#Modifier le chemin dans le fichier de configuration de virtual_cpu
+cd ~/tauon/tools/virtual_cpu/prj/scons/
+vi virtual_cpu_opts.py
+#Remplacer /home/shiby par le chemin de votre utilisateur courant
+
+#Compilation avec les chaines précompilées du projet tauon_flnxapp
+cd ~/tauon/tools/config
+scons BUILD_MKLEPTON=True BUILD_VIRTUALCPU=True BUILD_SAMPLEAPP=True
+
+#Mise en place de l'environnement de simulation
+sh ~/tauon/tools/host/debian/scripts/build_fifo.sh
+
+#Copier fichier de configuration minicom (EN ROOT)
+cp /home/kvm/tauon/sys/root/prj/config/minicom/minirc.tauonpt /etc/minicom/
+
+#Lancer une session de déboguage
+cd ~/tauon/sys/user/tauon_flnxapp/bin/
+gdb -x ../etc/scripts/gdb_script_synth.gdb tauon_synthetic.elf
+
+#Au prompt de gdb. Tapez r
+
+#Dans une autre console ouvir minicom
+minicom -o tauonpt
+
+#Tapez des commandes ;)
+ps
+ls /usr/sbin
+uname -a
+..

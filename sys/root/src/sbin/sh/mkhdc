@@ -1,0 +1,9 @@
+#! lsh 
+#format hdc
+cd /
+pwd
+umount /mnt
+#warning!!! format hdc (eeprom bank2) 
+mkfs -t ufs -n $1 -b $2 -d /dev/hd/hdc
+mount -t ufs /dev/hd/hdc /mnt
+exit
