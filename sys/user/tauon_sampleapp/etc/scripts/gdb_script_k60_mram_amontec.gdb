@@ -7,7 +7,7 @@ set remotetimeout 1000
 # Set GDB in little-endian (OK)
 set endian little
 
-monitor jtag_khz 8
+monitor adapter_khz 8
 echo Reduce JTAG speed...\n
 
 monitor reset
@@ -149,7 +149,7 @@ monitor mww 0x4004c000  0x00000500
 echo Configuring CS0 for MRAM done...\n
 
 # Increase JTAG Speed
-monitor jtag_khz 8000
+monitor adapter_khz 8000
 
 echo Configuring JTAG fast done...\n
 
