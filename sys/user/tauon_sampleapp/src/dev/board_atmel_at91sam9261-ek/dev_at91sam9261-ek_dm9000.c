@@ -107,13 +107,18 @@ static int dev_at91sam9261_ek_eth_dm9000_load(void){
    dev_io_info.irq_no   = CYGNUM_HAL_INTERRUPT_PIOC;//(voir cyg/hal/hal_platform_ints.h)
    dev_io_info.irq_prio = CYGNUM_HAL_H_PRIOR;
 
+   // init Chip Select (CS2) for Ethernet controler DM9000A
+   AT91C_BASE_SMC->SMC_CTRL2 = AT91C_SMC_READMODE | AT91C_SMC_WRITEMODE | AT91C_SMC_NWAITM_NWAIT_DISABLE | AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS;
+   AT91C_BASE_SMC->SMC_CYCLE2 = 0x000F000F; // RD cycle = WR cycle = 15 clock
+   AT91C_BASE_SMC->SMC_SETUP2 = 0x03030303; // RD setup = WR setup = 3 clock
+   AT91C_BASE_SMC->SMC_PULSE2 = 0x03030303; // RD pulse = WR pulse = 3 clock
+
    //disable hard reset on dm9000 chip for atmel at91sam9261-ek board.
    AT91_SYS->PMC_PCER |= (1 << (4)); //PIOC ID = 4 // Switch on clock to portC
    AT91_SYS->PIOC_PER |= (AT91C_PIO_PC10); //enable PC10 as IO
    AT91_SYS->PIOC_OER |= (AT91C_PIO_PC10); //enable PC10 as Output
    AT91_SYS->PIOC_CODR|= (AT91C_PIO_PC10); //clear PC10 line. reset is inactive.
-   //enable PC11 FIQ for dm9000 chip for for atmel at91sam9261-ek board.
-
+   
    return dev_at91sam9261_eth_dm9000a_load(&dev_io_info);
 }
 
