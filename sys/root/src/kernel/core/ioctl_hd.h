@@ -46,6 +46,11 @@ Declaration
 #define HDCLRDSK        6
 #define HDIO            7
 
+//for SD request
+#define HDSD_SENDCOMMAND   0x10
+#define HDSD_CHECKBUSY     0x11
+#define HDSD_SETSPEED      0x12
+
 //io informations
 typedef unsigned long hdio_addr_t;
 
