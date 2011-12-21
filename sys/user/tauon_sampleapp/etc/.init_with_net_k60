@@ -1,2 +1,3 @@
 #
-net/ifconfig addif 192.168.1.2 192.168.1.1
+#net/ifconfig addif 192.168.1.2 192.168.1.1
+mount /dev/sd /dev/sdhc /dev/hd/sdhc0

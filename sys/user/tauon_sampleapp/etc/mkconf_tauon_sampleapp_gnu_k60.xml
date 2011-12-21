@@ -95,11 +95,15 @@
 <target name="cortexm_lepton">
    <devices>
       <!-- /dev/ttys0 -->
-      <dev name="dev_k60n512_uart_s3_map"      use="on"/>
+      <dev name="dev_k60n512_uart_s3_map"       use="on"/>
       <!-- /dev/rtc0 -->
-      <dev name="dev_k60n512_rtc_map"          use="off"/>
+      <dev name="dev_k60n512_rtc_map"           use="off"/>
       <!-- /dev/eth0 -->
       <dev name="dev_k60n512_enet_map"          use="on"/>
+      <!-- /dev/sdhc -->
+      <dev name="dev_k60n512_sdhc_map"          use="on"/>
+      <!-- /dev/sdhc -->
+      <dev name="dev_sd_map"                    use="on"/>
    </devices>
 </target>
 
@@ -182,6 +186,7 @@
    <target name="cortexm_lepton">
         <!-- tools test-->
         <bin name="test"        stack="1024"    priority="10" timeslice="5" />
+        <bin name="test2"       stack="1024"    priority="10" timeslice="5" />
    </target>
 </binaries>
 

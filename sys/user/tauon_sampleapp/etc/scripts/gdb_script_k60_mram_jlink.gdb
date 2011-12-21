@@ -160,3 +160,9 @@ set remotetimeout 1000
 monitor gdb_breakpoint_override	soft
 
 load
+
+#k60 peripherals maps
+source ../etc/scripts/gdb_k60_regs_map.gdb 
+
+#put breakpoints
+#put watchpoints
