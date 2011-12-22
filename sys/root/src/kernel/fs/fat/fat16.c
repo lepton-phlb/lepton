@@ -25,7 +25,6 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
 /*============================================
 | Includes
 ==============================================*/
@@ -50,6 +49,16 @@ static fat16_boot_core_info_t fat16_boot_core_info = {0};
 static fat16_core_info_t fat16_core_info={0};
 
 fat16_ofile_t fat16_ofile_lst[MAX_OPEN_FILE]={0};
+
+#ifdef FAT_CACHE_FAT
+   fat16_u8_t fat16_cache[FAT_CACHE_FAT_SIZE]
+#if !defined(CPU_GNU32)
+__attribute__ ((section(".no_cache")))
+#endif
+;
+
+#endif //FAT_CACHE_FAT
+
 /*============================================
 | Implementation
 ==============================================*/
@@ -229,6 +238,17 @@ int _fat_readfs(mntdev_t* pmntdev) {
    //511 empty in rootdir + nbcluster*cluster_size/entry_size
    pmntdev->inodetbl_size = (pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_RootEntCnt-1)
          +(nb_clus*pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_SecPerClust*pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_BytesPerSec)/RD_SIZE;
+
+#ifdef FAT_CACHE_FAT
+   pmntdev->fs_info.fat_info.fat_core_info->fat_cache = fat16_cache;
+   //fill fat_cache
+   for(nb_clus=0; nb_clus<FAT_CACHE_FAT_SIZE/FAT16_BS_BPS_VAL;nb_clus++) {
+      if(_fat_read_data(pmntdev->dev_desc,__get_fat_addr(pmntdev) + nb_clus*FAT16_BS_BPS_VAL,
+            (unsigned char *)fat16_cache + nb_clus*FAT16_BS_BPS_VAL, FAT16_BS_BPS_VAL)<0) {
+         return -1;
+      }
+   }
+#endif //FAT_CACHE_FAT
    return 0;
 }
 
@@ -431,9 +451,10 @@ int _fat_close(desc_t desc) {
 | See:
 ---------------------------------------------*/
 int _fat_read(desc_t desc,char* buffer,int size) {
-   fat16_u32_t Add;
+   fat16_u32_t cluster_addr;
    fat16_u16_t clus, offset;
-   int readsize;
+   int readsize = 0;
+   int r = 0;
    //
    struct __timeval tv={0};
    unsigned char buf[RD_LSTDATEACC_SIZE]={0};
@@ -446,44 +467,45 @@ int _fat_read(desc_t desc,char* buffer,int size) {
    if((ofile_lst[desc].offset+size)>ofile_lst[desc].size)
       size = ofile_lst[desc].size-ofile_lst[desc].offset;
 
+   //we don't read more than one cluster
+   if(size > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
+      size = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL);
+   }
+
    //get current offset in cluster
-   if(_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&clus,&offset)==-1)
+   if(_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&clus,&offset, 0)==-1)
       return -1;
 
    //get addr of current offset
-   Add = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus)+offset;
+   cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus)+offset;
 
-   if(size>((__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)-offset))
-      readsize = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)-offset;
-   else
-      readsize = size;
-
-   if(_fat_read_data(__get_dev_desc(desc),Add,buffer,readsize)<0) {
-      return -1;
-   }
-
-   //read data in other clusters
-   while (readsize != size) {
-      clus = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus);          // On calcule l'adresse de l'offset courant
-      Add = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus);
-
-      //error
-      if (Add == 0)
-         return readsize;
-
-      if ((size-readsize)>(__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
-         if(_fat_read_data(__get_dev_desc(desc),Add,buffer+readsize,(__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL))<0) {
-            break;//return readsize;
+   //data are between to cluster
+   if((offset+size) > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
+      //read first part
+      int sz_part = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL) - offset;
+      while((readsize += r) < sz_part) {
+         if((r = _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize ,sz_part-readsize)) < 0) {
+            break;
          }
-
-         readsize = readsize + (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL); // Lecture
       }
-      else {
-         if(_fat_read_data(__get_dev_desc(desc),Add,buffer+readsize,size-readsize)<0) {
-            break;//return readsize;
-         }
+      clus = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus);
+      cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus);
 
-         readsize = size;
+      //read second part
+      sz_part = size - sz_part;
+      readsize = 0;
+      r = 0;
+      while((readsize += r) < sz_part) {
+         if((r = _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize ,sz_part-readsize)) < 0) {
+            break;
+         }
+      }
+   }
+   else {
+      while((readsize += r) < size) {
+         if((r = _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize ,size-readsize)) < 0) {
+            break;
+         }
       }
    }
 
@@ -511,8 +533,10 @@ int _fat_read(desc_t desc,char* buffer,int size) {
 int _fat_write(desc_t desc,char* buffer,int size) {
    fat16_u8_t Buffer[RD_FILESIZE_SIZE];
    fat16_u16_t curclus,curoffset;
-   fat16_u32_t curadd, tempadd;
-   int writtensize=0;
+   fat16_u32_t cluster_addr, tempadd;
+   int writesize = 0;
+   int w = 0;
+   fat16_u16_t prev_clus;
 
    //
    struct __timeval tv={0};//common
@@ -531,72 +555,85 @@ int _fat_write(desc_t desc,char* buffer,int size) {
       if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LWCLUSNO_OFF,Buffer,RD_LWCLUSNO_SIZE)<0) {
          return -1;
       }
+      curclus = fat16_ofile_lst[desc].entry_data_cluster;
+      curoffset = 0;
+   }
+   else {
+      //get current offset in cluster
+      if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&curclus,&curoffset, 0)==-1)
+         return -1;
+
+      //reach end of cluster allocate a new one
+      if(!curoffset && curclus == FAT16_LCLUSMAX) {
+         fat16_u16_t tmp = 0;
+         //get current offset in cluster
+         if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&curclus,&curoffset, 1)==-1)
+            return -1;
+
+         tmp = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
+
+         if(!tmp) {
+            return -1;//error
+         }
+         _fat16_chainclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), curclus, tmp);
+         curclus = tmp;
+      }
    }
 
-   //get current offset in cluster
-   if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&curclus,&curoffset)==-1)
-      return -1;
-
    //get addr of current offset
-   curadd = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,curclus)+curoffset;
+   cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,curclus)+curoffset;
 
-   if (!(curadd > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)))
-      return -1;
+   //limit write size
+   if(size > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
+      size = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL);
+   }
 
-   //write data in file
-   while (size != writtensize) {
-      //last cluster have enough space for datas
-      if ((curoffset + size) < (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
-         if(_fat_write_data(__get_dev_desc(desc),curadd,buffer+writtensize,size-writtensize)<0) {
-            break;//return writtensize;
+   //
+   //data are between to cluster
+   if((curoffset+size) > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
+      //write first part
+      int sz_part = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL) - curoffset;
+      while((writesize += w) < sz_part) {
+         if((w = _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize, buffer+writesize ,sz_part-writesize)) < 0) {
+            break;
          }
-
-         writtensize = size;
       }
-      //or not
-      else {
-         if(_fat_write_data(__get_dev_desc(desc),curadd,buffer+writtensize,(__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)-curoffset)<0) {
-            break;//return writtensize;
+
+      prev_clus = curclus;
+      curclus = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), curclus);
+      //allocate new cluster
+      if(curclus == 0 || curclus==FAT16_LCLUSMAX) {
+         curclus = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
+
+         if(!curclus) {
+            return -1;//error
          }
+         _fat16_chainclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), prev_clus, curclus);
+      }
 
-         writtensize = writtensize + (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)-curoffset;
-         curoffset = 0;
-         tempadd = __get_fat_addr(ofile_lst[desc].pmntdev) + (FAT16_CLUSSZ*curclus);
-         curclus = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), curclus);
-         //if (curclus == 0) {
-         //cluster empty or final cluster
-         if(curclus == 0 || curclus==FAT16_LCLUSMAX) {
-            ///!TODO add more clean code :)
-            curclus = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
-            if(curclus == 0)
-               return -1;
-            Buffer[0] = (fat16_u8_t)curclus;
-            Buffer[1] = (fat16_u8_t)(curclus>>8);
-
-            if(_fat_write_data(__get_dev_desc(desc),tempadd,Buffer,FAT16_CLUSSZ)<0) {
-               return -1;
-            }
-            if(_fat_write_data(__get_dev_desc(desc),tempadd+__get_fat_size(ofile_lst[desc].pmntdev),Buffer,FAT16_CLUSSZ)<0) {
-               return -1;
-            }
-
-            //error
-            curadd = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, curclus);
-            if (curadd == 0) {
-               return -1;
+      if((cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, curclus))) {
+         //write second part
+         int writesize_part2 = 0;
+         sz_part = size - sz_part;
+         w = 0;
+         while((writesize_part2 += w) < sz_part) {
+            if((w = _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize_part2, buffer+writesize+writesize_part2 , sz_part-writesize_part2)) < 0) {
+               break;
             }
          }
-         //
-         curadd = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, curclus);
-         if (curadd == 0) {
-            return(writtensize);
+      }
+   }
+   else {
+      while((writesize += w) < size) {
+         if((w = _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize, buffer+writesize, size-writesize)) < 0) {
+            break;
          }
       }
    }
 
    //update size
-   if (!(ofile_lst[desc].size > (ofile_lst[desc].offset + writtensize))) {
-      ofile_lst[desc].size = ofile_lst[desc].offset + writtensize;
+   if (!(ofile_lst[desc].size > (ofile_lst[desc].offset + writesize))) {
+      ofile_lst[desc].size = ofile_lst[desc].offset + writesize;
       Buffer[0] = (fat16_u8_t) ofile_lst[desc].size;
       Buffer[1] = (fat16_u8_t) (ofile_lst[desc].size>>8);
       Buffer[2] = (fat16_u8_t) (ofile_lst[desc].size>>16);
@@ -621,9 +658,9 @@ int _fat_write(desc_t desc,char* buffer,int size) {
 
    //set modified status and update offset
    ofile_lst[desc].status|=MSK_FSTATUS_MODIFIED;
-   ofile_lst[desc].offset+=writtensize;
+   ofile_lst[desc].offset+=writesize;
 
-   return writtensize;
+   return writesize;
 }
 
 /*-------------------------------------------
