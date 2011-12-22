@@ -26,6 +26,7 @@ tauon_sampleapp_src_kernel_dev_at91sam9261_dir = tauon_sampleapp_src_kernel_dev_
 ####source files
 #simple test
 tauon_sampleapp_src_list = [TauonSource(tauon_sampleapp_src_dir+'test.c')]
+tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dir+'tstsd.c')])
 
 #network utilities
 tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/telnetd.c'),
