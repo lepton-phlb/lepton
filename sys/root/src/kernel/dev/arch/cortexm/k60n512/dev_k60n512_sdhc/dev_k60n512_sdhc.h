@@ -199,7 +199,10 @@ either the MPL or the [eCos GPL] License."
 #define REG_SDHC_PROCTL_WECRM_MASK                   0x4000000u
 #define REG_SDHC_PROCTL_WECRM_SHIFT                  26
 
-#define SDHC_PROCTL_EMODE_INVARIANT                   (0x02)
+#define SDHC_PROCTL_EMODE_INVARIANT       (0x02)
+#define SDHC_PROCTL_DTW_1BIT              (0x00)
+#define SDHC_PROCTL_DTW_4BIT              (0x01)
+#define SDHC_PROCTL_DTW_8BIT              (0x10)
 
 //
 #define REG_SDHC_SYSCTL_IPGEN_MASK                   0x1u

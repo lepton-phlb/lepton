@@ -74,12 +74,16 @@ static int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char
 static unsigned char g_sd_buf_rcv[SD_BUFFER_SIZE_NO_CACHE_RCV+SD_BLOCK_SIZE]
 #if defined(CPU_ARM9)
 __attribute__ ((section (".no_cache")))
+#else
+__attribute((aligned(4)))
 #endif
 ;
 
 static unsigned char g_sd_buf_snd[SD_BUFFER_SIZE_NO_CACHE_SND+SD_BLOCK_SIZE]
 #if defined(CPU_ARM9)
 __attribute__ ((section (".no_cache")))
+#else
+__attribute((aligned(4)))
 #endif
 ;
 
