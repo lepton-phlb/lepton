@@ -25,7 +25,6 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
 /*============================================
 | Compiler Directive
 ==============================================*/
@@ -234,7 +233,12 @@ either the MPL or the [eCos GPL] License."
 //
 #define FAT16_VOLUME_NAME        "TAUONVOL\0"
 //to clean cluster content
-#define FAT_16_CLEAN_BUFFER_SIZE        128
+#define FAT_16_CLEAN_BUFFER_SIZE        FAT16_BS_BPS_VAL
+
+#if defined(CPU_GNU32) || defined(CPU_ARM9)
+#define FAT_CACHE_FAT
+#define FAT_CACHE_FAT_SIZE    (FAT16_LCLUSMAX*FAT16_CLUSSZ)
+#endif
 
 //tauon definition for FAT16
 typedef unsigned long   fat16_u32_t;
@@ -254,6 +258,10 @@ typedef struct fat16_core_info_st{
    fat16_u32_t         rd_size; //root directory size in bytes
    fat16_u32_t         ud_addr; //user data address
    fat16_u32_t         ud_size; //user data size in bytes
+   //
+#ifdef FAT_CACHE_FAT
+   fat16_u8_t           * fat_cache;
+#endif //FAT_CACHE_FAT
 }fat16_core_info_t;
 
 //
@@ -349,9 +357,9 @@ int _fat16_putclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cl
 int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster_curr, fat16_u16_t cluster_next);
 void _fat16_delcluslist(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t cluster);
 int _fat16_lastclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster);
-
+int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb, fat16_u16_t cluster);
 //
-int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus, fat16_u16_t* offset);
+int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus, fat16_u16_t* offset, unsigned char prev_flag);
 fat16_u32_t _fat16_adddir(fat16_core_info_t * fat_info, desc_t desc);
 int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc);
 

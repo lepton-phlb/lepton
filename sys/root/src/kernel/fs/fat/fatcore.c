@@ -25,7 +25,6 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
 /*============================================
 | Includes
 ==============================================*/
@@ -154,9 +153,13 @@ fat16_u16_t _fat16_cluster_suiv(fat16_core_info_t * fat_info, desc_t dev_desc, f
       return 0;
 
    //
+#ifdef FAT_CACHE_FAT
+   memcpy((void *)buf, fat_info->fat_cache+(cluster*FAT16_CLUSSZ), FAT16_CLUSSZ);
+#else
    if(_fat_read_data(dev_desc,fat_info->fat_addr+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
       return 0;
    }
+#endif //FAT_CACHE_FAT
 
    cluster_suiv = ((fat16_u16_t)buf[1]<<8)+buf[0];
    if ((cluster_suiv<FAT16_CLUSMIN) || (cluster_suiv>FAT16_CLUSMAX)) {
@@ -178,19 +181,47 @@ fat16_u16_t _fat16_cluster_suiv(fat16_core_info_t * fat_info, desc_t dev_desc, f
 | See:
 ---------------------------------------------*/
 fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb) {
-   fat16_u32_t addr;
    fat16_u16_t cluster = FAT16_CLUSMIN-1;
    fat16_u8_t buf[FAT16_CLUSSZ];
-   int i;
+   int i,j;
    unsigned char clean_buf[FAT_16_CLEAN_BUFFER_SIZE]={0};
-   int count=0;
+   unsigned short * p_cluster = NULL;
+   char found=0;
 
+#ifdef FAT_CACHE_FAT
+   //looking in cache fat
+   p_cluster = (unsigned short *)fat_info->fat_cache;
+   p_cluster += FAT16_CLUSMIN;
+   for(cluster=FAT16_CLUSMIN; cluster<FAT16_CLUSMAX ;cluster++, p_cluster++) {
+      if(!(*p_cluster)) {
+         break;
+      }
+   }
+
+#else
    //looking for first free cluster in FAT
-   do {
-      if(_fat_read_data(dev_desc,fat_info->fat_addr+(++cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
+   for(i=0; i<(fat_info->fat_size/FAT_16_CLEAN_BUFFER_SIZE) ;i++) {
+      //read block in cache
+      if(_fat_read_data(dev_desc,fat_info->fat_addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,FAT_16_CLEAN_BUFFER_SIZE)<0) {
          return 0;
       }
-   } while(((buf[0]!=0x00)||(buf[1]!=0x00)) && (cluster < (fat_info->fat_size/FAT16_CLUSSZ)));
+      //
+      p_cluster = (unsigned short *)clean_buf;
+      for(j=0; j<FAT_16_CLEAN_BUFFER_SIZE; j+=2) {
+         //free cluster found
+         if(!(*p_cluster)) {
+            found = 1;
+            break;
+         }
+         p_cluster++;
+      }
+
+      if(found) {
+         cluster = i*FAT_16_CLEAN_BUFFER_SIZE/FAT16_CLUSSZ + j/2;
+         break;
+      }
+   }
+#endif //FAT_CACHE_FAT
 
    //no available cluster
    if (cluster == (fat_info->fat_size/FAT16_CLUSSZ))
@@ -207,17 +238,10 @@ fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_p
       return 0;
    }
 
-   //erase cluster content
-   addr = _fat16_cluster_add(fat_info, cluster);
-   buf[0] = 0x00;
-
-   //
-   count = (bpb->BPB_BytesPerSec*bpb->BPB_SecPerClust)/FAT_16_CLEAN_BUFFER_SIZE;
-   for(i=0;i<count;i++) {
-      if(_fat_write_data(dev_desc,addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,FAT_16_CLEAN_BUFFER_SIZE)<0) {
-         return 0;
-      }
-   }
+#ifdef FAT_CACHE_FAT
+   //update fat cache
+   memcpy((void *)p_cluster, buf, FAT16_CLUSSZ);
+#endif //FAT_CACHE_FAT
 
    return cluster;
 }
@@ -244,6 +268,11 @@ int _fat16_putclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cl
    if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
       return -1;
    }
+
+#ifdef FAT_CACHE_FAT
+   //update fat cache
+   memcpy((void *)(fat_info->fat_cache + cluster*FAT16_CLUSSZ), buf, FAT16_CLUSSZ);
+#endif //FAT_CACHE_FAT
 
    return 0;
 }
@@ -277,6 +306,11 @@ int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t 
    if(_fat_write_data(dev_desc,addr+fat_info->fat_size,buf,FAT16_CLUSSZ)<0) {
       return -1;
    }
+
+#ifdef FAT_CACHE_FAT
+   //update fat cache
+   memcpy((void *)(fat_info->fat_cache + cluster_curr*FAT16_CLUSSZ), buf, FAT16_CLUSSZ);
+#endif //FAT_CACHE_FAT
 
    return 0;
 }
@@ -358,8 +392,9 @@ int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc) {
 | Comments:
 | See:
 ---------------------------------------------*/
-int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus, fat16_u16_t* offset) {
+int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus, fat16_u16_t* offset, unsigned char prev_flag) {
    fat16_u32_t off = ofile_lst[desc].offset;
+   fat16_u16_t prev;
 
    *clus = fat16_ofile_lst[desc].entry_data_cluster;
    //no data
@@ -367,13 +402,21 @@ int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* cl
       return -1;
 
    while (off>((fat_info->nbsec_per_clus*FAT16_BS_BPS_VAL)-1)) {
+      prev = *clus;
+
       *clus = _fat16_cluster_suiv(fat_info, __get_dev_desc(desc), *clus);
       //no more data
-      if(clus == 0)
+      if(*clus == 0)
          return -1;
       off = off-(fat_info->nbsec_per_clus*FAT16_BS_BPS_VAL);
    }
+
    *offset = off;
+
+   if(!off && prev_flag) {
+      *clus = prev;
+   }
+
    return(0);
 }
 
@@ -445,6 +488,41 @@ int _fat16_lastclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t c
    }
    if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
       return -1;
+   }
+
+#ifdef FAT_CACHE_FAT
+   //update fat cache
+   memcpy((void *)(fat_info->fat_cache + cluster*FAT16_CLUSSZ), buf, FAT16_CLUSSZ);
+#endif //FAT_CACHE_FAT
+
+   return 0;
+}
+
+/*-------------------------------------------
+| Name:_fat16_cleanclus
+| Description:free cluster in FATs
+| Parameters:
+| Return Type:-1 KO, 0 OK
+| Comments:
+| See:
+---------------------------------------------*/
+int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb, fat16_u16_t cluster) {
+
+   fat16_u32_t addr;
+   int i;
+   unsigned char clean_buf[FAT_16_CLEAN_BUFFER_SIZE]={0};
+   int count=0;
+
+   //erase cluster content
+   addr = _fat16_cluster_add(fat_info, cluster);
+   memset((void *)clean_buf, 0, FAT_16_CLEAN_BUFFER_SIZE);
+
+   //
+   count = (bpb->BPB_BytesPerSec*bpb->BPB_SecPerClust)/FAT_16_CLEAN_BUFFER_SIZE;
+   for(i=0;i<count;i++) {
+      if(_fat_write_data(dev_desc,addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,FAT_16_CLEAN_BUFFER_SIZE)<0) {
+         return 0;
+      }
    }
    return 0;
 }

@@ -25,7 +25,6 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
 /*============================================
 | Includes
 ==============================================*/

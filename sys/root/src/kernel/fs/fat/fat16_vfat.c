@@ -25,7 +25,6 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
 /*============================================
 | Includes
 ==============================================*/
@@ -95,8 +94,12 @@ static fat_vfat_dir_entry_t vfat_tab_long_entry[FAT16_MAX_LONGNAME_TAB_ENTRY]={0
 | See:
 ---------------------------------------------*/
 int _fat_vfat_statfs(mntdev_t* pmntdev,struct statvfs *statvfs) {
-   int i=0;
-   unsigned short cluster_value=0;
+   int i=0, j=0;
+   unsigned short *cluster_value=NULL;
+#ifndef FAT_CACHE_FAT
+   unsigned char cache_buf[FAT_16_CLEAN_BUFFER_SIZE];
+#endif
+
    memset(statvfs,0,sizeof(struct statvfs));
    //
 
@@ -105,15 +108,32 @@ int _fat_vfat_statfs(mntdev_t* pmntdev,struct statvfs *statvfs) {
    statvfs->f_blocks = __get_BPB_TotSec16(pmntdev)?__get_BPB_TotSec16(pmntdev):__get_BPB_TotSec32(pmntdev);
    statvfs->f_namemax = FAT16_MAX_NAME_FIL_VFAT;
 
-   //number of free blocks
-   for(i=0;i<(__get_fat_size(pmntdev)/FAT16_CLUSSZ);i++) {
-      if(_fat_read_data(pmntdev->dev_desc,__get_fat_addr(pmntdev)+(i*FAT16_CLUSSZ),(unsigned char *)&cluster_value,FAT16_CLUSSZ)<0) {
-         return -1;
-      }
-      if(cluster_value == RD_CLUSEMPTY) {
+#ifdef FAT_CACHE_FAT
+   cluster_value = (unsigned short *)pmntdev->fs_info.fat_info.fat_core_info->fat_cache;
+   cluster_value += FAT16_CLUSMIN;
+   for(i=FAT16_CLUSSZ-FAT16_CLUSMIN; i<__get_fat_size(pmntdev); i+=2, cluster_value++) {
+      if(*cluster_value == RD_CLUSEMPTY) {
          statvfs->f_bfree++;
       }
    }
+#else
+   //number of free blocks
+   for(i=0;i<(__get_fat_size(pmntdev)/FAT_16_CLEAN_BUFFER_SIZE);i++) {
+      //read block in cache
+      if(_fat_read_data(pmntdev->dev_desc,__get_fat_addr(pmntdev)+(i*FAT_16_CLEAN_BUFFER_SIZE),cache_buf,FAT_16_CLEAN_BUFFER_SIZE)<0) {
+         return -1;
+      }
+      //and count from cache
+      cluster_value = (unsigned short *)cache_buf;
+      for(j=0; j<FAT_16_CLEAN_BUFFER_SIZE; j+=2) {
+         if(*cluster_value == RD_CLUSEMPTY) {
+            statvfs->f_bfree++;
+         }
+         cluster_value++;
+      }
+   }
+#endif //FAT_CACHE_FAT
+
    return 0;
 }
 /*-------------------------------------------
@@ -563,6 +583,10 @@ inodenb_t _fat_vfat_create(desc_t desc,char* filename, int attr) {
 
    //create dot and dot dot for directory
    if(attr == S_IFDIR) {
+      //clean cluster and write . and ..
+      _fat16_cleanclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc),
+            &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb, tmp_cluster);
+
       if(_fat16_create_fat_directory_entry(&fat_entry.msdos_entry, desc, tmp_cluster, parent_cluster)<0)
          return INVALID_INODE_NB;
    }
