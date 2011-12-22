@@ -169,7 +169,7 @@
    <!--bin name="touch"    stack="2048"    priority="10" timeslice="5" /-->
    <bin name="cat"      stack="2048"    priority="10" timeslice="5" />
    <!--bin name="more"     stack="2048"    priority="10" timeslice="5" /-->
-   <!--bin name="mkfs"     stack="2048"    priority="10" timeslice="5" /-->
+   <bin name="mkfs"     stack="2048"    priority="10" timeslice="5" />
    <bin name="df"       stack="2048"    priority="10" timeslice="5" />
    <bin name="uname"    stack="2048"    priority="10" timeslice="5" />
    <!--bin name="pwd"      stack="2048"    priority="10" timeslice="5" /-->
@@ -186,7 +186,7 @@
    <target name="cortexm_lepton">
         <!-- tools test-->
         <bin name="test"        stack="1024"    priority="10" timeslice="5" />
-        <bin name="test2"       stack="1024"    priority="10" timeslice="5" />
+        <bin name="tstsd"       stack="2048"    priority="10" timeslice="5" />
    </target>
 </binaries>
 
