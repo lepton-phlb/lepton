@@ -75,12 +75,10 @@ mntdev_t  mntdev_lst[MAX_MOUNT_DEVICE];
 pfsop_t const fsop_lst[MAX_FILESYSTEM]={
    &rootfs_op,
    &ufs_op,
-#if !defined(CPU_CORTEXM)
    &ufsx_op,
    &kofs_op,
    &fat_msdos_op,
    &fat_vfat_op,
-#endif
    0
 };
 
