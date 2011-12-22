@@ -85,9 +85,14 @@ REG_SDHC_IRQSTATEN_DCESEN_MASK | REG_SDHC_IRQSTATEN_DTOESEN_MASK | \
 REG_SDHC_IRQSTATEN_CIESEN_MASK | REG_SDHC_IRQSTATEN_CEBESEN_MASK | \
 REG_SDHC_IRQSTATEN_CCESEN_MASK | REG_SDHC_IRQSTATEN_CTOESEN_MASK)
 
-#define  KINETIS_SDHC_ALLOWED_IRQS    (KINETIS_SDHC_ERRORS_IRQS | \
-REG_SDHC_IRQSTATEN_BRRSEN_MASK | REG_SDHC_IRQSTATEN_BWRSEN_MASK | \
+/*#define  KINETIS_SDHC_ALLOWED_IRQS    (KINETIS_SDHC_ERRORS_IRQS | \
+REG_SDHC_IRQSTATEN_DINTSEN_MASK | \
 REG_SDHC_IRQSTATEN_CRMSEN_MASK | REG_SDHC_IRQSTATEN_TCSEN_MASK | \
+REG_SDHC_IRQSTATEN_CCSEN_MASK)*/
+
+#define  KINETIS_SDHC_ALLOWED_IRQS    (KINETIS_SDHC_ERRORS_IRQS | \
+REG_SDHC_IRQSTATEN_DINTSEN_MASK | \
+REG_SDHC_IRQSTATEN_TCSEN_MASK | \
 REG_SDHC_IRQSTATEN_CCSEN_MASK)
 
 //
@@ -114,7 +119,10 @@ board_kinetis_sdhc_info_t g_kinetis_sdhc_info;
 //
 typedef struct _sdhc_stat_st {
    unsigned int error;
+   
    unsigned int cc;
+   unsigned int tc;
+   unsigned int dint;
 } _sdhc_stat_t;
 
 _sdhc_stat_t g_kinetis_sdhc_stat;
@@ -222,6 +230,11 @@ Implementation
 int dev_k60n512_sdhc_load(void) {
    volatile unsigned int reg_val = 0;
    
+   //FSL: allow concurrent access to MPU controller. Example: ENET uDMA to SRAM, otherwise bus error
+	reg_val = 0;
+	HAL_WRITE_UINT32(0x4000d000, reg_val);//MPU_CESR = 0; 
+   
+   //
    g_kinetis_sdhc_info.sdhc_base = 0x400b1000;
    g_kinetis_sdhc_info._desc_rd = -1;
 	g_kinetis_sdhc_info._desc_wr = -1;
@@ -413,8 +426,19 @@ int dev_k60n512_sdhc_ioctl(desc_t desc,int request,va_list ap) {
 
       case HDSD_SETSPEED: {
             board_kinetis_sdhc_info_t * p_inf_sdhc = (board_kinetis_sdhc_info_t *)ofile_lst[desc].p;
+            unsigned int reg_val = 0;
+            
             _kinetis_sdhc_configure_pins(0);
+            
+            //increase frequency
             _kinetis_sdhc_setbaud(p_inf_sdhc, 96000000, KINETIS_SDHC_NORMAL_SPEED);
+            
+            //4bits width
+            HAL_READ_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_PROCTL, reg_val);
+            reg_val &= (~REG_SDHC_PROCTL_DTW_MASK);
+            reg_val |= REG_SDHC_PROCTL_DTW(SDHC_PROCTL_DTW_4BIT);
+            HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_PROCTL, reg_val);
+            
             _kinetis_sdhc_configure_pins(1);
             return 0;
          }
@@ -459,30 +483,39 @@ int _kinetis_sdhc_send_command(board_kinetis_sdhc_info_t * p_inf_sdhc) {
    xfertyp &= (~REG_SDHC_XFERTYP_CMDTYP_MASK);
    xfertyp |= REG_SDHC_XFERTYP_CMDTYP(0);
    
-   if(p_inf_sdhc->command->block_count > 0) {
-      xfertyp |= REG_SDHC_XFERTYP_DPSEL_MASK;
-   }
-   
    //block count
    HAL_READ_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_BLKATTR, reg_val);
    reg_val &= (~ REG_SDHC_BLKATTR_BLKCNT_MASK);
+   HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_BLKATTR, reg_val);
    
    if(p_inf_sdhc->command->block_count > 0) {
+      xfertyp |= REG_SDHC_XFERTYP_DPSEL_MASK;
+      
       if(p_inf_sdhc->command->is_read) {
          xfertyp |= REG_SDHC_XFERTYP_DTDSEL_MASK;
       }
       
       if(p_inf_sdhc->command->block_count > 1) {
-         xfertyp |= REG_SDHC_XFERTYP_MSBSEL_MASK;
+         xfertyp |= REG_SDHC_XFERTYP_MSBSEL_MASK | REG_SDHC_XFERTYP_AC12EN_MASK;
       }
       
       HAL_READ_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_BLKATTR, reg_val);
+      reg_val &= (~REG_SDHC_BLKATTR_BLKCNT_MASK);
       reg_val |= REG_SDHC_BLKATTR_BLKCNT(p_inf_sdhc->command->block_count);
+      HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_BLKATTR, reg_val);
+      
       xfertyp |= REG_SDHC_XFERTYP_BCEN_MASK;
+      
+      //enable DMA
+      HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_DSADDR, 
+      (unsigned int)p_inf_sdhc->command->p_data);
+      xfertyp |= REG_SDHC_XFERTYP_DMAEN_MASK;
+   }
+   else {
+      HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_DSADDR, 0);
    }
    
    //issue command
-   HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_DSADDR, 0);
    HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_XFERTYP, xfertyp);
    
    //allowed irq generation
@@ -490,115 +523,6 @@ int _kinetis_sdhc_send_command(board_kinetis_sdhc_info_t * p_inf_sdhc) {
        
    return 0;
 }
-
-#if 0
-static int_32 _esdhc_send_command 
-    (
-        /* [IN/OUT] Module registry pointer */
-        SDHC_MemMapPtr          esdhc_ptr, 
-
-        /* [IN/OUT] Command specification */
-        ESDHC_COMMAND_STRUCT_PTR command
-    )
-{
-    uint_32                      xfertyp;
-    
-    /* Check command */
-    xfertyp = ESDHC_COMMAND_XFERTYP[command->COMMAND & 0x3F];
-    if ((0 == xfertyp) && (0 != command->COMMAND))
-    {
-        return 1;
-    }
-
-    /* Card removal check preparation */
-    esdhc_ptr->IRQSTAT |= SDHC_IRQSTAT_CRM_MASK;
-
-    /* Wait for cmd line idle */
-    while (esdhc_ptr->PRSSTAT & SDHC_PRSSTAT_CIHB_MASK) 
-        { };
-
-    /* Setup command */
-    esdhc_ptr->CMDARG = command->ARGUMENT;
-    xfertyp &= (~ SDHC_XFERTYP_CMDTYP_MASK);
-    xfertyp |= SDHC_XFERTYP_CMDTYP(command->TYPE);
-    if (ESDHC_TYPE_RESUME == command->TYPE)
-    {
-        xfertyp |= SDHC_XFERTYP_DPSEL_MASK;
-    }
-    if (ESDHC_TYPE_SWITCH_BUSY == command->TYPE)
-    {
-        if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) == SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_48))
-        {
-            xfertyp &= (~ SDHC_XFERTYP_RSPTYP_MASK);
-            xfertyp |= SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_48BUSY);
-        }
-        else
-        {
-            xfertyp &= (~ SDHC_XFERTYP_RSPTYP_MASK);
-            xfertyp |= SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_48);
-        }
-    }
-    esdhc_ptr->BLKATTR &= (~ SDHC_BLKATTR_BLKCNT_MASK);
-    if (0 != command->BLOCKS)
-    {
-        if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) != SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_48BUSY))
-        {
-            xfertyp |= SDHC_XFERTYP_DPSEL_MASK;
-        }
-        if (command->READ)
-        {
-            xfertyp |= SDHC_XFERTYP_DTDSEL_MASK;    
-        }
-        if (command->BLOCKS > 1)
-        {
-            xfertyp |= SDHC_XFERTYP_MSBSEL_MASK;    
-        }
-        if ((uint_32)-1 != command->BLOCKS)
-        {
-            esdhc_ptr->BLKATTR |= SDHC_BLKATTR_BLKCNT(command->BLOCKS);
-            xfertyp |= SDHC_XFERTYP_BCEN_MASK;
-        }
-    }
-
-    /* Issue command */
-    esdhc_ptr->DSADDR = 0;
-    esdhc_ptr->XFERTYP = xfertyp;
-    
-    /* Wait for response */
-    if (_esdhc_status_wait (esdhc_ptr, SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK) != SDHC_IRQSTAT_CC_MASK)
-    {
-        esdhc_ptr->IRQSTAT |= SDHC_IRQSTAT_CTOE_MASK | SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK;
-        return 1;
-    }
-
-    /* Check card removal */
-    if (esdhc_ptr->IRQSTAT & SDHC_IRQSTAT_CRM_MASK)
-    {
-        esdhc_ptr->IRQSTAT |= SDHC_IRQSTAT_CTOE_MASK | SDHC_IRQSTAT_CC_MASK;
-        return 1;
-    }
-
-    /* Get response, if available */
-    if (esdhc_ptr->IRQSTAT & SDHC_IRQSTAT_CTOE_MASK)
-    {
-        esdhc_ptr->IRQSTAT |= SDHC_IRQSTAT_CTOE_MASK | SDHC_IRQSTAT_CC_MASK;
-        return -1;
-    }
-    if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) != SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_NO))
-    {
-        command->RESPONSE[0] = esdhc_ptr->CMDRSP[0];
-        if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) == SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_136))
-        {
-            command->RESPONSE[1] = esdhc_ptr->CMDRSP[1];
-            command->RESPONSE[2] = esdhc_ptr->CMDRSP[2];
-            command->RESPONSE[3] = esdhc_ptr->CMDRSP[3];
-        }
-    }
-    esdhc_ptr->IRQSTAT |= SDHC_IRQSTAT_CC_MASK;
-
-    return 0;
-}
-#endif
 
 /*-------------------------------------------
 | Name:_kinetis_sdhc_isr
@@ -609,7 +533,7 @@ static int_32 _esdhc_send_command
 | See:
 ---------------------------------------------*/
 cyg_uint32 _kinetis_sdhc_isr(cyg_vector_t vector, cyg_addrword_t data) {
-   volatile unsigned int irq_stat = 0, irq_mask = 0;
+   volatile unsigned int irq_stat = 0, irq_mask = 0, reg_val = 0;
    board_kinetis_sdhc_info_t * p_inf_sdhc = (board_kinetis_sdhc_info_t *)data;
    
    cyg_interrupt_mask((cyg_vector_t)KINETIS_SDHC_IRQ_NO);
@@ -666,8 +590,42 @@ cyg_uint32 _kinetis_sdhc_isr(cyg_vector_t vector, cyg_addrword_t data) {
       //command ok
       if((irq_stat & REG_SDHC_IRQSTAT_CC_MASK) != 0) {
          HAL_WRITE_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_IRQSTAT, REG_SDHC_IRQSTAT_CC_MASK);
+         
+         
+         if(p_inf_sdhc->command->block_count > 0) {
+            HAL_WRITE_UINT32(g_kinetis_sdhc_info.sdhc_base + REG_SDHC_IRQSIGEN, KINETIS_SDHC_ALLOWED_IRQS);
+         }
+         else {
+            //just a simple command
+            p_inf_sdhc->post_event = 1;
+            g_kinetis_sdhc_stat.cc++;
+         }
+      }
+      
+      //transfert ok
+      if((irq_stat & REG_SDHC_IRQSTAT_TC_MASK) != 0) {
+         HAL_WRITE_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_IRQSTAT, REG_SDHC_IRQSTAT_TC_MASK);
          p_inf_sdhc->post_event = 1;
-         g_kinetis_sdhc_stat.cc++;
+         g_kinetis_sdhc_stat.tc++;
+      }
+      
+      //dma ok
+      if((irq_stat & REG_SDHC_IRQSTAT_DINT_MASK) != 0) {
+         HAL_WRITE_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_IRQSTAT, REG_SDHC_IRQSTAT_DINT_MASK);
+         
+         //stop DMA
+         #if 0
+         HAL_READ_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_SYSCTL, reg_val);
+         reg_val |= REG_SDHC_SYSCTL_RSTD_MASK;
+         HAL_WRITE_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_SYSCTL, reg_val);
+         #endif
+         
+         g_kinetis_sdhc_stat.dint++;
+      }
+      
+      //card removed
+      if((irq_stat & REG_SDHC_IRQSTAT_CRM_MASK) != 0) {
+         HAL_WRITE_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_IRQSTAT, REG_SDHC_IRQSTAT_CRM_MASK);
       }
    }
    
