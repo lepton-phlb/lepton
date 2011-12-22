@@ -46,6 +46,7 @@ tauon_kernel_arch_dir = tauon_kernel_dir + 'core/arch/cortexm/'
 tauon_kernel_dev_dir = tauon_kernel_dir + 'dev/'
 tauon_kernel_dev_k60n512_dir = tauon_kernel_dev_dir + 'arch/cortexm/k60n512/'
 tauon_sbin_dir = tauon_src_dir + 'sbin/'
+tauon_kernel_fat = tauon_kernel_dir + 'fs/fat/'
 
 #get previous files
 tauon_kernel_src_list = common_tauon_src_list
@@ -69,6 +70,15 @@ TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_sdhc/dev_k60n512_sdhc.c')
 #general device files
 tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_dir+'arch/all/sd/dev_sd.c'),
 TauonSource(tauon_kernel_dev_dir+'arch/all/sd/drv_sd.c')
+])
+
+#fat files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_fat+'fat16.c'),
+TauonSource(tauon_kernel_fat+'fatcore.c'),
+TauonSource(tauon_kernel_fat+'fat16_msdos.c'),
+TauonSource(tauon_kernel_fat+'fatcore_msdos.c'),
+TauonSource(tauon_kernel_fat+'fat16_vfat.c'),
+TauonSource(tauon_kernel_fat+'fatcore_vfat.c')
 ])
 
 #directory to store lib
