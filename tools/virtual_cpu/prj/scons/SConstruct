@@ -26,6 +26,7 @@
 #
 #python module
 import os
+import sys
 
 #Help for scons file
 Help("""
@@ -86,8 +87,14 @@ virtual_cpu_env = Environment(ENV = os.environ, variables = virtual_cpu_variable
 virtual_cpu_env.ParseConfig('pkg-config --cflags --libs gtk+-2.0 gmodule-2.0')
 
 #add CFLAGS options and include path
-virtual_cpu_env.Append(CCFLAGS = '"-gdwarf-2 -g3 -O0 -Wall"')
-virtual_cpu_env.Append(CCFLAGS = '"-iquote '+ src_dir + ' -iquote ' +src_hardware_dir+'"')
+#differences between lenny and squueze python version 
+if sys.version.find('2.5')>=0:
+	virtual_cpu_env.Append(CCFLAGS = '-gdwarf-2 -g3 -O0 -Wall')
+	virtual_cpu_env.Append(CCFLAGS = ' -iquote '+ src_dir +' -iquote ' +src_hardware_dir)
+else:
+	virtual_cpu_env.Append(CCFLAGS = '"-gdwarf-2 -g3 -O0 -Wall"')
+	virtual_cpu_env.Append(CCFLAGS = '"-iquote '+ src_dir + ' -iquote ' +src_hardware_dir+'"')
+
 
 virtual_cpu_env.Append(CCFLAGS = '-DSCREEN_XRES=${SCREEN_XRES}')
 virtual_cpu_env.Append(CCFLAGS = '-DSCREEN_YRES=${SCREEN_YRES}')
