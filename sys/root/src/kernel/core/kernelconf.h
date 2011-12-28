@@ -199,7 +199,7 @@ Declaration
    #endif
 
   // to do: put this definition in kernel_mkconf.h with mklepton.
-   #define __KERNEL_RTFS_BLOCK_SIZE 32 //default size 16
+   #define __KERNEL_RTFS_BLOCK_SIZE 16//32 //default size 16
    // to do: put this definition in kernel_mkconf.h with mklepton.
    #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
 #endif

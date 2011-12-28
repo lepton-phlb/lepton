@@ -148,7 +148,7 @@ static void _kinetis_sdhc_setbaud(board_kinetis_sdhc_info_t * p_inf_sdhc,
 unsigned int master_clock, unsigned int baudrate);
 static int _kinetis_sdhc_send_command(board_kinetis_sdhc_info_t * p_inf_sdhc);
 
-static unsigned int _kinetis_sdhc_supported_command[] = {
+static const unsigned int _kinetis_sdhc_supported_command[] = {
    REG_SDHC_XFERTYP_CMDINX(0) | REG_SDHC_XFERTYP_RSPTYP(SDHC_XFERTYP_RSPTYP_NO),
    REG_SDHC_XFERTYP_CMDINX(1) | REG_SDHC_XFERTYP_RSPTYP(SDHC_XFERTYP_RSPTYP_NO),
    REG_SDHC_XFERTYP_CMDINX(2) | REG_SDHC_XFERTYP_CCCEN_MASK | REG_SDHC_XFERTYP_RSPTYP(SDHC_XFERTYP_RSPTYP_136),
