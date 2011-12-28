@@ -1,0 +1,180 @@
+#
+#The contents of this file are subject to the Mozilla Public License Version 1.1 
+#(the "License"); you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at http://www.mozilla.org/MPL/
+#
+#Software distributed under the License is distributed on an "AS IS" basis, 
+#WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+#specific language governing rights and limitations under the License.
+#
+#The Original Code is Lepton.
+#
+#The Initial Developer of the Original Code is Philippe Le Boulanger.
+#Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+#All Rights Reserved.
+#
+#Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+#
+#Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+#(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+#instead of those above. If you wish to allow use of your version of this file only under the
+#terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+#the MPL, indicate your decision by deleting  the provisions above and replace 
+#them with the notice and other provisions required by the [eCos GPL] License. 
+#If you do not delete the provisions above, a recipient may use your version of this file under 
+#either the MPL or the [eCos GPL] License."
+#
+import os
+from tauon import *
+
+#define common files for all architecture
+common_base_dir = os.getenv('HOME') + '/tauon/sys/root/src/'
+
+common_kernel_dir = common_base_dir + 'kernel/'
+common_kernel_core_dir = common_kernel_dir + 'core/'
+common_kernel_core_ecos_dir = common_kernel_core_dir + 'core-ecos/'
+
+common_kernel_fs_vfs_dir = common_kernel_dir + 'fs/vfs/'
+common_kernel_fs_rootfs_dir = common_kernel_dir + 'fs/rootfs/'
+common_kernel_fs_ufs_dir = common_kernel_dir + 'fs/ufs/'
+common_kernel_fs_kofs_dir = common_kernel_dir + 'fs/kofs/'
+
+common_kernel_dev_dir = common_kernel_dir + 'dev/'
+
+common_libc_dir = common_base_dir + 'lib/libc/'
+common_libpthread_dir = common_base_dir + 'lib/pthread/'
+common_librt_dir = common_base_dir + 'lib/librt/'
+common_sbin_dir = common_base_dir + 'sbin/'
+
+#list of files to compile
+#core-ecos files
+common_tauon_src_list = [TauonSource(common_kernel_core_ecos_dir+'tauon.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel.c'),
+TauonSource(common_kernel_core_ecos_dir+'fork.c'),
+TauonSource(common_kernel_core_ecos_dir+'process.c'),
+TauonSource(common_kernel_core_ecos_dir+'syscall.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_pthread_mutex.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_pthread.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_sem.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_object.c'),
+TauonSource(common_kernel_core_ecos_dir+'signal.c'),
+TauonSource(common_kernel_core_ecos_dir+'core_rttimer.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_timer.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_sigqueue.c'),
+TauonSource(common_kernel_core_ecos_dir+'kernel_clock.c'),
+TauonSource(common_kernel_core_ecos_dir+'core_event.c')
+]
+
+#core files
+common_tauon_src_list.extend([TauonSource(common_kernel_core_dir+'system.c'),
+TauonSource(common_kernel_core_dir+'pipe.c'),
+TauonSource(common_kernel_core_dir+'bin.c'),
+TauonSource(common_kernel_core_dir+'env.c'),
+TauonSource(common_kernel_core_dir+'flock.c'),
+TauonSource(common_kernel_core_dir+'systime.c'),
+TauonSource(common_kernel_core_dir+'systime.c'),
+TauonSource(common_kernel_core_dir+'time.c'),
+TauonSource(common_kernel_core_dir+'lib.c'),
+TauonSource(common_kernel_core_dir+'dirent.c'),
+TauonSource(common_kernel_core_dir+'statvfs.c'),
+TauonSource(common_kernel_core_dir+'stat.c'),
+TauonSource(common_kernel_core_dir+'sysctl.c'),
+TauonSource(common_kernel_core_dir+'timer.c'),
+TauonSource(common_kernel_core_dir+'truncate.c'),
+TauonSource(common_kernel_core_dir+'wait.c'),
+TauonSource(common_kernel_core_dir+'fcntl.c'),
+TauonSource(common_kernel_core_dir+'devio.c'),
+TauonSource(common_kernel_core_dir+'select.c'),
+TauonSource(common_kernel_core_dir+'malloc.c'),
+TauonSource(common_kernel_core_dir+'posix_mqueue.c'),
+])
+
+#vfs files
+common_tauon_src_list.extend([TauonSource(common_kernel_fs_vfs_dir+'vfscore.c'),
+TauonSource(common_kernel_fs_vfs_dir+'vfskernel.c'),
+TauonSource(common_kernel_fs_vfs_dir+'vfs.c')
+])	
+
+#rootfs files
+common_tauon_src_list.extend([TauonSource(common_kernel_fs_rootfs_dir+'rootfscore.c'),
+TauonSource(common_kernel_fs_rootfs_dir+'rootfs.c')
+])
+
+#ufs files
+common_tauon_src_list.extend([TauonSource(common_kernel_fs_ufs_dir+'ufscore.c'),
+TauonSource(common_kernel_fs_ufs_dir+'ufsdriver.c'),
+TauonSource(common_kernel_fs_ufs_dir+'ufsdriver_1_3.c'),
+TauonSource(common_kernel_fs_ufs_dir+'ufsdriver_1_4.c'),
+TauonSource(common_kernel_fs_ufs_dir+'ufsdriver_1_5.c'),
+TauonSource(common_kernel_fs_ufs_dir+'ufsx.c'),
+TauonSource(common_kernel_fs_ufs_dir+'ufs.c')
+])
+
+#kofs files
+common_tauon_src_list.extend([TauonSource(common_kernel_fs_kofs_dir+'kofs.c')])
+
+#libc files
+common_tauon_src_list.extend([TauonSource(common_libc_dir+'libc.c'),
+TauonSource(common_libc_dir+'/misc/ltostr.c'),
+TauonSource(common_libc_dir+'stdio/stdio.c'),
+TauonSource(common_libc_dir+'stdio/printf.c'),
+TauonSource(common_libc_dir+'stdio/scanf.c'),
+TauonSource(common_libc_dir+'unistd/getopt.c'),
+TauonSource(common_libc_dir+'unistd/unistd.c'),
+TauonSource(common_libc_dir+'termios/termios.c'),
+TauonSource(common_libc_dir+'termios/tcgetattr.c'),
+TauonSource(common_libc_dir+'termios/tcsetattr.c'),
+TauonSource(common_libc_dir+'ctype/ctype.c'),
+TauonSource(common_libc_dir+'misc/strto_l.c'),
+TauonSource(common_libc_dir+'misc/strto_ll.c'),
+TauonSource(common_libc_dir+'misc/dtostr.c'),
+TauonSource(common_libc_dir+'string/string.c')
+])
+
+#libpthread file
+common_tauon_src_list.extend([TauonSource(common_libpthread_dir+'pthread.c'),
+TauonSource(common_libpthread_dir+'pthread_cond.c'),
+TauonSource(common_libpthread_dir+'pthread_mutex.c')
+])
+
+#librt file
+common_tauon_src_list.extend([TauonSource(common_librt_dir+'mq.c'),
+TauonSource(common_librt_dir+'sem.c')
+])
+
+#sbin files
+common_tauon_src_list.extend([TauonSource(common_sbin_dir+'lsh.c'),
+TauonSource(common_sbin_dir+'ls.c'),
+TauonSource(common_sbin_dir+'kill.c'),
+TauonSource(common_sbin_dir+'ps.c'),
+TauonSource(common_sbin_dir+'uname.c'),
+TauonSource(common_sbin_dir+'mkfs.c'),
+TauonSource(common_sbin_dir+'od.c'),
+TauonSource(common_sbin_dir+'mount.c'),
+TauonSource(common_sbin_dir+'umount.c'),
+TauonSource(common_sbin_dir+'df.c'),
+TauonSource(common_sbin_dir+'cat.c'),
+TauonSource(common_sbin_dir+'touch.c'),
+TauonSource(common_sbin_dir+'more.c'),
+TauonSource(common_sbin_dir+'pwd.c'),
+TauonSource(common_sbin_dir+'rmdir.c'),
+TauonSource(common_sbin_dir+'mkdir.c'),
+TauonSource(common_sbin_dir+'rm.c'),
+TauonSource(common_sbin_dir+'date.c'),
+TauonSource(common_sbin_dir+'echo.c'),
+TauonSource(common_sbin_dir+'xmodem.c'),
+TauonSource(common_sbin_dir+'mkfifo.c'),
+TauonSource(common_sbin_dir+'net/ifconfig.c')
+])
+
+#pseudo dev files
+common_tauon_src_list.extend([TauonSource(common_kernel_dev_dir+'dev_proc/dev_proc.c'),
+TauonSource(common_kernel_dev_dir+'dev_cpufs/dev_cpufs.c'),
+TauonSource(common_kernel_dev_dir+'dev_null/dev_null.c'),
+TauonSource(common_kernel_dev_dir+'dev_head/dev_head.c'),
+TauonSource(common_kernel_dev_dir+'dev_part/dev_part.c'),
+TauonSource(common_kernel_dev_dir+'dev_loadavg/dev_loadavg.c')
+])
+
+#export it
+Export('common_tauon_src_list') 

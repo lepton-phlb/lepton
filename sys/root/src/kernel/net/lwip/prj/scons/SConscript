@@ -1,0 +1,83 @@
+#python module
+import os
+from tauon import *
+
+#We need common file
+#directory
+lwip_kernel_base_dir = os.getenv('HOME') + '/tauon/sys/root/src/kernel/'
+lwip_base_dir = lwip_kernel_base_dir + 'net/lwip/'
+
+#directories of source file
+lwip_src_dir = lwip_base_dir
+lwip_src_api_dir = lwip_src_dir + 'api/'
+
+lwip_src_core_dir = lwip_src_dir + 'core/'
+lwip_src_core_ipv4_dir = lwip_src_core_dir + 'ipv4/'
+lwip_src_core_snmp_dir = lwip_src_core_dir + 'snmp/'
+
+lwip_src_netif_dir = lwip_src_dir + 'netif/'
+lwip_src_gnu_dir = lwip_src_dir + 'ports/gnu/'
+lwip_src_kernel_dir = lwip_kernel_base_dir + 'core/net/lwip_core/'
+
+#api files
+lwip_src_list = [TauonSource(lwip_src_api_dir+'api_lib.c'),
+TauonSource(lwip_src_api_dir+'api_msg.c'),
+TauonSource(lwip_src_api_dir+'err.c'),
+TauonSource(lwip_src_api_dir+'netbuf.c'),
+TauonSource(lwip_src_api_dir+'netdb.c'),
+TauonSource(lwip_src_api_dir+'netifapi.c'),
+TauonSource(lwip_src_api_dir+'tcpip.c')
+]
+
+#core ipv4 files
+lwip_src_list.extend([TauonSource(lwip_src_core_ipv4_dir+'autoip.c'),
+TauonSource(lwip_src_core_ipv4_dir+'icmp.c'),
+TauonSource(lwip_src_core_ipv4_dir+'igmp.c'),
+TauonSource(lwip_src_core_ipv4_dir+'inet.c'),
+TauonSource(lwip_src_core_ipv4_dir+'inet_chksum.c'),
+TauonSource(lwip_src_core_ipv4_dir+'ip.c'),
+TauonSource(lwip_src_core_ipv4_dir+'ip_addr.c'),
+TauonSource(lwip_src_core_ipv4_dir+'ip_frag.c')
+])
+
+#core snmp files
+lwip_src_list.extend([TauonSource(lwip_src_core_snmp_dir+'asn1_dec.c'),
+TauonSource(lwip_src_core_snmp_dir+'asn1_enc.c'),
+TauonSource(lwip_src_core_snmp_dir+'mib2.c'),
+TauonSource(lwip_src_core_snmp_dir+'mib_structs.c'),
+TauonSource(lwip_src_core_snmp_dir+'msg_in.c'),
+TauonSource(lwip_src_core_snmp_dir+'msg_out.c')
+])
+
+#core files
+lwip_src_list.extend([TauonSource(lwip_src_core_dir+'dhcp.c'),
+TauonSource(lwip_src_core_dir+'dns.c'),
+TauonSource(lwip_src_core_dir+'init.c'),
+TauonSource(lwip_src_core_dir+'mem.c'),
+TauonSource(lwip_src_core_dir+'memp.c'),
+TauonSource(lwip_src_core_dir+'netif.c'),
+TauonSource(lwip_src_core_dir+'pbuf.c'),
+TauonSource(lwip_src_core_dir+'raw.c'),
+TauonSource(lwip_src_core_dir+'stats.c'),
+TauonSource(lwip_src_core_dir+'sys.c'),
+TauonSource(lwip_src_core_dir+'tcp.c'),
+TauonSource(lwip_src_core_dir+'tcp_in.c'),
+TauonSource(lwip_src_core_dir+'tcp_out.c'),
+TauonSource(lwip_src_core_dir+'udp.c')
+])
+
+#netif files
+lwip_src_list.extend([TauonSource(lwip_src_netif_dir+'etharp.c'),
+TauonSource(lwip_src_netif_dir+'loopif.c'),
+TauonSource(lwip_src_netif_dir+'slipif.c')
+])
+
+#specific target files
+lwip_src_list.extend([TauonSource(lwip_src_gnu_dir+'sys_arch.c'),
+TauonSource(lwip_src_kernel_dir+'ethif_core.c'),
+TauonSource(lwip_src_kernel_dir+'lwip_core.c'),
+TauonSource(lwip_src_kernel_dir+'lwip_socket.c')
+])
+
+#export source files
+Export('lwip_src_list')
