@@ -24,7 +24,7 @@
       <heap size="10000" />
 
       <!-- process max (__KERNEL_PROCESS_MAX: must be strictly less than thread max)-->
-      <process max="5" />
+      <process max="6" />
 
       <!-- max open file (MAX_OPEN_FILE)-->
       <openfiles max="16" />
@@ -34,7 +34,7 @@
 
       <!-- cpu built-in file-system (see fileflash device) -->
       <!--cpufs size="6000" node="64" blocksz="32"/-->
-      <cpufs size="4000" node="32" blocksz="32"/>
+      <cpufs size="4000" node="64" blocksz="32"/>
 
       <!-- bin path (__KERNEL_ENV_PATH)-->
       <env path="/usr;/usr/sbin;/usr/bin" />
@@ -172,13 +172,13 @@
    <bin name="mkfs"     stack="2048"    priority="10" timeslice="5" />
    <bin name="df"       stack="2048"    priority="10" timeslice="5" />
    <bin name="uname"    stack="2048"    priority="10" timeslice="5" />
-   <!--bin name="pwd"      stack="2048"    priority="10" timeslice="5" /-->
-   <!--bin name="rmdir"    stack="2048"    priority="10" timeslice="5" /-->
-   <!--bin name="mkdir"    stack="2048"    priority="10" timeslice="5" /-->
-   <!--bin name="rm"       stack="2048"    priority="10" timeslice="5" /-->
+   <bin name="pwd"      stack="2048"    priority="10" timeslice="5" />
+   <bin name="rmdir"    stack="2048"    priority="10" timeslice="5" />
+   <bin name="mkdir"    stack="2048"    priority="10" timeslice="5" />
+   <bin name="rm"       stack="2048"    priority="10" timeslice="5" />
    <!--bin name="od"       stack="2048"    priority="10" timeslice="5" /-->
-   <!--bin name="date"     stack="2048"    priority="10" timeslice="5" /-->
-   <!--bin name="echo"     stack="2048"    priority="10" timeslice="5" /-->
+   <bin name="date"     stack="2048"    priority="10" timeslice="5" />
+   <bin name="echo"     stack="2048"    priority="10" timeslice="5" />
 </target>
 </binaries>
 
@@ -186,13 +186,14 @@
    <target name="cortexm_lepton">
         <!-- tools test-->
         <bin name="test"        stack="1024"    priority="10" timeslice="5" />
-        <bin name="tstsd"       stack="2048"    priority="10" timeslice="5" />
+        <!--bin name="tstsd"       stack="2048"    priority="10" timeslice="5" /-->
    </target>
 </binaries>
 
 <binaries src_path="bin/net" dest_path="bin/net">
       <bin name="ifconfig" stack="2048" priority="10" timeslice="5"/>
       <bin name="telnetd" stack="2048" priority="10" timeslice="5"/>
+      <bin name="ftpd" stack="2048" priority="10" timeslice="5"/>
 </binaries>
 
 <files>
@@ -200,6 +201,12 @@
    <file name=".init"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.init_with_net_k60"      dest_path="etc" />
    <file name=".boot"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.boot"      dest_path="etc" />
    <file name=".mount"     src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.mount"     dest_path="etc" />
+</files>
+
+<files>
+   <target name="cortexm_lepton">
+      <file name="fatft.sh"       src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/src/sh/fatsd_cortexm.sh"      dest_path="bin/sh" />
+   </target>
 </files>
 
 </mklepton>
