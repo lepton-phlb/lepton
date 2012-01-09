@@ -31,7 +31,9 @@ tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dir+'tstsd.c')]
 #network utilities
 tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/telnetd.c'),
 TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoose.c'),
-TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoosed.c')
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoosed.c'),
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ftpd.c'),
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ls.c')
 ])
 
 #nanox/flnx utilities and demo programm
