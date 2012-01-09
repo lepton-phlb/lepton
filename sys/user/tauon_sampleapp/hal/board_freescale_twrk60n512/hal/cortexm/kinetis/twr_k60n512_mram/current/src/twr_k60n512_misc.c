@@ -116,6 +116,21 @@ hal_system_init( void )
 {
 #if defined(CYG_HAL_STARTUP_ROM)
     hal_wdog_disable();
+    //disable cache FMC_PFB1CR and FMC_PFB0CR
+    //HAL_WRITE_UINT32(CYGHWR_HAL_KINETIS_FMC_PFB0CR, 0x30000019);
+    //HAL_WRITE_UINT32(CYGHWR_HAL_KINETIS_FMC_PFB1CR, 0x30000019);
+    HAL_WRITE_UINT32(CYGHWR_HAL_KINETIS_FMC_PFB0CR, 0x30000000);
+    HAL_WRITE_UINT32(CYGHWR_HAL_KINETIS_FMC_PFB1CR, 0x30000000);
+    
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    __asm__ volatile( "nop" );
+    
 #endif
     hal_gpio_init();
     hal_system_init_vectors();
