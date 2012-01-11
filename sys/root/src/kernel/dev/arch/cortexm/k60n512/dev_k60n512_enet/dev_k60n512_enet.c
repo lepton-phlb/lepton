@@ -159,7 +159,6 @@ static board_kinetis_enet_info_t kinetis_enet_info = {
 		_desc_rd : -1,
 		_desc_wr : -1,
 		_input_r : 0,
-		_input_w : 0,
 		_output_r : -1,
 		_output_w : 0,
 		mac_addr : {KINETIS_ENET_MAC_ADDR_1,KINETIS_ENET_MAC_ADDR_2,KINETIS_ENET_MAC_ADDR_3,
@@ -169,7 +168,6 @@ static board_kinetis_enet_info_t kinetis_enet_info = {
 		p_tx_desc : (enet_buf_desc_t *)&(kinetis_enet_tx_desc[0]),
 		p_rx_desc : (enet_buf_desc_t *)&(kinetis_enet_rx_desc[0]),
 		rx_buf : &(kinetis_enet_rx_buffers[0]),
-		_flag_w_irq : 0,
 		_flag_r_irq : 0,
 		eth_stat : ETH_STAT_LINK_DOWN,
 		interrupt_handles : {0, 0, 0}    
@@ -185,6 +183,52 @@ static void _kinetis_enet_set_mac_addr(board_kinetis_enet_info_t *penet, const u
 
 static cyg_uint32 _kinetis_enet_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void _kinetis_enet_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
+
+typedef struct board_kinetis_enet_stat_st {
+   unsigned int isr_tx;
+   unsigned int isr_rx;
+   unsigned int isr_err;
+   unsigned int dsr_tx;
+   unsigned int dsr_rx;
+   
+   unsigned int tx_ok;
+   unsigned int tx_ko;
+   
+   unsigned int rx_ok;
+   unsigned int rx_ko;
+}board_kinetis_enet_stat_t;
+
+#define DEBUG_ETH
+
+#ifdef DEBUG_ETH
+static board_kinetis_enet_stat_t kinetis_enet_stat;
+
+#define  __init_eth_stat() memset((void*)&kinetis_enet_stat, 0, sizeof(board_kinetis_enet_stat_t))
+#define  __inc_isr_tx()    kinetis_enet_stat.isr_tx++
+#define  __inc_isr_rx()    kinetis_enet_stat.isr_rx++
+#define  __inc_isr_err()   kinetis_enet_stat.isr_err++
+#define  __inc_dsr_tx()    kinetis_enet_stat.dsr_tx++
+#define  __inc_dsr_rx()    kinetis_enet_stat.dsr_rx++
+#define  __inc_tx_ok()     kinetis_enet_stat.tx_ok++
+#define  __inc_tx_ko()     kinetis_enet_stat.tx_ko++
+#define  __inc_rx_ok()     kinetis_enet_stat.rx_ok++
+#define  __inc_rx_ko()     kinetis_enet_stat.rx_ko++
+
+#else //DEBUG_ETH
+
+#define  __init_eth_stat()
+#define  __inc_isr_tx()
+#define  __inc_isr_rx()
+#define  __inc_isr_err()
+#define  __inc_dsr_tx()
+#define  __inc_dsr_rx()
+#define  __inc_tx_ok()
+#define  __inc_tx_ko()
+#define  __inc_rx_ok()
+#define  __inc_rx_ko()
+
+#endif //DEBUG_ETH
+
 /*===========================================
 Implementation
 =============================================*/
@@ -431,7 +475,7 @@ int dev_k60n512_enet_load(void){
 	HAL_WRITE_UINT32(kinetis_enet_info.enet_base + REG_ENET_ECR, reg_val);
 
 	//Wait at least 8 clock cycles
-	cyg_thread_delay(1);
+	HAL_DELAY_US(1);
 
 	//FSL: start MII interface
 	_kinetis_enet_mii_init(&kinetis_enet_info, CYGHWR_HAL_CORTEXM_KINETIS_CLK_PER_BUS/1000000);
@@ -439,7 +483,7 @@ int dev_k60n512_enet_load(void){
 
 	// Can we talk to the PHY? read phy ID
 	do {
-		cyg_thread_delay(PHY_LINK_DELAY);
+		HAL_DELAY_US(PHY_LINK_DELAY);
 		mii_val = 0xffff;
 		_kinetis_enet_mii_read(&kinetis_enet_info, REG_PHY_ADDRESS, REG_PHY_PHYIDR1, &mii_val);
 	} while(mii_val == 0xffff);
@@ -450,11 +494,13 @@ int dev_k60n512_enet_load(void){
 
 	// Wait for auto negotiate to complete.
 	do {
+      #if 0
       if(!(phy_link_retry--)) {
          return -1;
       }
+      #endif
       
-		cyg_thread_delay(PHY_LINK_DELAY);
+		HAL_DELAY_US(PHY_LINK_DELAY);
 		_kinetis_enet_mii_read(&kinetis_enet_info, REG_PHY_ADDRESS, REG_PHY_BMSR, &mii_val);
 	} while(!(mii_val & REG_PHY_BMSR_AN_COMPLETE));
 
@@ -532,6 +578,10 @@ int dev_k60n512_enet_load(void){
 	//Point to the start of the circular Tx buffer descriptor queue
 	reg_val = (unsigned int)kinetis_enet_info.p_tx_desc;
 	HAL_WRITE_UINT32(kinetis_enet_info.enet_base + REG_ENET_TDSR, reg_val);
+   
+   ///
+   __init_eth_stat();
+   ///
 	return 0;
 }
 
@@ -644,12 +694,18 @@ int dev_k60n512_enet_close(desc_t desc){
 int dev_k60n512_enet_isset_read(desc_t desc) {
 	board_kinetis_enet_info_t * p_net_info = (board_kinetis_enet_info_t*)ofile_lst[desc].p;
 	
-	if(!p_net_info)
+   if(!p_net_info)
 		return -1;
 
-	if(p_net_info->_input_r != p_net_info->_input_w)
-		return 0;
+   cyg_interrupt_mask(KINETIS_ENET_RX_IRQ);
+	if((p_net_info->p_rx_desc[p_net_info->_input_r].status & REG_ENET_RX_BD_E) == 0) {
+      cyg_interrupt_unmask(KINETIS_ENET_RX_IRQ);
+      __inc_rx_ok();
+      return 0;
+   }
 
+   cyg_interrupt_unmask(KINETIS_ENET_RX_IRQ);
+   __inc_rx_ko();
 	return -1;
 }
 
@@ -664,14 +720,19 @@ int dev_k60n512_enet_isset_read(desc_t desc) {
 int dev_k60n512_enet_isset_write(desc_t desc) {
 	board_kinetis_enet_info_t * p_net_info = (board_kinetis_enet_info_t*)ofile_lst[desc].p;
 	
-	if(!p_net_info)
+   if(!p_net_info)
 		return -1;
 
+   cyg_interrupt_mask(KINETIS_ENET_TX_IRQ);
 	if(p_net_info->_output_r==p_net_info->_output_w) {
 		p_net_info->_output_r = -1;
+      cyg_interrupt_unmask(KINETIS_ENET_TX_IRQ);
+      __inc_tx_ok();
 		return 0;
 	}
-
+   
+   cyg_interrupt_unmask(KINETIS_ENET_TX_IRQ);
+   __inc_tx_ko();
 	return -1;
 }
 
@@ -689,7 +750,7 @@ int dev_k60n512_enet_read(desc_t desc, char* buf,int size){
 	int status = 0;
 	unsigned char *rcv_buf_addr = NULL;
 	
-	// is a new buffer received
+   // is a new buffer received
 	if((p_net_info->p_rx_desc[p_net_info->_input_r].status & REG_ENET_RX_BD_E) == 0) {
 		//get status, packet len and copy data to buffer
       __REVSH(status, p_net_info->p_rx_desc[p_net_info->_input_r].status);
@@ -705,16 +766,15 @@ int dev_k60n512_enet_read(desc_t desc, char* buf,int size){
 		p_net_info->p_rx_desc[p_net_info->_input_r].status |= REG_ENET_RX_BD_E;
 
 		//inc receive buffer
-		if(++p_net_info->_input_r >= KINETIS_ENET_RX_BUFS) {
-			p_net_info->_input_r = 0;
-		}
-		
+      p_net_info->_input_r = (p_net_info->_input_r + 1) & (KINETIS_ENET_RX_BUFS - 1); 
+      
 		cyg_interrupt_unmask(KINETIS_ENET_RX_IRQ);	
 
 		//buffer is ready to receive again
 		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_RDAR, REG_ENET_RDAR_RDAR);
 	}
-	return cb;
+   
+   return cb;
 }
 
 /*-------------------------------------------
@@ -730,7 +790,7 @@ int dev_k60n512_enet_write(desc_t desc, const char* buf,int size){
 	
 	// When we get here the Tx descriptor should show as having completed.
 	while(p_net_info->p_tx_desc->status & REG_ENET_TX_BD_R) {
-		cyg_thread_delay(10);
+		HAL_DELAY_US(10);
 	}
 
 	//disable irq
@@ -824,6 +884,7 @@ int dev_k60n512_enet_ioctl(desc_t desc,int request,va_list ap) {
 	}
 	return 0;
 }
+
 /*-------------------------------------------
 | Name:_kinetis_uart_isr
 | Description:
@@ -833,7 +894,54 @@ int dev_k60n512_enet_ioctl(desc_t desc,int request,va_list ap) {
 | See:
 ---------------------------------------------*/
 cyg_uint32 _kinetis_enet_isr(cyg_vector_t vector, cyg_addrword_t data) {
+   board_kinetis_enet_info_t * p_net_info = (board_kinetis_enet_info_t*)data;
+   volatile unsigned int eimr = 0;
+	volatile unsigned int reg_val = 0;
+   
 	cyg_interrupt_mask(vector);
+   
+   HAL_READ_UINT32(p_net_info->enet_base + REG_ENET_EIMR, eimr);
+	HAL_READ_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
+   eimr &= reg_val;
+   
+   //write
+	if(eimr & REG_ENET_EIR_TXF) {
+		reg_val = REG_ENET_EIR_TXF;
+		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
+		//
+		p_net_info->p_tx_desc->data = NULL;
+		p_net_info->_output_r = p_net_info->_output_w;
+      
+      //
+      __inc_isr_tx();
+		
+	}
+	//read
+	if(eimr & REG_ENET_EIR_RXF) {
+		reg_val = REG_ENET_EIR_RXF;
+		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
+      p_net_info->_flag_r_irq = 1;
+      
+      //
+      __inc_isr_rx();
+	}
+
+	//error
+	if (eimr & (REG_ENET_EIR_UN | REG_ENET_EIR_RL | REG_ENET_EIR_LC |
+			REG_ENET_EIR_EBERR | REG_ENET_EIR_BABT | REG_ENET_EIR_BABR)) {
+		reg_val = REG_ENET_RDAR_RDAR;
+		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_RDAR, reg_val);
+
+		reg_val = REG_ENET_EIR_UN | REG_ENET_EIR_RL | REG_ENET_EIR_LC |
+		REG_ENET_EIR_EBERR | REG_ENET_EIR_BABT | REG_ENET_EIR_BABR;
+		
+      HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
+      
+      //
+      __inc_isr_err();
+	}
+   
+   
 	cyg_interrupt_acknowledge(vector);
     
 	return CYG_ISR_HANDLED | CYG_ISR_CALL_DSR;
@@ -849,45 +957,24 @@ cyg_uint32 _kinetis_enet_isr(cyg_vector_t vector, cyg_addrword_t data) {
 ---------------------------------------------*/
 void _kinetis_enet_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data) {
 	board_kinetis_enet_info_t * p_net_info = (board_kinetis_enet_info_t*)data;
-	volatile unsigned int eimr = 0;
-	volatile unsigned int reg_val = 0;
-	
-	HAL_READ_UINT32(p_net_info->enet_base + REG_ENET_EIMR, eimr);
-	HAL_READ_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
 
-	eimr &= reg_val;
 	//write
-	if(eimr & REG_ENET_EIR_TXF) {
-		reg_val = REG_ENET_EIR_TXF;
-		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
-		//
-		p_net_info->p_tx_desc->data = NULL;
-		p_net_info->_output_r = p_net_info->_output_w;
+	if(p_net_info->_output_r == p_net_info->_output_w) {
+      __inc_dsr_tx();
+      //
 		__fire_io_int(ofile_lst[p_net_info->_desc_wr].owner_pthread_ptr_write);
 	}
 	//read
-	if(eimr & REG_ENET_EIR_RXF) {
-		reg_val = REG_ENET_EIR_RXF;
-		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
-		if(++p_net_info->_input_w >= KINETIS_ENET_RX_BUFS) {
-			p_net_info->_input_w = 0;
-		}
+	if(p_net_info->_flag_r_irq) {////if(p_net_info->_input_r != p_net_info->_input_w) {
+      p_net_info->_flag_r_irq = 0;
+      __inc_dsr_rx();
+      //
 		__fire_io_int(ofile_lst[p_net_info->_desc_rd].owner_pthread_ptr_read);
 	}
-
-	//error
-	if (eimr & (REG_ENET_EIR_UN | REG_ENET_EIR_RL | REG_ENET_EIR_LC |
-			REG_ENET_EIR_EBERR | REG_ENET_EIR_BABT | REG_ENET_EIR_BABR)) {
-		reg_val = REG_ENET_RDAR_RDAR;
-		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_RDAR, reg_val);
-
-		reg_val = REG_ENET_EIR_UN | REG_ENET_EIR_RL | REG_ENET_EIR_LC |
-		REG_ENET_EIR_EBERR | REG_ENET_EIR_BABT | REG_ENET_EIR_BABR;
-		HAL_WRITE_UINT32(p_net_info->enet_base + REG_ENET_EIR, reg_val);
-	}
-	
+   	
 	cyg_interrupt_unmask(vector);
 }
+
 /*============================================
 | End of Source  : dev_k60n512_enet.c
 ==============================================*/
