@@ -58,7 +58,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 //ARM7
-#define LWIP_CORE_STACK_SIZE 9*1024//9*1024
+#define LWIP_CORE_STACK_SIZE 4*1024//9*1024
 //m16c
 //#define LWIP_CORE_STACK_SIZE 1000
 
