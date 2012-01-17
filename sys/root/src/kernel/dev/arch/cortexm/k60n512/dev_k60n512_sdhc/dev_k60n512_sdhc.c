@@ -761,7 +761,7 @@ unsigned int baudrate) {
    
    /* Wait for stable clock */
    do {
-      cyg_thread_delay(1);
+      HAL_DELAY_US(1);
       HAL_READ_UINT32(p_inf_sdhc->sdhc_base + REG_SDHC_PRSSTAT, reg_val);
    } while((reg_val & REG_SDHC_PRSSTAT_SDSTB_MASK) == 0);
 
