@@ -1039,9 +1039,24 @@ void do_swi(void) {
 			);
 }
 
+///DUMMY
+kernel_pthread_t* _kernel_pthread_self_swi(void){
+   kernel_pthread_t* p;
+   p=g_pthread_lst;
+   while(p){
+      if( __is_thread_self(p) ){
+         return p;
+      }
+      p=p->gnext;
+   }
+
+   return (kernel_pthread_t*)0;
+}
+///
+
 void _kernel_syscall_handler(void) {
 	//normalement recherche du pid du thread appelant
-	kernel_pthread_t* pthread_ptr = kernel_pthread_self();
+	kernel_pthread_t* pthread_ptr = _kernel_pthread_self_swi();//kernel_pthread_self();
 	//R12 contain stack addr
 	__asm__("str r12, %0":"=m"(pthread_ptr->bckup_context.svc_r12));
 	pthread_ptr->bckup_context.svc_regs = (svc_reg_t*)pthread_ptr->bckup_context.svc_r12;
