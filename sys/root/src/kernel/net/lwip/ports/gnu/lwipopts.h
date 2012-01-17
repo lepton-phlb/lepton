@@ -108,7 +108,7 @@ either the MPL or the [eCos GPL] License."
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
 #if defined(CPU_CORTEXM)
-#define MEM_SIZE               (10*1024)
+#define MEM_SIZE               (16*1024)//(10*1024)
 #else
 #define MEM_SIZE               (32*1024)//128*1024//lepton modif /*10240*/
 #endif
@@ -116,11 +116,8 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
    should be set high. */
-#if defined(CPU_CORTEXM)
-#define MEMP_NUM_PBUF           16
-#else
 #define MEMP_NUM_PBUF           64 //64 lepton modifs) //default 16
-#endif
+
 /* MEMP_NUM_RAW_PCB: the number of UDP protocol control blocks. One
    per active RAW "connection". */
 #define MEMP_NUM_RAW_PCB        3
@@ -148,7 +145,7 @@ a lot of data that needs to be copied, this should be set high. */
    set to 0 if the application only will use the raw API. */
 /* MEMP_NUM_NETBUF: the number of struct netbufs. */
 #if defined(CPU_CORTEXM)
-#define MEMP_NUM_NETBUF         64
+#define MEMP_NUM_NETBUF         64 //128 increase memp_memory by 1024
 #else
 #define MEMP_NUM_NETBUF         256  //64 lepton modifs) //default 2
 #endif
@@ -162,8 +159,8 @@ a lot of data that needs to be copied, this should be set high. */
    for sequential API communication and incoming packets. Used in
    src/api/tcpip.c. */
 #if defined(CPU_CORTEXM)
-#define MEMP_NUM_TCPIP_MSG_API   16
-#define MEMP_NUM_TCPIP_MSG_INPKT 16
+#define MEMP_NUM_TCPIP_MSG_API   32
+#define MEMP_NUM_TCPIP_MSG_INPKT 32 //2 fields with 64 increase memp by 1920
 #else
 #define MEMP_NUM_TCPIP_MSG_API   64//16 //128 lepton modifs) //default 16
 #define MEMP_NUM_TCPIP_MSG_INPKT 64//16 //128 lepton modifs) //default 16
@@ -172,7 +169,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* ---------- Pbuf options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
 #if defined(CPU_CORTEXM)
-#define PBUF_POOL_SIZE          64
+#define PBUF_POOL_SIZE          64 //100 increase memp_memory by 5184
 #else
 #define PBUF_POOL_SIZE          100 //512 lepton modifs) //default 100
 #endif
