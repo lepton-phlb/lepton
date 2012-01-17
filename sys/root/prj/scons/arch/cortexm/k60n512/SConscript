@@ -64,7 +64,10 @@ TauonSource(tauon_kernel_arch_dir+'dev_dskimg.c')
 tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_uart_s3/dev_k60n512_uart_s3.c'),
 TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_rtc/dev_k60n512_rtc.c'),
 TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_enet/dev_k60n512_enet.c'),
-TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_sdhc/dev_k60n512_sdhc.c')
+TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_sdhc/dev_k60n512_sdhc.c'),
+TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_x.c'),
+TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_0.c'),
+TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_2.c')
 ])
 
 #general device files
