@@ -146,6 +146,7 @@ int dev_loadavg_close(desc_t desc) {
          loadavg_info_t * p_loadavg = (loadavg_info_t *)ofile_lst[desc].p;
          cyg_cpuload_delete(p_loadavg->handle);
          ofile_lst[desc].p=NULL;
+         loadavg_info.desc = -1;
       }
    }
 
