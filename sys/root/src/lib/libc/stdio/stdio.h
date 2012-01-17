@@ -112,7 +112,7 @@ typedef struct __stdio_file FILE;
    #elif defined(CPU_ARM7) || defined(CPU_M16C62)
       #define BUFSIZ (64)
    #elif defined(CPU_CORTEXM)
-      #define BUFSIZ (32)
+      #define BUFSIZ (256)//(64)//(32)
    #endif
 
 #if !defined(__KERNEL_LOAD_LIB)
