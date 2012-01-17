@@ -40,21 +40,21 @@ Includes
 
 #include "lib/libc/termios/termios.h"
 
+#include "dev_k60n512_rtc.h"
 /*===========================================
 Global Declaration
 =============================================*/
-const char dev_k60n512_rtc_name[]="rtc0\0\0";
+const char dev_k60n512_rtc_name[]="rtt0\0";
 
 static int dev_k60n512_rtc_load(void);
 static int dev_k60n512_rtc_open(desc_t desc, int o_flag);
 static int dev_k60n512_rtc_close(desc_t desc);
-static int dev_k60n512_rtc_seek(desc_t desc,int offset,int origin);
 static int dev_k60n512_rtc_read(desc_t desc, char* buf,int cb);
 static int dev_k60n512_rtc_write(desc_t desc, const char* buf,int cb);
 
 dev_map_t dev_k60n512_rtc_map={
    dev_k60n512_rtc_name,
-   S_IFCHR,
+   S_IFBLK,
    dev_k60n512_rtc_load,
    dev_k60n512_rtc_open,
    dev_k60n512_rtc_close,
@@ -62,10 +62,30 @@ dev_map_t dev_k60n512_rtc_map={
    __fdev_not_implemented,
    dev_k60n512_rtc_read,
    dev_k60n512_rtc_write,
-   dev_k60n512_rtc_seek,
+   __fdev_not_implemented,
    __fdev_not_implemented
 };
 
+//#define RTC_STABILIZATION_DELAY     (0x600000)
+#define RTC_STABILIZATION_DELAY     (0x600000/200)
+
+//
+#define KINETIS_RTC_VECTOR_PRIORITY		3
+#define KINETIS_RTC_IRQ            67//66
+
+#if defined(USE_ECOS)
+static cyg_uint32 _kinetis_rtc_isr(cyg_vector_t vector, cyg_addrword_t data);
+static void _kinetis_rtc_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
+#endif
+
+//
+board_kinetis_rtc_info_t kinetis_rtc_info = {
+   rtc_base : 0x4003d000,
+   desc_r : -1
+};
+
+///DUMMY PIN
+#define DUMMY_RTC_PINS CYGHWR_HAL_KINETIS_PIN(D, 12, 1, 0)
 /*===========================================
 Implementation
 =============================================*/
@@ -78,6 +98,39 @@ Implementation
 | See:
 ---------------------------------------------*/
 int dev_k60n512_rtc_load(void){
+   volatile unsigned int reg_val = 0;
+   
+   //enable clock gating (SIM->SCGC6 |= SIM_SCGC6_RTC_MASK)
+   HAL_READ_UINT32(0x4004803c, reg_val);
+   reg_val |= (1 << 29);
+   HAL_WRITE_UINT32(0x4004803c, reg_val);
+   
+   #if 0
+   //software reset
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, 
+   REG_RTC_CR_SWR_MASK);
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
+   reg_val &= ~REG_RTC_CR_SWR_MASK;
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
+   #endif
+   
+   //enable oscillation and wait stabilization
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
+   reg_val |= REG_RTC_CR_OSCE_MASK;
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
+   
+   for(reg_val=0; reg_val<RTC_STABILIZATION_DELAY; reg_val++);
+   
+   //set timer compensation
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TCR,
+   REG_RTC_TCR_CIR(0) | REG_RTC_TCR_TCR(0));
+   
+   //continue counting
+   #if 0
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, 0);
+   #endif
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TAR, 0);
+   
    return 0;
 }
 
@@ -89,7 +142,31 @@ int dev_k60n512_rtc_load(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_rtc_open(desc_t desc, int o_flag){
+int dev_k60n512_rtc_open(desc_t desc, int o_flag) {
+   cyg_handle_t  irq_handle;
+	cyg_interrupt irq_it;
+   volatile unsigned int reg_val = 0;
+   
+   if(o_flag & O_RDONLY){
+		if(kinetis_rtc_info.desc_r<0) {
+			kinetis_rtc_info.desc_r = desc;
+		}
+		else {
+         ofile_lst[desc].p = (void *)&kinetis_rtc_info;
+			return 0; //already open
+      }
+	}
+   
+   if(ofile_lst[desc].p)
+      return -1;
+   
+   ofile_lst[desc].p = (void *)&kinetis_rtc_info;
+   
+   //enable counting
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+   reg_val |= REG_RTC_SR_TCE_MASK;
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+
    return 0;
 }
 
@@ -114,6 +191,14 @@ int dev_k60n512_rtc_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_k60n512_rtc_read(desc_t desc, char* buf,int size){
+   volatile unsigned int reg_val;
+
+   if(size!=sizeof(time_t))
+      return -1;
+   
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, reg_val);
+   memcpy((void *)buf, (void *)&reg_val, size);
+   
    return size;
 }
 
@@ -126,19 +211,27 @@ int dev_k60n512_rtc_read(desc_t desc, char* buf,int size){
 | See:
 ---------------------------------------------*/
 int dev_k60n512_rtc_write(desc_t desc, const char* buf,int size){
-   return size;
-}
+   volatile unsigned int reg_val = 0;
+   volatile unsigned int time_val = 0;
 
-/*-------------------------------------------
-| Name:dev_k60n512_rtc_seek
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-int dev_k60n512_rtc_seek(desc_t desc,int offset,int origin){
-   return 0;
+   if(size!=sizeof(time_t))
+      return -1;
+   
+   memcpy((void *)&time_val, (void *)buf, 4);
+   
+   //disable counter and write new value
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+   reg_val &= ~REG_RTC_SR_TCE_MASK;
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+   
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, time_val);
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TPR, 0);
+   
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+   reg_val |= REG_RTC_SR_TCE_MASK;
+   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+   
+   return size;
 }
 
 /*============================================
