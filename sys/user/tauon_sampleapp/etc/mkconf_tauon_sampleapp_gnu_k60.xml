@@ -24,7 +24,7 @@
       <heap size="10000" />
 
       <!-- process max (__KERNEL_PROCESS_MAX: must be strictly less than thread max)-->
-      <process max="6" />
+      <process max="8" />
 
       <!-- max open file (MAX_OPEN_FILE)-->
       <openfiles max="16" />
@@ -64,6 +64,8 @@
    <dev name="dev_lwip_stack_map"   use="on"/>
    <!-- /dev/fb -->
    <dev name="dev_fb_map" use="off"/>
+   <!-- /dev/fb -->
+   <dev name="dev_loadavg_map" use="on"/>
 </devices>
 
 <target name="gnu32_lepton">
@@ -97,13 +99,17 @@
       <!-- /dev/ttys0 -->
       <dev name="dev_k60n512_uart_s3_map"       use="on"/>
       <!-- /dev/rtc0 -->
-      <dev name="dev_k60n512_rtc_map"           use="off"/>
+      <dev name="dev_k60n512_rtc_map"           use="on"/>
       <!-- /dev/eth0 -->
       <dev name="dev_k60n512_enet_map"          use="on"/>
       <!-- /dev/sdhc -->
       <dev name="dev_k60n512_sdhc_map"          use="on"/>
       <!-- /dev/sdhc -->
       <dev name="dev_sd_map"                    use="on"/>
+      <!-- /dev/ftm0 -->
+      <dev name="dev_k60n512_ftm_0_map"         use="off"/>
+      <!-- /dev/dspi0 -->
+      <dev name="dev_k60n512_dspi_2_map"         use="on"/>
    </devices>
 </target>
 
@@ -159,41 +165,42 @@
 
 <binaries src_path="sbin" dest_path="sbin">
 <target name="cortexm_lepton">
-   <bin name="initd"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="lsh"      stack="2048"    priority="10" timeslice="5" />
-   <bin name="mount"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="umount"   stack="2048"    priority="10" timeslice="5" />
-   <bin name="ls"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="ps"       stack="2048"    priority="10" timeslice="5" />
+   <bin name="initd"    stack="2048"    priority="10" timeslice="1" />
+   <bin name="lsh"      stack="2048"    priority="10" timeslice="1" />
+   <bin name="mount"    stack="2048"    priority="10" timeslice="1" />
+   <bin name="umount"   stack="2048"    priority="10" timeslice="1" />
+   <bin name="ls"       stack="2048"    priority="10" timeslice="1" />
+   <bin name="ps"       stack="2048"    priority="10" timeslice="1" />
    <!--bin name="kill"     stack="2048"    priority="10" timeslice="5" /-->
    <!--bin name="touch"    stack="2048"    priority="10" timeslice="5" /-->
-   <bin name="cat"      stack="2048"    priority="10" timeslice="5" />
+   <bin name="cat"      stack="2048"    priority="10" timeslice="1" />
    <!--bin name="more"     stack="2048"    priority="10" timeslice="5" /-->
-   <bin name="mkfs"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="df"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="uname"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="pwd"      stack="2048"    priority="10" timeslice="5" />
-   <bin name="rmdir"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="mkdir"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="rm"       stack="2048"    priority="10" timeslice="5" />
+   <bin name="mkfs"     stack="2048"    priority="10" timeslice="1" />
+   <bin name="df"       stack="2048"    priority="10" timeslice="1" />
+   <bin name="uname"    stack="2048"    priority="10" timeslice="1" />
+   <bin name="pwd"      stack="2048"    priority="10" timeslice="1" />
+   <bin name="rmdir"    stack="2048"    priority="10" timeslice="1" />
+   <bin name="mkdir"    stack="2048"    priority="10" timeslice="1" />
+   <bin name="rm"       stack="2048"    priority="10" timeslice="1" />
    <!--bin name="od"       stack="2048"    priority="10" timeslice="5" /-->
-   <bin name="date"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="echo"     stack="2048"    priority="10" timeslice="5" />
+   <bin name="date"     stack="2048"    priority="10" timeslice="1" />
+   <bin name="echo"     stack="2048"    priority="10" timeslice="1" />
 </target>
 </binaries>
 
 <binaries src_path="bin" dest_path="bin">
    <target name="cortexm_lepton">
         <!-- tools test-->
-        <bin name="test"        stack="1024"    priority="10" timeslice="5" />
+        <bin name="test"        stack="2048"    priority="10" timeslice="1" />
         <!--bin name="tstsd"       stack="2048"    priority="10" timeslice="5" /-->
+        <bin name="tstspi"        stack="4096"    priority="10" timeslice="1" />
    </target>
 </binaries>
 
 <binaries src_path="bin/net" dest_path="bin/net">
-      <bin name="ifconfig" stack="2048" priority="10" timeslice="5"/>
-      <bin name="telnetd" stack="2048" priority="10" timeslice="5"/>
-      <bin name="ftpd" stack="2048" priority="10" timeslice="5"/>
+      <bin name="ifconfig" stack="2048" priority="10" timeslice="1"/>
+      <bin name="telnetd" stack="2048" priority="10" timeslice="1"/>
+      <bin name="ftpd" stack="2048" priority="10" timeslice="1"/>
 </binaries>
 
 <files>
