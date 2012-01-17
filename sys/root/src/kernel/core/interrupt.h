@@ -618,13 +618,13 @@ typedef unsigned char kernel_intr_t;
      	#define __set_irq() __disable_interrupt_section_out()
 
      	#define __kernel_usleep(useconds){\
-   		ldiv_t lr=ldiv(useconds,1000);\
+   		ldiv_t lr=ldiv(useconds,10000);\
    		if(lr.quot)		cyg_thread_delay(lr.quot);\
       }
 
       //
-      #define tick_to_msec(tick) ((unsigned int)(tick))
-      #define msec_to_tick(msec) ((cyg_tick_count_t)(msec))
+      #define tick_to_msec(tick) ((unsigned int)((tick)*10+1))
+      #define msec_to_tick(msec) ((cyg_tick_count_t)(msec+9)/10)
 
       //for suspend ans resume thread
       #define __kernel_pthread_suspend(__pthread_ptr__)  cyg_thread_suspend(__pthread_ptr__->thr_id)
