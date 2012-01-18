@@ -243,7 +243,10 @@ typedef struct board_kinetis_dspi_info_st {
    unsigned char mode;
    
    unsigned char cs;
-   unsigned char cs_active;
+   
+   cyg_handle_t irq_handle;
+	cyg_interrupt irq_it;
+   
 } board_kinetis_dspi_info_t;
 
 #endif //__DEV_CORTEXM_DSPI_H__
