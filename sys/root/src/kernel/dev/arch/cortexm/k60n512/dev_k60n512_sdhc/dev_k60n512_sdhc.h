@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive   
 ==============================================*/
-#ifndef __DEV_CORTEXM_SDHC_H__
-#define __DEV_CORTEXM_SDHC_H__
+#ifndef __DEV_CORTEXM_K60N512_SDHC_H__
+#define __DEV_CORTEXM_K60N512_SDHC_H__
 
 
 /*============================================
@@ -329,5 +329,5 @@ typedef struct mci_cmd_st {
    unsigned char  resp_type;
 } mci_cmd_t;
 
-#endif //__DEV_CORTEXM_SDHC_H__
+#endif //__DEV_CORTEXM_K60N512_SDHC_H__
 

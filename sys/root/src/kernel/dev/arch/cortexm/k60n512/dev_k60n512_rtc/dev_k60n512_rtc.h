@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive   
 ==============================================*/
-#ifndef __DEV_CORTEXM_RTC_H__
-#define __DEV_CORTEXM_RTC_H__
+#ifndef __DEV_CORTEXM_K60N512_RTC_H__
+#define __DEV_CORTEXM_K60N512_RTC_H__
 
 
 /*============================================
@@ -102,7 +102,7 @@ typedef struct board_kinetis_rtc_info_st {
    
    int desc_r;
 } board_kinetis_rtc_info_t;
-#endif //__DEV_CORTEXM_RTC_H__
+#endif //__DEV_CORTEXM_K60N512_RTC_H__
 
 
 
