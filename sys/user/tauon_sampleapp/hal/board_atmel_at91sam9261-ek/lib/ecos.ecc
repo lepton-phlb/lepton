@@ -2139,7 +2139,7 @@ cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
 };
 
 # <
-# Platform defined I/O channels.
+# Platform defined I/O channels
 # Platforms which provide additional I/O channels can implement
 # this interface, indicating that the function plf_if_init()
 # needs to be called.
@@ -2151,7 +2151,7 @@ cdl_interface CYGINT_HAL_PLF_IF_INIT {
     # Current_value: 0
 };
 
-# Platform IDE I/O support.
+# Platform IDE I/O support
 # Platforms which provide IDE controllers can implement
 # this interface, indicating that IDE I/O macros are
 # available.
@@ -2161,6 +2161,21 @@ cdl_interface CYGINT_HAL_PLF_IF_IDE {
     # This value cannot be modified here.
     # Flavor: data
     # Current_value: 0
+};
+
+# Saved interrupt state required
+# Components requiring access to saved interrupt state via the
+# hal_saved_interrupt_state symbol should implement this
+# interface.
+#
+cdl_interface CYGINT_HAL_COMMON_SAVED_INTERRUPT_STATE_REQUIRED {
+    # Implemented by CYGDBG_HAL_DEBUG_GDB_BREAK_SUPPORT, active, disabled
+    # Implemented by CYGDBG_HAL_DEBUG_GDB_CTRLC_SUPPORT, inactive, enabled
+    # This value cannot be modified here.
+    # Flavor: data
+    # Current_value: 0
+
+    # The following properties are affected by this value
 };
 
 # File I/O operations via GDB
@@ -3948,6 +3963,8 @@ cdl_component CYGSEM_KERNEL_SCHED_MLQUEUE {
     #     Calculated:   CYGSEM_KERNEL_SCHED_BITMAP  ? "<cyg/kernel/bitmap.hxx>"  : CYGSEM_KERNEL_SCHED_MLQUEUE ? "<cyg/kernel/mlqueue.hxx>" : CYGSEM_KERNEL_SCHED_LOTTERY ? "<cyg/kernel/lottery.hxx>" : "!!!-- Configuration broken - no scheduler selected --!!!"
     # component CYGSEM_KERNEL_SYNCH_MUTEX_PRIORITY_INVERSION_PROTOCOL
     #     ActiveIf:  CYGSEM_KERNEL_SCHED_MLQUEUE 
+    # option CYGDBG_KERNEL_INSTRUMENT_MLQ
+    #     ActiveIf: CYGSEM_KERNEL_SCHED_MLQUEUE
 };
 
 # >
@@ -4000,6 +4017,8 @@ cdl_option CYGSEM_KERNEL_SCHED_BITMAP {
     #     Calculated:   CYGSEM_KERNEL_SCHED_BITMAP  ? "<cyg/kernel/bitmap.hxx>"  : CYGSEM_KERNEL_SCHED_MLQUEUE ? "<cyg/kernel/mlqueue.hxx>" : CYGSEM_KERNEL_SCHED_LOTTERY ? "<cyg/kernel/lottery.hxx>" : "!!!-- Configuration broken - no scheduler selected --!!!"
     # component CYGSEM_KERNEL_SCHED_TIMESLICE
     #     Requires: !CYGSEM_KERNEL_SCHED_BITMAP
+    # option CYGDBG_KERNEL_INSTRUMENT_BITMAP
+    #     ActiveIf: CYGSEM_KERNEL_SCHED_BITMAP
 };
 
 # Scheduler header file
@@ -4903,6 +4922,8 @@ cdl_component CYGPKG_KERNEL_SYNCH {
     #     ActiveIf: CYGPKG_KERNEL_SYNCH
     # option CYGDBG_KERNEL_INSTRUMENT_MBOXT
     #     ActiveIf: CYGPKG_KERNEL_SYNCH
+    # option CYGDBG_KERNEL_INSTRUMENT_FLAG
+    #     ActiveIf: CYGPKG_KERNEL_SYNCH
 };
 
 # >
@@ -5175,6 +5196,7 @@ cdl_option CYGIMP_KERNEL_SYNCH_MQUEUE_NOT_INLINE {
 
 # <
 # Kernel instrumentation
+# doc: user-guide/kernel-instrumentation.html
 # The current release of the kernel contains an initial version
 # of instrumentation support. The various parts of the kernel
 # will invoke instrumentation routines whenever appropriate
@@ -5220,7 +5242,7 @@ cdl_option CYGVAR_KERNEL_INSTRUMENT_EXTERNAL_BUFFER {
     # Default value: 0
 };
 
-# Size of instrumentation buffer size
+# Instrumentation buffer size
 # If kernel instrumentation is enabled then the instrumentation
 # data goes into a circular buffer. A larger buffer allows
 # more data to be stored, but at a significant cost in memory.
@@ -5240,7 +5262,7 @@ cdl_option CYGNUM_KERNEL_INSTRUMENT_BUFFER_SIZE {
     # Legal values: 16 to 0x100000
 };
 
-# Wrap instrument buffer
+# Wrap instrumentation buffer
 # When the instrumentation buffer is full it can either be restarted
 # from the beginning, overwriting older data, or it can stop at the
 # end. The former is useful if you want to look at the last entries
@@ -5280,7 +5302,7 @@ cdl_option CYGDBG_KERNEL_INSTRUMENT_FLAGS {
     # Default value: 1
 };
 
-# Instrument the scheduler
+# Instrument common scheduler operations
 # It is possible to perform selective instrumentation at
 # run-time. It is also possible to disable instrumentation
 # in various kernel components at compile-time, thus
@@ -5324,7 +5346,7 @@ cdl_option CYGDBG_KERNEL_INSTRUMENT_THREAD {
     # Default value: 1
 };
 
-# Instrument interrupts
+# Instrument interrupt-related operations
 # It is possible to perform selective instrumentation at
 # run-time. It is also possible to disable instrumentation
 # in various kernel components at compile-time, thus
@@ -5456,6 +5478,28 @@ cdl_option CYGDBG_KERNEL_INSTRUMENT_MBOXT {
     # Default value: 1
 };
 
+# Instrument event flag operations
+# It is possible to perform selective instrumentation at
+# run-time. It is also possible to disable instrumentation
+# in various kernel components at compile-time, thus
+# reducing the code size overheads. This option controls
+# whether or not instrumentation support is compiled into
+# the event flag code.
+#
+cdl_option CYGDBG_KERNEL_INSTRUMENT_FLAG {
+    # This option is not active
+    # The parent CYGPKG_KERNEL_INSTRUMENT is disabled
+    # ActiveIf constraint: CYGPKG_KERNEL_SYNCH
+    #     CYGPKG_KERNEL_SYNCH == 1
+    #   --> 1
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
 # Instrument clock operations
 # It is possible to perform selective instrumentation at
 # run-time. It is also possible to disable instrumentation
@@ -5522,6 +5566,50 @@ cdl_option CYGDBG_KERNEL_INSTRUMENT_SMP {
     # Default value: 1
 };
 
+# Instrument multi-level queue scheduler operations
+# It is possible to perform selective instrumentation at
+# run-time. It is also possible to disable instrumentation
+# in various kernel components at compile-time, thus
+# reducing the code size overheads. This option controls
+# whether or not instrumentation support is compiled into
+# the code for the multi-level queue scheduler.
+#
+cdl_option CYGDBG_KERNEL_INSTRUMENT_MLQ {
+    # This option is not active
+    # The parent CYGPKG_KERNEL_INSTRUMENT is disabled
+    # ActiveIf constraint: CYGSEM_KERNEL_SCHED_MLQUEUE
+    #     CYGSEM_KERNEL_SCHED_MLQUEUE == 1
+    #   --> 1
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
+# Instrument bitmap scheduler operations
+# It is possible to perform selective instrumentation at
+# run-time. It is also possible to disable instrumentation
+# in various kernel components at compile-time, thus
+# reducing the code size overheads. This option controls
+# whether or not instrumentation support is compiled into
+# the code for the bitmap scheduler.
+#
+cdl_option CYGDBG_KERNEL_INSTRUMENT_BITMAP {
+    # This option is not active
+    # The parent CYGPKG_KERNEL_INSTRUMENT is disabled
+    # ActiveIf constraint: CYGSEM_KERNEL_SCHED_BITMAP
+    #     CYGSEM_KERNEL_SCHED_BITMAP == 0
+    #   --> 0
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
 # Support application-level instrumentation
 # It is possible to perform selective instrumentation at
 # run-time. It is also possible to disable instrumentation
@@ -5541,7 +5629,7 @@ cdl_option CYGDBG_KERNEL_INSTRUMENT_USER {
     # Default value: 1
 };
 
-# Print user friendly instrument messages
+# Provide user-friendly instrumentation messages
 # Include code which will convert the instrument type field 
 # into a more human understandable string
 #
@@ -9416,6 +9504,18 @@ cdl_option CYGFUN_LIBC_STRING_STRDUP {
     # Current value: 1
 };
 
+# Provide strnlen() GNU extension
+# This option controls support for the strnlen() function.
+# (This is a GNU extension, not part of ANSI C.)
+#
+cdl_option CYGFUN_LIBC_STRING_GNU_STRNLEN {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
 # C library string functions build options
 # Package specific build options including control over
 # compiler flags used only in building this package,
@@ -9457,9 +9557,9 @@ cdl_option CYGPKG_LIBC_STRING_CFLAGS_REMOVE {
 # string functions.
 #
 cdl_option CYGPKG_LIBC_STRING_TESTS {
-    # Calculated value:  "tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2" 
+    # Calculated value:  "tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2 tests/strnlen" 
     # Flavor: data
-    # Current_value: tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2
+    # Current_value: tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2 tests/strnlen
 };
 
 # <
@@ -9799,12 +9899,12 @@ cdl_component CYGPKG_LIBM_OPTIONS {
 cdl_option CYGPKG_LIBM_CFLAGS_ADD {
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value ""
+    # user_value -fno-strict-aliasing
     # value_source default
-    # Default value:  ((0 == CYGPKG_HAL_I386) && (0 == CYGPKG_HAL_SYNTH_I386)) ? "" : "-ffloat-store" 
+    # Default value:  "-fno-strict-aliasing" .  ((!CYGPKG_HAL_I386 && !CYGPKG_HAL_SYNTH_I386) ? "" : " -ffloat-store") 
     #     CYGPKG_HAL_I386 (unknown) == 0
     #     CYGPKG_HAL_SYNTH_I386 (unknown) == 0
-    #   --> ""
+    #   --> -fno-strict-aliasing
 };
 
 # Suppressed compiler flags
