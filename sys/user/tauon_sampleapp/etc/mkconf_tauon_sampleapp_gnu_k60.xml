@@ -96,8 +96,8 @@
 
 <target name="cortexm_lepton">
    <devices>
-      <!-- /dev/ttys0 -->
-      <dev name="dev_k60n512_uart_s3_map"       use="on"/>
+      <!-- /dev/ttys3 -->
+      <dev name="dev_k60n512_uart_s3_map"        use="on"/>
       <!-- /dev/rtc0 -->
       <dev name="dev_k60n512_rtc_map"           use="on"/>
       <!-- /dev/eth0 -->
@@ -106,8 +106,6 @@
       <dev name="dev_k60n512_sdhc_map"          use="on"/>
       <!-- /dev/sdhc -->
       <dev name="dev_sd_map"                    use="on"/>
-      <!-- /dev/ftm0 -->
-      <dev name="dev_k60n512_ftm_0_map"         use="off"/>
       <!-- /dev/dspi0 -->
       <dev name="dev_k60n512_dspi_2_map"         use="on"/>
    </devices>
@@ -132,7 +130,7 @@
 <!-- specially for K60n512 -->
 <target name="cortexm_lepton">
         <boot dest_path="$(HOME)/tauon/sys/user/tauon_sampleapp/etc">
-                <command arg="initd -t 100 -i /dev/ttys0 -o /dev/ttys0" />
+                <command arg="initd -t 100 -i /dev/ttys3 -o /dev/ttys3" />
         </boot>
 </target>
 
