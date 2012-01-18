@@ -87,17 +87,6 @@ Implementation
 int dev_k60n512_dspi_x_load(board_kinetis_dspi_info_t * kinetis_dspi_info) {
    volatile unsigned int reg_val = 0;
    
-   #if 0
-   ///DUMMY
-   //PTD12 in output mode
-   HAL_WRITE_UINT32(0x400FF0D4, (1<<12));
-   while(1) {
-      HAL_DELAY_US(10000);
-      HAL_WRITE_UINT32(0x400FF0CC, (1<<12));
-   }
-   ///
-   #endif
-   
    //disable and clear spi
    HAL_READ_UINT32(kinetis_dspi_info->dspi_base + REG_SPI_MCR, reg_val);
    reg_val &= ~REG_SPI_MCR_MDIS_MASK;
@@ -187,17 +176,15 @@ int dev_k60n512_dspi_x_open(desc_t desc, int o_flag, board_kinetis_dspi_info_t *
 				(cyg_addrword_t)kinetis_dspi_info,   
 				_kinetis_dspi_x_isr,
 				_kinetis_dspi_x_dsr,
-				&irq_handle,
-				&irq_it);
-		cyg_interrupt_attach(irq_handle);
+				&kinetis_dspi_info->irq_handle,
+				&kinetis_dspi_info->irq_it);
+		cyg_interrupt_attach(kinetis_dspi_info->irq_handle);
       
       //allow IRQ
       HAL_READ_UINT32(kinetis_dspi_info->dspi_base + REG_SPI_RSER, reg_val);
       reg_val |= DSPI_X_ALLOWED_IRQS;
       HAL_WRITE_UINT32(kinetis_dspi_info->dspi_base + REG_SPI_RSER, reg_val);
       #endif
-      
-      kinetis_dspi_info->cs_active = 0;
       
       //clear TFF (TX FIFO not full)
       HAL_READ_UINT32(kinetis_dspi_info->dspi_base + REG_SPI_SR, reg_val);
@@ -252,9 +239,7 @@ int dev_k60n512_dspi_x_close(desc_t desc) {
       HAL_WRITE_UINT32(p_inf_dspi_x->dspi_base + REG_SPI_MCR, reg_val);
       
       HAL_WRITE_UINT32(p_inf_dspi_x->dspi_base + REG_SPI_RSER, 0);
-      ofile_lst[desc].p = NULL;
-      
-      p_inf_dspi_x->cs_active = -1;
+      ofile_lst[desc].p = NULL;      
    }
 
    return 0;

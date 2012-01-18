@@ -97,7 +97,7 @@ static board_kinetis_dspi_info_t kinetis_dspi_0 = {
    clk_phase : SPI_CTAR_CLK_POL_PHA_MODE0,
    mode : SPI_MODE_MASTER,
    cs : 0,
-   cs_active : -1
+   irq_handle : 0
 };
 
 //
