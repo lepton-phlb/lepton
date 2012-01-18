@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive   
 ==============================================*/
-#ifndef __DEV_CORTEXM_DSPI_H__
-#define __DEV_CORTEXM_DSPI_H__
+#ifndef __DEV_CORTEXM_K60N512_DSPI_H__
+#define __DEV_CORTEXM_K60N512_DSPI_H__
 
 
 /*============================================
@@ -249,6 +249,6 @@ typedef struct board_kinetis_dspi_info_st {
    
 } board_kinetis_dspi_info_t;
 
-#endif //__DEV_CORTEXM_DSPI_H__
+#endif //__DEV_CORTEXM_K60N512_DSPI_H__
 
 

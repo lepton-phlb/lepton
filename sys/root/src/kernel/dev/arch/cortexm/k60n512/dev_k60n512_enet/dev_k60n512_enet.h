@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive   
 ==============================================*/
-#ifndef __DEV_CORTEXM_ENET_H__
-#define __DEV_CORTEXM_ENET_H__
+#ifndef __DEV_CORTEXM_K60N512_ENET_H__
+#define __DEV_CORTEXM_K60N512_ENET_H__
 
 
 /*============================================
@@ -389,4 +389,4 @@ either the MPL or the [eCos GPL] License."
 #define REG_PHY_PHYCTRL2_DUPLEX_STATUS				(4<<2)
 #define REG_PHY_PHYCTRL2_SPEED_STATUS				(1<<2)
 
-#endif //__DEV_CORTEXM_ENET_H__
+#endif //__DEV_CORTEXM_K60N512_ENET_H__

@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive   
 ==============================================*/
-#ifndef __DEV_CORTEXM_UART_X_H__
-#define __DEV_CORTEXM_UART_X_H__
+#ifndef __DEV_CORTEXM_UART_K60N512_X_H__
+#define __DEV_CORTEXM_UART_K60N512_X_H__
 
 
 /*============================================
@@ -154,4 +154,4 @@ typedef struct board_kinetis_uart_info_st {
    kernel_pthread_mutex_t mutex;
 } board_kinetis_uart_info_t;
 
-#endif //__DEV_CORTEXM_UART_X_H__
+#endif //__DEV_CORTEXM_K60N512_UART_X_H__
