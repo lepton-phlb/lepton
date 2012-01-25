@@ -113,15 +113,18 @@ common_compile_options
 #
 scripts_default_dir = tauon_dir + '/sys/root/lib/arch'
 epk_default_dir = tauon_dir + '/tools/host/debian/ecos/ports-v3.0'
-epk_list = ['/at91sam9261.epk', '/synth_tauon.epk']
-epk_list_name = ['CYGPKG_HAL_ARM_AT91SAM9261', 'CYGPKG_HAL_SYNTH_TAUON']
-epk_list_path = ['./arm9/at91sam9261', '']
+epk_list = ['/twrk60n512_mram.epk','/at91sam9261.epk', '/synth_tauon.epk']
+epk_list_name = ['CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM','CYGPKG_HAL_ARM_AT91SAM9261', 'CYGPKG_HAL_SYNTH_TAUON']
+epk_list_path = ['./cortexm/k60n512','./arm9/at91sam9261', '']
 ecos_admin_cmd = ecos_repository_path + '/ecosadmin.tcl'
 
 app_default_dir = tauon_dir + '/sys/user/tauon_sampleapp'
-app_default_target = ['arm9_lepton', 'gnu32_lepton']
-app_default_target_file = ['at91sam9261ek_opts.py', 'synthetic_opts.py']
-app_config_file = app_default_dir + '/etc/mkconf_tauon_sampleapp_gnu.xml'
+app_default_target = ['cortexm_lepton', 'arm9_lepton', 'gnu32_lepton']
+app_default_target_file = ['k60n512_opts.py', 'at91sam9261ek_opts.py', 'synthetic_opts.py']
+app_config_file = [app_default_dir + '/etc/mkconf_tauon_sampleapp_gnu_k60.xml',
+app_default_dir + '/etc/mkconf_tauon_sampleapp_gnu.xml',
+app_default_dir + '/etc/mkconf_tauon_sampleapp_gnu.xml']
+app_default_list_epk = ['board_freescale_twrk60n512', 'board_atmel_at91sam9261-ek', '']
 
 ###
 ### VARIABLES AND OPTIONS ###
@@ -315,7 +318,7 @@ def install_default_epk(epk_dir, epk_lst, epk_name_lst, ecos_cmd):
          Exit(1)
 
 #
-def build_ecos_lib(script_dir, epk_lst_name, epk_lst_path, app_path):
+def build_ecos_lib(script_dir, epk_lst_name, epk_lst_path, app_epk_lst, app_path):
    os.chdir(script_dir)
    
    for i in range(len(epk_lst_path)):
@@ -326,17 +329,17 @@ def build_ecos_lib(script_dir, epk_lst_name, epk_lst_path, app_path):
             print "(EE) build eCos synthetic library"
             Exit(1)  
       else:
-         # add application special package and buid it
+         # add application special package and build it
          cmd = "sh " + script_dir + "/install-ecos-epk.sh " + app_path + \
-         "/hal/board_atmel_at91sam9261-ek " + epk_lst_name[i]
+         "/hal/" + app_epk_lst[i] + " " + epk_lst_name[i]
          print cmd
          if subprocess.call(shlex.split(cmd)) > 0:
             print "(EE) add application ecos package : " + epk_lst_name[i]
             Exit(1)
          
          cmd = "sh " + script_dir + "/script_ecos_lib.sh " + app_path + \
-         "/hal/board_atmel_at91sam9261-ek " + epk_lst_path[i]
-         print cmd
+         "/hal/" + app_epk_lst[i] + " " + epk_lst_path[i]
+         print "**** [" + cmd + "]****"
          if subprocess.call(shlex.split(cmd)) > 0:
             print "(EE) build application ecos library : " + epk_lst_name[i]
             Exit(1)
@@ -348,7 +351,7 @@ def build_default_app(mklepton_path, app_dir, app_config, target_list, target_op
       #parse configuration file and build application
       os.chdir(mklepton_path)
       cmd = "sh " + mklepton_path + "/mklepton_gnu.sh " + " -t " + target_list[i] + \
-      " " + app_config
+      " " + app_config[i]
       if subprocess.call(shlex.split(cmd)) > 0:
          print "(EE) parse application config file : " + target_list[i]
          Exit(1)
@@ -379,7 +382,7 @@ if tauon_configure_env['BUILD_VIRTUALCPU']:
 
 if tauon_configure_env['BUILD_SAMPLEAPP']:
    install_default_epk(epk_default_dir, epk_list, epk_list_name, ecos_admin_cmd)
-   build_ecos_lib(scripts_default_dir, epk_list_name, epk_list_path, app_default_dir)
+   build_ecos_lib(scripts_default_dir, epk_list_name, epk_list_path, app_default_list_epk, app_default_dir)
    
    #prepare all things to build application
    os.chdir(app_default_dir + '/prj/scons')
