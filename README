@@ -1,0 +1,96 @@
+LEPTON/TAUON OPERATING SYSTEM
+Lepton/Tauon is a open source POSIX "compliant" Operating System for 
+deeply embedded devices. It tries to bring PSE-53 POSIX capabilities 
+(multiprocess, filesystems, messages queues, ... BUT without 
+asynchronous I/O now) in embedded world. It works on :
+   -. AT91M55800A (Atmel)
+   -. AT91SAM9261-EK (Atmel)
+   -. AT91SAM9260-EK (Atmel)
+   -. TWR-K60N512 (Freescale)
+   -. PC (Simulation for Linux and Windows)
+The initial version of Lepton/Tauon is 4.0.0..
+
+Lepton/Tauon provides more than 150 POSIX functions over a real-time
+operation system that can be :
+   -. Propriotary embOS from Segger (original Lepton)
+   -. Open source eCos community (Tauon)
+It is also possible to bring new real-time operating system like
+FreeRTOS.
+
+Lepton/Tauon uses some parts of underlying real-time operating system :
+   -. board startup (HAL)
+   -. basic synchronisation functions (semaphore, mutex, ..)
+   -. scheduling
+   -. ISR mechanisms
+   -. some libraries (math.h, stdlib.h ,...)
+
+In addition Lepton/Tauon offers :
+   -. more than 150 POSIX functions from 1003.1, 1003.1b and 1003.1c
+   -. simple model for device drivers
+   -. UNIX stream to improve "reuse"
+   -. support lwip stack (1.3.2)
+   -. support rootfs, ufs, fat16 filesystem
+   -. VFS layer to brings new and custom file systems 
+   -. USB devices stack and profils CDC-ACM, MSD and Ethernet-ECM (test
+   only on AT91SAM9261-EK)
+   -. NanoX and FLTK support (FLNX exactly)
+   -. Mongoose WEB server, FTP server (from trollFTPD) and mini shell
+   -. simulation process under Linux and Windows
+
+To install Lepton/Tauon and launch a sample application see docs/INSTALL.
+To see what is Lepton/Tauon, installation are tested on :
+   -. Debian Squeeze and Wheezy
+   -. Ubuntu 11.10
+
+To create your application see docs/START.
+
+The changes made in version 4.0.0.0 are documented in the file ChangeLog.
+
+Directories and/or files in this distribution :
+   -. sys/tools : tools to build a Lepton/Tauon application
+   -. sys/user : part for user application sources, libraries and
+   binaries
+   
+   -. sys/root/lib/arch : install path for all supported eCos HAL
+   
+   -. sys/root/prj/scons : general compilations files for arch supported
+   by Lepton/Tauon.
+   -. sys/root/prj/config : a pkg-config files use for compilation and a
+   minicom configuration file for simulation
+   
+   -. sys/root/src/sbin : source files for general utilities (mini
+   shell aka lsh, mkfs, ls, uname, ...)
+   -. sys/root/src/bin/net : source files for high level networking
+   utilities like web server or telnet server.
+   
+   -. sys/root/src/lib : source files for all common libraries (libc, 
+   pthread, ..)
+   
+   -. sys/root/src/kernel/core : source files for all kernel functions
+   
+   -. sys/root/src/kernel/core/core-ecos : source files for kernel
+   functions that use underlying real-time os functions
+   -. sys/root/src/kernel/fs : source files for supported filesystems.
+   -. sys/root/src/kernel/net : source files for supported net stack.
+   Only lwip is compiled for Tauon now.
+   -. sys/root/src/kernel/fs : source files for device drivers.
+   
+
+Send comments/corrections to lepton.phlb@gmail.com.
+
+The Lepton/Tauon home page is http://code.google.com/p/lepton/.
+
+Thanks to :
+   * eCos : http://ecos.sourceware.org/
+   * lwip : http://savannah.nongnu.org/projects/lwip/
+   * nano-X: http://www.microwindows.org/
+   * fltk : http://www.fltk.org/
+   * openOCD : http://openocd.sourceforge.net/
+   * all GNU/Tools..
+   
+
+Philippe Le Boulanger (original author of Lepton and current maintainer)
+<lepton.phlb@gmail.com>
+
+Jean-Jacques Pitrolle (current maintainer)
+<lepton.jjp@gmail.com>
