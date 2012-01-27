@@ -159,9 +159,31 @@ define print_k60_rtc
    printf "RTC_RAR : 0x%x\n", *$RTC_RAR
 end 
 
-#document MCG memory map
+#document RTC memory map
 document print_k60_rtc
    Show Kinetis K60 RTC registers
+end
+
+###
+# define PIT1 memory map
+set variable $PIT_MCR=0x40037000
+set variable $PIT_LDVAL1=0x40037110
+set variable $PIT_CVAL1=0x40037114
+set variable $PIT_TCTRL1=0x40037118
+set variable $PIT_TFLG1=0x4003711c
+
+#display PIT1 memory map
+define print_k60_pit1
+   printf "PIT_MCR : 0x%x\n", *$PIT_MCR
+   printf "PIT_LDVAL1 : 0x%x\n", *$PIT_LDVAL1
+   printf "PIT_CVAL1 : 0x%x\n", *$PIT_CVAL1
+   printf "PIT_TCTRL1 : 0x%x\n", *$PIT_TCTRL1
+   printf "PIT_TFLG1 : 0x%x\n", *$PIT_TFLG1
+end 
+
+#document PIT1 memory map
+document print_k60_pit1
+   Show Kinetis K60 PIT1 registers
 end
 
 ###
@@ -172,7 +194,7 @@ set variable $FTM0_MOD=0x40038008
 set variable $FTM0_CNTIN=0x4003804c
 set variable $FTM0_MODE=0x40038054
 
-#display SDHC memory map
+#display FTM0 memory map
 define print_k60_ftm0
    printf "[w] FTM0_SC : 0x%x\n", *$FTM0_SC
    printf "[w] FTM0_CNT : 0x%x\n", *$FTM0_CNT
