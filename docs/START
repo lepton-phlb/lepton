@@ -277,7 +277,7 @@ You can flash your application with OpenOCD or CodeWarrior 10.1
 If you want to debug your application in flash, you need to :
    -. Open a new terminal and launch OpenOCD
    $ cd ~/tauon/sys/user/tauon_myapp/etc/scripts
-   $ openocd -f [amontec_k60.cfg | jlink_k60.cfg]
+   $ openocd -f jlink_k60_flash.cfg
    
    -. Open a new terminal and launch GDB
    $ arm-eabi-gdb -x ../etc/scripts/gdb_script_k60_flash_jlink.gdb
