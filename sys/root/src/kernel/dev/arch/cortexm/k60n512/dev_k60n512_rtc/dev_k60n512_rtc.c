@@ -41,6 +41,7 @@ Includes
 #include "lib/libc/termios/termios.h"
 
 #include "dev_k60n512_rtc.h"
+#include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 /*===========================================
 Global Declaration
 =============================================*/
@@ -84,8 +85,6 @@ board_kinetis_rtc_info_t kinetis_rtc_info = {
    desc_r : -1
 };
 
-///DUMMY PIN
-#define DUMMY_RTC_PINS CYGHWR_HAL_KINETIS_PIN(D, 12, 1, 0)
 /*===========================================
 Implementation
 =============================================*/
@@ -101,9 +100,9 @@ int dev_k60n512_rtc_load(void){
    volatile unsigned int reg_val = 0;
    
    //enable clock gating (SIM->SCGC6 |= SIM_SCGC6_RTC_MASK)
-   HAL_READ_UINT32(0x4004803c, reg_val);
-   reg_val |= (1 << 29);
-   HAL_WRITE_UINT32(0x4004803c, reg_val);
+   HAL_READ_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
+   reg_val |= REG_SIM_SCGC6_RTC_MASK;
+   HAL_WRITE_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
    
    #if 0
    //software reset

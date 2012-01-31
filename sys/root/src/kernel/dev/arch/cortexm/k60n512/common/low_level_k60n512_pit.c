@@ -38,9 +38,8 @@ Includes
 #include "kernel/core/core_rttimer.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
-#include "lib/libc/termios/termios.h"
-
 #include "dev_k60n512_pit.h"
+#include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 /*===========================================
 Global Declaration
 =============================================*/
@@ -66,9 +65,9 @@ void _pit_start(unsigned char pit_no, unsigned int m_sec) {
    //enable PIT
    if(!_pit_enable) {
       //enable clock gating (SIM->SCGC6 |= SIM_SCGC6_PIT_MASK)
-      HAL_READ_UINT32(0x4004803c, reg_val);
-      reg_val |= (1 << 23);
-      HAL_WRITE_UINT32(0x4004803c, reg_val);
+      HAL_READ_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
+      reg_val |= REG_SIM_SCGC6_PIT_MASK;
+      HAL_WRITE_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
       
       //
       HAL_WRITE_UINT32(pit_base + REG_PIT_MCR, 0);
@@ -79,8 +78,8 @@ void _pit_start(unsigned char pit_no, unsigned int m_sec) {
       return;
    
    //calculate value
-   //reg_val = (1000000-1)*m_sec/PIT_PERIOD_NS;
-   reg_val = 100000;//500;
+   reg_val = (1000000-1)*m_sec/PIT_PERIOD_NS;
+   //reg_val = 100000;//500;
    HAL_WRITE_UINT32(pit_base + REG_PIT_LDVALx + 16*pit_no, reg_val);
    
    //start timer

@@ -39,6 +39,7 @@ Includes
 #include "kernel/fs/vfs/vfsdev.h"
 
 #include "dev_k60n512_dspi_x.h"
+#include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 /*===========================================
 Global Declaration
 =============================================*/
@@ -123,9 +124,9 @@ int dev_k60n512_dspi_0_load(void) {
    _kinetis_dspi0_configure_pins();
    
    //enable clock gating (SIM->SCGC6 |= SIM_SCGC6_DSPI0_MASK)
-   HAL_READ_UINT32(0x4004803c, reg_val);
-   reg_val |= (1 << 12);
-   HAL_WRITE_UINT32(0x4004803c, reg_val);
+   HAL_READ_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
+   reg_val |= REG_SIM_SCGC6_DSPI0_MASK;
+   HAL_WRITE_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
    
    return dev_k60n512_dspi_x_load(&kinetis_dspi_0);
 }
