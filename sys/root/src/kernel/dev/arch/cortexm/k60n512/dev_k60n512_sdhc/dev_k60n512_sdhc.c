@@ -42,6 +42,7 @@ Includes
 #include "lib/libc/termios/termios.h"
 
 #include "dev_k60n512_sdhc.h"
+#include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 
 #include "kernel/dev/arch/all/sd/dev_sd.h"
 /*===========================================
@@ -229,11 +230,7 @@ Implementation
 ---------------------------------------------*/
 int dev_k60n512_sdhc_load(void) {
    volatile unsigned int reg_val = 0;
-   
-   //FSL: allow concurrent access to MPU controller. Example: ENET uDMA to SRAM, otherwise bus error
-	reg_val = 0;
-	HAL_WRITE_UINT32(0x4000d000, reg_val);//MPU_CESR = 0; 
-   
+      
    //
    g_kinetis_sdhc_info.sdhc_base = 0x400b1000;
    g_kinetis_sdhc_info._desc_rd = -1;
@@ -795,9 +792,9 @@ void _kinetis_sdhc_configure_pins(unsigned char pin_flag) {
       hal_set_pin_function(SDHC_D3);
    }
    
-   HAL_READ_UINT32(SIM_SCGC3, reg_val);
-   reg_val |= SIM_SCGC3_SDHC_MASK;
-   HAL_WRITE_UINT32(SIM_SCGC3, reg_val);
+   HAL_READ_UINT32(REG_SIM_SCGC3_ADDR, reg_val);
+   reg_val |= REG_SIM_SCGC3_SDHC_MASK;
+   HAL_WRITE_UINT32(REG_SIM_SCGC3_ADDR, reg_val);
 }
 /*============================================
 | End of Source  : dev_k60n512_sdhc.c

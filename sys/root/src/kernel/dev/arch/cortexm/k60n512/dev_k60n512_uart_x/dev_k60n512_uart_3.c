@@ -39,6 +39,7 @@ Includes
 #include "kernel/fs/vfs/vfsdev.h"
 
 #include "dev_k60n512_uart_x.h"
+#include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 /*===========================================
 Global Declaration
 =============================================*/
@@ -125,9 +126,9 @@ int dev_k60n512_uart_3_load(void) {
    hal_set_pin_function(UART3_TX);
 
    //enable clock gating (SIM->SCGC4 |= SIM_SCGC4_UART3_MASK)
-   HAL_READ_UINT32(0x40048034, reg_val);
-   reg_val |= (1 << 13);
-   HAL_WRITE_UINT32(0x40048034, reg_val);
+   HAL_READ_UINT32(REG_SIM_SCGC4_ADDR, reg_val);
+   reg_val |= REG_SIM_SCGC4_UART3_MASK;
+   HAL_WRITE_UINT32(REG_SIM_SCGC4_ADDR, reg_val);
    
    return dev_k60n512_uart_x_load(&kinetis_uart_3);
 }

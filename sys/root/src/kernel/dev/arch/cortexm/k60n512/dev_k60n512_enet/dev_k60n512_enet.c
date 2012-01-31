@@ -40,6 +40,7 @@ Includes
 #include "kernel/core/ioctl_eth.h"
 
 #include "dev_k60n512_enet.h"
+#include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 
 #if defined(USE_ECOS)
 #include <cyg/hal/cortexm_regs.h>
@@ -458,10 +459,10 @@ int dev_k60n512_enet_load(void){
 	unsigned int *tmp;
    volatile unsigned int phy_link_retry = PHY_LINK_RETRY;
 
-	// Enable the ENET clock.
-	//!TODO find a way to do it properly
-	reg_val = 1;
-	HAL_WRITE_UINT32(0x4004802c, reg_val);//SIM_SCGC2 |= SIM_SCGC2_ENET_MASK;
+	//enable clock gating (SIM_SCGC2 |= SIM_SCGC2_ENET_MASK)
+   HAL_READ_UINT32(REG_SIM_SCGC2_ADDR, reg_val);
+   reg_val |= REG_SIM_SCGC2_ENET_MASK;
+   HAL_WRITE_UINT32(REG_SIM_SCGC2_ADDR, reg_val);
 
 	//FSL: allow concurrent access to MPU controller. Example: ENET uDMA to SRAM, otherwise bus error
 	reg_val = 0;
