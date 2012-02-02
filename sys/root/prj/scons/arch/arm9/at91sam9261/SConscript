@@ -106,7 +106,10 @@ TauonSource(tauon_kernel_dev_dir+'arch/all/eth/dev_eth_dm9000a/dev_eth_dm9000a.c
 TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_spi/dev_at91sam9261_spi.c'),
 TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_usbdp/dev_at91sam9261_usbdp.c'),
 TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_eth_ksz885x/dev_at91sam9261_eth_ksz885x.c'),
-TauonSource(tauon_kernel_dev_dir+'arch/all/eth/dev_eth_ksz885x/dev_eth_ksz885x.c')
+TauonSource(tauon_kernel_dev_dir+'arch/all/eth/dev_eth_ksz885x/dev_eth_ksz885x.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_mci/dev_at91sam9261_mci.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/sd/dev_sd.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/sd/drv_sd.c')
 ])
 
 #usb stack files
@@ -122,7 +125,8 @@ TauonSource(tauon_kernel_dev_usb_dir+'class/eth/usbeth.c'),
 #at91 device files
 tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_usbdp/dev_at91_usbdp.c'),
 TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_usbdp/dev_at91_usbdp_lowlevel.c'),
-TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_rtt/dev_at91_rtt.c')
+TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_rtt/dev_at91_rtt.c'),
+TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_mci/dev_at91_mci.c')
 ])
 
 #eth devices

@@ -696,7 +696,7 @@ int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char hcs, u
 
       //
       error = _sd_send_command(p_inf_sd, desc_next);
-      if (error != SD_LOW_LEVEL_ERROR && error != 0) {
+      if (error != SD_LOW_LEVEL_CRC_ERROR && error != 0) {
          return error;
       }
       *pCCS  = ((response & OCR_CCS) != 0);
