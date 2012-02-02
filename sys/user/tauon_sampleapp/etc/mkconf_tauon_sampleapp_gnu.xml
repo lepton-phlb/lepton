@@ -123,7 +123,7 @@
       <!-- /dev/ttydbgu -->
       <dev name="dev_at91sam9261_uart_dbg_map"        use="on"/>
       <!-- /dev/eth0 -->
-      <dev name="dev_at91sam9261_ek_eth_dm9000_map"   use="off"/>
+      <dev name="dev_at91sam9261_ek_eth_dm9000_map"   use="on"/>
       <!-- /dev/usbdp0 -->
       
       <dev name="dev_at91sam9261_usbdp_map"           use="off"/>
@@ -139,10 +139,13 @@
       <!-- /dev/hdx autoenumeration for flash device-->
       <dev name="dev_am29dlxxxx_1_map"                use="on"/>
       <!-- /dev/sdcard -->
-      <dev name="dev_sdcard_map"                      use="on"/>
+      <dev name="dev_sdcard_map"                      use="off"/>
       <!-- /dev/spi -->
-      <dev name="dev_at91sam9261_spi_map"             use="on"/>
-      
+      <dev name="dev_at91sam9261_spi_map"             use="off"/>
+      <!-- /dev/sd -->
+      <dev name="dev_sd_map"                          use="on"/>
+      <!-- /dev/mci -->
+      <dev name="dev_at91sam9261_mci_map"             use="on"/>
    </devices>
 </target>
 
