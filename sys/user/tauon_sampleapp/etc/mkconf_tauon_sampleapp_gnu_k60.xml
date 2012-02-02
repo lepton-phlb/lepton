@@ -101,13 +101,17 @@
       <!-- /dev/rtc0 -->
       <dev name="dev_k60n512_rtc_map"           use="on"/>
       <!-- /dev/eth0 -->
-      <dev name="dev_k60n512_enet_map"          use="on"/>
+      <dev name="dev_twrk60n512_enet_map"       use="on"/>
       <!-- /dev/sdhc -->
       <dev name="dev_k60n512_sdhc_map"          use="on"/>
       <!-- /dev/sdhc -->
       <dev name="dev_sd_map"                    use="on"/>
       <!-- /dev/dspi0 -->
       <dev name="dev_k60n512_dspi_2_map"         use="on"/>
+      <!-- /dev/ttys0 -->
+      <dev name="dev_k60n512_uart_s0_map"        use="off"/>
+      <!-- /dev/ttys4 -->
+      <dev name="dev_k60n512_uart_s4_map"        use="off"/>
    </devices>
 </target>
 
