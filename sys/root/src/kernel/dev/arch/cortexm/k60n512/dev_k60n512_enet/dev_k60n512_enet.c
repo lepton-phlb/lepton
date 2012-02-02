@@ -53,36 +53,26 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-const char dev_k60n512_enet_name[]="eth0\0\0";
-
-static int dev_k60n512_enet_load(void);
-static int dev_k60n512_enet_open(desc_t desc, int o_flag);
-static int dev_k60n512_enet_close(desc_t desc);
-static int dev_k60n512_enet_isset_read(desc_t desc);
-static int dev_k60n512_enet_isset_write(desc_t desc);
-static int dev_k60n512_enet_seek(desc_t desc,int offset,int origin);
-static int dev_k60n512_enet_read(desc_t desc, char* buf,int cb);
-static int dev_k60n512_enet_write(desc_t desc, const char* buf,int cb);
-static int dev_k60n512_enet_ioctl(desc_t desc,int request,va_list ap);
-
-dev_map_t dev_k60n512_enet_map={
-   dev_k60n512_enet_name,
-   S_IFCHR,
-   dev_k60n512_enet_load,
-   dev_k60n512_enet_open,
-   dev_k60n512_enet_close,
-   dev_k60n512_enet_isset_read,
-   dev_k60n512_enet_isset_write,
-   dev_k60n512_enet_read,
-   dev_k60n512_enet_write,
-   dev_k60n512_enet_seek,
-   dev_k60n512_enet_ioctl
-};
+int dev_k60n512_enet_load(void);
+int dev_k60n512_enet_open(desc_t desc, int o_flag);
+int dev_k60n512_enet_close(desc_t desc);
+int dev_k60n512_enet_isset_read(desc_t desc);
+int dev_k60n512_enet_isset_write(desc_t desc);
+int dev_k60n512_enet_seek(desc_t desc,int offset,int origin);
+int dev_k60n512_enet_read(desc_t desc, char* buf,int cb);
+int dev_k60n512_enet_write(desc_t desc, const char* buf,int cb);
+int dev_k60n512_enet_ioctl(desc_t desc,int request,va_list ap);
 
 //
 #define PHY_MII_TIMEOUT       (0x1FFFF)
 #define REG_PHY_ADDRESS       1
+
+#if 0
 #define PHY_LINK_DELAY        500
+#else
+#define PHY_LINK_DELAY        5000
+#endif
+
 #define PHY_LINK_RETRY        5000
 
 //
@@ -178,7 +168,6 @@ static void _kinetis_enet_mii_init(board_kinetis_enet_info_t *penet, unsigned in
 static int _kinetis_enet_mii_write(board_kinetis_enet_info_t *penet, unsigned int phy_addr, unsigned int reg_addr, unsigned int data);
 static int _kinetis_enet_mii_read(board_kinetis_enet_info_t *penet, unsigned int phy_addr, unsigned int reg_addr, unsigned int *data);
 static void _kinetis_enet_config_buffers(board_kinetis_enet_info_t *penet);
-static void _kinetis_enet_config_pins(void);
 static unsigned char _kinetis_enet_hash_addr(const unsigned char* addr);
 static void _kinetis_enet_set_mac_addr(board_kinetis_enet_info_t *penet, const unsigned char *pa);
 
@@ -399,26 +388,6 @@ void _kinetis_enet_set_mac_addr(board_kinetis_enet_info_t *penet, const unsigned
 | Description:
 | Parameters:
 | Return Type:
-| Comments: Configure pin for RMII mode only now
-| See:
----------------------------------------------*/
-void _kinetis_enet_config_pins(void) {
-	// CYGHWR_HAL_KINETIS_PIN(__port__, __gpio_no__, __mode__, 0)
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(B, 0, 4, 0));//PORTB_PCR0  = PORT_PCR_MUX(4);//GPIO;//RMII0_MDIO/MII0_MDIO
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(B, 1, 4, 0));//PORTB_PCR1  = PORT_PCR_MUX(4);//GPIO;//RMII0_MDC/MII0_MDC		
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(A, 14, 4, 0));//PORTA_PCR14 = PORT_PCR_MUX(4);//RMII0_CRS_DV/MII0_RXDV
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(A, 12, 4, 0));//PORTA_PCR12 = PORT_PCR_MUX(4);//RMII0_RXD1/MII0_RXD1
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(A, 13, 4, 0));//PORTA_PCR13 = PORT_PCR_MUX(4);//RMII0_RXD0/MII0_RXD0
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(A, 15, 4, 0));//PORTA_PCR15 = PORT_PCR_MUX(4);//RMII0_TXEN/MII0_TXEN
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(A, 16, 4, 0));//PORTA_PCR16 = PORT_PCR_MUX(4);//RMII0_TXD0/MII0_TXD0
-	hal_set_pin_function(CYGHWR_HAL_KINETIS_PIN(A, 17, 4, 0));//PORTA_PCR17 = PORT_PCR_MUX(4);//RMII0_TXD1/MII0_TXD1
-}
-
-/*-------------------------------------------
-| Name:_kinetis_enet_config_buffers
-| Description:
-| Parameters:
-| Return Type:
 | Comments: Configure transmit and receive buffer descriptors
 | See:
 ---------------------------------------------*/
@@ -480,7 +449,6 @@ int dev_k60n512_enet_load(void){
 
 	//FSL: start MII interface
 	_kinetis_enet_mii_init(&kinetis_enet_info, CYGHWR_HAL_CORTEXM_KINETIS_CLK_PER_BUS/1000000);
-	_kinetis_enet_config_pins();
 
 	// Can we talk to the PHY? read phy ID
 	do {
