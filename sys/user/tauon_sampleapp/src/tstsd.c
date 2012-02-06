@@ -145,7 +145,7 @@ int tstsd_main(int argc,char* argv[]) {
 
    srand(0);
    ///
-   sd_size = 200*1024;
+   sd_size = 20*1024*1024;
    ///
 
    begin = time(NULL);

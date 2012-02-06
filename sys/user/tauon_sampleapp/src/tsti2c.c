@@ -50,7 +50,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Global Declaration
 ==============================================*/
-
+//see KINETIS512_SC/src/projects/i2c from freescale website
 static signed char i2c_MMA7660_convert(signed char input);
 #define MMA7660_XOUT    0x0
 #define MMA7660_YOUT    0x1
@@ -75,11 +75,13 @@ static signed char i2c_MMA7660_convert(signed char input);
 | Comments:
 | See:
 ---------------------------------------------*/
-int test_main(int argc,char* argv[]) {
+int tsti2c_main(int argc,char* argv[]) {
    int fd=-1;
    signed char buf[2] = {0, 0};
    signed char xout, yout, zout;
    
+   //note we name it i2c1 because i2c0 device name is already use
+   //BUT it's really i2c0 (PTD8, PTD9)
    if((fd = open("/dev/i2c1", O_RDWR | O_NONBLOCK, 0)) < 0) {
       fprintf(stderr, "can't open dev/i2c1\r\n");
       return -1;
@@ -136,104 +138,8 @@ signed char i2c_MMA7660_convert(signed char input) {
    return (signed char) input;
 }
 
-#if 0
-int test_main(int argc,char* argv[]) {
-   #if 0
-   //settime test
-   struct tm tm_dt;
-   time_t time_dt;
-   struct timeval tv_dt;
-   struct tm * tm_p;
-   
-   tm_dt.tm_sec = 0;
-   tm_dt.tm_min = 50;
-   tm_dt.tm_hour = 10;
-   tm_dt.tm_mday = 6;
-   tm_dt.tm_mon = 1;
-   tm_dt.tm_year = 112;
-   
-   tv_dt.tv_usec = 0;
-   tv_dt.tv_sec= mktime(&tm_dt);
-   
-   _sys_settimeofday((const struct timeval *)&tv_dt, NULL);
-   
-   #endif
-   
-   #if 0
-   int fd=-1;
-   unsigned int time;
-   
-   if((fd = open("/dev/rtt0", O_RDONLY, 0)) < 0) {
-      fprintf(stderr, "can't open dev/rtc0\r\n");
-      return -1;
-   }
-   
-   while(1) {
-      read(fd, (char *)&time, 4);
-      fprintf(stderr, "%d\r\n", time);
-      usleep(1000000);
-   }
-   
-   close(fd);
-   #endif   
-}
-#endif
-
-#if 0
-int test_main(int argc,char* argv[]) {
-   int fd=-1;
-   unsigned int buf_data[3];
-   unsigned int count = 50;
-   
-   if((fd = open("/dev/load", O_RDONLY, 0)) < 0) {
-      fprintf(stderr, "can't open /dev/load");
-      return -1;
-   }
-   
-   while(count--) {
-      read(fd, (char *)&buf_data, 13);
-      fprintf(stderr, "[100ms/1s/10s] %d %d %d\r\n",
-      buf_data[0], buf_data[1], buf_data[2]);
-      usleep(1000000);
-   }
-   
-   close(fd);
-   
-   #if 0
-   unsigned char dummy_data=1;
-   if((fd = open("/dev/ftm0", O_RDWR, 0)) < 0) {
-      fprintf(stderr, "can't open /dev/ftm0");
-      return -1;
-   }
-   
-   while(1) {
-      //write(fd, &dummy_data, 1);
-      usleep(1000000);
-   }
-   
-   close(fd);
-   #endif
-   
-   return 0;
-}
-#endif
-
-/*-------------------------------------------
-| Name:test2_main
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-int test2_main(int argc, char * argv) {
-   int a=1, b=2;
-   printf("(S)%d\r\n", a+b);
-   return 0;
-}
-
 /*============================================
-| End of Source  : test.c
+| End of Source  : tsti2c.c
 |---------------------------------------------
 | Historic:
 |---------------------------------------------
