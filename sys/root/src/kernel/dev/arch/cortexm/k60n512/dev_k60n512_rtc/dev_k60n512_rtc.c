@@ -104,14 +104,19 @@ int dev_k60n512_rtc_load(void){
    reg_val |= REG_SIM_SCGC6_RTC_MASK;
    HAL_WRITE_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
    
-   #if 0
-   //software reset
-   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, 
-   REG_RTC_CR_SWR_MASK);
-   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
-   reg_val &= ~REG_RTC_CR_SWR_MASK;
-   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
-   #endif
+   HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
+   
+   if(reg_val & REG_RTC_SR_TIF_MASK) {
+      //software reset
+      HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, 
+      REG_RTC_CR_SWR_MASK);
+      HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
+      reg_val &= ~REG_RTC_CR_SWR_MASK;
+      HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
+      
+      //write a 01/01/2012 as default date
+      HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, 0x4effa200);
+   }
    
    //enable oscillation and wait stabilization
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
@@ -125,9 +130,6 @@ int dev_k60n512_rtc_load(void){
    REG_RTC_TCR_CIR(0) | REG_RTC_TCR_TCR(0));
    
    //continue counting
-   #if 0
-   HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, 0);
-   #endif
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TAR, 0);
    
    return 0;
