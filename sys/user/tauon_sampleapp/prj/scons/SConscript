@@ -52,6 +52,12 @@ if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('at91sam9261')>=0:
    ])
    tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS ='-DEVAL_BOARD')
 
+if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('k60n512')>=0:
+   tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_k60n512_i2c_x.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_twrk60n512_i2c_0.c'),
+   TauonSource(tauon_sampleapp_src_dir+'tsti2c.c')
+   ])
+
 ####name generated map file
 tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS = '-Wl,--Map -Wl,'+ tauon_sampleapp_bin_dir +tauon_binary_prefix+ tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'] +'.map')
 
