@@ -1,0 +1,301 @@
+/*
+The contents of this file are subject to the Mozilla Public License Version 1.1 
+(the "License"); you may not use this file except in compliance with the License.
+You may obtain a copy of the License at http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an "AS IS" basis, 
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+specific language governing rights and limitations under the License.
+
+The Original Code is Lepton.
+
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+All Rights Reserved.
+
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+instead of those above. If you wish to allow use of your version of this file only under the
+terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+the MPL, indicate your decision by deleting  the provisions above and replace 
+them with the notice and other provisions required by the [eCos GPL] License. 
+If you do not delete the provisions above, a recipient may use your version of this file under 
+either the MPL or the [eCos GPL] License."
+*/
+
+/*===========================================
+Includes
+=============================================*/
+#include "kernel/core/types.h"
+#include "kernel/core/interrupt.h"
+#include "kernel/core/kernelconf.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/system.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/cpu.h"
+#include "kernel/core/core_rttimer.h"
+#include "kernel/fs/vfs/vfsdev.h"
+
+#include "lib/libc/termios/termios.h"
+#include "dev_k60n512_i2c_x.h"
+
+/*===========================================
+Global Declaration
+=============================================*/
+int dev_k60n512_i2c_x_load(board_kinetis_i2c_info_t * kinetis_i2c_info);
+int dev_k60n512_i2c_x_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info);
+
+//
+int dev_k60n512_i2c_x_close(desc_t desc);
+int dev_k60n512_i2c_x_seek(desc_t desc,int offset,int origin);
+int dev_k60n512_i2c_x_read(desc_t desc, char* buf,int cb);
+int dev_k60n512_i2c_x_write(desc_t desc, const char* buf,int cb);
+int dev_k60n512_i2c_x_ioctl(desc_t desc,int request,va_list ap);
+int dev_k60n512_i2c_x_seek(desc_t desc,int offset,int origin);
+
+#define __i2c_x_start(__kinetis_i2c_x_info__) { \
+   unsigned char reg_start; \
+   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_start); \
+   reg_start |= REG_I2Cx_C1_TX_MASK; \
+   HAL_WRITE_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_start); \
+   reg_start |= REG_I2Cx_C1_MST_MASK; \
+   HAL_WRITE_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_start); \
+}
+
+#define __i2c_x_stop(__kinetis_i2c_x_info__) { \
+   unsigned char reg_stop; \
+   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_stop); \
+   reg_stop &= ~REG_I2Cx_C1_MST_MASK; \
+   reg_stop &= ~REG_I2Cx_C1_TX_MASK; \
+   HAL_WRITE_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_stop); \
+}
+
+#define __i2c_x_wait(__kinetis_i2c_x_info__) { \
+   unsigned char reg_wait; \
+   do { \
+      HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_S, reg_wait); \
+   } while((reg_wait & REG_I2Cx_S_IICIF_MASK)==0); \
+   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_S, reg_wait); \
+   reg_wait |= REG_I2Cx_S_IICIF_MASK; \
+   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_S, reg_wait); \
+}
+
+#define __i2c_x_pause(__delay__) { \
+   unsigned int n; \
+   for(n=0; n<__delay__; n++) { \
+      __asm__ volatile( "nop" ); \
+   } \
+}
+static int _kinetis_i2c_x_start_transmission(board_kinetis_i2c_info_t * kinetis_i2c_info, unsigned char mode);
+/*===========================================
+Implementation
+=============================================*/
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_load
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_load(board_kinetis_i2c_info_t * kinetis_i2c_info){
+   
+   //
+   HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_F, 
+   kinetis_i2c_info->icr | REG_I2Cx_F_MULT(kinetis_i2c_info->mult));
+   
+   //
+   HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_C1, REG_I2Cx_C1_IICEN_MASK);
+   
+	return 0;
+}
+
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_open
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info){
+   volatile unsigned short reg_val = 0;
+   
+	if(o_flag & O_RDONLY){
+		if(kinetis_i2c_info->desc_r<0) {
+			kinetis_i2c_info->desc_r = desc;
+		}
+		else
+			return -1; //already open
+	}
+
+	if(o_flag & O_WRONLY){
+		if(kinetis_i2c_info->desc_w<0) {
+			kinetis_i2c_info->desc_w = desc;
+		}
+		else
+			return -1; //already open
+	}
+	
+	if(!ofile_lst[desc].p)
+		ofile_lst[desc].p=kinetis_i2c_info;
+
+	return 0;
+}
+
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_close
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_close(desc_t desc){
+	//nothing to do
+	//save code space :)
+	return 0;
+}
+
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_read
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_read(desc_t desc, char* buf,int size){
+	board_kinetis_i2c_info_t * p_i2c_info = (board_kinetis_i2c_info_t*)ofile_lst[desc].p;
+   volatile unsigned char reg_val = 0;
+   
+   if(!p_i2c_info) {
+      return -1;
+   }
+   
+   // Send Slave Address
+   _kinetis_i2c_x_start_transmission(p_i2c_info, M_WR_S_RD);
+   __i2c_x_wait(p_i2c_info);
+
+   // Write Register Address => buf[0] : register addr
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_D, buf[0]);
+   __i2c_x_wait(p_i2c_info);
+
+   // Do a repeated start
+   HAL_READ_UINT8(p_i2c_info->i2c_base + REG_I2Cx_C1, reg_val);
+   reg_val |= REG_I2Cx_C1_RSTA_MASK;
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_C1, reg_val);
+   
+   // Send Slave Address
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_D, 
+   (p_i2c_info->slave_id << 1) | 0x1);
+   __i2c_x_wait(p_i2c_info);
+
+   // Put in Rx Mode
+   HAL_READ_UINT8(p_i2c_info->i2c_base + REG_I2Cx_C1, reg_val);
+   reg_val &= ~REG_I2Cx_C1_TX_MASK;
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_C1, reg_val);
+
+   // Turn off ACK since this is second to last byte being read
+   HAL_READ_UINT8(p_i2c_info->i2c_base + REG_I2Cx_C1, reg_val);
+   reg_val |= REG_I2Cx_C1_TXAK_MASK;
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_C1, reg_val);
+   
+   // Dummy read
+   HAL_READ_UINT8(p_i2c_info->i2c_base + REG_I2Cx_D, reg_val);
+   __i2c_x_wait(p_i2c_info);
+
+   // Send stop since about to read last byte
+   __i2c_x_stop(p_i2c_info);
+
+   //Read byte
+   HAL_READ_UINT8(p_i2c_info->i2c_base + REG_I2Cx_D, buf[1]);
+
+   return size;
+}
+
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_write
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_write(desc_t desc, const char* buf,int size){
+   board_kinetis_i2c_info_t * p_i2c_info = (board_kinetis_i2c_info_t*)ofile_lst[desc].p;
+   
+   if(!p_i2c_info) {
+      return -1;
+   }
+   
+   // send data to slave
+   _kinetis_i2c_x_start_transmission(p_i2c_info, M_WR_S_RD);
+   __i2c_x_wait(p_i2c_info);
+
+   //buf[0] : register addr
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_D, buf[0]);
+   __i2c_x_wait(p_i2c_info);
+
+   //buf[1] : data
+   HAL_WRITE_UINT8(p_i2c_info->i2c_base + REG_I2Cx_D, buf[1]);
+   __i2c_x_wait(p_i2c_info);
+
+   __i2c_x_stop(p_i2c_info);
+   __i2c_x_pause(10);
+   
+   return size;
+}
+
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_seek
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_seek(desc_t desc,int offset,int origin){
+   return 0;
+}
+
+/*-------------------------------------------
+| Name:dev_k60n512_i2c_x_ioctl
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_k60n512_i2c_x_ioctl(desc_t desc,int request,va_list ap) {
+   return 0;
+}
+
+/*-------------------------------------------
+| Name:_kinetis_i2c_x_start_transmission
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int _kinetis_i2c_x_start_transmission(board_kinetis_i2c_info_t * kinetis_i2c_info, unsigned char mode) {
+   unsigned char slave_id;
+   
+   // shift ID in right position
+   slave_id = (unsigned char) kinetis_i2c_info->slave_id << 1;
+
+   // Set R/W bit at end of Slave Address
+   slave_id |= (unsigned char)mode;
+
+   // send start signal
+   __i2c_x_start(kinetis_i2c_info);
+
+   // send ID with W/R bit
+   HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_D, slave_id);
+}
+/*============================================
+| End of Source  : dev_k60n512_i2c_x.c
+==============================================*/

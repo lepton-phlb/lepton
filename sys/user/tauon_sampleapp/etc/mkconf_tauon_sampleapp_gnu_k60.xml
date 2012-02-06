@@ -112,6 +112,8 @@
       <dev name="dev_k60n512_uart_s0_map"        use="off"/>
       <!-- /dev/ttys4 -->
       <dev name="dev_k60n512_uart_s4_map"        use="off"/>
+      <!-- /dev/i2c0 -->
+      <dev name="dev_twrk60n512_i2c_0_map"       use="on"/>
    </devices>
 </target>
 
@@ -195,6 +197,7 @@
         <!-- tools test-->
         <bin name="test"        stack="2048"    priority="10" timeslice="1" />
         <bin name="test2"       stack="2048"    priority="10" timeslice="1" />
+        <bin name="tsti2c"      stack="2048"    priority="10" timeslice="1" />
    </target>
 </binaries>
 
