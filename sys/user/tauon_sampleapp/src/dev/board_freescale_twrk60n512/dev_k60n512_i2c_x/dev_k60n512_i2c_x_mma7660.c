@@ -39,88 +39,50 @@ Includes
 #include "kernel/fs/vfs/vfsdev.h"
 
 #include "lib/libc/termios/termios.h"
-#include "dev_k60n512_i2c_x.h"
-
+#include "kernel/dev/arch/cortexm/k60n512/dev_k60n512_i2c_x/dev_k60n512_i2c_x.h"
 /*===========================================
 Global Declaration
 =============================================*/
-int dev_k60n512_i2c_x_load(board_kinetis_i2c_info_t * kinetis_i2c_info);
-int dev_k60n512_i2c_x_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info);
+int dev_k60n512_i2c_x_mma7660_load(board_kinetis_i2c_info_t * kinetis_i2c_info);
+int dev_k60n512_i2c_x_mma7660_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info);
 
 //
-int dev_k60n512_i2c_x_close(desc_t desc);
-int dev_k60n512_i2c_x_seek(desc_t desc,int offset,int origin);
-int dev_k60n512_i2c_x_read(desc_t desc, char* buf,int cb);
-int dev_k60n512_i2c_x_write(desc_t desc, const char* buf,int cb);
-int dev_k60n512_i2c_x_ioctl(desc_t desc,int request,va_list ap);
-int dev_k60n512_i2c_x_seek(desc_t desc,int offset,int origin);
+int dev_k60n512_i2c_x_mma7660_close(desc_t desc);
+int dev_k60n512_i2c_x_mma7660_seek(desc_t desc,int offset,int origin);
+int dev_k60n512_i2c_x_mma7660_read(desc_t desc, char* buf,int cb);
+int dev_k60n512_i2c_x_mma7660_write(desc_t desc, const char* buf,int cb);
+int dev_k60n512_i2c_x_mma7660_ioctl(desc_t desc,int request,va_list ap);
+int dev_k60n512_i2c_x_mma7660_seek(desc_t desc,int offset,int origin);
 
-#define __i2c_x_start(__kinetis_i2c_x_info__) { \
-   unsigned char reg_start; \
-   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_start); \
-   reg_start |= REG_I2Cx_C1_TX_MASK; \
-   HAL_WRITE_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_start); \
-   reg_start |= REG_I2Cx_C1_MST_MASK; \
-   HAL_WRITE_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_start); \
-}
-
-#define __i2c_x_stop(__kinetis_i2c_x_info__) { \
-   unsigned char reg_stop; \
-   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_stop); \
-   reg_stop &= ~REG_I2Cx_C1_MST_MASK; \
-   reg_stop &= ~REG_I2Cx_C1_TX_MASK; \
-   HAL_WRITE_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_C1, reg_stop); \
-}
-
-#define __i2c_x_wait(__kinetis_i2c_x_info__) { \
-   unsigned char reg_wait; \
-   do { \
-      HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_S, reg_wait); \
-   } while((reg_wait & REG_I2Cx_S_IICIF_MASK)==0); \
-   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_S, reg_wait); \
-   reg_wait |= REG_I2Cx_S_IICIF_MASK; \
-   HAL_READ_UINT8(__kinetis_i2c_x_info__->i2c_base + REG_I2Cx_S, reg_wait); \
-}
-
-#define __i2c_x_pause(__delay__) { \
-   unsigned int n; \
-   for(n=0; n<__delay__; n++) { \
-      __asm__ volatile( "nop" ); \
-   } \
-}
-static int _kinetis_i2c_x_start_transmission(board_kinetis_i2c_info_t * kinetis_i2c_info, unsigned char mode);
 /*===========================================
 Implementation
 =============================================*/
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_load
+| Name:dev_k60n512_i2c_x_mma7660_load
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_load(board_kinetis_i2c_info_t * kinetis_i2c_info){
+int dev_k60n512_i2c_x_mma7660_load(board_kinetis_i2c_info_t * kinetis_i2c_info){
+   HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_F,
+   _kinetis_i2c_x_find_baudrate(48000000, kinetis_i2c_info->speed));
    
-   //
-   HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_F, 
-   kinetis_i2c_info->icr | REG_I2Cx_F_MULT(kinetis_i2c_info->mult));
-   
-   //
    HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_C1, REG_I2Cx_C1_IICEN_MASK);
    
 	return 0;
 }
 
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_open
+| Name:dev_k60n512_i2c_x_mma7660_open
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info){
+int dev_k60n512_i2c_x_mma7660_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info){
    volatile unsigned short reg_val = 0;
    
 	if(o_flag & O_RDONLY){
@@ -146,28 +108,28 @@ int dev_k60n512_i2c_x_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * k
 }
 
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_close
+| Name:dev_k60n512_i2c_x_mma7660_close
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_close(desc_t desc){
+int dev_k60n512_i2c_x_mma7660_close(desc_t desc){
 	//nothing to do
 	//save code space :)
 	return 0;
 }
 
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_read
+| Name:dev_k60n512_i2c_x_mma7660_read
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_read(desc_t desc, char* buf,int size){
+int dev_k60n512_i2c_x_mma7660_read(desc_t desc, char* buf,int size){
 	board_kinetis_i2c_info_t * p_i2c_info = (board_kinetis_i2c_info_t*)ofile_lst[desc].p;
    volatile unsigned char reg_val = 0;
    
@@ -217,14 +179,14 @@ int dev_k60n512_i2c_x_read(desc_t desc, char* buf,int size){
 }
 
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_write
+| Name:dev_k60n512_i2c_x_mma7660_write
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_write(desc_t desc, const char* buf,int size){
+int dev_k60n512_i2c_x_mma7660_write(desc_t desc, const char* buf,int size){
    board_kinetis_i2c_info_t * p_i2c_info = (board_kinetis_i2c_info_t*)ofile_lst[desc].p;
    
    if(!p_i2c_info) {
@@ -250,52 +212,29 @@ int dev_k60n512_i2c_x_write(desc_t desc, const char* buf,int size){
 }
 
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_seek
+| Name:dev_k60n512_i2c_x_mma7660_seek
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_seek(desc_t desc,int offset,int origin){
+int dev_k60n512_i2c_x_mma7660_seek(desc_t desc,int offset,int origin){
    return 0;
 }
 
 /*-------------------------------------------
-| Name:dev_k60n512_i2c_x_ioctl
+| Name:dev_k60n512_i2c_x_mma7660_ioctl
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_k60n512_i2c_x_ioctl(desc_t desc,int request,va_list ap) {
+int dev_k60n512_i2c_x_mma7660_ioctl(desc_t desc,int request,va_list ap) {
    return 0;
 }
 
-/*-------------------------------------------
-| Name:_kinetis_i2c_x_start_transmission
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-int _kinetis_i2c_x_start_transmission(board_kinetis_i2c_info_t * kinetis_i2c_info, unsigned char mode) {
-   unsigned char slave_id;
-   
-   // shift ID in right position
-   slave_id = (unsigned char) kinetis_i2c_info->slave_id << 1;
-
-   // Set R/W bit at end of Slave Address
-   slave_id |= (unsigned char)mode;
-
-   // send start signal
-   __i2c_x_start(kinetis_i2c_info);
-
-   // send ID with W/R bit
-   HAL_WRITE_UINT8(kinetis_i2c_info->i2c_base + REG_I2Cx_D, slave_id);
-}
 /*============================================
-| End of Source  : dev_k60n512_i2c_x.c
+| End of Source  : dev_k60n512_i2c_x_mma7660.c
 ==============================================*/
