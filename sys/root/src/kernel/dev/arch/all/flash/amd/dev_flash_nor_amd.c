@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,20 +15,20 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
@@ -43,7 +43,7 @@ either the MPL or the [eCos GPL] License."
 #define USE_UNLOCK_BYPASS
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 const char dev_flash_nor_amd_name[]="hde\0flash_nor_amd\0";
@@ -63,7 +63,7 @@ dev_map_t dev_flash_nor_amd_map={
 };
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 
 /*--------------------------------------------
@@ -71,73 +71,73 @@ dev_map_t dev_flash_nor_amd_map={
 | Description: Procedure d'Initialisation de la mémoire FLASH
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int init_flash_nor_amd(void){
- return (0);
+   return (0);
 }
 
 /*--------------------------------------------
 | Name:        read_flash_nor_amd_words
-| Description:Lecture dans la memoire flash par mot de 16 bits 
+| Description:Lecture dans la memoire flash par mot de 16 bits
 | Parameters:
 |           adresse -> adresse de la premiere
 |                      case memoire a lire dans la mémoire
-|           *donnee -> pointeur sur un buffer 
+|           *donnee -> pointeur sur un buffer
 |                      de récupération des données lues
-| 	         nb_mots = nombre de mots a lire	   
+|                nb_mots = nombre de mots a lire
 | Return Type: none
-| Comments: 
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int read_flash_nor_amd_words(desc_t desc, unsigned short * buf, unsigned int cb){
-  unsigned int i;
-  unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
-  unsigned int offset =ofile_lst[desc].offset;
+   unsigned int i;
+   unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
+   unsigned int offset =ofile_lst[desc].offset;
 
    //while(FLASH_READY == 0);
 
    *(flash_base_pt + 0x555) = 0xAA;
-   *(flash_base_pt + 0x2AA) = 0x55;	            // passage en mode lecture
+   *(flash_base_pt + 0x2AA) = 0x55;                 // passage en mode lecture
    *(flash_base_pt + 0x555) = 0xF0;
 
    //
-   for (i=0; i<cb ; i++){
+   for (i=0; i<cb; i++) {
       //FLASH_PAGE = (char)((adresse >> 15)&0xFF);     // Adresse haute
-      *buf = *(flash_base_pt + cb);	    // lecture des données
+      *buf = *(flash_base_pt + cb);         // lecture des données
       buf++;
    }
 
- return cb;
-} 
+   return cb;
+}
 
 
 /*--------------------------------------------
 | Name:        write_flash_nor_amd_word
-| Description:Ecriture dans la memoire flash par mot de 16 bits 
+| Description:Ecriture dans la memoire flash par mot de 16 bits
 | Parameters:
 |           adresse -> adresse de la premiere
 |                      case memoire a lire dans la mémoire
-|           *donnee -> pointeur sur un buffer 
+|           *donnee -> pointeur sur un buffer
 |                      de récupération des données lues
-| 	         nb_mots = nombre de mots a lire	   
+|                nb_mots = nombre de mots a lire
 | Return Type: none
-| Comments: 
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int write_flash_nor_amd_word(desc_t desc, const unsigned short * buf, unsigned int cb){
-  unsigned int i;
-  unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
-  unsigned int offset =ofile_lst[desc].offset;
+   unsigned int i;
+   unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
+   unsigned int offset =ofile_lst[desc].offset;
 
-  for (i=0; i<cb ; i++){
-     // Attente flash
+   for (i=0; i<cb; i++) {
+      // Attente flash
       //while (FLASH_READY == 0);
       *(flash_base_pt + 0x555) = 0xAA;
       *(flash_base_pt + 0x2AA) = 0x55;  // passage mode ecriture
       *(flash_base_pt + 0x555) = 0xA0;
-      *(flash_base_pt + offset) = *buf;	// Ecriture en memoire
+      *(flash_base_pt + offset) = *buf; // Ecriture en memoire
       buf++;
       offset++;
    }
@@ -149,11 +149,11 @@ int write_flash_nor_amd_word(desc_t desc, const unsigned short * buf, unsigned i
 /*--------------------------------------------
 | Name:        erase_flash_nor_amd_sector
 | Description:Effacement d'un bloc de la memoire flash
-| Parameters: 
+| Parameters:
 |           ind_bloc = numero du bloc a effacer (de 0 à 255)
 | Return Type: none
-| Comments:      
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 char erase_flash_nor_amd_sector(desc_t desc, unsigned int sector_nb){
    unsigned short * pt_sector;
@@ -162,56 +162,57 @@ char erase_flash_nor_amd_sector(desc_t desc, unsigned int sector_nb){
 
    // Attente fin effacement
    //while (FLASH_READY == 0);
- 
-	pt_sector = flash_base_pt + (((unsigned int)sector_nb)<<12);
-	*(flash_base_pt + 0x555) = 0xAA;
-	*(flash_base_pt + 0x2AA) = 0x55;
-	*(flash_base_pt + 0x555) = 0x80;
-	*(flash_base_pt + 0x555) = 0xAA;
-	*(flash_base_pt + 0x2AA) = 0x55;
-	*pt_sector = 0x30;
-   return 0; 
+
+   pt_sector = flash_base_pt + (((unsigned int)sector_nb)<<12);
+   *(flash_base_pt + 0x555) = 0xAA;
+   *(flash_base_pt + 0x2AA) = 0x55;
+   *(flash_base_pt + 0x555) = 0x80;
+   *(flash_base_pt + 0x555) = 0xAA;
+   *(flash_base_pt + 0x2AA) = 0x55;
+   *pt_sector = 0x30;
+   return 0;
 }
 
 /*--------------------------------------------
 | Name:        erase_flash_nor_amd_all
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 char erase_flash_nor_amd_all(desc_t desc){
    unsigned int k;
-	
-   for (k=0;k<=255;k++){
-      //while (FLASH_READY == 0); 	// Attente fin effacement
-      erase_flash_nor_amd_sector(desc,k);		// Effacement du bloc k
+
+   for (k=0; k<=255; k++) {
+      //while (FLASH_READY == 0);       // Attente fin effacement
+      erase_flash_nor_amd_sector(desc,k);               // Effacement du bloc k
    }
- return(0);
+   return(0);
 }
 
 
 /*--------------------------------------------
 | Name:        get_flash_nor_amd_sectorsz
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 unsigned long get_flash_nor_amd_sectorsz(desc_t desc, unsigned long addr){
    //read only mode
    int i=0;
 
-   if(ofile_lst[desc].p){
+   if(ofile_lst[desc].p) {
       //
-      flash_sector_t* p_sector_map=(flash_sector_t*)((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->p_sector_map;
+      flash_sector_t* p_sector_map=
+         (flash_sector_t*)((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->p_sector_map;
 
       //
-      while(p_sector_map[i].addr!=0xFFFFFFFF){
+      while(p_sector_map[i].addr!=0xFFFFFFFF) {
          if( (addr > p_sector_map[i].addr)
-            && (addr < p_sector_map[i+1].addr) )
+             && (addr < p_sector_map[i+1].addr) )
             return p_sector_map[i].size;
          i++;
       }
@@ -230,7 +231,7 @@ unsigned long get_flash_nor_amd_sectorsz(desc_t desc, unsigned long addr){
 | See:
 ---------------------------------------------*/
 int dev_flash_nor_amd_load(void){
-      return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -244,10 +245,10 @@ int dev_flash_nor_amd_load(void){
 int dev_flash_nor_amd_open(desc_t desc, int o_flag){
 
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
    }
 
    ofile_lst[desc].offset=0;
@@ -265,7 +266,7 @@ int dev_flash_nor_amd_open(desc_t desc, int o_flag){
 ---------------------------------------------*/
 int dev_flash_nor_amd_close(desc_t desc){
 
-   if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer){
+   if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer) {
       ofile_lst[desc].p=(void*)0;
 
    }
@@ -282,7 +283,7 @@ int dev_flash_nor_amd_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_flash_nor_amd_isset_read(desc_t desc){
-  return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -294,7 +295,7 @@ int dev_flash_nor_amd_isset_read(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_flash_nor_amd_isset_write(desc_t desc){
-      return -1;
+   return -1;
 }
 /*-------------------------------------------
 | Name:dev_flash_nor_amd_read
@@ -308,19 +309,21 @@ int dev_flash_nor_amd_read(desc_t desc, char* buf,int size){
    unsigned int pos = ofile_lst[desc].offset;
    unsigned char buf_align[sizeof(FLASHDATA)];
    int cb=-1;
-   
-   if(ofile_lst[desc].p){
+
+   if(ofile_lst[desc].p) {
       FLASHDATA* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
 
-      if((pos+size)>(((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size*((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width))
+      if((pos+size)>
+         (((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size*
+          ((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width))
          if((size=((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size-pos)<0)
-            return -1; 
+            return -1;
 
       cb=0;
       //alignment algorithm for data bus acces size on flash
       //alignment on 16 bits for offset
       //to do: the same things for 32 bits alignment
-      if(ofile_lst[desc].offset&0x00000001){
+      if(ofile_lst[desc].offset&0x00000001) {
          pos = ofile_lst[desc].offset/sizeof(FLASHDATA);
          memcpy(buf_align,flash_base_pt+pos,sizeof(buf_align));
 
@@ -342,9 +345,9 @@ int dev_flash_nor_amd_read(desc_t desc, char* buf,int size){
       ofile_lst[desc].offset+=(size&(~0x00000001));
 
       //alignment algorithm for data bus acces size on flash
-      //alignment on 16 bits for size 
+      //alignment on 16 bits for size
       //to do: the same things for 32 bits alignment
-      if(size&0x00000001){
+      if(size&0x00000001) {
 
          pos = ofile_lst[desc].offset/sizeof(FLASHDATA);
          memcpy(buf_align,flash_base_pt+pos,sizeof(buf_align));
@@ -373,20 +376,22 @@ int dev_flash_nor_amd_write(desc_t desc, const char* buf,int size){
 
    int cb = -1;
 
-   if(ofile_lst[desc].p){
+   if(ofile_lst[desc].p) {
       //
       DEVSTATUS status;
       //
       FLASHDATA* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
 
-      if((pos+size)>(((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size*((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width))
+      if((pos+size)>
+         (((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size*
+          ((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width))
          if((size=((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size-pos)<0)
-            return -1; 
-      
-      #ifdef USE_UNLOCK_BYPASS
+            return -1;
+
+#ifdef USE_UNLOCK_BYPASS
       //1)
       lld_UnlockBypassEntryCmd(flash_base_pt);
-      #endif
+#endif
 
       //alignment algorithm for data bus acces size on flash
       //alignment on 16 bits for offset
@@ -395,12 +400,12 @@ int dev_flash_nor_amd_write(desc_t desc, const char* buf,int size){
       //
       pos = ofile_lst[desc].offset/sizeof(FLASHDATA);
       //
-      while(cb<size){
+      while(cb<size) {
          //
          FLASHDATA read_data = 0;
          FLASHDATA write_data = 0;
          //
-         if((offset&0x00000001) && !cb){
+         if((offset&0x00000001) && !cb) {
             //begin but not aligned on 16 bits
             //read data
             memcpy(&write_data,flash_base_pt+pos,sizeof(FLASHDATA));
@@ -409,7 +414,7 @@ int dev_flash_nor_amd_write(desc_t desc, const char* buf,int size){
             buf++;
             offset++;
             cb++;
-         }else if((int)(cb+sizeof(FLASHDATA))>size){
+         }else if((int)(cb+sizeof(FLASHDATA))>size) {
             //end but not aligned on 16 bits
             //read data
             memcpy(&write_data,flash_base_pt+pos,sizeof(FLASHDATA));
@@ -426,26 +431,26 @@ int dev_flash_nor_amd_write(desc_t desc, const char* buf,int size){
             cb+=sizeof(FLASHDATA);
          }
          //write data
-         #ifdef USE_UNLOCK_BYPASS
-            //2)
-            lld_UnlockBypassProgramCmd(flash_base_pt,pos,&write_data);
-            //to remove: debug test
+#ifdef USE_UNLOCK_BYPASS
+         //2)
+         lld_UnlockBypassProgramCmd(flash_base_pt,pos,&write_data);
+         //to remove: debug test
+         status = lld_Poll(flash_base_pt, pos, &write_data, &read_data, LLD_P_POLL_PGM);
+         //
+         if(cb==size)
             status = lld_Poll(flash_base_pt, pos, &write_data, &read_data, LLD_P_POLL_PGM);
-            //
-            if(cb==size)
-               status = lld_Poll(flash_base_pt, pos, &write_data, &read_data, LLD_P_POLL_PGM);
-            else
-               status = DEV_NOT_BUSY;
-         #else
-            status = lld_ProgramOp(flash_base_pt,pos,&write_data);
-         #endif
+         else
+            status = DEV_NOT_BUSY;
+#else
+         status = lld_ProgramOp(flash_base_pt,pos,&write_data);
+#endif
 
          //check status
-         if(status!=DEV_NOT_BUSY){
-            #ifdef USE_UNLOCK_BYPASS
+         if(status!=DEV_NOT_BUSY) {
+#ifdef USE_UNLOCK_BYPASS
             //3.a)
             lld_UnlockBypassResetCmd(flash_base_pt);
-            #endif
+#endif
 
             return -1;
          }
@@ -454,10 +459,10 @@ int dev_flash_nor_amd_write(desc_t desc, const char* buf,int size){
       }
 
 
-      #ifdef USE_UNLOCK_BYPASS
+#ifdef USE_UNLOCK_BYPASS
       //3.b)
       lld_UnlockBypassResetCmd(flash_base_pt);
-      #endif
+#endif
    }
 
    ofile_lst[desc].offset=offset;
@@ -475,29 +480,29 @@ int dev_flash_nor_amd_write(desc_t desc, const char* buf,int size){
 ---------------------------------------------*/
 int dev_flash_nor_amd_seek(desc_t desc,int offset,int origin){
 
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_CUR:
+      ofile_lst[desc].offset+=offset;
       break;
 
-      case SEEK_END:
-         //to do: warning in SEEK_END (+ or -)????
-         ofile_lst[desc].offset=((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size
-                   *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width;
-         ofile_lst[desc].offset+=offset;
-         //to do: test check device size
+   case SEEK_END:
+      //to do: warning in SEEK_END (+ or -)????
+      ofile_lst[desc].offset=((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size
+                              *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width;
+      ofile_lst[desc].offset+=offset;
+      //to do: test check device size
       break;
    }
 
    if(ofile_lst[desc].offset>=(off_t)(((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size
-                   *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width))
+                                      *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width))
       ofile_lst[desc].offset=((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size
-                   *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width;
+                              *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width;
 
 
    return ofile_lst[desc].offset;
@@ -512,75 +517,75 @@ int dev_flash_nor_amd_seek(desc_t desc,int offset,int origin){
 | See:
 ---------------------------------------------*/
 int dev_flash_nor_amd_ioctl(desc_t desc,int request,va_list ap){
-   switch(request){
+   switch(request) {
 
-      //
-      case HDGETSZ:{
-         unsigned long* hdsz_p= va_arg( ap, unsigned long*);
+   //
+   case HDGETSZ: {
+      unsigned long* hdsz_p= va_arg( ap, unsigned long*);
 
-         if(!ofile_lst[desc].p)
-            return -1;
-
-         if(!hdsz_p)
-            return -1;
-         *hdsz_p = ((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size
-                   *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width;
-      }
-      break;
-
-      //
-      case HDSETSZ:{
-        return -1;
-      }
-      break;
-
-      //
-      case HDCHK:{
-      }
-      break;
-
-      //
-      case HDGETSCTRSZ:{
-         unsigned long sector_addr= va_arg( ap, unsigned long);
-         unsigned long* sector_sz= va_arg( ap, unsigned long*);
-          if(!sector_sz)
-            return -1;
-
-          *sector_sz = get_flash_nor_amd_sectorsz(desc,sector_addr);
-      }
-      break;
-
-      //
-      case HDCLRSCTR:{
-         unsigned long sector_addr= va_arg( ap, unsigned long);
-         unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
-         DEVSTATUS status;
-         status = lld_SectorEraseOp((FLASHDATA*)flash_base_pt,(ADDRESS)(sector_addr/sizeof(FLASHDATA)));
-         if(status!=DEV_NOT_BUSY)
-            return -1;
-      }
-      break;
-
-      //
-      case HDCLRDSK:{
-         unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
-         DEVSTATUS status;
-         status = lld_ChipEraseOp(flash_base_pt);
-         if(status!=DEV_NOT_BUSY)
-            return -1;
-      }
-      break;
-
-      //
-      case HDIO:{
-         hdio_t* hdio= va_arg( ap, hdio_t*);
-         hdio->addr = (hdio_addr_t)((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
-      }
-      break;
-
-      //
-      default:
+      if(!ofile_lst[desc].p)
          return -1;
+
+      if(!hdsz_p)
+         return -1;
+      *hdsz_p = ((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->size
+                *((dev_flash_t*)ofile_lst[desc].p)->p_flash_type->width;
+   }
+   break;
+
+   //
+   case HDSETSZ: {
+      return -1;
+   }
+   break;
+
+   //
+   case HDCHK: {
+   }
+   break;
+
+   //
+   case HDGETSCTRSZ: {
+      unsigned long sector_addr= va_arg( ap, unsigned long);
+      unsigned long* sector_sz= va_arg( ap, unsigned long*);
+      if(!sector_sz)
+         return -1;
+
+      *sector_sz = get_flash_nor_amd_sectorsz(desc,sector_addr);
+   }
+   break;
+
+   //
+   case HDCLRSCTR: {
+      unsigned long sector_addr= va_arg( ap, unsigned long);
+      unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
+      DEVSTATUS status;
+      status = lld_SectorEraseOp((FLASHDATA*)flash_base_pt,(ADDRESS)(sector_addr/sizeof(FLASHDATA)));
+      if(status!=DEV_NOT_BUSY)
+         return -1;
+   }
+   break;
+
+   //
+   case HDCLRDSK: {
+      unsigned short* flash_base_pt=((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
+      DEVSTATUS status;
+      status = lld_ChipEraseOp(flash_base_pt);
+      if(status!=DEV_NOT_BUSY)
+         return -1;
+   }
+   break;
+
+   //
+   case HDIO: {
+      hdio_t* hdio= va_arg( ap, hdio_t*);
+      hdio->addr = (hdio_addr_t)((dev_flash_t*)ofile_lst[desc].p)->flash_base_pt;
+   }
+   break;
+
+   //
+   default:
+      return -1;
 
    }
 

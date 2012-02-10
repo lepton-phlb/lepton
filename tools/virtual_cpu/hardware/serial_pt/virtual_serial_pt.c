@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -98,7 +98,7 @@ int virtual_serialpt_open(void * data) {
 
    //descriptor and memory are already available
    if(virtual_serialpt.fd>0)  {
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       DEBUG_TRACE("(F) Already open %s [%d:%d]\n", virtual_serialpt.name, cmd.hdwr_id, cmd.cmd);
       return 0;
    }
@@ -108,8 +108,9 @@ int virtual_serialpt_open(void * data) {
    perror("remove");
    DEBUG_TRACE("(F) remove %s RET : %d\n", virtual_serialpt.name, ret);
    //try to open pseudo terminal
-   if((virtual_serialpt.fd = open(serialpt_real_name/*virtual_serialpt.name*/, O_RDWR|O_NOCTTY|O_NONBLOCK))<0) {
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   if((virtual_serialpt.fd =
+          open(serialpt_real_name /*virtual_serialpt.name*/, O_RDWR|O_NOCTTY|O_NONBLOCK))<0) {
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       DEBUG_TRACE("(F) Can't open %s\n", virtual_serialpt.name);
       perror("open");
       return -1;
@@ -119,7 +120,7 @@ int virtual_serialpt_open(void * data) {
    unlockpt(virtual_serialpt.fd);
    //get slave pts name
    if(ptsname_r(virtual_serialpt.fd, slave_path, SLAVE_PATH-1)) {
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       //
       perror("ptsname_r");
       return -1;
@@ -148,13 +149,13 @@ int virtual_serialpt_open(void * data) {
    cfmakeraw(&options);
    //options.c_cc[VMIN]  = 0;
    //débloque au bout de 256 caractères ou au bout de 100ms
-   options.c_cc[VMIN]  = 255;//0;
-   options.c_cc[VTIME] = 1;//10;
+   options.c_cc[VMIN]  = 255; //0;
+   options.c_cc[VTIME] = 1; //10;
 
    //set the options
    tcsetattr(virtual_serialpt.fd, TCSANOW, &options);
 
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    DEBUG_TRACE("(F) %d open ok..\n", virtual_serialpt.fd);
 
    return 0;
@@ -167,7 +168,7 @@ int virtual_serialpt_close(void * data) {
    DEBUG_TRACE("(F) virtual_serialpt_close\n");
    close(virtual_serialpt.fd);
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    return 0;
 }
 
@@ -176,15 +177,16 @@ int virtual_serialpt_read(void * data) {
    virtual_cmd_t cmd={SERIAL_PT, OPS_READ};
    virtual_cpu_t * vcpu = (virtual_cpu_t *)data;
    //
-   if((serial_pt_data->size_in = read(virtual_serialpt.fd, (void *)serial_pt_data->data_in, SHM_SERIAL_SIZE)) < 0) {
+   if((serial_pt_data->size_in =
+          read(virtual_serialpt.fd, (void *)serial_pt_data->data_in, SHM_SERIAL_SIZE)) < 0) {
       return -1;
    }
 
    DEBUG_TRACE("(F) virtual_serialpt_read : %d\n", serial_pt_data->size_in);
    //
    kill(getppid(), SIGIO);
-   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
-   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
+   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //
    return 0;
 }
@@ -197,15 +199,15 @@ int virtual_serialpt_write(void * data) {
    //
    write(virtual_serialpt.fd, (const void *)serial_pt_data->data_out, serial_pt_data->size_out);
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
 
    //DEBUG_TRACE("(F) virtual_serialpt_write %s [%d]\n", serial_pt_data->data_out, serial_pt_data->size_out);
    cmd.cmd =OPS_WRITE;
    cmd.hdwr_id=SERIAL_PT;
    //manage IRQ
    kill(getppid(), SIGIO);
-   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
-   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
+   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
 
    return 0;
 }
@@ -226,7 +228,7 @@ int virtual_serialpt_ioctl(void * data) {
    DEBUG_TRACE("request : %d\n", request);
 
    switch(request) {
-   case V_TIOCSSERIAL :
+   case V_TIOCSSERIAL:
    {
       //get speed
       unsigned long speed;
@@ -244,10 +246,10 @@ int virtual_serialpt_ioctl(void * data) {
 
    default:
       DEBUG_TRACE("default\n");
-   break;
+      break;
    }
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    return 0;
 }
 

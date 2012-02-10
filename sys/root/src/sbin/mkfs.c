@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -66,7 +66,7 @@ Implementation
 | Description:
 | Parameters:
 | Return Type:
-| Comments:[-t fstype] [-b max block] [-n max node] [-d dev] 
+| Comments:[-t fstype] [-b max block] [-n max node] [-d dev]
 | See:
 ---------------------------------------------*/
 int mkfs_main(int argc,char* argv[]){
@@ -77,108 +77,108 @@ int mkfs_main(int argc,char* argv[]){
    fstype_t fstype;
    char* dev_path;
    struct vfs_formatopt_t vfs_formatopt;
-     
-   if(argc<5)//not enough parameter
+
+   if(argc<5) //not enough parameter
       return -1;
 
    //ugly code to preserve compatibility with previous version of lepton
    vfs_formatopt.dev_sz=DFLT_DEV_SZ;
 
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               
-               //
-               case 't':{
-                  opt |= OPT_MSK_T;
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  i++;
-                  if(!argv[i])
-                     return -1;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
 
-                  for(fstype=0;
-                      fstype<fstype_list_size;
-                      fstype++){
+            //
+            case 't': {
+               opt |= OPT_MSK_T;
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               i++;
+               if(!argv[i])
+                  return -1;
 
-                     if(!strcmp(argv[i],fstype_list[fstype]))
-                        break;
-                  }
+               for(fstype=0;
+                   fstype<fstype_list_size;
+                   fstype++) {
 
-                  if(fstype==fstype_list_size)
-                     return -1;
+                  if(!strcmp(argv[i],fstype_list[fstype]))
+                     break;
                }
-               break;
 
-               //
-               case 'b':{
-                  opt |= OPT_MSK_B;
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  i++;
-                  if(!argv[i])
-                     return -1;
+               if(fstype==fstype_list_size)
+                  return -1;
+            }
+            break;
 
-                  vfs_formatopt.max_blk = atoi(argv[i]);
-               }
-               break;
+            //
+            case 'b': {
+               opt |= OPT_MSK_B;
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               i++;
+               if(!argv[i])
+                  return -1;
 
-               //
-               case 'n':{
-                  opt |= OPT_MSK_N;
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  i++;
-                  if(!argv[i])
-                     return -1;
+               vfs_formatopt.max_blk = atoi(argv[i]);
+            }
+            break;
 
-                  vfs_formatopt.max_node = atoi(argv[i]);
-               }
-               break;
+            //
+            case 'n': {
+               opt |= OPT_MSK_N;
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               i++;
+               if(!argv[i])
+                  return -1;
 
-               //
-               case 'd':{
-                  opt |= OPT_MSK_D;
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  i++;
-                  if(!argv[i])
-                     return -1;
+               vfs_formatopt.max_node = atoi(argv[i]);
+            }
+            break;
 
-                  dev_path = argv[i];
-               }
-               break;
+            //
+            case 'd': {
+               opt |= OPT_MSK_D;
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               i++;
+               if(!argv[i])
+                  return -1;
 
-               //
-               case 's':{
-                  opt |= OPT_MSK_S;
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  i++;
-                  if(!argv[i])
-                     return -1;
+               dev_path = argv[i];
+            }
+            break;
 
-                  vfs_formatopt.blk_sz = atoi(argv[i]);
-               }
-               break;
-               
-            }//switch
-         }//for
+            //
+            case 's': {
+               opt |= OPT_MSK_S;
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               i++;
+               if(!argv[i])
+                  return -1;
+
+               vfs_formatopt.blk_sz = atoi(argv[i]);
+            }
+            break;
+
+            } //switch
+         } //for
       }else{
-         
+
          if(!argv[i])
             return -1;
       }
 
-   }//for
-   
-   
+   } //for
+
+
 
    if( (opt&OPT_MSK_ALL)!=OPT_MSK_ALL )
-      return -1;//missing parameter
+      return -1;  //missing parameter
 
    if((fd = open(dev_path,O_RDONLY,0))<0)
       return -1;

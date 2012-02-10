@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -30,9 +30,9 @@ either the MPL or the [eCos GPL] License."
 #define _WINDEF_
 
 #ifndef NO_STRICT
-#ifndef STRICT
-#define STRICT 1
-#endif
+   #ifndef STRICT
+      #define STRICT 1
+   #endif
 #endif /* NO_STRICT */
 
 // Win32 defines _WIN32 automatically,
@@ -40,9 +40,9 @@ either the MPL or the [eCos GPL] License."
 // Win32 Functions, we must do it here
 
 #ifdef _MAC
-#ifndef _WIN32
-#define _WIN32
-#endif
+   #ifndef _WIN32
+      #define _WIN32
+   #endif
 #endif //_MAC
 
 #ifdef __cplusplus
@@ -50,7 +50,7 @@ extern "C" {
 #endif
 
 #ifndef WINVER
-#define WINVER 0x0500
+   #define WINVER 0x0500
 #endif /* WINVER */
 
 /*
@@ -58,7 +58,7 @@ extern "C" {
  */
 
 #ifndef BASETYPES
-#define BASETYPES
+   #define BASETYPES
 typedef unsigned long ULONG;
 typedef ULONG *PULONG;
 typedef unsigned short USHORT;
@@ -71,31 +71,31 @@ typedef char *PSZ;
 #define MAX_PATH          260
 
 #ifndef NULL
-#ifdef __cplusplus
-#define NULL    0
-#else
-#define NULL    ((void *)0)
-#endif
+   #ifdef __cplusplus
+      #define NULL    0
+   #else
+      #define NULL    ((void *)0)
+   #endif
 #endif
 
 #ifndef FALSE
-#define FALSE               0
+   #define FALSE               0
 #endif
 
 #ifndef TRUE
-#define TRUE                1
+   #define TRUE                1
 #endif
 
 #ifndef IN
-#define IN
+   #define IN
 #endif
 
 #ifndef OUT
-#define OUT
+   #define OUT
 #endif
 
 #ifndef OPTIONAL
-#define OPTIONAL
+   #define OPTIONAL
 #endif
 
 #undef far
@@ -105,48 +105,48 @@ typedef char *PSZ;
 #define far
 #define near
 #if (!defined(_MAC)) && ((_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED))
-#define pascal __stdcall
+   #define pascal __stdcall
 #else
-#define pascal
+   #define pascal
 #endif
 
 #if defined(DOSWIN32) || defined(_MAC)
-#define cdecl _cdecl
-#ifndef CDECL
-#define CDECL _cdecl
-#endif
+   #define cdecl _cdecl
+   #ifndef CDECL
+      #define CDECL _cdecl
+   #endif
 #else
-#define cdecl
-#ifndef CDECL
-#define CDECL
-#endif
+   #define cdecl
+   #ifndef CDECL
+      #define CDECL
+   #endif
 #endif
 
 #ifdef _MAC
-#define CALLBACK    PASCAL
-#define WINAPI      CDECL
-#define WINAPIV     CDECL
-#define APIENTRY    WINAPI
-#define APIPRIVATE  CDECL
-#ifdef _68K_
-#define PASCAL      __pascal
-#else
-#define PASCAL
-#endif
+   #define CALLBACK    PASCAL
+   #define WINAPI      CDECL
+   #define WINAPIV     CDECL
+   #define APIENTRY    WINAPI
+   #define APIPRIVATE  CDECL
+   #ifdef _68K_
+      #define PASCAL      __pascal
+   #else
+      #define PASCAL
+   #endif
 #elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
-#define CALLBACK    __stdcall
-#define WINAPI      __stdcall
-#define WINAPIV     __cdecl
-#define APIENTRY    WINAPI
-#define APIPRIVATE  __stdcall
-#define PASCAL      __stdcall
+   #define CALLBACK    __stdcall
+   #define WINAPI      __stdcall
+   #define WINAPIV     __cdecl
+   #define APIENTRY    WINAPI
+   #define APIPRIVATE  __stdcall
+   #define PASCAL      __stdcall
 #else
-#define CALLBACK
-#define WINAPI
-#define WINAPIV
-#define APIENTRY    WINAPI
-#define APIPRIVATE
-#define PASCAL      pascal
+   #define CALLBACK
+   #define WINAPI
+   #define WINAPIV
+   #define APIENTRY    WINAPI
+   #define APIPRIVATE
+   #define PASCAL      pascal
 #endif
 
 #undef FAR
@@ -154,14 +154,14 @@ typedef char *PSZ;
 #define FAR                 far
 #define NEAR                near
 #ifndef CONST
-#define CONST               const
+   #define CONST               const
 #endif
 
-typedef unsigned long       DWORD;
-typedef int                 BOOL;
-typedef unsigned char       BYTE;
-typedef unsigned short      WORD;
-typedef float               FLOAT;
+typedef unsigned long DWORD;
+typedef int BOOL;
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef float FLOAT;
 typedef FLOAT               *PFLOAT;
 typedef BOOL near           *PBOOL;
 typedef BOOL far            *LPBOOL;
@@ -177,14 +177,14 @@ typedef DWORD far           *LPDWORD;
 typedef void far            *LPVOID;
 typedef CONST void far      *LPCVOID;
 
-typedef int                 INT;
-typedef unsigned int        UINT;
+typedef int INT;
+typedef unsigned int UINT;
 typedef unsigned int        *PUINT;
 
 #ifndef NT_INCLUDED
 
 //lepton patch
-#include "kernel/core/winnt.h"
+   #include "kernel/core/winnt.h"
 //end of lepton patch
 
 #endif /* NT_INCLUDED */
@@ -196,13 +196,13 @@ typedef LONG LRESULT;
 
 #ifndef NOMINMAX
 
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
+   #ifndef max
+      #define max(a,b)            (((a) > (b)) ? (a) : (b))
+   #endif
 
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
+   #ifndef min
+      #define min(a,b)            (((a) < (b)) ? (a) : (b))
+   #endif
 
 #endif  /* NOMINMAX */
 
@@ -217,19 +217,19 @@ typedef LONG LRESULT;
 #ifndef WIN_INTERNAL
 DECLARE_HANDLE            (HWND);
 DECLARE_HANDLE            (HHOOK);
-#ifdef WINABLE
+   #ifdef WINABLE
 DECLARE_HANDLE            (HEVENT);
-#endif
+   #endif
 #endif
 
-typedef WORD                ATOM;
+typedef WORD ATOM;
 
 typedef HANDLE NEAR         *SPHANDLE;
 typedef HANDLE FAR          *LPHANDLE;
-typedef HANDLE              HGLOBAL;
-typedef HANDLE              HLOCAL;
-typedef HANDLE              GLOBALHANDLE;
-typedef HANDLE              LOCALHANDLE;
+typedef HANDLE HGLOBAL;
+typedef HANDLE HLOCAL;
+typedef HANDLE GLOBALHANDLE;
+typedef HANDLE LOCALHANDLE;
 #ifndef _MAC
 typedef int (FAR WINAPI *FARPROC)();
 typedef int (NEAR WINAPI *NEARPROC)();
@@ -241,11 +241,11 @@ typedef int (CALLBACK *PROC)();
 #endif
 
 #if !defined(_MAC) || !defined(GDI_INTERNAL)
-#ifdef STRICT
+   #ifdef STRICT
 typedef void NEAR* HGDIOBJ;
-#else
+   #else
 DECLARE_HANDLE(HGDIOBJ);
-#endif
+   #endif
 #endif
 
 #if !defined(_MAC) || !defined(WIN_INTERNAL)
@@ -255,7 +255,7 @@ DECLARE_HANDLE(HACCEL);
 DECLARE_HANDLE(HBITMAP);
 DECLARE_HANDLE(HBRUSH);
 #endif
-#if(WINVER >= 0x0400)
+#if (WINVER >= 0x0400)
 DECLARE_HANDLE(HCOLORSPACE);
 #endif /* WINVER >= 0x0400 */
 #if !defined(_MAC) || !defined(GDI_INTERNAL)
@@ -285,12 +285,12 @@ DECLARE_HANDLE(HTASK);
 DECLARE_HANDLE(HWINSTA);
 DECLARE_HANDLE(HKL);
 
-#if(WINVER >= 0x0500)
-#ifndef _MAC
+#if (WINVER >= 0x0500)
+   #ifndef _MAC
 DECLARE_HANDLE(HMONITOR);
 DECLARE_HANDLE(HTERMINAL);
 DECLARE_HANDLE(HWINEVENTHOOK);
-#endif
+   #endif
 #endif /* WINVER >= 0x0500 */
 
 #ifndef _MAC
@@ -301,60 +301,60 @@ typedef short HFILE;
 DECLARE_HANDLE(HCURSOR);    /* HICONs & HCURSORs are not polymorphic */
 #endif
 
-typedef DWORD   COLORREF;
+typedef DWORD COLORREF;
 typedef DWORD   *LPCOLORREF;
 
 #define HFILE_ERROR ((HFILE)-1)
 
 typedef struct tagRECT
 {
-    LONG    left;
-    LONG    top;
-    LONG    right;
-    LONG    bottom;
+   LONG left;
+   LONG top;
+   LONG right;
+   LONG bottom;
 } RECT, *PRECT, NEAR *NPRECT, FAR *LPRECT;
 
 typedef const RECT FAR* LPCRECT;
 
 typedef struct _RECTL       /* rcl */
 {
-    LONG    left;
-    LONG    top;
-    LONG    right;
-    LONG    bottom;
+   LONG left;
+   LONG top;
+   LONG right;
+   LONG bottom;
 } RECTL, *PRECTL, *LPRECTL;
 
 typedef const RECTL FAR* LPCRECTL;
 
 typedef struct tagPOINT
 {
-    LONG  x;
-    LONG  y;
+   LONG x;
+   LONG y;
 } POINT, *PPOINT, NEAR *NPPOINT, FAR *LPPOINT;
 
 typedef struct _POINTL      /* ptl  */
 {
-    LONG  x;
-    LONG  y;
+   LONG x;
+   LONG y;
 } POINTL, *PPOINTL;
 
 typedef struct tagSIZE
 {
-    LONG        cx;
-    LONG        cy;
+   LONG cx;
+   LONG cy;
 } SIZE, *PSIZE, *LPSIZE;
 
-typedef SIZE               SIZEL;
+typedef SIZE SIZEL;
 typedef SIZE               *PSIZEL, *LPSIZEL;
 
 typedef struct tagPOINTS
 {
 #ifndef _MAC
-    SHORT   x;
-    SHORT   y;
+   SHORT x;
+   SHORT y;
 #else
-    SHORT   y;
-    SHORT   x;
+   SHORT y;
+   SHORT x;
 #endif
 } POINTS, *PPOINTS, *LPPOINTS;
 

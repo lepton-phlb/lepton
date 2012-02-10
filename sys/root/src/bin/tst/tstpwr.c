@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -169,19 +169,19 @@ a0350_power_t *ptr_prw;
 ----------------------------------------------*/
 static int read_magic_number(void){
    int cb,fd;
-   char  mn=0x00;
+   char mn=0x00;
    char buf[20];
    uint16_t command;
 
    //open power device
-   if((fd=open(__pwr_device,O_RDWR,0))<0){
+   if((fd=open(__pwr_device,O_RDWR,0))<0) {
       printf("error: cannot open %s\r\n",__pwr_device);
       return -1;
    }
 
    //read registers
    lseek(fd,0x03,SEEK_SET);
-   if( (cb=read(fd,&buf,sizeof(buf))) == sizeof(buf) ){
+   if( (cb=read(fd,&buf,sizeof(buf))) == sizeof(buf) ) {
       ptr_prw->mn1 = buf[12];
       ptr_prw->mn2 = buf[13];
 
@@ -211,14 +211,14 @@ static int read_power_register(void){
    int error=0;
 
    //open power device
-   if((fd=open(__pwr_device,O_RDWR,0))<0){
+   if((fd=open(__pwr_device,O_RDWR,0))<0) {
       printf("error: cannot open %s\r\n",__pwr_device);
       return -1;
    }
 
    //read registers
    lseek(fd,0x03,SEEK_SET);
-   if( (cb=read(fd,&buf,sizeof(buf))) == sizeof(buf) ){
+   if( (cb=read(fd,&buf,sizeof(buf))) == sizeof(buf) ) {
       ptr_prw->delta_t = (buf[1]<<8)+buf[0];
       ptr_prw->iavg = (buf[3]<<8)+buf[2];
       ptr_prw->iacc = (buf[5]<<8)+buf[4];
@@ -261,7 +261,7 @@ static int read_power_register(void){
       printf("ST:0x%02x ",ptr_prw->status_bat);
       printf("A:%d/100 ",ptr_prw->autonomie);
 
-   } else if(cb<0){
+   } else if(cb<0) {
       error++;
    }
 
@@ -331,7 +331,7 @@ static int clr_bq2018_register(void){
    uint16_t command;
 
    //open power device
-   if((fd=open(__pwr_device,O_RDWR,0))<0){
+   if((fd=open(__pwr_device,O_RDWR,0))<0) {
       printf("error: cannot open %s\r\n",__pwr_device);
       return -1;
    }
@@ -340,28 +340,28 @@ static int clr_bq2018_register(void){
    command=0x1F;
    lseek(fd,0x74,SEEK_SET);
    if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-         return -1;
+      return -1;
    printf(" ok\r\n");
 
    printf("Write MN1 to 0...");
    command=0x00;
    lseek(fd,BQ2018_MAGIC_NUMDER1_ADR,SEEK_SET);
    if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-         return -1;
+      return -1;
    printf(" ok\r\n");
 
    printf("Write MN2 to 0...");
    command=0x00;
    lseek(fd,BQ2018_MAGIC_NUMDER2_ADR,SEEK_SET);
    if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-         return -1;
+      return -1;
    printf(" ok\r\n");
 
    printf("BAT_UNKNOWN --> BAT_STATUS...");
    command=0x01;
    lseek(fd,0x6D,SEEK_SET);
    if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-         return -1;
+      return -1;
    printf(" ok\r\n");
 
    close(fd);
@@ -401,16 +401,16 @@ int tstpwr_main(int argc,char* argv[]){
    uint16_t status=0;
    uint16_t volt=0;
    uint16_t cycle_count=0;
-   int16_t  current=0;
-   int16_t  remaining_capacity=0;
-   int16_t  runtime_to_empty=0;
-   int16_t  battery_mode=0;
+   int16_t current=0;
+   int16_t remaining_capacity=0;
+   int16_t runtime_to_empty=0;
+   int16_t battery_mode=0;
    int error=0;
    unsigned char buf[__BUF_MAX];
    unsigned int opt=0;
    uint8_t cpt_charge=0;
 
-   int32_t  period=DEFLT_PERIOD;//en secondes
+   int32_t period=DEFLT_PERIOD; //en secondes
    int n=0;
    int cb;
    int index;
@@ -424,30 +424,30 @@ int tstpwr_main(int argc,char* argv[]){
    ptr_prw->machine_state=0;
 
    //get options
-   for(index=1;index<argc;index++){
+   for(index=1; index<argc; index++) {
       if (argv[index][0] == '-') {
          switch (argv[index][1]) {
-            //i init
-            case 'i':
-               if(clr_bq2018_register()<0)
-                  printf(" error: cannot reset bq2018\r\n");
+         //i init
+         case 'i':
+            if(clr_bq2018_register()<0)
+               printf(" error: cannot reset bq2018\r\n");
             break;
 
-            //read mem
-            case 'r':
-              if(read_power_register()<0){
-                  printf(" error: cannot read register\r\n");
-              }
-               printf("\r\nRegister read OK.\r\n");
+         //read mem
+         case 'r':
+            if(read_power_register()<0) {
+               printf(" error: cannot read register\r\n");
+            }
+            printf("\r\nRegister read OK.\r\n");
             break;
-            //magic number
-            case 'm':
-               if(read_magic_number()<0)
-                  printf(" error: cannot read magic number\r\n");
-               break;
+         //magic number
+         case 'm':
+            if(read_magic_number()<0)
+               printf(" error: cannot read magic number\r\n");
+            break;
 
-            default:
-               printf("argument inconnu \r\n");
+         default:
+            printf("argument inconnu \r\n");
             break;
 
          }  //end switch
@@ -462,202 +462,202 @@ int tstpwr_main(int argc,char* argv[]){
    FD_ZERO(&readfs);
 
    //
-   for(;;){
+   for(;; ) {
       error = 0;
-      FD_SET(STDIN_FILENO,&readfs);//stdin
+      FD_SET(STDIN_FILENO,&readfs); //stdin
 
-      switch( select(STDIN_FILENO+1,&readfs,0,0,0) ){
+      switch( select(STDIN_FILENO+1,&readfs,0,0,0) ) {
 
-         case 0:
-            //timeout
-            presence = get_presence_charge();
-            if(presence<0){
-               // panne hardware BQ2018
-            } else {
-               switch(ptr_prw->status_bat){
-               case BAT_UNKNOWN : // battery unknown
-                  ptr_prw->machine_state = BAT_UNKNOWN;
-                  if((ptr_prw->status_bat&BAT_UNKNOWN)== BAT_UNKNOWN){
-                     printf(" UNKNOWN\r\n");
-                  }
-                  if(presence==1){  // wait for external power supply
-                     ptr_prw->memo_state = ptr_prw->machine_state;
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=0x1F;
-                     reg = BQ2018_TEMP_CLEAR_REG;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     command=BAT_IN_CHARGE;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                  }
-                  break;
-               case BAT_IN_CHARGE : // battery in charge
-                  ptr_prw->machine_state = BAT_IN_CHARGE;
-                  printf(" CHARGE.\r\n");
-                  if(presence==2){  // wait end of charge
-                     ptr_prw->memo_state = ptr_prw->machine_state;
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=BAT_CHARGED;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                  } else if((presence==0)&&(ptr_prw->memo_state==BAT_UNKNOWN)){
-                     ptr_prw->memo_state = ptr_prw->machine_state;
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=BAT_UNKNOWN;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                  }  else if((presence==0)&&(ptr_prw->memo_state==BAT_IN_USE)){
-                     ptr_prw->memo_state = BAT_IN_USE;
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=BAT_IN_USE;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                  }
-                  break;
-               case BAT_CHARGED :
-                  ptr_prw->machine_state = BAT_CHARGED;
-                  printf(" CHARGED\r\n");
-                  if((presence==0) && (ptr_prw->memo_state==BAT_IN_CHARGE)){
-                     ptr_prw->memo_state = ptr_prw->machine_state;
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=BAT_IN_USE;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     // write charge max 4000 ( 0x0FA0 )
-                     command=0xA0;
-                     reg = RM_MEMOL;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     command=0x0F;
-                     reg = RM_MEMOH;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                     ptr_prw->capacite_rest = 0x0FA0;   // 4000 mA
-                     //
-                  }  else if((presence==0)&&(ptr_prw->memo_state==BAT_IN_USE)){
-                     ptr_prw->memo_state = BAT_IN_USE;
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=BAT_IN_USE;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                  }
-                  break;
-               case BAT_IN_USE :       // battery in use
-                  ptr_prw->machine_state = BAT_IN_USE;
-                  printf(" USE.\r\n");
-                  if(presence==0){
-                     if(ptr_prw->autonomie<1){
-                        printf("Autonomie faible --> charger la batterie!!!!!\r\n");
-                     }
-                  }
-                  if(presence==1){
-                     if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
-                       return -1;
-                     command=0x1F;
-                     reg = BQ2018_TEMP_CLEAR_REG;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     command=BAT_IN_CHARGE;
-                     reg = STATUS_BAT;
-                     lseek(fd,reg,SEEK_SET);
-                     if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
-                       return -1;
-                     close(fd);
-                  }
-                  break;
-               default:
-                  break;
+      case 0:
+         //timeout
+         presence = get_presence_charge();
+         if(presence<0) {
+            // panne hardware BQ2018
+         } else {
+            switch(ptr_prw->status_bat) {
+            case BAT_UNKNOWN:     // battery unknown
+               ptr_prw->machine_state = BAT_UNKNOWN;
+               if((ptr_prw->status_bat&BAT_UNKNOWN)== BAT_UNKNOWN) {
+                  printf(" UNKNOWN\r\n");
                }
-
-               //
-   /*            if(verbose==1){
-                  printf("Machine_state= %d\r\n",ptr_prw->machine_state);
-                  printf("\r\n");
-                  printf("n=%d\r\n",n);
-                  if(error)
-                     printf("report error =%d\r\n",error);
-               }
-   */
-               if(n>=0)
-                  n--;
-               //
-               if(n==0){
-                  //restore old oflag
-                  fcntl(STDIN_FILENO,F_SETFL,oflag);
-                  exit(0);
-               }
-
-               //
-               usleep(period);//10 s
-               }
-            break;
-
-
-         default:
-            //
-            if(FD_ISSET(STDIN_FILENO,&readfs)){ //stdin
-               char c;
-               if(read(STDIN_FILENO,&c,1)<=0)
-                  break;
-
-               if(c=='\x18'){ //ctrl-x:exit
-                  // Memorisation capacité restante dans le BQ2018
+               if(presence==1) {    // wait for external power supply
+                  ptr_prw->memo_state = ptr_prw->machine_state;
                   if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
                      return -1;
-                  command=(uint8_t)(ptr_prw->capacite_rest&0x00FF);
+                  command=0x1F;
+                  reg = BQ2018_TEMP_CLEAR_REG;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  command=BAT_IN_CHARGE;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  close(fd);
+               }
+               break;
+            case BAT_IN_CHARGE:     // battery in charge
+               ptr_prw->machine_state = BAT_IN_CHARGE;
+               printf(" CHARGE.\r\n");
+               if(presence==2) {    // wait end of charge
+                  ptr_prw->memo_state = ptr_prw->machine_state;
+                  if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                     return -1;
+                  command=BAT_CHARGED;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  close(fd);
+               } else if((presence==0)&&(ptr_prw->memo_state==BAT_UNKNOWN)) {
+                  ptr_prw->memo_state = ptr_prw->machine_state;
+                  if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                     return -1;
+                  command=BAT_UNKNOWN;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  close(fd);
+               }  else if((presence==0)&&(ptr_prw->memo_state==BAT_IN_USE)) {
+                  ptr_prw->memo_state = BAT_IN_USE;
+                  if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                     return -1;
+                  command=BAT_IN_USE;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  close(fd);
+               }
+               break;
+            case BAT_CHARGED:
+               ptr_prw->machine_state = BAT_CHARGED;
+               printf(" CHARGED\r\n");
+               if((presence==0) && (ptr_prw->memo_state==BAT_IN_CHARGE)) {
+                  ptr_prw->memo_state = ptr_prw->machine_state;
+                  if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                     return -1;
+                  command=BAT_IN_USE;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  // write charge max 4000 ( 0x0FA0 )
+                  command=0xA0;
                   reg = RM_MEMOL;
                   lseek(fd,reg,SEEK_SET);
                   if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
                      return -1;
-                  command=(uint8_t)((ptr_prw->capacite_rest&0xFF00)>>8);
+                  command=0x0F;
                   reg = RM_MEMOH;
                   lseek(fd,reg,SEEK_SET);
                   if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
                      return -1;
-
-                  lseek(fd,0x03,SEEK_SET);
-                  if( (cb=read(fd,&buf,sizeof(buf))) == sizeof(buf) ){
-                     ptr_prw->capacite_rest = (buf[17]<<8)+buf[16];
-                     printf("REST_CAPACITY_memo:\t%dmA/h\r\n",ptr_prw->capacite_rest);
-                  } else if(cb<0){
-                     error++;
-                  }
                   close(fd);
+                  ptr_prw->capacite_rest = 0x0FA0;      // 4000 mA
                   //
-                  //restore old oflag
-                  fcntl(STDIN_FILENO,F_SETFL,oflag);
-                  return 0;
+               }  else if((presence==0)&&(ptr_prw->memo_state==BAT_IN_USE)) {
+                  ptr_prw->memo_state = BAT_IN_USE;
+                  if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                     return -1;
+                  command=BAT_IN_USE;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  close(fd);
                }
+               break;
+            case BAT_IN_USE:           // battery in use
+               ptr_prw->machine_state = BAT_IN_USE;
+               printf(" USE.\r\n");
+               if(presence==0) {
+                  if(ptr_prw->autonomie<1) {
+                     printf("Autonomie faible --> charger la batterie!!!!!\r\n");
+                  }
+               }
+               if(presence==1) {
+                  if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                     return -1;
+                  command=0x1F;
+                  reg = BQ2018_TEMP_CLEAR_REG;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  command=BAT_IN_CHARGE;
+                  reg = STATUS_BAT;
+                  lseek(fd,reg,SEEK_SET);
+                  if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                     return -1;
+                  close(fd);
+               }
+               break;
+            default:
+               break;
             }
+
+            //
+            /*            if(verbose==1){
+                           printf("Machine_state= %d\r\n",ptr_prw->machine_state);
+                           printf("\r\n");
+                           printf("n=%d\r\n",n);
+                           if(error)
+                              printf("report error =%d\r\n",error);
+                        }
+            */
+            if(n>=0)
+               n--;
+            //
+            if(n==0) {
+               //restore old oflag
+               fcntl(STDIN_FILENO,F_SETFL,oflag);
+               exit(0);
+            }
+
+            //
+            usleep(period);   //10 s
+         }
+         break;
+
+
+      default:
+         //
+         if(FD_ISSET(STDIN_FILENO,&readfs)) {   //stdin
+            char c;
+            if(read(STDIN_FILENO,&c,1)<=0)
+               break;
+
+            if(c=='\x18') {   //ctrl-x:exit
+               // Memorisation capacité restante dans le BQ2018
+               if ((fd = open("/dev/pwr0", O_RDWR, 0)) < 0)
+                  return -1;
+               command=(uint8_t)(ptr_prw->capacite_rest&0x00FF);
+               reg = RM_MEMOL;
+               lseek(fd,reg,SEEK_SET);
+               if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                  return -1;
+               command=(uint8_t)((ptr_prw->capacite_rest&0xFF00)>>8);
+               reg = RM_MEMOH;
+               lseek(fd,reg,SEEK_SET);
+               if( (cb=write(fd,&command,sizeof(command))) < sizeof(command) )
+                  return -1;
+
+               lseek(fd,0x03,SEEK_SET);
+               if( (cb=read(fd,&buf,sizeof(buf))) == sizeof(buf) ) {
+                  ptr_prw->capacite_rest = (buf[17]<<8)+buf[16];
+                  printf("REST_CAPACITY_memo:\t%dmA/h\r\n",ptr_prw->capacite_rest);
+               } else if(cb<0) {
+                  error++;
+               }
+               close(fd);
+               //
+               //restore old oflag
+               fcntl(STDIN_FILENO,F_SETFL,oflag);
+               return 0;
+            }
+         }
          break;
       }
    }

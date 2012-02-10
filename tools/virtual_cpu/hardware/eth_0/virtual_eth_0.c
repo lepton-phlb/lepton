@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -105,14 +105,14 @@ int virtual_eth0_open(void * data) {
    //
    if(virtual_eth0.fd>0) {
       DEBUG_TRACE("(F) socket already open[%d:%d]\n",cmd.hdwr_id, cmd.cmd);
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       return 0;
    }
    //
    if( (virtual_eth0.fd = open("/dev/net/tun", O_RDWR)) < 0 ) {
       perror("open");
       //write cmd to unblock client
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       virtual_eth0.fd = __fdev_not_fd;
       return -1;
    }
@@ -121,9 +121,9 @@ int virtual_eth0_open(void * data) {
    ifr.ifr_flags = IFF_TAP|IFF_NO_PI;
    strncpy(ifr.ifr_name, "tap0\0", IFNAMSIZ);
 
-   if( ioctl(virtual_eth0.fd, TUNSETIFF, (void *) &ifr) < 0 ){
+   if( ioctl(virtual_eth0.fd, TUNSETIFF, (void *) &ifr) < 0 ) {
       perror("ioctl");
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       //
       close(virtual_eth0.fd);
       virtual_eth0.fd = __fdev_not_fd;
@@ -132,7 +132,7 @@ int virtual_eth0_open(void * data) {
 
    if (ioctl(virtual_eth0.fd, TUNSETPERSIST, 1) < 0) {
       perror("ioctl");
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       //
       close(virtual_eth0.fd);
       virtual_eth0.fd = __fdev_not_fd;
@@ -142,9 +142,9 @@ int virtual_eth0_open(void * data) {
    //
    //
    DEBUG_TRACE("(F) %d [%s] open ok[%d:%d]..\n", virtual_eth0.fd, ifr.ifr_name,
-         cmd.hdwr_id, cmd.cmd);
+               cmd.hdwr_id, cmd.cmd);
 
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
 
    return 0;
 }
@@ -156,7 +156,7 @@ int virtual_eth0_close(void * data) {
    DEBUG_TRACE("(F) virtual_eth0_close\n");
    close(virtual_eth0.fd);
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //
    return 0;
 }
@@ -173,14 +173,15 @@ int virtual_eth0_read(void * data) {
    //read data from socket
    eth_0_data->size_in = read(virtual_eth0.fd, (void *)eth_0_data->data_in, SHM_ETH_SIZE);
    //kill(getppid(), SIGIO);
-   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    kill(getppid(), SIGIO);
-   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
 //
    gettimeofday(&t2,NULL);
    DEBUG_TRACE("(F)-------------[%d-%d]\t%d\telapse:%d s .. %d us\t(%d)\n",
-         cmd.hdwr_id, cmd.cmd, nb_read++, (int)difftime(t2.tv_sec,t1.tv_sec),(int)difftime(t2.tv_usec,t1.tv_usec)
-         , eth_0_data->size_in);
+               cmd.hdwr_id, cmd.cmd, nb_read++,
+               (int)difftime(t2.tv_sec,t1.tv_sec),(int)difftime(t2.tv_usec,t1.tv_usec)
+               , eth_0_data->size_in);
    //
    return 0;
 }
@@ -205,12 +206,13 @@ int virtual_eth0_write(void * data) {
    gettimeofday(&t1,NULL);
    //kill(getppid(), SIGIO);
    //
-   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    kill(getppid(), SIGIO);
-   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    gettimeofday(&t2,NULL);
 
-   DEBUG_TRACE("\n(F)+++[%d-%d]\telapse:%d us\n", cmd.hdwr_id, cmd.cmd, (int)difftime(t2.tv_usec,t1.tv_usec));
+   DEBUG_TRACE("\n(F)+++[%d-%d]\telapse:%d us\n", cmd.hdwr_id, cmd.cmd,
+               (int)difftime(t2.tv_usec,t1.tv_usec));
    return 0;
 }
 

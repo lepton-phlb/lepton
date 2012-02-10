@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -205,7 +205,8 @@ either the MPL or the [eCos GPL] License."
 #define RD_ATTR_LONGNAME         (RD_ATTR_READONLY|RD_ATTR_HIDDEN|RD_ATTR_SYSTEM|RD_ATTR_VOLUMEID)
 
 //long name mask
-#define FAT16_LONGNAME_MSK       (RD_ATTR_READONLY|RD_ATTR_HIDDEN|RD_ATTR_SYSTEM|RD_ATTR_VOLUMEID|RD_ATTR_DIRECTORY|RD_ATTR_ARCHIVE)
+#define FAT16_LONGNAME_MSK       (RD_ATTR_READONLY|RD_ATTR_HIDDEN|RD_ATTR_SYSTEM|RD_ATTR_VOLUMEID| \
+                                  RD_ATTR_DIRECTORY|RD_ATTR_ARCHIVE)
 //long name last long entry
 #define FAT16_LAST_LONGENTRY_MSK 0x40
 //part of name if long entry
@@ -228,7 +229,7 @@ either the MPL or the [eCos GPL] License."
 
 #define FAT16_MAX_ENTRIES        3
 #define FAT16_MAX_ENTRIES_TEST   (FAT16_MAX_ENTRIES+1)
-#define FAT16_MAX_NAME_FIL_VFAT  32//FAT16_LONGNAME_SUM*FAT16_MAX_ENTRIES//32
+#define FAT16_MAX_NAME_FIL_VFAT  32 //FAT16_LONGNAME_SUM*FAT16_MAX_ENTRIES//32
 
 //
 #define FAT16_VOLUME_NAME        "TAUONVOL\0"
@@ -236,28 +237,28 @@ either the MPL or the [eCos GPL] License."
 #define FAT_16_CLEAN_BUFFER_SIZE        FAT16_BS_BPS_VAL
 
 #if defined(CPU_GNU32) || defined(CPU_ARM9)
-#define FAT_CACHE_FAT
-#define FAT_CACHE_FAT_SIZE    (FAT16_LCLUSMAX*FAT16_CLUSSZ)
+   #define FAT_CACHE_FAT
+   #define FAT_CACHE_FAT_SIZE    (FAT16_LCLUSMAX*FAT16_CLUSSZ)
 #endif
 
 //tauon definition for FAT16
-typedef unsigned long   fat16_u32_t;
-typedef unsigned int    fat16_u16_t;
-typedef unsigned char   fat16_u8_t;
+typedef unsigned long fat16_u32_t;
+typedef unsigned int fat16_u16_t;
+typedef unsigned char fat16_u8_t;
 
-typedef struct fat16_core_info_st{
-   fat16_u8_t          nbsec_per_clus; //nb sector per cluster
-   fat16_u32_t         media_size; //media size in bytes
-   fat16_u32_t         bs_addr; // boot sector address
-   fat16_u32_t         bs_size; //boot sector size in bytes
-   fat16_u32_t         hs_addr; //hidden sector(s) addr
-   fat16_u32_t         hs_size; //hidden sector(s) size in bytes
-   fat16_u32_t         fat_addr; //first FAT address
-   fat16_u32_t         fat_size; //FAT size
-   fat16_u32_t         rd_addr; //root directory address
-   fat16_u32_t         rd_size; //root directory size in bytes
-   fat16_u32_t         ud_addr; //user data address
-   fat16_u32_t         ud_size; //user data size in bytes
+typedef struct fat16_core_info_st {
+   fat16_u8_t nbsec_per_clus;          //nb sector per cluster
+   fat16_u32_t media_size;         //media size in bytes
+   fat16_u32_t bs_addr;         // boot sector address
+   fat16_u32_t bs_size;         //boot sector size in bytes
+   fat16_u32_t hs_addr;         //hidden sector(s) addr
+   fat16_u32_t hs_size;         //hidden sector(s) size in bytes
+   fat16_u32_t fat_addr;         //first FAT address
+   fat16_u32_t fat_size;         //FAT size
+   fat16_u32_t rd_addr;         //root directory address
+   fat16_u32_t rd_size;         //root directory size in bytes
+   fat16_u32_t ud_addr;         //user data address
+   fat16_u32_t ud_size;         //user data size in bytes
    //
 #ifdef FAT_CACHE_FAT
    fat16_u8_t           * fat_cache;
@@ -265,11 +266,11 @@ typedef struct fat16_core_info_st{
 }fat16_core_info_t;
 
 //
-typedef struct fat16_ofile_st{
-   fat16_u32_t         entry_phys_addr; // physical address of entry
-   fat16_u16_t         entry_data_cluster; //first cluster of entry
-   fat16_u8_t          entry_attr;   //attribute of entry (volum, file or directory)
-   fat16_u32_t         entry_infos_addr;
+typedef struct fat16_ofile_st {
+   fat16_u32_t entry_phys_addr;         // physical address of entry
+   fat16_u16_t entry_data_cluster;         //first cluster of entry
+   fat16_u8_t entry_attr;            //attribute of entry (volum, file or directory)
+   fat16_u32_t entry_infos_addr;
 }fat16_ofile_t;
 
 extern fat16_ofile_t fat16_ofile_lst[]; // Table des fichiers ouverts, param fat16
@@ -277,72 +278,72 @@ extern fat16_ofile_t fat16_ofile_lst[]; // Table des fichiers ouverts, param fat
 //Following structure are defined in standard
 //boot sector
 typedef struct __attribute__((packed)) boot_sector_st {
-   unsigned char  BS_jmpBoot[3];              // jump inst E9xxxx or EBxx90
-   char           BS_OEMName[8];           // OEM name and version
-}boot_sector_t;
+   unsigned char BS_jmpBoot[3];               // jump inst E9xxxx or EBxx90
+   char BS_OEMName[8];                     // OEM name and version
+} boot_sector_t;
 
 //Bios Parameter Block
 typedef struct __attribute__((packed)) bios_param_block_st {
-   unsigned short    BPB_BytesPerSec;   // bytes per sector
-   unsigned char     BPB_SecPerClust;   // sectors per cluster
-   unsigned short    BPB_RsvdSecCnt; // number of reserved sectors
-   unsigned char     BPB_NumFATs;    // number of FATs
-   unsigned short    BPB_RootEntCnt;   // number of root directory entries
-   unsigned short    BPB_TotSec16;    // total number of sectors
-   unsigned char     BPB_Media;      // media descriptor
-   unsigned short    BPB_FATSz16;    // number of sectors per FAT
-   unsigned short    BPB_SecPerTrk;   // sectors per track
-   unsigned short    BPB_NumHeads;      // number of heads
-   unsigned int      BPB_HiddSec; // # of hidden sectors
-   unsigned int      BPB_TotSec32;   // # of sectors if BPB_Sectors == 0
-}bios_param_block_t;
+   unsigned short BPB_BytesPerSec;      // bytes per sector
+   unsigned char BPB_SecPerClust;       // sectors per cluster
+   unsigned short BPB_RsvdSecCnt;    // number of reserved sectors
+   unsigned char BPB_NumFATs;        // number of FATs
+   unsigned short BPB_RootEntCnt;      // number of root directory entries
+   unsigned short BPB_TotSec16;       // total number of sectors
+   unsigned char BPB_Media;          // media descriptor
+   unsigned short BPB_FATSz16;       // number of sectors per FAT
+   unsigned short BPB_SecPerTrk;      // sectors per track
+   unsigned short BPB_NumHeads;         // number of heads
+   unsigned int BPB_HiddSec;      // # of hidden sectors
+   unsigned int BPB_TotSec32;        // # of sectors if BPB_Sectors == 0
+} bios_param_block_t;
 
 typedef struct __attribute__((packed)) bpb_16_offset_36_st {
-   unsigned char     BS_DrvNum;
-   unsigned char     BS_Reserved1;
-   unsigned char     BS_BootSig;
-   unsigned char     BS_VolID[4];
-   unsigned char     BS_VolLabel[11];
-   unsigned char     BS_FilSysType[8];
-}bpb_offset_36_t;
+   unsigned char BS_DrvNum;
+   unsigned char BS_Reserved1;
+   unsigned char BS_BootSig;
+   unsigned char BS_VolID[4];
+   unsigned char BS_VolLabel[11];
+   unsigned char BS_FilSysType[8];
+} bpb_offset_36_t;
 
 //structure to get core info
 typedef struct __attribute__((packed)) fat16_boot_core_info_st {
-   boot_sector_t        bs;
-   bios_param_block_t   bpb;
-   bpb_offset_36_t      bpb_16_offset_36;
-}fat16_boot_core_info_t;
+   boot_sector_t bs;
+   bios_param_block_t bpb;
+   bpb_offset_36_t bpb_16_offset_36;
+} fat16_boot_core_info_t;
 
 //msdos dir entry
 typedef struct __attribute__((packed)) fat_msdos_dir_entry_st {
-   unsigned char DIR_Name[FAT16_MAX_NAME_FIL+FAT16_MAX_EXT_FIL];//name of entry (file or directory)
-   unsigned char DIR_Attr;//attribute
+   unsigned char DIR_Name[FAT16_MAX_NAME_FIL+FAT16_MAX_EXT_FIL]; //name of entry (file or directory)
+   unsigned char DIR_Attr; //attribute
    unsigned char DIR_NTRes;
-   unsigned char DIR_CrtTimeTenth;//count of tenth of a second
-   unsigned char DIR_CrtTime[2];//time of creation
-   unsigned char DIR_CrtDate[2];//date of creation
-   unsigned char DIR_LstAccDate[2];//last access date
+   unsigned char DIR_CrtTimeTenth; //count of tenth of a second
+   unsigned char DIR_CrtTime[2]; //time of creation
+   unsigned char DIR_CrtDate[2]; //date of creation
+   unsigned char DIR_LstAccDate[2]; //last access date
    unsigned char DIR_FstClusHI[2];
-   unsigned char DIR_WrtTime[2];//time of last write
-   unsigned char DIR_WrtDate[2];//date of last write
-   unsigned char DIR_FstClusLO[2];////cluster numbercluster number
-   unsigned int  DIR_FileSize;//file size
-}fat_msdos_dir_entry_t;
+   unsigned char DIR_WrtTime[2]; //time of last write
+   unsigned char DIR_WrtDate[2]; //date of last write
+   unsigned char DIR_FstClusLO[2]; ////cluster numbercluster number
+   unsigned int DIR_FileSize; //file size
+} fat_msdos_dir_entry_t;
 
 typedef struct __attribute__((packed)) fat_vfat_dir_entry_st {
-   unsigned char LDIR_Ord;//indicate entry number. last entry add FAT16_LAST_LONGENTRY_MSK
-   unsigned char LDIR_Name1[10];//first 5 char in Unicode
-   unsigned char LDIR_Attr;//must be RD_ATTR_LONGNAME
-   unsigned char LDIR_Type;//?
-   unsigned char LDIR_Chksum;//checksum of short dir entry associated with long name
-   unsigned char LDIR_Name2[12];//6-11 char in Unicode
-   unsigned char LDIR_FstClusLO[2];//must be zero
-   unsigned char LDIR_Name3[4];//12-13 char in Unicode
-}fat_vfat_dir_entry_t;
+   unsigned char LDIR_Ord; //indicate entry number. last entry add FAT16_LAST_LONGENTRY_MSK
+   unsigned char LDIR_Name1[10]; //first 5 char in Unicode
+   unsigned char LDIR_Attr; //must be RD_ATTR_LONGNAME
+   unsigned char LDIR_Type; //?
+   unsigned char LDIR_Chksum; //checksum of short dir entry associated with long name
+   unsigned char LDIR_Name2[12]; //6-11 char in Unicode
+   unsigned char LDIR_FstClusLO[2]; //must be zero
+   unsigned char LDIR_Name3[4]; //12-13 char in Unicode
+} fat_vfat_dir_entry_t;
 
 typedef union {
-   fat_msdos_dir_entry_t   msdos_entry;
-   fat_vfat_dir_entry_t    vfat_entry;
+   fat_msdos_dir_entry_t msdos_entry;
+   fat_vfat_dir_entry_t vfat_entry;
 }fat_dir_entry_t;
 
 ///
@@ -354,12 +355,16 @@ fat16_u32_t _fat16_cluster_add(fat16_core_info_t * fat_info, fat16_u16_t cluster
 fat16_u16_t _fat16_cluster_suiv(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster);
 fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb);
 int _fat16_putclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster);
-int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster_curr, fat16_u16_t cluster_next);
+int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster_curr,
+                     fat16_u16_t cluster_next);
 void _fat16_delcluslist(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t cluster);
 int _fat16_lastclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster);
-int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb, fat16_u16_t cluster);
+int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb,
+                     fat16_u16_t cluster);
 //
-int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus, fat16_u16_t* offset, unsigned char prev_flag);
+int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus,
+                      fat16_u16_t* offset,
+                      unsigned char prev_flag);
 fat16_u32_t _fat16_adddir(fat16_core_info_t * fat_info, desc_t desc);
 int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc);
 
@@ -369,7 +374,9 @@ time_t _fat16_converttime(const unsigned char *buf_date, const unsigned char *bu
 
 //
 fat16_u16_t _fat16_create_fat_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t desc, int attr);
-int _fat16_create_fat_directory_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t desc, fat16_u16_t cluster, fat16_u16_t parent_cluster);
+int _fat16_create_fat_directory_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t desc,
+                                      fat16_u16_t cluster,
+                                      fat16_u16_t parent_cluster);
 
 //
 int _fat_write_data(desc_t dev_desc, unsigned long addr, unsigned char *data, unsigned int size);

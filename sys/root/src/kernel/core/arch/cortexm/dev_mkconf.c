@@ -25,23 +25,23 @@ Global Declaration
 =============================================*/
 
 
-extern dev_map_t  dev_null_map;
-extern dev_map_t  dev_proc_map;
-extern dev_map_t  dev_cpufs_map;
-extern dev_map_t  dev_lwip_sock_map;
-extern dev_map_t  dev_lwip_stack_map;
-extern dev_map_t  dev_k60n512_uart_s3_map;
-extern dev_map_t  dev_k60n512_enet_map;
+extern dev_map_t dev_null_map;
+extern dev_map_t dev_proc_map;
+extern dev_map_t dev_cpufs_map;
+extern dev_map_t dev_lwip_sock_map;
+extern dev_map_t dev_lwip_stack_map;
+extern dev_map_t dev_k60n512_uart_s3_map;
+extern dev_map_t dev_k60n512_enet_map;
 
 
 pdev_map_t const dev_lst[]={
-&dev_null_map,
-&dev_proc_map,
-&dev_cpufs_map,
-&dev_lwip_sock_map,
-&dev_lwip_stack_map,
-&dev_k60n512_uart_s3_map,
-&dev_k60n512_enet_map
+   &dev_null_map,
+   &dev_proc_map,
+   &dev_cpufs_map,
+   &dev_lwip_sock_map,
+   &dev_lwip_stack_map,
+   &dev_k60n512_uart_s3_map,
+   &dev_k60n512_enet_map
 };
 
 pdev_map_t const * pdev_lst=&dev_lst[0];

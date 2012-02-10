@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -32,15 +32,15 @@ either the MPL or the [eCos GPL] License."
  */
 
 /**
- * \addtogroup hard_dev_m16c 
+ * \addtogroup hard_dev_m16c
  * @{
  *
  */
 
 /**
- * \addtogroup dev_rtc_c 
+ * \addtogroup dev_rtc_c
  * @{
- *    
+ *
  */
 
 
@@ -84,8 +84,8 @@ int dev_rtc_x1203_read(desc_t desc, char* buf,int cb);
 int dev_rtc_x1203_write(desc_t desc, const char* buf,int cb);
 
 //specific rtc device function
-int dev_rtc_x1203_settime(desc_t desc,char* buf,int size);  
-int dev_rtc_x1203_gettime(desc_t desc,char* buf,int size);  
+int dev_rtc_x1203_settime(desc_t desc,char* buf,int size);
+int dev_rtc_x1203_gettime(desc_t desc,char* buf,int size);
 
 dev_rtc_t dev_rtc_x1203_ext={
    dev_rtc_x1203_settime,
@@ -109,11 +109,11 @@ dev_map_t dev_rtc_x1203_map={
 };
 
 //
-#define __check_x1203_addr(addr)\
-( ((addr>=0x0000 && addr<=0x000F)\
-   ||(addr==0x0011)\
-   ||(addr>=0x0030 && addr<=0x0037)\
-   ||(addr==0x003F) ) ? 1 : 0 )
+#define __check_x1203_addr(addr) \
+   ( ((addr>=0x0000 && addr<=0x000F) \
+      ||(addr==0x0011) \
+      ||(addr>=0x0030 && addr<=0x0037) \
+      ||(addr==0x003F) ) ? 1 : 0 )
 
 
 //from netBSD
@@ -149,7 +149,7 @@ int dev_rtc_x1203_load(void){
 
    if (_l_kernel_if_i2c_master->fdev_read(__get_if_i2c_master_desc(),dev_rtc_x1203_buffer,1+4)<0)
       return -1;
-      
+
    return 0;
 }
 
@@ -162,7 +162,7 @@ int dev_rtc_x1203_load(void){
 | See:
 ---------------------------------------------*/
 int dev_rtc_x1203_isset_read(desc_t desc){
-  return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -187,16 +187,16 @@ int dev_rtc_x1203_isset_write(desc_t desc){
 ---------------------------------------------*/
 int dev_rtc_x1203_open(desc_t desc, int o_flag){
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
    }
 
    ofile_lst[desc].offset = 0;
    return 0;
 }
- 
+
 /*-------------------------------------------
 | Name:dev_rtc_x1203_close
 | Description:
@@ -221,25 +221,25 @@ int dev_rtc_x1203_read(desc_t desc, char* buf,int cb){
 
    fdev_map_t* _l_kernel_if_i2c_master = __get_if_i2c_master();
    int a;
-   
+
    //profiler
    __io_profiler_start(desc);
-   
+
    if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
-      return-1; //address out of range.
+      return -1;  //address out of range.
 
    memset(buf,0,cb);
-   for(a=0;a<cb;a++){
+   for(a=0; a<cb; a++) {
 
       if(!__check_x1203_addr(ofile_lst[desc].offset+a)) continue;
 
       dev_rtc_x1203_buffer[0] = dev_rtc_x1203_addr;
       dev_rtc_x1203_buffer[1] = 2;
-      dev_rtc_x1203_buffer[2] = (unsigned char) ((ofile_lst[desc].offset+a)>>8);//msb
-      dev_rtc_x1203_buffer[3] = (unsigned char) ofile_lst[desc].offset+a;//lsb
-      
+      dev_rtc_x1203_buffer[2] = (unsigned char) ((ofile_lst[desc].offset+a)>>8); //msb
+      dev_rtc_x1203_buffer[3] = (unsigned char) ofile_lst[desc].offset+a; //lsb
+
       if (_l_kernel_if_i2c_master->fdev_read(__get_if_i2c_master_desc(),dev_rtc_x1203_buffer,1+4)<0)
-      return -1;
+         return -1;
       /*if(_i2c_core_read(dev_rtc_x1203_addr,dev_rtc_x1203_buffer,(unsigned char)1,2)<0)
          continue;*/
 
@@ -271,33 +271,34 @@ int dev_rtc_x1203_write(desc_t desc, const char* buf,int cb){
 
    fdev_map_t* _l_kernel_if_i2c_master = __get_if_i2c_master();
    int a;
-   
+
    //profiler
    __io_profiler_start(desc);
 
    if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
-      return-1; //address out of range.
-   
-   for(a=0;a<cb;a++){
+      return -1;  //address out of range.
+
+   for(a=0; a<cb; a++) {
 
       if(!__check_x1203_addr(ofile_lst[desc].offset+a)) continue;
 
       dev_rtc_x1203_buffer[0] = dev_rtc_x1203_addr;
       dev_rtc_x1203_buffer[1] = 2;
-      dev_rtc_x1203_buffer[2] = (unsigned char) ((ofile_lst[desc].offset+a)>>8);//msb
-      dev_rtc_x1203_buffer[3] = (unsigned char) ofile_lst[desc].offset+a;//lsb
+      dev_rtc_x1203_buffer[2] = (unsigned char) ((ofile_lst[desc].offset+a)>>8); //msb
+      dev_rtc_x1203_buffer[3] = (unsigned char) ofile_lst[desc].offset+a; //lsb
 
       //data
       dev_rtc_x1203_buffer[4] = buf[a];
-      
-      if (_l_kernel_if_i2c_master->fdev_write(__get_if_i2c_master_desc(),dev_rtc_x1203_buffer,1+4)<0)
-      return -1;
+
+      if (_l_kernel_if_i2c_master->fdev_write(__get_if_i2c_master_desc(),dev_rtc_x1203_buffer,
+                                              1+4)<0)
+         return -1;
       /*
       if(_i2c_core_write(dev_rtc_x1203_addr,dev_rtc_x1203_buffer,(unsigned char)1,(unsigned char)2)<0)
          continue;
       */
 
-      
+
    }
 
    if((ofile_lst[desc].offset+cb)<DEV_RTCX1203_ADDR_LIMIT)
@@ -321,29 +322,29 @@ int dev_rtc_x1203_write(desc_t desc, const char* buf,int cb){
 | See:
 ---------------------------------------------*/
 int dev_rtc_x1203_seek(desc_t desc,int offset,int origin){
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
-            return-1; //address out of range.
+   case SEEK_SET:
+      if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
+         return -1;   //address out of range.
 
-         ofile_lst[desc].offset=offset;
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
-            return-1; //address out of range.
-         ofile_lst[desc].offset+=offset;
+   case SEEK_CUR:
+      if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
+         return -1;   //address out of range.
+      ofile_lst[desc].offset+=offset;
       break;
 
-      case SEEK_END:
-         //to do: warning in SEEK_END (+ or -)????
-         if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
-            return-1; //address out of range.
-         ofile_lst[desc].offset+=offset;
+   case SEEK_END:
+      //to do: warning in SEEK_END (+ or -)????
+      if(ofile_lst[desc].offset>DEV_RTCX1203_ADDR_LIMIT)
+         return -1;   //address out of range.
+      ofile_lst[desc].offset+=offset;
       break;
    }
-  
+
    //_i2c_core_seek(dev_rtc_x1203_addr,ofile_lst[desc].offset,2);
 
    return ofile_lst[desc].offset;
@@ -380,17 +381,17 @@ int dev_rtc_x1203_settime(desc_t desc,char* buf,int size){
 
    //write clock register
    dev_rtc_x1203_seek(desc,0x30,SEEK_SET);
-   bufw[0]=BIN_TO_BCD(buf[0]/*tm.tm_sec*/);
-   bufw[1]=BIN_TO_BCD(buf[1]/*tm.tm_min*/);
+   bufw[0]=BIN_TO_BCD(buf[0] /*tm.tm_sec*/);
+   bufw[1]=BIN_TO_BCD(buf[1] /*tm.tm_min*/);
 //   bufw[2]=BIN_TO_BCD(buf[2]/*tm.tm_hour*/)+0x80;
-   bufw[2]=BIN_TO_BCD(buf[2]/*tm.tm_hour*/);
-   bufw[3]=BIN_TO_BCD(buf[3]/*tm.tm_mday*/);
+   bufw[2]=BIN_TO_BCD(buf[2] /*tm.tm_hour*/);
+   bufw[3]=BIN_TO_BCD(buf[3] /*tm.tm_mday*/);
 
-   buf[4]++;//_tm.tm_mon++;
-   bufw[4]=BIN_TO_BCD(buf[4]/*tm.tm_mon*/);//m41t81 month:1..12
+   buf[4]++; //_tm.tm_mon++;
+   bufw[4]=BIN_TO_BCD(buf[4] /*tm.tm_mon*/); //m41t81 month:1..12
 
-   buf[5]%=100;//_tm.tm_year%=100;
-   bufw[5]=BIN_TO_BCD(buf[5]/*tm.tm_year*/);
+   buf[5]%=100; //_tm.tm_year%=100;
+   bufw[5]=BIN_TO_BCD(buf[5] /*tm.tm_year*/);
 //   dev_rtc_x1203_write(desc,bufw,8);
    dev_rtc_x1203_write(desc,bufw,8);
 
@@ -439,7 +440,7 @@ int dev_rtc_x1203_gettime(desc_t desc,char* buf,int size){
    bufr[3] &= 0x3F;
    buf[3] = BCD_TO_BIN(bufr[3]);
    bufr[4] &= 0x1F;
-   buf[4]  = (BCD_TO_BIN(bufr[4]));//_tm.tm_mon 0..11 posix see <time.h>
+   buf[4]  = (BCD_TO_BIN(bufr[4])); //_tm.tm_mon 0..11 posix see <time.h>
    buf[4]--;
    buf[5] = BCD_TO_BIN(bufr[5]);
    buf[5] += 100;

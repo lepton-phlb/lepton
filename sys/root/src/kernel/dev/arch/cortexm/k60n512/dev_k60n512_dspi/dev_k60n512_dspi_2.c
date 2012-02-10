@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -49,7 +49,8 @@ static int dev_k60n512_dspi_2_load(void);
 static int dev_k60n512_dspi_2_open(desc_t desc, int o_flag);
 
 extern int dev_k60n512_dspi_x_load(board_kinetis_dspi_info_t * kinetis_dspi_info);
-extern int dev_k60n512_dspi_x_open(desc_t desc, int o_flag, board_kinetis_dspi_info_t * kinetis_dspi_info);
+extern int dev_k60n512_dspi_x_open(desc_t desc, int o_flag,
+                                   board_kinetis_dspi_info_t * kinetis_dspi_info);
 extern int dev_k60n512_dspi_x_close(desc_t desc);
 extern int dev_k60n512_dspi_x_read(desc_t desc, char* buf,int cb);
 extern int dev_k60n512_dspi_x_write(desc_t desc, const char* buf,int cb);
@@ -72,8 +73,8 @@ dev_map_t dev_k60n512_dspi_2_map={
 };
 
 //
-#define KINETIS_DSPI2_VECTOR_PRIORITY		3
-#define KINETIS_DSPI2_IRQ            29//28
+#define KINETIS_DSPI2_VECTOR_PRIORITY           3
+#define KINETIS_DSPI2_IRQ            29 //28
 //#define KINETIS_DSPI0_VECTOR       44
 
 //
@@ -97,9 +98,9 @@ static board_kinetis_dspi_info_t kinetis_dspi_2 = {
    output_r : -1,
    output_w : -1,
    clk : KINETIS_DSPI2_SPEED,
-   clk_phase : SPI_CTAR_CLK_POL_PHA_MODE0,//SPI_CTAR_CLK_POL_PHA_MODE0,
+   clk_phase : SPI_CTAR_CLK_POL_PHA_MODE0, //SPI_CTAR_CLK_POL_PHA_MODE0,
    mode : SPI_MODE_MASTER,
-   cs : 0,//1,
+   cs : 0, //1,
    irq_handle : -1
 };
 
@@ -125,12 +126,12 @@ Implementation
 int dev_k60n512_dspi_2_load(void) {
    volatile unsigned int reg_val = 0;
    _kinetis_dspi2_configure_pins();
-   
+
    //enable clock gating (SIM->SCGC3 |= SIM_SCGC6_DSPI2_MASK)
    HAL_READ_UINT32(REG_SIM_SCGC3_ADDR, reg_val);
    reg_val |= REG_SIM_SCGC3_SPI2_MASK;
    HAL_WRITE_UINT32(REG_SIM_SCGC3_ADDR, reg_val);
-   
+
    return dev_k60n512_dspi_x_load(&kinetis_dspi_2);
 }
 

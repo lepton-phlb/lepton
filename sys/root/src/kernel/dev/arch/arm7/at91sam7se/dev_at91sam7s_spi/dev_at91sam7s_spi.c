@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -32,7 +32,7 @@ either the MPL or the [eCos GPL] License."
  */
 
 /**
- * \addtogroup hard_dev_arm7se 
+ * \addtogroup hard_dev_arm7se
  * @{
  *
  */
@@ -42,7 +42,7 @@ either the MPL or the [eCos GPL] License."
  * @{
  *
  * pilotes du périphérique spi.
- *    
+ *
  */
 
 
@@ -118,12 +118,12 @@ dev_map_t dev_at91sam7s_spi_map={
 
 #define  PCS_SPI_MR             0x00
 // Time between caract in DMA
-// #define  DLYBCT_SPI_CSR0        12     
+// #define  DLYBCT_SPI_CSR0        12
 
 //#define DMA_SPI_INT_RAM _Pragma ("location=\"INTRAMSTART_REMAP\"")
 
 #define  USE_BYTE_PER_BYTE_TRANSMISSION
-//#define  USE_DMA_TRANSMISSION          
+//#define  USE_DMA_TRANSMISSION
 //#define  USE_DMA_INTERUPT_TRANSMISSION
 
 //#if defined (USE_SEGGER)
@@ -131,13 +131,13 @@ OS_TIMER dev_at91sam7s_spi_timer;
 //#endif
 
 //termios
-static struct termios  ttys_termios;
-static int             dev_at91sam7s_spi_loaded = 0;
+static struct termios ttys_termios;
+static int dev_at91sam7s_spi_loaded = 0;
 
 static volatile desc_t spi_desc_rd = -1;   //O_RDONLY
 static volatile desc_t spi_desc_wr = -1;   //O_WRONLY
 
-static volatile short      spi_timeout;
+static volatile short spi_timeout;
 static void                dev_at91sam7s_spi_timer_callback(void);
 
 static char dummy_ff_block[SDCARD_BLOCK_SIZE];
@@ -165,13 +165,13 @@ static kernel_pthread_mutex_t s_spi_mutex;
 //#define __dev_spi_unlock()    pthread_mutex_unlock(&s_i2c_mutex)
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 
 /*-------------------------------------------
 | Name       : dev_at91sam7s_uart_sx_snd
 | Description: Send Data
-| Parameters : - 
+| Parameters : -
 | Return Type: None
 | Comments   : -
 | See        : -
@@ -180,29 +180,29 @@ void dev_at91sam7s_spi_snd ()
 {
 
 }
-                                   
+
 /*-------------------------------------------
 | Name       : dev_at91sam7s_uart_sx_rcv
 | Description: Receive Data
-| Parameters : - 
+| Parameters : -
 | Return Type: None
 | Comments   : -
 | See        : -
 ---------------------------------------------*/
 void dev_at91sam7s_spi_rcv ()
-{       
+{
 
-}                                   
-                                   
-                                   
+}
+
+
 /*--------------------------------------------
 | Name       : dev_at91sam7s_spi_interrupt
 | Description: Generic Interrupt function for
 |              reading/writing bytes
 | Parameters : descriptor  (desc_t)
 | Return Type: none
-| Comments   : -   
-| See        : -        
+| Comments   : -
+| See        : -
 ----------------------------------------------*/
 void dev_at91sam7s_spi_interrupt(void)
 {
@@ -220,7 +220,7 @@ void dev_at91sam7s_spi_interrupt(void)
 ---------------------------------------------*/
 static void  dev_at91sam7s_spi_timer_callback(void)
 {
-  spi_timeout = TIMEOUT_KO;
+   spi_timeout = TIMEOUT_KO;
 }
 
 /*-------------------------------------------
@@ -233,38 +233,38 @@ static void  dev_at91sam7s_spi_timer_callback(void)
 ---------------------------------------------*/
 int dev_at91sam7s_spi_load (void)
 {
-    int cpt;
-    
-    pthread_mutexattr_t  mutex_attr=0;
+   int cpt;
 
-    if(s_spi_io_init)
-     return 0;
+   pthread_mutexattr_t mutex_attr=0;
 
-    s_spi_io_init++;
+   if(s_spi_io_init)
+      return 0;
 
-    kernel_pthread_mutex_init(&s_spi_mutex, &mutex_attr);
+   s_spi_io_init++;
+
+   kernel_pthread_mutex_init(&s_spi_mutex, &mutex_attr);
 //pthread_mutex_init(&s_spi_mutex, &mutex_attr);
-    
+
    //already loaded?
    if (dev_at91sam7s_spi_loaded)
-      return 0;//yes
-   
+      return 0;  //yes
+
    // initialization
    for (cpt=0; cpt < SDCARD_BLOCK_SIZE; cpt++)
    {
-     dummy_ff_block[cpt]=0xff;
+      dummy_ff_block[cpt]=0xff;
    }
-   
+
    // to remove...
    cfmakeraw   (&ttys_termios);
    cfsetispeed (&ttys_termios, B9600);
    cfsetospeed (&ttys_termios, B9600);
-   
+
    dev_at91sam7s_spi_loaded = 1; // loaded
-  
+
    OS_CreateTimer (&dev_at91sam7s_spi_timer,
                    dev_at91sam7s_spi_timer_callback,
-                   10);  // delay * ms   
+                   10);  // delay * ms
    return 0;
 }
 
@@ -278,80 +278,80 @@ int dev_at91sam7s_spi_load (void)
 ---------------------------------------------*/
 int dev_at91sam7s_spi_open(desc_t desc, int o_flag)
 {
-   // Enable peripheral clock for selected USART 
+   // Enable peripheral clock for selected USART
    *AT91C_PMC_PCER   = 1 << AT91C_ID_SPI;
 
    // Enable peripheral clock for selected PIOA/B
-   *AT91C_PMC_PCER   = 1 << AT91C_ID_PIOA;//GPIO clock enable
-   *AT91C_PMC_PCER   = 1 << AT91C_ID_PIOB;//GPIO clock enable
-   
+   *AT91C_PMC_PCER   = 1 << AT91C_ID_PIOA; //GPIO clock enable
+   *AT91C_PMC_PCER   = 1 << AT91C_ID_PIOB; //GPIO clock enable
+
    // Enable Write Enable and SD card presence
    *AT91C_PIOB_PER   = (1<<21);   // Write Enable on PB21
    *AT91C_PIOB_MDDR  = (1<<21);   // Write Enable disable open drain
    *AT91C_PIOB_PER   = (1<<22);   // SD Card presence on PB22
-   *AT91C_PIOB_MDDR  = (1<<22);   // SD Card disable open drain      
+   *AT91C_PIOB_MDDR  = (1<<22);   // SD Card disable open drain
    *AT91C_PIOB_ODR   = (1<<21);  //  Input only
    *AT91C_PIOB_ODR   = (1<<22);  //  Input only
-      
+
    // Enable Chip Select line /GPIO on NPCS0 PA11
    *AT91C_PIOA_PER   = (1<<11);   // Write Enable on PA111
    *AT91C_PIOA_MDDR  = (1<<11);   // Write Enable disable open drain
    *AT91C_PIOA_OER   = (1<<11);   // Enable Output on the I/O line
-   *AT91C_PIOA_OWER  = (1<<11);	  // Port A all ODSR enabled    
+   *AT91C_PIOA_OWER  = (1<<11);   // Port A all ODSR enabled
    *AT91C_PIOA_SODR  = (1<<11);   //=1 => set CS
-   
+
    // Setup PIO pins for SPI interface
    // Disable PIO control of PA11/NPCS0, PA12/MISO, PA13/MOSI, PA14/SPCK
    *AT91C_PIOA_PDR = ( (1<<12)|
                        (1<<13)|
                        (1<<14) );
- 
+
    // Enable I/O peripheral mode A
    *AT91C_PIOA_ASR = ( (1<<12)|
                        (1<<13)|
                        (1<<14) );
-   
-   *AT91C_SPI_CR  = AT91C_SPI_SWRST; // Software reset          
+
+   *AT91C_SPI_CR  = AT91C_SPI_SWRST; // Software reset
    *AT91C_SPI_CR  = AT91C_SPI_SPIEN; // enable the SPI to transfer and receive data
    *AT91C_SPI_IDR = 0xffffffff;      // Disable all SPI interrupts.
-   
+
    // Set master mode with:
    *AT91C_SPI_MR  =   AT91C_SPI_MSTR     |  // SPI MASTER
-                      AT91C_SPI_PS_FIXED |  // Fixed peripheral Select
-                      AT91C_SPI_MODFDIS  |  // No mode fault
-                      (PCS_SPI_MR << 16);                       
-      
+                    AT91C_SPI_PS_FIXED |    // Fixed peripheral Select
+                    AT91C_SPI_MODFDIS  |    // No mode fault
+                    (PCS_SPI_MR << 16);
+
    // Setup data transfer format and rate for device 0 => 8 bits, CPOL=0, NCPHA=1
    *AT91C_SPI_CSR  =  //AT91C_SPI_CPOL |
-                      AT91C_SPI_NCPHA    |  
-                      AT91C_SPI_BITS_8   |
-                      AT91C_SPI_DLYBS  | // Maximum 0xff
+                     AT91C_SPI_NCPHA    |
+                     AT91C_SPI_BITS_8   |
+                     AT91C_SPI_DLYBS  |  // Maximum 0xff
 #ifdef USE_DMA_TRANSMISSION
                      (DLYBCT_SPI_CSR0 << 24) |
-#endif                        
-                      (SPI_SCKDIV_ARM7 << 8);
-                           
+#endif
+                     (SPI_SCKDIV_ARM7 << 8);
+
    *AT91C_AIC_ICCR = (1 << AT91C_ID_SPI); // Clears spi interrupt.
    // *AT91C_AIC_IECR = (1 << AT91C_ID_TWI); // Enable twi interrupt.
-       
+
    // twi interrupt vector.
-   // AT91C_AIC_SVR[AT91C_ID_SPI] = (unsigned long)&dev_at91sam7s_spi_interrupt; 
+   // AT91C_AIC_SVR[AT91C_ID_SPI] = (unsigned long)&dev_at91sam7s_spi_interrupt;
 
    // SRCTYPE=3, PRIOR=3. TWI 0 interrupt positive edge-triggered at prio 3.
-   // AT91C_AIC_SMR[AT91C_ID_SPI] = 0x63; 
+   // AT91C_AIC_SMR[AT91C_ID_SPI] = 0x63;
 #ifdef USE_DMA_TRANSMISSION
    // disable DMA
-  *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS; 
-  *AT91C_SPI_PTCR = AT91C_PDC_RXTDIS;
-    // enable DMA transfer
-  *AT91C_SPI_PTCR = AT91C_PDC_RXTEN;
-  *AT91C_SPI_PTCR = AT91C_PDC_TXTEN;   // enable DMA transfer TX
-#endif                      
+   *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS;
+   *AT91C_SPI_PTCR = AT91C_PDC_RXTDIS;
+   // enable DMA transfer
+   *AT91C_SPI_PTCR = AT91C_PDC_RXTEN;
+   *AT91C_SPI_PTCR = AT91C_PDC_TXTEN;  // enable DMA transfer TX
+#endif
    //
    if(o_flag & O_RDONLY)
    {
-      // initializations 
-      spi_desc_rd = desc;   //O_RDONLY         
+      // initializations
+      spi_desc_rd = desc;   //O_RDONLY
    }
 
    //
@@ -359,10 +359,10 @@ int dev_at91sam7s_spi_open(desc_t desc, int o_flag)
    {
       spi_desc_wr = desc;   //O_WRONLY
    }
-      
+
    return 0;
 }
- 
+
 /*-------------------------------------------
 | Name:dev_at91sam7s_spi_close
 | Description:
@@ -396,63 +396,63 @@ int dev_at91sam7s_spi_seek(desc_t desc,int offset,int origin){
 | Comments:
 | See:
 ---------------------------------------------*/
-static short at91_spi_poll_status (unsigned long bit, unsigned int delay) 
+static short at91_spi_poll_status (unsigned long bit, unsigned int delay)
 {
-  spi_timeout = TIMEOUT_OK;
+   spi_timeout = TIMEOUT_OK;
 
-  OS_SetTimerPeriod (&dev_at91sam7s_spi_timer, delay);  
-  OS_StartTimer     (&dev_at91sam7s_spi_timer);
-  
-  while (!(*AT91C_SPI_SR & bit) && (spi_timeout != TIMEOUT_KO ));
-    
-  OS_StopTimer(&dev_at91sam7s_spi_timer);
-  
-  return (spi_timeout);
+   OS_SetTimerPeriod (&dev_at91sam7s_spi_timer, delay);
+   OS_StartTimer     (&dev_at91sam7s_spi_timer);
+
+   while (!(*AT91C_SPI_SR & bit) && (spi_timeout != TIMEOUT_KO )) ;
+
+   OS_StopTimer(&dev_at91sam7s_spi_timer);
+
+   return (spi_timeout);
 }
 
 
-static void dev_at91sam7s_spi_dma_read_write (int         oper_type, 
-                                              const char *buf, 
-                                              int         size)
-{  
-  unsigned char c;
-  
- do 
- {
-    c = *AT91C_SPI_RDR;
- } while ((*AT91C_SPI_SR & AT91C_SPI_RDRF));
-    
-  // READ Or WRITE Operation
-  switch (oper_type)
-  {
-    case WRITE_DMA:
-        *AT91C_SPI_TPR  = (unsigned long)buf;
-        *AT91C_SPI_RPR  = (unsigned long)buf_recv; // trash beware
-        break;
-    case READ_DMA:
+static void dev_at91sam7s_spi_dma_read_write (int oper_type,
+                                              const char *buf,
+                                              int size)
+{
+   unsigned char c;
+
+   do
+   {
+      c = *AT91C_SPI_RDR;
+   } while ((*AT91C_SPI_SR & AT91C_SPI_RDRF));
+
+   // READ Or WRITE Operation
+   switch (oper_type)
+   {
+   case WRITE_DMA:
+      *AT91C_SPI_TPR  = (unsigned long)buf;
+      *AT91C_SPI_RPR  = (unsigned long)buf_recv;   // trash beware
+      break;
+   case READ_DMA:
       *AT91C_SPI_RPR = (unsigned long)buf;
       *AT91C_SPI_TPR = (unsigned long)dummy_ff_block; // 0xFF array
-        break;
-  }    
-  
-  *AT91C_SPI_TCR = size; // Common sizes
-  *AT91C_SPI_RCR = size;
- 
-  // enable DMA transfer
-  *AT91C_SPI_PTCR = AT91C_PDC_TXTEN;   // enable DMA transfer TX
-  *AT91C_SPI_PTCR = AT91C_PDC_RXTEN;
-   
-   while ( !(*AT91C_SPI_SR & AT91C_SPI_RXBUFF) ); 
-   while ( !(*AT91C_SPI_SR & AT91C_SPI_TXBUFE));
- 
+      break;
+   }
+
+   *AT91C_SPI_TCR = size; // Common sizes
+   *AT91C_SPI_RCR = size;
+
+   // enable DMA transfer
+   *AT91C_SPI_PTCR = AT91C_PDC_TXTEN;  // enable DMA transfer TX
+   *AT91C_SPI_PTCR = AT91C_PDC_RXTEN;
+
+   while ( !(*AT91C_SPI_SR & AT91C_SPI_RXBUFF) ) ;
+   while ( !(*AT91C_SPI_SR & AT91C_SPI_TXBUFE)) ;
+
 //while (!(*AT91C_SPI_SR & AT91C_SPI_ENDRX) );
 //while (!(*AT91C_SPI_SR & AT91C_SPI_ENDTX));
 
    //c = *AT91C_SPI_RDR;
-   
-  // disable DMA
-  *AT91C_SPI_PTCR = AT91C_PDC_RXTDIS;
-  *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS;    
+
+   // disable DMA
+   *AT91C_SPI_PTCR = AT91C_PDC_RXTDIS;
+   *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS;
 }
 
 /*-------------------------------------------
@@ -466,110 +466,110 @@ static void dev_at91sam7s_spi_dma_read_write (int         oper_type,
 ---------------------------------------------*/
 int dev_at91sam7s_spi_read(desc_t desc, char* buf, int size)
 {
-  int           cpt,i=0;
-  unsigned char c;
-  // test if size > max (ACU) and zero
-  
-  // if (size ==0) return (-1);
-  
-  __dev_spi_lock();
- 
+   int cpt,i=0;
+   unsigned char c;
+   // test if size > max (ACU) and zero
 
-#ifdef USE_DMA_TRANSMISSION  
-  // enable DMA transfer
+   // if (size ==0) return (-1);
+
+   __dev_spi_lock();
+
+
+#ifdef USE_DMA_TRANSMISSION
+   // enable DMA transfer
    *AT91C_SPI_PTCR = AT91C_PDC_RXTEN;
    *AT91C_SPI_PTCR = AT91C_PDC_TXTEN;   // enable DMA transfer TX
- 
+
    // initialisation
    // clear register courant
-  *AT91C_SPI_RPR = (unsigned int)0;
-  *AT91C_SPI_TPR = (unsigned int)0; // 0xFF array 
-  *AT91C_SPI_TCR = 0; // Common sizes
-  *AT91C_SPI_RCR = 0;
-   
-  // clear register next
+   *AT91C_SPI_RPR = (unsigned int)0;
+   *AT91C_SPI_TPR = (unsigned int)0; // 0xFF array
+   *AT91C_SPI_TCR = 0; // Common sizes
+   *AT91C_SPI_RCR = 0;
+
+   // clear register next
    *AT91C_SPI_RNPR = (unsigned int)0;
-   *AT91C_SPI_TNPR = (unsigned int)0; // 0xFF array 
+   *AT91C_SPI_TNPR = (unsigned int)0; // 0xFF array
    *AT91C_SPI_TNCR = 0; // Common sizes
-   *AT91C_SPI_RNCR = 0;           
+   *AT91C_SPI_RNCR = 0;
    // for (i=0;i < size;i++) buf_recv[i]= 0x00; // initialization
- 
-   // wait for receive ready  
-   do 
+
+   // wait for receive ready
+   do
    {
-     c = *AT91C_SPI_RDR;
+      c = *AT91C_SPI_RDR;
    } while ((*AT91C_SPI_SR & AT91C_SPI_RDRF));
- //  
- while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)); // + timeout ACU  
- 
-  // courant
-  *AT91C_SPI_RPR = (unsigned int)buf;
-  *AT91C_SPI_TPR = (unsigned int)dummy_ff_block; // 0xFF array
-  *AT91C_SPI_RCR = size;
-  *AT91C_SPI_TCR = size; // Common sizes
-  
-  // Next pointer
+   //
+   while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)) ;  // + timeout ACU
+
+   // courant
+   *AT91C_SPI_RPR = (unsigned int)buf;
+   *AT91C_SPI_TPR = (unsigned int)dummy_ff_block; // 0xFF array
+   *AT91C_SPI_RCR = size;
+   *AT91C_SPI_TCR = size; // Common sizes
+
+   // Next pointer
 //  *AT91C_SPI_RNPR = (unsigned int)buf_recv;
-//  *AT91C_SPI_TNPR = (unsigned int)dummy_ff_block; // 0xFF array  
+//  *AT91C_SPI_TNPR = (unsigned int)dummy_ff_block; // 0xFF array
 //  *AT91C_SPI_TNCR = dma_size_buff; // Common sizes
 //  *AT91C_SPI_RNCR = dma_size_buff;
-  
+
 //while (!(*AT91C_SPI_SR & AT91C_SPI_ENDTX));
-//while ( !(*AT91C_SPI_SR & AT91C_SPI_TXBUFE)); 
+//while ( !(*AT91C_SPI_SR & AT91C_SPI_TXBUFE));
 //while ((*AT91C_SPI_TNCR) || (*AT91C_SPI_TCR));
-   while (*AT91C_SPI_TNCR);
-       
-  //while (*AT91C_SPI_TCR);
-  // *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS; 
-   
+   while (*AT91C_SPI_TNCR) ;
+
+   //while (*AT91C_SPI_TCR);
+   // *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS;
+
 //  if ((*AT91C_SPI_SR & AT91C_SPI_OVRES))
 //  {
 //    return (-1);
 //  }
-    
-  //while (!(*AT91C_SPI_SR & AT91C_SPI_ENDRX) );
-  //while ( !(*AT91C_SPI_SR & AT91C_SPI_RXBUFF) );  
-  //while (*AT91C_SPI_RCR);
- // while ((*AT91C_SPI_RNCR) || (*AT91C_SPI_TCR));
- 
-  while (*AT91C_SPI_RNCR);
-   
+
+   //while (!(*AT91C_SPI_SR & AT91C_SPI_ENDRX) );
+   //while ( !(*AT91C_SPI_SR & AT91C_SPI_RXBUFF) );
+   //while (*AT91C_SPI_RCR);
+   // while ((*AT91C_SPI_RNCR) || (*AT91C_SPI_TCR));
+
+   while (*AT91C_SPI_RNCR) ;
+
 //  *AT91C_SPI_RPR = (unsigned int)0;
-//  *AT91C_SPI_TPR = (unsigned int)0; // 0xFF array 
+//  *AT91C_SPI_TPR = (unsigned int)0; // 0xFF array
 //  *AT91C_SPI_TCR = 0; // Common sizes
 //  *AT91C_SPI_RCR = 0;
-     
+
 //  memcpy (buf,(const *)&buf_recv[0],dma_size_buff);
-     
-  *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS;
-  *AT91C_SPI_PTCR = AT91C_PDC_RXTDIS;
-  
-   //dev_at91sam7s_spi_dma_read_write(READ_DMA, buf, size);                        
+
+   *AT91C_SPI_PTCR = AT91C_PDC_TXTDIS;
+   *AT91C_SPI_PTCR = AT91C_PDC_RXTDIS;
+
+   //dev_at91sam7s_spi_dma_read_write(READ_DMA, buf, size);
 #endif
 
-  
-#ifdef USE_BYTE_PER_BYTE_TRANSMISSION   
-    // wait for receive ready      
-    do 
-    {
-       c = *AT91C_SPI_RDR;
-    } while ((*AT91C_SPI_SR & AT91C_SPI_RDRF));
-             
+
+#ifdef USE_BYTE_PER_BYTE_TRANSMISSION
+   // wait for receive ready
+   do
+   {
+      c = *AT91C_SPI_RDR;
+   } while ((*AT91C_SPI_SR & AT91C_SPI_RDRF));
+
    // Receive the data block into buffer (byte per byte)
    for (cpt=0; cpt < size; cpt++)
-   {	      
-      while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)); // + timeout ACU
+   {
+      while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)) ;  // + timeout ACU
       *AT91C_SPI_TDR = 0xff;
 
       // wait for completion
-      while (!(*AT91C_SPI_SR & AT91C_SPI_RDRF)); // + timeout ACU     
+      while (!(*AT91C_SPI_SR & AT91C_SPI_RDRF)) ;  // + timeout ACU
       buf[cpt] = *AT91C_SPI_RDR;
-   }   
+   }
 #endif
-  
+
    __dev_spi_unlock();
-   
-    return size;
+
+   return size;
 }
 
 
@@ -578,43 +578,43 @@ int dev_at91sam7s_spi_read(desc_t desc, char* buf, int size)
 | Description:
 | Parameters : desc : descriptor
 |              buf  : buffer (data + header)
-|              size : dada size + header size              
+|              size : dada size + header size
 |
 | Return Type:
 | Comments   : -
 | See        : -
 ---------------------------------------------*/
 int dev_at91sam7s_spi_write (desc_t desc, const char* buf, int size)
-{   
-  int cpt;
-  unsigned char c;
-  // verify maximum size of data
-  
-  __dev_spi_lock();
-  
-#ifdef USE_DMA_TRANSMISSION   
-     while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)); // + timeout ACU    
-    dev_at91sam7s_spi_dma_read_write(WRITE_DMA, buf, size);
-   
+{
+   int cpt;
+   unsigned char c;
+   // verify maximum size of data
+
+   __dev_spi_lock();
+
+#ifdef USE_DMA_TRANSMISSION
+   while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)) ;  // + timeout ACU
+   dev_at91sam7s_spi_dma_read_write(WRITE_DMA, buf, size);
+
 #endif
-   
-#ifdef USE_BYTE_PER_BYTE_TRANSMISSION 
+
+#ifdef USE_BYTE_PER_BYTE_TRANSMISSION
    // Write data to be transmit
    for (cpt=0; cpt <size; cpt++)
-   {     
+   {
       // wait for transmit completion/ready
-     while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)); // + timeout ACU     
-     *AT91C_SPI_TDR = buf[cpt];
+      while (!(*AT91C_SPI_SR & AT91C_SPI_TDRE)) ;  // + timeout ACU
+      *AT91C_SPI_TDR = buf[cpt];
 
-     // wait for completion
-     while (!(*AT91C_SPI_SR & AT91C_SPI_RDRF)); // + timeout ACU      
-     c=*AT91C_SPI_RDR;     //  read RDR here
-   }  
+      // wait for completion
+      while (!(*AT91C_SPI_SR & AT91C_SPI_RDRF)) ;  // + timeout ACU
+      c=*AT91C_SPI_RDR;    //  read RDR here
+   }
 #endif
-   
-  __dev_spi_unlock();
-   
-  return (size);
+
+   __dev_spi_unlock();
+
+   return (size);
 }
 
 /** @} */

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -37,14 +37,14 @@ either the MPL or the [eCos GPL] License."
 
 
 #if defined(GNU_GCC)
-#include <stdlib.h>
+   #include <stdlib.h>
 #endif
 /*============================================
 | Global Declaration
 ==============================================*/
 #define va_strt      va_start
 
-#define __KERNEL_OBJECT_ID_LIMIT 512//2^N
+#define __KERNEL_OBJECT_ID_LIMIT 512 //2^N
 
 static unsigned char kernel_object_id_vector[(__KERNEL_OBJECT_ID_LIMIT/8)+1]={0};
 
@@ -53,9 +53,9 @@ typedef int (*pfn_kernel_object_destructor_t)(kernel_object_t* p);
 
 static kernel_object_t*  kernel_object_pool_head = (kernel_object_t*)0;
 
-typedef struct kernel_object_op_st{
-   pfn_kernel_object_constructor_t  kernel_object_constructor;
-   pfn_kernel_object_destructor_t   kernel_object_destructor;
+typedef struct kernel_object_op_st {
+   pfn_kernel_object_constructor_t kernel_object_constructor;
+   pfn_kernel_object_destructor_t kernel_object_destructor;
 }kernel_object_op_t;
 
 //
@@ -119,9 +119,10 @@ int kernel_object_destructor_null(kernel_object_t* p){
 ----------------------------------------------*/
 int kernel_object_constructor_pthread_mutex(kernel_object_t* p,va_list ap){
 
-   pthread_mutexattr_t  mutex_attr=0;
+   pthread_mutexattr_t mutex_attr=0;
 
-   if(kernel_pthread_mutex_init(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,&mutex_attr)<0)
+   if(kernel_pthread_mutex_init(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,
+                                &mutex_attr)<0)
       return -1;
 
    p->type = KERNEL_OBJECT_PTRHEAD_MUTEX;
@@ -143,10 +144,11 @@ int kernel_object_destructor_pthread_mutex(kernel_object_t* p){
    if(kernel_pthread_mutex_destroy(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex)<0)
       return -1;
 
-   #ifndef CPU_M16C62
-   p->type = KERNEL_OBJECT_FREE;//could be reused for any kernel object type
-   memset(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,0,sizeof(kernel_pthread_mutex_t));
-   #endif
+#ifndef CPU_M16C62
+   p->type = KERNEL_OBJECT_FREE; //could be reused for any kernel object type
+   memset(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,0,
+          sizeof(kernel_pthread_mutex_t));
+#endif
 
    return 0;
 }
@@ -166,7 +168,8 @@ int kernel_object_constructor_sem(kernel_object_t* p,va_list ap){
    //
    p->object.kernel_object_sem.init_count = init_count;
    //
-   if(kernel_sem_init(&p->object.kernel_object_sem.kernel_sem,0,p->object.kernel_object_sem.init_count)<0)
+   if(kernel_sem_init(&p->object.kernel_object_sem.kernel_sem,0,
+                      p->object.kernel_object_sem.init_count)<0)
       return -1;
    //
    p->type = KERNEL_OBJECT_SEM;
@@ -187,7 +190,7 @@ int kernel_object_destructor_sem(kernel_object_t* p){
    //
    memset(&p->object.kernel_object_sem.kernel_sem,0,sizeof(kernel_sem_t));
    //
-   p->type = KERNEL_OBJECT_FREE;//could be reused for any kernel object type
+   p->type = KERNEL_OBJECT_FREE; //could be reused for any kernel object type
    return 0;
 }
 
@@ -201,7 +204,7 @@ int kernel_object_destructor_sem(kernel_object_t* p){
 ----------------------------------------------*/
 int kernel_object_constructor_timer(kernel_object_t* p,va_list ap){
 
-   clockid_t   clockid;
+   clockid_t clockid;
    struct sigevent* psigevent;
    timer_t*    ptimerid;
 
@@ -235,44 +238,44 @@ int kernel_object_constructor_timer(kernel_object_t* p,va_list ap){
 int kernel_object_destructor_timer(kernel_object_t* p){
    if(kernel_timer_delete(&p->object.kernel_object_timer.kernel_timer)<0)
       return -1;
-   p->type = KERNEL_OBJECT_FREE;//could be reused for any kernel object type
+   p->type = KERNEL_OBJECT_FREE; //could be reused for any kernel object type
    return 0;
 }
 
 /*--------------------------------------------
 | Name:        kernel_object_get_id
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 kernel_object_id_t kernel_object_get_id(void){
    int byte;
    unsigned char bits;
 
-   for(byte=0;byte<((__KERNEL_OBJECT_ID_LIMIT)/8);byte++){
+   for(byte=0; byte<((__KERNEL_OBJECT_ID_LIMIT)/8); byte++) {
       if(kernel_object_id_vector[byte]==0x00) continue;
 
-      for(bits=0;bits<8;bits++){
+      for(bits=0; bits<8; bits++) {
          unsigned char msk=(0x01<<bits);
          if(!(kernel_object_id_vector[byte]&msk) )
             continue;
          kernel_object_id_vector[byte]&=(~msk);
          return (kernel_object_id_t)((byte<<3)+bits);
-      }  
+      }
    }
-      
-   return -1;   
+
+   return -1;
 }
 
 /*--------------------------------------------
 | Name:        kernel_object_put_id
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void kernel_object_put_id(kernel_object_id_t id){
    int byte = id>>3;
@@ -283,7 +286,7 @@ void kernel_object_put_id(kernel_object_id_t id){
       return;
 
    kernel_object_id_vector[byte]|=msk;
-} 
+}
 
 /*--------------------------------------------
 | Name:        kernel_object_alloc
@@ -296,17 +299,17 @@ void kernel_object_put_id(kernel_object_id_t id){
 kernel_object_t* kernel_object_alloc(kernel_object_type_t type){
    kernel_object_t* p;
 
-   switch(type){
-      case KERNEL_OBJECT_FREE:
-      case KERNEL_OBJECT_PTRHEAD_MUTEX:
-      case KERNEL_OBJECT_SEM:
-      case KERNEL_OBJECT_TIMER:
-      case KERNEL_OBJECT_PIPE:
+   switch(type) {
+   case KERNEL_OBJECT_FREE:
+   case KERNEL_OBJECT_PTRHEAD_MUTEX:
+   case KERNEL_OBJECT_SEM:
+   case KERNEL_OBJECT_TIMER:
+   case KERNEL_OBJECT_PIPE:
       if( !(p = (kernel_object_t*)malloc(sizeof(kernel_object_t))) )
          return (kernel_object_t*)0;
       break;
 
-      default:
+   default:
       return (kernel_object_t*)0;
    }
 
@@ -406,8 +409,8 @@ kernel_object_t* kernel_object_pool_put(kernel_object_t* p){
 kernel_object_t* kernel_object_pool_get(kernel_object_type_t type){
    kernel_object_t* p = kernel_object_pool_head;
 
-   while(p){
-      if(p->type==KERNEL_OBJECT_FREE || p->type==type){
+   while(p) {
+      if(p->type==KERNEL_OBJECT_FREE || p->type==type) {
          //remove from kernel object pool list
          kernel_object_pool_head=kernel_object_remove(kernel_object_pool_head,p);
          return p;
@@ -423,15 +426,15 @@ kernel_object_t* kernel_object_pool_get(kernel_object_type_t type){
 | Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int kernel_object_manager_pool(int kernel_object_no){
    kernel_object_t* p;
 
    memset(kernel_object_id_vector,0xff,(__KERNEL_OBJECT_ID_LIMIT/8));
 
-   for(;kernel_object_no>0;kernel_object_no--){
+   for(; kernel_object_no>0; kernel_object_no--) {
       if( !(p = kernel_object_alloc(KERNEL_OBJECT_FREE)) )
          return -1;
 
@@ -450,27 +453,27 @@ int kernel_object_manager_pool(int kernel_object_no){
 | Comments:
 | See:
 ----------------------------------------------*/
-kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head, 
+kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head,
                                            kernel_object_type_t type,
-                                           kernel_object_src_t  src, ...){
+                                           kernel_object_src_t src, ...){
    va_list ptr;
    kernel_object_t* p=(kernel_object_t*)0;
 
    //
    va_strt(ptr, src);
    //
-   if(src!=KERNEL_OBJECT_SRC_POOL){
+   if(src!=KERNEL_OBJECT_SRC_POOL) {
       p=va_arg(ptr,kernel_object_t*);
       memset(p,0,sizeof(kernel_object_t));
       p->src=src;
-   }else if( !(p=kernel_object_pool_get(type)) ){
-      if( !(p=kernel_object_alloc(type)) ){
-         return (kernel_object_t*)0;//kernel panic not enough space in heap
+   }else if( !(p=kernel_object_pool_get(type)) ) {
+      if( !(p=kernel_object_alloc(type)) ) {
+         return (kernel_object_t*)0; //kernel panic not enough space in heap
       }
    }
    //
-   if(kernel_object_op[type].kernel_object_constructor){
-      if(kernel_object_op[type].kernel_object_constructor(p,ptr)<0){
+   if(kernel_object_op[type].kernel_object_constructor) {
+      if(kernel_object_op[type].kernel_object_constructor(p,ptr)<0) {
          va_end(ptr);
          return (kernel_object_t*)0;
       }
@@ -480,7 +483,7 @@ kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_he
 
    //
    p->id = kernel_object_get_id();
-   
+
    //
    *pp_kernel_object_head= kernel_object_insert(*pp_kernel_object_head,p);
 
@@ -496,7 +499,8 @@ kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_he
 | Comments:
 | See:
 ----------------------------------------------*/
-kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,kernel_object_t* p){
+kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,
+                                           kernel_object_t* p){
    *pp_kernel_object_head = kernel_object_remove(*pp_kernel_object_head,p);
 
    if(kernel_object_op[p->type].kernel_object_destructor)
@@ -507,8 +511,8 @@ kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_he
 
    //
    if(p->src!=KERNEL_OBJECT_SRC_POOL)
-      return *pp_kernel_object_head;//kernel objet not come from pool.
-   
+      return *pp_kernel_object_head;  //kernel objet not come from pool.
+
    if(!kernel_object_pool_put(p))
       return (kernel_object_t*)0;
 
@@ -525,7 +529,7 @@ kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_he
 ----------------------------------------------*/
 kernel_object_t* kernel_object_manager_put_all(kernel_object_t** pp_kernel_object_head){
 
-   while(*pp_kernel_object_head){
+   while(*pp_kernel_object_head) {
       kernel_object_t* p = *pp_kernel_object_head;
       *pp_kernel_object_head=kernel_object_manager_put(pp_kernel_object_head,p);
    }

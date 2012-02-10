@@ -40,10 +40,10 @@
 //#####DESCRIPTIONBEGIN####
 //
 // Author(s):   jjp
-// Contributors: 
+// Contributors:
 // Date:        2009-01-19
 // Purpose:     Atmel AT91SAM9260 board specific registers
-// Description: 
+// Description:
 // Usage:       #include <cyg/hal/plf_io.h>
 //
 //####DESCRIPTIONEND####
@@ -54,10 +54,10 @@
 #define CYGARC_PHYSICAL_ADDRESS(_x_)
 
 #ifndef __ASSEMBLER__
-#ifdef CYGBLD_HAL_ARM_AT91SAM9261_BAUD_DYNAMIC
+   #ifdef CYGBLD_HAL_ARM_AT91SAM9261_BAUD_DYNAMIC
 extern cyg_uint32 hal_at91sam9261_us_baud(cyg_uint32 baud_rate)
-#define AT91_US_BAUD(baud) hal_at91sam9261_us_baud(baud)
-#endif
+      #define AT91_US_BAUD(baud) hal_at91sam9261_us_baud(baud)
+   #endif
 #endif // __ASSEMBLER__
 
 //----------------------------------------------------------------------
@@ -65,9 +65,9 @@ extern cyg_uint32 hal_at91sam9261_us_baud(cyg_uint32 baud_rate)
 // hal_hardware_init() function in the varient HAL.
 #ifndef __ASSEMBLER__
 extern void hal_plf_hardware_init(void);
-#define HAL_PLF_HARDWARE_INIT() \
-    hal_plf_hardware_init()
-#endif          
+   #define HAL_PLF_HARDWARE_INIT() \
+   hal_plf_hardware_init()
+#endif
 
 
 

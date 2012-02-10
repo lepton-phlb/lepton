@@ -41,9 +41,9 @@
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadIDCode(void)
 {
-	register unsigned int id;
- 	__asm("MRC p15, 0, %0, c0, c0, 0\n" : "=r" (id));
- 	return id;
+   register unsigned int id;
+   __asm("MRC p15, 0, %0, c0, c0, 0\n" : "=r" (id));
+   return id;
 }
 
 //*----------------------------------------------------------------------------
@@ -52,14 +52,14 @@ __inline static unsigned int AT91F_ARM_ReadIDCode(void)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadCacheType(void)
 {
-	register unsigned int type;
- 	__asm("MRC p15, 0, %0, c0, c0, 1\n" : "=r" (type));
- 	return type;
+   register unsigned int type;
+   __asm("MRC p15, 0, %0, c0, c0, 1\n" : "=r" (type));
+   return type;
 }
 
 // ****************************************************************************
 // CP15 Register 1
-// 	Read: Control
+//      Read: Control
 //	Write: Control
 
 //*----------------------------------------------------------------------------
@@ -68,9 +68,9 @@ __inline static unsigned int AT91F_ARM_ReadCacheType(void)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadControl(void)
 {
-	register unsigned int ctl;
- 	__asm("MRC p15, 0, %0, c1, c0, 0\n" : "=r" (ctl));
- 	return ctl;
+   register unsigned int ctl;
+   __asm("MRC p15, 0, %0, c1, c0, 0\n" : "=r" (ctl));
+   return ctl;
 }
 
 //*----------------------------------------------------------------------------
@@ -79,12 +79,12 @@ __inline static unsigned int AT91F_ARM_ReadControl(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteControl(unsigned int ctl)
 {
- 	__asm("MCR p15, 0, %0, c1, c0, 0\n" : : "r" (ctl));
+   __asm("MCR p15, 0, %0, c1, c0, 0\n" : : "r" (ctl));
 }
 
 // ****************************************************************************
 // CP15 Register 2
-// 	Read: Translation table Base
+//      Read: Translation table Base
 //	Write: Translation table Base
 
 //*----------------------------------------------------------------------------
@@ -93,9 +93,9 @@ __inline static void AT91F_ARM_WriteControl(unsigned int ctl)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadTTB(void)
 {
-	register unsigned int ttb;
- 	__asm("MRC p15, 0, %0, c2, c0, 0\n" : "=r" (ttb));
- 	return ttb;
+   register unsigned int ttb;
+   __asm("MRC p15, 0, %0, c2, c0, 0\n" : "=r" (ttb));
+   return ttb;
 }
 
 //*----------------------------------------------------------------------------
@@ -104,12 +104,12 @@ __inline static unsigned int AT91F_ARM_ReadTTB(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteTTB(unsigned int ttb)
 {
- 	__asm("MCR p15, 0, %0, c2, c0, 0\n" : : "r" (ttb&0xFFFFC000));
+   __asm("MCR p15, 0, %0, c2, c0, 0\n" : : "r" (ttb&0xFFFFC000));
 }
 
 // ****************************************************************************
 // CP15 Register 3
-// 	Read: Read domain access control
+//      Read: Read domain access control
 //	Write: Write domain access control
 
 //*----------------------------------------------------------------------------
@@ -118,9 +118,9 @@ __inline static void AT91F_ARM_WriteTTB(unsigned int ttb)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadDomain(void)
 {
-	register unsigned int domain;
- 	__asm("MRC p15, 0, %0, c3, c0, 0\n" : "=r" (domain));
- 	return domain;
+   register unsigned int domain;
+   __asm("MRC p15, 0, %0, c3, c0, 0\n" : "=r" (domain));
+   return domain;
 }
 
 //*----------------------------------------------------------------------------
@@ -129,12 +129,12 @@ __inline static unsigned int AT91F_ARM_ReadDomain(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteDomain(unsigned int domain)
 {
- 	__asm("MCR p15, 0, %0, c3, c0, 0\n" : : "r" (domain));
+   __asm("MCR p15, 0, %0, c3, c0, 0\n" : : "r" (domain));
 }
 
 // ****************************************************************************
 // CP15 Register 5
-// 	Read: Read Fault Status
+//      Read: Read Fault Status
 //	Write: Write Fault Status
 
 //*----------------------------------------------------------------------------
@@ -143,9 +143,9 @@ __inline static void AT91F_ARM_WriteDomain(unsigned int domain)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadDataFSR(void)
 {
-	register unsigned int dataFSR;
- 	__asm("MRC p15, 0, %0, c5, c0, 0\n" : "=r" (dataFSR));
- 	return dataFSR;
+   register unsigned int dataFSR;
+   __asm("MRC p15, 0, %0, c5, c0, 0\n" : "=r" (dataFSR));
+   return dataFSR;
 }
 
 //*----------------------------------------------------------------------------
@@ -154,7 +154,7 @@ __inline static unsigned int AT91F_ARM_ReadDataFSR(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteDataFSR(unsigned int dataFSR)
 {
- 	__asm("MCR p15, 0, %0, c5, c0, 0\n" : : "r" (dataFSR));
+   __asm("MCR p15, 0, %0, c5, c0, 0\n" : : "r" (dataFSR));
 }
 
 //*----------------------------------------------------------------------------
@@ -163,9 +163,9 @@ __inline static void AT91F_ARM_WriteDataFSR(unsigned int dataFSR)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadPrefetchFSR(void)
 {
-	register unsigned int prefetchFSR;
- 	__asm("MRC p15, 0, %0, c5, c0, 1\n" : "=r" (prefetchFSR));
- 	return prefetchFSR;
+   register unsigned int prefetchFSR;
+   __asm("MRC p15, 0, %0, c5, c0, 1\n" : "=r" (prefetchFSR));
+   return prefetchFSR;
 }
 
 //*----------------------------------------------------------------------------
@@ -174,12 +174,12 @@ __inline static unsigned int AT91F_ARM_ReadPrefetchFSR(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WritePrefetchFSR(unsigned int prefetchFSR)
 {
- 	__asm("MCR p15, 0, %0, c5, c0, 1\n" : : "r" (prefetchFSR));
+   __asm("MCR p15, 0, %0, c5, c0, 1\n" : : "r" (prefetchFSR));
 }
 
 // ****************************************************************************
 // CP15 Register 6
-// 	Read: Read Fault Address
+//      Read: Read Fault Address
 //	Write: Write Fault Address
 
 //*----------------------------------------------------------------------------
@@ -188,9 +188,9 @@ __inline static void AT91F_ARM_WritePrefetchFSR(unsigned int prefetchFSR)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadFAR(void)
 {
-	register unsigned int dataFAR;
- 	__asm("MRC p15, 0, %0, c6, c0, 0\n" : "=r" (dataFAR));
- 	return dataFAR;
+   register unsigned int dataFAR;
+   __asm("MRC p15, 0, %0, c6, c0, 0\n" : "=r" (dataFAR));
+   return dataFAR;
 }
 
 //*----------------------------------------------------------------------------
@@ -199,12 +199,12 @@ __inline static unsigned int AT91F_ARM_ReadFAR(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteFAR(unsigned int dataFAR)
 {
- 	__asm("MCR p15, 0, %0, c6, c0, 0\n" : : "r" (dataFAR));
+   __asm("MCR p15, 0, %0, c6, c0, 0\n" : : "r" (dataFAR));
 }
 
 // ****************************************************************************
 // CP15 Register 7
-// 	Read: Unpredictable
+//      Read: Unpredictable
 //	Write: Cache operations
 
 //*----------------------------------------------------------------------------
@@ -213,8 +213,8 @@ __inline static void AT91F_ARM_WriteFAR(unsigned int dataFAR)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateIDCache(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c7, c7, 0\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c7, c7, 0\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -223,8 +223,8 @@ __inline static void AT91F_ARM_InvalidateIDCache(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateICache(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c7, c5, 0\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c7, c5, 0\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -233,7 +233,7 @@ __inline static void AT91F_ARM_InvalidateICache(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateICacheMVA(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c7, c5, 1\n" : : "r" (mva&0xFFFFFFE0));
+   __asm("MCR p15, 0, %0, c7, c5, 1\n" : : "r" (mva&0xFFFFFFE0));
 }
 
 //*----------------------------------------------------------------------------
@@ -242,7 +242,7 @@ __inline static void AT91F_ARM_InvalidateICacheMVA(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_PrefetchICacheLine(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c7, c13, 1\n" : : "r" (mva&0xFFFFFFE0));
+   __asm("MCR p15, 0, %0, c7, c13, 1\n" : : "r" (mva&0xFFFFFFE0));
 }
 
 //*----------------------------------------------------------------------------
@@ -251,8 +251,8 @@ __inline static void AT91F_ARM_PrefetchICacheLine(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateDCache(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c7, c6, 0\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c7, c6, 0\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ __inline static void AT91F_ARM_InvalidateDCache(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateDCacheMVA(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c7, c6, 1\n" : : "r" (mva&0xFFFFFFE0));
+   __asm("MCR p15, 0, %0, c7, c6, 1\n" : : "r" (mva&0xFFFFFFE0));
 }
 
 //*----------------------------------------------------------------------------
@@ -270,7 +270,7 @@ __inline static void AT91F_ARM_InvalidateDCacheMVA(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_CleanDCacheMVA(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c7, c10, 1\n" : : "r" (mva&0xFFFFFFE0));
+   __asm("MCR p15, 0, %0, c7, c10, 1\n" : : "r" (mva&0xFFFFFFE0));
 }
 
 //*----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ __inline static void AT91F_ARM_CleanDCacheMVA(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_CleanInvalidateDCacheMVA(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c7, c14, 1\n" : : "r" (mva&0xFFFFFFE0));
+   __asm("MCR p15, 0, %0, c7, c14, 1\n" : : "r" (mva&0xFFFFFFE0));
 }
 
 //*----------------------------------------------------------------------------
@@ -288,7 +288,7 @@ __inline static void AT91F_ARM_CleanInvalidateDCacheMVA(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_CleanDCacheIDX(unsigned int index)
 {
- 	__asm("MCR p15, 0, %0, c7, c10, 2\n" : : "r" (index&0xFC0000E0));
+   __asm("MCR p15, 0, %0, c7, c10, 2\n" : : "r" (index&0xFC0000E0));
 }
 
 //*----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ __inline static void AT91F_ARM_CleanDCacheIDX(unsigned int index)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_CleanInvalidateDCacheIDX(unsigned int index)
 {
- 	__asm("MCR p15, 0, %0, c7, c14, 2\n" : : "r" (index&0xFC0000E0));
+   __asm("MCR p15, 0, %0, c7, c14, 2\n" : : "r" (index&0xFC0000E0));
 }
 
 //*----------------------------------------------------------------------------
@@ -306,8 +306,8 @@ __inline static void AT91F_ARM_CleanInvalidateDCacheIDX(unsigned int index)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_DrainWriteBuffer(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c7, c10, 4\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c7, c10, 4\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -316,13 +316,13 @@ __inline static void AT91F_ARM_DrainWriteBuffer(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WaitForInterrupt(void)
 {
-	register unsigned int sbz = 0;
-	__asm("MCR p15, 0, %0, c7, c0, 4\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c7, c0, 4\n" : : "r" (sbz));
 }
 
 // ****************************************************************************
 // CP15 Register 8
-// 	Read: Unpredictable
+//      Read: Unpredictable
 //	Write: TLB operations
 
 //*----------------------------------------------------------------------------
@@ -331,8 +331,8 @@ __inline static void AT91F_ARM_WaitForInterrupt(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateIDTLB(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c8, c7, 0\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c8, c7, 0\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -341,8 +341,8 @@ __inline static void AT91F_ARM_InvalidateIDTLB(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateITLB(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c8, c5, 0\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c8, c5, 0\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -351,7 +351,7 @@ __inline static void AT91F_ARM_InvalidateITLB(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateITLBMVA(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c8, c5, 1\n" : : "r" (mva&0xFFFFFE00));
+   __asm("MCR p15, 0, %0, c8, c5, 1\n" : : "r" (mva&0xFFFFFE00));
 }
 
 //*----------------------------------------------------------------------------
@@ -360,8 +360,8 @@ __inline static void AT91F_ARM_InvalidateITLBMVA(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateDTLB(void)
 {
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c8, c6, 0\n" : : "r" (sbz));
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c8, c6, 0\n" : : "r" (sbz));
 }
 
 //*----------------------------------------------------------------------------
@@ -370,13 +370,13 @@ __inline static void AT91F_ARM_InvalidateDTLB(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_InvalidateDTLBMVA(unsigned int mva)
 {
- 	__asm("MCR p15, 0, %0, c8, c6, 1\n" : : "r" (mva&0xFFFFFE00));
+   __asm("MCR p15, 0, %0, c8, c6, 1\n" : : "r" (mva&0xFFFFFE00));
 }
 
 
 // ****************************************************************************
 // CP15 Register 9
-// 	Read: Cache lockdown
+//      Read: Cache lockdown
 //	Write: Cache lockdown
 
 //*----------------------------------------------------------------------------
@@ -385,9 +385,9 @@ __inline static void AT91F_ARM_InvalidateDTLBMVA(unsigned int mva)
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadDCacheLockdown(void)
 {
-	register unsigned int index;
- 	__asm("MRC p15, 0, %0, c9, c0, 0\n" : "=r" (index));
-    return index;
+   register unsigned int index;
+   __asm("MRC p15, 0, %0, c9, c0, 0\n" : "=r" (index));
+   return index;
 }
 
 //*----------------------------------------------------------------------------
@@ -395,9 +395,9 @@ __inline static unsigned int AT91F_ARM_ReadDCacheLockdown(void)
 //* \brief Write D Cache lockdown
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteDCacheLockdown(
-	unsigned int index)
+   unsigned int index)
 {
-	__asm("MCR p15, 0, %0, c9, c0, 0\n" : : "r" (index));
+   __asm("MCR p15, 0, %0, c9, c0, 0\n" : : "r" (index));
 }
 
 //*----------------------------------------------------------------------------
@@ -406,9 +406,9 @@ __inline static void AT91F_ARM_WriteDCacheLockdown(
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadICacheLockdown(void)
 {
-	register unsigned int index;
-	__asm("MRC p15, 0, %0, c9, c0, 1\n" : : "r" (index));
-	return index;
+   register unsigned int index;
+   __asm("MRC p15, 0, %0, c9, c0, 1\n" : : "r" (index));
+   return index;
 }
 
 //*----------------------------------------------------------------------------
@@ -416,14 +416,14 @@ __inline static unsigned int AT91F_ARM_ReadICacheLockdown(void)
 //* \brief Write I Cache lockdown
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteICacheLockdown(
-	unsigned int index)
+   unsigned int index)
 {
-	__asm("MCR p15, 0, %0, c9, c0, 1\n" : : "r" (index));
+   __asm("MCR p15, 0, %0, c9, c0, 1\n" : : "r" (index));
 }
 
 // ****************************************************************************
 // CP15 Register 10
-// 	Read: TLB lockdown
+//      Read: TLB lockdown
 //	Write: TLB lockdown
 
 //*----------------------------------------------------------------------------
@@ -432,9 +432,9 @@ __inline static void AT91F_ARM_WriteICacheLockdown(
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadDTLBLockdown(void)
 {
-	register unsigned int lockdown;
- 	__asm("MRC p15, 0, %0, c10, c0, 0\n" : "=r" (lockdown));
-    return lockdown;
+   register unsigned int lockdown;
+   __asm("MRC p15, 0, %0, c10, c0, 0\n" : "=r" (lockdown));
+   return lockdown;
 }
 
 //*----------------------------------------------------------------------------
@@ -442,9 +442,9 @@ __inline static unsigned int AT91F_ARM_ReadDTLBLockdown(void)
 //* \brief Write D TLB lockdown
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteDTLBLockdown(
-	unsigned int lockdown)
+   unsigned int lockdown)
 {
-	__asm("MCR p15, 0, %0, c10, c0, 0\n" : : "r" (lockdown));
+   __asm("MCR p15, 0, %0, c10, c0, 0\n" : : "r" (lockdown));
 }
 
 //*----------------------------------------------------------------------------
@@ -453,9 +453,9 @@ __inline static void AT91F_ARM_WriteDTLBLockdown(
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadTLBLockdown(void)
 {
-	register unsigned int lockdown;
-	__asm("MRC p15, 0, %0, c10, c0, 0\n" : "=r" (lockdown));
-	return lockdown;
+   register unsigned int lockdown;
+   __asm("MRC p15, 0, %0, c10, c0, 0\n" : "=r" (lockdown));
+   return lockdown;
 }
 
 //*----------------------------------------------------------------------------
@@ -463,14 +463,14 @@ __inline static unsigned int AT91F_ARM_ReadTLBLockdown(void)
 //* \brief Write I TLB lockdown
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteTLBLockdown(
-	unsigned int lockdown)
+   unsigned int lockdown)
 {
-	__asm("MCR p15, 0, %0, c10, c0, 0\n" : : "r" (lockdown));
+   __asm("MCR p15, 0, %0, c10, c0, 0\n" : : "r" (lockdown));
 }
 
 // ****************************************************************************
 // CP15 Register 13
-// 	Read: Read FCSE PID
+//      Read: Read FCSE PID
 //	Write: Write FCSE PID
 
 //*----------------------------------------------------------------------------
@@ -479,9 +479,9 @@ __inline static void AT91F_ARM_WriteTLBLockdown(
 //*----------------------------------------------------------------------------
 __inline static unsigned int AT91F_ARM_ReadFCSEPID(void)
 {
-	register unsigned int pid;
- 	__asm("MRC p15, 0, %0, c13, c0, 0\n" : "=r" (pid));
- 	return pid;
+   register unsigned int pid;
+   __asm("MRC p15, 0, %0, c13, c0, 0\n" : "=r" (pid));
+   return pid;
 }
 
 //*----------------------------------------------------------------------------
@@ -490,7 +490,7 @@ __inline static unsigned int AT91F_ARM_ReadFCSEPID(void)
 //*----------------------------------------------------------------------------
 __inline static void AT91F_ARM_WriteFCSEPID(unsigned int pid)
 {
- 	__asm("MCR p15, 0, %0, c13, c0, 0\n" : : "r" (pid & 0xFF000000));
+   __asm("MCR p15, 0, %0, c13, c0, 0\n" : : "r" (pid & 0xFF000000));
 }
 
 
@@ -501,12 +501,12 @@ __inline static void AT91F_ARM_WriteFCSEPID(unsigned int pid)
 //*----------------------------------------------------------------------------
 void AT91F_CleanDCache()
 {
-	register char seg, index;
-	for (seg = 0; seg < 8; ++seg) {
-		for (index = 0; index < 64; ++index) {
-			AT91F_ARM_CleanDCacheIDX((index << 26) | (seg << 5));
-		}
-	}
+   register char seg, index;
+   for (seg = 0; seg < 8; ++seg) {
+      for (index = 0; index < 64; ++index) {
+         AT91F_ARM_CleanDCacheIDX((index << 26) | (seg << 5));
+      }
+   }
 }
 
 //*----------------------------------------------------------------------------
@@ -515,10 +515,10 @@ void AT91F_CleanDCache()
 //*----------------------------------------------------------------------------
 void AT91F_ResetICache()
 {
-	// Flush I TLB
-	AT91F_ARM_InvalidateITLB();
-	// Flush I cache
-	AT91F_ARM_InvalidateICache();
+   // Flush I TLB
+   AT91F_ARM_InvalidateITLB();
+   // Flush I cache
+   AT91F_ARM_InvalidateICache();
 }
 
 //*----------------------------------------------------------------------------
@@ -527,14 +527,14 @@ void AT91F_ResetICache()
 //*----------------------------------------------------------------------------
 void AT91F_ResetDCache()
 {
-	// Achieve pending write operations
-	AT91F_CleanDCache();
-	// Flush write buffers
-	AT91F_ARM_DrainWriteBuffer();
-	// Flush D TLB
-	AT91F_ARM_InvalidateDTLB();
-	// Flush D cache
-	AT91F_ARM_InvalidateDCache();
+   // Achieve pending write operations
+   AT91F_CleanDCache();
+   // Flush write buffers
+   AT91F_ARM_DrainWriteBuffer();
+   // Flush D TLB
+   AT91F_ARM_InvalidateDTLB();
+   // Flush D cache
+   AT91F_ARM_InvalidateDCache();
 }
 
 //*----------------------------------------------------------------------------
@@ -543,11 +543,11 @@ void AT91F_ResetDCache()
 //*----------------------------------------------------------------------------
 void AT91F_EnableMMU()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl |= (1 << 0);
-	AT91F_ARM_WriteControl(ctl);
+   ctl = AT91F_ARM_ReadControl();
+   ctl |= (1 << 0);
+   AT91F_ARM_WriteControl(ctl);
 }
 
 //*----------------------------------------------------------------------------
@@ -556,11 +556,11 @@ void AT91F_EnableMMU()
 //*----------------------------------------------------------------------------
 void AT91F_DisableMMU()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl &= ~(1 << 0);
-	AT91F_ARM_WriteControl(ctl);
+   ctl = AT91F_ARM_ReadControl();
+   ctl &= ~(1 << 0);
+   AT91F_ARM_WriteControl(ctl);
 }
 
 
@@ -570,11 +570,11 @@ void AT91F_DisableMMU()
 //*----------------------------------------------------------------------------
 void AT91F_EnableICache()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl |= (1 << 12);
-	AT91F_ARM_WriteControl(ctl);
+   ctl = AT91F_ARM_ReadControl();
+   ctl |= (1 << 12);
+   AT91F_ARM_WriteControl(ctl);
 }
 
 //*----------------------------------------------------------------------------
@@ -583,11 +583,11 @@ void AT91F_EnableICache()
 //*----------------------------------------------------------------------------
 void AT91F_DisableICache()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl &= ~(1 << 12);
-	AT91F_ARM_WriteControl(ctl);
+   ctl = AT91F_ARM_ReadControl();
+   ctl &= ~(1 << 12);
+   AT91F_ARM_WriteControl(ctl);
 }
 
 //*----------------------------------------------------------------------------
@@ -596,11 +596,11 @@ void AT91F_DisableICache()
 //*----------------------------------------------------------------------------
 void AT91F_EnableDCache()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl |= (1 << 2);
-	AT91F_ARM_WriteControl(ctl);
+   ctl = AT91F_ARM_ReadControl();
+   ctl |= (1 << 2);
+   AT91F_ARM_WriteControl(ctl);
 }
 
 
@@ -610,12 +610,12 @@ void AT91F_EnableDCache()
 //*----------------------------------------------------------------------------
 void AT91F_EnableIDCache()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl |= (1 << 2) + (1 << 12);
-	AT91F_ARM_WriteControl(ctl);
-	
+   ctl = AT91F_ARM_ReadControl();
+   ctl |= (1 << 2) + (1 << 12);
+   AT91F_ARM_WriteControl(ctl);
+
 }
 
 
@@ -625,11 +625,11 @@ void AT91F_EnableIDCache()
 //*----------------------------------------------------------------------------
 void AT91F_DisableDCache()
 {
-	unsigned int ctl;
+   unsigned int ctl;
 
-	ctl = AT91F_ARM_ReadControl();
-	ctl &= ~(1 << 2);
-	AT91F_ARM_WriteControl(ctl);
+   ctl = AT91F_ARM_ReadControl();
+   ctl &= ~(1 << 2);
+   AT91F_ARM_WriteControl(ctl);
 }
 
 //*----------------------------------------------------------------------------
@@ -638,12 +638,12 @@ void AT91F_DisableDCache()
 //*----------------------------------------------------------------------------
 void AT91F_LockTLB(unsigned int address)
 {
-	// Set the P bit
-	AT91F_ARM_WriteTLBLockdown( 1); // base 0 victim 0 P 1
-	// Prefetch the instruction assuming an TLB miss occurs, the entry base is loaded
-	AT91F_ARM_PrefetchICacheLine(address);
-	// Update base and victim values
-	AT91F_ARM_WriteTLBLockdown((1 << 26) | (1 << 20)); // base 1 victim 1 P 0
+   // Set the P bit
+   AT91F_ARM_WriteTLBLockdown( 1);      // base 0 victim 0 P 1
+   // Prefetch the instruction assuming an TLB miss occurs, the entry base is loaded
+   AT91F_ARM_PrefetchICacheLine(address);
+   // Update base and victim values
+   AT91F_ARM_WriteTLBLockdown((1 << 26) | (1 << 20));      // base 1 victim 1 P 0
 }
 
 //*----------------------------------------------------------------------------
@@ -652,23 +652,23 @@ void AT91F_LockTLB(unsigned int address)
 //*----------------------------------------------------------------------------
 void AT91F_LockICache(unsigned int startAddress, unsigned int size)
 {
-	unsigned int victim = 0;
+   unsigned int victim = 0;
 
-	AT91F_ARM_InvalidateICache();
-	AT91F_ARM_WriteICacheLockdown((victim++) << 26);
-	while (size) {
-		// Prefetch ICache line
-		AT91F_ARM_PrefetchICacheLine(startAddress);
-		startAddress += 32;
-		// Test for segment 0, and if so increment victim pointer
-		if ( !(startAddress & 0xE0) )
-			AT91F_ARM_WriteICacheLockdown((victim++) << 26);
-		size -= 32;
+   AT91F_ARM_InvalidateICache();
+   AT91F_ARM_WriteICacheLockdown((victim++) << 26);
+   while (size) {
+      // Prefetch ICache line
+      AT91F_ARM_PrefetchICacheLine(startAddress);
+      startAddress += 32;
+      // Test for segment 0, and if so increment victim pointer
+      if ( !(startAddress & 0xE0) )
+         AT91F_ARM_WriteICacheLockdown((victim++) << 26);
+      size -= 32;
 
-	}
-	// If segment != 0 the increment victim pointer
-	if ( (startAddress & 0xE0) )
-		AT91F_ARM_WriteICacheLockdown(victim << 26);
+   }
+   // If segment != 0 the increment victim pointer
+   if ( (startAddress & 0xE0) )
+      AT91F_ARM_WriteICacheLockdown(victim << 26);
 
 }
 
@@ -677,22 +677,22 @@ void AT91F_LockICache(unsigned int startAddress, unsigned int size)
 // for the given address range.
 void arm926e_dcache_flush_range( unsigned int start, unsigned int len )
 {
-	start &= 0xFFFFFFE0;
-	len += start;
-	do 
-	{	
-		// clean+invalidate D entry
-		//=========================
-		__asm("MCR p15, 0, %0, c7, c14, 1\n" : : "r" (start));
-		
-		start += 32;		
-	}
-	while( start < len );
-	
-	// Drain Write Buffer
-	//===================
-	register unsigned int sbz = 0;
- 	__asm("MCR p15, 0, %0, c7, c10, 4\n" : : "r" (sbz));
+   start &= 0xFFFFFFE0;
+   len += start;
+   do
+   {
+      // clean+invalidate D entry
+      //=========================
+      __asm("MCR p15, 0, %0, c7, c14, 1\n" : : "r" (start));
+
+      start += 32;
+   }
+   while( start < len );
+
+   // Drain Write Buffer
+   //===================
+   register unsigned int sbz = 0;
+   __asm("MCR p15, 0, %0, c7, c10, 4\n" : : "r" (sbz));
 }
 
 
@@ -704,82 +704,82 @@ void arm926e_dcache_flush_range( unsigned int start, unsigned int len )
 #define ARM_ACCESS_TYPE_CLIENT(domain_num)       (0x1 << (domain_num)*2)
 #define ARM_ACCESS_TYPE_MANAGER(domain_num)      (0x3 << (domain_num)*2)
 
-struct ARM_MMU_FIRST_LEVEL_FAULT 
+struct ARM_MMU_FIRST_LEVEL_FAULT
 {
-    int id : 2;
-    int sbz : 30;
+   int id : 2;
+   int sbz : 30;
 };
 #define ARM_MMU_FIRST_LEVEL_FAULT_ID 0x0
 
-struct ARM_MMU_FIRST_LEVEL_PAGE_TABLE 
+struct ARM_MMU_FIRST_LEVEL_PAGE_TABLE
 {
-    int id : 2;
-    int imp : 2;
-    int domain : 4;
-    int sbz : 1;
-    int base_address : 23;
+   int id : 2;
+   int imp : 2;
+   int domain : 4;
+   int sbz : 1;
+   int base_address : 23;
 };
 #define ARM_MMU_FIRST_LEVEL_PAGE_TABLE_ID 0x1
 
-struct ARM_MMU_FIRST_LEVEL_SECTION 
+struct ARM_MMU_FIRST_LEVEL_SECTION
 {
-    int id : 2;
-    int b : 1;
-    int c : 1;
-    int imp : 1;
-    int domain : 4;
-    int sbz0 : 1;
-    int ap : 2;
-    int sbz1 : 8;
-    int base_address : 12;
+   int id : 2;
+   int b : 1;
+   int c : 1;
+   int imp : 1;
+   int domain : 4;
+   int sbz0 : 1;
+   int ap : 2;
+   int sbz1 : 8;
+   int base_address : 12;
 };
 #define ARM_MMU_FIRST_LEVEL_SECTION_ID 0x2
 
-struct ARM_MMU_FIRST_LEVEL_RESERVED 
+struct ARM_MMU_FIRST_LEVEL_RESERVED
 {
-    int id : 2;
-    int sbz : 30;
+   int id : 2;
+   int sbz : 30;
 };
 #define ARM_MMU_FIRST_LEVEL_RESERVED_ID 0x3
 
 #define ARM_MMU_FIRST_LEVEL_DESCRIPTOR_ADDRESS(ttb_base, table_index) \
    (unsigned long *)((unsigned long)(ttb_base) + ((table_index) << 2))
 
-#define ARM_FIRST_LEVEL_PAGE_TABLE_SIZE 0x1000//0x4000 // 16 ko
+#define ARM_FIRST_LEVEL_PAGE_TABLE_SIZE 0x1000 //0x4000 // 16 ko
 
 //modify domain
 #define ARM_MMU_SECTION(ttb_base, actual_base, virtual_base,              \
                         cacheable, bufferable, perm)                      \
-    CYG_MACRO_START                                                       \
-        register union ARM_MMU_FIRST_LEVEL_DESCRIPTOR desc;               \
+   CYG_MACRO_START                                                       \
+   register union ARM_MMU_FIRST_LEVEL_DESCRIPTOR desc;               \
                                                                           \
-        desc.word = 0;                                                    \
-        desc.section.id = ARM_MMU_FIRST_LEVEL_SECTION_ID;                 \
-        desc.section.imp = 1;                                             \
-        desc.section.domain = 0xffff;                                          \
-        desc.section.c = (cacheable);                                     \
-        desc.section.b = (bufferable);                                    \
-        desc.section.ap = (perm);                                         \
-        desc.section.base_address = (actual_base);                        \
-        *ARM_MMU_FIRST_LEVEL_DESCRIPTOR_ADDRESS(ttb_base, (virtual_base)) \
-                            = desc.word;                                  \
-    CYG_MACRO_END
+   desc.word = 0;                                                    \
+   desc.section.id = ARM_MMU_FIRST_LEVEL_SECTION_ID;                 \
+   desc.section.imp = 1;                                             \
+   desc.section.domain = 0xffff;                                          \
+   desc.section.c = (cacheable);                                     \
+   desc.section.b = (bufferable);                                    \
+   desc.section.ap = (perm);                                         \
+   desc.section.base_address = (actual_base);                        \
+   *ARM_MMU_FIRST_LEVEL_DESCRIPTOR_ADDRESS(ttb_base, (virtual_base)) \
+      = desc.word;                                  \
+   CYG_MACRO_END
 
 #define X_ARM_MMU_SECTION(abase,vbase,size,cache,buff,access)      \
-    { int i; int j = abase; int k = vbase;                         \
-      for (i = size; i > 0 ; i--,j++,k++)                          \
-      {                                                            \
+   { int i; int j = abase; int k = vbase;                         \
+     for (i = size; i > 0; i--,j++,k++)                          \
+     {                                                            \
         ARM_MMU_SECTION(ttb_base, j, k, cache, buff, access);      \
-      }                                                            \
-    }
+     }                                                            \
+   }
 
-union ARM_MMU_FIRST_LEVEL_DESCRIPTOR 
+union ARM_MMU_FIRST_LEVEL_DESCRIPTOR
 {
-    unsigned long word;
-    struct ARM_MMU_FIRST_LEVEL_FAULT fault;
-    struct ARM_MMU_FIRST_LEVEL_PAGE_TABLE page_table;
-    struct ARM_MMU_FIRST_LEVEL_SECTION section;
-    struct ARM_MMU_FIRST_LEVEL_RESERVED reserved;
+   unsigned long word;
+   struct ARM_MMU_FIRST_LEVEL_FAULT fault;
+   struct ARM_MMU_FIRST_LEVEL_PAGE_TABLE page_table;
+   struct ARM_MMU_FIRST_LEVEL_SECTION section;
+   struct ARM_MMU_FIRST_LEVEL_RESERVED reserved;
 };
 
 #define ARM_UNCACHEABLE                         0
@@ -795,13 +795,13 @@ union ARM_MMU_FIRST_LEVEL_DESCRIPTOR
 #define ARM_ACCESS_PERM_RW_RW                   3
 
 
-#define	FLASH_PHYS		(AT91SAM9261_FLASH_PHYS_BASE >> 20)
-#define	FLASH_VIRT		(AT91SAM9261_FLASH_VIRT_BASE >> 20)
-#define	FLASH_NCVR		(AT91SAM9261_FLASH_NOCACHE_VIRT_BASE >> 20)
+#define FLASH_PHYS              (AT91SAM9261_FLASH_PHYS_BASE >> 20)
+#define FLASH_VIRT              (AT91SAM9261_FLASH_VIRT_BASE >> 20)
+#define FLASH_NCVR              (AT91SAM9261_FLASH_NOCACHE_VIRT_BASE >> 20)
 
-#define	SDRAM_PHYS		(AT91SAM9261_SDRAM_PHYS_BASE >> 20)
-#define	SDRAM_VIRT		(AT91SAM9261_SDRAM_VIRT_BASE >> 20)				// virtual cached		
-#define	SDRAM_NCVR		(AT91SAM9261_SDRAM_NOCACHE_VIRT_BASE >> 20)		// virtual non cached
+#define SDRAM_PHYS              (AT91SAM9261_SDRAM_PHYS_BASE >> 20)
+#define SDRAM_VIRT              (AT91SAM9261_SDRAM_VIRT_BASE >> 20)                             // virtual cached
+#define SDRAM_NCVR              (AT91SAM9261_SDRAM_NOCACHE_VIRT_BASE >> 20)             // virtual non cached
 
 //sram address (see ram2 label in ecos target.ld) used for no cached mmu on device driver internals buffers
 #define  SDRAM2_PHYS    (AT91SAM9261_SDRAM2_PHYS_BASE >> 20)
@@ -809,27 +809,28 @@ union ARM_MMU_FIRST_LEVEL_DESCRIPTOR
 
 
 //lcd user interface address
-#define	LCD_PHYS			(0x00600000 >> 20)
-#define	LCD_VIRT			(0x00600000 >> 20)				// virtual cached		
+#define LCD_PHYS                        (0x00600000 >> 20)
+#define LCD_VIRT                        (0x00600000 >> 20)                              // virtual cached
 
 //sram address
-#define	SRAM_PHYS		(0x00300000 >> 20)
-#define	SRAM_VIRT		(0x00300000 >> 20)
+#define SRAM_PHYS               (0x00300000 >> 20)
+#define SRAM_VIRT               (0x00300000 >> 20)
 
 //internal periphericals address
-#define	PERPH_PHYS		(0xFFF00000 >> 20)
-#define	PERPH_VIRT		(0xFFF00000 >> 20)
+#define PERPH_PHYS              (0xFFF00000 >> 20)
+#define PERPH_VIRT              (0xFFF00000 >> 20)
 
 //CS0 for NORflash
-#define	NOR_FLASH_PHYS		(AT91SAM9261_FLASH_PHYS_BASE >> 20)
-#define	NOR_FLASH_VIRT		(AT91SAM9261_FLASH_PHYS_BASE >> 20)				// virtual cached		
-#define	NOR_FLASH_NCVR		(AT91SAM9261_FLASH_NOCACHE_VIRT_BASE >> 20)		// virtual non cached
+#define NOR_FLASH_PHYS          (AT91SAM9261_FLASH_PHYS_BASE >> 20)
+#define NOR_FLASH_VIRT          (AT91SAM9261_FLASH_PHYS_BASE >> 20)                             // virtual cached
+#define NOR_FLASH_NCVR          (AT91SAM9261_FLASH_NOCACHE_VIRT_BASE >> 20)             // virtual non cached
 
 //CS2 for ethernet DM9000a
-#define EBI_CS2_PHYS            (0x30000000 >>20) 
-#define EBI_CS2_VIRT            (0x30000000 >>20) 
+#define EBI_CS2_PHYS            (0x30000000 >>20)
+#define EBI_CS2_VIRT            (0x30000000 >>20)
 
-unsigned int ttb_tab[ARM_FIRST_LEVEL_PAGE_TABLE_SIZE] __attribute__ ((aligned (16384), section (".no_init")));
+unsigned int ttb_tab[ARM_FIRST_LEVEL_PAGE_TABLE_SIZE] __attribute__ ((aligned (16384),
+                                                                      section (".no_init")));
 void hal_mmu_init(void) {
    unsigned int * ttb_base = (unsigned int *)&ttb_tab;
 
@@ -841,29 +842,40 @@ void hal_mmu_init(void) {
 
 #ifdef CYG_HAL_ARM_AT91SAM9261_MMU
    // Set the TTB register
-   asm volatile ("mcr  p15,0,%0,c2,c0,0" : : "r"(ttb_base) );
+   asm volatile ("mcr  p15,0,%0,c2,c0,0" : : "r" (ttb_base) );
 
    // Set the Domain Access Control Register
-   asm volatile ("mcr  p15,0,%0,c3,c0,0" : : "r"(0xC0000000) ); // domain 15: access are not checked
+   asm volatile ("mcr  p15,0,%0,c3,c0,0" : : "r" (0xC0000000) ); // domain 15: access are not checked
 
    // First clear all TT entries - ie Set them to Faulting
    memset((void *)ttb_base, 0, ARM_FIRST_LEVEL_PAGE_TABLE_SIZE*sizeof(int));
 
-   //               Actual  		Virtual   	Size   Attributes                                                    Function
-   //		         Base     		Base      	MB     cached?           buffered?        access permissions
-   //             xxx00000  		xxx00000
+   //               Actual              Virtual         Size   Attributes                                                    Function
+   //		         Base                   Base            MB     cached?           buffered?        access permissions
+   //             xxx00000              xxx00000
 
-   X_ARM_MMU_SECTION(0,  			0,    	1, ARM_UNCACHEABLE,   ARM_UNBUFFERABLE,   ARM_ACCESS_PERM_RW_RW); //first entry (vector address)
-   X_ARM_MMU_SECTION(SRAM_PHYS,  	SRAM_VIRT,    	1, ARM_CACHEABLE,   ARM_UNBUFFERABLE,   ARM_ACCESS_PERM_RW_RW); // SRAM cached
-   X_ARM_MMU_SECTION(LCD_PHYS,  	LCD_PHYS,    	1, ARM_CACHEABLE,   ARM_UNBUFFERABLE,   ARM_ACCESS_PERM_RW_RW); // LCD cached
-   X_ARM_MMU_SECTION(SDRAM_PHYS,  	SDRAM_VIRT,    	63, ARM_CACHEABLE,   ARM_UNBUFFERABLE,   ARM_ACCESS_PERM_RW_RW); // SDRAM cached
+   X_ARM_MMU_SECTION(0,                         0,      1, ARM_UNCACHEABLE,   ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                              //first entry (vector address)
+   X_ARM_MMU_SECTION(SRAM_PHYS,         SRAM_VIRT,      1, ARM_CACHEABLE,   ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                            // SRAM cached
+   X_ARM_MMU_SECTION(LCD_PHYS,          LCD_PHYS,       1, ARM_CACHEABLE,   ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                            // LCD cached
+   X_ARM_MMU_SECTION(SDRAM_PHYS,        SDRAM_VIRT,     63, ARM_CACHEABLE,   ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                             // SDRAM cached
    //leave the next 1 MEGA byte unchache and unbuffarable
-   X_ARM_MMU_SECTION(SDRAM2_PHYS,     SDRAM2_VIRT,      1, ARM_UNCACHEABLE,   ARM_UNBUFFERABLE,   ARM_ACCESS_PERM_RW_RW);
+   X_ARM_MMU_SECTION(SDRAM2_PHYS,     SDRAM2_VIRT,      1, ARM_UNCACHEABLE,   ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);
    //
-   X_ARM_MMU_SECTION(PERPH_PHYS,  	PERPH_PHYS,     		1,  ARM_UNCACHEABLE, ARM_UNBUFFERABLE, ARM_ACCESS_PERM_RW_RW); // Internal Peripherals
+   X_ARM_MMU_SECTION(PERPH_PHYS,        PERPH_PHYS,                     1,  ARM_UNCACHEABLE,
+                     ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                                           // Internal Peripherals
    //
-   X_ARM_MMU_SECTION(NOR_FLASH_PHYS,  	NOR_FLASH_VIRT,     		32,  ARM_UNCACHEABLE, ARM_UNBUFFERABLE, ARM_ACCESS_PERM_RW_RW); // CS0 for norflash
-   X_ARM_MMU_SECTION(EBI_CS2_PHYS,  	EBI_CS2_VIRT,     		32,  ARM_UNCACHEABLE, ARM_UNBUFFERABLE, ARM_ACCESS_PERM_RW_RW); // CS2 for ethernet DM9000a
+   X_ARM_MMU_SECTION(NOR_FLASH_PHYS,    NOR_FLASH_VIRT,                 32,  ARM_UNCACHEABLE,
+                     ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                                            // CS0 for norflash
+   X_ARM_MMU_SECTION(EBI_CS2_PHYS,      EBI_CS2_VIRT,                   32,  ARM_UNCACHEABLE,
+                     ARM_UNBUFFERABLE,
+                     ARM_ACCESS_PERM_RW_RW);                                                                                            // CS2 for ethernet DM9000a
    // Enable the MMU
    //===============
    AT91F_EnableMMU();

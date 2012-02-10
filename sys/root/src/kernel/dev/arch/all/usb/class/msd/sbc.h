@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,24 +15,24 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 //------------------------------------------------------------------------------
 /// \unit
 /// !Purpose
-/// 
+///
 /// SCSI definitions.
-/// 
+///
 /// !Usage
-/// 
+///
 /// -# After command block received, Access and decode the SCSI command block
 ///    with SBCCommand structure.
 //------------------------------------------------------------------------------
@@ -337,15 +337,15 @@ either the MPL or the [eCos GPL] License."
 
 /// \brief  Stores a dword value in a byte array, in big endian format
 #define STORE_DWORDB(dword, bytes) \
-    bytes[0] = (unsigned char) (((dword) >> 24) & 0xFF); \
-    bytes[1] = (unsigned char) (((dword) >> 16) & 0xFF); \
-    bytes[2] = (unsigned char) (((dword) >> 8) & 0xFF); \
-    bytes[3] = (unsigned char) ((dword) & 0xFF);
+   bytes[0] = (unsigned char) (((dword) >> 24) & 0xFF); \
+   bytes[1] = (unsigned char) (((dword) >> 16) & 0xFF); \
+   bytes[2] = (unsigned char) (((dword) >> 8) & 0xFF); \
+   bytes[3] = (unsigned char) ((dword) & 0xFF);
 
 /// \brief  Stores a word value in a byte array, in big endian format
 #define STORE_WORDB(word, bytes) \
-    bytes[0] = (unsigned char) (((word) >> 8) & 0xFF); \
-    bytes[1] = (unsigned char) ((word) & 0xFF);
+   bytes[0] = (unsigned char) (((word) >> 8) & 0xFF); \
+   bytes[1] = (unsigned char) ((word) & 0xFF);
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -353,8 +353,8 @@ either the MPL or the [eCos GPL] License."
 //------------------------------------------------------------------------------
 
 #ifdef __ICCARM__          // IAR
-#pragma pack(1)            // IAR
-#define __attribute__(...) // IAR
+   #pragma pack(1) // IAR
+   #define __attribute__(...) // IAR
 #endif                     // IAR
 
 //------------------------------------------------------------------------------
@@ -363,12 +363,12 @@ either the MPL or the [eCos GPL] License."
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode;       //!< 0x12 : SBC_INQUIRY
-    unsigned char isEVPD:1,             //!< Type of requested data
-                  bReserved1:7;         //!< Reserved bits
-    unsigned char bPageCode;            //!< Specifies the VPD to return
-    unsigned char pAllocationLength[2]; //!< Size of host buffer
-    unsigned char bControl;             //!< 0x00
+   unsigned char bOperationCode;        //!< 0x12 : SBC_INQUIRY
+   unsigned char isEVPD : 1,            //!< Type of requested data
+                 bReserved1 : 7;        //!< Reserved bits
+   unsigned char bPageCode;             //!< Specifies the VPD to return
+   unsigned char pAllocationLength[2];  //!< Size of host buffer
+   unsigned char bControl;              //!< 0x00
 
 } __attribute__ ((packed)) SBCInquiry; // GCC
 
@@ -378,39 +378,39 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char  bPeripheralDeviceType:5, //!< Peripheral device type
-                   bPeripheralQualifier :3; //!< Peripheral qualifier
-    unsigned char  bReserved1:7,            //!< Reserved bits
-                   isRMB     :1;            //!< Is media removable ?
-    unsigned char  bVersion;                //!< SPC version used
-    unsigned char  bResponseDataFormat:4,   //!< Must be 0x2
-                   isHIGHSUP          :1,   //!< Hierarchical addressing used ?
-                   isNORMACA          :1,   //!< ACA attribute supported ?
-                   bObsolete1         :2;   //!< Obsolete bits
-    unsigned char  bAdditionalLength;       //!< Length of remaining INQUIRY data
-    unsigned char  isSCCS    :1,            //!< Embedded SCC ?
-                   isACC     :1,            //!< Access control coordinator ?
-                   bTPGS     :2,            //!< Target port support group
-                   is3PC     :1,            //!< Third-party copy supported ?
-                   bReserved2:2,            //!< Reserved bits
-                   isProtect :1;            //!< Protection info supported ?
-    unsigned char  bObsolete2:1,            //!< Obsolete bit
-                   isEncServ :1,            //!< Embedded enclosure service comp?
-                   isVS      :1,            //!< ???
-                   isMultiP  :1,            //!< Multi-port device ?
-                   bObsolete3:3,            //!< Obsolete bits
-                   bUnused1  :1;            //!< Unused feature
-    unsigned char  bUnused2:6,              //!< Unused features
-                   isCmdQue:1,              //!< Task management model supported ?
-                   isVS2   :1;              //!< ???
-    unsigned char  pVendorID[8];            //!< T10 vendor identification
-    unsigned char  pProductID[16];          //!< Vendor-defined product ID
-    unsigned char  pProductRevisionLevel[4];//!< Vendor-defined product revision
-    unsigned char  pVendorSpecific[20];     //!< Vendor-specific data
-    unsigned char  bUnused3;                //!< Unused features
-    unsigned char  bReserved3;              //!< Reserved bits
-    unsigned short pVersionDescriptors[8];  //!< Standards the device complies to
-    unsigned char  pReserved4[22];          //!< Reserved bytes
+   unsigned char bPeripheralDeviceType : 5, //!< Peripheral device type
+                 bPeripheralQualifier : 3;  //!< Peripheral qualifier
+   unsigned char bReserved1 : 7,            //!< Reserved bits
+                 isRMB     : 1;             //!< Is media removable ?
+   unsigned char bVersion;                  //!< SPC version used
+   unsigned char bResponseDataFormat : 4,   //!< Must be 0x2
+                 isHIGHSUP          : 1,    //!< Hierarchical addressing used ?
+                 isNORMACA          : 1,    //!< ACA attribute supported ?
+                 bObsolete1         : 2;    //!< Obsolete bits
+   unsigned char bAdditionalLength;         //!< Length of remaining INQUIRY data
+   unsigned char isSCCS    : 1,             //!< Embedded SCC ?
+                 isACC     : 1,             //!< Access control coordinator ?
+                 bTPGS     : 2,             //!< Target port support group
+                 is3PC     : 1,             //!< Third-party copy supported ?
+                 bReserved2 : 2,            //!< Reserved bits
+                 isProtect : 1;             //!< Protection info supported ?
+   unsigned char bObsolete2 : 1,            //!< Obsolete bit
+                 isEncServ : 1,             //!< Embedded enclosure service comp?
+                 isVS      : 1,             //!< ???
+                 isMultiP  : 1,             //!< Multi-port device ?
+                 bObsolete3 : 3,            //!< Obsolete bits
+                 bUnused1  : 1;             //!< Unused feature
+   unsigned char bUnused2 : 6,              //!< Unused features
+                 isCmdQue : 1,              //!< Task management model supported ?
+                 isVS2   : 1;               //!< ???
+   unsigned char pVendorID[8];              //!< T10 vendor identification
+   unsigned char pProductID[16];            //!< Vendor-defined product ID
+   unsigned char pProductRevisionLevel[4];  //!< Vendor-defined product revision
+   unsigned char pVendorSpecific[20];       //!< Vendor-specific data
+   unsigned char bUnused3;                  //!< Unused features
+   unsigned char bReserved3;                //!< Reserved bits
+   unsigned short pVersionDescriptors[8];   //!< Standards the device complies to
+   unsigned char pReserved4[22];            //!< Reserved bytes
 
 } __attribute__ ((packed)) SBCInquiryData; // GCC
 
@@ -420,18 +420,18 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode;          //!< 0x28 : SBC_READ_10
-    unsigned char bObsolete1:1,            //!< Obsolete bit
-                  isFUA_NV:1,              //!< Cache control bit
-                  bReserved1:1,            //!< Reserved bit
-                  isFUA:1,                 //!< Cache control bit
-                  isDPO:1,                 //!< Cache control bit
-                  bRdProtect:3;            //!< Protection information to send
-    unsigned char pLogicalBlockAddress[4]; //!< Index of first block to read
-    unsigned char bGroupNumber:5,          //!< Information grouping
-                  bReserved2:3;            //!< Reserved bits
-    unsigned char pTransferLength[2];      //!< Number of blocks to transmit
-    unsigned char bControl;                //!< 0x00
+   unsigned char bOperationCode;           //!< 0x28 : SBC_READ_10
+   unsigned char bObsolete1 : 1,           //!< Obsolete bit
+                 isFUA_NV : 1,             //!< Cache control bit
+                 bReserved1 : 1,           //!< Reserved bit
+                 isFUA : 1,                //!< Cache control bit
+                 isDPO : 1,                //!< Cache control bit
+                 bRdProtect : 3;           //!< Protection information to send
+   unsigned char pLogicalBlockAddress[4];  //!< Index of first block to read
+   unsigned char bGroupNumber : 5,         //!< Information grouping
+                 bReserved2 : 3;           //!< Reserved bits
+   unsigned char pTransferLength[2];       //!< Number of blocks to transmit
+   unsigned char bControl;                 //!< 0x00
 
 } __attribute__ ((packed)) SBCRead10; // GCC
 
@@ -441,14 +441,14 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode;          //!< 0x25 : RBC_READ_CAPACITY
-    unsigned char bObsolete1:1,            //!< Obsolete bit
-                  bReserved1:7;            //!< Reserved bits
-    unsigned char pLogicalBlockAddress[4]; //!< Block to evaluate if PMI is set
-    unsigned char pReserved2[2];           //!< Reserved bytes
-    unsigned char isPMI:1,                 //!< Partial medium indicator bit
-                  bReserved3:7;            //!< Reserved bits
-    unsigned char bControl;                //!< 0x00
+   unsigned char bOperationCode;           //!< 0x25 : RBC_READ_CAPACITY
+   unsigned char bObsolete1 : 1,           //!< Obsolete bit
+                 bReserved1 : 7;           //!< Reserved bits
+   unsigned char pLogicalBlockAddress[4];  //!< Block to evaluate if PMI is set
+   unsigned char pReserved2[2];            //!< Reserved bytes
+   unsigned char isPMI : 1,                //!< Partial medium indicator bit
+                 bReserved3 : 7;           //!< Reserved bits
+   unsigned char bControl;                 //!< 0x00
 
 } SBCReadCapacity10;
 
@@ -458,8 +458,8 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char pLogicalBlockAddress[4]; //!< Address of last logical block
-    unsigned char pLogicalBlockLength[4];  //!< Length of last logical block
+   unsigned char pLogicalBlockAddress[4];  //!< Address of last logical block
+   unsigned char pLogicalBlockLength[4];   //!< Length of last logical block
 
 } SBCReadCapacity10Data;
 
@@ -469,12 +469,12 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode;    //!< 0x03 : SBC_REQUEST_SENSE
-    unsigned char isDesc    :1,      //!< Type of information expected
-                  bReserved1:7;      //!< Reserved bits
-    unsigned char pReserved2[2];     //!< Reserved bytes
-    unsigned char bAllocationLength; //!< Size of host buffer
-    unsigned char bControl;          //!< 0x00
+   unsigned char bOperationCode;     //!< 0x03 : SBC_REQUEST_SENSE
+   unsigned char isDesc    : 1,      //!< Type of information expected
+                 bReserved1 : 7;     //!< Reserved bits
+   unsigned char pReserved2[2];      //!< Reserved bytes
+   unsigned char bAllocationLength;  //!< Size of host buffer
+   unsigned char bControl;           //!< 0x00
 
 } SBCRequestSense;
 
@@ -485,23 +485,23 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bResponseCode:7,                //!< Sense data format
-                  isValid      :1;                //!< Information field is standard
-    unsigned char bObsolete1;                     //!< Obsolete byte
-    unsigned char bSenseKey :4,                   //!< Generic error information
-                  bReserved1:1,                   //!< Reserved bit
-                  isILI     :1,                   //!< SSC
-                  isEOM     :1,                   //!< SSC
-                  isFilemark:1;                   //!< SSC
-    unsigned char pInformation[4];                //!< Command-specific
-    unsigned char bAdditionalSenseLength;         //!< sizeof(SBCRequestSense_data)-8
-    unsigned char pCommandSpecificInformation[4]; //!< Command-specific
-    unsigned char bAdditionalSenseCode;           //!< Additional error information
-    unsigned char bAdditionalSenseCodeQualifier;  //!< Further error information
-    unsigned char bFieldReplaceableUnitCode;      //!< Specific component code
-    unsigned char bSenseKeySpecific:7,            //!< Additional exception info
-                  isSKSV           :1;            //!< Is sense key specific valid?
-    unsigned char pSenseKeySpecific[2];           //!< Additional exception info
+   unsigned char bResponseCode : 7,               //!< Sense data format
+                 isValid      : 1;                //!< Information field is standard
+   unsigned char bObsolete1;                      //!< Obsolete byte
+   unsigned char bSenseKey : 4,                   //!< Generic error information
+                 bReserved1 : 1,                  //!< Reserved bit
+                 isILI     : 1,                   //!< SSC
+                 isEOM     : 1,                   //!< SSC
+                 isFilemark : 1;                  //!< SSC
+   unsigned char pInformation[4];                 //!< Command-specific
+   unsigned char bAdditionalSenseLength;          //!< sizeof(SBCRequestSense_data)-8
+   unsigned char pCommandSpecificInformation[4];  //!< Command-specific
+   unsigned char bAdditionalSenseCode;            //!< Additional error information
+   unsigned char bAdditionalSenseCodeQualifier;   //!< Further error information
+   unsigned char bFieldReplaceableUnitCode;       //!< Specific component code
+   unsigned char bSenseKeySpecific : 7,           //!< Additional exception info
+                 isSKSV           : 1;            //!< Is sense key specific valid?
+   unsigned char pSenseKeySpecific[2];            //!< Additional exception info
 
 } SBCRequestSenseData;
 
@@ -511,9 +511,9 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode; //!< 0x00 : SBC_TEST_UNIT_READY
-    unsigned char pReserved1[4];  //!< Reserved bits
-    unsigned char bControl;       //!< 0x00
+   unsigned char bOperationCode;  //!< 0x00 : SBC_TEST_UNIT_READY
+   unsigned char pReserved1[4];   //!< Reserved bits
+   unsigned char bControl;        //!< 0x00
 
 } __attribute__ ((packed)) SBCTestUnitReady; // GCC
 
@@ -523,18 +523,18 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode;          //!< 0x2A : SBC_WRITE_10
-    unsigned char bObsolete1:1,            //!< Obsolete bit
-                  isFUA_NV:1,              //!< Cache control bit
-                  bReserved1:1,            //!< Reserved bit
-                  isFUA:1,                 //!< Cache control bit
-                  isDPO:1,                 //!< Cache control bit
-                  bWrProtect:3;            //!< Protection information to send
-    unsigned char pLogicalBlockAddress[4]; //!< First block to write
-    unsigned char bGroupNumber:5,          //!< Information grouping
-                  bReserved2:3;            //!< Reserved bits
-    unsigned char pTransferLength[2];      //!< Number of blocks to write
-    unsigned char bControl;                //!< 0x00
+   unsigned char bOperationCode;           //!< 0x2A : SBC_WRITE_10
+   unsigned char bObsolete1 : 1,           //!< Obsolete bit
+                 isFUA_NV : 1,             //!< Cache control bit
+                 bReserved1 : 1,           //!< Reserved bit
+                 isFUA : 1,                //!< Cache control bit
+                 isDPO : 1,                //!< Cache control bit
+                 bWrProtect : 3;           //!< Protection information to send
+   unsigned char pLogicalBlockAddress[4];  //!< First block to write
+   unsigned char bGroupNumber : 5,         //!< Information grouping
+                 bReserved2 : 3;           //!< Reserved bits
+   unsigned char pTransferLength[2];       //!< Number of blocks to write
+   unsigned char bControl;                 //!< 0x00
 
 } __attribute__ ((packed)) SBCWrite10;
 
@@ -544,11 +544,11 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode; //!< 0x1E : SBC_PREVENT_ALLOW_MEDIUM_REMOVAL
-    unsigned char pReserved1[3];  //!< Reserved bytes
-    unsigned char bPrevent:2,     //!< Accept/prohibit removal
-                  bReserved2:6;   //!< Reserved bits
-    unsigned char bControl;       //!< 0x00
+   unsigned char bOperationCode;  //!< 0x1E : SBC_PREVENT_ALLOW_MEDIUM_REMOVAL
+   unsigned char pReserved1[3];   //!< Reserved bytes
+   unsigned char bPrevent : 2,    //!< Accept/prohibit removal
+                 bReserved2 : 6;  //!< Reserved bits
+   unsigned char bControl;        //!< 0x00
 
 } __attribute__ ((packed)) SBCMediumRemoval; // GCC
 
@@ -558,15 +558,15 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bOperationCode;    //!< 0x1A : SBC_MODE_SENSE_6
-    unsigned char bReserved1:3,      //!< Reserved bits
-                  isDBD:1,           //!< Disable block descriptors bit
-                  bReserved2:4;      //!< Reserved bits
-    unsigned char bPageCode:6,       //!< Mode page to return
-                  bPC:2;             //!< Type of parameter values to return
-    unsigned char bSubpageCode;      //!< Mode subpage to return
-    unsigned char bAllocationLength; //!< Host buffer allocated size
-    unsigned char bControl;          //!< 0x00
+   unsigned char bOperationCode;     //!< 0x1A : SBC_MODE_SENSE_6
+   unsigned char bReserved1 : 3,     //!< Reserved bits
+                 isDBD : 1,          //!< Disable block descriptors bit
+                 bReserved2 : 4;     //!< Reserved bits
+   unsigned char bPageCode : 6,      //!< Mode page to return
+                 bPC : 2;            //!< Type of parameter values to return
+   unsigned char bSubpageCode;       //!< Mode subpage to return
+   unsigned char bAllocationLength;  //!< Host buffer allocated size
+   unsigned char bControl;           //!< 0x00
 
 } __attribute__ ((packed)) SBCModeSense6; // GCC
 
@@ -576,13 +576,13 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bModeDataLength;          //!< Length of mode data to follow
-    unsigned char bMediumType;              //!< Type of medium (SBC_MEDIUM_TYPE_DIRECT_ACCESS_BLOCK_DEVICE)
-    unsigned char bReserved1:4,             //!< Reserved bits
-                  isDPOFUA:1,               //!< DPO/FUA bits supported ?
-                  bReserved2:2,             //!< Reserved bits
-                  isWP:1;                   //!< Is medium write-protected ?
-    unsigned char bBlockDescriptorLength;   //!< Length of all block descriptors
+   unsigned char bModeDataLength;           //!< Length of mode data to follow
+   unsigned char bMediumType;               //!< Type of medium (SBC_MEDIUM_TYPE_DIRECT_ACCESS_BLOCK_DEVICE)
+   unsigned char bReserved1 : 4,            //!< Reserved bits
+                 isDPOFUA : 1,              //!< DPO/FUA bits supported ?
+                 bReserved2 : 2,            //!< Reserved bits
+                 isWP : 1;                  //!< Is medium write-protected ?
+   unsigned char bBlockDescriptorLength;    //!< Length of all block descriptors
 
 } __attribute__ ((packed)) SBCModeParameterHeader6; // GCC
 
@@ -592,22 +592,22 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bPageCode:6,       //!< 0x1C : SBC_PAGE_INFORMATIONAL_EXCEPTIONS_CONTROL
-                  isSPF:1,           //!< Page or subpage data format
-                  isPS:1;            //!< Parameters saveable ?
-    unsigned char bPageLength;       //!< Length of page data (0x0A)
-    unsigned char isLogErr:1,        //!< Should informational exceptions be logged ?
-                  isEBackErr:1,      //!< Enable background error bit
-                  isTest:1,          //!< Create a device test failure ?
-                  isDExcpt:1,        //!< Disable exception control bit
-                  isEWasc:1,         //!< Report warnings ?
-                  isEBF:1,           //!< Enable background function bit
-                  bReserved1:1,      //!< Reserved bit
-                  isPerf:1;          //!< Delay acceptable when treating exceptions ?
-    unsigned char bMRIE:4,           //!< Method of reporting informational exceptions
-                  bReserved2:4;      //!< Reserved bits
-    unsigned char pIntervalTimer[4]; //!< Error reporting period
-    unsigned char pReportCount[4];   //!< Maximum number of time a report can be issued
+   unsigned char bPageCode : 6,      //!< 0x1C : SBC_PAGE_INFORMATIONAL_EXCEPTIONS_CONTROL
+                 isSPF : 1,          //!< Page or subpage data format
+                 isPS : 1;           //!< Parameters saveable ?
+   unsigned char bPageLength;        //!< Length of page data (0x0A)
+   unsigned char isLogErr : 1,       //!< Should informational exceptions be logged ?
+                 isEBackErr : 1,     //!< Enable background error bit
+                 isTest : 1,         //!< Create a device test failure ?
+                 isDExcpt : 1,       //!< Disable exception control bit
+                 isEWasc : 1,        //!< Report warnings ?
+                 isEBF : 1,          //!< Enable background function bit
+                 bReserved1 : 1,     //!< Reserved bit
+                 isPerf : 1;         //!< Delay acceptable when treating exceptions ?
+   unsigned char bMRIE : 4,          //!< Method of reporting informational exceptions
+                 bReserved2 : 4;     //!< Reserved bits
+   unsigned char pIntervalTimer[4];  //!< Error reporting period
+   unsigned char pReportCount[4];    //!< Maximum number of time a report can be issued
 
 } __attribute__ ((packed)) SBCInformationalExceptionsControl; // GCC
 
@@ -617,24 +617,24 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
 
-    unsigned char bPageCode:6,           //!< 0x01 : SBC_PAGE_READ_WRITE_ERROR_RECOVERY
-                  isSPF:1,               //!< Page or subpage data format
-                  isPS:1;                //!< Parameters saveable ?
-    unsigned char bPageLength;           //!< Length of page data (0x0A)
-    unsigned char isDCR:1,               //!< Disable correction bit
-                  isDTE:1,               //!< Data terminate on error bit
-                  isPER:1,               //!< Post error bit
-                  isEER:1,               //!< Enable early recovery bit
-                  isRC:1,                //!< Read continuous bit
-                  isTB:1,                //!< Transfer block bit
-                  isARRE:1,              //!< Automatic read reallocation enabled bit
-                  isAWRE:1;              //!< Automatic write reallocation enabled bit
-    unsigned char bReadRetryCount;       //!< Number of retries when reading
-    unsigned char pObsolete1[3];         //!< Obsolete bytes
-    unsigned char bReserved1;            //!< Reserved byte
-    unsigned char bWriteRetryCount;      //!< Number of retries when writing
-    unsigned char bReserved2;            //!< Reserved byte
-    unsigned char pRecoveryTimeLimit[2]; //!< Maximum time duration for error recovery
+   unsigned char bPageCode : 6,          //!< 0x01 : SBC_PAGE_READ_WRITE_ERROR_RECOVERY
+                 isSPF : 1,              //!< Page or subpage data format
+                 isPS : 1;               //!< Parameters saveable ?
+   unsigned char bPageLength;            //!< Length of page data (0x0A)
+   unsigned char isDCR : 1,              //!< Disable correction bit
+                 isDTE : 1,              //!< Data terminate on error bit
+                 isPER : 1,              //!< Post error bit
+                 isEER : 1,              //!< Enable early recovery bit
+                 isRC : 1,               //!< Read continuous bit
+                 isTB : 1,               //!< Transfer block bit
+                 isARRE : 1,             //!< Automatic read reallocation enabled bit
+                 isAWRE : 1;             //!< Automatic write reallocation enabled bit
+   unsigned char bReadRetryCount;        //!< Number of retries when reading
+   unsigned char pObsolete1[3];          //!< Obsolete bytes
+   unsigned char bReserved1;             //!< Reserved byte
+   unsigned char bWriteRetryCount;       //!< Number of retries when writing
+   unsigned char bReserved2;             //!< Reserved byte
+   unsigned char pRecoveryTimeLimit[2];  //!< Maximum time duration for error recovery
 
 } __attribute__ ((packed)) SBCReadWriteErrorRecovery; // GCC
 
@@ -651,20 +651,20 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef union {
 
-    unsigned char     bOperationCode; //!< Operation code of the command
-    SBCInquiry        inquiry;        //!< INQUIRY command
-    SBCRead10         read10;         //!< READ (10) command
-    SBCReadCapacity10 readCapacity10; //!< READ CAPACITY (10) command
-    SBCRequestSense   requestSense;   //!< REQUEST SENSE command
-    SBCTestUnitReady  testUnitReady;  //!< TEST UNIT READY command
-    SBCWrite10        write10;        //!< WRITE (10) command
-    SBCMediumRemoval  mediumRemoval;  //!< PREVENT/ALLOW MEDIUM REMOVAL command
-    SBCModeSense6     modeSense6;     //!< MODE SENSE (6) command
+   unsigned char bOperationCode;      //!< Operation code of the command
+   SBCInquiry inquiry;                //!< INQUIRY command
+   SBCRead10 read10;                  //!< READ (10) command
+   SBCReadCapacity10 readCapacity10;  //!< READ CAPACITY (10) command
+   SBCRequestSense requestSense;      //!< REQUEST SENSE command
+   SBCTestUnitReady testUnitReady;    //!< TEST UNIT READY command
+   SBCWrite10 write10;                //!< WRITE (10) command
+   SBCMediumRemoval mediumRemoval;    //!< PREVENT/ALLOW MEDIUM REMOVAL command
+   SBCModeSense6 modeSense6;          //!< MODE SENSE (6) command
 
 } SBCCommand;
 
 #ifdef __ICCARM__          // IAR
-#pragma pack()             // IAR
+   #pragma pack() // IAR
 #endif                     // IAR
 
 //

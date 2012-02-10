@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include <stdlib.h>
 #include <string.h>
@@ -44,7 +44,7 @@ either the MPL or the [eCos GPL] License."
 #include "kofs.h"
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 static const char _kofsstr[]=".";
@@ -79,23 +79,23 @@ typedef uint16_t kofs_ino_t;
 typedef uint16_t kofs_attr_t;
 typedef uint16_t kofs_size_t;
 
-typedef struct kofs_node_st{
+typedef struct kofs_node_st {
    kofs_ino_t ino;
-   char       name[KOFS_MAX_FILENAME];
+   char name[KOFS_MAX_FILENAME];
 
-   kofs_attr_t   attr;
-   kofs_size_t   size;
+   kofs_attr_t attr;
+   kofs_size_t size;
 
-   time_t      cmtime;///creation/modifed time.
+   time_t cmtime;     ///creation/modifed time.
 
-   void* p_o;//objects
+   void* p_o; //objects
 
    struct kofs_node_st *next;
 }kofs_node_t;
 
-typedef struct kofs_entry_st{
+typedef struct kofs_entry_st {
    kofs_ino_t ino;
-   char       name[KOFS_MAX_FILENAME];
+   char name[KOFS_MAX_FILENAME];
 }kofs_entry_t;
 
 #define KOFS_INO_ROOT         0
@@ -116,8 +116,10 @@ typedef struct kofs_entry_st{
 
 
 struct kofs_node_st kofs_root_node[]={
-   {KOFS_INO_PROC,   "proc",      S_IFDIR, 0*sizeof(kofs_entry_t), (time_t)0, (void*)0, (struct kofs_node_st *)&kofs_root_node[KOFS_INO_PROC+1]},
-   {KOFS_INO_SEM,    "sem",       S_IFDIR, 0*sizeof(kofs_entry_t), (time_t)0, (void*)0, (struct kofs_node_st *)&kofs_root_node[KOFS_INO_SEM+1]},
+   {KOFS_INO_PROC,   "proc",      S_IFDIR, 0*sizeof(kofs_entry_t), (time_t)0, (void*)0,
+    (struct kofs_node_st *)&kofs_root_node[KOFS_INO_PROC+1]},
+   {KOFS_INO_SEM,    "sem",       S_IFDIR, 0*sizeof(kofs_entry_t), (time_t)0, (void*)0,
+    (struct kofs_node_st *)&kofs_root_node[KOFS_INO_SEM+1]},
    {KOFS_INO_MQUEUE, "mqueue",    S_IFDIR, 0*sizeof(kofs_entry_t), (time_t)0, (void*)0, NULL}
 
 };
@@ -127,43 +129,46 @@ const int kofs_root_node_entry_max=sizeof(kofs_root_node)/sizeof(kofs_node_t);
 
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 
 /*--------------------------------------------
 | Name:        _kofs_itoa
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
 | Comments: from http://www.jb.man.ac.uk/~slowe/cpp/itoa.html
-| See:         
+| See:
 ----------------------------------------------*/
 char* _kofs_ultoa(unsigned long value, char* result, int base) {
-   
+
    char* ptr = result, *ptr1 = result, tmp_char;
    unsigned long tmp_value;
 
-	// check that the base if valid
-	if (base < 2 || base > 36) {
-      *result = '\0'; 
-      return result; 
+   // check that the base if valid
+   if (base < 2 || base > 36) {
+      *result = '\0';
+      return result;
    }
 
-	do {
-		tmp_value = value;
-		value /= base;
-		*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-	} while ( value );
+   do {
+      tmp_value = value;
+      value /= base;
+      *ptr++ =
+         "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 +
+                                                                                    (tmp_value -
+                                                                                     value * base)];
+   } while ( value );
 
-	// Apply negative sign
-	if (tmp_value < 0) *ptr++ = '-';
-	*ptr-- = '\0';
-	while(ptr1 < ptr) {
-		tmp_char = *ptr;
-		*ptr--= *ptr1;
-		*ptr1++ = tmp_char;
-	}
-	return result;
+   // Apply negative sign
+   if (tmp_value < 0) *ptr++ = '-';
+   *ptr-- = '\0';
+   while(ptr1 < ptr) {
+      tmp_char = *ptr;
+      *ptr--= *ptr1;
+      *ptr1++ = tmp_char;
+   }
+   return result;
 }
 
 /*-------------------------------------------
@@ -175,13 +180,13 @@ char* _kofs_ultoa(unsigned long value, char* result, int base) {
 | See:
 ---------------------------------------------*/
 int _kofs_statfs(mntdev_t* pmntdev,struct statvfs *statvfs){
-   
+
    memset(statvfs,0,sizeof(struct statvfs));
 
    statvfs->f_bsize  =0; //RTFS_BLOCK_SIZE;
    statvfs->f_frsize =0; //RTFS_BLOCK_SIZE;
 
-   statvfs->f_blocks = 0;//rtfs_blkalloc_size<<3;//*8
+   statvfs->f_blocks = 0; //rtfs_blkalloc_size<<3;//*8
    statvfs->f_namemax = KOFS_MAX_FILENAME;
 
    statvfs->f_bfree = 0;
@@ -213,8 +218,8 @@ int _kofs_readfs(mntdev_t* pmntdev){
 
    pmntdev->inodetbl_size =4096; //RTFS_NODETBL_SIZE;
    //_kofs_offset = pmntdev->inodenb_offset;
-      
-    return 0;
+
+   return 0;
 }
 
 /*-------------------------------------------
@@ -264,12 +269,12 @@ int _kofs_mountdir(desc_t desc,inodenb_t original_root_node,inodenb_t target_roo
 ---------------------------------------------*/
 int _kofs_readdir(desc_t desc,dirent_t* dirent){
 
-   inodenb_t   _ino_logic= ofile_lst[desc].inodenb;
-   kofs_ino_t  _ino_phys= 0;
+   inodenb_t _ino_logic= ofile_lst[desc].inodenb;
+   kofs_ino_t _ino_phys= 0;
 
    _ino_phys = (kofs_ino_t)__cvt2physnode(desc,_ino_logic);
 
-   if(_ino_phys==KOFS_INO_ROOT){
+   if(_ino_phys==KOFS_INO_ROOT) {
       uchar8_t* p=(uchar8_t*)&kofs_root_node[0];
       kofs_node_t* p_kofs_node;
 
@@ -283,22 +288,25 @@ int _kofs_readdir(desc_t desc,dirent_t* dirent){
       //
       dirent->inodenb = __cvt2logicnode(desc,p_kofs_node->ino);
       strcpy(dirent->d_name,p_kofs_node->name);
-      
-   }else if(_ino_phys==KOFS_INO_PROC){
+
+   }else if(_ino_phys==KOFS_INO_PROC) {
       int pid=ofile_lst[desc].offset/sizeof(process_t)+1;
 
       if(pid>=PROCESS_MAX)
          return -1;
       //
-      while(pid<=PROCESS_MAX){
+      while(pid<=PROCESS_MAX) {
          //
-         if(process_lst[pid]){
+         if(process_lst[pid]) {
             char* str;
             //
             _ino_phys=(pid+KOFS_INO_PROC_LST);
             //
             dirent->inodenb = __cvt2logicnode(desc,_ino_phys);
-            strcpy(dirent->d_name, ( (str=strrchr(process_lst[pid]->argv[0],'/'))?(str+1):process_lst[pid]->argv[0] ) );
+            strcpy(dirent->d_name,
+                   ( (str=
+                         strrchr(process_lst[pid]->argv[0],
+                                 '/')) ? (str+1) : process_lst[pid]->argv[0] ) );
             //
             ofile_lst[desc].offset+=sizeof(process_t);
             pid=ofile_lst[desc].offset/sizeof(process_t)+1;
@@ -310,24 +318,24 @@ int _kofs_readdir(desc_t desc,dirent_t* dirent){
       }
 
       return -1;
-   }else if(_ino_phys>KOFS_INO_PROC_LST && _ino_phys<KOFS_INO_PROC_LST_MAX){
+   }else if(_ino_phys>KOFS_INO_PROC_LST && _ino_phys<KOFS_INO_PROC_LST_MAX) {
       int pid = (_ino_phys - KOFS_INO_PROC_LST);
       int iteration = ofile_lst[desc].offset;
 
       //
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          char buf[KOFS_MAX_FILENAME];
          kernel_pthread_t* pthread_ptr=process_lst[pid]->pthread_ptr;
          //
-         while(pthread_ptr){            
+         while(pthread_ptr) {
             if(!iteration--)
                break;
             pthread_ptr=pthread_ptr->next;
          }
 
          //
-         if(!pthread_ptr){
-            if(!iteration){
+         if(!pthread_ptr) {
+            if(!iteration) {
                _ino_phys=(pid+KOFS_INO_PROC_OBJECTS);
                //
                dirent->inodenb = __cvt2logicnode(desc,_ino_phys);
@@ -349,28 +357,28 @@ int _kofs_readdir(desc_t desc,dirent_t* dirent){
          strcat(dirent->d_name,_kofs_ultoa(pthread_ptr->id,buf,16));
          //
          ofile_lst[desc].offset++;
-         
+
       }
 
-   }else if(_ino_phys>KOFS_INO_PROC_OBJECTS && _ino_phys<KOFS_INO_PROC_OBJECTS_MAX){
+   }else if(_ino_phys>KOFS_INO_PROC_OBJECTS && _ino_phys<KOFS_INO_PROC_OBJECTS_MAX) {
 
       int pid = (_ino_phys - KOFS_INO_PROC_OBJECTS);
       int iteration = ofile_lst[desc].offset;
 
       //
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          char buf[KOFS_MAX_FILENAME];
          kernel_object_t* kernel_object_ptr=process_lst[pid]->kernel_object_head;
          unsigned long kernel_object_addr;
          //
-         while(kernel_object_ptr){            
+         while(kernel_object_ptr) {
             if(!iteration--)
                break;
             kernel_object_ptr=kernel_object_ptr->next;
          }
 
          //
-         if(!kernel_object_ptr){
+         if(!kernel_object_ptr) {
             return -1;
          }
          //
@@ -378,41 +386,41 @@ int _kofs_readdir(desc_t desc,dirent_t* dirent){
          //
          dirent->inodenb = __cvt2logicnode(desc,_ino_phys);
          //
-         switch(kernel_object_ptr->type){
-            //
-            case KERNEL_OBJECT_PTRHEAD_MUTEX:
-               strcpy(dirent->d_name,"mutex.0x");
+         switch(kernel_object_ptr->type) {
+         //
+         case KERNEL_OBJECT_PTRHEAD_MUTEX:
+            strcpy(dirent->d_name,"mutex.0x");
             break;
-            //
-            case KERNEL_OBJECT_SEM:
-               strcpy(dirent->d_name,"sem.anonymous.0x");
+         //
+         case KERNEL_OBJECT_SEM:
+            strcpy(dirent->d_name,"sem.anonymous.0x");
             break;
-            //
-            case KERNEL_OBJECT_TIMER:
-               strcpy(dirent->d_name,"timer.0x");
+         //
+         case KERNEL_OBJECT_TIMER:
+            strcpy(dirent->d_name,"timer.0x");
             break;
-            //
-            case KERNEL_OBJECT_PIPE:
-               strcpy(dirent->d_name,"pipe.0x");
+         //
+         case KERNEL_OBJECT_PIPE:
+            strcpy(dirent->d_name,"pipe.0x");
             break;
 
-            default:
-               strcpy(dirent->d_name,"unknow.0x");
+         default:
+            strcpy(dirent->d_name,"unknow.0x");
             break;
          }
 
          kernel_object_addr=(unsigned long)kernel_object_ptr;
-         
+
          //ltoa(pthread_ptr->id,dirent->d_name,16);
          strcat(dirent->d_name,_kofs_ultoa(kernel_object_addr,buf,16));
          //
          ofile_lst[desc].offset++;
-         
+
       }
-      
+
    }
 
-    
+
    return 0;
 }
 
@@ -426,12 +434,12 @@ int _kofs_readdir(desc_t desc,dirent_t* dirent){
 ---------------------------------------------*/
 int _kofs_telldir(desc_t desc){
    int loc=0;
-   inodenb_t   _ino_logic= ofile_lst[desc].inodenb;
-   kofs_ino_t  _ino_phys= 0;
+   inodenb_t _ino_logic= ofile_lst[desc].inodenb;
+   kofs_ino_t _ino_phys= 0;
 
    _ino_phys = (kofs_ino_t)__cvt2physnode(desc,_ino_logic);
 
-   if(_ino_phys==KOFS_INO_ROOT){
+   if(_ino_phys==KOFS_INO_ROOT) {
       loc = ofile_lst[desc].offset / sizeof(kofs_node_t);
    }
 
@@ -447,12 +455,12 @@ int _kofs_telldir(desc_t desc){
 | See:
 ---------------------------------------------*/
 int _kofs_seekdir(desc_t desc,int loc){
-   inodenb_t   _ino_logic=ofile_lst[desc].inodenb;
-   kofs_ino_t  _ino_phys= 0;
+   inodenb_t _ino_logic=ofile_lst[desc].inodenb;
+   kofs_ino_t _ino_phys= 0;
 
    _ino_phys = (kofs_ino_t)__cvt2physnode(desc,_ino_logic);
 
-   if(_ino_phys==KOFS_INO_ROOT){
+   if(_ino_phys==KOFS_INO_ROOT) {
       int pos = loc * sizeof(kofs_node_t);
       ofile_lst[desc].offset+=pos;
    }
@@ -469,31 +477,31 @@ int _kofs_seekdir(desc_t desc,int loc){
 | See:
 ---------------------------------------------*/
 inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
-   inodenb_t  _ino_logic= ofile_lst[desc].inodenb;
-   kofs_ino_t  _ino_phys= 0;
+   inodenb_t _ino_logic= ofile_lst[desc].inodenb;
+   kofs_ino_t _ino_phys= 0;
 
    _ino_phys = (kofs_ino_t)__cvt2physnode(desc,_ino_logic);
 
-   if(   filename[0]=='.' 
-      && filename[1]=='\0'){
+   if(   filename[0]=='.'
+         && filename[1]=='\0') {
 
       return ofile_lst[desc].inodenb;
-   
-   }else if(   filename[0]=='.' 
-            && filename[1]=='.'
-            && filename[2]=='\0'){
+
+   }else if(   filename[0]=='.'
+               && filename[1]=='.'
+               && filename[2]=='\0') {
 
       return ofile_lst[desc].dir_inodenb;
 
-   }else if(_ino_phys==KOFS_INO_ROOT){
+   }else if(_ino_phys==KOFS_INO_ROOT) {
       uchar8_t* p=(uchar8_t*)&kofs_root_node[0];
       kofs_node_t* p_kofs_node;
       int offset=0;
-      while(offset<kofs_root_node_sz){
+      while(offset<kofs_root_node_sz) {
          //
          p_kofs_node=(kofs_node_t*)p;
          //
-         if(!strcmp(filename,p_kofs_node->name)){
+         if(!strcmp(filename,p_kofs_node->name)) {
             _ino_logic = __cvt2logicnode(desc,p_kofs_node->ino);
             return _ino_logic;
          }
@@ -501,18 +509,21 @@ inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
          offset+= sizeof(kofs_node_t);
          p+=offset;
       }
-      
-   }else if(_ino_phys==KOFS_INO_PROC){
+
+   }else if(_ino_phys==KOFS_INO_PROC) {
       int pid=ofile_lst[desc].offset/sizeof(process_t)+1;
       //
-      while(pid<=PROCESS_MAX){
+      while(pid<=PROCESS_MAX) {
          //
-         if(process_lst[pid]){
+         if(process_lst[pid]) {
             char* str;
             _ino_phys=(pid+KOFS_INO_PROC_LST);
             //
-            if(!strcmp(filename, ( (str=strrchr(process_lst[pid]->argv[0],'/'))?(str+1):process_lst[pid]->argv[0] ) ) ){
-            //if(!strcmp(filename,process_lst[pid]->argv[0])){
+            if(!strcmp(filename,
+                       ( (str=
+                             strrchr(process_lst[pid]->argv[0],
+                                     '/')) ? (str+1) : process_lst[pid]->argv[0] ) ) ) {
+               //if(!strcmp(filename,process_lst[pid]->argv[0])){
                _ino_logic = __cvt2logicnode(desc,_ino_phys);
                return _ino_logic;
             }
@@ -521,15 +532,15 @@ inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
          ofile_lst[desc].offset+=sizeof(process_t);
          pid=ofile_lst[desc].offset/sizeof(process_t)+1;
       }
-   }else if(_ino_phys>KOFS_INO_PROC_LST && _ino_phys<KOFS_INO_PROC_LST_MAX){
+   }else if(_ino_phys>KOFS_INO_PROC_LST && _ino_phys<KOFS_INO_PROC_LST_MAX) {
       int pid = (_ino_phys - KOFS_INO_PROC_LST);
       //
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          char buf[KOFS_MAX_FILENAME];
          char _buf[KOFS_MAX_FILENAME];
          kernel_pthread_t* pthread_ptr=process_lst[pid]->pthread_ptr;
          //
-         while(pthread_ptr){            
+         while(pthread_ptr) {
             //
             _ino_phys=(pthread_ptr->id+KOFS_INO_PROC_THREAD);
             //
@@ -545,7 +556,7 @@ inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
          }
 
          //
-         if(!pthread_ptr){
+         if(!pthread_ptr) {
             _ino_phys=(pid+KOFS_INO_PROC_OBJECTS);
             //
             _ino_logic = __cvt2logicnode(desc,_ino_phys);
@@ -555,45 +566,45 @@ inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
                return _ino_logic;
          }
          //
-      }        
-   }else if(_ino_phys>KOFS_INO_PROC_OBJECTS && _ino_phys<KOFS_INO_PROC_OBJECTS_MAX){
+      }
+   }else if(_ino_phys>KOFS_INO_PROC_OBJECTS && _ino_phys<KOFS_INO_PROC_OBJECTS_MAX) {
 
       int pid = (_ino_phys - KOFS_INO_PROC_OBJECTS);
       //
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          char buf[KOFS_MAX_FILENAME];
          char _buf[KOFS_MAX_FILENAME];
 
          kernel_object_t* kernel_object_ptr=process_lst[pid]->kernel_object_head;
          unsigned long kernel_object_addr;
          //
-         while(kernel_object_ptr){            
-   
+         while(kernel_object_ptr) {
+
             //
             _ino_phys=(kernel_object_ptr->id+KOFS_INO_PROC_OBJECTS_OBJECT);
             //
             _ino_logic = __cvt2logicnode(desc,_ino_phys);
             //
-            switch(kernel_object_ptr->type){
-               //
-               case KERNEL_OBJECT_PTRHEAD_MUTEX:
-                  strcpy(buf,"mutex.0x");
+            switch(kernel_object_ptr->type) {
+            //
+            case KERNEL_OBJECT_PTRHEAD_MUTEX:
+               strcpy(buf,"mutex.0x");
                break;
-               //
-               case KERNEL_OBJECT_SEM:
-                  strcpy(buf,"sem.anonymous.0x");
+            //
+            case KERNEL_OBJECT_SEM:
+               strcpy(buf,"sem.anonymous.0x");
                break;
-               //
-               case KERNEL_OBJECT_TIMER:
-                  strcpy(buf,"timer.0x");
+            //
+            case KERNEL_OBJECT_TIMER:
+               strcpy(buf,"timer.0x");
                break;
-               //
-               case KERNEL_OBJECT_PIPE:
-                  strcpy(buf,"pipe.0x");
+            //
+            case KERNEL_OBJECT_PIPE:
+               strcpy(buf,"pipe.0x");
                break;
 
-               default:
-                  strcpy(buf,"unknow.0x");
+            default:
+               strcpy(buf,"unknow.0x");
                break;
             }
 
@@ -609,7 +620,7 @@ inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
       }
    }
 
-   
+
 
    return INVALID_INODE_NB;
 }
@@ -636,7 +647,7 @@ int _kofs_mknod(desc_t desc,inodenb_t inodenb,dev_t dev){
 ---------------------------------------------*/
 inodenb_t _kofs_create(desc_t desc,char* filename, int attr){
 
-   return -1;/*_inode*/;
+   return -1; /*_inode*/;
 }
 
 /*-------------------------------------------
@@ -648,35 +659,35 @@ inodenb_t _kofs_create(desc_t desc,char* filename, int attr){
 | See:
 ---------------------------------------------*/
 int _kofs_open(desc_t desc){
-   kofs_ino_t  _ino_logic= (kofs_ino_t)ofile_lst[desc].inodenb;
-   kofs_ino_t  _ino_phys= 0;
+   kofs_ino_t _ino_logic= (kofs_ino_t)ofile_lst[desc].inodenb;
+   kofs_ino_t _ino_phys= 0;
 
 
    _ino_phys = (kofs_ino_t)__cvt2physnode(desc,_ino_logic);
 
-   if(_ino_phys==KOFS_INO_ROOT){
+   if(_ino_phys==KOFS_INO_ROOT) {
       ofile_lst[desc].offset  =0;
       ofile_lst[desc].attr    = S_IFDIR;
       ofile_lst[desc].size    = kofs_root_node_sz;
       ofile_lst[desc].cmtime  = 0;
-   }else if(_ino_phys==KOFS_INO_PROC){
+   }else if(_ino_phys==KOFS_INO_PROC) {
       ofile_lst[desc].offset  =0;
       ofile_lst[desc].attr    = kofs_root_node[_ino_phys].attr;
       ofile_lst[desc].size    = PROCESS_MAX*sizeof(process_t);
       ofile_lst[desc].cmtime  = 0;
-   }else if(_ino_phys==KOFS_INO_SEM){
+   }else if(_ino_phys==KOFS_INO_SEM) {
       ofile_lst[desc].offset  =0;
       ofile_lst[desc].attr    = kofs_root_node[_ino_phys].attr;
       ofile_lst[desc].size    = kofs_root_node[_ino_phys].size;
       ofile_lst[desc].cmtime  = 0;
-   }else if(_ino_phys==KOFS_INO_MQUEUE){
+   }else if(_ino_phys==KOFS_INO_MQUEUE) {
       ofile_lst[desc].offset  =0;
       ofile_lst[desc].attr    = kofs_root_node[_ino_phys].attr;
       ofile_lst[desc].size    = kofs_root_node[_ino_phys].size;
       ofile_lst[desc].cmtime  = 0;
-   }else if( (_ino_phys>KOFS_INO_PROC_LST) && (_ino_phys<KOFS_INO_PROC_LST_MAX ) ){
+   }else if( (_ino_phys>KOFS_INO_PROC_LST) && (_ino_phys<KOFS_INO_PROC_LST_MAX ) ) {
       int pid = (_ino_phys - KOFS_INO_PROC_LST);
-      
+
       //
       ofile_lst[desc].offset  = 0;
       ofile_lst[desc].attr    = S_IFDIR;
@@ -684,27 +695,27 @@ int _kofs_open(desc_t desc){
       ofile_lst[desc].cmtime  = 0;
 
       //
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          kernel_pthread_t* pthread_ptr=process_lst[pid]->pthread_ptr;
-         while(pthread_ptr){
+         while(pthread_ptr) {
             ofile_lst[desc].size++;
             pthread_ptr=pthread_ptr->next;
          }
-         
+
          ofile_lst[desc].cmtime = process_lst[pid]->start_time;
       }
-   }else if( (_ino_phys>KOFS_INO_PROC_THREAD) && (_ino_phys<KOFS_INO_PROC_THREAD_MAX ) ){
+   }else if( (_ino_phys>KOFS_INO_PROC_THREAD) && (_ino_phys<KOFS_INO_PROC_THREAD_MAX ) ) {
       int pthread_id = (_ino_phys - KOFS_INO_PROC_THREAD);
       pid_t pid;
       kernel_pthread_t* pthread_ptr=g_pthread_lst;
-      
+
       //
       ofile_lst[desc].offset  = 0;
       ofile_lst[desc].attr    = S_IFREG;
       ofile_lst[desc].size    = sizeof(kernel_pthread_t);
       ofile_lst[desc].cmtime  = 0;
       //
-      while(pthread_ptr){
+      while(pthread_ptr) {
          if(pthread_ptr->id==pthread_id)
             break;
          pthread_ptr=pthread_ptr->next;
@@ -715,7 +726,7 @@ int _kofs_open(desc_t desc){
 
       if((pid=pthread_ptr->pid)>0)
          ofile_lst[desc].cmtime = process_lst[pid]->start_time;
-   }else if( _ino_phys>KOFS_INO_PROC_OBJECTS && _ino_phys<KOFS_INO_PROC_OBJECTS_MAX){
+   }else if( _ino_phys>KOFS_INO_PROC_OBJECTS && _ino_phys<KOFS_INO_PROC_OBJECTS_MAX) {
       pid_t pid = (_ino_phys - KOFS_INO_PROC_OBJECTS);
       kernel_object_t* kernel_object_ptr;
       //
@@ -724,18 +735,19 @@ int _kofs_open(desc_t desc){
       ofile_lst[desc].size    = 0;
       ofile_lst[desc].cmtime  = 0;
 
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          kernel_object_ptr=process_lst[pid]->kernel_object_head;
          //
-         while(kernel_object_ptr){
+         while(kernel_object_ptr) {
             ofile_lst[desc].size++;
             kernel_object_ptr=kernel_object_ptr->next;
          }
       }
-   }else if( _ino_phys>KOFS_INO_PROC_OBJECTS_OBJECT && _ino_phys<KOFS_INO_PROC_OBJECTS_OBJECT_MAX){
-      kernel_object_id_t  id= (_ino_phys - KOFS_INO_PROC_OBJECTS_OBJECT);
+   }else if( _ino_phys>KOFS_INO_PROC_OBJECTS_OBJECT && _ino_phys<
+             KOFS_INO_PROC_OBJECTS_OBJECT_MAX) {
+      kernel_object_id_t id= (_ino_phys - KOFS_INO_PROC_OBJECTS_OBJECT);
       //
-      kofs_ino_t  _dir_ino_phys = (kofs_ino_t)__cvt2physnode(desc,ofile_lst[desc].dir_inodenb);
+      kofs_ino_t _dir_ino_phys = (kofs_ino_t)__cvt2physnode(desc,ofile_lst[desc].dir_inodenb);
       pid_t pid = (_dir_ino_phys - KOFS_INO_PROC_OBJECTS);
       //
       kernel_object_t* kernel_object_ptr=(kernel_object_t*)0;
@@ -745,10 +757,10 @@ int _kofs_open(desc_t desc){
       ofile_lst[desc].size    = sizeof(kernel_object_t);
       ofile_lst[desc].cmtime  = 0;
       //
-      if(process_lst[pid]){
+      if(process_lst[pid]) {
          kernel_object_ptr=process_lst[pid]->kernel_object_head;
          //
-         while(kernel_object_ptr){
+         while(kernel_object_ptr) {
             if(kernel_object_ptr->id==id)
                break;
             kernel_object_ptr=kernel_object_ptr->next;
@@ -812,22 +824,22 @@ int _kofs_seek(desc_t desc, int offset, int origin)
 {
    switch(origin)
    {
-      case SEEK_SET:
-         //Begin of the File
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      //Begin of the File
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         //Current position of the file
-         ofile_lst[desc].offset=ofile_lst[desc].offset+offset;
+   case SEEK_CUR:
+      //Current position of the file
+      ofile_lst[desc].offset=ofile_lst[desc].offset+offset;
       break;
 
-      case SEEK_END:
-         //End of the File
-         ofile_lst[desc].offset = (ofile_lst[desc].size)+offset;
+   case SEEK_END:
+      //End of the File
+      ofile_lst[desc].offset = (ofile_lst[desc].size)+offset;
       break;
 
-      default:
+   default:
       return -1;
    }
 

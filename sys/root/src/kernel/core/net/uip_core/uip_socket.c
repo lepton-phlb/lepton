@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -52,9 +52,9 @@ Includes
 #include "kernel/core/net/uip_core/uip_core.h"
 
 #if UIP_LOGGING!=1
-#include "lib/libc/stdio/stdio.h"
+   #include "lib/libc/stdio/stdio.h"
 #else
-#pragma message ("warning uip 1.0 logging")
+   #pragma message ("warning uip 1.0 logging")
 #endif
 
 
@@ -113,8 +113,8 @@ unsigned long _uip_inet_addr(char *cp){
    strcpy(saddr,cp);
 
    token= strtok(saddr,".");
-   
-   while(token && i++<4){
+
+   while(token && i++<4) {
 
       if(!token)
          return -1;
@@ -138,9 +138,9 @@ unsigned long _uip_inet_addr(char *cp){
 char* _uip_inet_ntoa(char*cp, struct _in_addr in){
 
    sprintf(cp,"%d.%d.%d.%d",in.S_un.S_un_b.s_b1,
-                            in.S_un.S_un_b.s_b2,
-                            in.S_un.S_un_b.s_b3,
-                            in.S_un.S_un_b.s_b4);
+           in.S_un.S_un_b.s_b2,
+           in.S_un.S_un_b.s_b3,
+           in.S_un.S_un_b.s_b4);
 
    return cp;
 }
@@ -174,7 +174,7 @@ int _sys_sock_bind(int sock, struct _sockaddr *address,int len){
    pid_t pid      = 0;
    desc_t desc    = -1;
    hsock_t hsock  = 0;
-   
+
    if(sock<0)
       return -1;
 
@@ -188,7 +188,7 @@ int _sys_sock_bind(int sock, struct _sockaddr *address,int len){
    if(desc<0)
       return -1;
 
-   if(! (hsock  = ofile_lst[desc].ext.hsock) )
+   if(!(hsock  = ofile_lst[desc].ext.hsock) )
       return -1;
 
    //Enter Semaphore
@@ -232,7 +232,7 @@ int _sys_sock_connect(int sock, struct _sockaddr *address,int len){
    if(desc<0)
       return -1;
 
-   if(! (hsock  = ofile_lst[desc].ext.hsock) )
+   if(!(hsock  = ofile_lst[desc].ext.hsock) )
       return -1;
 
 
@@ -240,10 +240,10 @@ int _sys_sock_connect(int sock, struct _sockaddr *address,int len){
    ((socket_t*)hsock)->state = STATE_SOCKET_CONNECT;
 
    ((socket_t*)hsock)->addr_in.sin_port = ((struct _sockaddr_in*)address)->sin_port;
-    ((socket_t*)hsock)->addr_in.sin_addr.s_addr = ((struct _sockaddr_in*)address)->sin_addr.s_addr;
+   ((socket_t*)hsock)->addr_in.sin_addr.s_addr = ((struct _sockaddr_in*)address)->sin_addr.s_addr;
 
    uip_conn = uip_connect((uip_ipaddr_t*)(&((socket_t*)hsock)->addr_in.sin_addr.s_addr),
-                  (u16_t)( ((socket_t*)hsock)->addr_in.sin_port));
+                          (u16_t)( ((socket_t*)hsock)->addr_in.sin_port));
 
    ((socket_t*)hsock)->r =0;
    ((socket_t*)hsock)->w =0;
@@ -299,7 +299,7 @@ int _sys_sock_listen(int sock,int maxcon){
    if(desc<0)
       return -1;
 
-   if(! (hsock  = ofile_lst[desc].ext.hsock) )
+   if(!(hsock  = ofile_lst[desc].ext.hsock) )
       return -1;
 
    //Enter Semaphore
@@ -327,7 +327,7 @@ int _sys_sock_accept(int sock, struct _sockaddr *address,int* len){
    kernel_pthread_t* pthread_ptr;
    pid_t pid      = 0;
    desc_t desc    = -1;
-   
+
    if(sock<0)
       return -1;
 
@@ -342,7 +342,7 @@ int _sys_sock_accept(int sock, struct _sockaddr *address,int* len){
    if(desc<0)
       return -1;
 
-   if(! (hsock  = ofile_lst[desc].ext.hsock) )
+   if(!(hsock  = ofile_lst[desc].ext.hsock) )
       return -1;
 
    //Make ready to accept connection
@@ -383,9 +383,9 @@ int _sys_sock_accept(int sock, struct _sockaddr *address,int* len){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sys_sock_shutdown(int sock , int how){
+int _sys_sock_shutdown(int sock, int how){
 #if defined (__KERNEL_NET_IPSTACK)
-   netsend_t      netsend;
+   netsend_t netsend;
    pid_t pid      = 0;
    kernel_pthread_t* pthread_ptr;
    desc_t desc    = -1;
@@ -405,10 +405,10 @@ int _sys_sock_shutdown(int sock , int how){
    if(desc<0)
       return -1;
 
-   if(! (hsock  = ofile_lst[desc].ext.hsock) )
+   if(!(hsock  = ofile_lst[desc].ext.hsock) )
       return -1;
 
-   if( ((socket_t*)hsock)->socksconn!=NULL){
+   if( ((socket_t*)hsock)->socksconn!=NULL) {
       /*
       while( ((socket_t*)hsock)->w != ((socket_t*)hsock)->socksconn->_r )
          __WAIT_SOCKET_EVENT(hsock);
@@ -416,7 +416,7 @@ int _sys_sock_shutdown(int sock , int how){
    }
 
    if( ((socket_t*)(hsock))->state ==STATE_SOCKET_CLOSED ||
-      ((socket_t*)(hsock))->state == STATE_SOCKET_ACCEPTED){
+       ((socket_t*)(hsock))->state == STATE_SOCKET_ACCEPTED) {
       __CLR_SOCKET_EVENT(hsock);
 
       close(sock);
@@ -431,7 +431,7 @@ int _sys_sock_shutdown(int sock , int how){
    //OS_WakeTask(_OS_TASK_TCB(os_ipStack));
    netsend.desc = desc;
    __mk_uip_core_syscall(_SYSCALL_NET_SND,netsend);
-   
+
    while( ((socket_t*)(hsock))->state==STATE_SOCKET_WAIT )
       __WAIT_SOCKET_EVENT(pthread_ptr,hsock);
 
@@ -488,16 +488,16 @@ int _sys_sock_close(desc_t desc){
    if(!hsock)
       return -1;
 
-   if( (ofile_lst[desc].oflag & O_RDONLY) 
-      && ofile_lst[desc].oflag & O_WRONLY){
+   if( (ofile_lst[desc].oflag & O_RDONLY)
+       && ofile_lst[desc].oflag & O_WRONLY) {
 
-      if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer){
+      if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer) {
          sock_put(hsock);
          ofile_lst[desc].ext.hsock = (hsock_t)0;
       }
 
    }
-   
+
    return 0;
 }
 
@@ -513,12 +513,12 @@ int _sys_sock_isset_read(desc_t desc){
    hsock_t hsock = ofile_lst[desc].ext.hsock;
    int r= ((socket_t*)hsock)->r;
    int _w=((socket_t*)hsock)->socksconn->_w;
-   
+
    //
    if( (((socket_t*)(hsock))->state!=STATE_SOCKET_WAIT))
       return 0;
    //
-   if(r!=_w)//recv data ok.
+   if(r!=_w) //recv data ok.
       return 0;
 
    return -1;
@@ -538,27 +538,27 @@ int _sys_sock_isset_write(desc_t desc){
    int _r=((socket_t*)hsock)->socksconn->_r;
 
    //
-   #if UIP_LOGGING==1
+#if UIP_LOGGING==1
    {
       printf("desc=%d isset_write\n",desc);
    }
-   #endif
+#endif
 
-   if( (((socket_t*)(hsock))->state!=STATE_SOCKET_WAIT)){
-      #if UIP_LOGGING==1
+   if( (((socket_t*)(hsock))->state!=STATE_SOCKET_WAIT)) {
+#if UIP_LOGGING==1
       {
          printf("state!= STATE_SOCKET_WAIT w=%d r=%d\n",w,_r);
       }
-      #endif
+#endif
       return 0;
    }
    //
-   if(w==_r){//send data ok.
-      #if UIP_LOGGING==1
+   if(w==_r) { //send data ok.
+#if UIP_LOGGING==1
       {
          printf("w==r  w=%d r=%d\n",w,_r);
       }
-      #endif
+#endif
       return 0;
    }
 
@@ -585,12 +585,12 @@ int _sys_sock_read(desc_t desc,char* buffer,int nbyte ){
 
    r= ((socket_t*)hsock)->r;
    _w=((socket_t*)hsock)->socksconn->_w;
-   
+
    if( (r==_w) && (((socket_t*)(hsock))->state!=STATE_SOCKET_WAIT))
       return -1;
-   
+
    //
-   if(r<=_w){
+   if(r<=_w) {
       cb = _w-r;
    }else{
       cb = (RCV_SOCKET_BUFFER_SIZE-r)+_w;
@@ -599,7 +599,7 @@ int _sys_sock_read(desc_t desc,char* buffer,int nbyte ){
    if(nbyte<=cb)
       cb=nbyte;
 
-   if((r+cb)<RCV_SOCKET_BUFFER_SIZE){
+   if((r+cb)<RCV_SOCKET_BUFFER_SIZE) {
       memcpy(buffer,&((socket_t*)hsock)->socksconn->rcv_buffer[r],cb);
       r=r+cb;
    }else{
@@ -607,7 +607,7 @@ int _sys_sock_read(desc_t desc,char* buffer,int nbyte ){
       memcpy(buffer+(RCV_SOCKET_BUFFER_SIZE-r),((socket_t*)hsock)->socksconn->rcv_buffer,_w);
       r=cb-(RCV_SOCKET_BUFFER_SIZE-r);
    }
-   
+
    ((socket_t*)hsock)->r=r;
 #endif
    return cb;
@@ -631,7 +631,7 @@ int _sys_sock_write(desc_t desc,const char* buffer,int nbyte ){
    if(!hsock)
       return -1;
 
-   
+
    #if UIP_LOGGING==1
    printf("0 ready to send\r\n");
    #endif
@@ -652,12 +652,13 @@ int _sys_sock_write(desc_t desc,const char* buffer,int nbyte ){
    printf("1)desc=%d _sys_sock_write w=%d _r=%d\r\n",desc,w,((socket_t*)hsock)->socksconn->_r);
    #endif
 
-   if((w+cb)<SND_SOCKET_BUFFER_SIZE){
+   if((w+cb)<SND_SOCKET_BUFFER_SIZE) {
       memcpy(&((socket_t*)hsock)->socksconn->snd_buffer[w],buffer,cb);
       w=w+cb;
    }else{
       memcpy(&((socket_t*)hsock)->socksconn->snd_buffer[w],buffer,SND_SOCKET_BUFFER_SIZE-w);
-      memcpy(((socket_t*)hsock)->socksconn->snd_buffer,(char*)&buffer[SND_SOCKET_BUFFER_SIZE-w],cb-(SND_SOCKET_BUFFER_SIZE-w));
+      memcpy(((socket_t*)hsock)->socksconn->snd_buffer,
+             (char*)&buffer[SND_SOCKET_BUFFER_SIZE-w],cb-(SND_SOCKET_BUFFER_SIZE-w));
       w=cb-(SND_SOCKET_BUFFER_SIZE-w);
    }
 

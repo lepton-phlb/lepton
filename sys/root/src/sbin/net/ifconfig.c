@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include <stdlib.h>
 #include <string.h>
@@ -45,21 +45,21 @@ either the MPL or the [eCos GPL] License."
 #include "lib/libc/stdio/stdio.h"
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 /*--------------------------------------------
 | Name:        chk_ipv4_addr
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 static int chk_ipv4_addr(char* a_ip_addr){
    int ip_addr_1=-1;
@@ -69,7 +69,7 @@ static int chk_ipv4_addr(char* a_ip_addr){
    //interface gateway ip address
    sscanf(a_ip_addr,"%d.%d.%d.%d",&ip_addr_1,&ip_addr_2,&ip_addr_3,&ip_addr_4);
 
-   if(ip_addr_1> -1 && ip_addr_1<256 
+   if(ip_addr_1> -1 && ip_addr_1<256
       && ip_addr_2> -1 && ip_addr_2<256
       && ip_addr_3> -1 && ip_addr_3<256
       && ip_addr_4> -1 && ip_addr_4<256)
@@ -80,11 +80,11 @@ static int chk_ipv4_addr(char* a_ip_addr){
 
 /*--------------------------------------------
 | Name:        ifconfig_main
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int ifconfig_main(int argc,char* argv[]){
    int i;
@@ -96,11 +96,11 @@ int ifconfig_main(int argc,char* argv[]){
    int fd2;
 
    //
-   for(i=1;i<argc;i++){
+   for(i=1; i<argc; i++) {
       /*if(i==1){
          if_name = argv[i];
          continue;
-      }else*/ if( !strcmp(argv[i],"addif") ){
+      }else*/if( !strcmp(argv[i],"addif") ) {
          //get if ip addr
          if(++i==argc)
             return -1;
@@ -109,7 +109,7 @@ int ifconfig_main(int argc,char* argv[]){
          strcpy(if_config.if_ip_addr,argv[i]);
 
          //get if gateway ip addr
-         if(++i<argc){
+         if(++i<argc) {
             if(chk_ipv4_addr(argv[i])<0)
                return -1;
             strcpy(if_config.gw_ip_addr,argv[i]);
@@ -121,7 +121,7 @@ int ifconfig_main(int argc,char* argv[]){
          strcpy(if_config.if_net_msk,"255.255.0.0");
          //
          if_config.if_flags=IFF_BROADCAST|IFF_ADD|IFF_UP;
-      }else if( !strcmp(argv[i],"netmask") ){
+      }else if( !strcmp(argv[i],"netmask") ) {
          //get if netmask
          if(++i==argc)
             return -1;
@@ -131,21 +131,21 @@ int ifconfig_main(int argc,char* argv[]){
       }
 
 
-   }//for
+   } //for
 
    //
-   if(if_config.if_flags&IFF_ADD){
-      if((fd2=open("/dev/net/ip",O_RDWR,0))<0){
+   if(if_config.if_flags&IFF_ADD) {
+      if((fd2=open("/dev/net/ip",O_RDWR,0))<0) {
          printf("error: cannot open ip stack\r\n");
          return 0;
       }
 
-      if((fd1[0]=open("/dev/eth0",O_RDONLY,0))<0){
+      if((fd1[0]=open("/dev/eth0",O_RDONLY,0))<0) {
          printf("error: cannot open ip stack\r\n");
          return 0;
       }
 
-      if((fd1[1]=open("/dev/eth0",O_WRONLY,0))<0){
+      if((fd1[1]=open("/dev/eth0",O_WRONLY,0))<0) {
          printf("error: cannot open ip stack\r\n");
          return 0;
       }
@@ -161,7 +161,7 @@ int ifconfig_main(int argc,char* argv[]){
       close(fd1[1]);
       close(fd2);
 
-      if((fd2=open("/dev/net/e0",O_RDWR,0))<0){
+      if((fd2=open("/dev/net/e0",O_RDWR,0))<0) {
          printf("error: cannot open net device\r\n");
          return 0;
       }

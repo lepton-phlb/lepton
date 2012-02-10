@@ -42,30 +42,30 @@ static void fb_tauon_getscreeninfo(PSD psd,PMWSCREENINFO psi);
 static void fb_tauon_setpalette(PSD psd,int first, int count, MWPALENTRY *palette);
 static void fb_tauon_setportrait(PSD psd, int portraitmode);
 //
-SCREENDEVICE	scrdev = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL,
-	fb_tauon_open,
-	fb_tauon_close,
-	fb_tauon_getscreeninfo,
-	fb_tauon_setpalette,
-	NULL,//fb_tauon_drawpixel,			/* DrawPixel subdriver*/
-	NULL,//fb_tauon_readpixel,			/* ReadPixel subdriver*/
-	NULL,//fb_tauon_drawhline,			/* DrawHorzLine subdriver*/
-	NULL,//fb_tauon_drawvline,			/* DrawVertLine subdriver*/
-	NULL,//fb_tauon_fillrect,			/* FillRect subdriver*/
-	gen_fonts,
-	NULL,//fb_tauon_blit,			/* Blit subdriver*/
-	NULL,			/* PreSelect*/
-	NULL,			/* DrawArea subdriver*/
-	NULL,			/* SetIOPermissions*/
-	gen_allocatememgc,
-	fb_mapmemgc,
-	gen_freememgc,
-	NULL, /*StretchBlit*/
-	fb_tauon_setportrait, /*SetPortrait*/
-	0,//MWPORTRAIT_LEFT, MWPORTRAIT_RIGHT or MWPORTRAIT_DOWN /*screen mode portrait*/
-	NULL, /*subdriver for portrait*/
-	NULL /*StretchBlitEx*/
+SCREENDEVICE scrdev = {
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL,
+   fb_tauon_open,
+   fb_tauon_close,
+   fb_tauon_getscreeninfo,
+   fb_tauon_setpalette,
+   NULL,     //fb_tauon_drawpixel,			/* DrawPixel subdriver*/
+   NULL,     //fb_tauon_readpixel,			/* ReadPixel subdriver*/
+   NULL,     //fb_tauon_drawhline,			/* DrawHorzLine subdriver*/
+   NULL,     //fb_tauon_drawvline,			/* DrawVertLine subdriver*/
+   NULL,     //fb_tauon_fillrect,			/* FillRect subdriver*/
+   gen_fonts,
+   NULL,     //fb_tauon_blit,			/* Blit subdriver*/
+   NULL,                        /* PreSelect*/
+   NULL,                        /* DrawArea subdriver*/
+   NULL,                        /* SetIOPermissions*/
+   gen_allocatememgc,
+   fb_mapmemgc,
+   gen_freememgc,
+   NULL,      /*StretchBlit*/
+   fb_tauon_setportrait,      /*SetPortrait*/
+   0,     //MWPORTRAIT_LEFT, MWPORTRAIT_RIGHT or MWPORTRAIT_DOWN /*screen mode portrait*/
+   NULL,      /*subdriver for portrait*/
+   NULL      /*StretchBlitEx*/
 };
 
 //for portait mode
@@ -90,38 +90,38 @@ static PSD fb_tauon_open(PSD psd){
    psd->yres = psd->yvirtres = fb.y_res;
 
    //bpp
-   psd->bpp = fb.bpp;//panel_info.vl_bpix;
+   psd->bpp = fb.bpp; //panel_info.vl_bpix;
    //planes
    psd->planes = 1;
 
    //Colors
-   psd->ncolors = (psd->bpp >= 24)? (1 << 24): (1 << psd->bpp);
+   psd->ncolors = (psd->bpp >= 24) ? (1 << 24) : (1 << psd->bpp);
 
    psd->linelen = fb.line_len;
    psd->size = 0;
 
    /////gestion du nombre de bits par pixel
-   switch(psd->bpp){
-      case 8:
-	 psd->pixtype = MWPF_PALETTE;
-	 psd->linelen = fb.line_len*1;
+   switch(psd->bpp) {
+   case 8:
+      psd->pixtype = MWPF_PALETTE;
+      psd->linelen = fb.line_len*1;
       break;
-      case 16:
-	 psd->pixtype = MWPF_TRUECOLOR565;
-	 psd->linelen = fb.line_len*2;
+   case 16:
+      psd->pixtype = MWPF_TRUECOLOR565;
+      psd->linelen = fb.line_len*2;
       break;
-      case 24:
-	 psd->pixtype = MWPF_TRUECOLOR888;
-	 psd->linelen = fb.line_len*3;
+   case 24:
+      psd->pixtype = MWPF_TRUECOLOR888;
+      psd->linelen = fb.line_len*3;
       break;
-      case 32:
-	 psd->pixtype = MWPF_TRUECOLOR0888;
-	 psd->linelen = fb.line_len*4;
+   case 32:
+      psd->pixtype = MWPF_TRUECOLOR0888;
+      psd->linelen = fb.line_len*4;
       break;
-      default:
-	 EPRINTF(
-	 "Unsupported %d color (%d bpp) truecolor framebuffer\n",
-	 psd->ncolors, psd->bpp);
+   default:
+      EPRINTF(
+         "Unsupported %d color (%d bpp) truecolor framebuffer\n",
+         psd->ncolors, psd->bpp);
       break;
    }
 
@@ -170,7 +170,7 @@ static void fb_tauon_setpalette(PSD psd,int first, int count, MWPALENTRY *palett
    fb_info_t fb;
    ioctl(fd,FBIOGET_DISPINFO,&fb, FB_DEV_NO);
    //
-   for(;i<fb.cmap_len;i++) {
+   for(; i<fb.cmap_len; i++) {
       p = &palette[i];
       p->r=fb.cmap[i].red;
       p->g=fb.cmap[i].green;

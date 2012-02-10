@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -51,10 +51,10 @@ static fat16_core_info_t fat16_core_info={0};
 fat16_ofile_t fat16_ofile_lst[MAX_OPEN_FILE]={0};
 
 #ifdef FAT_CACHE_FAT
-   fat16_u8_t fat16_cache[FAT_CACHE_FAT_SIZE]
-#if !defined(CPU_GNU32)
+fat16_u8_t fat16_cache[FAT_CACHE_FAT_SIZE]
+   #if !defined(CPU_GNU32)
 __attribute__ ((section(".no_cache")))
-#endif
+   #endif
 ;
 
 #endif //FAT_CACHE_FAT
@@ -93,7 +93,8 @@ int _fat_makefs(desc_t dev_desc,struct vfs_formatopt_t* vfs_formatopt) {
    if (nbblocks<FAT16_NBCLUSMIN) return(-1);       // ERREUR : Pas assez de blocs pour une Fat16
    fat16_core_info.nbsec_per_clus = FAT16_SECMIN;
 
-   while((nbblocks/fat16_core_info.nbsec_per_clus)>FAT16_NBCLUSMAX) fat16_core_info.nbsec_per_clus = fat16_core_info.nbsec_per_clus<<1;
+   while((nbblocks/fat16_core_info.nbsec_per_clus)>
+         FAT16_NBCLUSMAX) fat16_core_info.nbsec_per_clus = fat16_core_info.nbsec_per_clus<<1;
 
    if(fat16_core_info.nbsec_per_clus > FAT16_SECMAX) return(-1);       // ERREUR : Trop de clusters pour une Fat16
 
@@ -107,7 +108,13 @@ int _fat_makefs(desc_t dev_desc,struct vfs_formatopt_t* vfs_formatopt) {
    //from http://support.microsoft.com/kb/451012/fr
 #ifndef USE_KERNEL_STATIC
    //fat16.SizeF   = (ceil(((2*(nbblocks-BS_RSVD-(BS_NBRD*RD_SIZE/BS_BYTS)+2*fat16.NbSect))/((2*BS_NBFAT)+(BS_BYTS*fat16.NbSect)))+0.5))*BS_BYTS;
-   fat16_core_info.fat_size = (((2*(nbblocks-FAT16_BS_RSVSEC_VAL-(FAT16_BS_NBROOTENT_VAL*RD_SIZE/FAT16_BS_BPS_VAL)+2*fat16_core_info.nbsec_per_clus))/((2*FAT16_BS_NBFAT_VAL)+(FAT16_BS_BPS_VAL*fat16_core_info.nbsec_per_clus)))+0.5);
+   fat16_core_info.fat_size =
+      (((2*
+         (nbblocks-FAT16_BS_RSVSEC_VAL-
+          (FAT16_BS_NBROOTENT_VAL*RD_SIZE/
+           FAT16_BS_BPS_VAL)+2*
+          fat16_core_info.nbsec_per_clus))/
+        ((2*FAT16_BS_NBFAT_VAL)+(FAT16_BS_BPS_VAL*fat16_core_info.nbsec_per_clus)))+0.5);
    fat16_core_info.fat_size *= FAT16_BS_BPS_VAL;
 #else
    fat16_core_info.fat_size   = 0;
@@ -119,39 +126,46 @@ int _fat_makefs(desc_t dev_desc,struct vfs_formatopt_t* vfs_formatopt) {
    fat16_core_info.ud_size  = vfs_formatopt->dev_sz - fat16_core_info.ud_addr;
 
    //clear media until user data
-   for(i=0;i<FAT16_BS_BPS_VAL;i++) buf[i]=0x00;
-   for(i=0;i<(fat16_core_info.ud_addr/FAT16_BS_BPS_VAL);i++) {
-      if(_fat_write_data(dev_desc,fat16_core_info.bs_addr+((fat16_u32_t)i*FAT16_BS_BPS_VAL),buf,FAT16_BS_BPS_VAL)<0) {
+   for(i=0; i<FAT16_BS_BPS_VAL; i++) buf[i]=0x00;
+   for(i=0; i<(fat16_core_info.ud_addr/FAT16_BS_BPS_VAL); i++) {
+      if(_fat_write_data(dev_desc,fat16_core_info.bs_addr+((fat16_u32_t)i*FAT16_BS_BPS_VAL),buf,
+                         FAT16_BS_BPS_VAL)<0) {
          return -1;
       }
    }
 
    //create boot sector
-   for(i=0;i<FAT16_BS_JUMPBOOT_SIZE;i++)   buf[FAT16_BS_JUMPBOOT_OFF+i] = (FAT16_BS_JUMPBOOT_VAL>>(16-(8*i))) & 0xFF;
-   for(i=0;i<FAT16_BS_OEM_SIZE;i++)    buf[FAT16_BS_OEM_OFF+i] = FAT16_BS_OEM_VAL[i];
-   for(i=0;i<FAT16_BS_BPS_SIZE;i++)   buf[FAT16_BS_BPS_OFF+i] = (FAT16_BS_BPS_VAL>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_JUMPBOOT_SIZE;
+       i++) buf[FAT16_BS_JUMPBOOT_OFF+i] = (FAT16_BS_JUMPBOOT_VAL>>(16-(8*i))) & 0xFF;
+   for(i=0; i<FAT16_BS_OEM_SIZE; i++) buf[FAT16_BS_OEM_OFF+i] = FAT16_BS_OEM_VAL[i];
+   for(i=0; i<FAT16_BS_BPS_SIZE; i++) buf[FAT16_BS_BPS_OFF+i] = (FAT16_BS_BPS_VAL>>(8*i)) & 0xFF;
 
    buf[FAT16_BS_SPC_OFF] = fat16_core_info.nbsec_per_clus;
 
 
-   for(i=0;i<FAT16_BS_RSVSEC_SIZE;i++)   buf[FAT16_BS_RSVSEC_OFF+i] = (FAT16_BS_RSVSEC_VAL>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_RSVSEC_SIZE;
+       i++) buf[FAT16_BS_RSVSEC_OFF+i] = (FAT16_BS_RSVSEC_VAL>>(8*i)) & 0xFF;
    buf[FAT16_BS_NBFAT_OFF] = FAT16_BS_NBFAT_VAL;
 
-   for(i=0;i<FAT16_BS_NBROOTENT_SIZE;i++)   buf[FAT16_BS_NBROOTENT_OFF+i] = (FAT16_BS_NBROOTENT_VAL>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_NBROOTENT_SIZE;
+       i++) buf[FAT16_BS_NBROOTENT_OFF+i] = (FAT16_BS_NBROOTENT_VAL>>(8*i)) & 0xFF;
 
    buf[FAT16_BS_MEDIA_OFF] = FAT16_BS_MEDIA_VAL;
 
-   for(i=0;i<FAT16_BS_FATBS_SIZE;i++)  buf[FAT16_BS_FATBS_OFF+i] = ((fat16_core_info.fat_size/FAT16_BS_BPS_VAL)>>(8*i)) & 0xFF;
-   for(i=0;i<FAT16_BS_TCKPS_SIZE;i++)    buf[FAT16_BS_TCKPS_OFF+i] = (FAT16_BS_TCKPS_VAL>>(8*i)) & 0xFF;
-   for(i=0;i<FAT16_BS_NBH_SIZE;i++)  buf[FAT16_BS_NBH_OFF+i] = (FAT16_BS_NBH_VAL>>(8*i)) & 0xFF;
-   for(i=0;i<FAT16_BS_NBSHID_SIZE;i++)   buf[FAT16_BS_NBSHID_OFF+i] = (FAT16_BS_NBSHID_VAL>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_FATBS_SIZE;
+       i++) buf[FAT16_BS_FATBS_OFF+i] = ((fat16_core_info.fat_size/FAT16_BS_BPS_VAL)>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_TCKPS_SIZE;
+       i++) buf[FAT16_BS_TCKPS_OFF+i] = (FAT16_BS_TCKPS_VAL>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_NBH_SIZE; i++) buf[FAT16_BS_NBH_OFF+i] = (FAT16_BS_NBH_VAL>>(8*i)) & 0xFF;
+   for(i=0; i<FAT16_BS_NBSHID_SIZE;
+       i++) buf[FAT16_BS_NBSHID_OFF+i] = (FAT16_BS_NBSHID_VAL>>(8*i)) & 0xFF;
 
    //determine number of sector
    if(nbblocks<0x10000) {
-      for(i=0;i<FAT16_BS_NBSEC16_SIZE;i++)  buf[FAT16_BS_NBSEC16_OFF+i] = (nbblocks>>(8*i)) & 0xFF;
+      for(i=0; i<FAT16_BS_NBSEC16_SIZE; i++) buf[FAT16_BS_NBSEC16_OFF+i] = (nbblocks>>(8*i)) & 0xFF;
    }
    else {
-      for(i=0;i<FAT16_BS_NBSEC32_SIZE;i++)  buf[FAT16_BS_NBSEC32_OFF+i] = (nbblocks>>(8*i)) & 0xFF;
+      for(i=0; i<FAT16_BS_NBSEC32_SIZE; i++) buf[FAT16_BS_NBSEC32_OFF+i] = (nbblocks>>(8*i)) & 0xFF;
    }
 
    buf[FAT16_BS_DRVNUM_OFF] = FAT16_BS_DRVNUM_VAL;
@@ -160,9 +174,9 @@ int _fat_makefs(desc_t dev_desc,struct vfs_formatopt_t* vfs_formatopt) {
 
    //maybe time
    //for(i=0;i<BS_VOLID_S;i++)  Buffer[BS_VOLID_I+i] = volid[i];
-   for(i=0;i<FAT16_BS_VOLID_SIZE;i++)  buf[FAT16_BS_VOLID_OFF+i] = '0';
-   for(i=0;i<FAT16_BS_VOLLAB_SIZE;i++) buf[FAT16_BS_VOLLAB_OFF+i] = FAT16_BS_VOLLAB_VAL[i];
-   for(i=0;i<FAT16_BS_FSTYPE_SIZE;i++)  buf[FAT16_BS_FSTYPE_OFF+i] = FAT16_BS_FSTYPE_VAL[i];
+   for(i=0; i<FAT16_BS_VOLID_SIZE; i++) buf[FAT16_BS_VOLID_OFF+i] = '0';
+   for(i=0; i<FAT16_BS_VOLLAB_SIZE; i++) buf[FAT16_BS_VOLLAB_OFF+i] = FAT16_BS_VOLLAB_VAL[i];
+   for(i=0; i<FAT16_BS_FSTYPE_SIZE; i++) buf[FAT16_BS_FSTYPE_OFF+i] = FAT16_BS_FSTYPE_VAL[i];
    if(_fat_write_data(dev_desc,FAT16_BS_ADDR,buf,FAT16_BS_SIZE)<0) {
       return -1;
    }
@@ -181,26 +195,28 @@ int _fat_makefs(desc_t dev_desc,struct vfs_formatopt_t* vfs_formatopt) {
    }
 
    //update root directory and create volume entry
-   for(i=0;i<(RD_ENTNAMR_SIZE+RD_ENTEXT_SIZE);i++) buf[RD_ENTNAME_OFF+i]=0x20; // Nom du volume
+   for(i=0; i<(RD_ENTNAMR_SIZE+RD_ENTEXT_SIZE); i++) buf[RD_ENTNAME_OFF+i]=0x20;  // Nom du volume
    i=0;
    while ((volume_name[i] != '\0') && (i<(RD_ENTNAMR_SIZE+RD_ENTEXT_SIZE))) {
       buf[RD_ENTNAME_OFF+i] = volume_name[i];
       i++;
    }
    buf[RD_ATTR_OFF] = RD_ATTR_VOLUMEID;
-   if(_fat_write_data(dev_desc,fat16_core_info.rd_addr,buf,(RD_ENTNAMR_SIZE+RD_ENTEXT_SIZE+RD_ATTR_SIZE))<0) {
+   if(_fat_write_data(dev_desc,fat16_core_info.rd_addr,buf,
+                      (RD_ENTNAMR_SIZE+RD_ENTEXT_SIZE+RD_ATTR_SIZE))<0) {
       return -1;
    }
 
    //fill fat16_core_info
-   if(_fat_read_data(dev_desc,0,(unsigned char *)&fat16_boot_core_info,sizeof(fat16_boot_core_info))<0) {
+   if(_fat_read_data(dev_desc,0,(unsigned char *)&fat16_boot_core_info,
+                     sizeof(fat16_boot_core_info))<0) {
       return -1;
    }
 
    //clean rootdir (skip first entry)
    memset(buf,0,RD_SIZE);
 
-   for(i=1;i<(fat16_boot_core_info.bpb.BPB_RootEntCnt-1);i++) {
+   for(i=1; i<(fat16_boot_core_info.bpb.BPB_RootEntCnt-1); i++) {
       if(_fat_write_data(dev_desc,fat16_core_info.rd_addr+RD_SIZE*i,buf,RD_SIZE)<0) {
          return -1;
       }
@@ -231,20 +247,23 @@ int _fat_readfs(mntdev_t* pmntdev) {
    }
 
    //fill our bootsector struct
-   if(_fat_read_data(pmntdev->dev_desc,0,(unsigned char *)pmntdev->fs_info.fat_info.fat_boot_info,sizeof(fat16_boot_core_info_t))<0) {
+   if(_fat_read_data(pmntdev->dev_desc,0,(unsigned char *)pmntdev->fs_info.fat_info.fat_boot_info,
+                     sizeof(fat16_boot_core_info_t))<0) {
       return -1;
    }
 
    //511 empty in rootdir + nbcluster*cluster_size/entry_size
    pmntdev->inodetbl_size = (pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_RootEntCnt-1)
-         +(nb_clus*pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_SecPerClust*pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_BytesPerSec)/RD_SIZE;
+                            +(nb_clus*pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_SecPerClust*
+                              pmntdev->fs_info.fat_info.fat_boot_info->bpb.BPB_BytesPerSec)/RD_SIZE;
 
 #ifdef FAT_CACHE_FAT
    pmntdev->fs_info.fat_info.fat_core_info->fat_cache = fat16_cache;
    //fill fat_cache
-   for(nb_clus=0; nb_clus<FAT_CACHE_FAT_SIZE/FAT16_BS_BPS_VAL;nb_clus++) {
+   for(nb_clus=0; nb_clus<FAT_CACHE_FAT_SIZE/FAT16_BS_BPS_VAL; nb_clus++) {
       if(_fat_read_data(pmntdev->dev_desc,__get_fat_addr(pmntdev) + nb_clus*FAT16_BS_BPS_VAL,
-            (unsigned char *)fat16_cache + nb_clus*FAT16_BS_BPS_VAL, FAT16_BS_BPS_VAL)<0) {
+                        (unsigned char *)fat16_cache + nb_clus*FAT16_BS_BPS_VAL,
+                        FAT16_BS_BPS_VAL)<0) {
          return -1;
       }
    }
@@ -294,7 +313,8 @@ int _fat_seekdir(desc_t desc,int loc) {
    if(!fat16_ofile_lst[desc].entry_data_cluster) {
       if(loc<__get_rd_size(ofile_lst[desc].pmntdev)) {
          //skip volume name
-         if(_fat_read_data(__get_dev_desc(desc),__get_rd_addr(ofile_lst[desc].pmntdev)+RD_SIZE+loc*RD_SIZE,&buf,1)<0) {
+         if(_fat_read_data(__get_dev_desc(desc),__get_rd_addr(ofile_lst[desc].pmntdev)+RD_SIZE+loc*
+                           RD_SIZE,&buf,1)<0) {
             return -1;
          }
          if(buf==RD_ENT_FREE) {
@@ -344,16 +364,16 @@ int _fat_seek(desc_t desc, int offset, int origin) {
    int new_offset=0;
 
    switch(origin) {
-      case SEEK_SET:
-         new_offset=offset;
+   case SEEK_SET:
+      new_offset=offset;
       break;
 
-      case SEEK_CUR:
-         new_offset=ofile_lst[desc].offset+offset;
+   case SEEK_CUR:
+      new_offset=ofile_lst[desc].offset+offset;
       break;
 
-      case SEEK_END:
-         new_offset = ofile_lst[desc].size+offset;
+   case SEEK_END:
+      new_offset = ofile_lst[desc].size+offset;
       break;
 
    default:
@@ -428,13 +448,14 @@ int _fat_close(desc_t desc) {
    unsigned char buffer[RD_LSTDATEACC_SIZE]={0};
 
    //set last access date
-   struct __timeval tv={0};//common
+   struct __timeval tv={0}; //common
 
-   if(IS_FSTATUS_MODIFIED(ofile_lst[desc].status)){
+   if(IS_FSTATUS_MODIFIED(ofile_lst[desc].status)) {
       //modify time of last write access => DIR_LstAccDate
       _fat16_getdatetime(buffer,NULL);
 
-      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTDATEACC_OFF,buffer,RD_LSTDATEACC_SIZE)<0) {
+      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+
+                         RD_LSTDATEACC_OFF,buffer,RD_LSTDATEACC_SIZE)<0) {
          return -1;
       }
    }
@@ -473,37 +494,51 @@ int _fat_read(desc_t desc,char* buffer,int size) {
    }
 
    //get current offset in cluster
-   if(_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&clus,&offset, 0)==-1)
+   if(_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&clus,&offset,
+                        0)==-1)
       return -1;
 
    //get addr of current offset
-   cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus)+offset;
+   cluster_addr =
+      _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus)+offset;
 
    //data are between to cluster
    if((offset+size) > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
       //read first part
       int sz_part = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL) - offset;
       while((readsize += r) < sz_part) {
-         if((r = _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize ,sz_part-readsize)) < 0) {
+         if((r =
+                _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize,
+                               sz_part-
+                               readsize)) < 0) {
             break;
          }
       }
-      clus = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus);
-      cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, clus);
+      clus =
+         _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                             __get_dev_desc(
+                                desc), clus);
+      cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                        clus);
 
       //read second part
       sz_part = size - sz_part;
       readsize = 0;
       r = 0;
       while((readsize += r) < sz_part) {
-         if((r = _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize ,sz_part-readsize)) < 0) {
+         if((r =
+                _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize,
+                               sz_part-
+                               readsize)) < 0) {
             break;
          }
       }
    }
    else {
       while((readsize += r) < size) {
-         if((r = _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize ,size-readsize)) < 0) {
+         if((r =
+                _fat_read_data(__get_dev_desc(desc), cluster_addr + readsize, buffer+readsize,size-
+                               readsize)) < 0) {
             break;
          }
       }
@@ -513,7 +548,8 @@ int _fat_read(desc_t desc,char* buffer,int size) {
    //modify time of last write access => DIR_LstAccDate
    _fat16_getdatetime(&buf[RD_LSTDATEACC_OFF],NULL);
 
-   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTDATEACC_OFF,buf,RD_LSTDATEACC_SIZE)<0) {
+   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTDATEACC_OFF,
+                      buf,RD_LSTDATEACC_SIZE)<0) {
       return -1;
    }
 
@@ -539,20 +575,23 @@ int _fat_write(desc_t desc,char* buffer,int size) {
    fat16_u16_t prev_clus;
 
    //
-   struct __timeval tv={0};//common
+   struct __timeval tv={0}; //common
    fat_msdos_dir_entry_t entry={0};
    char *ptr=NULL;
 
    //allocate cluster if needed
    if (fat16_ofile_lst[desc].entry_data_cluster == RD_CLUSEMPTY) {
-      fat16_ofile_lst[desc].entry_data_cluster = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
+      fat16_ofile_lst[desc].entry_data_cluster = _fat16_getclus(
+         ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(
+            desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
       //error
       if (fat16_ofile_lst[desc].entry_data_cluster == 0)
          return -1;
       Buffer[0] = (fat16_u8_t) fat16_ofile_lst[desc].entry_data_cluster;
       Buffer[1] = (fat16_u8_t) (fat16_ofile_lst[desc].entry_data_cluster>>8);
 
-      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LWCLUSNO_OFF,Buffer,RD_LWCLUSNO_SIZE)<0) {
+      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+
+                         RD_LWCLUSNO_OFF,Buffer,RD_LWCLUSNO_SIZE)<0) {
          return -1;
       }
       curclus = fat16_ofile_lst[desc].entry_data_cluster;
@@ -560,28 +599,34 @@ int _fat_write(desc_t desc,char* buffer,int size) {
    }
    else {
       //get current offset in cluster
-      if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&curclus,&curoffset, 0)==-1)
+      if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&curclus,
+                            &curoffset, 0)==-1)
          return -1;
 
       //reach end of cluster allocate a new one
       if(!curoffset && curclus == FAT16_LCLUSMAX) {
          fat16_u16_t tmp = 0;
          //get current offset in cluster
-         if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,&curclus,&curoffset, 1)==-1)
+         if (_fat16_offsetinfo(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,desc,
+                               &curclus,&curoffset, 1)==-1)
             return -1;
 
-         tmp = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
+         tmp =
+            _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(
+                              desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
 
          if(!tmp) {
-            return -1;//error
+            return -1; //error
          }
-         _fat16_chainclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), curclus, tmp);
+         _fat16_chainclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                          __get_dev_desc(desc), curclus, tmp);
          curclus = tmp;
       }
    }
 
    //get addr of current offset
-   cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,curclus)+curoffset;
+   cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                     curclus)+curoffset;
 
    //limit write size
    if(size > (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL)) {
@@ -594,30 +639,44 @@ int _fat_write(desc_t desc,char* buffer,int size) {
       //write first part
       int sz_part = (__get_nbsec_per_clus(ofile_lst[desc].pmntdev)*FAT16_BS_BPS_VAL) - curoffset;
       while((writesize += w) < sz_part) {
-         if((w = _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize, buffer+writesize ,sz_part-writesize)) < 0) {
+         if((w =
+                _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize, buffer+writesize,
+                                sz_part-
+                                writesize)) < 0) {
             break;
          }
       }
 
       prev_clus = curclus;
-      curclus = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), curclus);
+      curclus =
+         _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                             __get_dev_desc(
+                                desc), curclus);
       //allocate new cluster
       if(curclus == 0 || curclus==FAT16_LCLUSMAX) {
-         curclus = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
+         curclus =
+            _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(
+                              desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
 
          if(!curclus) {
-            return -1;//error
+            return -1; //error
          }
-         _fat16_chainclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), prev_clus, curclus);
+         _fat16_chainclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                          __get_dev_desc(desc), prev_clus, curclus);
       }
 
-      if((cluster_addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, curclus))) {
+      if((cluster_addr =
+             _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                curclus))) {
          //write second part
          int writesize_part2 = 0;
          sz_part = size - sz_part;
          w = 0;
          while((writesize_part2 += w) < sz_part) {
-            if((w = _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize_part2, buffer+writesize+writesize_part2 , sz_part-writesize_part2)) < 0) {
+            if((w =
+                   _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize_part2, buffer+
+                                   writesize+
+                                   writesize_part2, sz_part-writesize_part2)) < 0) {
                break;
             }
          }
@@ -625,7 +684,10 @@ int _fat_write(desc_t desc,char* buffer,int size) {
    }
    else {
       while((writesize += w) < size) {
-         if((w = _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize, buffer+writesize, size-writesize)) < 0) {
+         if((w =
+                _fat_write_data(__get_dev_desc(desc), cluster_addr + writesize, buffer+writesize,
+                                size-
+                                writesize)) < 0) {
             break;
          }
       }
@@ -639,7 +701,8 @@ int _fat_write(desc_t desc,char* buffer,int size) {
       Buffer[2] = (fat16_u8_t) (ofile_lst[desc].size>>16);
       Buffer[3] = (fat16_u8_t) (ofile_lst[desc].size>>24);
 
-      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_FILESIZE_OFF,Buffer,RD_FILESIZE_SIZE)<0) {
+      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+
+                         RD_FILESIZE_OFF,Buffer,RD_FILESIZE_SIZE)<0) {
          return -1;
       }
    }
@@ -652,7 +715,9 @@ int _fat_write(desc_t desc,char* buffer,int size) {
    ptr = (char *)&entry;
    ptr += RD_LSTDATEACC_OFF;
 
-   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTDATEACC_OFF,ptr,RD_LSTDATEACC_SIZE+RD_HICLUSNO_SIZE+RD_LSTTIMEWRT_SIZE+RD_LSTDATEWRT_SIZE)<0) {
+   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTDATEACC_OFF,
+                      ptr,RD_LSTDATEACC_SIZE+RD_HICLUSNO_SIZE+RD_LSTTIMEWRT_SIZE+
+                      RD_LSTDATEWRT_SIZE)<0) {
       return -1;
    }
 
@@ -688,18 +753,23 @@ int _fat_truncate(desc_t desc, off_t length) {
       //we free all clusters file
       do {
          clus1 = clus2;
-         clus2 = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
-         _fat16_putclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
-      } while(clus2 < FAT16_LCLUSMAX && clus2 > FAT16_CLUSMIN);//while(clus2 != FAT16_LCLUSMAX);
+         clus2 =
+            _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                __get_dev_desc(
+                                   desc), clus1);
+         _fat16_putclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                        __get_dev_desc(desc), clus1);
+      } while(clus2 < FAT16_LCLUSMAX && clus2 > FAT16_CLUSMIN); //while(clus2 != FAT16_LCLUSMAX);
 
       //update desc
       fat16_ofile_lst[desc].entry_data_cluster = RD_CLUSEMPTY;
 
       //remove cluster number
-      for(i=0;i<RD_LWCLUSNO_SIZE;i++)
+      for(i=0; i<RD_LWCLUSNO_SIZE; i++)
          Buf[i] = RD_CLUSEMPTY>>(8*i);
 
-      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LWCLUSNO_OFF,Buf,RD_LWCLUSNO_SIZE)<0) {
+      if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+
+                         RD_LWCLUSNO_OFF,Buf,RD_LWCLUSNO_SIZE)<0) {
          return -1;
       }
    }
@@ -709,21 +779,33 @@ int _fat_truncate(desc_t desc, off_t length) {
       if(ofile_lst[desc].size > length) {
          //calculate new cluster number
          nbclus = length/(__get_nbsec_per_clus(ofile_lst[desc].pmntdev) * FAT16_BS_BPS_VAL);
-         if((length%(__get_nbsec_per_clus(ofile_lst[desc].pmntdev) * FAT16_BS_BPS_VAL)) != 0) nbclus++;
+         if((length%(__get_nbsec_per_clus(ofile_lst[desc].pmntdev) * FAT16_BS_BPS_VAL)) !=
+            0) nbclus++;
          clus1 = fat16_ofile_lst[desc].entry_data_cluster;
 
          //find new last cluster and set it
-         for(i=1;i<nbclus;i++)
-            clus1 = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
+         for(i=1; i<nbclus; i++)
+            clus1 =
+               _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                   __get_dev_desc(
+                                      desc), clus1);
 
-         clus2 = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
-         _fat16_lastclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
+         clus2 =
+            _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                __get_dev_desc(
+                                   desc), clus1);
+         _fat16_lastclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                         __get_dev_desc(desc), clus1);
 
          //free all previous cluster
          while(clus2 < FAT16_LCLUSMAX && clus2 > FAT16_CLUSMIN) {
             clus1 = clus2;
-            clus2 = _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
-            _fat16_putclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), clus1);
+            clus2 =
+               _fat16_cluster_suiv(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                   __get_dev_desc(
+                                      desc), clus1);
+            _fat16_putclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                           __get_dev_desc(desc), clus1);
          }
       }
       //or increase
@@ -742,16 +824,18 @@ int _fat_truncate(desc_t desc, off_t length) {
    ofile_lst[desc].size = length;
 
    //update file size
-   for(i=0;i<RD_FILESIZE_SIZE;i++)
+   for(i=0; i<RD_FILESIZE_SIZE; i++)
       Buf[i] = (fat16_u8_t)(length>>(8*i));
 
-   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_FILESIZE_OFF,Buf,RD_FILESIZE_SIZE)<0) {
+   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_FILESIZE_OFF,
+                      Buf,RD_FILESIZE_SIZE)<0) {
       return -1;
    }
 
    //update write date and time of file
    _fat16_getdatetime(&Buf[2], &Buf[0]);
-   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTTIMEWRT_OFF,Buf,RD_LSTTIMEWRT_SIZE+RD_LSTDATEWRT_SIZE)<0) {
+   if(_fat_write_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr+RD_LSTTIMEWRT_OFF,
+                      Buf,RD_LSTTIMEWRT_SIZE+RD_LSTDATEWRT_SIZE)<0) {
       return -1;
    }
 

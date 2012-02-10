@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is ______________________________________.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): ______________________________________.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -74,9 +74,9 @@ either the MPL or the [eCos GPL] License."
 #include "lib/libc/stdio/stdio.h"
 //#include <string.h>
 #if !defined(GNU_GCC)
-#include <assert.h>
+   #include <assert.h>
 #else
-#define  assert(__cond__)
+   #define  assert(__cond__)
 #endif
 //#include <float.h>
 
@@ -84,11 +84,11 @@ either the MPL or the [eCos GPL] License."
 
 /* from printf.c -- should really be in an internal header file */
 enum {
-        FLAG_PLUS = 0,
-        FLAG_MINUS_LJUSTIFY,
-        FLAG_HASH,
-        FLAG_0_PAD,
-        FLAG_SPACE,
+   FLAG_PLUS = 0,
+   FLAG_MINUS_LJUSTIFY,
+   FLAG_HASH,
+   FLAG_0_PAD,
+   FLAG_SPACE,
 };
 
 /*****************************************************************************/
@@ -98,7 +98,7 @@ enum {
  */
 
 #if EXP_TABLE_SIZE < 6
-#error EXP_TABLE_SIZE should be at least 6 to comply with standards
+   #error EXP_TABLE_SIZE should be at least 6 to comply with standards
 #endif
 
 #define EXP_TABLE_MAX      (1U<<(EXP_TABLE_SIZE-1))
@@ -108,7 +108,7 @@ enum {
  */
 
 #if LDBL_MAX_10_EXP/2 > EXP_TABLE_MAX
-#error larger EXP_TABLE_SIZE needed
+   #error larger EXP_TABLE_SIZE needed
 #endif
 
 /*
@@ -117,18 +117,18 @@ enum {
 #define DIGITS_PER_BLOCK     9
 
 #if (INT_MAX >> 30)
-#define DIGIT_BLOCK_TYPE     int
-#define DB_FMT               "%.*d"
+   #define DIGIT_BLOCK_TYPE     int
+   #define DB_FMT               "%.*d"
 #elif (LONG_MAX >> 30)
-#define DIGIT_BLOCK_TYPE     long
-#define DB_FMT               "%.*ld"
+   #define DIGIT_BLOCK_TYPE     long
+   #define DB_FMT               "%.*ld"
 #else
-#error need at least 32 bit longs
+   #error need at least 32 bit longs
 #endif
 
 /* Are there actually any machines where this might fail? */
 #if 'A' > 'a'
-#error ordering assumption violated : 'A' > 'a'
+   #error ordering assumption violated : 'A' > 'a'
 #endif
 
 /* Maximum number of calls to fnprintf to output double. */
@@ -143,280 +143,280 @@ enum {
 /*****************************************************************************/
 
 static const char *fmts[] = {
-        "%0*d", "%.*s", ".", "inf", "INF", "nan", "NAN", "%*s"
+   "%0*d", "%.*s", ".", "inf", "INF", "nan", "NAN", "%*s"
 };
 
 /*****************************************************************************/
 
 int __dtostr(FILE * fp, size_t size, long double x,
-                         char flag[], int width, int preci, char mode)
+             char flag[], int width, int preci, char mode)
 {
-        long double exp_table[EXP_TABLE_SIZE];
-        long double p10;
-        DIGIT_BLOCK_TYPE digit_block; /* int of at least 32 bits */
-        int i, j;
-        int round, o_exp;
-        int exp, exp_neg;
-        char *s;
-        char *e;
-        char buf[BUF_SIZE];
-        INT_OR_PTR pc_fwi[2*MAX_CALLS];
-        INT_OR_PTR *ppc;
-        char exp_buf[8];
-        char drvr[8];
-        char *pdrvr;
-        int npc;
-        int cnt;
-        char sign_str[2];
-        char o_mode;
+   long double exp_table[EXP_TABLE_SIZE];
+   long double p10;
+   DIGIT_BLOCK_TYPE digit_block;      /* int of at least 32 bits */
+   int i, j;
+   int round, o_exp;
+   int exp, exp_neg;
+   char *s;
+   char *e;
+   char buf[BUF_SIZE];
+   INT_OR_PTR pc_fwi[2*MAX_CALLS];
+   INT_OR_PTR *ppc;
+   char exp_buf[8];
+   char drvr[8];
+   char *pdrvr;
+   int npc;
+   int cnt;
+   char sign_str[2];
+   char o_mode;
 
-        /* check that INT_OR_PTR is sufficiently large */
-        assert( sizeof(INT_OR_PTR) == sizeof(char *) );
+   /* check that INT_OR_PTR is sufficiently large */
+   assert( sizeof(INT_OR_PTR) == sizeof(char *) );
 
-        *sign_str = flag[FLAG_PLUS];
-        *(sign_str+1) = 0;
-        if (isnan(x)) {                         /* nan check */
-                pdrvr = drvr + 1;
-                *pdrvr++ = 5 + (mode < 'a');
-                pc_fwi[2] = 3;
-                flag[FLAG_0_PAD] = 0;
-                goto EXIT_SPECIAL;
-        }
+   *sign_str = flag[FLAG_PLUS];
+   *(sign_str+1) = 0;
+   if (isnan(x)) {                              /* nan check */
+      pdrvr = drvr + 1;
+      *pdrvr++ = 5 + (mode < 'a');
+      pc_fwi[2] = 3;
+      flag[FLAG_0_PAD] = 0;
+      goto EXIT_SPECIAL;
+   }
 
-        if (x == 0) {                           /* handle 0 now to avoid false positive */
-                exp = -1;
-                goto GENERATE_DIGITS;
-        }
+   if (x == 0) {                                /* handle 0 now to avoid false positive */
+      exp = -1;
+      goto GENERATE_DIGITS;
+   }
 
-        if (x < 0) {                            /* convert negatives to positives */
-                *sign_str = '-';
-                x = -x;
-        }
+   if (x < 0) {                                 /* convert negatives to positives */
+      *sign_str = '-';
+      x = -x;
+   }
 
-        if (_zero_or_inf_check(x)) { /* must be inf since zero handled above */
-                pdrvr = drvr + 1;
-                *pdrvr++ = 3 +  + (mode < 'a');
-                pc_fwi[2] = 3;
-                flag[FLAG_0_PAD] = 0;
-                goto EXIT_SPECIAL;
-        }
+   if (_zero_or_inf_check(x)) {      /* must be inf since zero handled above */
+      pdrvr = drvr + 1;
+      *pdrvr++ = 3 +  + (mode < 'a');
+      pc_fwi[2] = 3;
+      flag[FLAG_0_PAD] = 0;
+      goto EXIT_SPECIAL;
+   }
 
-        /* need to build the scaling table */
-        for (i = 0, p10 = 10 ; i < EXP_TABLE_SIZE ; i++) {
-                exp_table[i] = p10;
-                p10 *= p10;
-        }
+   /* need to build the scaling table */
+   for (i = 0, p10 = 10; i < EXP_TABLE_SIZE; i++) {
+      exp_table[i] = p10;
+      p10 *= p10;
+   }
 
-        exp_neg = 0;
-        if (x < 1e8) {                          /* do we need to scale up or down? */
-                exp_neg = 1;
-        }
+   exp_neg = 0;
+   if (x < 1e8) {                               /* do we need to scale up or down? */
+      exp_neg = 1;
+   }
 
-        exp = DIGITS_PER_BLOCK - 1;
+   exp = DIGITS_PER_BLOCK - 1;
 
-        i = EXP_TABLE_SIZE;
-        j = EXP_TABLE_MAX;
-        while ( i-- ) {                         /* scale x such that 1e8 <= x < 1e9 */
-                if (exp_neg) {
-                        if (x * exp_table[i] < 1e9) {
-                                x *= exp_table[i];
-                                exp -= j;
-                        }
-                } else {
-                        if (x / exp_table[i] >= 1e8) {
-                                x /= exp_table[i];
-                                exp += j;
-                        }
-                }
-                j >>= 1;
-        }
-        if (x >= 1e9) {                         /* handle bad rounding case */
-                x /= 10;
-                ++exp;
-        }
-        assert(x < 1e9);
+   i = EXP_TABLE_SIZE;
+   j = EXP_TABLE_MAX;
+   while ( i-- ) {                              /* scale x such that 1e8 <= x < 1e9 */
+      if (exp_neg) {
+         if (x * exp_table[i] < 1e9) {
+            x *= exp_table[i];
+            exp -= j;
+         }
+      } else {
+         if (x / exp_table[i] >= 1e8) {
+            x /= exp_table[i];
+            exp += j;
+         }
+      }
+      j >>= 1;
+   }
+   if (x >= 1e9) {                              /* handle bad rounding case */
+      x /= 10;
+      ++exp;
+   }
+   assert(x < 1e9);
 
- GENERATE_DIGITS:
-        s = buf + 2; /* leave space for '\0' and '0' */
+GENERATE_DIGITS:
+   s = buf + 2;      /* leave space for '\0' and '0' */
 
-        for (i = 0 ; i < NUM_DIGIT_BLOCKS ; ++i ) {
-                digit_block = (DIGIT_BLOCK_TYPE) x;
-                x = (x - digit_block) * 1e9;
-                s += sprintf(s, DB_FMT, DIGITS_PER_BLOCK, digit_block);
-        }
+   for (i = 0; i < NUM_DIGIT_BLOCKS; ++i ) {
+      digit_block = (DIGIT_BLOCK_TYPE) x;
+      x = (x - digit_block) * 1e9;
+      s += sprintf(s, DB_FMT, DIGITS_PER_BLOCK, digit_block);
+   }
 
-        /*************************************************************************/
+   /*************************************************************************/
 
-        *exp_buf = 'e';
-        if (mode < 'a') {
-                *exp_buf = 'E';
-                mode += ('a' - 'A');
-        }
+   *exp_buf = 'e';
+   if (mode < 'a') {
+      *exp_buf = 'E';
+      mode += ('a' - 'A');
+   }
 
-        o_mode = mode;
+   o_mode = mode;
 
-        round = preci;
+   round = preci;
 
-        if ((mode == 'g') && (round > 0)){
-                --round;
-        }
+   if ((mode == 'g') && (round > 0)) {
+      --round;
+   }
 
-        if (mode == 'f') {
-                round += exp;
-        }
+   if (mode == 'f') {
+      round += exp;
+   }
 
-        s = buf;
-        *s++ = 0;                                       /* terminator for rounding and 0-triming */
-        *s = '0';                                       /* space to round */
+   s = buf;
+   *s++ = 0;                                            /* terminator for rounding and 0-triming */
+   *s = '0';                                            /* space to round */
 
-        i = 0;
-        e = s + MAX_DIGITS + 1;
-        if (round < MAX_DIGITS) {
-                e = s + round + 2;
-                if (*e >= '5') {
-                        i = 1;
-                }
-        }
+   i = 0;
+   e = s + MAX_DIGITS + 1;
+   if (round < MAX_DIGITS) {
+      e = s + round + 2;
+      if (*e >= '5') {
+         i = 1;
+      }
+   }
 
-        do {                                            /* handle rounding and trim trailing 0s */
-                *--e += i;                              /* add the carry */
-        } while ((*e == '0') || (*e > '9'));
+   do {                                                 /* handle rounding and trim trailing 0s */
+      *--e += i;                                        /* add the carry */
+   } while ((*e == '0') || (*e > '9'));
 
-        o_exp = exp;
-        if (e <= s) {                           /* we carried into extra digit */
-                ++o_exp;
-                e = s;                                  /* needed if all 0s */
-        } else {
-                ++s;
-        }
-        *++e = 0;                                       /* ending nul char */
+   o_exp = exp;
+   if (e <= s) {                                /* we carried into extra digit */
+      ++o_exp;
+      e = s;                                            /* needed if all 0s */
+   } else {
+      ++s;
+   }
+   *++e = 0;                                            /* ending nul char */
 
-        if ((mode == 'g') && ((o_exp >= -4) && (o_exp <= round))) {
-                mode = 'f';
-        }
+   if ((mode == 'g') && ((o_exp >= -4) && (o_exp <= round))) {
+      mode = 'f';
+   }
 
-        exp = o_exp;
-        if (mode != 'f') {
-                o_exp = 0;
-        }
+   exp = o_exp;
+   if (mode != 'f') {
+      o_exp = 0;
+   }
 
-        if (o_exp < 0) {
-                *--s = '0';                             /* fake the first digit */
-        }
+   if (o_exp < 0) {
+      *--s = '0';                                       /* fake the first digit */
+   }
 
-        pdrvr = drvr+1;
-        ppc = pc_fwi+2;
+   pdrvr = drvr+1;
+   ppc = pc_fwi+2;
 
-        *pdrvr++ = 0;
-        *ppc++ = 1;
-        *ppc++ = (INT_OR_PTR)(*s++ - '0');
+   *pdrvr++ = 0;
+   *ppc++ = 1;
+   *ppc++ = (INT_OR_PTR)(*s++ - '0');
 
-        i = e - s;                                      /* total digits */
-        if (o_exp >= 0) {
-                if (o_exp >= i) {               /* all digit(s) left of decimal */
-                        *pdrvr++ = 1;
-                        *ppc++ = i;
-                        *ppc++ = (INT_OR_PTR)(s);
-                        o_exp -= i;
-                        i = 0;
-                        if (o_exp>0) {          /* have 0s left of decimal */
-                                *pdrvr++ = 0;
-                                *ppc++ = o_exp;
-                                *ppc++ = 0;
-                        }
-                } else if (o_exp > 0) { /* decimal between digits */
-                        *pdrvr++ = 1;
-                        *ppc++ = o_exp;
-                        *ppc++ = (INT_OR_PTR)(s);
-                        s += o_exp;
-                        i -= o_exp;
-                }
-                o_exp = -1;
-        }
+   i = e - s;                                           /* total digits */
+   if (o_exp >= 0) {
+      if (o_exp >= i) {                         /* all digit(s) left of decimal */
+         *pdrvr++ = 1;
+         *ppc++ = i;
+         *ppc++ = (INT_OR_PTR)(s);
+         o_exp -= i;
+         i = 0;
+         if (o_exp>0) {                         /* have 0s left of decimal */
+            *pdrvr++ = 0;
+            *ppc++ = o_exp;
+            *ppc++ = 0;
+         }
+      } else if (o_exp > 0) {           /* decimal between digits */
+         *pdrvr++ = 1;
+         *ppc++ = o_exp;
+         *ppc++ = (INT_OR_PTR)(s);
+         s += o_exp;
+         i -= o_exp;
+      }
+      o_exp = -1;
+   }
 
-        if (flag[FLAG_HASH] || (i) || ((o_mode != 'g') && (preci > 0))) {
-                *pdrvr++ = 2;                   /* need decimal */
-                *ppc++ = 1;                             /* needed for width calc */
-                ppc++;
-        }
+   if (flag[FLAG_HASH] || (i) || ((o_mode != 'g') && (preci > 0))) {
+      *pdrvr++ = 2;                             /* need decimal */
+      *ppc++ = 1;                                       /* needed for width calc */
+      ppc++;
+   }
 
-        if (++o_exp < 0) {                      /* have 0s right of decimal */
-                *pdrvr++ = 0;
-                *ppc++ = -o_exp;
-                *ppc++ = 0;
-        }
-        if (i) {                                        /* have digit(s) right of decimal */
-                *pdrvr++ = 1;
-                *ppc++ = i;
-                *ppc++ = (INT_OR_PTR)(s);
-        }
+   if (++o_exp < 0) {                           /* have 0s right of decimal */
+      *pdrvr++ = 0;
+      *ppc++ = -o_exp;
+      *ppc++ = 0;
+   }
+   if (i) {                                             /* have digit(s) right of decimal */
+      *pdrvr++ = 1;
+      *ppc++ = i;
+      *ppc++ = (INT_OR_PTR)(s);
+   }
 
-        if (o_mode != 'g') {
-                i -= o_exp;
-                if (i < preci) {                /* have 0s right of digits */
-                        i = preci - i;
-                        *pdrvr++ = 0;
-                        *ppc++ = i;
-                        *ppc++ = 0;
-                }
-        }
+   if (o_mode != 'g') {
+      i -= o_exp;
+      if (i < preci) {                          /* have 0s right of digits */
+         i = preci - i;
+         *pdrvr++ = 0;
+         *ppc++ = i;
+         *ppc++ = 0;
+      }
+   }
 
-        /* build exponent string */
-        if (mode != 'f') {
-                *pdrvr++ = 1;
-                *ppc++ = sprintf(exp_buf,"%c%+.2d", *exp_buf, exp);
-                *ppc++ = (INT_OR_PTR) exp_buf;
-        }
+   /* build exponent string */
+   if (mode != 'f') {
+      *pdrvr++ = 1;
+      *ppc++ = sprintf(exp_buf,"%c%+.2d", *exp_buf, exp);
+      *ppc++ = (INT_OR_PTR) exp_buf;
+   }
 
- EXIT_SPECIAL:
-        npc = pdrvr - drvr;
-        ppc = pc_fwi + 2;
-        for (i=1 ; i< npc ; i++) {
-                width -= *(ppc++);
-                ppc++;
-        }
-        i = 0;
-        if (*sign_str) {
-                i = 1;
-        }
-        width -= i;
-        if (width <= 0) {
-                width = 0;
-        } else {
-                if (flag[FLAG_MINUS_LJUSTIFY]) { /* padding on right */
-                        ++npc;
-                        *pdrvr++ = 7;
-                        *ppc = width;
-                        *++ppc = (INT_OR_PTR)("");
-                        width = 0;
-                } else if (flag[FLAG_0_PAD] == '0') { /* 0 padding */
-                        pc_fwi[2] += width;
-                        width = 0;
-                }
-        }
-        *drvr = 7;
-        ppc = pc_fwi;
-        *ppc++ = width + i;
-        *ppc = (INT_OR_PTR) sign_str;
+EXIT_SPECIAL:
+   npc = pdrvr - drvr;
+   ppc = pc_fwi + 2;
+   for (i=1; i< npc; i++) {
+      width -= *(ppc++);
+      ppc++;
+   }
+   i = 0;
+   if (*sign_str) {
+      i = 1;
+   }
+   width -= i;
+   if (width <= 0) {
+      width = 0;
+   } else {
+      if (flag[FLAG_MINUS_LJUSTIFY]) {           /* padding on right */
+         ++npc;
+         *pdrvr++ = 7;
+         *ppc = width;
+         *++ppc = (INT_OR_PTR)("");
+         width = 0;
+      } else if (flag[FLAG_0_PAD] == '0') {           /* 0 padding */
+         pc_fwi[2] += width;
+         width = 0;
+      }
+   }
+   *drvr = 7;
+   ppc = pc_fwi;
+   *ppc++ = width + i;
+   *ppc = (INT_OR_PTR) sign_str;
 
-        pdrvr = drvr;
-        ppc = pc_fwi;
-        cnt = 0;
-        for (i=0 ; i<npc ; i++) {
+   pdrvr = drvr;
+   ppc = pc_fwi;
+   cnt = 0;
+   for (i=0; i<npc; i++) {
 #if 1
-                fnprintf(fp, size, fmts[(int)(*pdrvr++)], (INT_OR_PTR)(*(ppc)),
-                                 (INT_OR_PTR)(*(ppc+1)));
+      fnprintf(fp, size, fmts[(int)(*pdrvr++)], (INT_OR_PTR)(*(ppc)),
+               (INT_OR_PTR)(*(ppc+1)));
 #else
-                j = fnprintf(fp, size, fmts[(int)(*pdrvr++)], (INT_OR_PTR)(*(ppc)),
-                                          (INT_OR_PTR)(*(ppc+1)));
-                assert(j == *ppc);
+      j = fnprintf(fp, size, fmts[(int)(*pdrvr++)], (INT_OR_PTR)(*(ppc)),
+                   (INT_OR_PTR)(*(ppc+1)));
+      assert(j == *ppc);
 #endif
-                if (size > *ppc) {
-                        size -= *ppc;
-                }
-                cnt += *ppc;                    /* to avoid problems if j == -1 */
-                ppc += 2;
-        }
+      if (size > *ppc) {
+         size -= *ppc;
+      }
+      cnt += *ppc;                              /* to avoid problems if j == -1 */
+      ppc += 2;
+   }
 
-        return cnt;
+   return cnt;
 }

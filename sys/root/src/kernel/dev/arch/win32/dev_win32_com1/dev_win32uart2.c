@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -59,10 +59,10 @@ char strUseCom[256]=DFLT_USE_COM;
 //
 volatile static HANDLE hCom;
 static HANDLE hComThread;
-static DWORD  dwThreadID;
+static DWORD dwThreadID;
 
 
-static OVERLAPPED  osWrite, osRead ;
+static OVERLAPPED osWrite, osRead;
 
 #define COM_STOP  TRUE
 #define COM_START FALSE
@@ -75,14 +75,14 @@ volatile static BOOLEAN snd_interrupt_enable=FALSE;
 static int rcvLength;
 static int sndLength;
 
-static char  rcvBuffer[MAX_BUFFER];
-static char  sndBuffer[MAX_BUFFER];
+static char rcvBuffer[MAX_BUFFER];
+static char sndBuffer[MAX_BUFFER];
 
-static volatile char  rcvData;
+static volatile char rcvData;
 
 //static unsigned char slipBuffer[255];
 
-static int nRS232PhysicalSimTimeOut=500;//50; //ms//INFINITE;
+static int nRS232PhysicalSimTimeOut=500; //50; //ms//INFINITE;
 static HANDLE hRS232PhysicalSimEvent;
 
 
@@ -101,19 +101,19 @@ Implementation
 ---------------------------------------------*/
 static int _readCom2(HANDLE hCom,char*  buffer, UINT bufferlen )
 {
-   BOOL       fReadStat ;
-   COMSTAT    ComStat ;
-   DWORD      dwErrorFlags;
-   DWORD      dwLength;
-   DWORD      dwError;
+   BOOL fReadStat;
+   COMSTAT ComStat;
+   DWORD dwErrorFlags;
+   DWORD dwLength;
+   DWORD dwError;
 
    // only try to read number of bytes in queue
-   ClearCommError( hCom, &dwErrorFlags, &ComStat ) ;
-   dwLength = min( (DWORD) bufferlen, ComStat.cbInQue ) ;
+   ClearCommError( hCom, &dwErrorFlags, &ComStat );
+   dwLength = min( (DWORD) bufferlen, ComStat.cbInQue );
 
    if (dwLength > 0)
    {
-      fReadStat = ReadFile( hCom, buffer,dwLength, &dwLength, & osRead ) ;
+      fReadStat = ReadFile( hCom, buffer,dwLength, &dwLength, &osRead );
       if (!fReadStat)
       {
          if (GetLastError() == ERROR_IO_PENDING)
@@ -126,16 +126,16 @@ static int _readCom2(HANDLE hCom,char*  buffer, UINT bufferlen )
                else
                {
                   // an error occurred, try to recover
-                  ClearCommError( hCom, &dwErrorFlags, &ComStat ) ;
+                  ClearCommError( hCom, &dwErrorFlags, &ComStat );
                   break;
                }
             }
-	      }
+         }
          else
          {
             // some other error occurred
-            dwLength = 0 ;
-            ClearCommError( hCom, &dwErrorFlags, &ComStat ) ;
+            dwLength = 0;
+            ClearCommError( hCom, &dwErrorFlags, &ComStat );
          }
       }
    }
@@ -153,23 +153,23 @@ static int _readCom2(HANDLE hCom,char*  buffer, UINT bufferlen )
 ---------------------------------------------*/
 static int _writeCom2(HANDLE hCom,char*  buffer, UINT bufferlen )
 {
-   BOOL        fWriteStat ;
-   DWORD       dwBytesWritten ;
-   DWORD       dwErrorFlags;
-   DWORD   	   dwError;
-   DWORD       dwBytesSent=0;
-   COMSTAT     ComStat;
+   BOOL fWriteStat;
+   DWORD dwBytesWritten;
+   DWORD dwErrorFlags;
+   DWORD dwError;
+   DWORD dwBytesSent=0;
+   COMSTAT ComStat;
 
-   
+
    fWriteStat = WriteFile( hCom, buffer, bufferlen,
-                           &dwBytesWritten, &osWrite ) ;
+                           &dwBytesWritten, &osWrite );
 
    if (!fWriteStat)
    {
       if((dwError=GetLastError()) == ERROR_IO_PENDING)
       {
          while(!GetOverlappedResult( hCom,
-            &osWrite, &dwBytesWritten, /*TRUE*/ FALSE))
+                                     &osWrite, &dwBytesWritten, /*TRUE*/ FALSE))
          {
             //Sleep(/*0*/1);
             dwError = GetLastError();
@@ -182,7 +182,7 @@ static int _writeCom2(HANDLE hCom,char*  buffer, UINT bufferlen )
             else
             {
 
-               ClearCommError( hCom, &dwErrorFlags, &ComStat ) ;
+               ClearCommError( hCom, &dwErrorFlags, &ComStat );
                break;
             }
          }
@@ -193,12 +193,12 @@ static int _writeCom2(HANDLE hCom,char*  buffer, UINT bufferlen )
       else
       {
          // some other error occurred
-         ClearCommError( hCom, &dwErrorFlags, &ComStat ) ;
+         ClearCommError( hCom, &dwErrorFlags, &ComStat );
          return -1;
       }
    }
 
-   return dwBytesSent ;
+   return dwBytesSent;
 }
 
 /*-------------------------------------------
@@ -229,7 +229,7 @@ unsigned char readWin32UartReceiveRegister2(void) {
 void writeWin32UartTransmitRegister2(char reg){
    _writeCom2(hCom,&reg,1);
 
-   if(snd_interrupt_enable){
+   if(snd_interrupt_enable) {
       emuFireInterrupt(76);
    }
 }
@@ -245,11 +245,11 @@ void writeWin32UartTransmitRegister2(char reg){
 static DWORD comThread2 (LPVOID lpParameter)
 {
    int i;
-     
+
    printf("uart wait on %s...\n",USE_COM);
    while ( !bComStopped )
    {
-      DWORD dwEvtMask = 0 ;
+      DWORD dwEvtMask = 0;
 
       WaitCommEvent( hCom, &dwEvtMask, NULL );
       if ((dwEvtMask & EV_RXCHAR) == EV_RXCHAR)
@@ -257,16 +257,16 @@ static DWORD comThread2 (LPVOID lpParameter)
          //printf("event\n");
          do
          {
-            if (rcvLength  = _readCom2( hCom, rcvBuffer, MAX_BUFFER  )) 
+            if (rcvLength  = _readCom2( hCom, rcvBuffer, MAX_BUFFER  ))
             {
-               
+
                for(i=0; i<rcvLength; i++)
                {
                   //printf("%c\n",rcvBuffer[i]);
                   //Sleep(/*5*/0);
                   //WriteRS232ReceiveRegister(rcvBuffer[i]);
                   rcvData = rcvBuffer[i];
-                  if(rcv_interrupt_enable){
+                  if(rcv_interrupt_enable) {
                      emuFireInterrupt(80);
                      //Synchro
                      WaitForSingleObject(hRS232PhysicalSimEvent,nRS232PhysicalSimTimeOut);
@@ -274,11 +274,11 @@ static DWORD comThread2 (LPVOID lpParameter)
 
                }
             }
-         }while ( rcvLength > 0 ) ;
+         } while ( rcvLength > 0 );
       }
       if ( (dwEvtMask & EV_TXEMPTY) == EV_TXEMPTY )
       {
-         
+
       }
    }
 
@@ -359,19 +359,19 @@ int setRs2322(uart2_config* config){
    memcpy(&current_config,config,sizeof(uart2_config));
    */
 
-   COMMCONFIG  commconfig;
-   DWORD       dwSize=sizeof(COMMCONFIG);
+   COMMCONFIG commconfig;
+   DWORD dwSize=sizeof(COMMCONFIG);
    char buffer[256]={0};
-   DCB     dcb={0};
+   DCB dcb={0};
 
-   COMMTIMEOUTS    NewTimeouts;        // Serial port new timeouts
-   COMMTIMEOUTS    OldTimeouts;        // Serial port old timeouts
+   COMMTIMEOUTS NewTimeouts;           // Serial port new timeouts
+   COMMTIMEOUTS OldTimeouts;           // Serial port old timeouts
 
    sprintf(buffer,"%s: baud=%d parity=%c data=%d stop=%d",USE_COM,
-      config->speed,
-      config->parity,
-      config->data,
-      config->stop);
+           config->speed,
+           config->parity,
+           config->data,
+           config->stop);
 
    if(!GetCommConfig(hCom,&commconfig,&dwSize))
       return -1;
@@ -383,56 +383,56 @@ int setRs2322(uart2_config* config){
    if(!SetCommConfig(hCom,&commconfig,dwSize))
       return -1;
 
-    // Get default DCB and initialize
-	if(!GetCommState( hCom, &dcb)) 
-	{
+   // Get default DCB and initialize
+   if(!GetCommState( hCom, &dcb))
+   {
       CloseHandle( hCom );
-		return -1;
-	}
+      return -1;
+   }
    else
    {
       dcb.fOutxCtsFlow = FALSE;
-	   dcb.fOutxDsrFlow = FALSE;
-		dcb.fDtrControl = DTR_CONTROL_DISABLE;	// DTR ON when device open (+12V) in order to power Optical link with DTR
-		dcb.fRtsControl = RTS_CONTROL_DISABLE;  // RTS OFF when device open (-12V) in order to power Optical link with RTS
-	   dcb.fDsrSensitivity = FALSE;
+      dcb.fOutxDsrFlow = FALSE;
+      dcb.fDtrControl = DTR_CONTROL_DISABLE;            // DTR ON when device open (+12V) in order to power Optical link with DTR
+      dcb.fRtsControl = RTS_CONTROL_DISABLE;            // RTS OFF when device open (-12V) in order to power Optical link with RTS
+      dcb.fDsrSensitivity = FALSE;
 //	    dcb.fTXContinueOnXoff = false;
-	   dcb.fTXContinueOnXoff = TRUE;
-	   dcb.fNull = FALSE;
+      dcb.fTXContinueOnXoff = TRUE;
+      dcb.fNull = FALSE;
    }
 
    dcb.fOutX = FALSE;
-	dcb.fInX = FALSE;
-	dcb.fErrorChar = FALSE;
-	dcb.fAbortOnError = FALSE;
-	dcb.XonLim = 0;//32;
-	dcb.XoffLim = 0;//32;
-	dcb.XonChar =  40;
-	dcb.XoffChar = 41;
-	dcb.ErrorChar = 0;
-	dcb.EofChar = 0;
-	dcb.EvtChar = 0;	// '\n' is the last character of a Modbus frame ; this character will be the event for retreiving the receive buffer
-	dcb.wReserved = 0;  
-	
+   dcb.fInX = FALSE;
+   dcb.fErrorChar = FALSE;
+   dcb.fAbortOnError = FALSE;
+   dcb.XonLim = 0;     //32;
+   dcb.XoffLim = 0;     //32;
+   dcb.XonChar =  40;
+   dcb.XoffChar = 41;
+   dcb.ErrorChar = 0;
+   dcb.EofChar = 0;
+   dcb.EvtChar = 0;             // '\n' is the last character of a Modbus frame ; this character will be the event for retreiving the receive buffer
+   dcb.wReserved = 0;
+
    // Set the new state of the serial port.
-	if(!SetCommState( hCom, &dcb))
-	{ 
+   if(!SetCommState( hCom, &dcb))
+   {
       CloseHandle( hCom );
-		return -1;
-	}
+      return -1;
+   }
 
    // Save current timeouts
    GetCommTimeouts(hCom, &OldTimeouts);
 
-	// Set new read timeout
+   // Set new read timeout
    memcpy((void *)&NewTimeouts, (const void *)&OldTimeouts, sizeof(COMMTIMEOUTS));
 
    NewTimeouts.ReadIntervalTimeout = 0;
    NewTimeouts.ReadTotalTimeoutMultiplier = 0;
    NewTimeouts.ReadTotalTimeoutConstant = 0; // Timeout is expressed in milliseconds
 
-   SetCommTimeouts (hCom, &NewTimeouts);	
-	
+   SetCommTimeouts (hCom, &NewTimeouts);
+
    //
    printf("com cfg: %s\n",buffer);
 
@@ -454,10 +454,10 @@ int startAsyncRs2322(void)
    FILE *stream= (FILE *)0;
 
    uart2_config config={DFLT_SPEED,DFLT_PARITY,DFLT_DATA,DFLT_STOPBIT};
-   
+
    //const static char strConfig[]="COM1: baud=9600 parity=N data=8 stop=1";
 
-   if( (stream  = fopen( "lepton_com.conf", "r" )) == NULL ){
+   if( (stream  = fopen( "lepton_com.conf", "r" )) == NULL ) {
       printf( "error: lepton_com.conf was not opened\nuse default com:%s\r\n", DFLT_USE_COM);
    }else{
       printf( "lepton_com.conf was opened\n" );
@@ -467,7 +467,7 @@ int startAsyncRs2322(void)
 
 
    hRS232PhysicalSimEvent=CreateEvent(NULL,FALSE,FALSE,NULL);
-   
+
    hCom = CreateFile(USE_COM, GENERIC_READ | GENERIC_WRITE,
                      0,
                      NULL,
@@ -479,24 +479,24 @@ int startAsyncRs2322(void)
 
    //set comm
    setRs2322(&config);
-  
+
    // purge any information in the buffer
-   PurgeComm( hCom, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR ) ;
+   PurgeComm( hCom, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR );
 
    //
    ClearCommBreak(hCom);
 
    //
    //EscapeCommFunction( hCom, SETDTR ) ;
-      
+
    // get any early notifications
-   SetCommMask(hCom, EV_RXFLAG|EV_RXCHAR|EV_TXEMPTY) ;
+   SetCommMask(hCom, EV_RXFLAG|EV_RXCHAR|EV_TXEMPTY);
 
    // setup device buffers
-   SetupComm( hCom, 4096, 4096 ) ;
+   SetupComm( hCom, 4096, 4096 );
 
-   
-   //   
+
+   //
    bComStopped=COM_START;
    hComThread = CreateThread( (LPSECURITY_ATTRIBUTES) NULL,
                               0,
@@ -505,11 +505,11 @@ int startAsyncRs2322(void)
                               0, &dwThreadID );
    if(hComThread==INVALID_HANDLE_VALUE)
       return -1;
-     
-   
+
+
 
    printf("uart started\n");
-   
+
    return 0;
 }
 
@@ -528,21 +528,21 @@ int stopAsyncRs2322(void)
 
    // disable event notification and wait for thread
    // to halt
-   SetCommMask( hCom, 0 ) ;
+   SetCommMask( hCom, 0 );
 
    // block until thread has been halted
    while(dwThreadID)
       Sleep(10);
 
    // drop DTR
-   EscapeCommFunction( hCom, CLRDTR ) ;
+   EscapeCommFunction( hCom, CLRDTR );
 
    // purge any outstanding reads/writes and close device handle
 
    PurgeComm( hCom, PURGE_TXABORT | PURGE_RXABORT |
-                    PURGE_TXCLEAR | PURGE_RXCLEAR ) ;
+              PURGE_TXCLEAR | PURGE_RXCLEAR );
 
-   CloseHandle(hCom) ;
+   CloseHandle(hCom);
 
    return 0;
 }

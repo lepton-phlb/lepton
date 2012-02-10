@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -54,20 +54,21 @@ either the MPL or the [eCos GPL] License."
 | Global Declaration
 ==============================================*/
 
-extern AT91PS_SYS  AT91_SYS;
+extern AT91PS_SYS AT91_SYS;
 
 /*===========================================
 Implementation
 =============================================*/
 
 #if defined(USE_ECOS)
-static cyg_uint32 dev_at91sam9261_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t data) {
-      cyg_interrupt_mask(vector);
+static cyg_uint32 dev_at91sam9261_eth_dm9000a_interrupt_isr(cyg_vector_t vector,
+                                                            cyg_addrword_t data) {
+   cyg_interrupt_mask(vector);
 
-   if(vector==CYGNUM_HAL_INTERRUPT_PIOC){//use FIQ interrupt line as gpio irq
+   if(vector==CYGNUM_HAL_INTERRUPT_PIOC) { //use FIQ interrupt line as gpio irq
 
-      if(!(AT91_SYS->PIOC_ISR&AT91C_PIO_PC11))//PIOC_ISR must be read to re-enabled interrupt on PIOC
-               return(CYG_ISR_HANDLED);
+      if(!(AT91_SYS->PIOC_ISR&AT91C_PIO_PC11)) //PIOC_ISR must be read to re-enabled interrupt on PIOC
+         return(CYG_ISR_HANDLED);
 
       return dev_eth_dm9000a_interrupt_isr(vector,data); //call generic dm9000 interrupt
    }
@@ -86,7 +87,7 @@ static cyg_uint32 dev_at91sam9261_eth_dm9000a_interrupt_isr(cyg_vector_t vector,
 ----------------------------------------------*/
 int dev_at91sam9261_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
 
-   if(p_dev_io_info->irq_no==CYGNUM_HAL_INTERRUPT_PIOC){
+   if(p_dev_io_info->irq_no==CYGNUM_HAL_INTERRUPT_PIOC) {
       //enable IRQ on PIO_PC11/FIQ pin
       AT91_SYS->PMC_PCER |= (1 << (4)); //PIOC ID = 4 // Switch on clock to portC
       AT91_SYS->PIOC_PER |= (AT91C_PIO_PC11); //enable PC11 as IO: default Input

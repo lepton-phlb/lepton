@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -33,7 +33,7 @@ either the MPL or the [eCos GPL] License."
  */
 
 /**
- * \addtogroup hard_dev_at91sam9261 
+ * \addtogroup hard_dev_at91sam9261
  * @{
  *
  */
@@ -45,7 +45,7 @@ either the MPL or the [eCos GPL] License."
  * Les pilotes de p�riph�riques pour les uart de l'arm9 at91sam9261
  * Ces pilotes de p�riph�riques g�re les vitesses de 50 � 38400 bauds
  * et supporte le timeout (VTIME) pour le mode bloquant.
- *    
+ *
  */
 
 
@@ -86,7 +86,7 @@ Global Declaration
 =============================================*/
 const char dev_at91sam9261_uart_1_name[]="ttys1\0";
 
-// extern 
+// extern
 extern int dev_at91sam9261_uart_x_load        (board_inf_uart_t *);
 extern int dev_at91sam9261_uart_x_open        (desc_t, int );
 extern int dev_at91sam9261_uart_x_close       (desc_t);
@@ -101,20 +101,20 @@ extern int termios2ttys                       (struct termios *);
 
 #if defined(USE_SEGGER)
 
-   extern void dev_at91sam9261_uart_x_interrupt   (/*desc_t*/ board_inf_uart_t *);
-   extern void dev_at91sam9261_uart_x_timer_callback(board_inf_uart_t *);
+extern void dev_at91sam9261_uart_x_interrupt   (/*desc_t*/ board_inf_uart_t *);
+extern void dev_at91sam9261_uart_x_timer_callback(board_inf_uart_t *);
 
-   static void dev_at91sam9261_uart_1_interrupt  (void);
+static void dev_at91sam9261_uart_1_interrupt  (void);
 
 #elif defined(USE_ECOS)
-   extern cyg_uint32 dev_at91sam9261_uart_isr(cyg_vector_t vector, cyg_addrword_t data);
-   extern void dev_at91sam9261_uart_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
-   extern void dev_at91sam9261_uart_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
+extern cyg_uint32 dev_at91sam9261_uart_isr(cyg_vector_t vector, cyg_addrword_t data);
+extern void dev_at91sam9261_uart_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
+extern void dev_at91sam9261_uart_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
 
    #define CYGNUM_HAL_H_PRIOR 3
-   static cyg_handle_t _at91sam9261_uart_handle;
-   static cyg_interrupt _at91sam9261_uart_it;
-   extern struct termios ttys_termios;
+static cyg_handle_t _at91sam9261_uart_handle;
+static cyg_interrupt _at91sam9261_uart_it;
+extern struct termios ttys_termios;
 
 #endif
 
@@ -124,7 +124,7 @@ int dev_at91sam9261_uart_1_open        (desc_t, int);
 
 desc_t desc_uart_1;
 
-static volatile board_inf_uart_t  board_inf_uart_1 __attribute__ ((section (".no_cache")));
+static volatile board_inf_uart_t board_inf_uart_1 __attribute__ ((section (".no_cache")));
 static board_inf_uart_t *p_board_inf_uart_1=(void*)0;   // ADU
 
 // uart_1 Functions pointers
@@ -157,7 +157,7 @@ Implementation
 ---------------------------------------------*/
 void dev_at91sam9261_uart_1_interrupt(void)
 {
-  dev_at91sam9261_uart_x_interrupt(desc_uart_1);
+   dev_at91sam9261_uart_x_interrupt(desc_uart_1);
 }
 
 /*-------------------------------------------
@@ -170,7 +170,7 @@ void dev_at91sam9261_uart_1_interrupt(void)
 ---------------------------------------------*/
 void dev_at91sam9261_uart_1_timer_callback(void)
 {
-  dev_at91sam9261_uart_x_timer_callback(p_board_inf_uart_1);
+   dev_at91sam9261_uart_x_timer_callback(p_board_inf_uart_1);
 }
 #endif
 
@@ -183,7 +183,7 @@ void dev_at91sam9261_uart_1_timer_callback(void)
 | See        : -
 ---------------------------------------------*/
 int dev_at91sam9261_uart_1_load (void)
-{      
+{
    return dev_at91sam9261_uart_1_load_ex(&board_inf_uart_1);
 }
 
@@ -202,11 +202,11 @@ int dev_at91sam9261_uart_1_load_ex(board_inf_uart_t* p_board_inf_uart){
    else
       p_board_inf_uart_1  = p_board_inf_uart;
 
-   #if defined(USE_SEGGER)
-      p_board_inf_uart_1->f_timer_call_back = dev_at91sam9261_uart_1_timer_callback;
-   #else
-      p_board_inf_uart_1->f_timer_call_back = (void*)0;
-   #endif
+#if defined(USE_SEGGER)
+   p_board_inf_uart_1->f_timer_call_back = dev_at91sam9261_uart_1_timer_callback;
+#else
+   p_board_inf_uart_1->f_timer_call_back = (void*)0;
+#endif
 
    p_board_inf_uart_1->loaded = 0; // Not loaded
 
@@ -222,63 +222,63 @@ int dev_at91sam9261_uart_1_load_ex(board_inf_uart_t* p_board_inf_uart){
 | Parameters : desc_t desc -> descriptor
 |
 | Return Type:
-| Comments   : - 
-| See        : - 
+| Comments   : -
+| See        : -
 ---------------------------------------------*/
 int dev_at91sam9261_uart_1_open (desc_t desc, int o_flag)
-{     
-   #if defined(USE_ECOS)
-      cyg_vector_t serial_vector = CYGNUM_HAL_INTERRUPT_USART1;
-      cyg_priority_t serial_prior = CYGNUM_HAL_H_PRIOR;
-   #endif
+{
+#if defined(USE_ECOS)
+   cyg_vector_t serial_vector = CYGNUM_HAL_INTERRUPT_USART1;
+   cyg_priority_t serial_prior = CYGNUM_HAL_H_PRIOR;
+#endif
 
-  // Uart1 informations
-  ofile_lst[desc].p = (board_inf_uart_t *)p_board_inf_uart_1;
-  
-  // Specific fields
-  ((board_inf_uart_t *)ofile_lst[desc].p)->base_adr    = (AT91_REG *)AT91C_US1_CR; 
-  ((board_inf_uart_t *)ofile_lst[desc].p)->periph_id   = AT91C_ID_US1;
-  ((board_inf_uart_t *)ofile_lst[desc].p)->ind_pio_rxd = 13;  // PC13/RXD1
-  ((board_inf_uart_t *)ofile_lst[desc].p)->ind_pio_txd = 12;  // PC12/TXD1
-  
-  // Save o_flag
-  ((board_inf_uart_t *)ofile_lst[desc].p)->o_flag |= o_flag;
-  
-  // Switch on o_flag type and save it
-  if (o_flag & O_RDONLY)
-  {
-    ((board_inf_uart_t *)ofile_lst[desc].p)->desc_r = desc;    
-  }
-  
-  if (o_flag & O_WRONLY)
-  {
-    ((board_inf_uart_t *)ofile_lst[desc].p)->desc_w = desc;
-  }
-  
-  // save descriptor
-  desc_uart_1 = desc;
-  
-  // call uart common Api open 
-  int ret = dev_at91sam9261_uart_x_open(desc, o_flag);
+   // Uart1 informations
+   ofile_lst[desc].p = (board_inf_uart_t *)p_board_inf_uart_1;
 
-  //create interrupt a first time
-  if((ofile_lst[desc].nb_reader==0)&&(ofile_lst[desc].nb_writer==0))
-  {
-      #ifdef USE_SEGGER
-        // Usart 1 interrupt vector.
-        AT91C_AIC_SVR[AT91C_ID_US1] = (unsigned long)&dev_at91sam9261_uart_1_interrupt;
-      #elif defined(USE_ECOS)
-        //Primitive de creation de l'IT au chargement du driver
-        cyg_interrupt_create(serial_vector, serial_prior, (cyg_addrword_t)ofile_lst[desc].p,
-            &dev_at91sam9261_uart_isr, &dev_at91sam9261_uart_dsr,
-            &_at91sam9261_uart_handle, &_at91sam9261_uart_it);
-        //Liaison entre l'IT crée et le vecteur d'IT
-        cyg_interrupt_attach(_at91sam9261_uart_handle);
-        cyg_interrupt_unmask(serial_vector);
-      #endif
-  }
+   // Specific fields
+   ((board_inf_uart_t *)ofile_lst[desc].p)->base_adr    = (AT91_REG *)AT91C_US1_CR;
+   ((board_inf_uart_t *)ofile_lst[desc].p)->periph_id   = AT91C_ID_US1;
+   ((board_inf_uart_t *)ofile_lst[desc].p)->ind_pio_rxd = 13; // PC13/RXD1
+   ((board_inf_uart_t *)ofile_lst[desc].p)->ind_pio_txd = 12; // PC12/TXD1
 
-  return 0;
+   // Save o_flag
+   ((board_inf_uart_t *)ofile_lst[desc].p)->o_flag |= o_flag;
+
+   // Switch on o_flag type and save it
+   if (o_flag & O_RDONLY)
+   {
+      ((board_inf_uart_t *)ofile_lst[desc].p)->desc_r = desc;
+   }
+
+   if (o_flag & O_WRONLY)
+   {
+      ((board_inf_uart_t *)ofile_lst[desc].p)->desc_w = desc;
+   }
+
+   // save descriptor
+   desc_uart_1 = desc;
+
+   // call uart common Api open
+   int ret = dev_at91sam9261_uart_x_open(desc, o_flag);
+
+   //create interrupt a first time
+   if((ofile_lst[desc].nb_reader==0)&&(ofile_lst[desc].nb_writer==0))
+   {
+#ifdef USE_SEGGER
+      // Usart 1 interrupt vector.
+      AT91C_AIC_SVR[AT91C_ID_US1] = (unsigned long)&dev_at91sam9261_uart_1_interrupt;
+#elif defined(USE_ECOS)
+      //Primitive de creation de l'IT au chargement du driver
+      cyg_interrupt_create(serial_vector, serial_prior, (cyg_addrword_t)ofile_lst[desc].p,
+                           &dev_at91sam9261_uart_isr, &dev_at91sam9261_uart_dsr,
+                           &_at91sam9261_uart_handle, &_at91sam9261_uart_it);
+      //Liaison entre l'IT crée et le vecteur d'IT
+      cyg_interrupt_attach(_at91sam9261_uart_handle);
+      cyg_interrupt_unmask(serial_vector);
+#endif
+   }
+
+   return 0;
 }
 /** @} */
 /** @} */

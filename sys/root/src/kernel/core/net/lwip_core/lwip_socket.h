@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -46,17 +46,17 @@ either the MPL or the [eCos GPL] License."
 
 /* members are in network byte order */
 struct sockaddr_in {
-  u8_t sin_len;
-  u8_t sin_family;
-  u16_t sin_port;
-  struct in_addr sin_addr;
-  char sin_zero[8];
+   u8_t sin_len;
+   u8_t sin_family;
+   u16_t sin_port;
+   struct in_addr sin_addr;
+   char sin_zero[8];
 };
 
 struct sockaddr {
-  u8_t sa_len;
-  u8_t sa_family;
-  char sa_data[14];
+   u8_t sa_len;
+   u8_t sa_family;
+   char sa_data[14];
 };
 
 #ifndef socklen_t
@@ -103,8 +103,8 @@ struct sockaddr {
  * Structure used for manipulating linger option.
  */
 struct linger {
-       int l_onoff;                /* option on/off */
-       int l_linger;               /* linger time */
+   int l_onoff;                    /* option on/off */
+   int l_linger;                   /* linger time */
 };
 
 /*
@@ -144,19 +144,19 @@ struct linger {
 /*
  * Options for level IPPROTO_TCP
  */
-#define TCP_NODELAY    0x01    /* don't delay send to coalesce packets */
-#define TCP_KEEPALIVE  0x02    /* send KEEPALIVE probes when idle for pcb->keep_idle milliseconds */
-#define TCP_KEEPIDLE   0x03    /* set pcb->keep_idle  - Same as TCP_KEEPALIVE, but use seconds for get/setsockopt */
-#define TCP_KEEPINTVL  0x04    /* set pcb->keep_intvl - Use seconds for get/setsockopt */
-#define TCP_KEEPCNT    0x05    /* set pcb->keep_cnt   - Use number of probes sent for get/setsockopt */
+   #define TCP_NODELAY    0x01 /* don't delay send to coalesce packets */
+   #define TCP_KEEPALIVE  0x02 /* send KEEPALIVE probes when idle for pcb->keep_idle milliseconds */
+   #define TCP_KEEPIDLE   0x03 /* set pcb->keep_idle  - Same as TCP_KEEPALIVE, but use seconds for get/setsockopt */
+   #define TCP_KEEPINTVL  0x04 /* set pcb->keep_intvl - Use seconds for get/setsockopt */
+   #define TCP_KEEPCNT    0x05 /* set pcb->keep_cnt   - Use number of probes sent for get/setsockopt */
 #endif /* LWIP_TCP */
 
 #if LWIP_UDP && LWIP_UDPLITE
 /*
  * Options for level IPPROTO_UDPLITE
  */
-#define UDPLITE_SEND_CSCOV 0x01 /* sender checksum coverage */
-#define UDPLITE_RECV_CSCOV 0x02 /* minimal receiver checksum coverage */
+   #define UDPLITE_SEND_CSCOV 0x01 /* sender checksum coverage */
+   #define UDPLITE_RECV_CSCOV 0x02 /* minimal receiver checksum coverage */
 #endif /* LWIP_UDP && LWIP_UDPLITE*/
 
 
@@ -164,15 +164,15 @@ struct linger {
 /*
  * Options and types for UDP multicast traffic handling
  */
-#define IP_ADD_MEMBERSHIP  3
-#define IP_DROP_MEMBERSHIP 4
-#define IP_MULTICAST_TTL   5
-#define IP_MULTICAST_IF    6
-#define IP_MULTICAST_LOOP  7
+   #define IP_ADD_MEMBERSHIP  3
+   #define IP_DROP_MEMBERSHIP 4
+   #define IP_MULTICAST_TTL   5
+   #define IP_MULTICAST_IF    6
+   #define IP_MULTICAST_LOOP  7
 
 typedef struct ip_mreq {
-    struct in_addr imr_multiaddr; /* IP multicast address of group */
-    struct in_addr imr_interface; /* local IP address of interface */
+   struct in_addr imr_multiaddr;  /* IP multicast address of group */
+   struct in_addr imr_interface;  /* local IP address of interface */
 } ip_mreq;
 #endif /* LWIP_IGMP */
 
@@ -211,47 +211,47 @@ typedef struct ip_mreq {
  * we restrict parameters to at most 128 bytes.
  */
 #if !defined(FIONREAD) || !defined(FIONBIO)
-#define IOCPARM_MASK    0x7fU           /* parameters must be < 128 bytes */
-#define IOC_VOID        0x20000000UL    /* no parameters */
-#define IOC_OUT         0x40000000UL    /* copy out parameters */
-#define IOC_IN          0x80000000UL    /* copy in parameters */
-#define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
-#define _IO(x,y)        (IOC_VOID|((x)<<8)|(y))
+   #define IOCPARM_MASK    0x7fU        /* parameters must be < 128 bytes */
+   #define IOC_VOID        0x20000000UL /* no parameters */
+   #define IOC_OUT         0x40000000UL /* copy out parameters */
+   #define IOC_IN          0x80000000UL /* copy in parameters */
+   #define IOC_INOUT       (IOC_IN|IOC_OUT)
+/* 0x20000000 distinguishes new &
+   old ioctl's */
+   #define _IO(x,y)        (IOC_VOID|((x)<<8)|(y))
 
-#define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
+   #define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
-#define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
+   #define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 #endif /* !defined(FIONREAD) || !defined(FIONBIO) */
 
 //see kernel/core/ioctl.h
 #if 0
    #ifndef FIONREAD
-   #define FIONREAD    _IOR('f', 127, unsigned long) /* get # bytes to read */
+      #define FIONREAD    _IOR('f', 127, unsigned long) /* get # bytes to read */
    #endif
    #ifndef FIONBIO
-   #define FIONBIO     _IOW('f', 126, unsigned long) /* set/clear non-blocking i/o */
+      #define FIONBIO     _IOW('f', 126, unsigned long) /* set/clear non-blocking i/o */
    #endif
 #endif
 
 /* Socket I/O Controls: unimplemented */
 #ifndef SIOCSHIWAT
-#define SIOCSHIWAT  _IOW('s',  0, unsigned long)  /* set high watermark */
-#define SIOCGHIWAT  _IOR('s',  1, unsigned long)  /* get high watermark */
-#define SIOCSLOWAT  _IOW('s',  2, unsigned long)  /* set low watermark */
-#define SIOCGLOWAT  _IOR('s',  3, unsigned long)  /* get low watermark */
-#define SIOCATMARK  _IOR('s',  7, unsigned long)  /* at oob mark? */
+   #define SIOCSHIWAT  _IOW('s',  0, unsigned long) /* set high watermark */
+   #define SIOCGHIWAT  _IOR('s',  1, unsigned long) /* get high watermark */
+   #define SIOCSLOWAT  _IOW('s',  2, unsigned long) /* set low watermark */
+   #define SIOCGLOWAT  _IOR('s',  3, unsigned long) /* get low watermark */
+   #define SIOCATMARK  _IOR('s',  7, unsigned long) /* at oob mark? */
 #endif
 
 /*Struture for gethostbyname*/
 struct hostent {
-    char  *h_name;      /* Official name of the host. */
-    char **h_aliases;   /* A pointer to an array of pointers to alternative host names,
+   char  *h_name;       /* Official name of the host. */
+   char **h_aliases;    /* A pointer to an array of pointers to alternative host names,
                            terminated by a null pointer. */
-    int    h_addrtype;  /* Address type. */
-    int    h_length;    /* The length, in bytes, of the address. */
-    char **h_addr_list; /* A pointer to an array of pointers to network addresses (in
+   int h_addrtype;      /* Address type. */
+   int h_length;        /* The length, in bytes, of the address. */
+   char **h_addr_list;  /* A pointer to an array of pointers to network addresses (in
                            network byte order) for the host, terminated by a null pointer. */
 #define h_addr h_addr_list[0] /* for backward compatibility */
 };
@@ -269,38 +269,38 @@ int _sys_lwip_connect(int fd, struct sockaddr *name, socklen_t namelen);
 int _sys_lwip_listen(int fd, int backlog);
 int _sys_lwip_recv(int fd, void *mem, int len, unsigned int flags);
 int _sys_lwip_recvfrom(int fd, void *mem, int len, unsigned int flags,
-      struct sockaddr *from, socklen_t *fromlen);
+                       struct sockaddr *from, socklen_t *fromlen);
 int _sys_lwip_send(int fd, const void *dataptr, int size, unsigned int flags);
 int _sys_lwip_sendto(int fd, void *dataptr, int size, unsigned int flags,
-    struct sockaddr *to, socklen_t tolen);
+                     struct sockaddr *to, socklen_t tolen);
 int _sys_lwip_socket(int domain, int type, int protocol);
 int _sys_lwip_select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset,
-                struct timeval *timeout);
+                     struct timeval *timeout);
 int _sys_lwip_ioctl(int fd, long cmd, void *argp);
 struct hostent* _sys_lwip_gethostbyname(const char *name);
 
 
 #if LWIP_COMPAT_SOCKETS
-#define accept(a,b,c)         _sys_lwip_accept(a,b,c)
-#define bind(a,b,c)           _sys_lwip_bind(a,b,c)
-#define shutdown(a,b)         _sys_lwip_shutdown(a,b)
+   #define accept(a,b,c)         _sys_lwip_accept(a,b,c)
+   #define bind(a,b,c)           _sys_lwip_bind(a,b,c)
+   #define shutdown(a,b)         _sys_lwip_shutdown(a,b)
 //#define close(s)              _sys_lwip_close(s)
-#define connect(a,b,c)        _sys_lwip_connect(a,b,c)
-#define getsockname(a,b,c)    _sys_lwip_getsockname(a,b,c)
-#define getpeername(a,b,c)    _sys_lwip_getpeername(a,b,c)
-#define setsockopt(a,b,c,d,e) _sys_lwip_setsockopt(a,b,c,d,e)
-#define getsockopt(a,b,c,d,e) _sys_lwip_getsockopt(a,b,c,d,e)
-#define listen(a,b)           _sys_lwip_listen(a,b)
-#define recv(a,b,c,d)         _sys_lwip_recv(a,b,c,d)
+   #define connect(a,b,c)        _sys_lwip_connect(a,b,c)
+   #define getsockname(a,b,c)    _sys_lwip_getsockname(a,b,c)
+   #define getpeername(a,b,c)    _sys_lwip_getpeername(a,b,c)
+   #define setsockopt(a,b,c,d,e) _sys_lwip_setsockopt(a,b,c,d,e)
+   #define getsockopt(a,b,c,d,e) _sys_lwip_getsockopt(a,b,c,d,e)
+   #define listen(a,b)           _sys_lwip_listen(a,b)
+   #define recv(a,b,c,d)         _sys_lwip_recv(a,b,c,d)
 //#define read(a,b,c)           _sys_lwip_read(a,b,c)
-#define recvfrom(a,b,c,d,e,f) _sys_lwip_recvfrom(a,b,c,d,e,f)
-#define send(a,b,c,d)         _sys_lwip_send(a,b,c,d)
-#define sendto(a,b,c,d,e,f)   _sys_lwip_sendto(a,b,c,d,e,f)
-#define socket(a,b,c)         _sys_lwip_socket(a,b,c)
+   #define recvfrom(a,b,c,d,e,f) _sys_lwip_recvfrom(a,b,c,d,e,f)
+   #define send(a,b,c,d)         _sys_lwip_send(a,b,c,d)
+   #define sendto(a,b,c,d,e,f)   _sys_lwip_sendto(a,b,c,d,e,f)
+   #define socket(a,b,c)         _sys_lwip_socket(a,b,c)
 //#define write(a,b,c)          _sys_lwip_write(a,b,c)
 //#define select(a,b,c,d,e)     _sys_lwip_select(a,b,c,d,e)
-#define ioctlsocket(a,b,c)    _sys_lwip_ioctl(a,b,c)
-#define gethostbyname(a)      _sys_lwip_gethostbyname(a)
+   #define ioctlsocket(a,b,c)    _sys_lwip_ioctl(a,b,c)
+   #define gethostbyname(a)      _sys_lwip_gethostbyname(a)
 #endif /* LWIP_COMPAT_SOCKETS */
 
 

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -57,10 +57,10 @@ Implementation
 | See:/GZ VC++ compiler option
 ---------------------------------------------*/
 #if defined(WIN32) && defined(LEPTON_CHKESP)
-#pragma message ("check esp patch")
+   #pragma message ("check esp patch")
 void __declspec ( naked ) _chkesp(void)
 {
-   _asm{
+   _asm {
       ret
    }
 }
@@ -87,28 +87,28 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
    kernel_pthread_t* backup_parent_pthread_ptr;
 
    //
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __clr_irq();
-   #endif
+#endif
    //profiler
    __kernel_profiler_start();
-	//
+   //
    //1)process operation
    //pseudo process creation
-   if(_nextpid(&pid)==-EAGAIN){
+   if(_nextpid(&pid)==-EAGAIN) {
       //kernel panic!!!
-      #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-	   	__set_irq();
-      #endif
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+      __set_irq();
+#endif
       return (pid_t)-ENOMEM;
    }
    //dynamic allocation:alloc
    p = malloc(sizeof(process_t));
-   if(!p){
+   if(!p) {
       //kernel panic!!!
-      #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-	   	__set_irq();
-      #endif
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+      __set_irq();
+#endif
       return (pid_t)(-ENOMEM);
    }
    process_lst[pid] = (process_t*)p;
@@ -134,7 +134,7 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
 
    //not command line yet
    process_lst[pid]->argv[argc]=(char *)strtok(process_lst[pid]->arg," ");
-   while(process_lst[pid]->argv[argc++]){
+   while(process_lst[pid]->argv[argc++]) {
       process_lst[pid]->argv[argc]=(char *)strtok(0," ");
    }
    process_lst[pid]->argc=argc-1;
@@ -142,14 +142,14 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
 
    //2)pthread operation
    backup_parent_pthread_ptr=(kernel_pthread_t*)malloc(sizeof(kernel_pthread_t));
-   if(!backup_parent_pthread_ptr){
+   if(!backup_parent_pthread_ptr) {
       //
       free(process_lst[pid]);
       //kernel panic!!!
-      #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-      	__set_irq();
-      #endif
-      return -ENOMEM;//kernel panic!!!
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+      __set_irq();
+#endif
+      return -ENOMEM; //kernel panic!!!
    }
 
 
@@ -169,7 +169,7 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
 
    //reinit thread chain list in new process container
    //phlb bug fix 3.0.0.8 process_lst[pid]->pthread_ptr->next = (kernel_pthread_t*)0; //(not need kernel_put_pthread_id() and kernel_get_pthread_id() operation)
-   process_lst[pid]->pthread_ptr->time_out  = (time_t)-1;//for alarm()
+   process_lst[pid]->pthread_ptr->time_out  = (time_t)-1; //for alarm()
    //retinit parent thread status
    process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat |= PTHREAD_STATUS_FORK;
 
@@ -182,17 +182,20 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
    //to do: reinit sigqueue struct
    //thread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
-   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
+   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
+          sizeof(kernel_sigqueue_t));
+   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(
+      &process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
 #endif
 
    //profiler
    __kernel_profiler_stop(backup_parent_pthread_ptr);
-   __profiler_add_result(backup_parent_pthread_ptr,_SYSCALL_VFORK,__kernel_profiler_get_counter(backup_parent_pthread_ptr));
+   __profiler_add_result(backup_parent_pthread_ptr,_SYSCALL_VFORK,
+                         __kernel_profiler_get_counter(backup_parent_pthread_ptr));
    //
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();
-   #endif
+#endif
 
    return pid;
 }
@@ -213,10 +216,10 @@ int _sys_vfork_exit(kernel_pthread_t* pthread_ptr,int status){
 
    kernel_pthread_t* backup_parent_pthread_ptr;
 
-      //
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-   		__clr_irq();
-   #endif
+   //
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+   __clr_irq();
+#endif
 
    //get pid
    pid  = pthread_ptr->pid;
@@ -275,9 +278,9 @@ int _sys_vfork_exit(kernel_pthread_t* pthread_ptr,int status){
    //process_lst[pid]= 0;
    //
    _dbg_printf("vfork exit _pid:%d\n",pid);
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-   		__set_irq();
-   #endif
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+   __set_irq();
+#endif
 
    return 0;
 }

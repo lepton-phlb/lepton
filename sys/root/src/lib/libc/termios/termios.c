@@ -14,8 +14,8 @@
    You should have received a copy of the GNU Library General Public
    License along with the GNU C Library; see the file COPYING.LIB.  If not,
    write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  
- 
+   Boston, MA 02111-1307, USA.
+
 
    About the only thing remaining here fromthe original Linux-8086 C library
    version by Robert de Bath <robert@mayday.compulink.co.uk>, is the general
@@ -47,85 +47,85 @@ Global Declaration
 
 struct speed_struct
 {
-  speed_t value;
-  speed_t internal;
+   speed_t value;
+   speed_t internal;
 };
 
 static const struct speed_struct speeds[] =
-  {
+{
 #ifdef B0
-    { 0, B0 },
+   { 0, B0 },
 #endif
 #ifdef B50
-    { 50, B50 },
+   { 50, B50 },
 #endif
 #ifdef B75
-    { 75, B75 },
+   { 75, B75 },
 #endif
 #ifdef B110
-    { 110, B110 },
+   { 110, B110 },
 #endif
 #ifdef B134
-    { 134, B134 },
+   { 134, B134 },
 #endif
 #ifdef B150
-    { 150, B150 },
+   { 150, B150 },
 #endif
 #ifdef B200
-    { 200, B200 },
+   { 200, B200 },
 #endif
 #ifdef B300
-    { 300, B300 },
+   { 300, B300 },
 #endif
 #ifdef B600
-    { 600, B600 },
+   { 600, B600 },
 #endif
 #ifdef B1200
-    { 1200, B1200 },
+   { 1200, B1200 },
 #endif
 #ifdef B1200
-    { 1200, B1200 },
+   { 1200, B1200 },
 #endif
 #ifdef B1800
-    { 1800, B1800 },
+   { 1800, B1800 },
 #endif
 #ifdef B2400
-    { 2400, B2400 },
+   { 2400, B2400 },
 #endif
 #ifdef B4800
-    { 4800, B4800 },
+   { 4800, B4800 },
 #endif
 #ifdef B9600
-    { 9600, B9600 },
+   { 9600, B9600 },
 #endif
 #ifdef B19200
-    { 19200, B19200 },
+   { 19200, B19200 },
 #endif
 #ifdef B38400
-    { 38400, B38400 },
+   { 38400, B38400 },
 #endif
 #ifdef B57600
-    { 57600, B57600 },
+   { 57600, B57600 },
 #endif
 #ifdef B76800
-    { 76800, B76800 },
+   { 76800, B76800 },
 #endif
 #ifdef B115200
-    { 115200, B115200 },
+   { 115200, B115200 },
 #endif
 #ifdef B153600
-    { 153600, B153600 },
+   { 153600, B153600 },
 #endif
 #ifdef B230400
-    { 230400, B230400 },
+   { 230400, B230400 },
 #endif
 #ifdef B307200
-    { 307200, B307200 },
+   { 307200, B307200 },
 #endif
 #ifdef B460800
-    { 460800, B460800 },
+   { 460800, B460800 },
 #endif
-  };
+};
 
 /*===========================================
 Implementation
@@ -140,8 +140,8 @@ Implementation
 | See:
 ---------------------------------------------*/
 int isatty(int fd){
-    struct termios term;
-    return (tcgetattr (fd, &term) == 0);
+   struct termios term;
+   return (tcgetattr (fd, &term) == 0);
 }
 
 /*-------------------------------------------
@@ -204,8 +204,8 @@ int tcsendbreak( int fd, int duration){
    /* ioctl can't send a break of any other duration for us.
      This could be changed to use trickery (e.g. lower speed and
      send a '\0') to send the break, but for now just return an error.  */
-  //__set_errno (EINVAL);
-  return -1;
+   //__set_errno (EINVAL);
+   return -1;
 #endif
 }
 
@@ -230,11 +230,11 @@ int tcsetpgrp ( int fd, pid_t pgrp_id){
 | See:
 ---------------------------------------------*/
 pid_t tcgetpgrp ( int fd){
-    int pgrp;
+   int pgrp;
 
-    if (ioctl (fd, TIOCGPGRP, &pgrp) < 0)
-        return (pid_t) -1;
-    return (pid_t) pgrp;
+   if (ioctl (fd, TIOCGPGRP, &pgrp) < 0)
+      return (pid_t) -1;
+   return (pid_t) pgrp;
 }
 
 /*-------------------------------------------
@@ -263,7 +263,7 @@ speed_t cfgetospeed ( const struct termios *termios_p){
  * should set the input baud rate to the output baud rate. */
 speed_t cfgetispeed (const struct termios *termios_p){
    return ((termios_p->c_iflag & IBAUD0)
-          ? 0 : termios_p->c_cflag & (CBAUD | CBAUDEX));
+           ? 0 : termios_p->c_cflag & (CBAUD | CBAUDEX));
 }
 
 /*-------------------------------------------
@@ -276,10 +276,10 @@ speed_t cfgetispeed (const struct termios *termios_p){
 ---------------------------------------------*/
 int cfsetospeed  (struct termios *termios_p, speed_t speed){
    if ((speed & ~CBAUD) != 0
-         && (speed < B57600 || speed > B460800))
+       && (speed < B57600 || speed > B460800))
    {
-     //__set_errno(EINVAL);
-     return -1;
+      //__set_errno(EINVAL);
+      return -1;
    }
 
    termios_p->c_cflag &= ~(CBAUD | CBAUDEX);
@@ -303,12 +303,12 @@ int cfsetospeed  (struct termios *termios_p, speed_t speed){
 int cfsetispeed ( struct termios *termios_p, speed_t speed)
 {
    if ((speed & ~CBAUD) != 0
-         && (speed < B57600 || speed > B460800)){
-     //__set_errno(EINVAL);
-     return -1;
+       && (speed < B57600 || speed > B460800)) {
+      //__set_errno(EINVAL);
+      return -1;
    }
 
-   if (speed == 0){
+   if (speed == 0) {
       termios_p->c_iflag |= IBAUD0;
    }else{
       termios_p->c_iflag &= ~IBAUD0;
@@ -328,20 +328,20 @@ int cfsetispeed ( struct termios *termios_p, speed_t speed)
 | See:
 ---------------------------------------------*/
 int cfsetspeed (struct termios *termios_p, speed_t speed){
-  size_t cnt;
+   size_t cnt;
 
    for (cnt = 0; cnt < sizeof (speeds) / sizeof (speeds[0]); ++cnt)
       if (speed == speeds[cnt].internal)
       {
-        cfsetispeed (termios_p, speed);
-        cfsetospeed (termios_p, speed);
-        return 0;
+         cfsetispeed (termios_p, speed);
+         cfsetospeed (termios_p, speed);
+         return 0;
       }
       else if (speed == speeds[cnt].value)
       {
-        cfsetispeed (termios_p, speeds[cnt].internal);
-        cfsetospeed (termios_p, speeds[cnt].internal);
-        return 0;
+         cfsetispeed (termios_p, speeds[cnt].internal);
+         cfsetospeed (termios_p, speeds[cnt].internal);
+         return 0;
       }
 
    //__set_errno (EINVAL);
@@ -357,18 +357,18 @@ int cfsetspeed (struct termios *termios_p, speed_t speed){
 | Comments:
 | See:
 ---------------------------------------------*/
-/* 
+/*
    Copyright (C) 1992, 1996, 1997 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 */
 void cfmakeraw (struct termios *termios_p){
-  termios_p->c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
-  termios_p->c_oflag &= ~OPOST;
-  termios_p->c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-  termios_p->c_cflag &= ~(CSIZE|PARENB);
-  termios_p->c_cflag |= CS8;
-  termios_p->c_cc[VMIN] = 1;            /* read returns when one char is available.  */
-  termios_p->c_cc[VTIME] = 0;
+   termios_p->c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
+   termios_p->c_oflag &= ~OPOST;
+   termios_p->c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+   termios_p->c_cflag &= ~(CSIZE|PARENB);
+   termios_p->c_cflag |= CS8;
+   termios_p->c_cc[VMIN] = 1;           /* read returns when one char is available.  */
+   termios_p->c_cc[VTIME] = 0;
 }
 
 

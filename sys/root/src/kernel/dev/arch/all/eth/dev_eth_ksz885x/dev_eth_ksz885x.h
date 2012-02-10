@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -45,25 +45,25 @@ either the MPL or the [eCos GPL] License."
 
 typedef unsigned long long int ULONGLONG;
 
-#define CMD_LOW         0           							/* data line is data bus */
+#define CMD_LOW         0                                                               /* data line is data bus */
 
-#define BE3             0x8000      							/* Byte Enable 3 SD15*/
-#define BE2             0x4000      							/* Byte Enable 2 SD14*/
-#define BE1             0x2000      							/* Byte Enable 1 SD13*/
-#define BE0             0x1000      							/* Byte Enable 0 SD12*/
+#define BE3             0x8000                                                          /* Byte Enable 3 SD15*/
+#define BE2             0x4000                                                          /* Byte Enable 2 SD14*/
+#define BE1             0x2000                                                          /* Byte Enable 1 SD13*/
+#define BE0             0x1000                                                          /* Byte Enable 0 SD12*/
 
 // WORD boundary
-#define DATA_ALIGNMENT				2
+#define DATA_ALIGNMENT                          2
 
 #undef TRUE
 #undef FALSE
-#define TRUE				1
-#define FALSE				0
+#define TRUE                            1
+#define FALSE                           0
 
-typedef int			BOOL;
+typedef int BOOL;
 
-#define __ksz885x_read_reg		_ksz885x_read_word
-#define __ksz885x_write_reg	_ksz885x_write_word
+#define __ksz885x_read_reg              _ksz885x_read_word
+#define __ksz885x_write_reg     _ksz885x_write_word
 
 /* PMCS */
 #define POWER_STATE_MASK        0x0003
@@ -75,19 +75,19 @@ typedef int			BOOL;
 #define __ksz885x_mio_byte(x)   *(( volatile unsigned char* )( x ))
 
 typedef struct {
-   unsigned long        io_virt_addr;
-   unsigned long        io_virt_data;
-   unsigned short       irq_mask;
-   BOOL                 enabled;
-   unsigned char 			mac_addr[6];
-   unsigned char 			auto_nego_req;
-   unsigned long			speed;
-   unsigned long			duplex;
+   unsigned long io_virt_addr;
+   unsigned long io_virt_data;
+   unsigned short irq_mask;
+   BOOL enabled;
+   unsigned char mac_addr[6];
+   unsigned char auto_nego_req;
+   unsigned long speed;
+   unsigned long duplex;
 } ksz885x_hw_t, *p_ksz885x_hw_t;
 
 typedef enum {
- KS885XERR_NOERROR = 0,
- KS885XERR_ERROR,
+   KS885XERR_NOERROR = 0,
+   KS885XERR_ERROR,
 } ksz885x_err_t;
 
 
@@ -107,7 +107,7 @@ typedef enum {
  * (Offset 0x00 - 0x25)
  */
 #define REG_BUS_ERROR_STATUS       0x06       /* BESR */
-#define   BUS_ERROR_IBEC              0x8000    
+#define   BUS_ERROR_IBEC              0x8000
 #define   BUS_ERROR_IBECV_MASK        0x7800    /* Default IPSec clock at 166Mhz */
 
 #define REG_CHIP_CFG_STATUS        0x08       /* CCFG */
@@ -273,7 +273,7 @@ typedef enum {
 #define   RX_RUNT_ERROR               0x0002    /* Received frame was demaged by a collision */
 #define   RX_BAD_CRC                  0x0001    /* Received frame has a CRC error */
 #define   RX_ERRORS                   ( RX_BAD_CRC | RX_TOO_LONG | RX_RUNT_ERROR | RX_PHY_ERROR | \
-      RX_ICMP_ERROR | RX_IP_ERROR | RX_TCP_ERROR | RX_UDP_ERROR )
+                                        RX_ICMP_ERROR | RX_IP_ERROR | RX_TCP_ERROR | RX_UDP_ERROR )
 
 #define REG_RX_FHR_BYTE_CNT        0x7E       /* RXFHBCR */
 #define   RX_BYTE_CNT_MASK            0x0FFF    /* Received frame byte size mask */
@@ -485,7 +485,7 @@ typedef enum {
 #define REG_PORT_CTRL              0xF6       /* P1CR */
 #define   PORT_LED_OFF                0x8000     /* Turn off all the port LEDs (LED3/LED2/LED1/LED0) */
 #define   PORT_TX_DISABLE             0x4000     /* Disable port transmit */
-#define   PORT_AUTO_NEG_RESTART       0x2000     /* Restart auto-negotiation */ 
+#define   PORT_AUTO_NEG_RESTART       0x2000     /* Restart auto-negotiation */
 #define   PORT_POWER_DOWN             0x0800     /* Set port power-down */
 #define   PORT_AUTO_MDIX_DISABLE      0x0400     /* Disable auto MDI-X */
 #define   PORT_FORCE_MDIX             0x0200     /* Force MDI-X */
@@ -514,24 +514,25 @@ typedef enum {
 #define   PORT_REMOTE_10BT_FD         0x0002     /* Link partner 10 full-duplex capability */
 #define   PORT_REMOTE_10BT            0x0001     /* Link partner 10 half-duplex capability */
 
-/* 	END */
+/*      END */
 
 #define PHY_RESET_TIMEOUT           10
-#define CHIP_ID_8851 		         0x8870
+#define CHIP_ID_8851                     0x8870
 #define KS885X_MULTICAST_SIZE       3
 
 void _ksz885x_write_data16( void * pksz885xHW, unsigned short data );
-void _ksz885x_read_data16( void * pksz885xHW, unsigned short * data ) ;
+void _ksz885x_read_data16( void * pksz885xHW, unsigned short * data );
 
 ksz885x_err_t _ksz885x_init_hw(p_ksz885x_hw_t pksz885xHW);
 void _ksz885x_ack_irq(p_ksz885x_hw_t pksz885xHW,unsigned long ulInterrupt );
 void _ksz885x_get_mac_addr(p_ksz885x_hw_t pksz885xHW);
 void _ksz885x_set_mac_addr(p_ksz885x_hw_t pksz885xHW,unsigned char * pByte);
 void _ksz885x_reset_hw(p_ksz885x_hw_t pksz885xHW);
-int  _ksz885x_check_link (p_ksz885x_hw_t pksz885xHW, unsigned long  *pSpeed, unsigned long  *pDuplex);
+int  _ksz885x_check_link (p_ksz885x_hw_t pksz885xHW, unsigned long  *pSpeed,
+                          unsigned long  *pDuplex);
 void _ksz885x_enable_hw(p_ksz885x_hw_t pksz885xHW );
 void _ksz885x_disable_hw(p_ksz885x_hw_t pksz885xHW );
-void _ksz885x_enable_irq(p_ksz885x_hw_t pksz885xHW) ;
+void _ksz885x_enable_irq(p_ksz885x_hw_t pksz885xHW);
 void _ksz885x_disable_irq(p_ksz885x_hw_t pksz885xHW );
 void _ksz885x_setup_irq(p_ksz885x_hw_t pksz885xHW );
 int  _ksz885x_restart_auto_nego (p_ksz885x_hw_t pksz885xHW);
@@ -541,7 +542,8 @@ void _ksz885x_clean_rx_queue(p_ksz885x_hw_t pksz885xHW);
 
 void _ksz885x_read_word(void * pksz885xHW,  unsigned short addr, unsigned short * pw);
 void _ksz885x_write_word(void * pksz885xHW,unsigned short addr, unsigned short w);
-void _ksz885x_write_data_header(void *pksz885xHW,unsigned short  uOrgPktLen);
-void _ksz885x_write_data_buffer(void * pksz885xHW, unsigned char *  pData, unsigned short uOrgPktLen);
+void _ksz885x_write_data_header(void *pksz885xHW,unsigned short uOrgPktLen);
+void _ksz885x_write_data_buffer(void * pksz885xHW, unsigned char *  pData,
+                                unsigned short uOrgPktLen);
 
-#endif//__DEV_ETH_KS885X_H___
+#endif //__DEV_ETH_KS885X_H___

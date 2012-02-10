@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 #ifndef _KERNEL_H
@@ -84,7 +84,7 @@ extern const char * _kernel_time;
 
 #define __KERNEL_ALARM_TIMER 100 //ms
 
-enum  _syscall_enum_t{
+enum  _syscall_enum_t {
    _SYSCALL_WAITPID=0,
    _SYSCALL_EXECVE,
    _SYSCALL_EXIT,
@@ -171,7 +171,7 @@ enum  _syscall_enum_t{
  * kernel en mode statique
  * \hideinitializer
  */
-extern volatile int   _kernel_in_static_mode;
+extern volatile int _kernel_in_static_mode;
 
 /**
  * entr du kernel en mode statique
@@ -195,13 +195,13 @@ extern volatile int   _kernel_in_static_mode;
  * verrou sur le noyau
  * \hideinitializer
  */
-extern kernel_pthread_mutex_t   kernel_mutex;
+extern kernel_pthread_mutex_t kernel_mutex;
 
 /**
  * thread du noyau
  * \hideinitializer
  */
-extern kernel_pthread_t         kernel_thread;
+extern kernel_pthread_t kernel_thread;
 
 void _start_kernel(char* arg);
 void _stop_kernel(void);
@@ -235,66 +235,68 @@ typedef SYSCALL p_syscall_t;
 
 
 #ifdef KERNEL_PROFILER
-   typedef struct{
-      pid_t pid;
-      unsigned short counter;
-      const char* pname;
-   }kernel_profiler_result_t;
+typedef struct {
+   pid_t pid;
+   unsigned short counter;
+   const char* pname;
+}kernel_profiler_result_t;
 
-   extern kernel_profiler_result_t kernel_profiler_result_lst[_SYSCALL_TOTAL_NB];
+extern kernel_profiler_result_t kernel_profiler_result_lst[_SYSCALL_TOTAL_NB];
 
-   typedef struct{
-      unsigned short counter[4];
-      unsigned long nbacces[4];
-      unsigned short size[4];
-      float avg[4];
-      float rate_max[4];
-      float rate_min[4];
-      const char* pname;
-   }io_profiler_result_t;
+typedef struct {
+   unsigned short counter[4];
+   unsigned long nbacces[4];
+   unsigned short size[4];
+   float avg[4];
+   float rate_max[4];
+   float rate_min[4];
+   const char* pname;
+}io_profiler_result_t;
 
-   extern io_profiler_result_t*       io_profiler_result_lst;
+extern io_profiler_result_t*       io_profiler_result_lst;
 
-   typedef struct{
-      p_syscall_t p_syscall;
-      const char* p_syscall_name;
-   }kernel_syscall_t;
-   #define __add_syscall(__syscall_name__) {__syscall_name__,#__syscall_name__ }
+typedef struct {
+   p_syscall_t p_syscall;
+   const char* p_syscall_name;
+}kernel_syscall_t;
+   #define __add_syscall(__syscall_name__) {__syscall_name__,# __syscall_name__ }
 
-   #define __profiler_add_result(__pthread_ptr__,__syscall_nb__,__counter__)\
-      kernel_profiler_result_lst[__syscall_nb__].pid = __pthread_ptr__->pid;\
-      kernel_profiler_result_lst[__syscall_nb__].counter = __counter__;\
-      kernel_profiler_result_lst[__syscall_nb__].pname = kernel_syscall_lst[__syscall_nb__].p_syscall_name;
+   #define __profiler_add_result(__pthread_ptr__,__syscall_nb__,__counter__) \
+   kernel_profiler_result_lst[__syscall_nb__].pid = __pthread_ptr__->pid; \
+   kernel_profiler_result_lst[__syscall_nb__].counter = __counter__; \
+   kernel_profiler_result_lst[__syscall_nb__].pname = \
+      kernel_syscall_lst[__syscall_nb__].p_syscall_name;
 
-   #define __io_profiler_add_result(__desc__,__mode__,__size__,__counter__){\
-      int __dev_nb__ = ofile_lst[__desc__].ext.dev;\
-      float __time__ = (float)((__counter__) * PROFILER_PERIOD);\
-      float __rate__=(float)0.0;\
-      if(__dev_nb__<__KERNEL_DEV_MAX){/*protect for ext.dev from BSD socket type device*/\
-         if(__time__){\
-            __rate__ = (float)( (__size__)/(__time__) );\
-            if(__rate__>io_profiler_result_lst[__dev_nb__].rate_max[__mode__]){\
-               io_profiler_result_lst[__dev_nb__].rate_max[__mode__]=__rate__;\
-            }else if(__rate__<io_profiler_result_lst[__dev_nb__].rate_min[__mode__]){\
-               io_profiler_result_lst[__dev_nb__].rate_min[__mode__]=__rate__;\
-            }else{\
-               io_profiler_result_lst[__dev_nb__].rate_max[__mode__]=__rate__;\
-               io_profiler_result_lst[__dev_nb__].rate_min[__mode__]=__rate__;\
-            }\
-         }\
-         io_profiler_result_lst[__dev_nb__].nbacces[__mode__]++;\
-         io_profiler_result_lst[__dev_nb__].size[__mode__]=__size__;\
-         io_profiler_result_lst[__dev_nb__].counter[__mode__]= __counter__;\
-         io_profiler_result_lst[__dev_nb__].avg[__mode__]=(float)((io_profiler_result_lst[__dev_nb__].avg[__mode__]+__rate__)/(float)2.0);\
-         io_profiler_result_lst[__dev_nb__].pname=ofile_lst[__desc__].pfsop->fdev.dev_name;\
-      }\
-	}
+   #define __io_profiler_add_result(__desc__,__mode__,__size__,__counter__){ \
+   int __dev_nb__ = ofile_lst[__desc__].ext.dev; \
+   float __time__ = (float)((__counter__) * PROFILER_PERIOD); \
+   float __rate__=(float)0.0; \
+   if(__dev_nb__<__KERNEL_DEV_MAX) {  /*protect for ext.dev from BSD socket type device*/ \
+      if(__time__) { \
+         __rate__ = (float)( (__size__)/(__time__) ); \
+         if(__rate__>io_profiler_result_lst[__dev_nb__].rate_max[__mode__]) { \
+            io_profiler_result_lst[__dev_nb__].rate_max[__mode__]=__rate__; \
+         }else if(__rate__<io_profiler_result_lst[__dev_nb__].rate_min[__mode__]) { \
+            io_profiler_result_lst[__dev_nb__].rate_min[__mode__]=__rate__; \
+         }else{ \
+            io_profiler_result_lst[__dev_nb__].rate_max[__mode__]=__rate__; \
+            io_profiler_result_lst[__dev_nb__].rate_min[__mode__]=__rate__; \
+         } \
+      } \
+      io_profiler_result_lst[__dev_nb__].nbacces[__mode__]++; \
+      io_profiler_result_lst[__dev_nb__].size[__mode__]=__size__; \
+      io_profiler_result_lst[__dev_nb__].counter[__mode__]= __counter__; \
+      io_profiler_result_lst[__dev_nb__].avg[__mode__]= \
+         (float)((io_profiler_result_lst[__dev_nb__].avg[__mode__]+__rate__)/(float)2.0); \
+      io_profiler_result_lst[__dev_nb__].pname=ofile_lst[__desc__].pfsop->fdev.dev_name; \
+   } \
+}
 
 
 #else
-   typedef struct{
-      p_syscall_t p_syscall;
-   }kernel_syscall_t;
+typedef struct {
+   p_syscall_t p_syscall;
+}kernel_syscall_t;
    #define  __add_syscall(__syscall_name__) {__syscall_name__}
    #define __profiler_add_result(__pthread_ptr__,__syscall_nb__,__counter__)
    #define __io_profiler_add_result(__desc__,__mode__,__size__,__counter__)
@@ -331,7 +333,8 @@ extern kernel_pthread_t* _syscall_owner_pthread_ptr;
  * \param pid du processus
  * \hideinitializer
  */
-#define __set_syscall_owner_pthread_ptr(__pthread_ptr__) _syscall_owner_pthread_ptr = __pthread_ptr__
+#define __set_syscall_owner_pthread_ptr(__pthread_ptr__) _syscall_owner_pthread_ptr = \
+   __pthread_ptr__
 
 /**
  * obtention du pointeur sur pthread qui a gnr l'appel systme
@@ -343,22 +346,23 @@ extern kernel_pthread_t* _syscall_owner_pthread_ptr;
 //errno macro routine
 extern int __g_kernel_static_errno;
 
-#define __kernel_set_errno(__errno__)\
-   if(!__kernel_is_in_static_mode()){\
-      if(_syscall_owner_pthread_ptr && !_syscall_owner_pthread_ptr->_errno) _syscall_owner_pthread_ptr->_errno=__errno__;\
-    }else{\
-      __g_kernel_static_errno=__g_kernel_static_errno;\
-    }
+#define __kernel_set_errno(__errno__) \
+   if(!__kernel_is_in_static_mode()) { \
+      if(_syscall_owner_pthread_ptr && \
+         !_syscall_owner_pthread_ptr->_errno) _syscall_owner_pthread_ptr->_errno=__errno__; \
+   }else{ \
+      __g_kernel_static_errno=__g_kernel_static_errno; \
+   }
 
 //RTC specific function
-#define __kernel_dev_settime(__desc,__buf,__size){\
-   if(ofile_lst[desc].pfsop->fdev.pfdev_ext)\
-      ((fdev_rtc_t*)(ofile_lst[desc].pfsop->fdev.pfdev_ext))->fdev_rtc_settime(__desc,__buf,__size);\
+#define __kernel_dev_settime(__desc,__buf,__size){ \
+   if(ofile_lst[desc].pfsop->fdev.pfdev_ext) \
+      ((fdev_rtc_t*)(ofile_lst[desc].pfsop->fdev.pfdev_ext))->fdev_rtc_settime(__desc,__buf,__size); \
 }
 
-#define __kernel_dev_gettime(__desc,__buf,__size){\
-   if(ofile_lst[desc].pfsop->fdev.pfdev_ext)\
-      ((fdev_rtc_t*)(ofile_lst[desc].pfsop->fdev.pfdev_ext))->fdev_rtc_gettime(__desc,__buf,__size);\
+#define __kernel_dev_gettime(__desc,__buf,__size){ \
+   if(ofile_lst[desc].pfsop->fdev.pfdev_ext) \
+      ((fdev_rtc_t*)(ofile_lst[desc].pfsop->fdev.pfdev_ext))->fdev_rtc_gettime(__desc,__buf,__size); \
 }
 
 
@@ -376,42 +380,44 @@ extern int __g_kernel_static_errno;
  * \note le numro est spcifi par syscall_nb et les donnes associes par cet appel sont accessibles par le kernel au moyen d'un pointeur sur la structure de donnes.
  * Cette macro est utiliss par toutes les fonctions standards (kill, exec, fork, etc).
  */
-#define __mk_syscall(__syscall_nb__,__pdata__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__syscall_lock();\
-__kernel_profiler_start();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)&__pdata__;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__atomic_in();\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
-__atomic_out();\
-__wait_ret_int();\
-__kernel_profiler_stop(__pthread_ptr__);\
-__profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
+   #define __mk_syscall(__syscall_nb__,__pdata__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __syscall_lock(); \
+   __kernel_profiler_start(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)&__pdata__; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __atomic_in(); \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
+   __atomic_out(); \
+   __wait_ret_int(); \
+   __kernel_profiler_stop(__pthread_ptr__); \
+   __profiler_add_result(__pthread_ptr__,__syscall_nb__, \
+                         __kernel_profiler_get_counter(__pthread_ptr__)); \
 }
 
 //no blocking call
 
-#define __mk_syscall0(__syscall_nb__,__pdata__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__syscall_lock();\
-__kernel_profiler_start();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)&__pdata__;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__atomic_in();\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
-__atomic_out();\
-__wait_ret_int();/*to remove????*/\
-__kernel_profiler_stop(__pthread_ptr__);\
-__profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
+   #define __mk_syscall0(__syscall_nb__,__pdata__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __syscall_lock(); \
+   __kernel_profiler_start(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)&__pdata__; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __atomic_in(); \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
+   __atomic_out(); \
+   __wait_ret_int(); /*to remove????*/ \
+   __kernel_profiler_stop(__pthread_ptr__); \
+   __profiler_add_result(__pthread_ptr__,__syscall_nb__, \
+                         __kernel_profiler_get_counter(__pthread_ptr__)); \
 }
 
 /**
@@ -422,95 +428,95 @@ __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_count
  * \ note c'est le mme fonctionnement que pour __mk_syscall().
  * \hideinitializer
  */
-#define __mk_syscall2(__syscall_nb__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__syscall_lock();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)0;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__atomic_in();\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
-__atomic_out();\
-__wait_ret_int();\
+   #define __mk_syscall2(__syscall_nb__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __syscall_lock(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)0; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __atomic_in(); \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
+   __atomic_out(); \
+   __wait_ret_int(); \
 }
 
 #elif defined(GNU_GCC) && (defined(CPU_ARM7) || defined(CPU_ARM9) || defined(CPU_GNU32))
 //
-#define __mk_syscall(__syscall_nb__,__pdata__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)&__pdata__;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__clr_irq();\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
-__set_irq();\
+   #define __mk_syscall(__syscall_nb__,__pdata__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)&__pdata__; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __clr_irq(); \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
+   __set_irq(); \
 }
 
-#define __mk_syscall0(__syscall_nb__,__pdata__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)&__pdata__;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__clr_irq();\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
-__set_irq();\
+   #define __mk_syscall0(__syscall_nb__,__pdata__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)&__pdata__; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __clr_irq(); \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
+   __set_irq(); \
 }
 
-#define __mk_syscall2(__syscall_nb__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)0;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__clr_irq();\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
-__set_irq();\
+   #define __mk_syscall2(__syscall_nb__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)0; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __clr_irq(); \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
+   __set_irq(); \
 }
 
 #elif defined(GNU_GCC) && defined(CPU_CORTEXM)
 //
-#define __mk_syscall(__syscall_nb__,__pdata__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)&__pdata__;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
+   #define __mk_syscall(__syscall_nb__,__pdata__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)&__pdata__; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
 }
 
-#define __mk_syscall0(__syscall_nb__,__pdata__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)&__pdata__;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
+   #define __mk_syscall0(__syscall_nb__,__pdata__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)&__pdata__; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
 }
 
-#define __mk_syscall2(__syscall_nb__){\
-kernel_pthread_t* __pthread_ptr__;\
-__pthread_ptr__ = kernel_pthread_self();\
-__pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__;\
-__pthread_ptr__->reg.syscall=__syscall_nb__;\
-__pthread_ptr__->reg.data=(void*)0;\
-__pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB;\
-__pthread_ptr__->irq_prior=-1;\
-__make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
+   #define __mk_syscall2(__syscall_nb__){ \
+   kernel_pthread_t* __pthread_ptr__; \
+   __pthread_ptr__ = kernel_pthread_self(); \
+   __pthread_ptr__->reg.from_pthread_ptr = __pthread_ptr__; \
+   __pthread_ptr__->reg.syscall=__syscall_nb__; \
+   __pthread_ptr__->reg.data=(void*)0; \
+   __pthread_ptr__->irq_nb=KERNEL_INTERRUPT_NB; \
+   __pthread_ptr__->irq_prior=-1; \
+   __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb); \
 }
 #endif
 /**
@@ -520,18 +526,18 @@ __make_interrupt(__pthread_ptr__,__pthread_ptr__->irq_nb);\
  *
  * \note cette macro n'est utils que dans le noyau.
  */
-#define __flush_syscall(__pthread_ptr__){\
-__pthread_ptr__->irq_nb=0x00;\
+#define __flush_syscall(__pthread_ptr__){ \
+   __pthread_ptr__->irq_nb=0x00; \
 }
 
-#define __K_IS_SYSCALL(__INTR) ((__INTR) & KERNEL_INTERRUPT)
-#define __K_IS_IOINTR(__INTR) ((__INTR) & SYSTEM_IO_INTERRUPT)
+#define __K_IS_SYSCALL(__INTR) ((__INTR) &KERNEL_INTERRUPT)
+#define __K_IS_IOINTR(__INTR) ((__INTR) &SYSTEM_IO_INTERRUPT)
 
 #define _SYSCALL_NET_SND         100
 
 //cpu device
 extern fdev_map_t*   __g_kernel_cpu;
-extern desc_t        __g_kernel_desc_cpu;
+extern desc_t __g_kernel_desc_cpu;
 
 #define __set_cpu(__p_kernel_cpu__) __g_kernel_cpu = __p_kernel_cpu__
 #define __get_cpu() __g_kernel_cpu
@@ -541,12 +547,13 @@ extern desc_t        __g_kernel_desc_cpu;
 
 //i2c interface
 extern fdev_map_t*   __g_kernel_if_i2c_master;
-extern desc_t        __g_kernel_desc_if_i2c_master;
+extern desc_t __g_kernel_desc_if_i2c_master;
 
 #define __set_if_i2c_master(__p_if_i2c_master__) __g_kernel_if_i2c_master = __p_if_i2c_master__
 #define __get_if_i2c_master() __g_kernel_if_i2c_master
 
-#define __set_if_i2c_master_desc(__desc_if_i2c_master__) __g_kernel_desc_if_i2c_master = __desc_if_i2c_master__
+#define __set_if_i2c_master_desc(__desc_if_i2c_master__) __g_kernel_desc_if_i2c_master = \
+   __desc_if_i2c_master__
 #define __get_if_i2c_master_desc() __g_kernel_desc_if_i2c_master
 
 extern kernel_pthread_mutex_t _i2c_core_mutex;
@@ -556,12 +563,13 @@ extern kernel_pthread_mutex_t _i2c_core_mutex;
 
 //spi interface
 extern fdev_map_t*   __g_kernel_if_spi_master;
-extern desc_t        __g_kernel_desc_if_spi_master;
+extern desc_t __g_kernel_desc_if_spi_master;
 
 #define __set_if_spi_master(__p_if_spi_master__) __g_kernel_if_spi_master = __p_if_spi_master__
 #define __get_if_spi_master() __g_kernel_if_spi_master
 
-#define __set_if_spi_master_desc(__desc_if_spi_master__) __g_kernel_desc_if_spi_master = __desc_if_spi_master__
+#define __set_if_spi_master_desc(__desc_if_spi_master__) __g_kernel_desc_if_spi_master = \
+   __desc_if_spi_master__
 #define __get_if_spi_master_desc() __g_kernel_desc_if_spi_master
 
 extern kernel_pthread_mutex_t _spi_core_mutex;
@@ -575,18 +583,18 @@ void _init_syscall(void);
 void _kernel_routine(void* arg);
 
 //wrapper for external call
-#ifndef USE_ECOS
+   #ifndef USE_ECOS
 void __wrpr_kernel_dev_gettime(desc_t __desc, char * __buf, int __size);
-#endif
+   #endif
 
-#if defined(CPU_GNU32) && !defined(USE_KERNEL_STATIC)
-	void _kernel_syscall_handler_synth(int sig, cyg_hal_sys_siginfo_t * info, void *ptr);
-#elif defined(CPU_ARM7) || defined(CPU_ARM9)
-	void _kernel_syscall_handler(cyg_addrword_t data, cyg_code_t number, cyg_addrword_t info);
-#elif defined(CPU_CORTEXM)
-	void do_swi(void);
-	void _kernel_syscall_handler(void);
-#endif
+   #if defined(CPU_GNU32) && !defined(USE_KERNEL_STATIC)
+void _kernel_syscall_handler_synth(int sig, cyg_hal_sys_siginfo_t * info, void *ptr);
+   #elif defined(CPU_ARM7) || defined(CPU_ARM9)
+void _kernel_syscall_handler(cyg_addrword_t data, cyg_code_t number, cyg_addrword_t info);
+   #elif defined(CPU_CORTEXM)
+void do_swi(void);
+void _kernel_syscall_handler(void);
+   #endif
 
 #endif
 
@@ -597,10 +605,10 @@ void __wrpr_kernel_dev_gettime(desc_t __desc, char * __buf, int __size);
 //
 typedef unsigned char kernel_syscall_status_t;
 //
-typedef struct{
-   pid_t              _syscall_owner_pid;
+typedef struct {
+   pid_t _syscall_owner_pid;
    kernel_pthread_t*  _syscall_owner_pthread_ptr;
-   kernel_syscall_t  _kernel_syscall;
+   kernel_syscall_t _kernel_syscall;
    kernel_syscall_status_t kernel_syscall_status;
 }_kernel_syscall_trace_t;
 extern _kernel_syscall_trace_t _g_kernel_syscall_trace;

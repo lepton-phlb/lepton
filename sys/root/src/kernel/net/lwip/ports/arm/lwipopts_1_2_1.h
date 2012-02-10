@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is ______________________________________.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): ______________________________________.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 #ifndef __LWIPOPTS_H__
@@ -46,17 +46,17 @@ either the MPL or the [eCos GPL] License."
 #define PBUF_DEBUG              DBG_ON
 #define API_LIB_DEBUG   DBG_ON
 #define API_MSG_DEBUG   DBG_ON */
-#define TCPIP_DEBUG             DBG_ON
-#define NETIF_DEBUG             DBG_ON
-#define SOCKETS_DEBUG   DBG_ON
-#define DEMO_DEBUG              DBG_ON
-#define IP_DEBUG                DBG_ON
-#define IP_REASS_DEBUG  DBG_ON
-#define ICMP_DEBUG              DBG_ON
-#define UDP_DEBUG               DBG_ON
+   #define TCPIP_DEBUG             DBG_ON
+   #define NETIF_DEBUG             DBG_ON
+   #define SOCKETS_DEBUG   DBG_ON
+   #define DEMO_DEBUG              DBG_ON
+   #define IP_DEBUG                DBG_ON
+   #define IP_REASS_DEBUG  DBG_ON
+   #define ICMP_DEBUG              DBG_ON
+   #define UDP_DEBUG               DBG_ON
 //#define TCP_DEBUG               DBG_ON
-#define TCP_INPUT_DEBUG         DBG_ON
-#define TCP_OUTPUT_DEBUG        DBG_ON
+   #define TCP_INPUT_DEBUG         DBG_ON
+   #define TCP_OUTPUT_DEBUG        DBG_ON
 /*#define TCP_RTO_DEBUG   DBG_ON
 #define TCP_CWND_DEBUG  DBG_ON
 #define TCP_WND_DEBUG   DBG_ON
@@ -67,7 +67,7 @@ either the MPL or the [eCos GPL] License."
 
 #define DBG_TYPES_ON    (DBG_ON|DBG_TRACE|DBG_STATE|DBG_FRESH|DBG_HALT)
 
-#define NO_SYS 0//1 //phlb
+#define NO_SYS 0 //1 //phlb
 
 #define MEMP_SANITY_CHECK       0
 
@@ -98,7 +98,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_TCP_PCB_LISTEN 8
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        64//64 lepton modifs  // default 16
+#define MEMP_NUM_TCP_SEG        64 //64 lepton modifs  // default 16
 /* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
    timeouts. */
 #define MEMP_NUM_SYS_TIMEOUT    3
@@ -112,11 +112,11 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_APIMSG: the number of struct api_msg, used for
    communication between the TCP/IP stack and the sequential
    programs. */
-#define MEMP_NUM_API_MSG        64//64 lepton modifs  // default 16
+#define MEMP_NUM_API_MSG        64 //64 lepton modifs  // default 16
 /* MEMP_NUM_TCPIPMSG: the number of struct tcpip_msg, which is used
    for sequential API communication and incoming packets. Used in
    src/api/tcpip.c. */
-#define MEMP_NUM_TCPIP_MSG      64//64 lepton modifs  // default 16
+#define MEMP_NUM_TCPIP_MSG      64 //64 lepton modifs  // default 16
 
 
 /* ---------- Pbuf options ---------- */
@@ -124,11 +124,11 @@ a lot of data that needs to be copied, this should be set high. */
 #define PBUF_POOL_SIZE          100
 
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
-#define PBUF_POOL_BUFSIZE       128//1024 Bytes lepton modifs  // default 128
+#define PBUF_POOL_BUFSIZE       128 //1024 Bytes lepton modifs  // default 128
 
 /* PBUF_LINK_HLEN: the number of bytes that should be allocated for a
    link level header. */
-#define PBUF_LINK_HLEN          16 
+#define PBUF_LINK_HLEN          16
 
 /** SYS_LIGHTWEIGHT_PROT
  * define SYS_LIGHTWEIGHT_PROT in lwipopts.h if you want inter-task protection
@@ -158,7 +158,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* TCP writable space (bytes). This must be less than or equal
    to TCP_SND_BUF. It is the amount of space which must be
    available in the tcp snd_buf for select to return writable */
-#define TCP_SNDLOWAT		(TCP_SND_BUF/2)
+#define TCP_SNDLOWAT            (TCP_SND_BUF/2)
 
 /* TCP receive window. */
 #define TCP_WND                 8096
@@ -206,15 +206,15 @@ a lot of data that needs to be copied, this should be set high. */
 /* ---------- Statistics options ---------- */
 
 #ifdef LWIP_STATS
-#define LINK_STATS
-#define IP_STATS
-#define ICMP_STATS
-#define UDP_STATS
-#define TCP_STATS
-#define MEM_STATS
-#define MEMP_STATS
-#define PBUF_STATS
-#define SYS_STATS
+   #define LINK_STATS
+   #define IP_STATS
+   #define ICMP_STATS
+   #define UDP_STATS
+   #define TCP_STATS
+   #define MEM_STATS
+   #define MEMP_STATS
+   #define PBUF_STATS
+   #define SYS_STATS
 #endif /* LWIP_STATS */
 
 /* ---------- PPP options ---------- */
@@ -223,49 +223,49 @@ a lot of data that needs to be copied, this should be set high. */
 
 #if PPP_SUPPORT > 0
 
-#define NUM_PPP 1           /* Max PPP sessions. */
+   #define NUM_PPP 1        /* Max PPP sessions. */
 
 
 /* Select modules to enable.  Ideally these would be set in the makefile but
  * we're limited by the command line length so you need to modify the settings
  * in this file.
  */
-#define PAP_SUPPORT      1      /* Set > 0 for PAP. */
-#define CHAP_SUPPORT     1      /* Set > 0 for CHAP. */
-#define MSCHAP_SUPPORT   0      /* Set > 0 for MSCHAP (NOT FUNCTIONAL!) */
-#define CBCP_SUPPORT     0      /* Set > 0 for CBCP (NOT FUNCTIONAL!) */
-#define CCP_SUPPORT      0      /* Set > 0 for CCP (NOT FUNCTIONAL!) */
-#define VJ_SUPPORT       1      /* Set > 0 for VJ header compression. */
-#define MD5_SUPPORT      1      /* Set > 0 for MD5 (see also CHAP) */
+   #define PAP_SUPPORT      1   /* Set > 0 for PAP. */
+   #define CHAP_SUPPORT     1   /* Set > 0 for CHAP. */
+   #define MSCHAP_SUPPORT   0   /* Set > 0 for MSCHAP (NOT FUNCTIONAL!) */
+   #define CBCP_SUPPORT     0   /* Set > 0 for CBCP (NOT FUNCTIONAL!) */
+   #define CCP_SUPPORT      0   /* Set > 0 for CCP (NOT FUNCTIONAL!) */
+   #define VJ_SUPPORT       1   /* Set > 0 for VJ header compression. */
+   #define MD5_SUPPORT      1   /* Set > 0 for MD5 (see also CHAP) */
 
 
 /*
  * Timeouts.
  */
-#define FSM_DEFTIMEOUT		6	/* Timeout time in seconds */
-#define FSM_DEFMAXTERMREQS	2	/* Maximum Terminate-Request transmissions */
-#define FSM_DEFMAXCONFREQS	10	/* Maximum Configure-Request transmissions */
-#define FSM_DEFMAXNAKLOOPS	5	/* Maximum number of nak loops */
+   #define FSM_DEFTIMEOUT          6    /* Timeout time in seconds */
+   #define FSM_DEFMAXTERMREQS      2    /* Maximum Terminate-Request transmissions */
+   #define FSM_DEFMAXCONFREQS      10   /* Maximum Configure-Request transmissions */
+   #define FSM_DEFMAXNAKLOOPS      5    /* Maximum number of nak loops */
 
-#define UPAP_DEFTIMEOUT		6	/* Timeout (seconds) for retransmitting req */
-#define UPAP_DEFREQTIME		30	/* Time to wait for auth-req from peer */
+   #define UPAP_DEFTIMEOUT         6    /* Timeout (seconds) for retransmitting req */
+   #define UPAP_DEFREQTIME         30   /* Time to wait for auth-req from peer */
 
-#define CHAP_DEFTIMEOUT		6	/* Timeout time in seconds */
-#define CHAP_DEFTRANSMITS	10	/* max # times to send challenge */
+   #define CHAP_DEFTIMEOUT         6    /* Timeout time in seconds */
+   #define CHAP_DEFTRANSMITS       10   /* max # times to send challenge */
 
 
 /* Interval in seconds between keepalive echo requests, 0 to disable. */
-#if 1
-#define LCP_ECHOINTERVAL 0
-#else
-#define LCP_ECHOINTERVAL 10
-#endif
+   #if 1
+      #define LCP_ECHOINTERVAL 0
+   #else
+      #define LCP_ECHOINTERVAL 10
+   #endif
 
 /* Number of unanswered echo requests before failure. */
-#define LCP_MAXECHOFAILS 3
+   #define LCP_MAXECHOFAILS 3
 
 /* Max Xmit idle time (in jiffies) before resend flag char. */
-#define PPP_MAXIDLEFLAG 100
+   #define PPP_MAXIDLEFLAG 100
 
 /*
  * Packet sizes
@@ -275,21 +275,21 @@ a lot of data that needs to be copied, this should be set high. */
  * (XXX - these constants should simply be shared by lcp.c instead
  *    of living in lcp.h)
  */
-#define PPP_MTU     1500     /* Default MTU (size of Info field) */
-#if 0
-#define PPP_MAXMTU  65535 - (PPP_HDRLEN + PPP_FCSLEN)
-#else
-#define PPP_MAXMTU  1500 /* Largest MTU we allow */
-#endif
-#define PPP_MINMTU  64
-#define PPP_MRU     1500     /* default MRU = max length of info field */
-#define PPP_MAXMRU  1500     /* Largest MRU we allow */
-#define PPP_DEFMRU	296		/* Try for this */
-#define PPP_MINMRU	128		/* No MRUs below this */
+   #define PPP_MTU     1500  /* Default MTU (size of Info field) */
+   #if 0
+      #define PPP_MAXMTU  65535 - (PPP_HDRLEN + PPP_FCSLEN)
+   #else
+      #define PPP_MAXMTU  1500 /* Largest MTU we allow */
+   #endif
+   #define PPP_MINMTU  64
+   #define PPP_MRU     1500  /* default MRU = max length of info field */
+   #define PPP_MAXMRU  1500  /* Largest MRU we allow */
+   #define PPP_DEFMRU      296          /* Try for this */
+   #define PPP_MINMRU      128          /* No MRUs below this */
 
 
-#define MAXNAMELEN      256     /* max length of hostname or name for auth */
-#define MAXSECRETLEN    256     /* max length of password or secret */
+   #define MAXNAMELEN      256  /* max length of hostname or name for auth */
+   #define MAXSECRETLEN    256  /* max length of password or secret */
 
 #endif /* PPP_SUPPORT > 0 */
 

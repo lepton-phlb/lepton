@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -51,67 +51,67 @@ Includes
 Global Declaration
 =============================================*/
 
-extern FILE *__IO_list;		/* For fflush at exit */
+extern FILE *__IO_list;         /* For fflush at exit */
 
 #define Inline_init __io_init_vars()
 
-FILE *__IO_list = 0;		/* For fflush at exit */
+FILE *__IO_list = 0;            /* For fflush at exit */
 
 #if !defined(__KERNEL_LOAD_LIB)
 //not thread safe
-   static char bufin[BUFSIZ];
-   static char bufout[BUFSIZ];
-   static char buferr[BUFSIZ];
+static char bufin[BUFSIZ];
+static char bufout[BUFSIZ];
+static char buferr[BUFSIZ];
 
-#if defined(GNU_GCC)
-   FILE  stdin[1] __attribute__ ((visibility("hidden"))) =
-#else
-   FILE  stdin[1] =
+   #if defined(GNU_GCC)
+FILE stdin[1] __attribute__ ((visibility("hidden"))) =
+   #else
+FILE stdin[1] =
+   #endif
+{
+   {bufin, bufin, bufin, bufin, bufin + sizeof(bufin),
+    0, _IOFBF | __MODE_READ | __MODE_IOTRAN}
+};
+
+   #if defined(GNU_GCC)
+FILE stdout[1] __attribute__ ((visibility("hidden"))) =
+   #else
+FILE stdout[1] =
+   #endif
+{
+   {bufout, bufout, bufout, bufout, bufout + sizeof(bufout),
+    1,
+   #if defined (__KERNEL_NET_IPSTACK)
+    /*_IOLBF*/ _IONBF
+   #else
+    _IONBF
+   #endif
+    | __MODE_WRITE | __MODE_IOTRAN}        //_IONBF instead _IOFBF (force fflush buffer) in printf.
+};
+
+   #if defined(GNU_GCC)
+FILE stderr[1] __attribute__ ((visibility("hidden"))) =
+   #else
+FILE stderr[1] =
+   #endif
+{
+   {buferr, buferr, buferr, buferr, buferr + sizeof(buferr),
+    2,
+   #if defined (__KERNEL_NET_IPSTACK)
+    _IOLBF           /*_IONBF*/
+   #else
+    _IONBF
+   #endif
+    | __MODE_WRITE | __MODE_IOTRAN}        //_IONBF instead _IOFBF (force fflush buffer) in printf.
+};
+
 #endif
-   {
-      {bufin, bufin, bufin, bufin, bufin + sizeof(bufin),
-       0, _IOFBF | __MODE_READ | __MODE_IOTRAN}
-   };
 
-#if defined(GNU_GCC)
-   FILE  stdout[1] __attribute__ ((visibility("hidden"))) =
-#else
-   FILE  stdout[1] =
-#endif
-   {
-      {bufout, bufout, bufout, bufout, bufout + sizeof(bufout),
-       1,
-            #if defined (__KERNEL_NET_IPSTACK)
-               /*_IOLBF*/_IONBF
-            #else
-               _IONBF
-            #endif
-            | __MODE_WRITE | __MODE_IOTRAN}//_IONBF instead _IOFBF (force fflush buffer) in printf.
-   };
-
-#if defined(GNU_GCC)
-   FILE  stderr[1] __attribute__ ((visibility("hidden"))) =
-#else
-   FILE  stderr[1] =
-#endif
-   {
-      {buferr, buferr, buferr, buferr, buferr + sizeof(buferr),
-       2,
-            #if defined (__KERNEL_NET_IPSTACK)
-               _IOLBF/*_IONBF*/
-            #else
-               _IONBF
-            #endif
-            | __MODE_WRITE | __MODE_IOTRAN}//_IONBF instead _IOFBF (force fflush buffer) in printf.
-   };
-
-#endif
-
-#define __buferr (stderr->unbuf)	/* Stderr is unbuffered */
+#define __buferr (stderr->unbuf)        /* Stderr is unbuffered */
 
 /* Call the stdio initiliser; it's main job it to call atexit */
 
-   /* Note: This def of READING is ok since 1st ungetc puts in buf. */
+/* Note: This def of READING is ok since 1st ungetc puts in buf. */
 #define READING(fp) (fp->bufstart < fp->bufread)
 #define WRITING(fp) (fp->bufwrite > fp->bufstart)
 
@@ -156,7 +156,7 @@ void __stdio_close_all(pid_t pid){
 ---------------------------------------------*/
 void __stdio_init(){
 #if !defined(__KERNEL_LOAD_LIB)
-   pthread_mutexattr_t  mutex_attr=0;
+   pthread_mutexattr_t mutex_attr=0;
 
    kernel_pthread_mutex_init(&stdin->mutex,&mutex_attr);
    kernel_pthread_mutex_init(&stdout->mutex,&mutex_attr);
@@ -174,7 +174,7 @@ void __stdio_init(){
 ---------------------------------------------*/
 void __io_init_vars(){
    static int first_time = 1;
-   if( !first_time ) return ; first_time = 1;
+   if( !first_time ) return; first_time = 1;
    if (__isatty(1))
       stdout->mode |= _IOLBF;
    //atexit(__stdio_close_all);//to do: restore atexit
@@ -197,27 +197,27 @@ int __fputc(int ch, FILE *fp){
 
    v = fp->mode;
    /* If last op was a read ... */
-   if ((v & __MODE_READING) && __fflush(fp)){
+   if ((v & __MODE_READING) && __fflush(fp)) {
       __thr_safe_unlock(fp);
       return EOF;
    }
 
    /* Can't write or there's been an EOF or error then return EOF */
-   if ((v & (__MODE_WRITE | __MODE_EOF | __MODE_ERR)) != __MODE_WRITE){
+   if ((v & (__MODE_WRITE | __MODE_EOF | __MODE_ERR)) != __MODE_WRITE) {
       __thr_safe_unlock(fp);
       return EOF;
    }
 
    /* In MSDOS translation mode */
 #if __MODE_IOTRAN
-   if (ch == '\n' && (v & __MODE_IOTRAN) && fputc('\r', fp) == EOF){
+   if (ch == '\n' && (v & __MODE_IOTRAN) && fputc('\r', fp) == EOF) {
       __thr_safe_unlock(fp);
       return EOF;
    }
 #endif
 
    /* Buffer is full */
-   if (fp->bufpos >= fp->bufend && __fflush(fp)){
+   if (fp->bufpos >= fp->bufend && __fflush(fp)) {
       __thr_safe_unlock(fp);
       return EOF;
    }
@@ -228,16 +228,16 @@ int __fputc(int ch, FILE *fp){
 
    /* Unbuffered or Line buffered and end of line */
    if (((ch == '\n' && (v & _IOLBF)) || (v & _IONBF))
-       && __fflush(fp)){
+       && __fflush(fp)) {
       __thr_safe_unlock(fp);
       return EOF;
    }
 
    /* Can the macro handle this by itself ? */
    if (v & (__MODE_IOTRAN | _IOLBF | _IONBF))
-      fp->bufwrite = fp->bufstart;	/* Nope */
+      fp->bufwrite = fp->bufstart;      /* Nope */
    else
-      fp->bufwrite = fp->bufend;	/* Yup */
+      fp->bufwrite = fp->bufend;        /* Yup */
 
    __thr_safe_unlock(fp);
 
@@ -254,17 +254,17 @@ int __fputc(int ch, FILE *fp){
 | See:
 ---------------------------------------------*/
 int __fgetc(FILE *fp){
-   int   ch;
+   int ch;
 
    __thr_safe_lock(fp);
 
    if (fp->mode & __MODE_WRITING)
       __fflush(fp);
 #if __MODE_IOTRAN
- try_again:
+try_again:
 #endif
    /* Can't read or there's been an EOF or error then return EOF */
-   if ((fp->mode & (__MODE_READ | __MODE_EOF | __MODE_ERR)) != __MODE_READ){
+   if ((fp->mode & (__MODE_READ | __MODE_EOF | __MODE_ERR)) != __MODE_READ) {
       __thr_safe_unlock(fp);
       return EOF;
    }
@@ -274,7 +274,7 @@ int __fgetc(FILE *fp){
    {
       fp->bufpos = fp->bufread = fp->bufstart;
       ch = __fread(fp->bufpos, 1, fp->bufend - fp->bufstart, fp);
-      if (ch == 0){
+      if (ch == 0) {
          __thr_safe_unlock(fp);
          return EOF;
       }
@@ -304,32 +304,32 @@ int __fgetc(FILE *fp){
 | See:
 ---------------------------------------------*/
 int __fflush(FILE *fp){
-   int   len, cc, rv=0;
+   int len, cc, rv=0;
    char * bstart;
    //int errno;
 
    __thr_safe_lock(fp);
 
-   if (fp == NULL)		/* On NULL flush the lot. */
+   if (fp == NULL)              /* On NULL flush the lot. */
    {
-      if (__fflush(stdin)){
+      if (__fflush(stdin)) {
          __thr_safe_unlock(fp);
          return EOF;
       }
-      if (__fflush(stdout)){
+      if (__fflush(stdout)) {
          __thr_safe_unlock(fp);
          return EOF;
       }
-      if (__fflush(stderr)){
+      if (__fflush(stderr)) {
          __thr_safe_unlock(fp);
          return EOF;
       }
 
       for (fp = __IO_list; fp; fp = fp->next)
-	      if (__fflush(fp)){
-         __thr_safe_unlock(fp);
-         return EOF;
-      }
+         if (__fflush(fp)) {
+            __thr_safe_unlock(fp);
+            return EOF;
+         }
 
       __thr_safe_unlock(fp);
       return 0;
@@ -342,30 +342,30 @@ int __fflush(FILE *fp){
 
       if (len)
       {
-	 bstart = fp->bufstart;
-	 /*
-	  * The loop is so we don't get upset by signals or partial writes.
-	  */
-	 do
-	 {
-	    cc = write(fp->fd, bstart, len);
-	    if( cc > 0 )
-	    {
-	       bstart+=cc; len-=cc;
-	    }
-	 }
-	 while ( cc>0 || (cc != -1 /*&& errno == EINTR*/));//to do: (cc == -1 && errno == EINTR) test.
-	 /*
-	  * If we get here with len!=0 there was an error, exactly what to
-	  * do about it is another matter ...
-	  *
-	  * I'll just clear the buffer.
-	  */
-	 if (len)
-	 {
-	    fp->mode |= __MODE_ERR;
-	    rv = EOF;
-	 }
+         bstart = fp->bufstart;
+         /*
+          * The loop is so we don't get upset by signals or partial writes.
+          */
+         do
+         {
+            cc = write(fp->fd, bstart, len);
+            if( cc > 0 )
+            {
+               bstart+=cc; len-=cc;
+            }
+         }
+         while ( cc>0 || (cc != -1 /*&& errno == EINTR*/)); //to do: (cc == -1 && errno == EINTR) test.
+         /*
+          * If we get here with len!=0 there was an error, exactly what to
+          * do about it is another matter ...
+          *
+          * I'll just clear the buffer.
+          */
+         if (len)
+         {
+            fp->mode |= __MODE_ERR;
+            rv = EOF;
+         }
       }
    }
    /* If there's data in the buffer sychronise the file positions */
@@ -374,14 +374,14 @@ int __fflush(FILE *fp){
       /* Humm, I think this means sync the file like fpurge() ... */
       /* Anyway the user isn't supposed to call this function when reading */
 
-      len = fp->bufread - fp->bufpos;	/* Bytes buffered but unread */
+      len = fp->bufread - fp->bufpos;   /* Bytes buffered but unread */
       /* If it's a file, make it good */
       if (len > 0 && (lseek(fp->fd, (off_t)-len, 1) < 0))
       {
-	 /* Hummm - Not certain here, I don't think this is reported */
-	 /*
-	  * fp->mode |= __MODE_ERR; return EOF;
-	  */
+         /* Hummm - Not certain here, I don't think this is reported */
+         /*
+          * fp->mode |= __MODE_ERR; return EOF;
+          */
       }
    }
 
@@ -414,19 +414,19 @@ char * __fgets(char *s,size_t count,FILE *f)
       ch = getc(f);
       if (ch == EOF)
       {
-         if (s == ret){
+         if (s == ret) {
             __thr_safe_unlock(f);
-	         return 0;
+            return 0;
          }
-	      break;
+         break;
       }
       *s++ = (char) ch;
       if (ch == '\n')
-	      break;
+         break;
    }
    *s = 0;
 
-   if (ferror(f)){
+   if (ferror(f)) {
       __thr_safe_unlock(f);
       return 0;
    }
@@ -458,7 +458,7 @@ char * __gets(char *str)
 
    __thr_safe_unlock(stdin);
 
-   return  (((c == EOF) && (p == str)) ? NULL : str);	/* NULL == EOF */
+   return  (((c == EOF) && (p == str)) ? NULL : str);   /* NULL == EOF */
 }
 
 /*-------------------------------------------
@@ -476,9 +476,9 @@ int __fputs(char *str,FILE *fp){
 
    while (*str)
    {
-      if (putc(*str++, fp) == EOF){
+      if (putc(*str++, fp) == EOF) {
          __thr_safe_unlock(fp);
-	      return (EOF);
+         return (EOF);
       }
       ++n;
    }
@@ -499,7 +499,7 @@ int __puts(char *str){
 
    __thr_safe_lock(stdout);
    if (((n = __fputs(str, stdout)) == EOF)
-      || (putc('\n', stdout) == EOF)){
+       || (putc('\n', stdout) == EOF)) {
       __thr_safe_unlock(stdout);
       return (EOF);
    }
@@ -521,7 +521,7 @@ int __puts(char *str){
 | See:
 ---------------------------------------------*/
 int __fread(char *buf,int size,int nelm,FILE *fp){
-   int   len, v;
+   int len, v;
    unsigned bytes, got = 0;
 
    __thr_safe_lock(fp);
@@ -535,7 +535,7 @@ int __fread(char *buf,int size,int nelm,FILE *fp){
       __fflush(fp);
 
    /* Can't read or there's been an EOF or error then return zero */
-   if ((v & (__MODE_READ | __MODE_EOF | __MODE_ERR)) != __MODE_READ){
+   if ((v & (__MODE_READ | __MODE_EOF | __MODE_ERR)) != __MODE_READ) {
       __thr_safe_unlock(fp);
       return 0;
    }
@@ -544,14 +544,14 @@ int __fread(char *buf,int size,int nelm,FILE *fp){
    bytes = size * nelm;
 
    len = fp->bufread - fp->bufpos;
-   if ( (unsigned)len >= bytes)		/* Enough buffered */
+   if ( (unsigned)len >= bytes)         /* Enough buffered */
    {
       memcpy(buf, fp->bufpos, (unsigned) bytes);
       fp->bufpos += bytes;
       __thr_safe_unlock(fp);
       return bytes;
    }
-   else if (len > 0)		/* Some buffered */
+   else if (len > 0)            /* Some buffered */
    {
       memcpy(buf, fp->bufpos, len);
       fp->bufpos += len;
@@ -590,7 +590,7 @@ int __fread(char *buf,int size,int nelm,FILE *fp){
 ---------------------------------------------*/
 int __fwrite(char *buf,int size,int nelm,FILE *fp){
    register int v;
-   int   len;
+   int len;
    unsigned bytes, put;
    //int errno;
 
@@ -598,13 +598,13 @@ int __fwrite(char *buf,int size,int nelm,FILE *fp){
 
    v = fp->mode;
    /* If last op was a read ... */
-   if ((v & __MODE_READING) && __fflush(fp)){
+   if ((v & __MODE_READING) && __fflush(fp)) {
       __thr_safe_unlock(fp);
       return 0;
    }
 
    /* Can't write or there's been an EOF or error then return 0 */
-   if ((v & (__MODE_WRITE | __MODE_EOF | __MODE_ERR)) != __MODE_WRITE){
+   if ((v & (__MODE_WRITE | __MODE_EOF | __MODE_ERR)) != __MODE_WRITE) {
       __thr_safe_unlock(fp);
       return 0;
    }
@@ -616,13 +616,13 @@ int __fwrite(char *buf,int size,int nelm,FILE *fp){
 
    /* Flush the buffer if not enough room */
    if (bytes > (unsigned)len)
-      if (__fflush(fp)){
+      if (__fflush(fp)) {
          __thr_safe_unlock(fp);
-	      return 0;
+         return 0;
       }
 
    len = fp->bufend - fp->bufpos;
-   if (bytes <= (unsigned)len)		/* It'll fit in the buffer ? */
+   if (bytes <= (unsigned)len)          /* It'll fit in the buffer ? */
    {
       fp->mode |= __MODE_WRITING;
       memcpy(fp->bufpos, buf, bytes);
@@ -630,7 +630,7 @@ int __fwrite(char *buf,int size,int nelm,FILE *fp){
 
       /* If we're not fully buffered */
       if (v & (_IOLBF | _IONBF))
-	      __fflush(fp);
+         __fflush(fp);
 
       __thr_safe_unlock(fp);
       return nelm;
@@ -641,13 +641,13 @@ int __fwrite(char *buf,int size,int nelm,FILE *fp){
       do
       {
          len = write(fp->fd, buf, bytes);
-	      if( len > 0 ){
-	         buf+=len; bytes-=len;
-	      }
-      }while (len > 0 || (len != -1 /*&& errno == EINTR*/));//to do: (len==-1 && errno == EINTR) test.
+         if( len > 0 ) {
+            buf+=len; bytes-=len;
+         }
+      } while (len > 0 || (len != -1 /*&& errno == EINTR*/)); //to do: (len==-1 && errno == EINTR) test.
 
       if (len < 0)
-	      fp->mode |= __MODE_ERR;
+         fp->mode |= __MODE_ERR;
 
       put -= bytes;
    }
@@ -681,39 +681,39 @@ void __rewind(FILE * fp){
 ---------------------------------------------*/
 int __fseek(FILE *fp,long offset,int ref)
 {
-__thr_safe_lock(fp);
+   __thr_safe_lock(fp);
 #if 1
    /* if __MODE_READING and no ungetc ever done can just move pointer */
    /* This needs testing! */
 
    if ( (fp->mode &(__MODE_READING | __MODE_UNGOT)) == __MODE_READING &&
-        ( ref == SEEK_SET || ref == SEEK_CUR )){
+        ( ref == SEEK_SET || ref == SEEK_CUR )) {
 
       long fpos = lseek(fp->fd, 0L, SEEK_CUR);
-      if( fpos == -1 ){
+      if( fpos == -1 ) {
          __thr_safe_unlock(fp);
          return EOF;
       }
 
-      if( ref == SEEK_CUR ){
+      if( ref == SEEK_CUR ) {
          ref = SEEK_SET;
-	      offset = fpos + offset + fp->bufpos - fp->bufread;
+         offset = fpos + offset + fp->bufpos - fp->bufread;
       }
-      if( ref == SEEK_SET ){
-         if ( offset < fpos && offset >= fpos + fp->bufstart - fp->bufread ){
-	         fp->bufpos = offset - fpos + fp->bufread;
+      if( ref == SEEK_SET ) {
+         if ( offset < fpos && offset >= fpos + fp->bufstart - fp->bufread ) {
+            fp->bufpos = offset - fpos + fp->bufread;
             __thr_safe_unlock(fp);
-	         return 0;
-	      }
+            return 0;
+         }
       }
    }
 #endif
    /* Use fflush to sync the pointers */
-   if (__fflush(fp) == EOF){
+   if (__fflush(fp) == EOF) {
       __thr_safe_unlock(fp);
       return EOF;
    }
-   if (lseek(fp->fd, (off_t)offset, ref) < 0){
+   if (lseek(fp->fd, (off_t)offset, ref) < 0) {
       __thr_safe_unlock(fp);
       return EOF;
    }
@@ -735,7 +735,7 @@ long __ftell(FILE * fp){
 
    __thr_safe_lock(fp);
 
-   if (__fflush(fp) == EOF){
+   if (__fflush(fp) == EOF) {
       __thr_safe_unlock(fp);
       return EOF;
    }
@@ -759,11 +759,11 @@ long __ftell(FILE * fp){
 ---------------------------------------------*/
 FILE * __fopen(const char *fname,int fd,FILE *fp,char *mode)
 {
-   int   open_mode = 0;
+   int open_mode = 0;
 #if __MODE_IOTRAN
-   int	 do_iosense = 1;
+   int do_iosense = 1;
 #endif
-   int   fopen_mode = 0;
+   int fopen_mode = 0;
    FILE *nfp = 0;
 
    /* If we've got an fp close the old one (freopen) */
@@ -780,28 +780,28 @@ FILE * __fopen(const char *fname,int fd,FILE *fp,char *mode)
       switch (*mode++)
       {
       case 'r':
-	 fopen_mode |= __MODE_READ;
-	 break;
+         fopen_mode |= __MODE_READ;
+         break;
       case 'w':
-	 fopen_mode |= __MODE_WRITE;
-	 open_mode = (O_CREAT | O_TRUNC);
-	 break;
+         fopen_mode |= __MODE_WRITE;
+         open_mode = (O_CREAT | O_TRUNC);
+         break;
       case 'a':
-	 fopen_mode |= __MODE_WRITE;
-	 open_mode = (O_CREAT | O_APPEND);
-	 break;
+         fopen_mode |= __MODE_WRITE;
+         open_mode = (O_CREAT | O_APPEND);
+         break;
       case '+':
-	 fopen_mode |= __MODE_RDWR;
-	 break;
+         fopen_mode |= __MODE_RDWR;
+         break;
 #if __MODE_IOTRAN
-      case 'b':		/* Binary */
-	 fopen_mode &= ~__MODE_IOTRAN;
-	 do_iosense=0;
-	 break;
-      case 't':		/* Text */
-	 fopen_mode |= __MODE_IOTRAN;
-	 do_iosense=0;
-	 break;
+      case 'b':         /* Binary */
+         fopen_mode &= ~__MODE_IOTRAN;
+         do_iosense=0;
+         break;
+      case 't':         /* Text */
+         fopen_mode |= __MODE_IOTRAN;
+         do_iosense=0;
+         break;
 #endif
       }
 
@@ -826,17 +826,17 @@ FILE * __fopen(const char *fname,int fd,FILE *fp,char *mode)
    {
       nfp = malloc(sizeof(FILE));
       if (nfp == 0)
-	   return 0;
+         return 0;
    }
 
    /* Open the file itself */
    if (fname)
       fd = open(fname, open_mode, 0666);
 
-   if (fd < 0)			/* Grrrr */
+   if (fd < 0)                  /* Grrrr */
    {
       if (nfp)
-	      free(nfp);
+         free(nfp);
       return 0;
    }
 
@@ -850,24 +850,24 @@ FILE * __fopen(const char *fname,int fd,FILE *fp,char *mode)
       fp->mode = __MODE_FREEFIL;
       if( __isatty(fd) )
       {
-	      fp->mode |= _IOLBF;
+         fp->mode |= _IOLBF;
 #if __MODE_IOTRAN
-	      if( do_iosense ) fopen_mode |= __MODE_IOTRAN;
+         if( do_iosense ) fopen_mode |= __MODE_IOTRAN;
 #endif
       }
       else
-	      fp->mode |= _IOFBF;
+         fp->mode |= _IOFBF;
       fp->bufstart = malloc(BUFSIZ);
-      if (fp->bufstart == 0)	/* Oops, no mem */
-      {				/* Humm, full buffering with a two(!) byte
-				 * buffer. */
-	      fp->bufstart = fp->unbuf;
-	      fp->bufend = fp->unbuf + sizeof(fp->unbuf);
+      if (fp->bufstart == 0)    /* Oops, no mem */
+      {                         /* Humm, full buffering with a two(!) byte
+                                 * buffer. */
+         fp->bufstart = fp->unbuf;
+         fp->bufend = fp->unbuf + sizeof(fp->unbuf);
       }
       else
       {
-	      fp->bufend = fp->bufstart + BUFSIZ;
-	      fp->mode |= __MODE_FREEBUF;
+         fp->bufend = fp->bufstart + BUFSIZ;
+         fp->mode |= __MODE_FREEBUF;
       }
    }
 
@@ -888,7 +888,7 @@ FILE * __fopen(const char *fname,int fd,FILE *fp,char *mode)
 | See:
 ---------------------------------------------*/
 int __fclose(FILE *fp){
-   int   rv = 0;
+   int rv = 0;
    //int errno;
 
    if (fp == 0)
@@ -916,13 +916,13 @@ int __fclose(FILE *fp){
       fp->mode = 0;
 
       for (ptr = __IO_list; ptr && ptr != fp; ptr = ptr->next)
-	 ;
+         ;
       if (ptr == fp)
       {
-	 if (prev == 0)
-	    __IO_list = fp->next;
-	 else
-	    prev->next = fp->next;
+         if (prev == 0)
+            __IO_list = fp->next;
+         else
+            prev->next = fp->next;
       }
       free(fp);
    }
@@ -983,7 +983,7 @@ int __setvbuf(FILE * fp,char * buf,int mode,size_t size){
    {
       if( size <= 0  ) size = BUFSIZ;
       if( buf == 0 ) buf = malloc(size);
-      if( buf == 0 ){
+      if( buf == 0 ) {
          __thr_safe_unlock(fp);
          return EOF;
       }
@@ -1014,12 +1014,12 @@ int __ungetc(int c, FILE *fp) {
 
    /* If can't read or there's been an error, or c == EOF, or ungot slot
     * already filled, then return EOF */
-      /*
-       * This can only happen if an fgetc triggered a read (that filled
-       * the buffer for case 2 above) and then we ungetc 3 chars.
-       */
+   /*
+    * This can only happen if an fgetc triggered a read (that filled
+    * the buffer for case 2 above) and then we ungetc 3 chars.
+    */
    if (!READABLE(fp) || (fp->mode & (__MODE_UNGOT | __MODE_ERR))
-      || (c == EOF) ) {
+       || (c == EOF) ) {
       __thr_safe_unlock(fp);
       return EOF;
    }

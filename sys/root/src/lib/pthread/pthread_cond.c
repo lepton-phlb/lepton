@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -168,16 +168,18 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
       return -1;
 
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) add this thread in cond
    pthread_condlist.pthread_ptr = kernel_pthread_self();
    pthread_condlist_insert(cond,&pthread_condlist);
    //3) unlock cond mutex if it's lock
    if(!cond->mutex)
-       cond->mutex=mutex;
+      cond->mutex=mutex;
    pthread_mutex_unlock(cond->mutex);
    //4) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //5) init sigevent filter
    kernel_sigevent.si_code=SI_SYSTEM;
    kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
@@ -185,11 +187,13 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
    //6) wait on thread sigqueue
    pthread_condlist.pthread_ptr->kernel_sigqueue.wait(&kernel_sigevent);
    //7) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //8) lock cond mutex
    pthread_mutex_lock(cond->mutex);
    //9) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
 
    return 0;
 }
@@ -220,15 +224,18 @@ int pthread_cond_signal(pthread_cond_t* cond){
    cond->kernel_sigevent.si_code = SI_SYSTEM;
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) loop walk cond thread until first pthread in the fifo list
    while(condlist->next) condlist = condlist->next;
    //3) signal queue cond thread
-   cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,&cond->kernel_sigevent);
+   cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,
+                                                 &cond->kernel_sigevent);
    //4) remove cond thread
    pthread_condlist_remove(cond,cond->list);
    //5) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return 0;
 }
@@ -242,7 +249,7 @@ int pthread_cond_signal(pthread_cond_t* cond){
 | See:
 ----------------------------------------------*/
 int pthread_cond_broadcast(pthread_cond_t* cond){
-    if(!cond)
+   if(!cond)
       return -1;
    if(!cond->mutex)
       return -1;
@@ -253,16 +260,19 @@ int pthread_cond_broadcast(pthread_cond_t* cond){
    cond->kernel_sigevent.si_code = SI_SYSTEM;
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
-    //2) loop walk cond thread{
-   while(cond->list){
+   kernel_pthread_mutex_lock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   //2) loop walk cond thread{
+   while(cond->list) {
       //3)     signal queue cond thread
-      cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,&cond->kernel_sigevent);
+      cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,
+                                                    &cond->kernel_sigevent);
       //4)     remove cond thread
       pthread_condlist_remove(cond,cond->list);
    }
    //5) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(
+      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return 0;
 }

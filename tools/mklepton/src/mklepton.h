@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -105,7 +105,7 @@ const char* cpu_type_list[]={
 };
 
 //kernel struct configuration
-struct kernel_conf_t{
+struct kernel_conf_t {
    char* str_cpu_type;
    char* str_cpu_freq;
    char* str_heap_size;
@@ -125,28 +125,28 @@ struct kernel_conf_t{
    int descriptors_max;
    int network_used;
    long cpufs_size;
-   int  cpufs_node;
-   int  cpufs_block;
-   int  cpufs_blocksz;
+   int cpufs_node;
+   int cpufs_block;
+   int cpufs_blocksz;
    char* str_cpufs_option;
 };
 
 //boot struct config
-struct boot_t{
+struct boot_t {
    char* kb_val;
    char* arg;
-   struct boot_t* pprev; 
-   struct boot_t* pnext; 
+   struct boot_t* pprev;
+   struct boot_t* pnext;
 };
 
 //mount struct config
-struct mount_t{
+struct mount_t {
    char* fstype;
    char* dev;
    char* mount_point;
 
-   struct mount_t* pprev; 
-   struct mount_t* pnext; 
+   struct mount_t* pprev;
+   struct mount_t* pnext;
 };
 
 
@@ -165,37 +165,37 @@ struct mount_t{
 
 
 //dev struct config
-struct mkdev_t{
+struct mkdev_t {
    char*   dev_map_name;
-   struct mkdev_t* pprev; 
-   struct mkdev_t* pnext; 
+   struct mkdev_t* pprev;
+   struct mkdev_t* pnext;
 };
 
 
 //bin struct config
-struct mkbin_t{
-   int   bin_index;
+struct mkbin_t {
+   int bin_index;
    char* src_path;
    char* dest_path;
    char* bin_name;
    char* stack;
-   char* priority; 
-   char* timeslice; 
-   struct mkbin_t* pprev; 
-   struct mkbin_t* pnext; 
+   char* priority;
+   char* timeslice;
+   struct mkbin_t* pprev;
+   struct mkbin_t* pnext;
 };
 
 //file struct config
-struct mkfile_t{
+struct mkfile_t {
    char* src_file;
    char* dest_path;
    char* file_name;
-   struct mkfile_t* pprev; 
-   struct mkfile_t* pnext; 
+   struct mkfile_t* pprev;
+   struct mkfile_t* pnext;
 };
 
 //dir struct config
-struct mkdir_t{
+struct mkdir_t {
    char * src_path;
    char * dest_path;
    struct mkdir_t * pprev;
@@ -223,9 +223,9 @@ struct mkdir_t{
 #define _O_NONBLOCK   0x0020
 
 
-#define _S_IREAD 	0400//S_IRUSR
-#define _S_IWRITE 0200//S_IWUSR
-#define _O_TRUNC	01000
+#define _S_IREAD        0400 //S_IRUSR
+#define _S_IWRITE 0200 //S_IWUSR
+#define _O_TRUNC        01000
 
 #define MAX_PATH          260
 

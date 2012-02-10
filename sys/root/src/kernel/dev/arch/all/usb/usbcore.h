@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -49,14 +49,14 @@ either the MPL or the [eCos GPL] License."
 // to worry about alignment. Also for some requests the value field
 // is split into separate bytes anyway.
 typedef struct usb_devreq {
-    unsigned char       type;
-    unsigned char       request;
-    unsigned char       value_lo;
-    unsigned char       value_hi;
-    unsigned char       index_lo;
-    unsigned char       index_hi;
-    unsigned char       length_lo;
-    unsigned char       length_hi;
+   unsigned char type;
+   unsigned char request;
+   unsigned char value_lo;
+   unsigned char value_hi;
+   unsigned char index_lo;
+   unsigned char index_hi;
+   unsigned char length_lo;
+   unsigned char length_hi;
 } __attribute__((packed)) usb_devreq;
 
 // Encoding of the request_type
@@ -116,24 +116,24 @@ typedef struct usb_devreq {
 
 // Descriptors for the GET_DESCRIPTOR and SET_DESCRIPTOR requests.
 typedef struct usb_device_descriptor {
-    unsigned char       length;                 // USB_DEVICE_DESCRIPTOR_LENGTH == 18
-    unsigned char       type;                   // USB_DEVREQ_DESCRIPTOR_TYPE
-    unsigned char       usb_spec_lo;
-    unsigned char       usb_spec_hi;
-    unsigned char       device_class;
-    unsigned char       device_subclass;
-    unsigned char       device_protocol;
-    unsigned char       max_packet_size;
-    unsigned char       vendor_lo;
-    unsigned char       vendor_hi;
-    unsigned char       product_lo;
-    unsigned char       product_hi;
-    unsigned char       device_lo;
-    unsigned char       device_hi;
-    unsigned char       manufacturer_str;
-    unsigned char       product_str;
-    unsigned char       serial_number_str;
-    unsigned char       number_configurations;
+   unsigned char length;                        // USB_DEVICE_DESCRIPTOR_LENGTH == 18
+   unsigned char type;                          // USB_DEVREQ_DESCRIPTOR_TYPE
+   unsigned char usb_spec_lo;
+   unsigned char usb_spec_hi;
+   unsigned char device_class;
+   unsigned char device_subclass;
+   unsigned char device_protocol;
+   unsigned char max_packet_size;
+   unsigned char vendor_lo;
+   unsigned char vendor_hi;
+   unsigned char product_lo;
+   unsigned char product_hi;
+   unsigned char device_lo;
+   unsigned char device_hi;
+   unsigned char manufacturer_str;
+   unsigned char product_str;
+   unsigned char serial_number_str;
+   unsigned char number_configurations;
 } __attribute__((packed)) usb_device_descriptor;
 
 #define USB_DEVICE_DESCRIPTOR_LENGTH             18
@@ -154,31 +154,31 @@ typedef struct usb_device_descriptor {
 
 //
 typedef struct usb_qualifier_descriptor {
-	unsigned char length;// Size of the descriptor in bytes.
-   unsigned char type;// Descriptor type (USBDESC_DEVICE_QUALIFIER or "USB device types").
-   unsigned char bcd_low;// USB specification release number (in BCD format).
+   unsigned char length;     // Size of the descriptor in bytes.
+   unsigned char type; // Descriptor type (USBDESC_DEVICE_QUALIFIER or "USB device types").
+   unsigned char bcd_low; // USB specification release number (in BCD format).
    unsigned char bcd_high;
-   unsigned char device_class;// Device class code.
-   unsigned char device_subclass;// Device subclass code.
-   unsigned char device_protocol;// Device protocol code.
-   unsigned char max_packet_size;// Maximum packet size of endpoint 0.
-   unsigned char number_configurations;/// Number of possible configurations for the device.
-   unsigned char reserved;// Reserved.
+   unsigned char device_class; // Device class code.
+   unsigned char device_subclass; // Device subclass code.
+   unsigned char device_protocol; // Device protocol code.
+   unsigned char max_packet_size; // Maximum packet size of endpoint 0.
+   unsigned char number_configurations; /// Number of possible configurations for the device.
+   unsigned char reserved; // Reserved.
 } __attribute__((packed)) usb_qualifier_descriptor;
 
 #define USB_QUALIFIER_DESCRIPTOR_LENGTH     10
 #define USB_QUALIFIER_DESCRIPTOR_TYPE       USB_DEVREQ_DESCRIPTOR_TYPE_QUALIFIER
 //
 typedef struct usb_configuration_descriptor {
-    unsigned char       length;
-    unsigned char       type;
-    unsigned char       total_length_lo;
-    unsigned char       total_length_hi;
-    unsigned char       number_interfaces;
-    unsigned char       configuration_id;
-    unsigned char       configuration_str;
-    unsigned char       attributes;
-    unsigned char       max_power;
+   unsigned char length;
+   unsigned char type;
+   unsigned char total_length_lo;
+   unsigned char total_length_hi;
+   unsigned char number_interfaces;
+   unsigned char configuration_id;
+   unsigned char configuration_str;
+   unsigned char attributes;
+   unsigned char max_power;
 } __attribute__((packed)) usb_configuration_descriptor;
 
 #define USB_CONFIGURATION_DESCRIPTOR_LENGTH     9
@@ -190,8 +190,11 @@ typedef struct usb_configuration_descriptor {
 ///NOW WE DON'T USE INTERFACE AND ENDPOINT DESCRIPTOR
 ///WE PREFER unsigned char array BECAUSE OF Functionnal Header for CDC/ACM
 typedef unsigned char usb_interface_descriptor;
-#define  USB_INTERFACE_DESCRIPTOR(lenght,type,interface_id,alternate_setting,number_endpoint,interface_class,interface_subclass,interface_protocol,interface_str) \
-      lenght,type,interface_id,alternate_setting,number_endpoint,interface_class,interface_subclass,interface_protocol,interface_str
+#define  USB_INTERFACE_DESCRIPTOR(lenght,type,interface_id,alternate_setting,number_endpoint, \
+                                  interface_class,interface_subclass,interface_protocol, \
+                                  interface_str) \
+   lenght,type,interface_id,alternate_setting,number_endpoint,interface_class,interface_subclass, \
+   interface_protocol,interface_str
 
 //offset
 #define  INTERFACE_LENGHT_OFFSET                0
@@ -212,17 +215,18 @@ typedef unsigned char usb_interface_descriptor;
 
 ////
 typedef struct usb_endpoint_descriptor {
-    unsigned char       length;
-    unsigned char       type;
-    unsigned char       endpoint;
-    unsigned char       attributes;
-    unsigned char       max_packet_lo;
-    unsigned char       max_packet_hi;
-    unsigned char       interval;
+   unsigned char length;
+   unsigned char type;
+   unsigned char endpoint;
+   unsigned char attributes;
+   unsigned char max_packet_lo;
+   unsigned char max_packet_hi;
+   unsigned char interval;
 } __attribute__((packed)) usb_endpoint_descriptor;
 
-#define  USB_ENDPOINT_DESCRIPTOR(lenght,type,endpoint,attributes,max_packet_lo,max_packet_hi,interval) \
-      lenght,type,endpoint,attributes,max_packet_lo,max_packet_hi,interval
+#define  USB_ENDPOINT_DESCRIPTOR(lenght,type,endpoint,attributes,max_packet_lo,max_packet_hi, \
+                                 interval) \
+   lenght,type,endpoint,attributes,max_packet_lo,max_packet_hi,interval
 
 //offset
 #define  ENDPOINT_LENGHT_OFFSET                 0
@@ -261,14 +265,14 @@ typedef struct usb_endpoint_descriptor {
 // Utility macros to calculate the total_length fields in a
 // configuration descriptor.
 #define USB_CONFIGURATION_DESCRIPTOR_TOTAL_LENGTH_LO(interfaces, endpoints) \
-    (USB_CONFIGURATION_DESCRIPTOR_LENGTH +            \
-     (interfaces * USB_INTERFACE_DESCRIPTOR_LENGTH) + \
-     (endpoints  * USB_ENDPOINT_DESCRIPTOR_LENGTH)) % 256
+   (USB_CONFIGURATION_DESCRIPTOR_LENGTH +            \
+    (interfaces * USB_INTERFACE_DESCRIPTOR_LENGTH) + \
+    (endpoints  * USB_ENDPOINT_DESCRIPTOR_LENGTH)) % 256
 
 #define USB_CONFIGURATION_DESCRIPTOR_TOTAL_LENGTH_HI(interfaces, endpoints) \
-    (USB_CONFIGURATION_DESCRIPTOR_LENGTH +            \
-     (interfaces * USB_INTERFACE_DESCRIPTOR_LENGTH) + \
-     (endpoints  * USB_ENDPOINT_DESCRIPTOR_LENGTH)) / 256
+   (USB_CONFIGURATION_DESCRIPTOR_LENGTH +            \
+    (interfaces * USB_INTERFACE_DESCRIPTOR_LENGTH) + \
+    (endpoints  * USB_ENDPOINT_DESCRIPTOR_LENGTH)) / 256
 
 //
 //Atmel Vendor (0x03EB)
@@ -286,13 +290,13 @@ typedef struct usb_endpoint_descriptor {
 //
 //from atmel see USBStringDescriptor.h
 // Language ID for US english.
-#define USB_STRING_DESC_ENGLISH_US          				0x09, 0x04
-#define USB_STRING_DESC_LENGTH(length)						((length) * 2 + 2)
-#define USB_STRING_DESC_UNICODE(ascii)						(ascii), 0
+#define USB_STRING_DESC_ENGLISH_US                                      0x09, 0x04
+#define USB_STRING_DESC_LENGTH(length)                                          ((length) * 2 + 2)
+#define USB_STRING_DESC_UNICODE(ascii)                                          (ascii), 0
 
 #if defined(USE_ECOS)
 //for true and false
-#include <cyg/hal/hal_io.h>
+   #include <cyg/hal/hal_io.h>
 #endif
 
 #endif /*_USBCORE_H_*/

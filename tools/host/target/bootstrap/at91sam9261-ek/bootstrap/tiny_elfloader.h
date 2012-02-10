@@ -1,59 +1,59 @@
 /*
- The contents of this file are subject to the Mozilla Public License Version 1.1 
+ The contents of this file are subject to the Mozilla Public License Version 1.1
  (the "License"); you may not use this file except in compliance with the License.
  You may obtain a copy of the License at http://www.mozilla.org/MPL/
- 
- Software distributed under the License is distributed on an "AS IS" basis, 
- WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+
+ Software distributed under the License is distributed on an "AS IS" basis,
+ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
  specific language governing rights and limitations under the License.
- 
+
  The Original Code is ______________________________________.
- 
+
  The Initial Developer of the Original Code is ________________________.
  Portions created by ______________________ are Copyright (C) ______ _______________________.
  All Rights Reserved.
- 
+
  Contributor(s): ______________________________________.
- 
- Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
- (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+
+ Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+ (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
  instead of those above. If you wish to allow use of your version of this file only under the
- terms of the [eCos GPL] License and not to allow others to use your version of this file under 
- the MPL, indicate your decision by deleting  the provisions above and replace 
- them with the notice and other provisions required by the [eCos GPL] License. 
- If you do not delete the provisions above, a recipient may use your version of this file under 
+ terms of the [eCos GPL] License and not to allow others to use your version of this file under
+ the MPL, indicate your decision by deleting  the provisions above and replace
+ them with the notice and other provisions required by the [eCos GPL] License.
+ If you do not delete the provisions above, a recipient may use your version of this file under
  either the MPL or the [eCos GPL] License."
 */
 
 /*============================================
-| Compiler Directive   
+| Compiler Directive
 ==============================================*/
 #ifndef _KERNEL_ELFLOADER_H
 #define _KERNEL_ELFLOADER_H
 
 
 /*============================================
-| Includes 
+| Includes
 ==============================================*/
 
 
 /*============================================
-| Declaration  
+| Declaration
 ==============================================*/
 #if !defined(__GNUC__)
-#pragma pack(push, 1)
+   #pragma pack(push, 1)
 #endif
 
 typedef int int32;
-typedef unsigned int    uint32;
-typedef unsigned short  uint16;
+typedef unsigned int uint32;
+typedef unsigned short uint16;
 
 
 typedef uint32 Elf32_Addr;
 typedef uint32 Elf32_Off;
 typedef uint16 Elf32_Half;
 typedef uint32 Elf32_Word;
-typedef int32  Elf32_Sword;
+typedef int32 Elf32_Sword;
 /*
 typedef uint64 Elf64_Addr;
 typedef uint64 Elf64_Off;
@@ -69,38 +69,38 @@ typedef int64  Elf64_Sxword;
 #define EI_NIDENT 16
 
 typedef struct {
-    unsigned char   e_ident[EI_NIDENT];
-    Elf32_Half      e_type;
-    Elf32_Half      e_machine;
-    Elf32_Word      e_version;
-    Elf32_Addr      e_entry;
-    Elf32_Off       e_phoff;
-    Elf32_Off       e_shoff;
-    Elf32_Word      e_flags;
-    Elf32_Half      e_ehsize;
-    Elf32_Half      e_phentsize;
-    Elf32_Half      e_phnum;
-    Elf32_Half      e_shentsize;
-    Elf32_Half      e_shnum;
-    Elf32_Half      e_shtrndx;
+   unsigned char e_ident[EI_NIDENT];
+   Elf32_Half e_type;
+   Elf32_Half e_machine;
+   Elf32_Word e_version;
+   Elf32_Addr e_entry;
+   Elf32_Off e_phoff;
+   Elf32_Off e_shoff;
+   Elf32_Word e_flags;
+   Elf32_Half e_ehsize;
+   Elf32_Half e_phentsize;
+   Elf32_Half e_phnum;
+   Elf32_Half e_shentsize;
+   Elf32_Half e_shnum;
+   Elf32_Half e_shtrndx;
 } Elf32_Ehdr;
 
 #ifdef USE_ELFHDR_64
 typedef struct {
-    unsigned char   e_ident[EI_NIDENT];
-    Elf64_Half      e_type;
-    Elf64_Half      e_machine;
-    Elf64_Word      e_version;
-    Elf64_Addr      e_entry;
-    Elf64_Off       e_phoff;
-    Elf64_Off       e_shoff;
-    Elf64_Word      e_flags;
-    Elf64_Half      e_ehsize;
-    Elf64_Half      e_phentsize;
-    Elf64_Half      e_phnum;
-    Elf64_Half      e_shentsize;
-    Elf64_Half      e_shnum;
-    Elf64_Half      e_shtrndx;
+   unsigned char e_ident[EI_NIDENT];
+   Elf64_Half e_type;
+   Elf64_Half e_machine;
+   Elf64_Word e_version;
+   Elf64_Addr e_entry;
+   Elf64_Off e_phoff;
+   Elf64_Off e_shoff;
+   Elf64_Word e_flags;
+   Elf64_Half e_ehsize;
+   Elf64_Half e_phentsize;
+   Elf64_Half e_phnum;
+   Elf64_Half e_shentsize;
+   Elf64_Half e_shnum;
+   Elf64_Half e_shtrndx;
 } Elf64_Ehdr;
 #endif
 
@@ -282,31 +282,31 @@ typedef struct {
 /* Section Header */
 
 typedef struct {
-    Elf32_Word  sh_name;        /* name - index into section header
+   Elf32_Word sh_name;          /* name - index into section header
                                    string table section */
-    Elf32_Word  sh_type;        /* type */
-    Elf32_Word  sh_flags;       /* flags */
-    Elf32_Addr  sh_addr;        /* address */
-    Elf32_Off   sh_offset;      /* file offset */
-    Elf32_Word  sh_size;        /* section size */
-    Elf32_Word  sh_link;        /* section header table index link */
-    Elf32_Word  sh_info;        /* extra information */
-    Elf32_Word  sh_addralign;   /* address alignment */
-    Elf32_Word  sh_entsize;     /* section entry size */
+   Elf32_Word sh_type;          /* type */
+   Elf32_Word sh_flags;         /* flags */
+   Elf32_Addr sh_addr;          /* address */
+   Elf32_Off sh_offset;         /* file offset */
+   Elf32_Word sh_size;          /* section size */
+   Elf32_Word sh_link;          /* section header table index link */
+   Elf32_Word sh_info;          /* extra information */
+   Elf32_Word sh_addralign;     /* address alignment */
+   Elf32_Word sh_entsize;       /* section entry size */
 } Elf32_Shdr;
 
 #ifdef USE_ELFHDR_64
 typedef struct {
-    Elf64_Word  sh_name;        /* section name */
-    Elf64_Word  sh_type;        /* section type */
-    Elf64_Xword sh_flags;       /* section flags */
-    Elf64_Addr  sh_addr;        /* virtual address */
-    Elf64_Off   sh_offset;      /* file offset */
-    Elf64_Xword sh_size;        /* section size */
-    Elf64_Word  sh_link;        /* link to another */
-    Elf64_Word  sh_info;        /* misc info */
-    Elf64_Xword sh_addralign;   /* memory alignment */
-    Elf64_Xword sh_entsize;     /* table entry size */
+   Elf64_Word sh_name;          /* section name */
+   Elf64_Word sh_type;          /* section type */
+   Elf64_Xword sh_flags;        /* section flags */
+   Elf64_Addr sh_addr;          /* virtual address */
+   Elf64_Off sh_offset;         /* file offset */
+   Elf64_Xword sh_size;         /* section size */
+   Elf64_Word sh_link;          /* link to another */
+   Elf64_Word sh_info;          /* misc info */
+   Elf64_Xword sh_addralign;    /* memory alignment */
+   Elf64_Xword sh_entsize;      /* table entry size */
 } Elf64_Shdr;
 #endif
 
@@ -399,22 +399,22 @@ typedef struct {
 /* Symbol Table Entry */
 
 typedef struct {
-    Elf32_Word          st_name;        /* name - index into string table */
-    Elf32_Addr          st_value;       /* symbol value */
-    Elf32_Word          st_size;        /* symbol size */
-    unsigned char       st_info;        /* type and binding */
-    unsigned char       st_other;       /* visibility */
-    Elf32_Half          st_shndx;       /* section header index */
+   Elf32_Word st_name;                  /* name - index into string table */
+   Elf32_Addr st_value;                 /* symbol value */
+   Elf32_Word st_size;                  /* symbol size */
+   unsigned char st_info;               /* type and binding */
+   unsigned char st_other;              /* visibility */
+   Elf32_Half st_shndx;                 /* section header index */
 } Elf32_Sym;
 
 #ifdef USE_ELFHDR_64
 typedef struct {
-    Elf64_Word          st_name;        /* Symbol name index in str table */
-    unsigned char       st_info;        /* type / binding attrs */
-    unsigned char       st_other;       /* visibility */
-    Elf64_Half          st_shndx;       /* section index of symbol */
-    Elf64_Addr          st_value;       /* value of symbol */
-    Elf64_Xword          st_size;        /* size of symbol */
+   Elf64_Word st_name;                  /* Symbol name index in str table */
+   unsigned char st_info;               /* type / binding attrs */
+   unsigned char st_other;              /* visibility */
+   Elf64_Half st_shndx;                 /* section index of symbol */
+   Elf64_Addr st_value;                 /* value of symbol */
+   Elf64_Xword st_size;                  /* size of symbol */
 } Elf64_Sym;
 #endif
 
@@ -474,18 +474,18 @@ typedef struct {
 // 32 bit relocation records
 
 /* Relocation entry with implicit addend */
-typedef struct 
+typedef struct
 {
-        Elf32_Addr      r_offset;       /* offset of relocation */
-        Elf32_Word      r_info;         /* symbol table index and type */
+   Elf32_Addr r_offset;                 /* offset of relocation */
+   Elf32_Word r_info;                   /* symbol table index and type */
 } Elf32_Rel;
 
 /* Relocation entry with explicit addend */
-typedef struct 
+typedef struct
 {
-        Elf32_Addr      r_offset;       /* offset of relocation */
-        Elf32_Word      r_info;         /* symbol table index and type */
-        Elf32_Sword     r_addend;
+   Elf32_Addr r_offset;                 /* offset of relocation */
+   Elf32_Word r_info;                   /* symbol table index and type */
+   Elf32_Sword r_addend;
 } Elf32_Rela;
 
 /* Extract relocation info - r_info */
@@ -497,45 +497,45 @@ typedef struct
 // 64 bit equivalents of above structures and macros.
 #ifdef USE_ELFHDR_64
 typedef struct {
-        Elf64_Addr      r_offset;       /* where to do it */
-        Elf64_Xword     r_info;         /* index & type of relocation */
+   Elf64_Addr r_offset;                 /* where to do it */
+   Elf64_Xword r_info;                  /* index & type of relocation */
 } Elf64_Rel;
 
 typedef struct {
-        Elf64_Addr      r_offset;       /* where to do it */
-        Elf64_Xword     r_info;         /* index & type of relocation */
-        Elf64_Sxword    r_addend;       /* adjustment value */
+   Elf64_Addr r_offset;                 /* where to do it */
+   Elf64_Xword r_info;                  /* index & type of relocation */
+   Elf64_Sxword r_addend;               /* adjustment value */
 } Elf64_RelA;
 
-#define ELF64_R_SYM(info)       ((info) >> 32)
-#define ELF64_R_TYPE(info)      ((info) & 0xFFFFFFFF)
-#define ELF64_R_INFO(s,t)       (((s) << 32) + (u_int32_t)(t))
+   #define ELF64_R_SYM(info)       ((info) >> 32)
+   #define ELF64_R_TYPE(info)      ((info) & 0xFFFFFFFF)
+   #define ELF64_R_INFO(s,t)       (((s) << 32) + (u_int32_t)(t))
 
 #endif
 // -------------------------------------------------------------------------
 /* Program Header */
 
 typedef struct {
-    Elf32_Word  p_type;         /* segment type */
-    Elf32_Off   p_offset;       /* segment offset */
-    Elf32_Addr  p_vaddr;        /* virtual address of segment */
-    Elf32_Addr  p_paddr;        /* physical address - ignored? */
-    Elf32_Word  p_filesz;       /* number of bytes in file for seg. */
-    Elf32_Word  p_memsz;        /* number of bytes in mem. for seg. */
-    Elf32_Word  p_flags;        /* flags */
-    Elf32_Word  p_align;        /* memory alignment */
+   Elf32_Word p_type;           /* segment type */
+   Elf32_Off p_offset;          /* segment offset */
+   Elf32_Addr p_vaddr;          /* virtual address of segment */
+   Elf32_Addr p_paddr;          /* physical address - ignored? */
+   Elf32_Word p_filesz;         /* number of bytes in file for seg. */
+   Elf32_Word p_memsz;          /* number of bytes in mem. for seg. */
+   Elf32_Word p_flags;          /* flags */
+   Elf32_Word p_align;          /* memory alignment */
 } Elf32_Phdr;
 
 #ifdef USE_ELFHDR_64
 typedef struct {
-    Elf64_Word  p_type;         /* entry type */
-    Elf64_Word  p_flags;        /* flags */
-    Elf64_Off   p_offset;       /* offset */
-    Elf64_Addr  p_vaddr;        /* virtual address */
-    Elf64_Addr  p_paddr;        /* physical address */
-    Elf64_Xword p_filesz;       /* file size */
-    Elf64_Xword p_memsz;        /* memory size */
-    Elf64_Xword p_align;        /* memory & file alignment */
+   Elf64_Word p_type;           /* entry type */
+   Elf64_Word p_flags;          /* flags */
+   Elf64_Off p_offset;          /* offset */
+   Elf64_Addr p_vaddr;          /* virtual address */
+   Elf64_Addr p_paddr;          /* physical address */
+   Elf64_Xword p_filesz;        /* file size */
+   Elf64_Xword p_memsz;         /* memory size */
+   Elf64_Xword p_align;         /* memory & file alignment */
 } Elf64_Phdr;
 #endif
 // -------------------------------------------------------------------------
@@ -569,22 +569,22 @@ typedef struct {
 /* Dynamic structure */
 
 typedef struct {
-    Elf32_Sword         d_tag;  /* controls meaning of d_val */
-    union {
-        Elf32_Word      d_val;  /* Multiple meanings - see d_tag */
-        Elf32_Addr      d_ptr;  /* program virtual address */
-    } d_un;
+   Elf32_Sword d_tag;           /* controls meaning of d_val */
+   union {
+      Elf32_Word d_val;         /* Multiple meanings - see d_tag */
+      Elf32_Addr d_ptr;         /* program virtual address */
+   } d_un;
 } Elf32_Dyn;
 
-extern Elf32_Dyn        _DYNAMIC[];     /* XXX not 64-bit clean */
+extern Elf32_Dyn _DYNAMIC[];            /* XXX not 64-bit clean */
 
 #ifdef USE_ELFHDR_64
 typedef struct {
-    Elf64_Sxword        d_tag;  /* controls meaning of d_val */
-    union {
-        Elf64_Xword     d_val;
-        Elf64_Addr      d_ptr;
-    } d_un;
+   Elf64_Sxword d_tag;          /* controls meaning of d_val */
+   union {
+      Elf64_Xword d_val;
+      Elf64_Addr d_ptr;
+   } d_un;
 } Elf64_Dyn;
 #endif
 
@@ -644,16 +644,16 @@ typedef struct {
 /* Note Definitions */
 
 typedef struct {
-    Elf32_Word namesz;
-    Elf32_Word descsz;
-    Elf32_Word type;
+   Elf32_Word namesz;
+   Elf32_Word descsz;
+   Elf32_Word type;
 } Elf32_Note;
 
 #ifdef USE_ELFHDR_64
 typedef struct {
-    Elf64_Word namesz;
-    Elf64_Word descsz;
-    Elf64_Word type;
+   Elf64_Word namesz;
+   Elf64_Word descsz;
+   Elf64_Word type;
 } Elf64_Note;
 #endif
 
@@ -662,15 +662,15 @@ typedef struct {
 // The same structure is used by both 32 and 64 bit formats
 
 typedef struct {
-    Elf32_Word          nbucket;        /* number of buckets */
-    Elf32_Word          nchain;         /* number of chains */
+   Elf32_Word nbucket;                  /* number of buckets */
+   Elf32_Word nchain;                   /* number of chains */
 
-    /* The buckets follow this structure in memory and the chains
-       follow those. */
+   /* The buckets follow this structure in memory and the chains
+      follow those. */
 } Elf_Hash;
 
 #if !defined(__GNUC__)
-#pragma pack (pop)
+   #pragma pack (pop)
 #endif
 
 int tiny_elfloader(void);

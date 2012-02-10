@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -47,7 +47,7 @@ Includes
 #include "lib/libc/stdio/stdio.h"
 
 #if defined(GNU_GCC)
-#include <stdlib.h>
+   #include <stdlib.h>
 #endif
 /*===========================================
 Global Declaration
@@ -124,15 +124,15 @@ int _syscall_waitpid(kernel_pthread_t* pthread_ptr, pid_t pid, void* data)
 
    //blocking call
    if( (waitpid_dt->ret=_sys_waitpid(pid,waitpid_dt->pid,
-                                        waitpid_dt->options,
-                                        &waitpid_dt->status))!=0){
+                                     waitpid_dt->options,
+                                     &waitpid_dt->status))!=0) {
       //errno=ECHILD //no child
       pthread_ptr->stat&=(~PTHREAD_STATUS_STOP);
-       __flush_syscall(pthread_ptr);
+      __flush_syscall(pthread_ptr);
       return 0;
    }
    //calling process is stopped until child process was stopped.
-   if(!waitpid_dt->options){
+   if(!waitpid_dt->options) {
       pthread_ptr->stat|=PTHREAD_STATUS_STOP;
    }
    __flush_syscall(pthread_ptr);
@@ -157,16 +157,17 @@ int _syscall_execve(kernel_pthread_t* pthread_ptr, pid_t pid, void* data)
    _cloexec_process_fd(pid);
 
    //see kernel/process.c
-   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr && process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK ){
+   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr &&
+      process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK ) {
       kernel_pthread_t* parent_pthread_ptr= process_lst[pid]->pthread_ptr;
 
       fork_t* fork_dt = (fork_t*)process_lst[pid]->pthread_ptr->parent_pthread_ptr->reg.data;
       pid_t _pid= _sys_exec(execve_dt->path,
-                     execve_dt->argv,
-                     execve_dt->envp,
-                     pthread_ptr);
+                            execve_dt->argv,
+                            execve_dt->envp,
+                            pthread_ptr);
 
-      if(_pid<0){
+      if(_pid<0) {
          //__restart_sched();
          __flush_syscall(pthread_ptr);
          //__kernel_ret_int(pthread_ptr);
@@ -186,9 +187,9 @@ int _syscall_execve(kernel_pthread_t* pthread_ptr, pid_t pid, void* data)
    }
    else {
       pid_t _pid = _sys_exec(execve_dt->path,
-                     execve_dt->argv,
-                     execve_dt->envp,
-                     pthread_ptr);
+                             execve_dt->argv,
+                             execve_dt->envp,
+                             pthread_ptr);
 
       __restart_sched();
       __flush_syscall(pthread_ptr);
@@ -212,7 +213,7 @@ int _syscall_sigexit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    __atomic_in();
    __stop_sched();
 
-   if( (pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) ){
+   if( (pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) ) {
       //return to main
       _sys_kill_exit(pthread_ptr);
 
@@ -247,13 +248,13 @@ int _syscall_kill(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    __stop_sched();
 
    //
-   if(kill_dt->pid>PROCESS_MAX || !process_lst[kill_dt->pid]){
-      kill_dt->ret = -1;//error
-   }else if(kill_dt->pid>0){
+   if(kill_dt->pid>PROCESS_MAX || !process_lst[kill_dt->pid]) {
+      kill_dt->ret = -1; //error
+   }else if(kill_dt->pid>0) {
       //get main thread of father process
       kernel_pthread_t* _pthread_ptr=process_lst[kill_dt->pid]->pthread_ptr;
       //walking on threads chained list in curent process
-      while(_pthread_ptr){
+      while(_pthread_ptr) {
          //send signal to all pthread of processus
          kill_dt->ret   = _sys_kill(_pthread_ptr,kill_dt->sig,kill_dt->atomic);
          //phlb bug fix 3.0.0.7
@@ -264,63 +265,63 @@ int _syscall_kill(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
          //
          _pthread_ptr=_pthread_ptr->next;
       }
-   }else if(kill_dt->pid==-1){
+   }else if(kill_dt->pid==-1) {
 
       for(kill_dt->pid = PROCESS_MAX;
           kill_dt->pid > 1;
-          kill_dt->pid --){
-            kernel_pthread_t* _pthread_ptr;
-            if(kill_dt->pid == pid)//calling process is not killed
-               continue;
-             //get main thread of father process
-            _pthread_ptr= process_lst[kill_dt->pid]->pthread_ptr;
-            //walking on threads chained list in current process
-            while(_pthread_ptr){
-               //send signal to all pthread of processus
-               kill_dt->ret   = _sys_kill(_pthread_ptr,kill_dt->sig,kill_dt->atomic);
-               //phlb bug fix 3.0.0.7
-               //send 1 times an only the signal to the first pthread which accept standard signal
-               //better conformance with posix specification
-               if(kill_dt->sig<NSIG)
-                  break;
-               //
-               _pthread_ptr=_pthread_ptr->next;
-            }
-          }
+          kill_dt->pid--) {
+         kernel_pthread_t* _pthread_ptr;
+         if(kill_dt->pid == pid)   //calling process is not killed
+            continue;
+         //get main thread of father process
+         _pthread_ptr= process_lst[kill_dt->pid]->pthread_ptr;
+         //walking on threads chained list in current process
+         while(_pthread_ptr) {
+            //send signal to all pthread of processus
+            kill_dt->ret   = _sys_kill(_pthread_ptr,kill_dt->sig,kill_dt->atomic);
+            //phlb bug fix 3.0.0.7
+            //send 1 times an only the signal to the first pthread which accept standard signal
+            //better conformance with posix specification
+            if(kill_dt->sig<NSIG)
+               break;
+            //
+            _pthread_ptr=_pthread_ptr->next;
+         }
+      }
       kill_dt->ret = 0;
-   }else if(kill_dt->pid<-1){
+   }else if(kill_dt->pid<-1) {
       pid_t _pid = -kill_dt->pid;
       pid_t _pgid = -1;
 
       if(!process_lst[_pid])
-         kill_dt->ret = -1;goto end;
+         kill_dt->ret = -1; goto end;
 
       _pgid = process_lst[pid]->pgid;
 
       for(kill_dt->pid = PROCESS_MAX;
           kill_dt->pid > 1;
-          kill_dt->pid --){
-             kernel_pthread_t* _pthread_ptr;
-             if(kill_dt->pid == pid)//calling process is not killed
-                continue;
-             if(!process_lst[kill_dt->pid])
-                continue;
-             if(process_lst[kill_dt->pid]->pgid != _pgid)
-                continue;
-             //get main thread of father process
-             _pthread_ptr= process_lst[kill_dt->pid]->pthread_ptr;
-             //walking on threads chained list in curent process
-             while(_pthread_ptr){
-               //send signal to all pthread of processus
-               kill_dt->ret   = _sys_kill(_pthread_ptr,kill_dt->sig,kill_dt->atomic);
-               //send 1 times an only the signal to the first pthread which accept standard signal
-               //better conformance with posix specification
-               if(kill_dt->sig<NSIG)
-                  break;
-               //
-               _pthread_ptr=_pthread_ptr->next;
-             }
-          }
+          kill_dt->pid--) {
+         kernel_pthread_t* _pthread_ptr;
+         if(kill_dt->pid == pid)    //calling process is not killed
+            continue;
+         if(!process_lst[kill_dt->pid])
+            continue;
+         if(process_lst[kill_dt->pid]->pgid != _pgid)
+            continue;
+         //get main thread of father process
+         _pthread_ptr= process_lst[kill_dt->pid]->pthread_ptr;
+         //walking on threads chained list in curent process
+         while(_pthread_ptr) {
+            //send signal to all pthread of processus
+            kill_dt->ret   = _sys_kill(_pthread_ptr,kill_dt->sig,kill_dt->atomic);
+            //send 1 times an only the signal to the first pthread which accept standard signal
+            //better conformance with posix specification
+            if(kill_dt->sig<NSIG)
+               break;
+            //
+            _pthread_ptr=_pthread_ptr->next;
+         }
+      }
       kill_dt->ret = 0;
    }
 
@@ -329,7 +330,7 @@ end:
    __restart_sched();
 
    __flush_syscall(pthread_ptr);
-  // __kernel_ret_int(pthread_ptr);
+   // __kernel_ret_int(pthread_ptr);
 
    __atomic_out();
 #endif
@@ -346,8 +347,8 @@ end:
 | See:
 ----------------------------------------------*/
 int _syscall_pause(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
-	//the calling process get STOP state
-	pthread_ptr->stat=pthread_ptr->stat | PTHREAD_STATUS_STOP;
+   //the calling process get STOP state
+   pthread_ptr->stat=pthread_ptr->stat | PTHREAD_STATUS_STOP;
    __flush_syscall(pthread_ptr);
    return 0;
 }
@@ -367,9 +368,9 @@ int _syscall_vfork(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    __atomic_in();
    __stop_sched();
 
-   pthread_ptr->irq_nb=0x00;//disable father interrupt
+   pthread_ptr->irq_nb=0x00; //disable father interrupt
    fork_dt->pid = _sys_vfork(pthread_ptr);
-   if(fork_dt->pid>0){
+   if(fork_dt->pid>0) {
       //copy all father process file descriptor
       //nb_reader++ and/ou nbwriter++
       _copy_process_fd(fork_dt->pid,fork_dt->ppid,0);
@@ -403,83 +404,83 @@ int _syscall_vfork(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 int _syscall_fcntl(kernel_pthread_t* pthread_ptr, pid_t pid, void* data)
 {
    fcntl_t* fcntl_dt = (fcntl_t*)data;
-   switch(fcntl_dt->cmd){
-      case F_DUPFD:
-      case F_GETFD:
-      case F_SETFD:
-      case F_GETFL:
-      case F_SETFL:
-         fcntl_dt->ret = _sys_fcntl(pid,fcntl_dt->fd,fcntl_dt->cmd,
-                                    fcntl_dt->argc,fcntl_dt->argv);
+   switch(fcntl_dt->cmd) {
+   case F_DUPFD:
+   case F_GETFD:
+   case F_SETFD:
+   case F_GETFL:
+   case F_SETFL:
+      fcntl_dt->ret = _sys_fcntl(pid,fcntl_dt->fd,fcntl_dt->cmd,
+                                 fcntl_dt->argc,fcntl_dt->argv);
+      __flush_syscall(pthread_ptr);
+      __kernel_ret_int(pthread_ptr);
+      break;
+
+
+   case F_GETLK: {
+      struct flock* p_flock;
+
+      if(fcntl_dt->argc<0) {
+         fcntl_dt->ret = -1;
          __flush_syscall(pthread_ptr);
          __kernel_ret_int(pthread_ptr);
-      break;
+         return 0;
+      }
 
-
-      case F_GETLK:{
-         struct flock* p_flock;
-
-         if(fcntl_dt->argc<0){
-            fcntl_dt->ret = -1;
-            __flush_syscall(pthread_ptr);
-            __kernel_ret_int(pthread_ptr);
-            return 0;
-         }
-
-         if( !(p_flock = (struct flock*)fcntl_dt->argv[0]) ){
-            fcntl_dt->ret = -1;
-            __flush_syscall(pthread_ptr);
-            __kernel_ret_int(pthread_ptr);
-            return 0;
-         }
-
-         p_flock->l_pid = pid;
-         fcntl_dt->ret = _sys_lock(pthread_ptr,fcntl_dt->fd,fcntl_dt->cmd,p_flock);
-
-
+      if( !(p_flock = (struct flock*)fcntl_dt->argv[0]) ) {
+         fcntl_dt->ret = -1;
          __flush_syscall(pthread_ptr);
          __kernel_ret_int(pthread_ptr);
+         return 0;
       }
-      break;
 
-      case F_SETLKW://blocking call
-      case F_SETLK:{
-         struct flock* p_flock;
+      p_flock->l_pid = pid;
+      fcntl_dt->ret = _sys_lock(pthread_ptr,fcntl_dt->fd,fcntl_dt->cmd,p_flock);
 
-         fcntl_dt->ret;
 
-         if(fcntl_dt->argc<0){
-            fcntl_dt->ret = -1;
-            __flush_syscall(pthread_ptr);
-            __kernel_ret_int(pthread_ptr);
-            return 0;
-         }
+      __flush_syscall(pthread_ptr);
+      __kernel_ret_int(pthread_ptr);
+   }
+   break;
 
-         if( !(p_flock = (struct flock*)fcntl_dt->argv[0]) ){
-            fcntl_dt->ret = -1;
-            __flush_syscall(pthread_ptr);
-            __kernel_ret_int(pthread_ptr);
-            return 0;
-         }
+   case F_SETLKW:   //blocking call
+   case F_SETLK: {
+      struct flock* p_flock;
 
-         p_flock->l_pid = pid;
-         fcntl_dt->ret = _sys_lock(pthread_ptr,fcntl_dt->fd,fcntl_dt->cmd,p_flock);
+      fcntl_dt->ret;
 
-         if(!fcntl_dt->ret && p_flock->l_type==F_UNLCK)
-            _sys_unlockw();
-
+      if(fcntl_dt->argc<0) {
+         fcntl_dt->ret = -1;
          __flush_syscall(pthread_ptr);
-
-         if( (fcntl_dt->cmd == F_SETLK)
-            || (fcntl_dt->cmd == F_SETLKW && !fcntl_dt->ret)){
-            //to do: list all pthread of this process lock on this node
-            __kernel_ret_int(pthread_ptr); // locked ok
-         }else if(fcntl_dt->cmd == F_SETLKW && fcntl_dt->ret<0){
-               pthread_ptr->stat|=PTHREAD_STATUS_STOP;//cannot be locked:proccess is waiting
-         }
-
+         __kernel_ret_int(pthread_ptr);
+         return 0;
       }
-      break;
+
+      if( !(p_flock = (struct flock*)fcntl_dt->argv[0]) ) {
+         fcntl_dt->ret = -1;
+         __flush_syscall(pthread_ptr);
+         __kernel_ret_int(pthread_ptr);
+         return 0;
+      }
+
+      p_flock->l_pid = pid;
+      fcntl_dt->ret = _sys_lock(pthread_ptr,fcntl_dt->fd,fcntl_dt->cmd,p_flock);
+
+      if(!fcntl_dt->ret && p_flock->l_type==F_UNLCK)
+         _sys_unlockw();
+
+      __flush_syscall(pthread_ptr);
+
+      if( (fcntl_dt->cmd == F_SETLK)
+          || (fcntl_dt->cmd == F_SETLKW && !fcntl_dt->ret)) {
+         //to do: list all pthread of this process lock on this node
+         __kernel_ret_int(pthread_ptr);    // locked ok
+      }else if(fcntl_dt->cmd == F_SETLKW && fcntl_dt->ret<0) {
+         pthread_ptr->stat|=PTHREAD_STATUS_STOP;      //cannot be locked:proccess is waiting
+      }
+
+   }
+   break;
    }
    return 0;
 }
@@ -579,35 +580,35 @@ int _syscall_ioctl(kernel_pthread_t* pthread_ptr, pid_t pid, void* data)
    //
    __va_list_copy(ap, ioctl_dt->ap);
 
-   switch(ioctl_dt->request){
-      //I_LINK
-      case I_LINK:{
-         int fd_link;
-         desc_t desc_link;
+   switch(ioctl_dt->request) {
+   //I_LINK
+   case I_LINK: {
+      int fd_link;
+      desc_t desc_link;
 
-         fd_link = va_arg(ap, int);
-         if(fd_link<0){
-            __flush_syscall(pthread_ptr);
-            //__kernel_ret_int(pthread_ptr);
-            return -1;
-         }
-
-         //get kernel open file descriptor from process file descriptor;
-         if((desc_link= process_lst[pid]->desc_tbl[fd_link])<0){
-            __flush_syscall(pthread_ptr);
-            //__kernel_ret_int(pthread_ptr);
-            return -1;
-         }
-         //retrieve original ap position in stack bug fix 3.0.2.2
-         __va_list_copy(ap, ioctl_dt->ap);
-         //vfs ioctl use only kernel open file descriptor
-         ioctl_dt->ret = _vfs_ioctl(desc,ioctl_dt->request,desc_link, ap);
+      fd_link = va_arg(ap, int);
+      if(fd_link<0) {
+         __flush_syscall(pthread_ptr);
+         //__kernel_ret_int(pthread_ptr);
+         return -1;
       }
-      break;
 
-      //I_UNLINK,....
-      default:
-         ioctl_dt->ret = _vfs_ioctl2(desc,ioctl_dt->request,ioctl_dt->ap);
+      //get kernel open file descriptor from process file descriptor;
+      if((desc_link= process_lst[pid]->desc_tbl[fd_link])<0) {
+         __flush_syscall(pthread_ptr);
+         //__kernel_ret_int(pthread_ptr);
+         return -1;
+      }
+      //retrieve original ap position in stack bug fix 3.0.2.2
+      __va_list_copy(ap, ioctl_dt->ap);
+      //vfs ioctl use only kernel open file descriptor
+      ioctl_dt->ret = _vfs_ioctl(desc,ioctl_dt->request,desc_link, ap);
+   }
+   break;
+
+   //I_UNLINK,....
+   default:
+      ioctl_dt->ret = _vfs_ioctl2(desc,ioctl_dt->request,ioctl_dt->ap);
       break;
    }
 
@@ -739,8 +740,10 @@ int _syscall_pthread_create(kernel_pthread_t* pthread_ptr, pid_t pid, void* data
    pthread_create_t* pthread_create_dt = (pthread_create_t*)data;
 
    pthread_create_dt->ret=_sys_pthread_create(&pthread_create_dt->kernel_pthread, pthread_ptr,
-                       pthread_create_dt->attr,
-                       pthread_create_dt->start_routine,pthread_create_dt->arg,pid);
+                                              pthread_create_dt->attr,
+                                              pthread_create_dt->start_routine,
+                                              pthread_create_dt->arg,
+                                              pid);
 
    __flush_syscall(pthread_ptr);
    //__kernel_ret_int(pthread_ptr);
@@ -758,19 +761,20 @@ int _syscall_pthread_create(kernel_pthread_t* pthread_ptr, pid_t pid, void* data
 int _syscall_pthread_cancel(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    pthread_cancel_t* pthread_cancel_dt = (pthread_cancel_t*)data;
 
-   if(process_lst[pid]->pthread_ptr!=pthread_cancel_dt->kernel_pthread){
+   if(process_lst[pid]->pthread_ptr!=pthread_cancel_dt->kernel_pthread) {
       //it's a thread annexe
       //pthread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
       //remove sigqueue objects explicitly only for annexe thread in other case "put all object" is used in process exit scenario.
-      pthread_cancel_dt->kernel_pthread->kernel_sigqueue.destructor(&pthread_cancel_dt->kernel_pthread->kernel_sigqueue);
+      pthread_cancel_dt->kernel_pthread->kernel_sigqueue.destructor(
+         &pthread_cancel_dt->kernel_pthread->kernel_sigqueue);
 #endif
       //
       pthread_cancel_dt->ret = _sys_pthread_cancel(pthread_cancel_dt->kernel_pthread,pid);
 
       //calling thread kill himself???
       if(pthread_cancel_dt->kernel_pthread==_syscall_owner_pthread_ptr)
-         return 0;///yes it's same than pthread_exit()
+         return 0;  ///yes it's same than pthread_exit()
 
       //
       __flush_syscall(pthread_ptr);
@@ -800,11 +804,12 @@ int _syscall_pthread_cancel(kernel_pthread_t* pthread_ptr, pid_t pid, void* data
 int _syscall_pthread_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    pthread_exit_t* pthread_exit_dt = (pthread_exit_t*)data;
 
-   if(process_lst[pid]->pthread_ptr!=pthread_exit_dt->kernel_pthread){
+   if(process_lst[pid]->pthread_ptr!=pthread_exit_dt->kernel_pthread) {
       //pthread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
       //remove sigqueue objects explicitly only for annexe thread in other case "put all object" is used in process exit scenario.
-      pthread_exit_dt->kernel_pthread->kernel_sigqueue.destructor(&pthread_exit_dt->kernel_pthread->kernel_sigqueue);
+      pthread_exit_dt->kernel_pthread->kernel_sigqueue.destructor(
+         &pthread_exit_dt->kernel_pthread->kernel_sigqueue);
 #endif
       //it's a thread annexe
       _sys_pthread_cancel(pthread_exit_dt->kernel_pthread,pid);
@@ -831,18 +836,20 @@ int _syscall_pthread_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 | See:
 ----------------------------------------------*/
 int _syscall_pthread_mutex_init(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
-	pthread_mutex_init_t* pthread_mutex_init_dt = (pthread_mutex_init_t*)data;
-      //
+   pthread_mutex_init_t* pthread_mutex_init_dt = (pthread_mutex_init_t*)data;
+   //
    pthread_mutex_init_dt->ret=0;
-      //paranoïac protection ;)
+   //paranoïac protection ;)
    __atomic_in();
-      //
-   if(pthread_mutex_init_dt->mutex && pthread_mutex_init_dt->mutex->kernel_object==PTHREAD_MUTEX_UNINITIALIZED){
-   	pthread_mutex_init_dt->mutex->kernel_object = kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_PTRHEAD_MUTEX, KERNEL_OBJECT_SRC_POOL);
-      	if(!pthread_mutex_init_dt->mutex->kernel_object)
-      		pthread_mutex_init_dt->ret = -1;
+   //
+   if(pthread_mutex_init_dt->mutex && pthread_mutex_init_dt->mutex->kernel_object==
+      PTHREAD_MUTEX_UNINITIALIZED) {
+      pthread_mutex_init_dt->mutex->kernel_object = kernel_object_manager_get(
+         &process_lst[pid]->kernel_object_head, KERNEL_OBJECT_PTRHEAD_MUTEX, KERNEL_OBJECT_SRC_POOL);
+      if(!pthread_mutex_init_dt->mutex->kernel_object)
+         pthread_mutex_init_dt->ret = -1;
    }
-      //paranoïac protection ;)
+   //paranoïac protection ;)
    __atomic_out();
    //
    __flush_syscall(pthread_ptr);
@@ -857,23 +864,25 @@ int _syscall_pthread_mutex_init(kernel_pthread_t* pthread_ptr, pid_t pid, void* 
 | See:
 ----------------------------------------------*/
 int _syscall_pthread_mutex_destroy(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
-	pthread_mutex_destroy_t* pthread_mutex_destroy_dt = (pthread_mutex_destroy_t*)data;
-	//
-	pthread_mutex_destroy_dt->ret=0;
-	//paranoïac protection ;)
-	__atomic_in();
-	//
-	if(pthread_mutex_destroy_dt->mutex && pthread_mutex_destroy_dt->mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED){
-		if(!kernel_object_manager_put(&process_lst[pid]->kernel_object_head, pthread_mutex_destroy_dt->mutex->kernel_object))
-			pthread_mutex_destroy_dt->ret=-1;
-	      if(!pthread_mutex_destroy_dt->ret)
-	      	pthread_mutex_destroy_dt->mutex->kernel_object=PTHREAD_MUTEX_UNINITIALIZED;
-	}
-	//paranoïac protection ;)
-	__atomic_out();
-	//
-	__flush_syscall(pthread_ptr);
-	return 0;
+   pthread_mutex_destroy_t* pthread_mutex_destroy_dt = (pthread_mutex_destroy_t*)data;
+   //
+   pthread_mutex_destroy_dt->ret=0;
+   //paranoïac protection ;)
+   __atomic_in();
+   //
+   if(pthread_mutex_destroy_dt->mutex && pthread_mutex_destroy_dt->mutex->kernel_object!=
+      PTHREAD_MUTEX_UNINITIALIZED) {
+      if(!kernel_object_manager_put(&process_lst[pid]->kernel_object_head,
+                                    pthread_mutex_destroy_dt->mutex->kernel_object))
+         pthread_mutex_destroy_dt->ret=-1;
+      if(!pthread_mutex_destroy_dt->ret)
+         pthread_mutex_destroy_dt->mutex->kernel_object=PTHREAD_MUTEX_UNINITIALIZED;
+   }
+   //paranoïac protection ;)
+   __atomic_out();
+   //
+   __flush_syscall(pthread_ptr);
+   return 0;
 }
 
 
@@ -889,7 +898,8 @@ int _syscall_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    pid_t ppid = process_lst[pid]->ppid;
    exit_t* exit_dt=(exit_t*)data;
 
-   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr && process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK ){
+   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr &&
+      process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK ) {
       kernel_pthread_t* parent_pthread_ptr= process_lst[pid]->pthread_ptr;
       fork_t* fork_dt;
 
@@ -952,13 +962,14 @@ int _syscall_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
       __atomic_out();
       //ppid threads are on waitpid()?
-      if( ppid){
+      if( ppid) {
          //get main thread of father process
          kernel_pthread_t* _pthread_ptr=process_lst[ppid]->pthread_ptr;
          //walking on threads chained list in parent process
-         while(_pthread_ptr){
+         while(_pthread_ptr) {
             //is thread blocked on waitpid()?
-            if(_pthread_ptr->stat&PTHREAD_STATUS_STOP && _pthread_ptr->reg.syscall==_SYSCALL_WAITPID){
+            if(_pthread_ptr->stat&PTHREAD_STATUS_STOP && _pthread_ptr->reg.syscall==
+               _SYSCALL_WAITPID) {
                waitpid_t* waitpid_dt = (waitpid_t*)_pthread_ptr->reg.data;
                _syscall_waitpid(_pthread_ptr,ppid,waitpid_dt);
             }
@@ -977,14 +988,14 @@ int _syscall_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 //
          //printf("_syscall_exit\r\n");
          //checkif it's the last process
-         for(_pid=1;_pid<=PROCESS_MAX;_pid++)
+         for(_pid=1; _pid<=PROCESS_MAX; _pid++)
             if(process_lst[_pid]) {
-            	free(process_lst[pid]);
-            	process_lst[pid]= 0;
-            	goto end;
+               free(process_lst[pid]);
+               process_lst[pid]= 0;
+               goto end;
             }
 
-         return -1;//in this case stop all
+         return -1; //in this case stop all
       }
       //
    }
@@ -1009,11 +1020,13 @@ int _syscall_timer_create(kernel_pthread_t* pthread_ptr, pid_t pid, void* data)
 
    timer_create_dt->ret=0;
    //
-   if( !(kernel_object = kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_TIMER, KERNEL_OBJECT_SRC_POOL,
-                                                   timer_create_dt->clockid,
-                                                   timer_create_dt->psigevent,
-                                                   timer_create_dt->ptimerid)) )
-                                                   timer_create_dt->ret=-1;
+   if( !(kernel_object =
+            kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_TIMER,
+                                      KERNEL_OBJECT_SRC_POOL,
+                                      timer_create_dt->clockid,
+                                      timer_create_dt->psigevent,
+                                      timer_create_dt->ptimerid)) )
+      timer_create_dt->ret=-1;
 
    __flush_syscall(pthread_ptr);
    //__kernel_ret_int(pthread_ptr);
@@ -1119,8 +1132,10 @@ int _syscall_pthread_cond_init(kernel_pthread_t* pthread_ptr, pid_t pid, void* d
    //parano�ac protection ;)
    __atomic_in();
    //
-   if(pthread_cond_init_dt->cond && pthread_cond_init_dt->cond->kernel_object==PTHREAD_COND_UNINITIALIZED){
-      pthread_cond_init_dt->cond->kernel_object = kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_PTRHEAD_MUTEX,KERNEL_OBJECT_SRC_POOL);
+   if(pthread_cond_init_dt->cond && pthread_cond_init_dt->cond->kernel_object==
+      PTHREAD_COND_UNINITIALIZED) {
+      pthread_cond_init_dt->cond->kernel_object = kernel_object_manager_get(
+         &process_lst[pid]->kernel_object_head, KERNEL_OBJECT_PTRHEAD_MUTEX,KERNEL_OBJECT_SRC_POOL);
       if(!pthread_cond_init_dt->cond->kernel_object)
          pthread_cond_init_dt->ret = -1;
    }
@@ -1147,8 +1162,10 @@ int _syscall_pthread_cond_destroy(kernel_pthread_t* pthread_ptr, pid_t pid, void
    //parano�ac protection ;)
    __atomic_in();
    //
-   if(pthread_cond_destroy_dt->cond && pthread_cond_destroy_dt->cond->kernel_object!=PTHREAD_COND_UNINITIALIZED){
-      if(!kernel_object_manager_put(&process_lst[pid]->kernel_object_head, pthread_cond_destroy_dt->cond->kernel_object))
+   if(pthread_cond_destroy_dt->cond && pthread_cond_destroy_dt->cond->kernel_object!=
+      PTHREAD_COND_UNINITIALIZED) {
+      if(!kernel_object_manager_put(&process_lst[pid]->kernel_object_head,
+                                    pthread_cond_destroy_dt->cond->kernel_object))
          pthread_cond_destroy_dt->ret=-1;
       if(!pthread_cond_destroy_dt->ret)
          pthread_cond_destroy_dt->cond->kernel_object=PTHREAD_COND_UNINITIALIZED;
@@ -1175,11 +1192,13 @@ int _syscall_sem_init(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    //
    sem_init_dt->ret = 0;
    //
-   if(!sem_init_dt->name){//anonymous semaphore
-      if(!(kernel_object=kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_SEM, KERNEL_OBJECT_SRC_EXTERN,
-         sem_init_dt->psem,
-         sem_init_dt->value)))
-            sem_init_dt->ret = -1;
+   if(!sem_init_dt->name) { //anonymous semaphore
+      if(!(kernel_object=
+              kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_SEM,
+                                        KERNEL_OBJECT_SRC_EXTERN,
+                                        sem_init_dt->psem,
+                                        sem_init_dt->value)))
+         sem_init_dt->ret = -1;
    }
    //
    __flush_syscall(pthread_ptr);

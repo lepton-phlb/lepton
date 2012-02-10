@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -74,18 +74,19 @@ typedef struct {
    unsigned long min;
    unsigned long max;
    unsigned long store[ISTATSIZE];
-   char  rd,wr;
-   } dev_proc_istat_t;
+   char rd,wr;
+} dev_proc_istat_t;
 
 dev_proc_istat_t dev_proc_istat = {   // global val init @ reset with max =0 & min = MAX long Value
    0xffffffff,
-   };
+};
 // idle task stat.
 
 #define PROC_BUF_MAX  sizeof(process_t)
 
 #define LIMIT_PROCESS_STAT ( PROCESS_MAX * PROC_BUF_MAX )
-#define LIMIT_KERNEL_STAT  ( LIMIT_PROCESS_STAT + 1 + (_SYSCALL_TOTAL_NB*sizeof(kernel_profiler_result_t)) )
+#define LIMIT_KERNEL_STAT  ( LIMIT_PROCESS_STAT + 1 + \
+                             (_SYSCALL_TOTAL_NB*sizeof(kernel_profiler_result_t)) )
 #define LIMIT_IO_STAT      ( LIMIT_KERNEL_STAT+1+(sizeof(io_profiler_result_t)*max_dev) )
 
 /*===========================================
@@ -114,11 +115,11 @@ int dev_proc_load(void){
 int dev_proc_open(desc_t desc, int o_flag){
 
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
       ofile_lst[desc].size = LIMIT_PROCESS_STAT;
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
    }
 
    ofile_lst[desc].offset=0;
@@ -148,7 +149,7 @@ int dev_proc_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_proc_isset_read(desc_t desc){
-  return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -160,7 +161,7 @@ int dev_proc_isset_read(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_proc_isset_write(desc_t desc){
-      return -1;
+   return -1;
 }
 /*-------------------------------------------
 | Name:dev_proc_read
@@ -173,8 +174,8 @@ int dev_proc_isset_write(desc_t desc){
 int dev_proc_read(desc_t desc, char* buf,int size){
    int i;
 
-   
-   if(ofile_lst[desc].offset<LIMIT_PROCESS_STAT){
+
+   if(ofile_lst[desc].offset<LIMIT_PROCESS_STAT) {
       if(size<PROC_BUF_MAX)
          return -1;
 
@@ -183,7 +184,7 @@ int dev_proc_read(desc_t desc, char* buf,int size){
       if(i>PROCESS_MAX)
          return -1;
 
-      if(process_lst[i]){
+      if(process_lst[i]) {
          memcpy(buf,process_lst[i],PROC_BUF_MAX);
          size = PROC_BUF_MAX;
       }else{
@@ -195,35 +196,35 @@ int dev_proc_read(desc_t desc, char* buf,int size){
       ofile_lst[desc].offset = (i-1)*PROC_BUF_MAX;
       return size;
    }
-   #ifdef KERNEL_PROFILER
-   else if( (ofile_lst[desc].offset>LIMIT_PROCESS_STAT) 
-            && ofile_lst[desc].offset< LIMIT_KERNEL_STAT){
-   
+#ifdef KERNEL_PROFILER
+   else if( (ofile_lst[desc].offset>LIMIT_PROCESS_STAT)
+            && ofile_lst[desc].offset< LIMIT_KERNEL_STAT) {
+
       if(size<sizeof(kernel_profiler_result_t))
          return -1;
 
       i = (ofile_lst[desc].offset-(LIMIT_PROCESS_STAT+1)) / sizeof(kernel_profiler_result_t);
 
       memcpy(buf,&kernel_profiler_result_lst[i],size);
-      
+
       ofile_lst[desc].offset+=sizeof(kernel_profiler_result_t);
       return size;
-   
-   }else if( (ofile_lst[desc].offset>LIMIT_KERNEL_STAT) 
-            && ofile_lst[desc].offset< LIMIT_IO_STAT){
-   
+
+   }else if( (ofile_lst[desc].offset>LIMIT_KERNEL_STAT)
+             && ofile_lst[desc].offset< LIMIT_IO_STAT) {
+
       if(size<sizeof(io_profiler_result_t))
          return -1;
 
       i = ( ofile_lst[desc].offset- (LIMIT_KERNEL_STAT+1) ) / sizeof(io_profiler_result_t);
 
       memcpy(buf,&io_profiler_result_lst[i],size);
-      
+
       ofile_lst[desc].offset+=sizeof(io_profiler_result_t);
       return size;
-   
+
    }
-   #endif
+#endif
 
    return -1;
 }
@@ -251,19 +252,19 @@ int dev_proc_write(desc_t desc, const char* buf,int size){
 ---------------------------------------------*/
 int dev_proc_seek(desc_t desc,int offset,int origin){
 
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_CUR:
+      ofile_lst[desc].offset+=offset;
       break;
 
-      case SEEK_END:
-         //to do: warning in SEEK_END (+ or -)????
-         ofile_lst[desc].offset+=offset;
+   case SEEK_END:
+      //to do: warning in SEEK_END (+ or -)????
+      ofile_lst[desc].offset+=offset;
       break;
    }
 
@@ -280,25 +281,25 @@ int dev_proc_seek(desc_t desc,int offset,int origin){
 ---------------------------------------------*/
 int dev_proc_ioctl(desc_t desc,int request,va_list ap){
 
-   switch(request){
-      case PROCSTAT:
-         ofile_lst[desc].offset=0;
+   switch(request) {
+   case PROCSTAT:
+      ofile_lst[desc].offset=0;
 
       break;
 
-   #ifdef KERNEL_PROFILER
-      case PROCSCHEDSTAT:
-         ofile_lst[desc].offset=(LIMIT_PROCESS_STAT+1);
+#ifdef KERNEL_PROFILER
+   case PROCSCHEDSTAT:
+      ofile_lst[desc].offset=(LIMIT_PROCESS_STAT+1);
       break;
 
-      case PROCIOSTAT:
-         ofile_lst[desc].offset=(LIMIT_KERNEL_STAT+1);
+   case PROCIOSTAT:
+      ofile_lst[desc].offset=(LIMIT_KERNEL_STAT+1);
       break;
-   #endif
+#endif
 
-      //
-      default:
-         return -1;
+   //
+   default:
+      return -1;
 
    }
 

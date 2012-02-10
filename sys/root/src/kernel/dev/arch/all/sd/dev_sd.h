@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -77,16 +77,17 @@ either the MPL or the [eCos GPL] License."
 #define OCR_VDD_35_36          (1 << 23)
 #define OCR_CARD_POWER_UP_BUSY (1 << 31)
 
-#define OCR_MMC_HOST_VOLTAGE_RANGE     (OCR_VDD_27_28 +\
-                                          OCR_VDD_28_29 +\
-                                          OCR_VDD_29_30 +\
-                                          OCR_VDD_30_31 +\
-                                          OCR_VDD_31_32 +\
-                                          OCR_VDD_32_33)
+#define OCR_MMC_HOST_VOLTAGE_RANGE     (OCR_VDD_27_28 + \
+                                        OCR_VDD_28_29 + \
+                                        OCR_VDD_29_30 + \
+                                        OCR_VDD_30_31 + \
+                                        OCR_VDD_31_32 + \
+                                        OCR_VDD_32_33)
 #define OCR_CCS    (1 << 30)
 
 // CSD register access macros.
-#define SD_CSD(pSd, bitfield, bits)   ((((pSd)->csd)[3-(bitfield)/32] >> ((bitfield)%32)) & ((1 << (bits)) - 1))
+#define SD_CSD(pSd, bitfield, \
+               bits)   ((((pSd)->csd)[3-(bitfield)/32] >> ((bitfield)%32)) & ((1 << (bits)) - 1))
 #define SD_CSD_STRUCTURE(pSd)          SD_CSD(pSd, 126, 2) ///< CSD structure 00b  Version 1.0 01b version 2.0 High Cap
 #define SD_CSD_TAAC(pSd)               SD_CSD(pSd, 112, 8) ///< Data read-access-time-1
 #define SD_CSD_NSAC(pSd)               SD_CSD(pSd, 104, 8) ///< Data read access-time-2 in CLK cycles
@@ -157,7 +158,7 @@ enum {
 
 //
 #define SD_ADDRESS(pSd, address) (((pSd)->card_type == CARD_SDHC) ? \
-                                 (address):((address) << SD_BLOCK_SIZE_BIT))
+                                  (address) : ((address) << SD_BLOCK_SIZE_BIT))
 
 // Error type
 enum {
@@ -178,124 +179,124 @@ enum {
 
 // SD operations
 enum {
-      GO_IDLE_STATE,
-      SEND_OP_COND,
-      ALL_SEND_CID,
-      SEND_RELATIVE_ADDRESS,
-      SET_DSR,
-      IO_SEND_OP_COND, //5
-      SWITCH_FUNC,
-      SELECT_DESELECT_CARD,
-      SEND_IF_COND,
-      SEND_CSD,
-      SEND_CID, //10
-      NOT_SUPPORTED_11,
-      STOP_TRANSMISSION,
-      SEND_STATUS,
-      NOT_SUPPORTED_14,
-      GO_INACTIVE_STATE,//15
-      SET_BLOCKLEN,
-      READ_SINGLE_BLOCK,
-      READ_MULTIPLE_BLOCK,
-      NOT_SUPPORTED_19, //
-      NOT_SUPPORTED_20, //20
-      NOT_SUPPORTED_21, //
-      NOT_SUPPORTED_22, //
-      NOT_SUPPORTED_23, //
-      WRITE_SINGLE_BLOCK,
-      WRITE_MULTIPLE_BLOCK, //25
-      NOT_SUPPORTED_26, //
-      NOT_SUPPORTED_27, //
-      NOT_SUPPORTED_28, //
-      NOT_SUPPORTED_29, //
-      NOT_SUPPORTED_30, //30
-      NOT_SUPPORTED_31, //
-      NOT_SUPPORTED_32, //
-      NOT_SUPPORTED_33, //
-      NOT_SUPPORTED_34, //
-      NOT_SUPPORTED_35, //35
-      NOT_SUPPORTED_36, //
-      NOT_SUPPORTED_37, //
-      NOT_SUPPORTED_38, //
-      NOT_SUPPORTED_39, //
-      NOT_SUPPORTED_40, //40
-      NOT_SUPPORTED_41, //
-      NOT_SUPPORTED_42, //
-      NOT_SUPPORTED_43, //
-      NOT_SUPPORTED_44, //
-      NOT_SUPPORTED_45, //45
-      NOT_SUPPORTED_46, //
-      NOT_SUPPORTED_47, //
-      NOT_SUPPORTED_48, //
-      NOT_SUPPORTED_49, //
-      NOT_SUPPORTED_50, //50
-      NOT_SUPPORTED_51, //
-      NOT_SUPPORTED_52, //
-      NOT_SUPPORTED_53, //
-      NOT_SUPPORTED_54, //
-      APP_CMD, //55
-      NOT_SUPPORTED_56, //
-      NOT_SUPPORTED_57, //
-      NOT_SUPPORTED_58,
-      NOT_SUPPORTED_59,
-      NOT_SUPPORTED_60, //60
-      NOT_SUPPORTED_61, //
-      NOT_SUPPORTED_62,
-      NOT_SUPPORTED_63,
-      DUMMY_POWER_ON_INIT,
-      //ACMD command begin
-      NOT_SUPPORTED_65, //65 (64+1)
-      NOT_SUPPORTED_66,
-      NOT_SUPPORTED_67,
-      NOT_SUPPORTED_68,
-      NOT_SUPPORTED_69,
-      SET_BUS_WIDTH, //70
-      NOT_SUPPORTED_71,
-      NOT_SUPPORTED_72,
-      NOT_SUPPORTED_73,
-      NOT_SUPPORTED_74,
-      NOT_SUPPORTED_75, //75
-      NOT_SUPPORTED_76,
-      NOT_SUPPORTED_77,
-      NOT_SUPPORTED_78,
-      NOT_SUPPORTED_79,
-      NOT_SUPPORTED_80, //80
-      NOT_SUPPORTED_81,
-      NOT_SUPPORTED_82,
-      NOT_SUPPORTED_83,
-      NOT_SUPPORTED_84,
-      NOT_SUPPORTED_85, //85
-      NOT_SUPPORTED_86,
-      NOT_SUPPORTED_87,
-      NOT_SUPPORTED_88,
-      NOT_SUPPORTED_89,
-      NOT_SUPPORTED_90, //90
-      NOT_SUPPORTED_91,
-      NOT_SUPPORTED_92,
-      NOT_SUPPORTED_93,
-      NOT_SUPPORTED_94,
-      NOT_SUPPORTED_95, //95
-      NOT_SUPPORTED_96,
-      NOT_SUPPORTED_97,
-      NOT_SUPPORTED_98,
-      NOT_SUPPORTED_99,
-      NOT_SUPPORTED_100, //100
-      NOT_SUPPORTED_101,
-      NOT_SUPPORTED_102,
-      NOT_SUPPORTED_103,
-      NOT_SUPPORTED_104,
-      SD_APP_OP_COND,
-      NOT_SUPPORTED_106,
-      NOT_SUPPORTED_107,
-      NOT_SUPPORTED_108,
-      NOT_SUPPORTED_109,
-      NOT_SUPPORTED_110, //110
-      NOT_SUPPORTED_111,
-      NOT_SUPPORTED_112,
-      NOT_SUPPORTED_113,
-      NOT_SUPPORTED_114,
-      SEND_SCR,
-      NOT_SUPPORTED_116
+   GO_IDLE_STATE,
+   SEND_OP_COND,
+   ALL_SEND_CID,
+   SEND_RELATIVE_ADDRESS,
+   SET_DSR,
+   IO_SEND_OP_COND,    //5
+   SWITCH_FUNC,
+   SELECT_DESELECT_CARD,
+   SEND_IF_COND,
+   SEND_CSD,
+   SEND_CID,    //10
+   NOT_SUPPORTED_11,
+   STOP_TRANSMISSION,
+   SEND_STATUS,
+   NOT_SUPPORTED_14,
+   GO_INACTIVE_STATE,   //15
+   SET_BLOCKLEN,
+   READ_SINGLE_BLOCK,
+   READ_MULTIPLE_BLOCK,
+   NOT_SUPPORTED_19,    //
+   NOT_SUPPORTED_20,    //20
+   NOT_SUPPORTED_21,    //
+   NOT_SUPPORTED_22,    //
+   NOT_SUPPORTED_23,    //
+   WRITE_SINGLE_BLOCK,
+   WRITE_MULTIPLE_BLOCK,    //25
+   NOT_SUPPORTED_26,    //
+   NOT_SUPPORTED_27,    //
+   NOT_SUPPORTED_28,    //
+   NOT_SUPPORTED_29,    //
+   NOT_SUPPORTED_30,    //30
+   NOT_SUPPORTED_31,    //
+   NOT_SUPPORTED_32,    //
+   NOT_SUPPORTED_33,    //
+   NOT_SUPPORTED_34,    //
+   NOT_SUPPORTED_35,    //35
+   NOT_SUPPORTED_36,    //
+   NOT_SUPPORTED_37,    //
+   NOT_SUPPORTED_38,    //
+   NOT_SUPPORTED_39,    //
+   NOT_SUPPORTED_40,    //40
+   NOT_SUPPORTED_41,    //
+   NOT_SUPPORTED_42,    //
+   NOT_SUPPORTED_43,    //
+   NOT_SUPPORTED_44,    //
+   NOT_SUPPORTED_45,    //45
+   NOT_SUPPORTED_46,    //
+   NOT_SUPPORTED_47,    //
+   NOT_SUPPORTED_48,    //
+   NOT_SUPPORTED_49,    //
+   NOT_SUPPORTED_50,    //50
+   NOT_SUPPORTED_51,    //
+   NOT_SUPPORTED_52,    //
+   NOT_SUPPORTED_53,    //
+   NOT_SUPPORTED_54,    //
+   APP_CMD,    //55
+   NOT_SUPPORTED_56,    //
+   NOT_SUPPORTED_57,    //
+   NOT_SUPPORTED_58,
+   NOT_SUPPORTED_59,
+   NOT_SUPPORTED_60,    //60
+   NOT_SUPPORTED_61,    //
+   NOT_SUPPORTED_62,
+   NOT_SUPPORTED_63,
+   DUMMY_POWER_ON_INIT,
+   //ACMD command begin
+   NOT_SUPPORTED_65,    //65 (64+1)
+   NOT_SUPPORTED_66,
+   NOT_SUPPORTED_67,
+   NOT_SUPPORTED_68,
+   NOT_SUPPORTED_69,
+   SET_BUS_WIDTH,    //70
+   NOT_SUPPORTED_71,
+   NOT_SUPPORTED_72,
+   NOT_SUPPORTED_73,
+   NOT_SUPPORTED_74,
+   NOT_SUPPORTED_75,    //75
+   NOT_SUPPORTED_76,
+   NOT_SUPPORTED_77,
+   NOT_SUPPORTED_78,
+   NOT_SUPPORTED_79,
+   NOT_SUPPORTED_80,    //80
+   NOT_SUPPORTED_81,
+   NOT_SUPPORTED_82,
+   NOT_SUPPORTED_83,
+   NOT_SUPPORTED_84,
+   NOT_SUPPORTED_85,    //85
+   NOT_SUPPORTED_86,
+   NOT_SUPPORTED_87,
+   NOT_SUPPORTED_88,
+   NOT_SUPPORTED_89,
+   NOT_SUPPORTED_90,    //90
+   NOT_SUPPORTED_91,
+   NOT_SUPPORTED_92,
+   NOT_SUPPORTED_93,
+   NOT_SUPPORTED_94,
+   NOT_SUPPORTED_95,    //95
+   NOT_SUPPORTED_96,
+   NOT_SUPPORTED_97,
+   NOT_SUPPORTED_98,
+   NOT_SUPPORTED_99,
+   NOT_SUPPORTED_100,    //100
+   NOT_SUPPORTED_101,
+   NOT_SUPPORTED_102,
+   NOT_SUPPORTED_103,
+   NOT_SUPPORTED_104,
+   SD_APP_OP_COND,
+   NOT_SUPPORTED_106,
+   NOT_SUPPORTED_107,
+   NOT_SUPPORTED_108,
+   NOT_SUPPORTED_109,
+   NOT_SUPPORTED_110,    //110
+   NOT_SUPPORTED_111,
+   NOT_SUPPORTED_112,
+   NOT_SUPPORTED_113,
+   NOT_SUPPORTED_114,
+   SEND_SCR,
+   NOT_SUPPORTED_116
 };
 
 //
@@ -303,8 +304,8 @@ enum {
 #define  R1             1
 #define  R2             2
 #define  R3             3
-#define  R1b            4//1
-#define  R6             6//1
+#define  R1b            4 //1
+#define  R6             6 //1
 #define  R7             7
 
 //
@@ -326,33 +327,33 @@ typedef struct sd_cmd_st {
    /// Response buffer.
    unsigned int  *p_resp;
    /// SD card response type.
-   unsigned char  resp_type;
+   unsigned char resp_type;
 } sd_cmd_t;
 
 //
 typedef struct board_inf_sd_st {
-    /// Current MCI command being processed.
-    sd_cmd_t * command;
-    /// SD card current address.
-    unsigned short card_addr;
-    /// Card-specific data.
-    unsigned int csd[4];
-    /// State after sd command complete
-    unsigned char state;
-    /// Card type
-    unsigned char card_type;
-    /// Card total size
-    unsigned int total_size;
-    /// Card block number
-    unsigned int block_nb;
-    /// Card access mode
-    unsigned char mode;
+   /// Current MCI command being processed.
+   sd_cmd_t * command;
+   /// SD card current address.
+   unsigned short card_addr;
+   /// Card-specific data.
+   unsigned int csd[4];
+   /// State after sd command complete
+   unsigned char state;
+   /// Card type
+   unsigned char card_type;
+   /// Card total size
+   unsigned int total_size;
+   /// Card block number
+   unsigned int block_nb;
+   /// Card access mode
+   unsigned char mode;
 
 } board_inf_sd_t;
 
 //
-#define  SD_BUFFER_SIZE_NO_CACHE_RCV    (SD_BLOCK_SIZE*4)//2ko
-#define  SD_BUFFER_SIZE_NO_CACHE_SND    (SD_BLOCK_SIZE*4)//2ko
+#define  SD_BUFFER_SIZE_NO_CACHE_RCV    (SD_BLOCK_SIZE*4) //2ko
+#define  SD_BUFFER_SIZE_NO_CACHE_SND    (SD_BLOCK_SIZE*4) //2ko
 
 //
 int _sd_init(board_inf_sd_t * p_inf_sd, desc_t desc_next);

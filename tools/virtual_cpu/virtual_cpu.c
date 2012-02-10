@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -61,7 +61,7 @@ int init_hardware(void * arg) {
    int i=0;
    //
 
-   for(;i<hdwr_max_dev;i++) {
+   for(; i<hdwr_max_dev; i++) {
       hdwr_lst[i]->load(arg);
    }
 
@@ -70,7 +70,7 @@ int init_hardware(void * arg) {
 
 //
 int set_watch_fd(fd_set *rfd) {
-   int i = 1;//because hdwr id 0 is clock
+   int i = 1; //because hdwr id 0 is clock
    int max_fd = MAX(0, 0);
    int tmp = 0;
 
@@ -78,7 +78,7 @@ int set_watch_fd(fd_set *rfd) {
    FD_SET(0, rfd);
 
    //set hdwr descriptor
-   for(;i<RFDS_SIZE;i++) {
+   for(; i<RFDS_SIZE; i++) {
       if(hdwr_lst[i]->fd<0) continue;
       //
       FD_SET(hdwr_lst[i]->fd, rfd);
@@ -99,33 +99,33 @@ int decode_cmd(virtual_cmd_t *c) {
    switch(c->cmd) {
    case OPS_OPEN:
       hdwr_lst[c->hdwr_id]->open(NULL);
-   break;
+      break;
 
    case OPS_CLOSE:
       hdwr_lst[c->hdwr_id]->close(NULL);
-   break;
+      break;
 
    case OPS_READ:
       hdwr_lst[c->hdwr_id]->read(NULL);
       nb_sig++;
-   break;
+      break;
 
    case OPS_WRITE:
       hdwr_lst[c->hdwr_id]->write(NULL);
       nb_sig++;
-   break;
+      break;
 
    case OPS_SEEK:
       hdwr_lst[c->hdwr_id]->seek(NULL);
-   break;
+      break;
 
    case OPS_IOCTL:
       hdwr_lst[c->hdwr_id]->ioctl(NULL);
-   break;
+      break;
 
    default:
       DEBUG_TRACE("default[%d:%d]\n",c->hdwr_id, c->cmd);
-   break;
+      break;
    }
    //
    DEBUG_TRACE("\n\tNB_SIG(R/W):%d\n", nb_sig);
@@ -149,8 +149,8 @@ int main(int argc, char *argv[]){
    //
 
    //wake dad all stuff are good
-   while(write(1, &cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
-   while(read(0, &cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
+   while(write(1, &cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
+   while(read(0, &cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
    //
    while(1) {
       FD_ZERO(&rfds_in);
@@ -168,13 +168,13 @@ int main(int argc, char *argv[]){
          //pipe descriptor
          if(FD_ISSET(0, &rfds_in)) {
             //read command and exectute it
-            while(read(0, (void *)&cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
+            while(read(0, (void *)&cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
             //decode cmd
             decode_cmd(&cmd);
          }
          //hardware descriptor
-         for(i=1;i<RFDS_SIZE;i++) {
-            if(hdwr_lst[i]->fd<0)   continue;
+         for(i=1; i<RFDS_SIZE; i++) {
+            if(hdwr_lst[i]->fd<0) continue;
             //fprintf(stderr, "fd:%d-hdwr_id:%d\n", hdwr_lst[i]->fd, i);
             //
             if(FD_ISSET(hdwr_lst[i]->fd, &rfds_in)) {

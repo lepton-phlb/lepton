@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -50,9 +50,9 @@ either the MPL or the [eCos GPL] License."
 
 #define CYGNUM_HAL_H_PRIOR       3
 #define ETH_FRAME_LEN            SHM_ETH_SIZE
-#define MAX_POOL                 32//64//16//4
+#define MAX_POOL                 32 //64//16//4
 
-#define ETH_0_INPUT_BUFFER_SZ    (MAX_POOL*ETH_FRAME_LEN)//SHM_ETH_0_SIZE
+#define ETH_0_INPUT_BUFFER_SZ    (MAX_POOL*ETH_FRAME_LEN) //SHM_ETH_0_SIZE
 
 #define ETH_0_OUTPUT_BUFFER_SZ   ETH_FRAME_LEN
 #define ETH_0_OUTPUT_BUFFER_OFF  SHM_ETH_0_SIZE/2
@@ -155,10 +155,10 @@ cyg_uint32 dev_linux_eth_isr(cyg_vector_t vector, cyg_addrword_t data) {
 //DSR
 void dev_linux_eth_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data) {
    if(rcv_flag) {
-      rcv_flag=0;//if(rcv_buf_input_no == rcv_buf_read_no)   rcv_flag=0;
+      rcv_flag=0; //if(rcv_buf_input_no == rcv_buf_read_no)   rcv_flag=0;
       __fire_io_int(ofile_lst[_linux_eth_desc_rd].owner_pthread_ptr_read);
    }
-   if(_linux_eth_desc_wr>=0 && _linux_eth_output_r==_linux_eth_output_w){
+   if(_linux_eth_desc_wr>=0 && _linux_eth_output_r==_linux_eth_output_w) {
       _linux_eth_output_r = -1;
       __fire_io_int(ofile_lst[_linux_eth_desc_wr].owner_pthread_ptr_write);
    }
@@ -174,8 +174,8 @@ int dev_linux_eth_load(void) {
 
    //Primitive de creation de l'IT
    cyg_interrupt_create(eth_vector, eth_prior, 0,
-         &dev_linux_eth_isr, &dev_linux_eth_dsr,
-         &_linux_eth_handle, &_linux_eth_it);
+                        &dev_linux_eth_isr, &dev_linux_eth_dsr,
+                        &_linux_eth_handle, &_linux_eth_it);
    //Liaison entre l'IT crée et le vecteur d'IT
    cyg_interrupt_attach(_linux_eth_handle);
    //cyg_interrupt_unmask(serial_vector);
@@ -201,7 +201,7 @@ int dev_linux_eth_open(desc_t desc, int o_flag) {
       _linux_eth_input_w = 0;
    }
 
-      //
+   //
    if(_linux_eth_desc_wr>=0 && _linux_eth_desc_rd>=0) {
       //open eth port in virtual cpu
       eth_cmd.hdwr_id = ETH_0;
@@ -210,8 +210,8 @@ int dev_linux_eth_open(desc_t desc, int o_flag) {
 
       //disable IT
       //__clr_irq();
-      while(cyg_hal_sys_write(1, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
-      while(cyg_hal_sys_read(0, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
+      while(cyg_hal_sys_write(1, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
+      while(cyg_hal_sys_read(0, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
       //enable IT
       //__set_irq();
       cyg_interrupt_unmask(eth_vector);
@@ -237,8 +237,8 @@ int dev_linux_eth_close(desc_t desc) {
       eth_cmd.hdwr_id = ETH_0;
       eth_cmd.cmd = OPS_CLOSE;
       //
-      while(cyg_hal_sys_write(1, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
-      while(cyg_hal_sys_read(0, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
+      while(cyg_hal_sys_write(1, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
+      while(cyg_hal_sys_read(0, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
    }
    return 0;
 }
@@ -295,7 +295,7 @@ int dev_linux_eth_write(desc_t desc, const char* buf,int size) {
    //disable IT
    //__clr_irq();
    //write to wake virtual_cpu
-   while(cyg_hal_sys_write(1, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
+   while(cyg_hal_sys_write(1, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
    //while(cyg_hal_sys_read(0, (void *)&eth_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
 
    //Enable all IT
@@ -322,7 +322,8 @@ void dev_linux_eth_snd(void) {
 //read data and store it on local buffer
 void dev_linux_eth_rcv(void) {
    eth_rcv_buffer[rcv_buf_input_no].size = eth_0_data->size_in;
-   memcpy((void *)(eth_rcv_buffer[rcv_buf_input_no].data), (void *)eth_0_data->data_in, ETH_FRAME_LEN);
+   memcpy((void *)(eth_rcv_buffer[rcv_buf_input_no].data), (void *)eth_0_data->data_in,
+          ETH_FRAME_LEN);
 
    rcv_buf_input_no = ((rcv_buf_input_no+1)&(~MAX_POOL));
    rcv_flag=1;

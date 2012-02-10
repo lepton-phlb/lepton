@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -114,14 +114,14 @@ int dev_part_load(void) {
 | See:
 ----------------------------------------------*/
 int dev_part_open(desc_t desc,int o_flag) {
-   if(ofile_lst[desc].oflag & O_RDONLY){
+   if(ofile_lst[desc].oflag & O_RDONLY) {
    }
 
-   if(ofile_lst[desc].oflag & O_WRONLY){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
    }
 
    if(!ofile_lst[desc].nb_writer
-         &&!ofile_lst[desc].nb_reader){
+      &&!ofile_lst[desc].nb_reader) {
    }
 
    if(!set_part_infos_4_desc(desc)) {
@@ -139,7 +139,7 @@ int dev_part_open(desc_t desc,int o_flag) {
 | See:
 ----------------------------------------------*/
 int dev_part_close(desc_t desc) {
-   if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer){
+   if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer) {
       ofile_lst[desc].p=(void*)0;
    }
 
@@ -158,17 +158,17 @@ int dev_part_seek(desc_t desc,int offset,int origin) {
    switch(origin) {
    case SEEK_SET:
       ofile_lst[desc].offset=offset;
-   break;
+      break;
 
    case SEEK_CUR:
       ofile_lst[desc].offset+=offset;
-   break;
+      break;
 
    case SEEK_END:
       if(offset>0)
          return -1;
       ofile_lst[desc].offset+=offset;
-   break;
+      break;
    }
    //
    return ofile_lst[desc].offset;
@@ -191,7 +191,7 @@ int dev_part_read(desc_t desc, char* buf,int size) {
 
    //maybe protection by mutex
    //seek on physical device and read on it
-   pfsop = (pfsop_t)(((mbr_disk_entry_t *)(ofile_lst[desc].p))->p_underlying_fops);// ->fdev_write(desc, buf,size);
+   pfsop = (pfsop_t)(((mbr_disk_entry_t *)(ofile_lst[desc].p))->p_underlying_fops); // ->fdev_write(desc, buf,size);
    //we get absolute offset
    ofile_lst[desc].offset += abs_offset;
    cb = pfsop->fdev.fdev_read(desc, buf,size);
@@ -248,7 +248,7 @@ int dev_part_ioctl(desc_t desc,int request,va_list ap) {
       char * sector_count = va_arg(ap, char *);
       //from kernel or user program
       //int _pid = _sys_getpid();
-      int _desc = ofile_lst[desc].desc_nxt[0];//(_pid>0)?process_lst[_pid]->desc_tbl[desc]:desc;
+      int _desc = ofile_lst[desc].desc_nxt[0]; //(_pid>0)?process_lst[_pid]->desc_tbl[desc]:desc;
       mbr_disk_t * p_md=NULL;
 
       //we always open dev_part in O_RDWR mode
@@ -257,7 +257,7 @@ int dev_part_ioctl(desc_t desc,int request,va_list ap) {
       }
 
       //if not available command or disk
-      if(!cmd || !disk_suffix)    return -1;
+      if(!cmd || !disk_suffix) return -1;
 
       if(is_valid_mbr(_desc)<0) {
          //try to create a MBR
@@ -273,11 +273,11 @@ int dev_part_ioctl(desc_t desc,int request,va_list ap) {
       //add a new partition entry
       if(!strncmp(cmd,tauon_part_cmd_add, strlen(tauon_part_cmd_add))) {
          //if no available parameters
-         if(!part_number || !block_size || ! sector_count)     return -1;
+         if(!part_number || !block_size || !sector_count) return -1;
 
          //create mbr entry
          if(create_mbr_part_tbl_entry(_desc, p_md->disk_name,
-               atoi(part_number), atoi(sector_count),0x00)<0) {
+                                      atoi(part_number), atoi(sector_count),0x00)<0) {
             return -1;
          }
       }
@@ -288,8 +288,8 @@ int dev_part_ioctl(desc_t desc,int request,va_list ap) {
       }
       //ofile_lst[desc].desc_nxt[{0|1}] contain underlying module : a physical block device
       create_rootfs_entry(disk_suffix, p_md,
-            ofile_lst[desc].ext.dev, (void *)ofile_lst[_desc].pfsop);
-            ///(void *)ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop);
+                          ofile_lst[desc].ext.dev, (void *)ofile_lst[_desc].pfsop);
+      ///(void *)ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop);
 
 //         ofile_lst[desc].p = (void *)&disk_part_tbl[0];
    }
@@ -299,7 +299,7 @@ int dev_part_ioctl(desc_t desc,int request,va_list ap) {
    }
    break;
 
-   case HDGETSZ:{
+   case HDGETSZ: {
       long* hdsz_p= va_arg( ap, long*);
       if(!hdsz_p)
          return -1;
@@ -311,16 +311,16 @@ int dev_part_ioctl(desc_t desc,int request,va_list ap) {
    }
    break;
 
-	case HDGETSCTRSZ: {
-		unsigned int * sector_size=va_arg(ap, unsigned int *);
-		if(!sector_size)
-			return -1;
+   case HDGETSCTRSZ: {
+      unsigned int * sector_size=va_arg(ap, unsigned int *);
+      if(!sector_size)
+         return -1;
 
-		*sector_size = 512;
-	}
-	break;
-   default:
+      *sector_size = 512;
+   }
    break;
+   default:
+      break;
    }
    //
    return 0;
@@ -338,7 +338,7 @@ int build_part_tbl(int desc, mbr_disk_t * md) {
    int cb=-1;
    int i=0;
    //
-   if(!md)  return -1;
+   if(!md) return -1;
 
    if(is_valid_mbr(desc)) {
       return -1;
@@ -348,7 +348,7 @@ int build_part_tbl(int desc, mbr_disk_t * md) {
       return -1;
    }
    //get raw partition informations
-   for(i=0;i<MAX_PARTITION;i++) {
+   for(i=0; i<MAX_PARTITION; i++) {
       if(_vfs_read(desc,(void*)&(md->mbr_part_tbl[i].mbr_part_entry),PART_TABLE_ENTRY_SZ)<0) {
          return -1;
       }
@@ -372,10 +372,14 @@ void get_part_info(mbr_disk_entry_t * mde) {
    char real_starting_rel_sector[5]={0};
    char real_sector_count[5]={0};
    //get cylinder (dummy but get compatibility)
-   mde->starting_cylinder = (mde->mbr_part_entry.raw_starting_cylinder_part1<<8) | mde->mbr_part_entry.raw_starting_cylinder_part2;
-   mde->ending_cylinder = (mde->mbr_part_entry.raw_ending_cylinder_part1<<8) | mde->mbr_part_entry.raw_ending_cylinder_part2;
+   mde->starting_cylinder =
+      (mde->mbr_part_entry.raw_starting_cylinder_part1<<
+       8) | mde->mbr_part_entry.raw_starting_cylinder_part2;
+   mde->ending_cylinder =
+      (mde->mbr_part_entry.raw_ending_cylinder_part1<<
+       8) | mde->mbr_part_entry.raw_ending_cylinder_part2;
    //
-   bigend_2_litend_4b(mde->mbr_part_entry.raw_starting_sector , real_starting_rel_sector);
+   bigend_2_litend_4b(mde->mbr_part_entry.raw_starting_sector, real_starting_rel_sector);
    bigend_2_litend_4b(mde->mbr_part_entry.raw_sector_count,real_sector_count);
    mde->starting_sector = str_2_int(real_starting_rel_sector,4);
    mde->sector_count = str_2_int(real_sector_count,4);
@@ -396,13 +400,13 @@ mbr_disk_t * create_disk_entry(const char * name, mbr_disk_t * head) {
    int len=-1;
    mbr_disk_t * md=NULL;
    //
-   if(!name || !head)   return NULL;
+   if(!name || !head) return NULL;
 
    if(md = find_disk_entry(name, strlen("/dev/"))) {
       return md;
    }
 
-   for(i=0;i<MAX_SLICED_DISK;i++) {
+   for(i=0; i<MAX_SLICED_DISK; i++) {
       //we find a valid entry
       if(head[i].disk_name[0] != '/') {
          //make disk name entry like /dev/hdd[x]s
@@ -437,7 +441,7 @@ int create_rootfs_entry(const char * name, mbr_disk_t * md, unsigned int dev_no,
    int len=-1;
    struct stat s={0};
    //
-   if(!name || !md)  return -1;
+   if(!name || !md) return -1;
    //
    strcpy(work,md->disk_name);
    strcat(work,"/");
@@ -446,7 +450,7 @@ int create_rootfs_entry(const char * name, mbr_disk_t * md, unsigned int dev_no,
 
    len = strlen(work);
    //we can create entry for partition
-   for(i=0;i<MAX_PARTITION;i++) {
+   for(i=0; i<MAX_PARTITION; i++) {
       if(md->mbr_part_tbl[i].sector_count) {
          work[len] = 48+i;
 
@@ -473,10 +477,10 @@ int set_part_infos_4_desc(unsigned int desc) {
    mbr_disk_t * p_disk_part_tbl = &disk_part_tbl[0];
    int i=0,j=0;
 
-   if(desc<0)  return -1;
+   if(desc<0) return -1;
 
-   for(i=0;i<MAX_SLICED_DISK;i++) {
-      for(j=0;j<MAX_PARTITION;j++) {
+   for(i=0; i<MAX_SLICED_DISK; i++) {
+      for(j=0; j<MAX_PARTITION; j++) {
          //compare ofile_lst[desc].inodenb to mbr_disk_entry.inode
          if(ofile_lst[desc].inodenb==p_disk_part_tbl[i].mbr_part_tbl[j].inode) {
             ofile_lst[desc].p = (void*)&p_disk_part_tbl[i].mbr_part_tbl[j];
@@ -500,7 +504,7 @@ int set_part_infos_4_desc(unsigned int desc) {
 int is_valid_mbr(int desc) {
    char mbr_signature[3]={0};
    //
-   if(desc<0)  return -1;
+   if(desc<0) return -1;
 
    //verify mbr signature
    if(_vfs_lseek(desc,MBR_SIGNATURE_OFFSET,SEEK_SET)<0) {
@@ -509,7 +513,7 @@ int is_valid_mbr(int desc) {
 
    _vfs_read(desc,(void *)mbr_signature, 2);
    if(mbr_signature[0]!= MBR_SIGNATURE_LOW
-         && mbr_signature[1]!= MBR_SIGNATURE_HIGH) {
+      && mbr_signature[1]!= MBR_SIGNATURE_HIGH) {
       return -1;
    }
    return 0;
@@ -526,7 +530,7 @@ int is_valid_mbr(int desc) {
 int create_mbr(int desc) {
    //MAX_PARTITION*PART_TABLE_ENTRY_SZ=4*16=64
    char buf[64]={0};
-   if(desc<0)  return -1;
+   if(desc<0) return -1;
 
    //go to beginning of disk and write tauon special signature
    if(_vfs_lseek(desc,0L,SEEK_SET)<0) {
@@ -538,7 +542,7 @@ int create_mbr(int desc) {
 
    //clear partition table on disk
    if(_vfs_lseek(desc,PART_TABLE_OFFSET,SEEK_SET)<0) {
-         return -1;
+      return -1;
    }
    if((_vfs_write(desc,buf,64))<0) {
       return -1;
@@ -569,9 +573,9 @@ int create_mbr(int desc) {
 mbr_disk_t * find_disk_entry(const char * disk_name, int off) {
    int i=0;
 
-   if(!disk_name)   return NULL;
+   if(!disk_name) return NULL;
 
-   for(i=0;i<MAX_SLICED_DISK;i++) {
+   for(i=0; i<MAX_SLICED_DISK; i++) {
       //all physical disk stay in /dev/hd/hd[count_hdd] aka /dev/hd/hdd
       if(!strncmp(disk_name,disk_part_tbl[i].disk_name+off,3)) {
          return &disk_part_tbl[i];
@@ -588,14 +592,16 @@ mbr_disk_t * find_disk_entry(const char * disk_name, int off) {
 | Comments:
 | See:
 ----------------------------------------------*/
-int create_mbr_part_tbl_entry(int desc, char *disk_name, unsigned int part_no, unsigned int sector_no, unsigned char bootable) {
+int create_mbr_part_tbl_entry(int desc, char *disk_name, unsigned int part_no,
+                              unsigned int sector_no,
+                              unsigned char bootable) {
    mbr_disk_t * mde=NULL;
 
    unsigned int prev_starting_sector=1;
    unsigned int prev_sector_count=0;
    unsigned long phy_disk_size=0;
 
-   if(!disk_name || !sector_no)  return -1;
+   if(!disk_name || !sector_no) return -1;
 
    //find disk_entry
    if(!(mde = find_disk_entry(disk_name,0))) {
@@ -615,14 +621,16 @@ int create_mbr_part_tbl_entry(int desc, char *disk_name, unsigned int part_no, u
    //verify that we are not out of disk or reset entry
    _vfs_ioctl(desc,HDGETSZ,&phy_disk_size);
    if((mde->mbr_part_tbl[part_no].starting_sector*sector_size+
-         mde->mbr_part_tbl[part_no].sector_count*sector_size)>phy_disk_size) {
+       mde->mbr_part_tbl[part_no].sector_count*sector_size)>phy_disk_size) {
       memset((void*)&mde->mbr_part_tbl[part_no],0,sizeof(mbr_disk_entry_t));
       return -1;
    }
 
    //transform it to raw value
-   int_2_str(mde->mbr_part_tbl[part_no].starting_sector, mde->mbr_part_tbl[part_no].mbr_part_entry.raw_starting_sector);
-   int_2_str(mde->mbr_part_tbl[part_no].sector_count, mde->mbr_part_tbl[part_no].mbr_part_entry.raw_sector_count);
+   int_2_str(mde->mbr_part_tbl[part_no].starting_sector,
+             mde->mbr_part_tbl[part_no].mbr_part_entry.raw_starting_sector);
+   int_2_str(mde->mbr_part_tbl[part_no].sector_count,
+             mde->mbr_part_tbl[part_no].mbr_part_entry.raw_sector_count);
 
    //bootable to indicate firmware
    mde->mbr_part_tbl[part_no].mbr_part_entry.boot_indicator = bootable;
@@ -634,7 +642,8 @@ int create_mbr_part_tbl_entry(int desc, char *disk_name, unsigned int part_no, u
       return -1;
    }
    //write it to physical disk or reset entry
-   if((_vfs_write(desc,(void*)&mde->mbr_part_tbl[part_no].mbr_part_entry, PART_TABLE_ENTRY_SZ))<0) {
+   if((_vfs_write(desc,(void*)&mde->mbr_part_tbl[part_no].mbr_part_entry,
+                  PART_TABLE_ENTRY_SZ))<0) {
       memset((void*)&mde->mbr_part_tbl[part_no],0,sizeof(mbr_disk_entry_t));
       return -1;
    }
@@ -685,7 +694,7 @@ int int_2_str(unsigned int src, char *dst) {
    //tranform decimal to hexadecimal
    sprintf(work,"%8x",src);
 
-   for(i=0;i<8;i=i+2,j++) {
+   for(i=0; i<8; i=i+2,j++) {
       high = ascii_2_int(work[i]);
       low = ascii_2_int(work[i+1]);
       tmp[j] = (low)|(high<<4);
@@ -725,7 +734,7 @@ unsigned int str_2_int(const char * s, unsigned int size) {
    //
    if(!s) return 0;
 
-   for(work=(char *)(s+size-1);i<(size*2);work--) {
+   for(work=(char *)(s+size-1); i<(size*2); work--) {
       //low
       sum += ((*work) & 0x0f) * (int)pow(16,i++);
       //high

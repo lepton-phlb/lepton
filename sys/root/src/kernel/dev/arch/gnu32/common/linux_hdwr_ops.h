@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -48,42 +48,42 @@ typedef struct {
 
 //new struct for hardware
 //Serial
-#define SHM_SERIAL_SIZE       2048//128
+#define SHM_SERIAL_SIZE       2048 //128
 #define SHM_SERIAL_IOCTL      64
 
 typedef struct __attribute__((packed)){
-   unsigned char  data_in[SHM_SERIAL_SIZE];
-   unsigned int   size_in;
-   unsigned char  data_out[SHM_SERIAL_SIZE];
-   unsigned int   size_out;
-   unsigned char  data_ioctl[SHM_SERIAL_IOCTL];
-}virtual_serial_t;
+   unsigned char data_in[SHM_SERIAL_SIZE];
+   unsigned int size_in;
+   unsigned char data_out[SHM_SERIAL_SIZE];
+   unsigned int size_out;
+   unsigned char data_ioctl[SHM_SERIAL_IOCTL];
+} virtual_serial_t;
 
 //Ethernet
 #define SHM_ETH_SIZE          1600
 #define SHM_ETH_IOCTL         16
 
 typedef struct __attribute__((packed)){
-   unsigned char  data_in[SHM_ETH_SIZE];
-   unsigned int   size_in;
-   unsigned char  data_out[SHM_ETH_SIZE];
-   unsigned int   size_out;
-   unsigned char  data_ioctl[SHM_ETH_IOCTL];
-}virtual_eth_t;
+   unsigned char data_in[SHM_ETH_SIZE];
+   unsigned int size_in;
+   unsigned char data_out[SHM_ETH_SIZE];
+   unsigned int size_out;
+   unsigned char data_ioctl[SHM_ETH_IOCTL];
+} virtual_eth_t;
 
 //Keyboard
 #define SHM_KB_IOCTL          8
 
 typedef struct __attribute__((packed)){
-   unsigned char  data_in;
-   unsigned char  data_ioctl[SHM_KB_IOCTL];
-}virtual_kb_t;
+   unsigned char data_in;
+   unsigned char data_ioctl[SHM_KB_IOCTL];
+} virtual_kb_t;
 
 //Leds
 #define SHM_LEDS_MAX          32
 typedef struct __attribute__((packed)){
-   unsigned char  data_out[SHM_LEDS_MAX];
-}virtual_leds_t;
+   unsigned char data_out[SHM_LEDS_MAX];
+} virtual_leds_t;
 
 //Screen
 #define SHM_SCRN_IOCTL        32
@@ -94,24 +94,24 @@ typedef struct __attribute__((packed)){
    //data_ioctl[0] is x_res
    //data_ioctl[1] is y_res
    //data_ioctl[2] is bpp
-   unsigned char  data_ioctl[SHM_SCRN_IOCTL];
+   unsigned char data_ioctl[SHM_SCRN_IOCTL];
    //get a pointer on virtual_cpu screen
    unsigned char  * data_out;
-}virtual_screen_t;
+} virtual_screen_t;
 
 
 //Put All shared devices in that struct
 typedef struct __attribute__((packed)) {
-   virtual_serial_t  ttys0;
-   virtual_serial_t  ttys1;
-   virtual_serial_t  ttypt;
-   virtual_eth_t     eth0;
-   virtual_kb_t      kb0;
-   virtual_leds_t    leds;
-   virtual_serial_t  rtu0;
-   virtual_serial_t  rtu1;
-   virtual_screen_t  screen0;
-}virtual_shared_dev_t;
+   virtual_serial_t ttys0;
+   virtual_serial_t ttys1;
+   virtual_serial_t ttypt;
+   virtual_eth_t eth0;
+   virtual_kb_t kb0;
+   virtual_leds_t leds;
+   virtual_serial_t rtu0;
+   virtual_serial_t rtu1;
+   virtual_screen_t screen0;
+} virtual_shared_dev_t;
 
 //offset in shared device structure
 #define TTYS0_OFFSET    0

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -39,7 +39,7 @@ either the MPL or the [eCos GPL] License."
 
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 //
@@ -71,19 +71,19 @@ dev_map_t dev_lcd_sanyo_lc75813_map={
 };
 
 //
-#define __LCD_SCL      P4.1
-#define __LCD_DATA     P4.0
-#define __LCD_CE       P4.2
-#define __LCD_INH      P4.3
+#define __LCD_SCL      P4 .1
+#define __LCD_DATA     P4 .0
+#define __LCD_CE       P4 .2
+#define __LCD_INH      P4 .3
 
-#define __SCL_1EDGE_DELAY\
-   __LCD_SCL  = 1;\
-   {char cpt=0;\
-    for(cpt=0;cpt<50;cpt++);\
-   }\
-   __LCD_SCL  = 0;\
-   {char cpt=0;\
-    for(cpt=0;cpt<50;cpt++);\
+#define __SCL_1EDGE_DELAY \
+   __LCD_SCL  = 1; \
+   {char cpt=0; \
+    for(cpt=0; cpt<50; cpt++) ; \
+   } \
+   __LCD_SCL  = 0; \
+   {char cpt=0; \
+    for(cpt=0; cpt<50; cpt++) ; \
    }
 
 
@@ -94,32 +94,34 @@ typedef struct {
 }lcdframebuffer_t;
 
 //
-#define __set_picto(__id__,__status__) {\
-   unsigned char __byte__=__id__>>3;\
-   unsigned char __offset__=(__id__-(__byte__<<3));\
-   _sanyo_lc75813_bits_buffer[__byte__]= (__status__ ? (_sanyo_lc75813_bits_buffer[__byte__]|=((0x01)<<__offset__)) :\
-   (_sanyo_lc75813_bits_buffer[__byte__]&=~((0x01)<<__offset__)));\
-}
+#define __set_picto(__id__,__status__) { \
+      unsigned char __byte__=__id__>>3; \
+      unsigned char __offset__=(__id__-(__byte__<<3)); \
+      _sanyo_lc75813_bits_buffer[__byte__]= \
+         (__status__ ? (_sanyo_lc75813_bits_buffer[__byte__]|=((0x01)<<__offset__)) : \
+                                                               ( \
+                           _sanyo_lc75813_bits_buffer[__byte__]&=~((0x01)<<__offset__))); \
+                           }
 
-static char _sanyo_lc75813_bits_buffer[52]={0};// 4 x 104 bits
+static char _sanyo_lc75813_bits_buffer[52]={0}; // 4 x 104 bits
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 /*--------------------------------------------
 | Name:        _lcd_sanyo_lc75813_write_data_block1
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    int i=0;
-  
+
    //OS_Delay(10);
    __LCD_CE   = 0;
-      //bank 4
+   //bank 4
    __LCD_SCL  = 0;
    //OS_Delay(10);
 
@@ -128,7 +130,7 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    __LCD_DATA = 0; //B0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //B1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -144,7 +146,7 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    __LCD_DATA = 0; //A0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //A1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -168,14 +170,14 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    //
    __LCD_INH  = 1;
    //OS_Delay(10);
-   
+
    //first 88 bits
-   for(i=0;i<11;i++){
+   for(i=0; i<11; i++) {
       unsigned char b=0;
-      for(b=0;b<8;b++){
+      for(b=0; b<8; b++) {
          char mask=(0x01<<b);
-         char v = ( (buf[i]&mask)?0x01:0x00 );
-         __LCD_DATA = v;//v;
+         char v = ( (buf[i]&mask) ? 0x01 : 0x00 );
+         __LCD_DATA = v; //v;
          //clock upside front edge
          __SCL_1EDGE_DELAY;
       }
@@ -185,7 +187,7 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    __LCD_DATA = 0; //b0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -203,11 +205,11 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    __SCL_1EDGE_DELAY;
 
 
-    //control data
+   //control data
    __LCD_DATA = 0; //P0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //P1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -225,7 +227,7 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    __LCD_DATA = 0; //DR=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //DT=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -246,7 +248,7 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
    __LCD_DATA = 0; //DD0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //DD1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -259,18 +261,18 @@ int _lcd_sanyo_lc75813_write_data_block1(char* buf, int len){
 
 /*--------------------------------------------
 | Name:        _lcd_sanyo_lc75813_write_data_block2
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    int i=0;
-  
+
    //OS_Delay(10);
    __LCD_CE   = 0;
-      //bank 4
+   //bank 4
    __LCD_SCL  = 0;
    //OS_Delay(10);
 
@@ -279,7 +281,7 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    __LCD_DATA = 0; //B0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //B1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -295,7 +297,7 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    __LCD_DATA = 0; //A0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //A1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -319,14 +321,14 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    //
    __LCD_INH  = 1;
    //OS_Delay(10);
-   
+
    //first 88 bits
-   for(i=0;i<11;i++){
+   for(i=0; i<11; i++) {
       unsigned char b=0;
-      for(b=0;b<8;b++){
+      for(b=0; b<8; b++) {
          char mask=(0x01<<b);
-         char v = ( (buf[i]&mask)?0x01:0x00 );
-         __LCD_DATA = v;//v;
+         char v = ( (buf[i]&mask) ? 0x01 : 0x00 );
+         __LCD_DATA = v; //v;
          //clock upside front edge
          __SCL_1EDGE_DELAY;
       }
@@ -336,7 +338,7 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    __LCD_DATA = 0; //b0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -356,7 +358,7 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    __LCD_DATA = 0; //b5=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b6=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -377,7 +379,7 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    __LCD_DATA = 0; //b10=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b11=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -390,16 +392,16 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
    //clock upside front edge
    __SCL_1EDGE_DELAY;
 
-   
+
    //DD
    __LCD_DATA = 0; //DD1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 1; //DD0=1
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-      
+
    //OS_Delay(1);
    __LCD_CE   = 0;
    //OS_Delay(1);
@@ -410,18 +412,18 @@ int _lcd_sanyo_lc75813_write_data_block2(char* buf, int len){
 
 /*--------------------------------------------
 | Name:        _lcd_sanyo_lc75813_write_data_block3
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    int i=0;
-  
+
    //OS_Delay(10);
    __LCD_CE   = 0;
-      //bank 4
+   //bank 4
    __LCD_SCL  = 0;
    //OS_Delay(10);
 
@@ -430,7 +432,7 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    __LCD_DATA = 0; //B0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //B1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -446,7 +448,7 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    __LCD_DATA = 0; //A0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //A1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -470,17 +472,17 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    //
    __LCD_INH  = 1;
    //OS_Delay(10);
-   
+
    //first 88 bits
-   for(i=0;i<11;i++){
+   for(i=0; i<11; i++) {
       unsigned char b=0;
-      for(b=0;b<8;b++){
+      for(b=0; b<8; b++) {
          char mask=(0x01<<b);
-         char v = ( (buf[i]&mask)?0x01:0x00 );
+         char v = ( (buf[i]&mask) ? 0x01 : 0x00 );
          if(i==10 && b>3)
-            __LCD_DATA = 0;//v;
+            __LCD_DATA = 0;  //v;
          else
-         __LCD_DATA = v;//v;
+            __LCD_DATA = v;  //v;
          //clock upside front edge
          __SCL_1EDGE_DELAY;
       }
@@ -490,7 +492,7 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    __LCD_DATA = 0; //b0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -510,7 +512,7 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    __LCD_DATA = 0; //b5=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b6=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -531,7 +533,7 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    __LCD_DATA = 0; //b10=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b11=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -544,16 +546,16 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
    //clock upside front edge
    __SCL_1EDGE_DELAY;
 
-   
+
    //DD
    __LCD_DATA = 1; //DD1=1
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //DD0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-      
+
    //OS_Delay(1);
    __LCD_CE   = 0;
    //OS_Delay(1);
@@ -563,18 +565,18 @@ int _lcd_sanyo_lc75813_write_data_block3(char* buf, int len){
 
 /*--------------------------------------------
 | Name:        _lcd_sanyo_lc75813_write_data_block4
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    int i=0;
-  
+
    //OS_Delay(10);
    __LCD_CE   = 0;
-      //bank 4
+   //bank 4
    __LCD_SCL  = 0;
    //OS_Delay(10);
 
@@ -583,7 +585,7 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    __LCD_DATA = 0; //B0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //B1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -599,7 +601,7 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    __LCD_DATA = 0; //A0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //A1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -623,17 +625,17 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    //
    __LCD_INH  = 1;
    //OS_Delay(10);
-   
+
    //first 88 bits
-   for(i=0;i<11;i++){
+   for(i=0; i<11; i++) {
       unsigned char b=0;
-      for(b=0;b<8;b++){
+      for(b=0; b<8; b++) {
          char mask=(0x01<<b);
-         char v = ( (buf[i]&mask)?0x01:0x00 );
+         char v = ( (buf[i]&mask) ? 0x01 : 0x00 );
          if(i==10 && b>3)
-            __LCD_DATA = 0;//v;
+            __LCD_DATA = 0;  //v;
          else
-         __LCD_DATA = v;//v;
+            __LCD_DATA = v;  //v;
          //clock upside front edge
          __SCL_1EDGE_DELAY;
       }
@@ -643,7 +645,7 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    __LCD_DATA = 0; //b0=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b1=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -663,7 +665,7 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    __LCD_DATA = 0; //b5=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b6=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -684,7 +686,7 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    __LCD_DATA = 0; //b10=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 0; //b11=0
    //clock upside front edge
    __SCL_1EDGE_DELAY;
@@ -697,16 +699,16 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    //clock upside front edge
    __SCL_1EDGE_DELAY;
 
-   
+
    //DD
    __LCD_DATA = 1; //DD1=1
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-   
+
    __LCD_DATA = 1; //DD0=1
    //clock upside front edge
    __SCL_1EDGE_DELAY;
-      
+
    //OS_Delay(1);
    __LCD_CE   = 0;
    //OS_Delay(1);
@@ -714,7 +716,7 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
    __LCD_INH  = 1;
    {
       char cpt=0;
-    for(cpt=0;cpt<50;cpt++);
+      for(cpt=0; cpt<50; cpt++) ;
    }
    __LCD_INH  = 1;
 
@@ -730,11 +732,11 @@ int _lcd_sanyo_lc75813_write_data_block4(char* buf, int len){
 | See:
 ---------------------------------------------*/
 int dev_lcd_sanyo_lc75813_load(void){
-   PD4|=0x1F;//P4.0 to P4.4 set ouput mode.
+   PD4|=0x1F; //P4.0 to P4.4 set ouput mode.
 
    /*__LCD_SCL   = 0;
    __LCD_SCL   = 1;
-   
+
    __LCD_CE    = 0;
    __LCD_CE    = 1;
 
@@ -743,12 +745,16 @@ int dev_lcd_sanyo_lc75813_load(void){
 
    __LCD_DATA  = 0;
    __LCD_DATA  = 1;*/
-      
-   
-   _lcd_sanyo_lc75813_write_data_block1(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-   _lcd_sanyo_lc75813_write_data_block2(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-   _lcd_sanyo_lc75813_write_data_block3(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-   _lcd_sanyo_lc75813_write_data_block4(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
+
+
+   _lcd_sanyo_lc75813_write_data_block1(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+   _lcd_sanyo_lc75813_write_data_block2(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+   _lcd_sanyo_lc75813_write_data_block3(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+   _lcd_sanyo_lc75813_write_data_block4(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
    return 0;
 }
 
@@ -763,11 +769,11 @@ int dev_lcd_sanyo_lc75813_load(void){
 int dev_lcd_sanyo_lc75813_open(desc_t desc, int o_flag){
 
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
       return -1;
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
    }
 
    ofile_lst[desc].offset=0;
@@ -785,8 +791,8 @@ int dev_lcd_sanyo_lc75813_open(desc_t desc, int o_flag){
 ---------------------------------------------*/
 int dev_lcd_sanyo_lc75813_close(desc_t desc){
 
-   if(ofile_lst[desc].oflag & O_WRONLY){
-      if(!ofile_lst[desc].nb_writer){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      if(!ofile_lst[desc].nb_writer) {
       }
    }
 
@@ -841,17 +847,21 @@ int dev_lcd_sanyo_lc75813_write(desc_t desc, const char* buf,int size){
    int cb=0;
    lcdframebuffer_t lcdframebuffer;
 
-   for(cb=0;cb<size;cb++){
+   for(cb=0; cb<size; cb++) {
       lcdframebuffer.pos=ofile_lst[desc].offset+cb;
       lcdframebuffer.v=((signed char)buf[cb]);
-     __set_picto(lcdframebuffer.pos,lcdframebuffer.v);
+      __set_picto(lcdframebuffer.pos,lcdframebuffer.v);
    }
 
-   _lcd_sanyo_lc75813_write_data_block1(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-   _lcd_sanyo_lc75813_write_data_block2(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-   _lcd_sanyo_lc75813_write_data_block3(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-   _lcd_sanyo_lc75813_write_data_block4(_sanyo_lc75813_bits_buffer,sizeof(_sanyo_lc75813_bits_buffer));
-  
+   _lcd_sanyo_lc75813_write_data_block1(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+   _lcd_sanyo_lc75813_write_data_block2(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+   _lcd_sanyo_lc75813_write_data_block3(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+   _lcd_sanyo_lc75813_write_data_block4(_sanyo_lc75813_bits_buffer,
+                                        sizeof(_sanyo_lc75813_bits_buffer));
+
    ofile_lst[desc].offset+=cb;
 
 
@@ -867,18 +877,18 @@ int dev_lcd_sanyo_lc75813_write(desc_t desc, const char* buf,int size){
 | See:
 ---------------------------------------------*/
 int dev_lcd_sanyo_lc75813_seek(desc_t desc,int offset,int origin){
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_CUR:
+      ofile_lst[desc].offset+=offset;
       break;
 
-      case SEEK_END:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_END:
+      ofile_lst[desc].offset+=offset;
       break;
    }
 
@@ -887,11 +897,11 @@ int dev_lcd_sanyo_lc75813_seek(desc_t desc,int offset,int origin){
 
 /*--------------------------------------------
 | Name:        dev_lcd_sanyo_lc75813_ioctl
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int dev_lcd_sanyo_lc75813_ioctl(desc_t desc,int request,va_list ap){
    return -1;

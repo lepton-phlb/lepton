@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -38,7 +38,7 @@ either the MPL or the [eCos GPL] License."
 /*----------------------------------------------------------------------------*/
 // Definitions generales
 
-#define IDLE_TIMEOUT					(FREQUENCY_SPI_SD * 1 / 2)/8 			// 500 ms
+#define IDLE_TIMEOUT                                    (FREQUENCY_SPI_SD * 1 / 2)/8                    // 500 ms
 
 /*----------------------------------------------------------------------------*/
 // Definitions des commandes (SPI mode)
@@ -83,57 +83,57 @@ either the MPL or the [eCos GPL] License."
 /*----------------------------------------------------------------------------*/
 // Definitions utiles pour la creation des commandes
 
-#define CMD_SIZE			         6
-#define CMD_START_TRAME				0x40
-#define CMD_END_TRAME_CMD0_CS		0x95 //Checksum de la CMD0 precalcule
-#define CMD_END_TRAME_NO_CS		0xFF //Pas de checksum en mode SPI
-#define CMD_NO_ARG				   0x00000000 //Pas de checksum en mode SPI
+#define CMD_SIZE                                 6
+#define CMD_START_TRAME                         0x40
+#define CMD_END_TRAME_CMD0_CS           0x95 //Checksum de la CMD0 precalcule
+#define CMD_END_TRAME_NO_CS             0xFF //Pas de checksum en mode SPI
+#define CMD_NO_ARG                                 0x00000000 //Pas de checksum en mode SPI
 
 /*----------------------------------------------------------------------------*/
 // Definitions utiles pour la lecture/ecriture de block
-#define BLOCK_SIZE				512
-#define CHECKSUM_SIZE			2
-#define READ_TIMEOUT	     		(FREQUENCY_SPI_SD * 0.10)/8 // 100 ms
-#define WRITE_TIMEOUT 			(FREQUENCY_SPI_SD * 0.25)/8 // 250 ms
-#define DATA_RESP_TIMEOUT	     		8
-#define TOKEN_MASK_START_SRW_MR		0xFE
-#define TOKEN_MASK_START_MW			0xFC
-#define TOKEN_MASK_STOP_MW			   0xFD
-#define TOKEN_MASK_BUSY				   0x00
-#define TOKEN_SIZE				      1
-#define WRITE_CS_BIDON				   0xFFFF
-#define TOKEN_MASK_WRITE_OK			0x05
-#define TOKEN_MASK_WRITE_CRC_ERROR	0x0B
-#define TOKEN_MASK_WRITE_ERROR		0x0D
+#define BLOCK_SIZE                              512
+#define CHECKSUM_SIZE                   2
+#define READ_TIMEOUT                    (FREQUENCY_SPI_SD * 0.10)/8 // 100 ms
+#define WRITE_TIMEOUT                   (FREQUENCY_SPI_SD * 0.25)/8 // 250 ms
+#define DATA_RESP_TIMEOUT                       8
+#define TOKEN_MASK_START_SRW_MR         0xFE
+#define TOKEN_MASK_START_MW                     0xFC
+#define TOKEN_MASK_STOP_MW                         0xFD
+#define TOKEN_MASK_BUSY                            0x00
+#define TOKEN_SIZE                                    1
+#define WRITE_CS_BIDON                             0xFFFF
+#define TOKEN_MASK_WRITE_OK                     0x05
+#define TOKEN_MASK_WRITE_CRC_ERROR      0x0B
+#define TOKEN_MASK_WRITE_ERROR          0x0D
 
 /*----------------------------------------------------------------------------*/
-// Definitions utiles pour la reception des reponses 
-#define RESPONSE_R1				 1
-#define RESPONSE_R2			    2
-#define RESPONSE_R1_SIZE		 1
-#define RESPONSE_R2_SIZE		 2
-#define OCR_SIZE			   	 5
-#define REGISTER_SIZE			 16
-#define RESPONSE_TIMEOUT		 8 // 8 octets = 64 clocks cycle
-#define RESPONSE_R1_MASK		 0x80 // si le MSB vaut 1, reponse invalide
-#define RESPONSE_R1_BUSY		 0x7F00
+// Definitions utiles pour la reception des reponses
+#define RESPONSE_R1                              1
+#define RESPONSE_R2                         2
+#define RESPONSE_R1_SIZE                 1
+#define RESPONSE_R2_SIZE                 2
+#define OCR_SIZE                                 5
+#define REGISTER_SIZE                    16
+#define RESPONSE_TIMEOUT                 8 // 8 octets = 64 clocks cycle
+#define RESPONSE_R1_MASK                 0x80 // si le MSB vaut 1, reponse invalide
+#define RESPONSE_R1_BUSY                 0x7F00
 
 /*----------------------------------------------------------------------------*/
-// Status de la COM et de la SDCARD 
+// Status de la COM et de la SDCARD
 
-#define STATUS_SD_SPI_OK			      0x00000000	
-#define STATUS_SD_IDLE_STATE			   0x00000100 // Resultats R1
-#define STATUS_SD_RESPONSE_TIMEOUT		0x00008000 // Reponse a la cmd non recue
-#define STATUS_SD_READ_ERROR			   0x00010000 // Resultat de lecture
-#define STATUS_SD_READ_CC_ERROR			0x00020000
-#define STATUS_SD_READ_ECC_ERROR		   0x00030000
-#define STATUS_SD_READ_OUT_OF_RANGE		0x00040000
-#define STATUS_SD_TOKEN_TIMEOUT			0x00080000 // start ou stop token non recu
-#define STATUS_SD_WRITE_CRC_ERROR		0x00100000 // Resultat d'ecriture
-#define STATUS_SD_WRITE_ERROR			   0x00200000
-#define STATUS_SD_DATA_RESP_TIMEOUT		0x00400000
-#define STATUS_SD_BUSY_TIMEOUT			0x00800000
-#define STATUS_SD_TIMEOUT_IDLE			0x04000000 // Idle timeout
+#define STATUS_SD_SPI_OK                              0x00000000
+#define STATUS_SD_IDLE_STATE                       0x00000100 // Resultats R1
+#define STATUS_SD_RESPONSE_TIMEOUT              0x00008000 // Reponse a la cmd non recue
+#define STATUS_SD_READ_ERROR                       0x00010000 // Resultat de lecture
+#define STATUS_SD_READ_CC_ERROR                 0x00020000
+#define STATUS_SD_READ_ECC_ERROR                   0x00030000
+#define STATUS_SD_READ_OUT_OF_RANGE             0x00040000
+#define STATUS_SD_TOKEN_TIMEOUT                 0x00080000 // start ou stop token non recu
+#define STATUS_SD_WRITE_CRC_ERROR               0x00100000 // Resultat d'ecriture
+#define STATUS_SD_WRITE_ERROR                      0x00200000
+#define STATUS_SD_DATA_RESP_TIMEOUT             0x00400000
+#define STATUS_SD_BUSY_TIMEOUT                  0x00800000
+#define STATUS_SD_TIMEOUT_IDLE                  0x04000000 // Idle timeout
 
 /*----------------------------------------------------------------------------*/
 // Macros
@@ -142,8 +142,8 @@ either the MPL or the [eCos GPL] License."
 // Structures
 typedef struct
 {
-	unsigned char		volid[4];
-	unsigned long		size;
+   unsigned char volid[4];
+   unsigned long size;
 } t_media;
 
 /*----------------------------------------------------------------------------*/

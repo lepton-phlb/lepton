@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -75,12 +75,12 @@ Global Declaration
 //
 #define STOPSERVER_TIMEOUT          10
 
-#define ERR_NO_SOCKET		-1
-#define ERR_BIND_FAILED		-2
-#define ERR_LISTEN_FAILED	-3
-#define ERR_ACCEPT_FAILED	-4
-#define ERR_CONNECT_FAILED	-5
-#define ERR_NO_HOSTNAME		-6
+#define ERR_NO_SOCKET           -1
+#define ERR_BIND_FAILED         -2
+#define ERR_LISTEN_FAILED       -3
+#define ERR_ACCEPT_FAILED       -4
+#define ERR_CONNECT_FAILED      -5
+#define ERR_NO_HOSTNAME         -6
 
 
 #define TCP_PORT_SERVER    2000
@@ -114,7 +114,8 @@ void hand(int sig){
 | Comments:
 | See:
 ---------------------------------------------*/
-#define  XML_REQUEST           "\
+#define  XML_REQUEST \
+   "\
 <?xml version=\"1.0\"?>\
 <releve-cpl version=\"1.0\">\
 	<telerel-rq ident=\"040000000001\">\
@@ -132,64 +133,64 @@ char str[MAX_LEN];     /* string to send */
 
 void socket_client_tcp(void)
 {
-  int sock;                   /* socket descriptor */
+   int sock;                  /* socket descriptor */
 
-  struct sockaddr_in mc_addr; /* socket address structure */
-  int    send_len;               /* length of string to send */
-  char   mc_addr_str[32];          /*  IP address */
-  unsigned short mc_port;     /*  port */
-  int    res;
+   struct sockaddr_in mc_addr; /* socket address structure */
+   int send_len;                 /* length of string to send */
+   char mc_addr_str[32];           /*  IP address */
+   unsigned short mc_port;    /*  port */
+   int res;
 
    strcpy (mc_addr_str, "192.168.200.1");
    mc_port     = 80;
 
-  /* create a socket for sending to the multicast address */
-  if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
-    printf("socket() failed");
-    exit(1);
-  }
-    
-  /* construct a tcpip address structure */
-  memset(&mc_addr, 0, sizeof(mc_addr));
-  mc_addr.sin_family      = AF_INET;
-  mc_addr.sin_addr.s_addr = inet_addr(mc_addr_str);
-  mc_addr.sin_port        = htons(mc_port);
+   /* create a socket for sending to the multicast address */
+   if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+      printf("socket() failed");
+      exit(1);
+   }
 
-  res =sizeof(struct sockaddr_in);
-  // Connection to the server
-  res = connect ( sock,
-                 (struct sockaddr *) &mc_addr,
-                 sizeof(struct sockaddr_in) );
+   /* construct a tcpip address structure */
+   memset(&mc_addr, 0, sizeof(mc_addr));
+   mc_addr.sin_family      = AF_INET;
+   mc_addr.sin_addr.s_addr = inet_addr(mc_addr_str);
+   mc_addr.sin_port        = htons(mc_port);
+
+   res =sizeof(struct sockaddr_in);
+   // Connection to the server
+   res = connect ( sock,
+                   (struct sockaddr *) &mc_addr,
+                   sizeof(struct sockaddr_in) );
    if (res == -1) {
-      close(sock); 
+      close(sock);
       return;
       // Error: connection with server is aborted!!!! ADU
    }
    res = connect ( sock,
-                 (struct sockaddr *) &mc_addr,
-                 sizeof(struct sockaddr_in) );
+                   (struct sockaddr *) &mc_addr,
+                   sizeof(struct sockaddr_in) );
    if (res == -1) {
-      close(sock); 
+      close(sock);
       return;
       // Error: connection with server is aborted!!!! ADU
    }
-  /* clear send buffer */
-  memset(str, 0, sizeof(str)); 
-  strcpy (str, XML_REQUEST);
-  send_len = strlen(str);
+   /* clear send buffer */
+   memset(str, 0, sizeof(str));
+   strcpy (str, XML_REQUEST);
+   send_len = strlen(str);
 
-    /* send string to multicast address */
- res = sendto(sock, str, send_len, 0, 
-         (struct sockaddr *) &mc_addr, 
-         sizeof(mc_addr));
+   /* send string to multicast address */
+   res = sendto(sock, str, send_len, 0,
+                (struct sockaddr *) &mc_addr,
+                sizeof(mc_addr));
 
-    if (res != send_len) {
+   if (res != send_len) {
       printf("sendto() sent incorrect number of bytes");
       exit(1);
-    }
+   }
 
-    /* clear send buffer */
-    memset(str, 0, sizeof(str));
+   /* clear send buffer */
+   memset(str, 0, sizeof(str));
 }
 
 
@@ -213,7 +214,7 @@ int socket_test(void){
    sock=socket(PF_INET,SOCK_STREAM,0);
    if(sock<0)
    {
-		return(ERR_NO_SOCKET);
+      return(ERR_NO_SOCKET);
    }
 
    memset(&addr,0,sizeof(addr));
@@ -225,25 +226,25 @@ int socket_test(void){
 
 
    nRc=bind(sock,(struct sockaddr*)&addr,sizeof(struct sockaddr));
-   if(nRc!=0){
-     close(sock);
-	  return(ERR_BIND_FAILED);
-	}
+   if(nRc!=0) {
+      close(sock);
+      return(ERR_BIND_FAILED);
+   }
 
-   nRc=listen(sock,/*SOMAXCONN*/0);
-   if(nRc!=0){
-		close(sock);
-		return(ERR_LISTEN_FAILED);
-	}
+   nRc=listen(sock,/*SOMAXCONN*/ 0);
+   if(nRc!=0) {
+      close(sock);
+      return(ERR_LISTEN_FAILED);
+   }
 
 
    //
    newSock = accept( sock,(struct sockaddr*) &acc_sin,(int*) &sin_len);
-   for(;;){
+   for(;; ) {
       int cb;
       int i=0;
-      if((cb=recv(newSock,buffer,sizeof(buffer)-1,0))<=0)break;
-      for(i=0;i<cb;i++){
+      if((cb=recv(newSock,buffer,sizeof(buffer)-1,0))<=0) break;
+      for(i=0; i<cb; i++) {
          //printf("buf[%d]=%c\n",i,buffer[i]);
       }
       send(newSock,buffer,cb,0);
@@ -256,37 +257,37 @@ int socket_test(void){
 
 /*--------------------------------------------
 | Name:        lwip_socket_test
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 /*
 char sock_buf[400];
 static void
 lwip_socket_test(void *arg)
 {
-	int sock,s;
-	int len;
-	struct sockaddr_in addr,rem;
-	sock = socket(AF_INET,SOCK_STREAM,0);	
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(7);
-	addr.sin_addr.s_addr = INADDR_ANY;
+        int sock,s;
+        int len;
+        struct sockaddr_in addr,rem;
+        sock = socket(AF_INET,SOCK_STREAM,0);
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(7);
+        addr.sin_addr.s_addr = INADDR_ANY;
 
    printf("socket app started\n");
 
-	bind(sock,(struct sockaddr *)&addr,sizeof(addr));
-			
-	listen(sock,5);
-	while(1) {	
-		len = sizeof(rem);
-		s = accept(sock,(struct sockaddr*)&rem,&len);
-		while((len = read(s,sock_buf,400)) > 0)
-			write(s,sock_buf,len);
-		close(s);
-	}	
+        bind(sock,(struct sockaddr *)&addr,sizeof(addr));
+
+        listen(sock,5);
+        while(1) {
+                len = sizeof(rem);
+                s = accept(sock,(struct sockaddr*)&rem,&len);
+                while((len = read(s,sock_buf,400)) > 0)
+                        write(s,sock_buf,len);
+                close(s);
+        }
 }
 */
 /*-------------------------------------------
@@ -347,35 +348,35 @@ void basic_test(void){
 */
 
 
-   if(!(pid=vfork())){
+   if(!(pid=vfork())) {
       i++;
       printf("son(%d):%d\r\n",getpid(),++i);
       exit(0);
    }
    printf("father(%d):%d\r\n",getpid(),++i);
 
- /*
-   pid=vfork();
-   if(pid!=0){
-      i++;
-      printf("Father(%d):%d\r\n",getpid(),++i);
+   /*
+     pid=vfork();
+     if(pid!=0){
+        i++;
+        printf("Father(%d):%d\r\n",getpid(),++i);
 
-   }else{
-      i++;
+     }else{
+        i++;
 
-      printf("Son(%d):%d\r\n",getpid(),++i);
-      //Sleep(1000);
-      pid=vfork();
-      if(pid!=0){
-         printf("Father(%d):%d\r\n",getpid(),++i);
-         //Sleep(1000);
-      }else{
-         printf("Son(%d):%d\r\n",getpid(),++i);
-         //Sleep(1000);
-      }
+        printf("Son(%d):%d\r\n",getpid(),++i);
+        //Sleep(1000);
+        pid=vfork();
+        if(pid!=0){
+           printf("Father(%d):%d\r\n",getpid(),++i);
+           //Sleep(1000);
+        }else{
+           printf("Son(%d):%d\r\n",getpid(),++i);
+           //Sleep(1000);
+        }
 
-   }
-*/
+     }
+  */
    exit(0);
 
 }
@@ -427,25 +428,25 @@ int pipe_test(int argc,char* argv[]){
    np = open("/dev/pipe0",O_WRONLY,0);
    printf("open /dev/pipe0 O_WRONLY ok\r\n");
 
-   while (1){
+   while (1) {
 
-      cb=read(STDIN_FILENO,buf,5);//read pipe
-      if(cb<=0){
+      cb=read(STDIN_FILENO,buf,5); //read pipe
+      if(cb<=0) {
          printf("\r\n no writer\r\n");
 #ifdef WIN32
          Sleep(10);
 #endif
       }
 
-      for(i=0;i<cb;i++){
+      for(i=0; i<cb; i++) {
          //printf("%c",buf[i]);//write ttys0
-         if(buf[i]=='q'){
+         if(buf[i]=='q') {
             //close(STDIN_FILENO); //close pipe: SIGPIPE to writer
          }
       }
 
       if(cb>0)
-       write(STDOUT_FILENO,buf,cb);//write ttys0
+         write(STDOUT_FILENO,buf,cb);  //write ttys0
 
       //write to named pipe
       write(np,buf,cb);
@@ -472,7 +473,7 @@ int pipe_test(int argc,char* argv[]){
 | See:
 ---------------------------------------------*/
 void file_test(){
-   char buf[80]={0};//64+16
+   char buf[80]={0}; //64+16
    int i =0;
    int j =0;
    int cb = 0;
@@ -480,11 +481,11 @@ void file_test(){
 
    printf("fill buffer\r\n");
    //
-   for(i = 0; i<sizeof(buf); i++){
+   for(i = 0; i<sizeof(buf); i++) {
       buf[i]='a'+ (j++);
       printf("%c",buf[i]);
 
-      if(buf[i]=='z'){
+      if(buf[i]=='z') {
          j=0;
          printf("\r\n");
       }
@@ -497,7 +498,7 @@ void file_test(){
    //write
    printf("write buffer\r\n");
    fd=open("/etc/ftst",O_CREAT|O_WRONLY,0);
-   if(fd<0){
+   if(fd<0) {
       printf("test error\r\n");
       return;
    }
@@ -510,10 +511,10 @@ void file_test(){
    lseek(fd,(off_t)0,SEEK_SET);
    cb  = read(fd,buf,sizeof(buf));
    printf("read %d bytes ok\r\n",cb);
-   for(i = 0; i<sizeof(buf); i++){
+   for(i = 0; i<sizeof(buf); i++) {
       printf("%c",buf[i]);
 
-      if(buf[i]=='z'){
+      if(buf[i]=='z') {
          printf("\r\n");
       }
 
@@ -523,7 +524,7 @@ void file_test(){
 
    printf("reopen\r\n",cb);
    fd=open("/etc/ftst",O_RDONLY,0);
-   if(fd<0){
+   if(fd<0) {
       printf("test error\r\n");
       return;
    }
@@ -534,10 +535,10 @@ void file_test(){
    memset(buf,0,sizeof(buf));
    printf("reset buffer\r\n",cb);
    j=0;
-   for(i = 0; i<sizeof(buf); i++){
+   for(i = 0; i<sizeof(buf); i++) {
       printf("%c",buf[i]+'0');
 
-      if(!((++j)%26)){
+      if(!((++j)%26)) {
          j=0;
          printf("\r\n");
       }
@@ -547,10 +548,10 @@ void file_test(){
    //read
    cb  = read(fd,buf,sizeof(buf));
    printf("read %d bytes ok\r\n",cb);
-   for(i = 0; i<sizeof(buf); i++){
+   for(i = 0; i<sizeof(buf); i++) {
       printf("%c",buf[i]);
 
-      if(buf[i]=='z'){
+      if(buf[i]=='z') {
          printf("\r\n");
       }
 
@@ -575,7 +576,7 @@ void test_waitpid(void){
    int status;
    printf("father:pid[%d]\r\n",getpid());
 
-   if(!(pid=vfork())){
+   if(!(pid=vfork())) {
       printf("son:pid[%d]\r\n",getpid());
       //Sleep(3000);
       setpgid(0,0);
@@ -585,7 +586,7 @@ void test_waitpid(void){
       exit(0);
    }
 
-   while((pid=waitpid((pid_t)0,&status,0))>0){
+   while((pid=waitpid((pid_t)0,&status,0))>0) {
       printf(":[%d] done(%d)\r\n",pid,status);
    };
 
@@ -637,7 +638,7 @@ void write_test(void){
    int cb;
    int fd;
    fd=open("/etc/f1",O_CREAT|O_WRONLY,0);
-   for(i=0;i<2;i++){
+   for(i=0; i<2; i++) {
       /*if(i==546)
          printf("bug");*/
       cb=write(fd,buf,sizeof(buf));
@@ -647,21 +648,21 @@ void write_test(void){
 
 /*--------------------------------------------
 | Name:        lock_test
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void lock_test(void){
    char buf[32];
    struct flock flock1;
    pid_t pid = getpid();
    int fd = open("/usr/bin/tst/tstkb",O_RDONLY,0);
-   
+
    //
    fcntl(fd,F_GETLK,&flock1);
-   if(flock1.l_type!=F_UNLCK){
+   if(flock1.l_type!=F_UNLCK) {
       sprintf(buf,"pid=%d lock by pid=%d\r\n",pid,flock1.l_pid);
       write(1,buf,strlen(buf));
    }
@@ -702,24 +703,28 @@ void lock_test(void){
 
 /*--------------------------------------------
 | Name:        test_eth
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void test_eth(void){
-   const static unsigned char _dummy_tcp[64] = {0x00,0x02,0xF2,0x00,0xAA,0x55,0x00,0x02,0xF2,0x00,0x03,0x7B,0x08,0x00,0x44,0x45,
-                0x46,0x47,0x48,0x49,0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x60,0x61,
-                0x62,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77,
-                0x78,0x79,0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x90,0x91,0x92,0x93};
+   const static unsigned char _dummy_tcp[64] =
+   {0x00,0x02,0xF2,0x00,0xAA,0x55,0x00,0x02,0xF2,0x00,0x03,0x7B,0x08,0x00,0x44,0x45,
+    0x46,0x47,0x48,0x49,0x50,0x51,0x52,0x53,0x54,0x55,
+    0x56,0x57,0x58,0x59,0x60,0x61,
+    0x62,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x70,0x71,
+    0x72,0x73,0x74,0x75,0x76,0x77,
+    0x78,0x79,0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,
+    0x88,0x89,0x90,0x91,0x92,0x93};
 
    char buf[512]={0};
    int fd;
    int cb;
 
    fd = open("/dev/eth0",O_RDWR,0);
-   for(;;){
+   for(;; ) {
       printf("wait packet...");
       cb=read(fd,buf,sizeof(buf));
       if(cb<0)
@@ -737,11 +742,11 @@ void test_eth(void){
 
 /*--------------------------------------------
 | Name:        test_alarm
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 static int alarm_fd;
 int alarm_cpt=0;
@@ -750,34 +755,34 @@ void alarm_handler(int sig){
    char buf[48]={0};
    int i=0;
    int cb=0;
-   
+
    alarm(1);
    printf("alarm sighandler(%d) %d\r\n",getpid(),alarm_cpt++);
-      
+
    //cb=write(alarm_fd,buf,sizeof(buf));
    //if(cb<sizeof(buf))
-      //exit(0);
+   //exit(0);
 }
 
 void alarm_test(){
    struct sigaction sa;
    alarm_fd=open("/etc/f1",O_CREAT|O_WRONLY,0);
-   
+
    sa.sa_handler=alarm_handler;
 
    sigaction(SIGALRM,&sa,NULL);
    alarm(1);
-   for(;;)
+   for(;; )
       pause();
 }
 
 /*--------------------------------------------
 | Name:        test_cal_asyc3
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void test_cal_asyc3(void){
 #define EEPROM_ADDRESS 0x77F0
@@ -787,8 +792,8 @@ void test_cal_asyc3(void){
 
    //remove("/etc/calib");
    //test
-   fd_src=open("/dev/hd/hdb",O_RDONLY,0);//eeprom
-   fd_dst=open("/etc/calib",O_CREAT|O_WRONLY,0);//fichier de calibration
+   fd_src=open("/dev/hd/hdb",O_RDONLY,0); //eeprom
+   fd_dst=open("/etc/calib",O_CREAT|O_WRONLY,0); //fichier de calibration
 
    lseek(fd_src,EEPROM_ADDRESS,SEEK_SET);
    read(fd_src,buf,sizeof(buf));
@@ -796,17 +801,17 @@ void test_cal_asyc3(void){
    write(fd_dst,buf,sizeof(buf));
 
    close(fd_dst);
-   close(fd_src); 
+   close(fd_src);
 
 }
 
 /*--------------------------------------------
 | Name:        test_modbus_eth
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void test_modbus_eth(void){
    char buf[32];
@@ -816,28 +821,28 @@ void test_modbus_eth(void){
    int cb;
    unsigned int i, l;
    static unsigned int cpt=0;
-   while(1){
+   while(1) {
       //printf("%03d:",cpt++);
       cb = read(0,buf,sizeof(buf));
-      for(i=0;i<(unsigned)cb;i++){
+      for(i=0; i<(unsigned)cb; i++) {
          sprintf(p_eth_buf,"0x%02x ",buf[i]);
          l = strlen(p_eth_buf);
          p_eth_buf+=l;
          cpt+=l;
       }
-      
+
       sprintf(p_eth_buf,"\r\n");
       l = strlen(p_eth_buf);
       p_eth_buf+=l;
       cpt+=l;
-      
+
       //
       if(cpt<450)
          continue;
       //send
       l=cpt;
       cpt=0;
-      while(cpt<l){
+      while(cpt<l) {
          cb = write(1,eth_buf+cpt,l-cpt);
          cpt+=cb;
       }
@@ -845,40 +850,40 @@ void test_modbus_eth(void){
       //
       p_eth_buf = eth_buf;
       cpt=0;
-     
+
    }
 }
 
 /*--------------------------------------------
 | Name:        test_modbus
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void test_modbus(void){
    char buf[64];
    int cb;
-   int i ;
+   int i;
    unsigned char cpt=0;
    struct termios _termios;
 
    tcgetattr(STDIN_FILENO,&_termios);
-   _termios.c_cc[VTIME]=20;//read timeout 20*0.1s=2 seconds
+   _termios.c_cc[VTIME]=20; //read timeout 20*0.1s=2 seconds
    tcsetattr(STDIN_FILENO,TCSANOW,&_termios);
 
-   while(1){
+   while(1) {
       printf("%03d:",cpt++);
-      
-      if((cb = read(0,buf,sizeof(buf)))<0){
+
+      if((cb = read(0,buf,sizeof(buf)))<0) {
          printf("crc error\r\n");
          continue;
       }
       if(!cb)
          printf("timeout\r\n");
 
-      for(i=0;i<cb;i++)
+      for(i=0; i<cb; i++)
          printf("0x%02x ",buf[i]);
       printf("\r\n");
    }
@@ -886,21 +891,21 @@ void test_modbus(void){
 
 /*--------------------------------------------
 | Name:        test_echo
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void test_rs_asyc3_cal(void){
    int cb;
    int w;
    char buffer[128];
 
-   for(;;){
+   for(;; ) {
       cb=0;
       printf("wait...");
-      while( (cb+=read(0,buffer+cb,sizeof(buffer)-cb))<(sizeof(buffer)-2));
+      while( (cb+=read(0,buffer+cb,sizeof(buffer)-cb))<(sizeof(buffer)-2)) ;
       printf("ok\r\n");
       printf("test_cal_asyc3...");
       test_cal_asyc3();
@@ -914,16 +919,16 @@ void test_rs_asyc3_cal(void){
 
 /*--------------------------------------------
 | Name:        test_pthread1
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void* my_pthread_routine(void* arg){
    int i=0;
-   for(;;){
-      if(i++==10){
+   for(;; ) {
+      if(i++==10) {
          //pthread_exit(0);
          pthread_cancel(pthread_self());
       }
@@ -938,7 +943,7 @@ void test_pthread1(void){
    pthread_t my_pthread1;
    pthread_t my_pthread2;
    pthread_attr_t thread_attr;
-   
+
    //
    thread_attr.stacksize = 2048;
    thread_attr.stackaddr = NULL;
@@ -950,7 +955,7 @@ void test_pthread1(void){
    pthread_create(&my_pthread2, &thread_attr,my_pthread_routine,NULL);
    printf("thread 2 %ul\r\n",my_pthread2);
 
-   for(;;){
+   for(;; ) {
       if(i++==2)
          exit(0);
       printf("main %u\r\n",pthread_self());
@@ -961,22 +966,22 @@ void test_pthread1(void){
 
 /*--------------------------------------------
 | Name:        test_pthread_mutex1
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 static volatile int shared_var = 0;
 
 void* my_pthread_mutex1_routine(void* arg){
    int i=0;
-   
+
    pthread_mutex_t* mutex=(pthread_mutex_t*)arg;
 
-   for(;;){
+   for(;; ) {
 
-      if(i++==20){
+      if(i++==20) {
          //pthread_exit(0);
          pthread_cancel(pthread_self());
       }
@@ -989,7 +994,7 @@ void* my_pthread_mutex1_routine(void* arg){
          return (void*)0;
       //
       //usleep(500000);
-      
+
    }
 }
 
@@ -1003,7 +1008,7 @@ void test_pthread_mutex1(void){
 
    //
    pthread_mutex_init(&mutex,(pthread_mutexattr_t*)0);
-   
+
    //
    thread_attr.stacksize = 2048;
    thread_attr.stackaddr = NULL;
@@ -1013,7 +1018,7 @@ void test_pthread_mutex1(void){
    pthread_create(&my_pthread1, &thread_attr,my_pthread_mutex1_routine,&mutex);
    printf("thread 1 %ul\r\n",my_pthread1);
 
-   for(;;){
+   for(;; ) {
 
       if(i++==20)
          exit(0);
@@ -1036,20 +1041,20 @@ void test_pthread_mutex1(void){
 
 /*--------------------------------------------
 | Name:        test_pthread_cond1
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 void* my_pthread_cond1_routine(void* arg){
    int i=0;
-   
+
    pthread_mutex_t* mutex=(pthread_mutex_t*)arg;
 
-   for(;;){
+   for(;; ) {
 
       //
       printf_r("thread[%ul]  wait mutex...",pthread_self());
@@ -1065,7 +1070,7 @@ void* my_pthread_cond1_routine(void* arg){
          return (void*)0;
       //
       usleep(100000);
-      
+
    }
 }
 
@@ -1082,7 +1087,7 @@ void test_pthread_cond1(void){
    //
    pthread_mutex_init(&mutex,(pthread_mutexattr_t*)0);
    pthread_cond_init(&cond,(pthread_condattr_t*)0);
-   
+
    //
    thread_attr.stacksize = 2048;
    thread_attr.stackaddr = NULL;
@@ -1091,7 +1096,7 @@ void test_pthread_cond1(void){
 
    //if(pthread_mutex_lock(&mutex)<0)
    //return;
-   
+
 
    pthread_create(&my_pthread1, &thread_attr,my_pthread_cond1_routine,&mutex);
    printf("thread created 1 [%ul]\r\n",my_pthread1);
@@ -1100,8 +1105,8 @@ void test_pthread_cond1(void){
 
    //
    //
-   for(;;){
-      if(shared_var==25){
+   for(;; ) {
+      if(shared_var==25) {
          pthread_mutex_destroy(&mutex);
          exit(0);
       }
@@ -1123,11 +1128,11 @@ void test_pthread_cond1(void){
 
 /*--------------------------------------------
 | Name:        timer_test
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 
 void timer_handler(int sig){
@@ -1149,13 +1154,13 @@ void timer_test(void){
    timer_create(CLOCK_REALTIME,(struct sigevent*)0,&timerid);
 
    itimer.it_value.tv_sec=1;
-   itimer.it_value.tv_nsec=1000000000;//1s
-   itimer.it_interval.tv_sec=2;//1s
-   itimer.it_interval.tv_nsec=1000000000;//1s
+   itimer.it_value.tv_nsec=1000000000; //1s
+   itimer.it_interval.tv_sec=2; //1s
+   itimer.it_interval.tv_nsec=1000000000; //1s
 
    timer_settime(&timerid,CLOCK_REALTIME, &itimer,(struct itimerspec *)0);
 
-   for(;;){
+   for(;; ) {
       pause();
    }
 
@@ -1165,11 +1170,11 @@ void timer_test_rt(void){
    struct sigaction sa={0};
    timer_t timerid;
    struct sigevent sigevent={0};
-   struct siginfo  info={0};
+   struct siginfo info={0};
    struct itimerspec itimer;
 
    sigset_t set;
-   
+
    sigevent.sigev_signo=SIGRTMIN;
    timer_create(CLOCK_REALTIME,&sigevent,&timerid);
 
@@ -1182,14 +1187,14 @@ void timer_test_rt(void){
    sigprocmask(SIG_SETMASK,&set,(sigset_t*)0);
 
    itimer.it_value.tv_sec=1;
-   itimer.it_value.tv_nsec=1000000000;//1s
-   itimer.it_interval.tv_sec=2;//1s
-   itimer.it_interval.tv_nsec=1000000000;//1s
+   itimer.it_value.tv_nsec=1000000000; //1s
+   itimer.it_interval.tv_sec=2; //1s
+   itimer.it_interval.tv_nsec=1000000000; //1s
    timer_settime(&timerid,CLOCK_REALTIME, &itimer,(struct itimerspec *)0);
    //
    usleep(30000000);
    //
-   for(;;){
+   for(;; ) {
       sigwaitinfo(&set,&info);
       printf("si_code:%d si_signo=%d\r\n",info.si_code,info.si_signo);
    }
@@ -1198,11 +1203,11 @@ void timer_test_rt(void){
 
 /*--------------------------------------------
 | Name:        test_mqueue
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void* pthread_mq_reader_routine(void* arg){
 
@@ -1213,7 +1218,7 @@ void* pthread_mq_reader_routine(void* arg){
    fd_r=mq_open("/var/mq0",O_RDONLY);
 
    //usleep(4000000);
-   for(;;){
+   for(;; ) {
       int cb;
 
       //cb=read(fd_r,buf,sizeof(buf));
@@ -1221,7 +1226,7 @@ void* pthread_mq_reader_routine(void* arg){
       printf_r("mqr: %s [%d]\r\n",buf,prio);
       usleep(2000000);
    }
-   
+
    return (void*)0;
 }
 
@@ -1233,7 +1238,7 @@ void test_mqueue(void){
    int prio=1;
 
    struct mq_attr attr;
-   pthread_t      pthread_mq_reader;
+   pthread_t pthread_mq_reader;
    pthread_attr_t thread_attr;
 
 
@@ -1247,12 +1252,12 @@ void test_mqueue(void){
    thread_attr.stackaddr = NULL;
    thread_attr.priority  = 100;
    thread_attr.timeslice = 1;
-   
+
    pthread_create(&pthread_mq_reader, &thread_attr,pthread_mq_reader_routine,(void*)0);
    printf("thread reader created [%ul]\r\n",pthread_mq_reader);
 
 
-   for(;;){
+   for(;; ) {
       int d;
       i++;
       d=i;
@@ -1267,24 +1272,24 @@ void test_mqueue(void){
 
 /*--------------------------------------------
 | Name:        test_sem
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 static int i_sem_test;
 void* pthread_sem_routine(void* arg){
    sem_t* p_sem = (sem_t*)(arg);
 
-   for(;;){
+   for(;; ) {
       sem_wait(p_sem);
       i_sem_test++;
       printf_r("thread: i=%d\r\n",i_sem_test);
       usleep(1000000);
       sem_post(p_sem);
       //
-      usleep(1000);//for context switch
+      usleep(1000); //for context switch
    }
 
 }
@@ -1307,31 +1312,31 @@ void test_sem(void){
    pthread_create(&my_pthread, &thread_attr,pthread_sem_routine,&sem);
    printf("main: thread  %ul\r\n",my_pthread);
 
-   for(;;){
+   for(;; ) {
       sem_wait(&sem);
       i_sem_test++;
       printf_r("main: i=%d\r\n",i_sem_test);
       usleep(1000000);
       sem_post(&sem);
       //
-      usleep(1000);//for context switch
+      usleep(1000); //for context switch
    }
 
 }
 
 /*--------------------------------------------
 | Name:        test_stdio
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void test_stdio(void){
-   char  tokenstring[] = "15 12 14...";
-   char  s[81];
-   char  c;
-   int   i;
+   char tokenstring[] = "15 12 14...";
+   char s[81];
+   char c;
+   int i;
    float fp;
 
    double df=1.5678e-6;
@@ -1357,11 +1362,11 @@ void test_stdio(void){
 
 /*--------------------------------------------
 | Name:        tst_sdcard
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 
 /*
@@ -1376,7 +1381,7 @@ volatile unsigned short _stop_counter;
      mdbfs_profiler_counter=(*AT91C_TC1_CV);\
    }
 
-      
+
 
 #define __mdbfs_profiler_stop(){\
     unsigned short __counter__;\
@@ -1403,7 +1408,7 @@ void tst_fs_sdcard(void){
    __mdbfs_profiler_start();
    fd=open("/mnt/f1",O_CREAT|O_RDWR,0);
    __mdbfs_profiler_stop();
-  
+
    //
    lseek(fd,0,SEEK_SET);
 
@@ -1412,16 +1417,16 @@ void tst_fs_sdcard(void){
    if((cb=write(fd,buf,sizeof(buf)))<sizeof(buf))
       return ;
    __mdbfs_profiler_stop();
-   
+
    //
    lseek(fd,0,SEEK_SET);
-   
+
    //
    __mdbfs_profiler_start();
    if((cb=read(fd,buf,sizeof(buf)))<sizeof(buf))
       return;
    __mdbfs_profiler_stop();
-   
+
    //
    close(fd);
 }
@@ -1430,11 +1435,11 @@ void tst_fs_sdcard(void){
 
 /*--------------------------------------------
 | Name:        test_benchmark_write_fich
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 /*
 uchar8_t g_write_buffer [512];   // 120 voies*4 octet d'entete => 480 octets
@@ -1443,43 +1448,43 @@ void test_benchmark_write_fich(char *nom){
    struct   timespec tp_deb,tp_fin;
    uint32_t time_memo_deb,time_memo_fin;
       off_t pos;
-   int fd,cpt;      
+   int fd,cpt;
    char path[32];
    // Enable peripheral clock for selected PIOA   / PA28
-   *AT91C_PMC_PCER     = 1 << AT91C_ID_PIOA; // GPIO clock enable  
+   *AT91C_PMC_PCER     = 1 << AT91C_ID_PIOA; // GPIO clock enable
    (*AT91C_PIOA_PER)   = 1 << 28;            // PA28
    (*AT91C_PIOA_OER)   = 1 << 28;            // Ouput
-   
+
    sprintf(path,"/mnt/%s",nom);
    //  fd=open("/mnt/32k.txt",O_WRONLY|O_RDONLY,0);
   fd=open(path,O_WRONLY|O_RDONLY,0);
-  
+
   if (fd != -1)
-  {   
-    // pos = lseek(fd,0,SEEK_END);    
-    // lseek(fd,10000,SEEK_CUR); 
-    
+  {
+    // pos = lseek(fd,0,SEEK_END);
+    // lseek(fd,10000,SEEK_CUR);
+
 
     for(cpt=0;cpt < 1000;cpt++)
     {
-     lseek(fd,0,SEEK_SET); 
+     lseek(fd,0,SEEK_SET);
 
-//    clock_gettime(CLOCK_MONOTONIC, &tp_deb);  // initial time for top 500ms 
-//    time_memo_deb           = tp_deb.tv_sec*1000L + tp_deb.tv_nsec/1000000L;  
-     
-    ((*AT91C_PIOA_SODR) = (1<<28));           // PA28_1    
-    write(fd,g_write_buffer,sizeof(g_write_buffer));        
+//    clock_gettime(CLOCK_MONOTONIC, &tp_deb);  // initial time for top 500ms
+//    time_memo_deb           = tp_deb.tv_sec*1000L + tp_deb.tv_nsec/1000000L;
+
+    ((*AT91C_PIOA_SODR) = (1<<28));           // PA28_1
+    write(fd,g_write_buffer,sizeof(g_write_buffer));
     ((*AT91C_PIOA_CODR) = (1<<28));     // PA28_0
 
-//    clock_gettime(CLOCK_MONOTONIC, &tp_fin);  // initial time for top 500ms 
-//    time_memo_fin           = tp_fin.tv_sec*1000L + tp_fin.tv_nsec/1000000L;  
-    
+//    clock_gettime(CLOCK_MONOTONIC, &tp_fin);  // initial time for top 500ms
+//    time_memo_fin           = tp_fin.tv_sec*1000L + tp_fin.tv_nsec/1000000L;
+
     // usleep ( 100); // 100 us
     }
-    
-    //  printf("time = %d",time_memo_fin-time_memo_deb);   
+
+    //  printf("time = %d",time_memo_fin-time_memo_deb);
   }
-   
+
   close (fd);
 }
 */
@@ -1514,7 +1519,7 @@ int test2_main(int argc,char* argv[]){
    int i=0;
    pid_t pid;
    int status;*/
-   
+
    /*uint16_t coeff_pince;
 
    #if defined (__IAR_SYSTEMS_ICC)
@@ -1550,7 +1555,7 @@ int test2_main(int argc,char* argv[]){
    //lock_test();
    //test_benchmark_write_fich(argv[1]);
    return 0;
-   
+
 
    /*while(1){
       unsigned char c = (unsigned char)getc(stdin);
@@ -1613,7 +1618,7 @@ int test2_main(int argc,char* argv[]){
       }
       write(1,p,len);
       usleep(400000);//0.4 sec
-      
+
    }*/
 
    //fread_test();
@@ -1625,7 +1630,7 @@ int test2_main(int argc,char* argv[]){
    UDF|=0x02; //TA1 up count
    TA1 =32000;
    TABSR.1=1; //TA1 start flag
-   
+
    //count = TA1;
    usleep(100000);//100 msec
    TABSR.1=0; //TA1 stop flag

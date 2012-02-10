@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 
 // Lepton
@@ -81,47 +81,47 @@ static void dm9161_dump_registers(phy_stuff_t * pDm);
 //-----------------------------------------------------------------------------
 static unsigned char emac_wait_phy( unsigned int retry )
 {
-    unsigned int retry_count = 0;
+   unsigned int retry_count = 0;
 
-    while((AT91C_BASE_EMACB->EMAC_NSR & AT91C_EMAC_IDLE) == 0) {
-        // Dead LOOP!
-        if (retry == 0) {
-            continue;
-        }
-        // Timeout check
-        retry_count++;
-        if(retry_count >= retry) {
+   while((AT91C_BASE_EMACB->EMAC_NSR & AT91C_EMAC_IDLE) == 0) {
+      // Dead LOOP!
+      if (retry == 0) {
+         continue;
+      }
+      // Timeout check
+      retry_count++;
+      if(retry_count >= retry) {
 //            TRACE_ERROR("E: Wait PHY time out\n\r");
-            return 0;
-        }
-    }
-    return 1;
+         return 0;
+      }
+   }
+   return 1;
 }
 
 //-----------------------------------------------------------------------------
-/// Set MDC clock according to current board clock. Per 802.3, MDC should be 
+/// Set MDC clock according to current board clock. Per 802.3, MDC should be
 /// less then 2.5MHz.
 /// Return 1 if successfully, 0 if MDC clock not found.
 //-----------------------------------------------------------------------------
 unsigned char emac_set_mdc_clock( unsigned int mck )
 {
-    int clock_dividor;
+   int clock_dividor;
 
-    if (mck <= 20000000) {
-        clock_dividor = AT91C_EMAC_CLK_HCLK_8;          /// MDC clock = MCK/8
-    } else if (mck <= 40000000) {
-        clock_dividor = AT91C_EMAC_CLK_HCLK_16;         /// MDC clock = MCK/16
-    } else if (mck <= 80000000) {
-        clock_dividor = AT91C_EMAC_CLK_HCLK_32;         /// MDC clock = MCK/32
-    } else if (mck <= 160000000) {
-        clock_dividor = AT91C_EMAC_CLK_HCLK_64;         /// MDC clock = MCK/64
-    } else {
+   if (mck <= 20000000) {
+      clock_dividor = AT91C_EMAC_CLK_HCLK_8;            /// MDC clock = MCK/8
+   } else if (mck <= 40000000) {
+      clock_dividor = AT91C_EMAC_CLK_HCLK_16;           /// MDC clock = MCK/16
+   } else if (mck <= 80000000) {
+      clock_dividor = AT91C_EMAC_CLK_HCLK_32;           /// MDC clock = MCK/32
+   } else if (mck <= 160000000) {
+      clock_dividor = AT91C_EMAC_CLK_HCLK_64;           /// MDC clock = MCK/64
+   } else {
       //  TRACE_ERROR("E: No valid MDC clock.\n\r");
-        return 0;
-    }
-    AT91C_BASE_EMACB->EMAC_NCFGR = (AT91C_BASE_EMACB->EMAC_NCFGR & (~AT91C_EMAC_CLK))
-                                 | clock_dividor;
-    return 1;
+      return 0;
+   }
+   AT91C_BASE_EMACB->EMAC_NCFGR = (AT91C_BASE_EMACB->EMAC_NCFGR & (~AT91C_EMAC_CLK))
+                                  | clock_dividor;
+   return 1;
 }
 
 //-----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ unsigned char emac_set_mdc_clock( unsigned int mck )
 //-----------------------------------------------------------------------------
 void emac_enable_mdio( void )
 {
-    AT91C_BASE_EMACB->EMAC_NCR |= AT91C_EMAC_MPE;
+   AT91C_BASE_EMACB->EMAC_NCR |= AT91C_EMAC_MPE;
 }
 
 //-----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ void emac_enable_mdio( void )
 //-----------------------------------------------------------------------------
 void emac_disable_mdio( void )
 {
-    AT91C_BASE_EMACB->EMAC_NCR &= ~AT91C_EMAC_MPE;
+   AT91C_BASE_EMACB->EMAC_NCR &= ~AT91C_EMAC_MPE;
 }
 
 //-----------------------------------------------------------------------------
@@ -145,7 +145,7 @@ void emac_disable_mdio( void )
 //-----------------------------------------------------------------------------
 void emac_enable_mii( void )
 {
-    AT91C_BASE_EMACB->EMAC_USRIO = AT91C_EMAC_CLKEN;
+   AT91C_BASE_EMACB->EMAC_USRIO = AT91C_EMAC_CLKEN;
 }
 
 //-----------------------------------------------------------------------------
@@ -153,7 +153,7 @@ void emac_enable_mii( void )
 //-----------------------------------------------------------------------------
 void emac_enable_rmii( void )
 {
-    AT91C_BASE_EMACB->EMAC_USRIO = AT91C_EMAC_CLKEN | AT91C_EMAC_RMII;
+   AT91C_BASE_EMACB->EMAC_USRIO = AT91C_EMAC_CLKEN | AT91C_EMAC_RMII;
 }
 
 //-----------------------------------------------------------------------------
@@ -165,22 +165,22 @@ void emac_enable_rmii( void )
 /// \param retry The retry times, 0 to wait forever until complete.
 //-----------------------------------------------------------------------------
 unsigned char emac_read_phy(unsigned char PhyAddress,
-                           unsigned char Address,
-                           unsigned int *pValue,
-                           unsigned int retry)
+                            unsigned char Address,
+                            unsigned int *pValue,
+                            unsigned int retry)
 {
-    AT91C_BASE_EMACB->EMAC_MAN = (AT91C_EMAC_SOF & (0x01 << 30))
-                              | (AT91C_EMAC_CODE & (2 << 16))
-                              | (AT91C_EMAC_RW & (2 << 28))
-                              | (AT91C_EMAC_PHYA & ((PhyAddress & 0x1f) << 23))
-                              | (AT91C_EMAC_REGA & (Address << 18));
+   AT91C_BASE_EMACB->EMAC_MAN = (AT91C_EMAC_SOF & (0x01 << 30))
+                                | (AT91C_EMAC_CODE & (2 << 16))
+                                | (AT91C_EMAC_RW & (2 << 28))
+                                | (AT91C_EMAC_PHYA & ((PhyAddress & 0x1f) << 23))
+                                | (AT91C_EMAC_REGA & (Address << 18));
 
-    if ( emac_wait_phy(retry) == 0 ) {
+   if ( emac_wait_phy(retry) == 0 ) {
 //        TRACE_ERROR("TimeOut emac_read_phy\n\r");
-        return 0;
-    }
-    *pValue = ( AT91C_BASE_EMACB->EMAC_MAN & 0x0000ffff );
-    return 1;
+      return 0;
+   }
+   *pValue = ( AT91C_BASE_EMACB->EMAC_MAN & 0x0000ffff );
+   return 1;
 }
 
 //-----------------------------------------------------------------------------
@@ -192,21 +192,21 @@ unsigned char emac_read_phy(unsigned char PhyAddress,
 /// \param retry The retry times, 0 to wait forever until complete.
 //-----------------------------------------------------------------------------
 unsigned char emac_write_phy(unsigned char PhyAddress,
-                            unsigned char Address,
-                            unsigned int  Value,
-                            unsigned int  retry)
+                             unsigned char Address,
+                             unsigned int Value,
+                             unsigned int retry)
 {
-    AT91C_BASE_EMACB->EMAC_MAN = (AT91C_EMAC_SOF & (0x01 << 30))
-                              | (AT91C_EMAC_CODE & (2 << 16))
-                              | (AT91C_EMAC_RW & (1 << 28))
-                              | (AT91C_EMAC_PHYA & ((PhyAddress & 0x1f) << 23))
-                              | (AT91C_EMAC_REGA & (Address << 18))
-                              | (AT91C_EMAC_DATA & Value) ;
-    if ( emac_wait_phy(retry) == 0 ) {
+   AT91C_BASE_EMACB->EMAC_MAN = (AT91C_EMAC_SOF & (0x01 << 30))
+                                | (AT91C_EMAC_CODE & (2 << 16))
+                                | (AT91C_EMAC_RW & (1 << 28))
+                                | (AT91C_EMAC_PHYA & ((PhyAddress & 0x1f) << 23))
+                                | (AT91C_EMAC_REGA & (Address << 18))
+                                | (AT91C_EMAC_DATA & Value);
+   if ( emac_wait_phy(retry) == 0 ) {
 //        TRACE_ERROR("TimeOut emac_write_phy\n\r");
-        return 0;
-    }
-    return 1;
+      return 0;
+   }
+   return 1;
 }
 
 //-----------------------------------------------------------------------------
@@ -216,17 +216,17 @@ unsigned char emac_write_phy(unsigned char PhyAddress,
 //-----------------------------------------------------------------------------
 void emac_set_link_speed(unsigned char speed, unsigned char fullduplex)
 {
-    unsigned int ncfgr;
+   unsigned int ncfgr;
 
-    ncfgr = AT91C_BASE_EMACB->EMAC_NCFGR;
-    ncfgr &= ~(AT91C_EMAC_SPD | AT91C_EMAC_FD);
-    if (speed) {
-        ncfgr |= AT91C_EMAC_SPD;
-    }
-    if (fullduplex) {
-        ncfgr |= AT91C_EMAC_FD;
-    }
-    AT91C_BASE_EMACB->EMAC_NCFGR = ncfgr;
+   ncfgr = AT91C_BASE_EMACB->EMAC_NCFGR;
+   ncfgr &= ~(AT91C_EMAC_SPD | AT91C_EMAC_FD);
+   if (speed) {
+      ncfgr |= AT91C_EMAC_SPD;
+   }
+   if (fullduplex) {
+      ncfgr |= AT91C_EMAC_FD;
+   }
+   AT91C_BASE_EMACB->EMAC_NCFGR = ncfgr;
 }
 
 
@@ -238,51 +238,51 @@ void emac_set_link_speed(unsigned char speed, unsigned char fullduplex)
 //-----------------------------------------------------------------------------
 static unsigned char dm9161_find_valid_phy(phy_stuff_t * pDm)
 {
-    unsigned int  retryMax;
-    unsigned int  value=0;
-    unsigned char rc;
-    unsigned char phyAddress;
-    unsigned char cnt;
+   unsigned int retryMax;
+   unsigned int value=0;
+   unsigned char rc;
+   unsigned char phyAddress;
+   unsigned char cnt;
 
- //   TRACE_DEBUG("dm9161_find_valid_phy\n\r");
- //   ASSERT(pDm, "F: dm9161_find_valid_phy\n\r");
+   //   TRACE_DEBUG("dm9161_find_valid_phy\n\r");
+   //   ASSERT(pDm, "F: dm9161_find_valid_phy\n\r");
 
-    emac_enable_mdio();
-    phyAddress = pDm->phyAddress;
-    retryMax = pDm->retryMax;
+   emac_enable_mdio();
+   phyAddress = pDm->phyAddress;
+   retryMax = pDm->retryMax;
 
-    // Check current phyAddress
-    rc = phyAddress;
-    if( emac_read_phy(phyAddress, DM9161_PHYID1, &value, retryMax) == 0 ) {
-     //   TRACE_ERROR("DM9161 PROBLEM\n\r");
+   // Check current phyAddress
+   rc = phyAddress;
+   if( emac_read_phy(phyAddress, DM9161_PHYID1, &value, retryMax) == 0 ) {
+      //   TRACE_ERROR("DM9161 PROBLEM\n\r");
       rc = 0xFF;
-    }
+   }
    // TRACE_DEBUG("_PHYID1  : 0x%X, addr: %d\n\r", value, phyAddress);
 
-    // Find another one
-    if (value != DM9161_OUI_MSB) {
-        rc = 0xFF;
-        for(cnt = 0; cnt < 32; cnt ++) {
-            phyAddress = (phyAddress + 1) & 0x1F;
-            if( emac_read_phy(phyAddress, DM9161_PHYID1, &value, retryMax) == 0 ) {
-             //   TRACE_ERROR("DM9161 PROBLEM\n\r");
-               rc = 0xFF;
-            }
-          //  TRACE_DEBUG("_PHYID1  : 0x%X, addr: %d\n\r", value, phyAddress);
-            if (value == DM9161_OUI_MSB) {
-                rc = phyAddress;
-                break;
-            }
-        }
-    }
-    
-    emac_disable_mdio();
-    if (rc != 0xFF) {
-        //TRACE_INFO("** Valid PHY Found: %d\n\r", rc);
-        emac_read_phy(phyAddress, DM9161_DSCSR, &value, retryMax);
-        //TRACE_DEBUG("_DSCSR  : 0x%X, addr: %d\n\r", value, phyAddress);
-    }
-    return rc;
+   // Find another one
+   if (value != DM9161_OUI_MSB) {
+      rc = 0xFF;
+      for(cnt = 0; cnt < 32; cnt++) {
+         phyAddress = (phyAddress + 1) & 0x1F;
+         if( emac_read_phy(phyAddress, DM9161_PHYID1, &value, retryMax) == 0 ) {
+            //   TRACE_ERROR("DM9161 PROBLEM\n\r");
+            rc = 0xFF;
+         }
+         //  TRACE_DEBUG("_PHYID1  : 0x%X, addr: %d\n\r", value, phyAddress);
+         if (value == DM9161_OUI_MSB) {
+            rc = phyAddress;
+            break;
+         }
+      }
+   }
+
+   emac_disable_mdio();
+   if (rc != 0xFF) {
+      //TRACE_INFO("** Valid PHY Found: %d\n\r", rc);
+      emac_read_phy(phyAddress, DM9161_DSCSR, &value, retryMax);
+      //TRACE_DEBUG("_DSCSR  : 0x%X, addr: %d\n\r", value, phyAddress);
+   }
+   return rc;
 }
 
 
@@ -297,8 +297,8 @@ static unsigned char dm9161_find_valid_phy(phy_stuff_t * pDm)
 //-----------------------------------------------------------------------------
 void dm9161_setup_timeout(phy_stuff_t *pDm, unsigned int toMax)
 {
- //   ASSERT(pDm, "-F- DM9161_SetupTimeout\n\r");
-    pDm->retryMax = toMax;
+   //   ASSERT(pDm, "-F- DM9161_SetupTimeout\n\r");
+   pDm->retryMax = toMax;
 }
 
 //-----------------------------------------------------------------------------
@@ -311,9 +311,9 @@ void dm9161_setup_timeout(phy_stuff_t *pDm, unsigned int toMax)
 void dm9161_init(phy_stuff_t *pDm, unsigned char phyAddress)
 {
    // ASSERT(pDm , "-F- DM9161_Init\n\r");
-    pDm->phyAddress = phyAddress;
-    // Initialize timeout by default
-    pDm->retryMax = DM9161_RETRY_MAX;
+   pDm->phyAddress = phyAddress;
+   // Initialize timeout by default
+   pDm->retryMax = DM9161_RETRY_MAX;
 }
 
 
@@ -324,34 +324,34 @@ void dm9161_init(phy_stuff_t *pDm, unsigned char phyAddress)
 //-----------------------------------------------------------------------------
 static unsigned char dm9161_reset_phy(phy_stuff_t *pDm)
 {
-    unsigned int retryMax;
-    unsigned int bmcr = DM9161_RESET;
-    unsigned char phyAddress;
-    unsigned int timeout = 10;
-    unsigned char ret = 1;
+   unsigned int retryMax;
+   unsigned int bmcr = DM9161_RESET;
+   unsigned char phyAddress;
+   unsigned int timeout = 10;
+   unsigned char ret = 1;
 
    // ASSERT(pDm, "-F- DM9161_ResetPhy");
    // TRACE_INFO(" DM9161_ResetPhy\n\r");
 
-    phyAddress = pDm->phyAddress;
-    retryMax = pDm->retryMax;
+   phyAddress = pDm->phyAddress;
+   retryMax = pDm->retryMax;
 
-    emac_enable_mdio();
-    bmcr = DM9161_RESET;
-    emac_write_phy(phyAddress, DM9161_BMCR, bmcr, retryMax);
+   emac_enable_mdio();
+   bmcr = DM9161_RESET;
+   emac_write_phy(phyAddress, DM9161_BMCR, bmcr, retryMax);
 
-    do {
-        emac_read_phy(phyAddress, DM9161_BMCR, &bmcr, retryMax);
-        timeout--;
-    } while ((bmcr & DM9161_RESET) && timeout);
+   do {
+      emac_read_phy(phyAddress, DM9161_BMCR, &bmcr, retryMax);
+      timeout--;
+   } while ((bmcr & DM9161_RESET) && timeout);
 
-    emac_disable_mdio();
+   emac_disable_mdio();
 
-    if (!timeout) {
-        ret = 0;
-    }
+   if (!timeout) {
+      ret = 0;
+   }
 
-    return( ret );
+   return( ret );
 }
 
 #define CONF_PIOA_PERIPH_A(mask) \
@@ -400,7 +400,7 @@ void emac_run_pins(void)
 
    CONF_PIOA_PERIPH_A(AT91C_PA20_EMDC);
    CONF_PIOA_PERIPH_A(AT91C_PA21_EMDIO);
-  // CONF_PIOA_PERIPH_A(AT91C_PA7_MCCDA);
+   // CONF_PIOA_PERIPH_A(AT91C_PA7_MCCDA);
 }
 
 void emac_reset_pins(void)
@@ -428,10 +428,10 @@ void emac_reset_pins(void)
 //-----------------------------------------------------------------------------
 void RSTC_SetExtResetLength(unsigned char powl)
 {
-    unsigned int rmr = AT91C_BASE_RSTC->RSTC_RMR;
-    rmr &= ~(AT91C_RSTC_KEY | AT91C_RSTC_ERSTL);
-    rmr |=  (powl << 8) & AT91C_RSTC_ERSTL;
-    AT91C_BASE_RSTC->RSTC_RMR = rmr | RSTC_KEY_PASSWORD;
+   unsigned int rmr = AT91C_BASE_RSTC->RSTC_RMR;
+   rmr &= ~(AT91C_RSTC_KEY | AT91C_RSTC_ERSTL);
+   rmr |=  (powl << 8) & AT91C_RSTC_ERSTL;
+   AT91C_BASE_RSTC->RSTC_RMR = rmr | RSTC_KEY_PASSWORD;
 }
 
 //-----------------------------------------------------------------------------
@@ -439,7 +439,7 @@ void RSTC_SetExtResetLength(unsigned char powl)
 //-----------------------------------------------------------------------------
 void RSTC_ExtReset(void)
 {
-    AT91C_BASE_RSTC->RSTC_RCR = AT91C_RSTC_EXTRST | RSTC_KEY_PASSWORD;
+   AT91C_BASE_RSTC->RSTC_RCR = AT91C_RSTC_EXTRST | RSTC_KEY_PASSWORD;
 }
 
 //-----------------------------------------------------------------------------
@@ -447,11 +447,11 @@ void RSTC_ExtReset(void)
 //-----------------------------------------------------------------------------
 unsigned char RSTC_GetNrstLevel(void)
 {
-    if (AT91C_BASE_RSTC->RSTC_RSR & AT91C_RSTC_NRSTL) {
+   if (AT91C_BASE_RSTC->RSTC_RSR & AT91C_RSTC_NRSTL) {
 
-        return 1;
-    }
-    return 0;
+      return 1;
+   }
+   return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -479,28 +479,28 @@ unsigned char dm9161_init_phy(phy_stuff_t *pDm)
 
    // ASSERT(pDm, "-F- DM9161_InitPhy\n\r");
 
-    // Perform RESET
-  //  TRACE_DEBUG("RESET PHY\n\r");
+   // Perform RESET
+   //  TRACE_DEBUG("RESET PHY\n\r");
 
 //    if (pResetPins) {
-        // Configure PINS
-  //      PIO_Configure(pResetPins, nbResetPins);
+// Configure PINS
+//      PIO_Configure(pResetPins, nbResetPins);
    emac_reset_pins();
 
    // Execute reset
    RSTC_SetExtResetLength(DM9161_RESET_LENGTH);
    RSTC_ExtReset();
    // Wait for end hardware reset
-   while (!RSTC_GetNrstLevel());
+   while (!RSTC_GetNrstLevel()) ;
 //    }
 
-   
 
-  // for(k=0;k<1000;k++);
+
+   // for(k=0;k<1000;k++);
 
    // Configure EMAC runtime pins
    if (rc) {
-   //     PIO_Configure(pEmacPins, nbEmacPins);
+      //     PIO_Configure(pEmacPins, nbEmacPins);
       emac_run_pins();
       rc = emac_set_mdc_clock( CYGNUM_HAL_ARM_AT91SAM9260_CLOCK_SPEED );
       if (!rc) {
@@ -518,7 +518,7 @@ unsigned char dm9161_init_phy(phy_stuff_t *pDm)
          dm9161_reset_phy(pDm);
       }
    } else {
-   //   TRACE_ERROR("PHY Reset Timeout\n\r");
+      //   TRACE_ERROR("PHY Reset Timeout\n\r");
    }
 
    return rc;
@@ -531,142 +531,142 @@ unsigned char dm9161_init_phy(phy_stuff_t *pDm)
 //-----------------------------------------------------------------------------
 unsigned char dm9161_auto_negotiate(phy_stuff_t *pDm)
 {
-    unsigned int retryMax;
-    unsigned int value;
-    unsigned int phyAnar;
-    unsigned int phyAnalpar;
-    unsigned int retryCount= 0;
-    unsigned char phyAddress;
-    unsigned char rc = 1;
+   unsigned int retryMax;
+   unsigned int value;
+   unsigned int phyAnar;
+   unsigned int phyAnalpar;
+   unsigned int retryCount= 0;
+   unsigned char phyAddress;
+   unsigned char rc = 1;
 
 //    ASSERT(pDm, "-F- DM9161_AutoNegotiate\n\r");
-    phyAddress = pDm->phyAddress;
-    retryMax = pDm->retryMax;
+   phyAddress = pDm->phyAddress;
+   retryMax = pDm->retryMax;
 
    dm9161_dump_registers(pDm);
 
-    emac_enable_mdio();
+   emac_enable_mdio();
 
-    if (!emac_read_phy(phyAddress, DM9161_PHYID1, &value, retryMax)) {
-  //      TRACE_ERROR("Pb emac_read_phy Id1\n\r");
-        rc = 0;
-        goto AutoNegotiateExit;
-    }
+   if (!emac_read_phy(phyAddress, DM9161_PHYID1, &value, retryMax)) {
+      //      TRACE_ERROR("Pb emac_read_phy Id1\n\r");
+      rc = 0;
+      goto AutoNegotiateExit;
+   }
    // TRACE_DEBUG("ReadPhy Id1 0x%X, addresse: %d\n\r", value, phyAddress);
-    if (!emac_read_phy(phyAddress, DM9161_PHYID2, &phyAnar, retryMax)) {
-     //   TRACE_ERROR("Pb emac_read_phy Id2\n\r");
-        rc = 0;
-        goto AutoNegotiateExit;
-    }
-    //TRACE_DEBUG("ReadPhy Id2 0x%X\n\r", phyAnar);
+   if (!emac_read_phy(phyAddress, DM9161_PHYID2, &phyAnar, retryMax)) {
+      //   TRACE_ERROR("Pb emac_read_phy Id2\n\r");
+      rc = 0;
+      goto AutoNegotiateExit;
+   }
+   //TRACE_DEBUG("ReadPhy Id2 0x%X\n\r", phyAnar);
 
-    if( ( value == DM9161_OUI_MSB )
-     && ( ((phyAnar>>10)&DM9161_LSB_MASK) == DM9161_OUI_LSB ) ) {
+   if( ( value == DM9161_OUI_MSB )
+       && ( ((phyAnar>>10)&DM9161_LSB_MASK) == DM9161_OUI_LSB ) ) {
 
       //  TRACE_DEBUG("Vendor Number Model = 0x%X\n\r", ((phyAnar>>4)&0x3F));
       //  TRACE_DEBUG("Model Revision Number = 0x%X\n\r", (phyAnar&0x7));
-    } else {
+   } else {
       //  TRACE_ERROR("Problem OUI value\n\r");
-    }        
+   }
 
-    // Setup control register
-    rc  = emac_read_phy(phyAddress, DM9161_BMCR, &value, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
+   // Setup control register
+   rc  = emac_read_phy(phyAddress, DM9161_BMCR, &value, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
 
-    value &= ~DM9161_AUTONEG;   // Remove autonegotiation enable
-    value &= ~(DM9161_LOOPBACK|DM9161_POWER_DOWN);
-    value |=  DM9161_ISOLATE;   // Electrically isolate PHY
-    rc = emac_write_phy(phyAddress, DM9161_BMCR, value, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
+   value &= ~DM9161_AUTONEG;    // Remove autonegotiation enable
+   value &= ~(DM9161_LOOPBACK|DM9161_POWER_DOWN);
+   value |=  DM9161_ISOLATE;    // Electrically isolate PHY
+   rc = emac_write_phy(phyAddress, DM9161_BMCR, value, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
 
-    // Set the Auto_negotiation Advertisement Register
-    // MII advertising for Next page
-    // 100BaseTxFD and HD, 10BaseTFD and HD, IEEE 802.3
-    phyAnar = DM9161_NP | DM9161_TX_FDX | DM9161_TX_HDX |
-              DM9161_10_FDX | DM9161_10_HDX | DM9161_AN_IEEE_802_3;
-    rc = emac_write_phy(phyAddress, DM9161_ANAR, phyAnar, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
+   // Set the Auto_negotiation Advertisement Register
+   // MII advertising for Next page
+   // 100BaseTxFD and HD, 10BaseTFD and HD, IEEE 802.3
+   phyAnar = DM9161_NP | DM9161_TX_FDX | DM9161_TX_HDX |
+             DM9161_10_FDX | DM9161_10_HDX | DM9161_AN_IEEE_802_3;
+   rc = emac_write_phy(phyAddress, DM9161_ANAR, phyAnar, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
 
-    // Read & modify control register
-    rc  = emac_read_phy(phyAddress, DM9161_BMCR, &value, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
+   // Read & modify control register
+   rc  = emac_read_phy(phyAddress, DM9161_BMCR, &value, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
 
-    value |= DM9161_SPEED_SELECT | DM9161_AUTONEG | DM9161_DUPLEX_MODE;
-    rc = emac_write_phy(phyAddress, DM9161_BMCR, value, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
+   value |= DM9161_SPEED_SELECT | DM9161_AUTONEG | DM9161_DUPLEX_MODE;
+   rc = emac_write_phy(phyAddress, DM9161_BMCR, value, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
 
-    // Restart Auto_negotiation
-    value |=  DM9161_RESTART_AUTONEG;
-    value &= ~DM9161_ISOLATE;
-    rc = emac_write_phy(phyAddress, DM9161_BMCR, value, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
-    //TRACE_DEBUG(" _BMCR: 0x%X\n\r", value);
+   // Restart Auto_negotiation
+   value |=  DM9161_RESTART_AUTONEG;
+   value &= ~DM9161_ISOLATE;
+   rc = emac_write_phy(phyAddress, DM9161_BMCR, value, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
+   //TRACE_DEBUG(" _BMCR: 0x%X\n\r", value);
 
-    // Check AutoNegotiate complete
-    while (1) {
-        rc  = emac_read_phy(phyAddress, DM9161_BMSR, &value, retryMax);
-        if (rc == 0) {
+   // Check AutoNegotiate complete
+   while (1) {
+      rc  = emac_read_phy(phyAddress, DM9161_BMSR, &value, retryMax);
+      if (rc == 0) {
 //            TRACE_ERROR("rc==0\n\r");
-            goto AutoNegotiateExit;
-        }
-        // Done successfully
-        if (value & DM9161_AUTONEG_COMP) {
+         goto AutoNegotiateExit;
+      }
+      // Done successfully
+      if (value & DM9161_AUTONEG_COMP) {
 //            TRACE_INFO("AutoNegotiate complete\n\r");
-            break;
-        }
-        // Timeout check
-        if (retryMax) {
-            if (++ retryCount >= retryMax) {
-             //   DM9161_DumpRegisters(pDm);
-  //              TRACE_FATAL("TimeOut\n\r");
-                goto AutoNegotiateExit;
-            }
-        }
-    }
+         break;
+      }
+      // Timeout check
+      if (retryMax) {
+         if (++retryCount >= retryMax) {
+            //   DM9161_DumpRegisters(pDm);
+            //              TRACE_FATAL("TimeOut\n\r");
+            goto AutoNegotiateExit;
+         }
+      }
+   }
 
-    // Get the AutoNeg Link partner base page
-    rc  = emac_read_phy(phyAddress, DM9161_ANLPAR, &phyAnalpar, retryMax);
-    if (rc == 0) {
-        goto AutoNegotiateExit;
-    }
+   // Get the AutoNeg Link partner base page
+   rc  = emac_read_phy(phyAddress, DM9161_ANLPAR, &phyAnalpar, retryMax);
+   if (rc == 0) {
+      goto AutoNegotiateExit;
+   }
 
-    // Setup the EMAC link speed
-    if ((phyAnar & phyAnalpar) & DM9161_TX_FDX) {
-        // set MII for 100BaseTX and Full Duplex
-        emac_set_link_speed(1, 1);
-    } else if ((phyAnar & phyAnalpar) & DM9161_10_FDX) {
-        // set MII for 10BaseT and Full Duplex
-        emac_set_link_speed(0, 1);
-    } else if ((phyAnar & phyAnalpar) & DM9161_TX_HDX) {
-        // set MII for 100BaseTX and half Duplex
-        emac_set_link_speed(1, 0);
-    } else if ((phyAnar & phyAnalpar) & DM9161_10_HDX) {
-        // set MII for 10BaseT and half Duplex
-        emac_set_link_speed(0, 0);
-    }
+   // Setup the EMAC link speed
+   if ((phyAnar & phyAnalpar) & DM9161_TX_FDX) {
+      // set MII for 100BaseTX and Full Duplex
+      emac_set_link_speed(1, 1);
+   } else if ((phyAnar & phyAnalpar) & DM9161_10_FDX) {
+      // set MII for 10BaseT and Full Duplex
+      emac_set_link_speed(0, 1);
+   } else if ((phyAnar & phyAnalpar) & DM9161_TX_HDX) {
+      // set MII for 100BaseTX and half Duplex
+      emac_set_link_speed(1, 0);
+   } else if ((phyAnar & phyAnalpar) & DM9161_10_HDX) {
+      // set MII for 10BaseT and half Duplex
+      emac_set_link_speed(0, 0);
+   }
 
-    // Setup EMAC mode
+   // Setup EMAC mode
 #if BOARD_EMAC_MODE_RMII != 1
-    emac_enable_mii();
+   emac_enable_mii();
 #else
-    emac_enable_rmii();
+   emac_enable_rmii();
 #endif
 
 AutoNegotiateExit:
-    emac_disable_mdio();
-    return rc;
+   emac_disable_mdio();
+   return rc;
 }
 
 //-----------------------------------------------------------------------------
@@ -678,108 +678,108 @@ AutoNegotiateExit:
 //-----------------------------------------------------------------------------
 unsigned char dm9161_get_link_speed(phy_stuff_t *pDm, unsigned char applySetting)
 {
-    unsigned int retryMax;
-    unsigned int stat1;
-    unsigned int stat2;
-    unsigned char phyAddress;
-    unsigned char rc = 1;
+   unsigned int retryMax;
+   unsigned int stat1;
+   unsigned int stat2;
+   unsigned char phyAddress;
+   unsigned char rc = 1;
 
- //   TRACE_DEBUG("DM9161_GetLinkSpeed\n\r");
- //   ASSERT(pDm, "-F- DM9161_GetLinkSpeed\n\r");
+   //   TRACE_DEBUG("DM9161_GetLinkSpeed\n\r");
+   //   ASSERT(pDm, "-F- DM9161_GetLinkSpeed\n\r");
 
-    emac_enable_mdio();
-    phyAddress = pDm->phyAddress;
-    retryMax = pDm->retryMax;
+   emac_enable_mdio();
+   phyAddress = pDm->phyAddress;
+   retryMax = pDm->retryMax;
 
-    rc  = emac_read_phy(phyAddress, DM9161_BMSR, &stat1, retryMax);
-    if (rc == 0) {
-        goto GetLinkSpeedExit;
-    }
-    if ((stat1 & DM9161_LINK_STATUS) == 0) {
+   rc  = emac_read_phy(phyAddress, DM9161_BMSR, &stat1, retryMax);
+   if (rc == 0) {
+      goto GetLinkSpeedExit;
+   }
+   if ((stat1 & DM9161_LINK_STATUS) == 0) {
 //        TRACE_ERROR("Pb: LinkStat: 0x%x\n\r", stat1);
-        rc = 0;
-        goto GetLinkSpeedExit;
-    }
-    if (applySetting == 0) {
+      rc = 0;
+      goto GetLinkSpeedExit;
+   }
+   if (applySetting == 0) {
 //        TRACE_ERROR("Pb: applySetting: 0x%x\n\r", applySetting);
-        goto GetLinkSpeedExit;
-    }
-    // Re-configure Link speed
-    rc  = emac_read_phy(phyAddress, DM9161_DSCSR, &stat2, retryMax);
-    if (rc == 0) {
+      goto GetLinkSpeedExit;
+   }
+   // Re-configure Link speed
+   rc  = emac_read_phy(phyAddress, DM9161_DSCSR, &stat2, retryMax);
+   if (rc == 0) {
 //        TRACE_ERROR("Pb: rc: 0x%x\n\r", rc);
-        goto GetLinkSpeedExit;
-    }
-    if ((stat1 & DM9161_100BASE_TX_FD) && (stat2 & DM9161_100FDX)) {
-        // set Emac for 100BaseTX and Full Duplex
-        emac_set_link_speed(1, 1);
-    }
-    if ((stat1 & DM9161_10BASE_T_FD) && (stat2 & DM9161_10FDX)) {
-        // set MII for 10BaseT and Full Duplex
-        emac_set_link_speed(0, 1);
-    }
-    if ((stat1 & DM9161_100BASE_T4_HD) && (stat2 & DM9161_100HDX)) {
-        // set MII for 100BaseTX and Half Duplex
-        emac_set_link_speed(1, 0);
-    }
-    if ((stat1 & DM9161_10BASE_T_HD) && (stat2 & DM9161_10HDX)) {
-        // set MII for 10BaseT and Half Duplex
-        emac_set_link_speed(0, 0);
-    }
+      goto GetLinkSpeedExit;
+   }
+   if ((stat1 & DM9161_100BASE_TX_FD) && (stat2 & DM9161_100FDX)) {
+      // set Emac for 100BaseTX and Full Duplex
+      emac_set_link_speed(1, 1);
+   }
+   if ((stat1 & DM9161_10BASE_T_FD) && (stat2 & DM9161_10FDX)) {
+      // set MII for 10BaseT and Full Duplex
+      emac_set_link_speed(0, 1);
+   }
+   if ((stat1 & DM9161_100BASE_T4_HD) && (stat2 & DM9161_100HDX)) {
+      // set MII for 100BaseTX and Half Duplex
+      emac_set_link_speed(1, 0);
+   }
+   if ((stat1 & DM9161_10BASE_T_HD) && (stat2 & DM9161_10HDX)) {
+      // set MII for 10BaseT and Half Duplex
+      emac_set_link_speed(0, 0);
+   }
 
-    // Start the EMAC transfers
-  //  TRACE_DEBUG("DM9161_GetLinkSpeed passed\n\r");
+   // Start the EMAC transfers
+   //  TRACE_DEBUG("DM9161_GetLinkSpeed passed\n\r");
 
 GetLinkSpeedExit:
-    emac_disable_mdio();
-    return rc;
+   emac_disable_mdio();
+   return rc;
 }
 
 static void dm9161_dump_registers(phy_stuff_t * pDm)
 {
-    unsigned char phyAddress;
-    unsigned int retryMax;
-    unsigned int value;
+   unsigned char phyAddress;
+   unsigned int retryMax;
+   unsigned int value;
 
- //   TRACE_INFO("DM9161_DumpRegisters\n\r");
- //   ASSERT(pDm, "F: DM9161_DumpRegisters\n\r");
+   //   TRACE_INFO("DM9161_DumpRegisters\n\r");
+   //   ASSERT(pDm, "F: DM9161_DumpRegisters\n\r");
 
-    emac_enable_mdio();
-    phyAddress = pDm->phyAddress;
-    retryMax = pDm->retryMax;
+   emac_enable_mdio();
+   phyAddress = pDm->phyAddress;
+   retryMax = pDm->retryMax;
 
 //    TRACE_INFO("DM9161 (%d) Registers:\n\r", phyAddress);
 
-    emac_read_phy(phyAddress, DM9161_BMCR, &value, retryMax);
+   emac_read_phy(phyAddress, DM9161_BMCR, &value, retryMax);
 //    TRACE_INFO(" _BMCR   : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_BMSR, &value, retryMax);
+   emac_read_phy(phyAddress, DM9161_BMSR, &value, retryMax);
 //    TRACE_INFO(" _BMSR   : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_ANAR, &value, retryMax);
+   emac_read_phy(phyAddress, DM9161_ANAR, &value, retryMax);
 //    TRACE_INFO(" _ANAR   : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_ANLPAR, &value, retryMax);
+   emac_read_phy(phyAddress, DM9161_ANLPAR, &value, retryMax);
 //    TRACE_INFO(" _ANLPAR : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_ANER, &value, retryMax);
+   emac_read_phy(phyAddress, DM9161_ANER, &value, retryMax);
 //    TRACE_INFO(" _ANER   : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_DSCR, &value, retryMax);
+   emac_read_phy(phyAddress, DM9161_DSCR, &value, retryMax);
 //    TRACE_INFO(" _DSCR   : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_DSCSR, &value, retryMax);
- //   TRACE_INFO(" _DSCSR  : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_10BTCSR, &value, retryMax);
- //   TRACE_INFO(" _10BTCSR: 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_PWDOR, &value, retryMax);
- //   TRACE_INFO(" _PWDOR  : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_CONFIGR, &value, retryMax);
- //   TRACE_INFO(" _CONFIGR: 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_MDINTR, &value, retryMax);
- //   TRACE_INFO(" _MDINTR : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_RECR, &value, retryMax);
- //   TRACE_INFO(" _RECR   : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_DISCR, &value, retryMax);
- //   TRACE_INFO(" _DISCR  : 0x%X\n\r", value);
-    emac_read_phy(phyAddress, DM9161_RLSR, &value, retryMax);
- //   TRACE_INFO(" _RLSR   : 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_DSCSR, &value, retryMax);
+   //   TRACE_INFO(" _DSCSR  : 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_10BTCSR, &value, retryMax);
+   //   TRACE_INFO(" _10BTCSR: 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_PWDOR, &value, retryMax);
+   //   TRACE_INFO(" _PWDOR  : 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_CONFIGR, &value, retryMax);
+   //   TRACE_INFO(" _CONFIGR: 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_MDINTR, &value, retryMax);
+   //   TRACE_INFO(" _MDINTR : 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_RECR, &value, retryMax);
+   //   TRACE_INFO(" _RECR   : 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_DISCR, &value, retryMax);
+   //   TRACE_INFO(" _DISCR  : 0x%X\n\r", value);
+   emac_read_phy(phyAddress, DM9161_RLSR, &value, retryMax);
+   //   TRACE_INFO(" _RLSR   : 0x%X\n\r", value);
 
-    emac_disable_mdio();
+   emac_disable_mdio();
 }
 
 /*============================================

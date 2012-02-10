@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -99,7 +99,7 @@ unsigned char serial_1_snd_buffer[SERIAL_1_OUTPUT_BUFFER_SIZE] = {0};
 static volatile signed int _linux_serial_1_output_r;
 static volatile signed int _linux_serial_1_output_w;
 static volatile signed int _linux_serial_1_desc_wr = -1; //flag O_WRONLY
-int  _linux_serial_1_loaded = 0;
+int _linux_serial_1_loaded = 0;
 
 //variables pour la gestion de l'IT
 static cyg_interrupt _linux_serial_1_it;
@@ -125,31 +125,31 @@ static volatile unsigned char _snd_xonoff_status = STATUS_IDLE;
 static volatile unsigned char _rcv_xonoff_status = STATUS_IDLE;
 
 typedef struct s2s {
-        speed_t ts;
-        long ns;
+   speed_t ts;
+   long ns;
 }s2s_t;
 
 static s2s_t const s2s[] = {
-        { B0,                0 },
-        { B50,              50 },
-        { B75,              75 },
-        { B110,            110 },
-        { B134,            134 },
-        { B150,            150 },
-        { B200,            200 },
-        { B300,            300 },
-        { B600,            600 },
-        { B1200,          1200 },
-        { B1800,          1800 },
-        { B2400,          2400 },
-        { B4800,          4800 },
-        { B9600,          9600 },
-        { B19200,        19200 },
-        { B38400,        38400 },
-        { B57600,        57600 },
-        { B115200,      115200 },
-        { B230400,      230400 },
-        { B460800,      460800 }
+   { B0,                0 },
+   { B50,              50 },
+   { B75,              75 },
+   { B110,            110 },
+   { B134,            134 },
+   { B150,            150 },
+   { B200,            200 },
+   { B300,            300 },
+   { B600,            600 },
+   { B1200,          1200 },
+   { B1800,          1800 },
+   { B2400,          2400 },
+   { B4800,          4800 },
+   { B9600,          9600 },
+   { B19200,        19200 },
+   { B38400,        38400 },
+   { B57600,        57600 },
+   { B115200,      115200 },
+   { B230400,      230400 },
+   { B460800,      460800 }
 };
 
 
@@ -206,7 +206,7 @@ void dev_linux_serial_1_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrwor
       rcv_flag=0;
       __fire_io_int(ofile_lst[_linux_serial_1_desc_rd].owner_pthread_ptr_read);
    }
-   if(_linux_serial_1_desc_wr>=0 && _linux_serial_1_output_r==_linux_serial_1_output_w){
+   if(_linux_serial_1_desc_wr>=0 && _linux_serial_1_output_r==_linux_serial_1_output_w) {
       //_linux_serial_1_output_r=-1;
       __fire_io_int(ofile_lst[_linux_serial_1_desc_wr].owner_pthread_ptr_write);
    }
@@ -228,7 +228,7 @@ int dev_linux_serial_1_load(void)
    int key=-1;
 
    if(_linux_serial_1_loaded)
-         return 0;//yes
+      return 0;   //yes
 
    _linux_serial_1_desc_rd = -1;
    _linux_serial_1_desc_wr = -1;
@@ -240,8 +240,8 @@ int dev_linux_serial_1_load(void)
 
    //Primitive de creation de l'IT
    cyg_interrupt_create(serial_vector, serial_prior, 0,
-            &dev_linux_serial_1_isr, &dev_linux_serial_1_dsr,
-               &_linux_serial_1_handle, &_linux_serial_1_it);
+                        &dev_linux_serial_1_isr, &dev_linux_serial_1_dsr,
+                        &_linux_serial_1_handle, &_linux_serial_1_it);
    //Liaison entre l'IT crée et le vecteur d'IT
    cyg_interrupt_attach(_linux_serial_1_handle);
 
@@ -261,19 +261,19 @@ int dev_linux_serial_1_open(desc_t desc, int o_flag)
    cyg_vector_t serial_vector = CYGNUM_HAL_INT_SERIAL_1;
    int rc;
    //
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
       if(_linux_serial_1_desc_wr>=0) //already open: exclusive resource.
          return -1;
       _linux_serial_1_output_r = -1;
       _linux_serial_1_output_w = 0;
       _linux_serial_1_desc_wr = desc;
    }
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
       if(_linux_serial_1_desc_rd>=0) //already open: exclusive resource.
          return -1;
-       _linux_serial_1_input_r = 0;
-       _linux_serial_1_input_w = 0;
-       _linux_serial_1_desc_rd= desc;
+      _linux_serial_1_input_r = 0;
+      _linux_serial_1_input_w = 0;
+      _linux_serial_1_desc_rd= desc;
    }
 
    //open serial port in virtual cpu
@@ -282,8 +282,8 @@ int dev_linux_serial_1_open(desc_t desc, int o_flag)
    //
    //disable IT
    //__clr_irq();
-   while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
-   while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
+   while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //enable IT
    //__set_irq();
    //
@@ -302,29 +302,31 @@ int dev_linux_serial_1_open(desc_t desc, int o_flag)
 int dev_linux_serial_1_close(desc_t desc)
 {
    int rc;
-   if(ofile_lst[desc].oflag & O_RDONLY){
-      if(!ofile_lst[desc].nb_reader){
+   if(ofile_lst[desc].oflag & O_RDONLY) {
+      if(!ofile_lst[desc].nb_reader) {
          // Disable Interrupt on RXRDY
          //
          _linux_serial_1_desc_rd = -1;
       }
    }
    //
-   if(ofile_lst[desc].oflag & O_WRONLY){
-      if(!ofile_lst[desc].nb_writer){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      if(!ofile_lst[desc].nb_writer) {
          // Disable Interrupt on TXRDY
          //
          _linux_serial_1_desc_wr = -1;
       }
    }
    //close all
-   if(_linux_serial_1_desc_wr<0 && _linux_serial_1_desc_rd<0){
+   if(_linux_serial_1_desc_wr<0 && _linux_serial_1_desc_rd<0) {
       //close serial port in virtual cpu
       serial_1_cmd.hdwr_id = SERIAL_1;
       serial_1_cmd.cmd = OPS_CLOSE;
       //
-      while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
-      while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(cyg_hal_sys_write(1, (void *)&serial_1_cmd,
+                              sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
+      while(cyg_hal_sys_read(0, (void *)&serial_1_cmd,
+                             sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    }
 
    return 0;
@@ -360,7 +362,7 @@ int dev_linux_serial_1_isset_write(desc_t desc)
    if(_linux_serial_1_output_w==_linux_serial_1_output_r)
       return 0;
    else
-       return -1;
+      return -1;
 }
 
 /*-------------------------------------------
@@ -374,10 +376,10 @@ int dev_linux_serial_1_isset_write(desc_t desc)
 int dev_linux_serial_1_read(desc_t desc, char* buf,int size)
 {
    int cb = 0;
-   while(_linux_serial_1_input_r != _linux_serial_1_input_w){
+   while(_linux_serial_1_input_r != _linux_serial_1_input_w) {
       buf[cb++] = serial_1_rcv_buffer[_linux_serial_1_input_r];
       _linux_serial_1_input_r = (_linux_serial_1_input_r+1)&(~SERIAL_1_INPUT_BUFFER_SIZE);
-      if(cb == size)   break;
+      if(cb == size) break;
    }
    return cb;
 }
@@ -394,7 +396,7 @@ void dev_linux_serial_1_rcv(void)
 {
    int cb = 0;
    if(_linux_serial_1_input_w == _linux_serial_1_input_r) {
-         rcv_flag=1;
+      rcv_flag=1;
    }
    //get data from shared memory
    while(serial_1_data->size_in--) {
@@ -420,7 +422,7 @@ int dev_linux_serial_1_write(desc_t desc, const char* buf,int size){
    serial_1_data->size_out = size;
    memcpy(serial_1_data->data_out, buf, serial_1_data->size_out);
 
-   _linux_serial_1_output_r = 0;//size;//0;
+   _linux_serial_1_output_r = 0; //size;//0;
    _linux_serial_1_output_w = size;
 
    //send order to write data on hardware serial port
@@ -430,8 +432,8 @@ int dev_linux_serial_1_write(desc_t desc, const char* buf,int size){
    //disable IT
    //__clr_irq();
 
-   while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
-   while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
+   while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
 
    //Enable all IT
    //__set_irq();
@@ -475,54 +477,56 @@ int dev_linux_serial_1_ioctl(desc_t desc,int request,va_list ap)
 {
    struct termios* termios_p = (struct termios*)0;
 
-   switch(request){
-      //
-      case TIOCSSERIAL:{
-         unsigned long speed  = va_arg( ap, unsigned long);
-         if(speed<0)
-            return -1;
-
-         //copy the opt number and the speed
-         memcpy((void *)serial_1_data->data_ioctl,(void *)&request, sizeof(int));
-         memcpy((void *)(serial_1_data->data_ioctl+sizeof(int)),(void *)&speed, sizeof(unsigned long));
-         //
-         serial_1_cmd.hdwr_id = SERIAL_1;
-         serial_1_cmd.cmd = OPS_IOCTL;
-
-         while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
-         while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
-
-      }break;
-
-      /* If optional_actions is TCSANOW, the change will occur immediately.*/
-      /* If optional_actions is TCSADRAIN, the change will occur after all output written to fildes is transmitted.
-         This function should be used when changing parameters that affect output.*/
-      /* If optional_actions is TCSAFLUSH, the change will occur after all output written to fildes is transmitted,
-         and all input so far received but not read will be discarded before the change is made.
-         return 0;*/
-      case TCSETS:
-      case TCSAFLUSH:
-      case TCSADRAIN:
-      case TCSANOW:
-         termios_p = va_arg( ap, struct termios*);
-         if(!termios_p)
-            return -1;
-         termios2ttys(termios_p);
-
-      break;
-
-      //
-      case TCGETS:
-         termios_p = va_arg( ap, struct termios*);
-         if(!termios_p)
-            return -1;
-
-         memcpy(termios_p,&ttys_termios,sizeof(struct termios));
-      break;
-
-      //
-      default:
+   switch(request) {
+   //
+   case TIOCSSERIAL: {
+      unsigned long speed  = va_arg( ap, unsigned long);
+      if(speed<0)
          return -1;
+
+      //copy the opt number and the speed
+      memcpy((void *)serial_1_data->data_ioctl,(void *)&request, sizeof(int));
+      memcpy((void *)(serial_1_data->data_ioctl+sizeof(int)),(void *)&speed, sizeof(unsigned long));
+      //
+      serial_1_cmd.hdwr_id = SERIAL_1;
+      serial_1_cmd.cmd = OPS_IOCTL;
+
+      while(cyg_hal_sys_write(1, (void *)&serial_1_cmd,
+                              sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
+      while(cyg_hal_sys_read(0, (void *)&serial_1_cmd,
+                             sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
+
+   } break;
+
+   /* If optional_actions is TCSANOW, the change will occur immediately.*/
+   /* If optional_actions is TCSADRAIN, the change will occur after all output written to fildes is transmitted.
+      This function should be used when changing parameters that affect output.*/
+   /* If optional_actions is TCSAFLUSH, the change will occur after all output written to fildes is transmitted,
+      and all input so far received but not read will be discarded before the change is made.
+      return 0;*/
+   case TCSETS:
+   case TCSAFLUSH:
+   case TCSADRAIN:
+   case TCSANOW:
+      termios_p = va_arg( ap, struct termios*);
+      if(!termios_p)
+         return -1;
+      termios2ttys(termios_p);
+
+      break;
+
+   //
+   case TCGETS:
+      termios_p = va_arg( ap, struct termios*);
+      if(!termios_p)
+         return -1;
+
+      memcpy(termios_p,&ttys_termios,sizeof(struct termios));
+      break;
+
+   //
+   default:
+      return -1;
 
    }
 
@@ -544,8 +548,8 @@ static int termios2ttys(struct termios* termios_p)
    speed_t speed;
 
    //xon/xoff
-   if((termios_p->c_iflag&IXON) != (ttys_termios.c_iflag&IXON)){
-      if(termios_p->c_iflag&IXON){
+   if((termios_p->c_iflag&IXON) != (ttys_termios.c_iflag&IXON)) {
+      if(termios_p->c_iflag&IXON) {
          termios_p->c_iflag |= (IXOFF|IXON);
          _xonoff_option = 1;
       }else{
@@ -553,8 +557,8 @@ static int termios2ttys(struct termios* termios_p)
          _xonoff_option = 0;
 
       }
-   }else if((termios_p->c_iflag&IXOFF) != (ttys_termios.c_iflag&IXOFF)){
-     if(termios_p->c_iflag&IXOFF){
+   }else if((termios_p->c_iflag&IXOFF) != (ttys_termios.c_iflag&IXOFF)) {
+      if(termios_p->c_iflag&IXOFF) {
          termios_p->c_iflag |= (IXOFF|IXON);
          _xonoff_option = 1;
       }else{
@@ -566,18 +570,21 @@ static int termios2ttys(struct termios* termios_p)
    //speed
    speed = cfgetospeed(termios_p);
    for (sp = s2s; sp < s2s + (sizeof(s2s) / sizeof(s2s[0])); sp++) {
-      if (sp->ts == speed){
+      if (sp->ts == speed) {
          int request = TIOCSSERIAL;
          n_speed = sp->ns;
          // Set baud rate
          memcpy((void *)serial_1_data->data_ioctl,(void *)&request, sizeof(int));
-         memcpy((void *)(serial_1_data->data_ioctl+sizeof(int)),(void *)&n_speed, sizeof(unsigned long));
+         memcpy((void *)(serial_1_data->data_ioctl+sizeof(int)),(void *)&n_speed,
+                sizeof(unsigned long));
          //
          serial_1_cmd.hdwr_id = SERIAL_1;
          serial_1_cmd.cmd = OPS_IOCTL;
 
-         while(cyg_hal_sys_write(1, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
-         while(cyg_hal_sys_read(0, (void *)&serial_1_cmd, sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t));
+         while(cyg_hal_sys_write(1, (void *)&serial_1_cmd,
+                                 sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
+         while(cyg_hal_sys_read(0, (void *)&serial_1_cmd,
+                                sizeof(virtual_cmd_t)) != sizeof(virtual_cmd_t)) ;
          break;
       }
    }

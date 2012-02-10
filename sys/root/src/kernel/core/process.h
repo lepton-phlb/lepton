@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,20 +15,20 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 #ifndef _PROCESS_H
 #define _PROCESS_H
 
 /**
- * \addtogroup lepton_kernel 
+ * \addtogroup lepton_kernel
  * @{
  *
  */
@@ -50,7 +50,7 @@ Includes
 
 
 #ifdef CPU_WIN32
-#pragma pack(push, 8)
+   #pragma pack(push, 8)
 #endif
 
 
@@ -61,11 +61,11 @@ Includes
 Declaration
 =============================================*/
 
-typedef unsigned char  fds_bits_t;
+typedef unsigned char fds_bits_t;
 
 //descriptor table
 #ifndef OPEN_MAX
-#define OPEN_MAX        15
+   #define OPEN_MAX        15
 #endif
 
 #define __FD_SETSIZE    OPEN_MAX //nb max of descriptor for each process
@@ -97,18 +97,18 @@ typedef _atexit_func_t atexit_func_t;
 /**
  * structure de controle d'un processus
  */
-typedef struct{
-   pid_t          pid;  /**<numero d'identification du processus courant*/
-   pid_t          ppid; /**<numero d'identification du processus pre du processus courant*/
+typedef struct {
+   pid_t pid;           /**<numero d'identification du processus courant*/
+   pid_t ppid;          /**<numero d'identification du processus pre du processus courant*/
 
    //process group id (session leader)
-   pid_t          pgid; 
-   uid_t          uid;
-   uid_t          gid;
+   pid_t pgid;
+   uid_t uid;
+   uid_t gid;
 
    //
-   time_t         start_time;
-   
+   time_t start_time;
+
    //pthread based
    kernel_pthread_t* pthread_ptr; /**<Pointeur sur la structure du pthread associ au processus courant (voir kernel/kernel_pthread.h).*/
 
@@ -119,27 +119,27 @@ typedef struct{
    inodenb_t inode_curdir; /**<Numro d'inoeud du rpertoire courant du processus.*/
 
    //descriptor table
-   desc_t      desc_tbl[__FD_SETSIZE]; /**<Table des descripteurs de fichiers qui est utilise par les fonctions _get_fd() et _put_fd().*/
-   fds_bits_t  fds_bits[__FDSET_LONGS]; /**<Champs de bits pour l'allocation des descripteurs de fichiers (0 libre, 1 utilis). Oprations ralises par les fonctions _get_fd() et _put_fd().*/
-   fds_bits_t  clx_bits[__FDSET_LONGS]; /**<Champs de bits pour le close on exec.*/
+   desc_t desc_tbl[__FD_SETSIZE];      /**<Table des descripteurs de fichiers qui est utilise par les fonctions _get_fd() et _put_fd().*/
+   fds_bits_t fds_bits[__FDSET_LONGS];  /**<Champs de bits pour l'allocation des descripteurs de fichiers (0 libre, 1 utilis). Oprations ralises par les fonctions _get_fd() et _put_fd().*/
+   fds_bits_t clx_bits[__FDSET_LONGS];  /**<Champs de bits pour le close on exec.*/
    //
-   char  arg[ARG_LEN_MAX] ;/**<chaine de caractres contenant la ligne de commande*/
-   int   argc; /**<nombre d'arguments dans la ligne de commande*/
+   char arg[ARG_LEN_MAX];  /**<chaine de caractres contenant la ligne de commande*/
+   int argc;   /**<nombre d'arguments dans la ligne de commande*/
    char* argv[ARG_MAX]; /**<liste des arguments dans ligne de commande, pointe directement sur arg[]*/
-  
+
    int status; /**<*/
 
    process_routine_t process_routine; /**<Pointeur sur la routine principale du processus process_routine().*/
-   
+
    //atexit function pointer
    atexit_func_t* p_atexit_func;
 
    //last error
-   int            _errno; /**<Dernire erreur survenu dans le processus courant.*/
+   int _errno;            /**<Dernire erreur survenu dans le processus courant.*/
 
 }process_t;
 
-extern   pid_t pid_counter;
+extern pid_t pid_counter;
 
 #define PROCESS_MAX  __KERNEL_PROCESS_MAX
 
@@ -192,7 +192,8 @@ int _sys_fcntl(pid_t pid,unsigned int fd, unsigned int cmd, unsigned int argc,vo
 
 
 pid_t _sys_krnl_exec(const char *path, const char* argv[], const char* envp, pid_t ppid,pid_t pid);
-pid_t _sys_exec(const char *path, const char* argv[], const char* envp,kernel_pthread_t* pthread_ptr);
+pid_t _sys_exec(const char *path, const char* argv[], const char* envp,
+                kernel_pthread_t* pthread_ptr);
 
 #ifdef __cplusplus
 extern "C" {
@@ -214,7 +215,8 @@ pid_t _sys_waitpid(pid_t pid,pid_t child_pid,int options,int* status);
 //signal system call
 int _sys_sigprocmask (kernel_pthread_t* pthread_ptr, int how,sigset_t* set,sigset_t* oset);
 int _sys_sigpending  (kernel_pthread_t* pthread_ptr, sigset_t* set);
-int _sys_sigaction   (kernel_pthread_t* pthread_ptr, int sig,struct sigaction* act,struct sigaction* oact);
+int _sys_sigaction   (kernel_pthread_t* pthread_ptr, int sig,struct sigaction* act,
+                      struct sigaction* oact);
 //send signal system call
 int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic);
 int _sys_kill_exit(kernel_pthread_t* pthread_ptr);
@@ -234,7 +236,7 @@ int _sys_pthread_cancel_all_except(pid_t pid,kernel_pthread_t* except_pthread_pt
 #define __sys_errno __kernel_pthread_errno
 
 #ifdef CPU_WIN32
-#pragma pack(pop)
+   #pragma pack(pop)
 #endif
 
 /** @} */

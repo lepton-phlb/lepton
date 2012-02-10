@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -69,11 +69,11 @@ int lcd_main(int argc,char* argv[]){
    if(!(dir=opendir("/dev")))
       return -1;
 
-   while(readdir(dir,&dirent)){
-   
+   while(readdir(dir,&dirent)) {
+
       if(dirent.d_name[0]=='l'
          && dirent.d_name[1]=='c'
-         && dirent.d_name[2]=='d'){
+         && dirent.d_name[2]=='d') {
          strcpy(buf,"/dev/");
          strcat(buf,dirent.d_name);
          break;
@@ -91,18 +91,18 @@ int lcd_main(int argc,char* argv[]){
 
 
    //get option
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               case 't'://tiny
-                  opt |= OPT_MSK_T;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
+            case 't':   //tiny
+               opt |= OPT_MSK_T;
                break;
 
-               case 'm'://main
-                  opt |= OPT_MSK_M;
+            case 'm':   //main
+               opt |= OPT_MSK_M;
                break;
 
             }
@@ -115,29 +115,29 @@ int lcd_main(int argc,char* argv[]){
 
          len = strlen(str);
 
-         if(len>4){
+         if(len>4) {
 
-            for(pos=0; pos<len;pos++){
+            for(pos=0; pos<len; pos++) {
 
                memset(buf,'*',8);
-               memcpy(buf,&str[pos],((len-pos)>4?4:(len-pos)));
+               memcpy(buf,&str[pos],((len-pos)>4 ? 4 : (len-pos)));
 
                if(opt&OPT_MSK_T)
                   xlcd_tiny_display_str(&context,buf,0);
                if(opt&OPT_MSK_M)
                   xlcd_main_display_str(&context,buf,0);
-               usleep(500000);//0.5 s
+               usleep(500000); //0.5 s
             }
-            
+
          }else{
             if(opt&OPT_MSK_T)
                xlcd_tiny_display_str(&context,str,0);
             if(opt&OPT_MSK_M)
                xlcd_main_display_str(&context,str,0);
-            usleep(500000);//0.5 s
+            usleep(500000); //0.5 s
          }
 
-         
+
 
       }
    }

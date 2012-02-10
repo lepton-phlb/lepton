@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -89,18 +89,18 @@ Implementation
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_load(void)
 {
-  pthread_mutexattr_t  mutex_attr=0;
+   pthread_mutexattr_t mutex_attr=0;
 
-  if(s_twi_io_init)
-     return 0;
+   if(s_twi_io_init)
+      return 0;
 
-  s_twi_io_init++;
+   s_twi_io_init++;
 
-  kernel_pthread_mutex_init(&_i2c_core_mutex, &mutex_attr);
-  
-  _twi_io_init();   // SCL en sortie
+   kernel_pthread_mutex_init(&_i2c_core_mutex, &mutex_attr);
 
- return 0;
+   _twi_io_init();  // SCL en sortie
+
+   return 0;
 }
 
 /*-------------------------------------------
@@ -113,7 +113,7 @@ int dev_at91sam9261_twi_io_load(void)
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_isset_read(desc_t desc)
 {
- return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -126,7 +126,7 @@ int dev_at91sam9261_twi_io_isset_read(desc_t desc)
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_isset_write(desc_t desc)
 {
- return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -139,19 +139,19 @@ int dev_at91sam9261_twi_io_isset_write(desc_t desc)
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_open(desc_t desc, int o_flag)
 {
- if(o_flag & O_RDONLY)
-    {
-    }
+   if(o_flag & O_RDONLY)
+   {
+   }
 
- if(o_flag & O_WRONLY)
-    {
-    }
-   
- ofile_lst[desc].offset = 0;
-   
- return 0;
+   if(o_flag & O_WRONLY)
+   {
+   }
+
+   ofile_lst[desc].offset = 0;
+
+   return 0;
 }
- 
+
 /*-------------------------------------------
 | Name:dev_at91sam9261_twi_io_close
 | Description:
@@ -162,7 +162,7 @@ int dev_at91sam9261_twi_io_open(desc_t desc, int o_flag)
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_close(desc_t desc)
 {
- return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -175,7 +175,7 @@ int dev_at91sam9261_twi_io_close(desc_t desc)
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_seek(desc_t desc,int offset,int origin)
 {
- return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -185,16 +185,16 @@ int dev_at91sam9261_twi_io_seek(desc_t desc,int offset,int origin)
 |                buf[0]:i2c io addr , buf[1]:offset size , buf[2]:offset MSB , buf[3]:offset LSB
 | Return Type: - cb = 0 lecture correcte  /  cb = -1 lecture incorrecte
 |              - Datas lues en buf[3] si offset size=1  et  en buf[4] si offset size=2
-| Comments: 
+| Comments:
 | See:
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_read(desc_t desc, char* buf,int cb)
 {
-  unsigned int data_len=cb-2-buf[1];
-  
-  cb = _twi_io_read(buf[0], &buf[2], data_len, buf[1]);
-  
-  return (cb);
+   unsigned int data_len=cb-2-buf[1];
+
+   cb = _twi_io_read(buf[0], &buf[2], data_len, buf[1]);
+
+   return (cb);
 }
 
 /*-------------------------------------------
@@ -204,21 +204,21 @@ int dev_at91sam9261_twi_io_read(desc_t desc, char* buf,int cb)
 |                buf[0]:i2c io addr , buf[1]:offset size , buf[2]:offset MSB , buf[3]:offset LSB
 | Return Type: - cb = 0 écriture correcte  /  cb = -1 écriture incorrecte
 |              - Datas écrites en buf[3] si offset size=1  et  en buf[4] si offset size=2
-| Comments: 
+| Comments:
 | See:
 ---------------------------------------------*/
 int dev_at91sam9261_twi_io_write(desc_t desc, const char* buf,int cb)
 {
-  unsigned int data_len=cb-2-buf[1];
-  
-  // _i2c_lock();
-  
-  cb = _twi_io_write(buf[0], &buf[2], data_len, buf[1]);
-      
-  //_i2c_unlock();
-  
-  cyg_thread_delay(10);  
-  return (cb);
+   unsigned int data_len=cb-2-buf[1];
+
+   // _i2c_lock();
+
+   cb = _twi_io_write(buf[0], &buf[2], data_len, buf[1]);
+
+   //_i2c_unlock();
+
+   cyg_thread_delay(10);
+   return (cb);
 }
 
 /*============================================

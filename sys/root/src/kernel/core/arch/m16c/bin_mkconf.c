@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is ______________________________________.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): ______________________________________.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -171,51 +171,96 @@ int mtest_main(int argc, char* argv[]);
 Global Declaration
 =============================================*/
 static const bin_t _bin_lst[]={
-{          "init",			                  init_main,			100,			512,			1},
-{           "lsh",			                   lsh_main,			100,			640,			1},
-{         "mkdir",			                 mkdir_main,			100,			512,			1},
-{         "rmdir",			                 rmdir_main,			100,			512,			1},
-{            "rm",			                    rm_main,			100,			512,			1},
-{         "mount",			                 mount_main,			100,			512,			1},
-{        "umount",			                umount_main,			100,			512,			1},
-{            "ls",			                    ls_main,			100,			640,			1},
-{           "pwd",			                   pwd_main,			100,			512,			1},
-{            "ps",			                    ps_main,			100,			1024,			1},
-{          "kill",			                  kill_main,			100,			512,			1},
-{         "touch",			                 touch_main,			100,			512,			1},
-{           "cat",			                   cat_main,			100,			512,			1},
-{          "ecat",			                  ecat_main,			100,			512,			1},
-{          "more",			                  more_main,			100,			512,			1},
-{          "mkfs",			                  mkfs_main,			100,			512,			1},
-{            "df",			                    df_main,			100,			512,			1},
-{          "date",			                  date_main,			100,			1024,			1},
-{            "od",			                    od_main,			100,			1024,			1},
-{          "stty",			                  stty_main,			100,			1024,			1},
-{            "cp",			                    cp_main,			100,			512,			1},
-{         "sleep",			                 sleep_main,			100,			256,			1},
-{          "sync",			                  sync_main,			100,			128,			1},
-{         "wrapr",			                 wrapr_main,			100,			1224,			1},
-{        "xmodem",			                xmodem_main,			100,			512,			1},
-{          "echo",			                  echo_main,			100,			512,			1},
-{          "memd",			                  memd_main,			100,			1024,			1},
-{           "btb",			                   btb_main,			100,			512,			1},
-{          "macq",			                  macq_main,			100,			1024,			1},
-{         "mloop",			                 mloop_main,			100,			1024,			1},
-{         "mcont",			                 mcont_main,			100,			1024,			1},
-{          "mohm",			                  mohm_main,			100,			1024,			1},
-{         "mmohm",			                 mmohm_main,			100,			1024,			1},
-{          "madj",			                  madj_main,			100,			512,			1},
-{          "mrcd",			                  mrcd_main,			100,			1024,			1},
-{        "mearth",			                mearth_main,			100,			1024,			1},
-{          "msrd",			                  msrd_main,			100,			11000,			1},
-{          "madc",			                  madc_main,			100,			512,			1},
-{          "mdac",			                  mdac_main,			100,			512,			1},
-{          "mpga",			                  mpga_main,			100,			512,			1},
-{          "mcal",			                  mcal_main,			100,			512,			1},
-{       "tstport",			               tstport_main,			100,			640,			1},
-{       "tstslip",			               tstslip_main,			100,			640,			1},
-{       "tstloop",			               tstloop_main,			100,			640,			1},
-{         "mtest",			                 mtest_main,			100,			1024,			1}
+   {          "init",                                        init_main,                    100,
+              512,                    1},
+   {           "lsh",                                         lsh_main,                    100,
+               640,                    1},
+   {         "mkdir",                                       mkdir_main,                    100,
+             512,                    1},
+   {         "rmdir",                                       rmdir_main,                    100,
+             512,                    1},
+   {            "rm",                                          rm_main,                    100,
+                512,                    1},
+   {         "mount",                                       mount_main,                    100,
+             512,                    1},
+   {        "umount",                                      umount_main,                    100,
+            512,                    1},
+   {            "ls",                                          ls_main,                    100,
+                640,                    1},
+   {           "pwd",                                         pwd_main,                    100,
+               512,                    1},
+   {            "ps",                                          ps_main,                    100,
+                1024,                   1},
+   {          "kill",                                        kill_main,                    100,
+              512,                    1},
+   {         "touch",                                       touch_main,                    100,
+             512,                    1},
+   {           "cat",                                         cat_main,                    100,
+               512,                    1},
+   {          "ecat",                                        ecat_main,                    100,
+              512,                    1},
+   {          "more",                                        more_main,                    100,
+              512,                    1},
+   {          "mkfs",                                        mkfs_main,                    100,
+              512,                    1},
+   {            "df",                                          df_main,                    100,
+                512,                    1},
+   {          "date",                                        date_main,                    100,
+              1024,                   1},
+   {            "od",                                          od_main,                    100,
+                1024,                   1},
+   {          "stty",                                        stty_main,                    100,
+              1024,                   1},
+   {            "cp",                                          cp_main,                    100,
+                512,                    1},
+   {         "sleep",                                       sleep_main,                    100,
+             256,                    1},
+   {          "sync",                                        sync_main,                    100,
+              128,                    1},
+   {         "wrapr",                                       wrapr_main,                    100,
+             1224,                   1},
+   {        "xmodem",                                      xmodem_main,                    100,
+            512,                    1},
+   {          "echo",                                        echo_main,                    100,
+              512,                    1},
+   {          "memd",                                        memd_main,                    100,
+              1024,                   1},
+   {           "btb",                                         btb_main,                    100,
+               512,                    1},
+   {          "macq",                                        macq_main,                    100,
+              1024,                   1},
+   {         "mloop",                                       mloop_main,                    100,
+             1024,                   1},
+   {         "mcont",                                       mcont_main,                    100,
+             1024,                   1},
+   {          "mohm",                                        mohm_main,                    100,
+              1024,                   1},
+   {         "mmohm",                                       mmohm_main,                    100,
+             1024,                   1},
+   {          "madj",                                        madj_main,                    100,
+              512,                    1},
+   {          "mrcd",                                        mrcd_main,                    100,
+              1024,                   1},
+   {        "mearth",                                      mearth_main,                    100,
+            1024,                   1},
+   {          "msrd",                                        msrd_main,                    100,
+              11000,                  1},
+   {          "madc",                                        madc_main,                    100,
+              512,                    1},
+   {          "mdac",                                        mdac_main,                    100,
+              512,                    1},
+   {          "mpga",                                        mpga_main,                    100,
+              512,                    1},
+   {          "mcal",                                        mcal_main,                    100,
+              512,                    1},
+   {       "tstport",                                     tstport_main,                    100,
+           640,                    1},
+   {       "tstslip",                                     tstslip_main,                    100,
+           640,                    1},
+   {       "tstloop",                                     tstloop_main,                    100,
+           640,                    1},
+   {         "mtest",                                       mtest_main,                    100,
+             1024,                   1}
 };
 
 const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);

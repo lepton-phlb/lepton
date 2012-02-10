@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -38,7 +38,7 @@ Includes
 #include "kernel/core/stat.h"
 
 #if defined(GNU_GCC)
-#include <stdlib.h>
+   #include <stdlib.h>
 #endif
 /*===========================================
 Global Declaration
@@ -111,8 +111,8 @@ int _syscall_opendir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    opendir_dt->dir = (void*)0;
 
    //
-   if((desc = _vfs_opendir(opendir_dt->dirname))>=0){
-         opendir_dt->dir = &ofile_lst[desc];
+   if((desc = _vfs_opendir(opendir_dt->dirname))>=0) {
+      opendir_dt->dir = &ofile_lst[desc];
    }
 
    __flush_syscall(pthread_ptr);
@@ -139,7 +139,7 @@ int _syscall_closedir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
       _sys_free(ofile_lst[desc].p);
 
    ofile_lst[desc].p=(void*)0;
-   
+
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
    return 0;
@@ -163,10 +163,10 @@ int _syscall_readdir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
    if(!readdir_dt->dirent)
       readdir_dt->dirent = ofile_lst[desc].p;
-   
+
    if(readdir_dt->dirent)
       readdir_dt->dirent = _vfs_readdir(readdir_dt->dir->desc,readdir_dt->dirent);
-   
+
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
    return 0;
@@ -184,7 +184,7 @@ int _syscall_rewinddir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    rewinddir_t* rewinddir_dt = (rewinddir_t*)data;
 
    _vfs_rewinddir(rewinddir_dt->dir->desc);
-   
+
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
    return 0;
@@ -202,7 +202,7 @@ int _syscall_telldir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    telldir_t* telldir_dt = (telldir_t*)data;
 
    telldir_dt->loc = _vfs_telldir(telldir_dt->dir->desc);
-   
+
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
    return 0;
@@ -220,7 +220,7 @@ int _syscall_seekdir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    seekdir_t* seekdir_dt = (seekdir_t*)data;
 
    _vfs_seekdir(seekdir_dt->dir->desc,seekdir_dt->loc);
-   
+
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
    return 0;
@@ -256,20 +256,20 @@ int _syscall_open(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
    //to remove: profiling test
    /*__kernel_profiler_start();
-   {      
+   {
       int testfd=0;
       int Nbcalcule=10000;
       float resultat;
       float cal1=10.23454646E3;
       float cal2=0.231452424E-5;
       for(testfd=2;testfd<Nbcalcule;testfd++)
-	   {
- 	      cal2=cal1+cal2;
- 	      resultat=cal1-cal2;
- 	      cal1=cal1/cal2;
- 	      cal2=cal1*cal2;
- 	   }
-      
+           {
+              cal2=cal1+cal2;
+              resultat=cal1-cal2;
+              cal1=cal1/cal2;
+              cal2=cal1*cal2;
+           }
+
       //OS_Delay(50);
       __kernel_profiler_stop(__get_syscall_owner_pthread_ptr());
       __profiler_add_result(__get_syscall_owner_pthread_ptr(),_SYSCALL_CREAT,__kernel_profiler_get_counter(__get_syscall_owner_pthread_ptr()));
@@ -280,11 +280,11 @@ int _syscall_open(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    if(desc>=0)
       open_dt->fildes = _get_fd(pid,0);
 
-   if(open_dt->fildes>=0){
+   if(open_dt->fildes>=0) {
       process_lst[pid]->desc_tbl[open_dt->fildes]  = desc;
       open_dt->attr = ofile_lst[desc].attr;
       //ofile_lst[desc].pid = pid;//see _vfs_getdesc() in vfs.c
-   }else if(desc>=0){
+   }else if(desc>=0) {
       _vfs_close(desc);
    }
 
@@ -305,11 +305,11 @@ int _syscall_close(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    desc_t desc=-1;
    int ilck;
    close_t* close_dt = (close_t*)data;
-      
+
    desc = process_lst[pid]->desc_tbl[close_dt->fildes];
 
    if(desc>=0)
-      close_dt->ret = _vfs_close(desc);//be aware ;-) :_sys_kill() called in _sys_pipe_close() use __atomic_in() __atomic_out().
+      close_dt->ret = _vfs_close(desc);  //be aware ;-) :_sys_kill() called in _sys_pipe_close() use __atomic_in() __atomic_out().
    //
    close_dt->ret=_put_fd(pid,close_dt->fildes);
    //see close on exec in kernel/core/core-segger/process.c
@@ -319,16 +319,16 @@ int _syscall_close(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
       process_lst[pid]->desc_tbl[close_dt->fildes] = -1;
 
    //unlock file
-   #ifdef __KERNEL_USE_FILE_LOCK
+#ifdef __KERNEL_USE_FILE_LOCK
    __atomic_in();
-   if((ilck=_is_locked(ofile_lst[desc].inodenb))>=0)//is locked?
-      if( flock_lst[ilck]._flock.l_pid == pid){//locked by this process?
-         _put_flock(ofile_lst[desc].inodenb);//now, is unlocked
+   if((ilck=_is_locked(ofile_lst[desc].inodenb))>=0) //is locked?
+      if( flock_lst[ilck]._flock.l_pid == pid) { //locked by this process?
+         _put_flock(ofile_lst[desc].inodenb); //now, is unlocked
          //wakeup locked process
          _sys_unlockw();
       }
    __atomic_out();
-   #endif
+#endif
 
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
@@ -348,7 +348,7 @@ int _syscall_close(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 int _syscall_read(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    desc_t desc=-1;
    read_t* read_dt = (read_t*)data;
-  
+
    if(read_dt->fildes>=0)
       desc = process_lst[pid]->desc_tbl[read_dt->fildes];
 
@@ -371,7 +371,7 @@ int _syscall_read(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 int _syscall_write(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    desc_t desc=-1;
    write_t* write_dt = (write_t*)data;
-  
+
    if(write_dt->fildes>=0)
       desc = process_lst[pid]->desc_tbl[write_dt->fildes];
 
@@ -400,7 +400,7 @@ int _syscall_lseek(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
    if(desc>=0)
       lseek_dt->offset = _vfs_lseek(desc,lseek_dt->offset,lseek_dt->whence);
-   
+
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
    return 0;
@@ -432,14 +432,14 @@ int _syscall_mkdir(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 ---------------------------------------------*/
 int _syscall_mknod(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    mknod_t* mknod_dt = (mknod_t*)data;
-   if( (mknod_dt->mode&S_IFCHR) ||  (mknod_dt->mode&S_IFBLK)){
+   if( (mknod_dt->mode&S_IFCHR) ||  (mknod_dt->mode&S_IFBLK)) {
       mknod_dt->ret = _vfs_mknod(mknod_dt->path,mknod_dt->mode,mknod_dt->ext.dev);
-   }else if(mknod_dt->mode&S_IFIFO){
+   }else if(mknod_dt->mode&S_IFIFO) {
       mknod_dt->ext.pipe_desc = -1;
       mknod_dt->ret = _vfs_mknod(mknod_dt->path,mknod_dt->mode,mknod_dt->ext.pipe_desc);
-   }else if(mknod_dt->mode&S_IFREG){
+   }else if(mknod_dt->mode&S_IFREG) {
       desc_t desc = _vfs_open(mknod_dt->path,O_CREAT|O_WRONLY,mknod_dt->mode);
-      if(desc>=0){
+      if(desc>=0) {
          mknod_dt->ret = 0;
          _vfs_close(desc);
       }else
@@ -456,11 +456,11 @@ int _syscall_mknod(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
 /*--------------------------------------------
 | Name:        _syscall_fattach
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _syscall_fattach(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    fattach_t* fattach_dt = (fattach_t*)data;
@@ -470,12 +470,12 @@ int _syscall_fattach(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
    if(fattach_dt->fd<0)
       fattach_dt->ret = -1;
-   
+
    if(fattach_dt->path==(const char *)0)
       fattach_dt->ret = -1;
 
-   if(fattach_dt->ret != -1){
-      if((desc = process_lst[pid]->desc_tbl[fattach_dt->fd])>=0){
+   if(fattach_dt->ret != -1) {
+      if((desc = process_lst[pid]->desc_tbl[fattach_dt->fd])>=0) {
          fattach_dt->ret = _vfs_fattach(desc,fattach_dt->path);
       }
    }
@@ -487,11 +487,11 @@ int _syscall_fattach(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
 /*--------------------------------------------
 | Name:        _syscall_fdetach
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _syscall_fdetach(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    fdetach_t* fdetach_dt = (fdetach_t*)data;
@@ -501,8 +501,8 @@ int _syscall_fdetach(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    if(fdetach_dt->path==(const char *)0)
       fdetach_dt->ret = -1;
 
-   if(fdetach_dt->ret != -1){
-         fdetach_dt->ret = _vfs_fdetach(fdetach_dt->path);
+   if(fdetach_dt->ret != -1) {
+      fdetach_dt->ret = _vfs_fdetach(fdetach_dt->path);
    }
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
@@ -522,7 +522,7 @@ int _syscall_ftruncate(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    ftruncate_t* ftruncate_dt=(ftruncate_t*)data;
 
    ftruncate_dt->ret=-1;
-  
+
    if(ftruncate_dt->fildes>=0)
       desc = process_lst[pid]->desc_tbl[ftruncate_dt->fildes];
 
@@ -645,7 +645,7 @@ int _syscall_fstatvfs(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    fstatvfs_t* fstatvfs_dt=(fstatvfs_t*)data;
 
    fstatvfs_dt->ret=-1;
-  
+
    if(fstatvfs_dt->fildes>=0)
       desc = process_lst[pid]->desc_tbl[fstatvfs_dt->fildes];
 
@@ -666,7 +666,7 @@ int _syscall_fstatvfs(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 | See:
 ---------------------------------------------*/
 int _syscall_statvfs(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
-   
+
    statvfs_t* statvfs_dt=(statvfs_t*)data;
 
    statvfs_dt->ret = _vfs_statvfs(statvfs_dt->path,statvfs_dt->statvfs);
@@ -687,7 +687,7 @@ int _syscall_statvfs(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 int _syscall_getcwd(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
    getcwd_t* getcwd_dt=(getcwd_t*)data;
-   
+
    getcwd_dt->ret=_vfs_getcwd(getcwd_dt->buf,getcwd_dt->size);
 
    __flush_syscall(pthread_ptr);
