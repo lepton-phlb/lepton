@@ -71,12 +71,18 @@ TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_enet/dev_twrk60n512_enet.c
 TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_sdhc/dev_k60n512_sdhc.c'),
 TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_x.c'),
 TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_0.c'),
-TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_2.c')
+TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_dspi/dev_k60n512_dspi_2.c'),
+TauonSource(tauon_kernel_dev_k60n512_dir+'common/low_level_k60n512_pit.c'),
+TauonSource(tauon_kernel_dev_k60n512_dir+'dev_k60n512_i2c_x/low_level_k60n512_i2c_x.c')
 ])
 
 #general device files
 tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_dir+'arch/all/sd/dev_sd.c'),
-TauonSource(tauon_kernel_dev_dir+'arch/all/sd/drv_sd.c')
+TauonSource(tauon_kernel_dev_dir+'arch/all/sd/drv_sd.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/i2c/dev_eeprom_24xxx.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/i2c/dev_eeprom_24xxx_0.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/i2c/dev_eeprom_24xxx_1.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/i2c/dev_eeprom_24xxx_2.c'),
 ])
 
 #fat files
