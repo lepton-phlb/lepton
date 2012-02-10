@@ -38,52 +38,46 @@ Includes
 #include "kernel/core/core_rttimer.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
-#include "dev_k60n512_i2c_x.h"
+#include "kernel/dev/arch/cortexm/k60n512/dev_k60n512_i2c_x/dev_k60n512_i2c_x.h"
 #include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 /*===========================================
 Global Declaration
 =============================================*/
-const char dev_twrk60n512_i2c_0_name[]="i2c1\0";
+const char dev_twrk60n512_i2c_0_mma7660_name[]="i2c1\0";
 
-static int dev_twrk60n512_i2c_0_load(void);
-static int dev_twrk60n512_i2c_0_open(desc_t desc, int o_flag);
+static int dev_twrk60n512_i2c_0_mma7660_load(void);
+static int dev_twrk60n512_i2c_0_mma7660_open(desc_t desc, int o_flag);
 
-extern int dev_k60n512_i2c_x_load(board_kinetis_i2c_info_t * kinetis_i2c_info);
-extern int dev_k60n512_i2c_x_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info);
-extern int dev_k60n512_i2c_x_close(desc_t desc);
-extern int dev_k60n512_i2c_x_read(desc_t desc, char* buf,int cb);
-extern int dev_k60n512_i2c_x_write(desc_t desc, const char* buf,int cb);
-extern int dev_k60n512_i2c_x_ioctl(desc_t desc,int request,va_list ap);
+extern int dev_k60n512_i2c_x_mma7660_load(board_kinetis_i2c_info_t * kinetis_i2c_info);
+extern int dev_k60n512_i2c_x_mma7660_open(desc_t desc, int o_flag, board_kinetis_i2c_info_t * kinetis_i2c_info);
+extern int dev_k60n512_i2c_x_mma7660_close(desc_t desc);
+extern int dev_k60n512_i2c_x_mma7660_read(desc_t desc, char* buf,int cb);
+extern int dev_k60n512_i2c_x_mma7660_write(desc_t desc, const char* buf,int cb);
+extern int dev_k60n512_i2c_x_mma7660_ioctl(desc_t desc,int request,va_list ap);
 
-dev_map_t dev_twrk60n512_i2c_0_map={
-   dev_twrk60n512_i2c_0_name,
+dev_map_t dev_twrk60n512_i2c_0_mma7660_map={
+   dev_twrk60n512_i2c_0_mma7660_name,
    S_IFCHR,
-   dev_twrk60n512_i2c_0_load,
-   dev_twrk60n512_i2c_0_open,
-   dev_k60n512_i2c_x_close,
+   dev_twrk60n512_i2c_0_mma7660_load,
+   dev_twrk60n512_i2c_0_mma7660_open,
+   dev_k60n512_i2c_x_mma7660_close,
    __fdev_not_implemented,
    __fdev_not_implemented,
-   dev_k60n512_i2c_x_read,
-   dev_k60n512_i2c_x_write,
+   dev_k60n512_i2c_x_mma7660_read,
+   dev_k60n512_i2c_x_mma7660_write,
    __fdev_not_implemented,
-   dev_k60n512_i2c_x_ioctl
+   dev_k60n512_i2c_x_mma7660_ioctl
 };
-
-//
-#define KINETIS_I2C0_VECTOR_PRIORITY		3
-#define KINETIS_I2C0_IRQ            25//24
-//#define KINETIS_I2C0_VECTOR       40
 
 //slave address
 #define MMA7660_I2C_ADDRESS      0x4C
 
 //
-static board_kinetis_i2c_info_t kinetis_i2c_0 = {
+static board_kinetis_i2c_info_t kinetis_i2c_0_mma7660 = {
    i2c_base : 0x40066000,
    desc_r : -1,
    desc_w : -1,
-   mult : 1,
-   icr : 4,
+   speed : 800000, //Hz
    slave_id : MMA7660_I2C_ADDRESS
 };
 
@@ -101,7 +95,7 @@ Implementation
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_twrk60n512_i2c_0_load(void) {
+int dev_twrk60n512_i2c_0_mma7660_load(void) {
    volatile unsigned int reg_val = 0;
    
    hal_set_pin_function(I2C0_SCL);
@@ -112,7 +106,7 @@ int dev_twrk60n512_i2c_0_load(void) {
    reg_val |= REG_SIM_SCGC4_I2C0_MASK;
    HAL_WRITE_UINT32(REG_SIM_SCGC4_ADDR, reg_val);
    
-   return dev_k60n512_i2c_x_load(&kinetis_i2c_0);
+   return dev_k60n512_i2c_x_mma7660_load(&kinetis_i2c_0_mma7660);
 }
 
 /*-------------------------------------------
@@ -123,10 +117,10 @@ int dev_twrk60n512_i2c_0_load(void) {
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_twrk60n512_i2c_0_open(desc_t desc, int o_flag) {
-   return dev_k60n512_i2c_x_open(desc, o_flag, &kinetis_i2c_0);
+int dev_twrk60n512_i2c_0_mma7660_open(desc_t desc, int o_flag) {
+   return dev_k60n512_i2c_x_mma7660_open(desc, o_flag, &kinetis_i2c_0_mma7660);
 }
 
 /*============================================
-| End of Source  : dev_k60n512_i2c_0.c
+| End of Source  : dev_k60n512_i2c_0_mma7660.c
 ==============================================*/
