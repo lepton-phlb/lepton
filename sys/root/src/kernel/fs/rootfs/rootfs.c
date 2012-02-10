@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -104,10 +104,10 @@ void _rtfs_fpos(int offset,int* blk,int* pos)
 ---------------------------------------------*/
 int _rtfs_mountdir(desc_t desc,inodenb_t original_root_node,inodenb_t target_root_node){
    int r;
-   rtfs_block_dir_t      dir;
+   rtfs_block_dir_t dir;
    _rtfs_seek(desc,0,SEEK_SET);
-   while( (r=_rtfs_read(desc,(char*)&dir,sizeof(rtfs_block_dir_t)))>0){
-      if(dir.inode==original_root_node){
+   while( (r=_rtfs_read(desc,(char*)&dir,sizeof(rtfs_block_dir_t)))>0) {
+      if(dir.inode==original_root_node) {
          int offset = sizeof(rtfs_block_dir_t);
          _rtfs_seek(desc,-1*offset,SEEK_CUR);
          dir.inode = (unsigned short)target_root_node;
@@ -129,7 +129,7 @@ int _rtfs_mountdir(desc_t desc,inodenb_t original_root_node,inodenb_t target_roo
 ---------------------------------------------*/
 int _rtfs_readdir(desc_t desc,dirent_t* dirent){
 
-   rtfs_block_dir_t      dir;
+   rtfs_block_dir_t dir;
    int r;
 
    r  = _rtfs_read(desc,(char*)&dir,sizeof(rtfs_block_dir_t));
@@ -184,13 +184,13 @@ inodenb_t _rtfs_lookupdir(desc_t desc,char* filename){
 
    int r;
 
-   rtfs_block_dir_t      dir;
-   rtfs_inodenb_t          _inode=INVALID_INODE_NB;
+   rtfs_block_dir_t dir;
+   rtfs_inodenb_t _inode=INVALID_INODE_NB;
 
    dir.inode   = (unsigned char)ofile_lst[desc].inodenb;
 
    if( (__rtfsinode_lst(dir.inode).attr&S_IFDIR) != S_IFDIR)
-      return INVALID_INODE_NB; 
+      return INVALID_INODE_NB;
 
    //
    _rtfs_open(desc);
@@ -233,21 +233,21 @@ int _rtfs_mknod(desc_t desc,inodenb_t inodenb,dev_t dev){
 ---------------------------------------------*/
 inodenb_t _rtfs_create(desc_t desc,char* filename, int attr){
 
-   rtfs_inodenb_t        _dir_inode;
-   rtfs_inodenb_t        _inode;
-   rtfs_block_dir_t    dir;
+   rtfs_inodenb_t _dir_inode;
+   rtfs_inodenb_t _inode;
+   rtfs_block_dir_t dir;
 
-   static struct __timeval tv;//common
+   static struct __timeval tv; //common
 
-   if(strlen(filename)>RTFS_MAX_FILENAME){
-      __kernel_set_errno(ENAMETOOLONG); 
+   if(strlen(filename)>RTFS_MAX_FILENAME) {
+      __kernel_set_errno(ENAMETOOLONG);
       return -1; //file name is too long
    }
 
    _dir_inode = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
-   
+
    _inode=(rtfs_inodenb_t)_rtfs_allocnode();
-   if(_inode==INVALID_RTFSNODE) 
+   if(_inode==INVALID_RTFSNODE)
       return -1;
 
    //set creation date
@@ -299,17 +299,17 @@ inodenb_t _rtfs_create(desc_t desc,char* filename, int attr){
 ---------------------------------------------*/
 int _rtfs_open(desc_t desc){
 
-   rtfs_inodenb_t  _inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
+   rtfs_inodenb_t _inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
 
    ofile_lst[desc].offset  =0;
    ofile_lst[desc].attr    = __rtfsinode_lst(_inode).attr;
    ofile_lst[desc].size    = __rtfsinode_lst(_inode).size;
    ofile_lst[desc].cmtime  = __rtfsinode_lst(_inode).cmtime;
 
-   if((ofile_lst[desc].attr & (S_IFCHR | S_IFBLK )) ){
+   if((ofile_lst[desc].attr & (S_IFCHR | S_IFBLK )) ) {
       ofile_lst[desc].ext.dev = __rtfsinode_lst(_inode).blk[0];
-   }else if(ofile_lst[desc].attr & S_IFIFO){
-      ofile_lst[desc].ext.pipe_desc = __rtfsinode_lst(_inode).blk[0] ;
+   }else if(ofile_lst[desc].attr & S_IFIFO) {
+      ofile_lst[desc].ext.pipe_desc = __rtfsinode_lst(_inode).blk[0];
    }
 
    return 0;
@@ -326,21 +326,21 @@ int _rtfs_open(desc_t desc){
 int _rtfs_close(desc_t desc){
 
 
-   rtfs_inodenb_t  _inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
+   rtfs_inodenb_t _inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
 
    __rtfsinode_lst(_inode).size=ofile_lst[desc].size;
 
-   if(IS_FSTATUS_MODIFIED(ofile_lst[desc].status)){
-      static struct __timeval tv;//common
+   if(IS_FSTATUS_MODIFIED(ofile_lst[desc].status)) {
+      static struct __timeval tv; //common
       //set modification date
       _sys_gettimeofday(&tv,0L);
       __rtfsinode_lst(_inode).cmtime = tv.tv_sec;
    }
 
    //
-   if((ofile_lst[desc].attr & (S_IFCHR | S_IFBLK )) ){
+   if((ofile_lst[desc].attr & (S_IFCHR | S_IFBLK )) ) {
       __rtfsinode_lst(_inode).blk[0] = ofile_lst[desc].ext.dev;
-   }else if(ofile_lst[desc].attr & S_IFIFO){
+   }else if(ofile_lst[desc].attr & S_IFIFO) {
       __rtfsinode_lst(_inode).blk[0] = ofile_lst[desc].ext.pipe_desc;
    }
 
@@ -364,15 +364,15 @@ int _rtfs_read(desc_t desc,char* buffer,int size){
 
    int r=0;
    rtfs_inodenb_t inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
-   
+
    rtfs_blocknb_t blknb;
 
-   int  blk;
-   int  pos;
-   int  cpsize=0;
-   int  filsz = ofile_lst[desc].size;
-   
-   while( r<size && ofile_lst[desc].offset<filsz){
+   int blk;
+   int pos;
+   int cpsize=0;
+   int filsz = ofile_lst[desc].size;
+
+   while( r<size && ofile_lst[desc].offset<filsz) {
 
       _rtfs_fpos(ofile_lst[desc].offset,&blk,&pos);
       blknb=__rtfsinode_lst(inode).blk[blk];
@@ -383,13 +383,13 @@ int _rtfs_read(desc_t desc,char* buffer,int size){
          cpsize=size-r;
       if((ofile_lst[desc].offset+cpsize)>=filsz)
          cpsize=filsz-ofile_lst[desc].offset;
-      
+
       memcpy(buffer+r,&rtfsblk_lst[blknb].byte[pos],cpsize);
 
       r+=cpsize;
       ofile_lst[desc].offset+=cpsize;
    }
-   
+
    return r;
 }
 
@@ -404,25 +404,25 @@ int _rtfs_read(desc_t desc,char* buffer,int size){
 int _rtfs_write(desc_t desc,char* buffer,int size){
 
    int w = 0;
-   
+
    rtfs_inodenb_t inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
 
    rtfs_blocknb_t blknb;
 
-   int  _blk;
+   int _blk;
    int _pos;
 
-   int  blk;
+   int blk;
    int pos;
-   
-   int  cpsize=size;
+
+   int cpsize=size;
 
    /*if(!ofile_lst[desc].offset)
       ofile_lst[desc].offset--;*/
 
    _rtfs_fpos(ofile_lst[desc].offset-1,&blk,&pos);
-   
-   while( w<size ){
+
+   while( w<size ) {
 
       _blk=blk;
       _pos=pos;
@@ -432,25 +432,25 @@ int _rtfs_write(desc_t desc,char* buffer,int size){
       if(blk>=MAX_RTFS_BLOCK)
          return -1;
 
-      if( (_blk!=blk && ofile_lst[desc].offset>ofile_lst[desc].size) 
-         || ofile_lst[desc].size==0){
+      if( (_blk!=blk && ofile_lst[desc].offset>ofile_lst[desc].size)
+          || ofile_lst[desc].size==0) {
 
-         if((blknb=_rtfs_allocblk())==INVALID_RTFSBLOCK)//no block available
+         if((blknb=_rtfs_allocblk())==INVALID_RTFSBLOCK) //no block available
             break;
 
          __rtfsinode_lst(inode).blk[blk]=blknb;
-      
+
       }else
          blknb=__rtfsinode_lst(inode).blk[blk];
 
-      
+
       rtfsblk_lst[blknb].byte[pos]=buffer[w];
 
       w++;
-      
+
       if( ofile_lst[desc].offset>(ofile_lst[desc].size))
          ofile_lst[desc].size = ofile_lst[desc].offset;
-      
+
    }
 
    //set modified status
@@ -471,22 +471,22 @@ int _rtfs_seek(desc_t desc, int offset, int origin)
 {
    switch(origin)
    {
-      case SEEK_SET:
-         //Begin of the File
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      //Begin of the File
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         //Current position of the file
-         ofile_lst[desc].offset=ofile_lst[desc].offset+offset;
+   case SEEK_CUR:
+      //Current position of the file
+      ofile_lst[desc].offset=ofile_lst[desc].offset+offset;
       break;
 
-      case SEEK_END:
-         //End of the File
-         ofile_lst[desc].offset = (ofile_lst[desc].size)+offset;
+   case SEEK_END:
+      //End of the File
+      ofile_lst[desc].offset = (ofile_lst[desc].size)+offset;
       break;
 
-      default:
+   default:
       return -1;
    }
 
@@ -505,18 +505,18 @@ int _rtfs_truncate(desc_t desc, off_t length){
 
    rtfs_inodenb_t inode   = (rtfs_inodenb_t)ofile_lst[desc].inodenb;
 
-   int  _blk;
-   int  _offset;
+   int _blk;
+   int _offset;
 
-   int  blk;
+   int blk;
    int offset;
    int pos = (int)(__rtfsinode_lst(inode).size);
 
-   if(!__rtfsinode_lst(inode).size)return 0;
-   
+   if(!__rtfsinode_lst(inode).size) return 0;
+
    _rtfs_fpos(pos,&blk,&offset);
-   
-   while( --pos>=length ){
+
+   while( --pos>=length ) {
 
       _blk=blk;
       _offset=offset;
@@ -548,11 +548,11 @@ int _rtfs_truncate(desc_t desc, off_t length){
 ---------------------------------------------*/
 int _rtfs_remove(desc_t desc_ancst,desc_t desc){
    //remove regular file
-   rtfs_block_dir_t   dir;
+   rtfs_block_dir_t dir;
    int r;
    int pos;
    int offset;
-   
+
    //
    _rtfs_open(desc_ancst);
    while( (r=_rtfs_read(desc_ancst,(char*)&dir,sizeof(rtfs_block_dir_t))) )
@@ -566,7 +566,7 @@ int _rtfs_remove(desc_t desc_ancst,desc_t desc){
 
    offset=-1*(int)(sizeof(rtfs_block_dir_t));
 
-   pos = _rtfs_seek(desc_ancst,offset , SEEK_CUR);
+   pos = _rtfs_seek(desc_ancst,offset, SEEK_CUR);
 
    _rtfs_seek(desc_ancst, offset, SEEK_END);
 
@@ -601,13 +601,13 @@ int _rtfs_remove(desc_t desc_ancst,desc_t desc){
 int _rtfs_rename(desc_t desc,const char*  old_name, char* new_name){
 
    //remove regular file
-   rtfs_block_dir_t   dir;
+   rtfs_block_dir_t dir;
    int r;
    int pos;
    int offset;
-   
+
    //
-   while( (r=_rtfs_read(desc,(char*)&dir,sizeof(rtfs_block_dir_t))) ){
+   while( (r=_rtfs_read(desc,(char*)&dir,sizeof(rtfs_block_dir_t))) ) {
       if(!strcmp(dir.name,old_name))
          break;
    }
@@ -617,7 +617,7 @@ int _rtfs_rename(desc_t desc,const char*  old_name, char* new_name){
    offset=-1*(int)(sizeof(rtfs_block_dir_t));
 
    //rewind on the entry matched
-   pos = _rtfs_seek(desc,offset , SEEK_CUR);
+   pos = _rtfs_seek(desc,offset, SEEK_CUR);
 
    //change the entry name
    strcpy(dir.name,new_name);
@@ -646,9 +646,9 @@ int _rtfs_loadfs(void){
    _inode = (rtfs_inodenb_t)_rtfs_allocnode();
    __rtfsinode_lst(_inode).attr  =  S_IFDIR;
    __rtfsinode_lst(_inode).size  =  0;
-   
+
    return 0;
-   
+
 }
 
 /*===========================================

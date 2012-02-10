@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -90,21 +90,21 @@ void invoke_app_ctr(void);
 static char invoke_app_ctr_ok=0;
 
 #ifdef USE_ECOS
-typedef void (*pfunc) (void);
+typedef void (*pfunc)(void);
 //EABI or ELF
-#ifdef CYGBLD_HAL_ARM_EABI
+   #ifdef CYGBLD_HAL_ARM_EABI
 extern pfunc __init_array_start__[];
 extern pfunc __init_array_end__[];
-#define CONSTRUCTORS_START  (__init_array_start__[0])
-#define CONSTRUCTORS_END    (__init_array_end__)
-#define NEXT_CONSTRUCTOR(c) ((c)++)
-#else
+      #define CONSTRUCTORS_START  (__init_array_start__[0])
+      #define CONSTRUCTORS_END    (__init_array_end__)
+      #define NEXT_CONSTRUCTOR(c) ((c)++)
+   #else
 extern pfunc __CTOR_LIST__[];
 extern pfunc __CTOR_END__[];
-#define CONSTRUCTORS_START  (__CTOR_END__[-1])
-#define CONSTRUCTORS_END    (&__CTOR_LIST__[-1])
-#define NEXT_CONSTRUCTOR(c) ((c)--)
-#endif
+      #define CONSTRUCTORS_START  (__CTOR_END__[-1])
+      #define CONSTRUCTORS_END    (&__CTOR_LIST__[-1])
+      #define NEXT_CONSTRUCTOR(c) ((c)--)
+   #endif
 extern void tauon_cplusplus_ctor(void);
 #endif
 
@@ -186,9 +186,9 @@ int _get_fd(pid_t pid,int limit){
    unsigned char i;
    unsigned char d;
    int fd=0;
-   for(i=0;i<__FDSET_LONGS;i++){
-      for(d=0;d<__fds_size;d++){
-         if( !((process_lst[pid]->fds_bits[i]>>d)&0x01) ){
+   for(i=0; i<__FDSET_LONGS; i++) {
+      for(d=0; d<__fds_size; d++) {
+         if( !((process_lst[pid]->fds_bits[i]>>d)&0x01) ) {
             fd = ((i<<__shl_fds_bits)+d); //i*8+d
             if(fd<limit) continue;
             process_lst[pid]->fds_bits[i]|=(0x01<<d);
@@ -223,10 +223,10 @@ int _put_fd(pid_t pid,int fd){
    unsigned char d;
 
    i = (fd>>__shl_fds_bits); // i/8
-   d = fd-(i<<__shl_fds_bits);//i modulo 8
+   d = fd-(i<<__shl_fds_bits); //i modulo 8
 
    if( !((process_lst[pid]->fds_bits[i]>>d)&0x01) )
-      return -1;//already closed
+      return -1;  //already closed
 
    process_lst[pid]->fds_bits[i]&=(~(0x01<<d));
    //printf("fd:%d-in:%d\r\n",pid, fd);
@@ -246,10 +246,10 @@ int _set_cloexec(pid_t pid,int fd){
    unsigned char d;
 
    i = (fd>>__shl_fds_bits); // i/8
-   d = fd-(i<<__shl_fds_bits);//i modulo 8
+   d = fd-(i<<__shl_fds_bits); //i modulo 8
 
    if( !((process_lst[pid]->fds_bits[i]>>d)&0x01) )
-      return -1;//already closed
+      return -1;  //already closed
 
    //set flag
    process_lst[pid]->clx_bits[i]|=((0x01<<d));
@@ -270,10 +270,10 @@ int _unset_cloexec(pid_t pid,int fd){
    unsigned char d;
 
    i = (fd>>__shl_fds_bits); // i/8
-   d = fd-(i<<__shl_fds_bits);//i modulo 8
+   d = fd-(i<<__shl_fds_bits); //i modulo 8
 
    if( !((process_lst[pid]->fds_bits[i]>>d)&0x01) )
-      return -1;//already closed
+      return -1;  //already closed
 
    //set flag
    process_lst[pid]->clx_bits[i]&=(~(0x01<<d));
@@ -293,10 +293,10 @@ int _is_cloexec(pid_t pid,int fd){
    unsigned char d;
 
    i = (fd>>__shl_fds_bits); // i/8
-   d = fd-(i<<__shl_fds_bits);//i modulo 8
+   d = fd-(i<<__shl_fds_bits); //i modulo 8
    //
    if( !((process_lst[pid]->fds_bits[i]>>d)&0x01) )
-      return -1;//already closed
+      return -1;  //already closed
    //
    return process_lst[pid]->clx_bits[i]&((0x01<<d));
 }
@@ -314,10 +314,10 @@ int _cloexec_process_fd(pid_t pid){
    unsigned char d;
    int fd;
    desc_t desc;
-   for(i=0;i<__FDSET_LONGS;i++){
-      for(d=0;d<__fds_size;d++){
+   for(i=0; i<__FDSET_LONGS; i++) {
+      for(d=0; d<__fds_size; d++) {
          if(    ((process_lst[pid]->fds_bits[i]>>d)&0x01)
-             && ((process_lst[pid]->clx_bits[i]>>d)&0x01) ){
+                && ((process_lst[pid]->clx_bits[i]>>d)&0x01) ) {
             //
             fd = ((i<<__shl_fds_bits)+d); //i*8+d
             if( (desc = process_lst[pid]->desc_tbl[fd])<0 )
@@ -354,9 +354,9 @@ int _copy_process_fd(pid_t pid, pid_t ppid,int oflags){
    unsigned char d;
    int fd;
    desc_t desc;
-   for(i=0;i<__FDSET_LONGS;i++){
-      for(d=0;d<__fds_size;d++){
-         if( ((process_lst[ppid]->fds_bits[i]>>d)&0x01) ){
+   for(i=0; i<__FDSET_LONGS; i++) {
+      for(d=0; d<__fds_size; d++) {
+         if( ((process_lst[ppid]->fds_bits[i]>>d)&0x01) ) {
             process_lst[ppid]->fds_bits[i]|=(0x01<<d);
             fd = ((i<<__shl_fds_bits)+d); //i*8+d
             desc = process_lst[ppid]->desc_tbl[fd];
@@ -394,9 +394,9 @@ int _close_process_fd(pid_t pid){
    int fd;
    desc_t desc;
 
-   for(i=0;i<__FDSET_LONGS;i++){
-      for(d=0;d<__fds_size;d++){
-         if( ((process_lst[pid]->fds_bits[i]>>d)&0x01) ){
+   for(i=0; i<__FDSET_LONGS; i++) {
+      for(d=0; d<__fds_size; d++) {
+         if( ((process_lst[pid]->fds_bits[i]>>d)&0x01) ) {
             int ilck;
             process_lst[pid]->fds_bits[i]|=(0x01<<d);
             fd = ((i<<__shl_fds_bits)+d); //i*8+d
@@ -409,14 +409,14 @@ int _close_process_fd(pid_t pid){
             process_lst[pid]->fds_bits[i]&=(~(0x01<<d));
 
             //unlock file
-            #ifdef __KERNEL_USE_FILE_LOCK
+#ifdef __KERNEL_USE_FILE_LOCK
             if((ilck=_is_locked(ofile_lst[desc].inodenb))<0)
-               continue;//not locked
+               continue;  //not locked
             if( flock_lst[ilck]._flock.l_pid != pid)
-               continue;//locked by another process: cannot be unlocked by the current process.
+               continue;  //locked by another process: cannot be unlocked by the current process.
 
-            _put_flock(ofile_lst[desc].inodenb);//is unlocked
-            #endif
+            _put_flock(ofile_lst[desc].inodenb); //is unlocked
+#endif
 
          }
       }
@@ -440,11 +440,11 @@ void _pid(void){
    process_lst= &__process_lst[0];
    process_lst--;
    //
-   for(_pid=1;_pid<=PROCESS_MAX;_pid++){
+   for(_pid=1; _pid<=PROCESS_MAX; _pid++) {
       process_lst[_pid]=0;
    }
 
-   pid_counter=0;//PROCESS_MAX-1;
+   pid_counter=0; //PROCESS_MAX-1;
 }
 
 /*-------------------------------------------
@@ -459,19 +459,19 @@ int _nextpid(pid_t* pid){
 
    pid_t _pid=pid_counter;
 
-   do{
+   do {
 
       if(++_pid>PROCESS_MAX)
          _pid=1;
 
       //if(process_lst[_pid]->pid){
-      if(!process_lst[_pid]){
+      if(!process_lst[_pid]) {
          pid_counter=_pid;
          *pid   = _pid;
          return 0;
       }
 
-   }while(_pid!=pid_counter);
+   } while(_pid!=pid_counter);
 
 
    return -EAGAIN;
@@ -495,7 +495,7 @@ int _sys_dup(pid_t pid,int fd,int limit)
       return -1;
 
    if((_fd = _get_fd(pid,limit))<0) {
-	   return -1;
+      return -1;
    }
 
    process_lst[pid]->desc_tbl[_fd]=process_lst[pid]->desc_tbl[fd];
@@ -530,12 +530,12 @@ int _sys_dup2(pid_t pid,int fd,int fd2){
 
    //fd2 is free
    i = (fd2>>__shl_fds_bits); // i/8
-   d = fd2-(i<<__shl_fds_bits);//i modulo 8
+   d = fd2-(i<<__shl_fds_bits); //i modulo 8
 
-   if( ((process_lst[pid]->fds_bits[i]>>d)&0x01) )//if not free
-      _vfs_close(process_lst[pid]->desc_tbl[fd2]); //close fd2
+   if( ((process_lst[pid]->fds_bits[i]>>d)&0x01) ) //if not free
+      _vfs_close(process_lst[pid]->desc_tbl[fd2]);  //close fd2
    else
-      process_lst[pid]->fds_bits[i]|=(0x01<<d);// it was free but now not.
+      process_lst[pid]->fds_bits[i]|=(0x01<<d);  // it was free but now not.
 
 
    process_lst[pid]->desc_tbl[fd2]=process_lst[pid]->desc_tbl[fd];
@@ -560,9 +560,9 @@ int _sys_dup2(pid_t pid,int fd,int fd2){
 | See:
 ----------------------------------------------*/
 int _sys_process_insert_pthread(process_t* process,kernel_pthread_t* p){
-   if(!process->pthread_ptr){
+   if(!process->pthread_ptr) {
       process->pthread_ptr=p;
-   }else if(process->pthread_ptr->next){
+   }else if(process->pthread_ptr->next) {
       struct kernel_pthread_st* next = process->pthread_ptr->next;
       process->pthread_ptr->next=(struct kernel_pthread_st*)p;
       p->next=next;
@@ -583,7 +583,7 @@ int _sys_process_insert_pthread(process_t* process,kernel_pthread_t* p){
 int _sys_process_remove_pthread(process_t* process,kernel_pthread_t* p){
    struct kernel_pthread_st* pthread_ptr = (struct kernel_pthread_st*)process->pthread_ptr;
 
-   if(p!=process->pthread_ptr){
+   if(p!=process->pthread_ptr) {
       while(pthread_ptr && (pthread_ptr->next!=(struct kernel_pthread_st*)p))
          pthread_ptr=pthread_ptr->next;
       pthread_ptr->next=p->next;
@@ -603,65 +603,65 @@ int _sys_process_remove_pthread(process_t* process,kernel_pthread_t* p){
 ---------------------------------------------*/
 int _sys_fcntl(pid_t pid,unsigned int fd, unsigned int cmd, unsigned int argc,void* argv[])
 {
-    int result;
-    desc_t desc;
+   int result;
+   desc_t desc;
 
-    if (fd >= OPEN_MAX
+   if (fd >= OPEN_MAX
        || fd<0
        || (desc=process_lst[pid]->desc_tbl[fd])<0)
-	   return -EBADF;
+      return -EBADF;
 
-    switch (cmd) {
-      case F_DUPFD:{
-         int limit=0;
-         if(argc>0)
-            limit = (int)argv[0];
-	      result = _sys_dup(pid,fd,limit);
-      }
-	   break;
+   switch (cmd) {
+   case F_DUPFD: {
+      int limit=0;
+      if(argc>0)
+         limit = (int)argv[0];
+      result = _sys_dup(pid,fd,limit);
+   }
+   break;
 
-      case F_GETFD:
+   case F_GETFD:
 
-	   break;
-
-      case F_SETFD:
-         if(((unsigned int)argv[0])&FD_CLOEXEC)
-            result = _set_cloexec(pid,fd);
-         else
-            //bug fix 3.0.2.2
-            result = _unset_cloexec(pid,fd);
       break;
 
-      case F_GETFL:
-   	   result = ofile_lst[desc].oflag;
-	   break;
+   case F_SETFD:
+      if(((unsigned int)argv[0])&FD_CLOEXEC)
+         result = _set_cloexec(pid,fd);
+      else
+         //bug fix 3.0.2.2
+         result = _unset_cloexec(pid,fd);
+      break;
 
-      case F_SETFL:{
-         int oflag=0;
-         if(argc>0)
-            oflag = (int)argv[0];
+   case F_GETFL:
+      result = ofile_lst[desc].oflag;
+      break;
 
-	      /*
-	       * In the case of an append-only file, O_APPEND
-	       * cannot be cleared
-	       */
-	      result = EPERM;
-	      if (ofile_lst[desc].oflag&O_APPEND || oflag & O_APPEND) {
-	          ofile_lst[desc].oflag &= ~(O_APPEND | O_NONBLOCK);
-	          ofile_lst[desc].oflag |= oflag & (O_APPEND | O_NONBLOCK);
-	          result = 0;
-         }else{
-            ofile_lst[desc].oflag = oflag;
-         }
+   case F_SETFL: {
+      int oflag=0;
+      if(argc>0)
+         oflag = (int)argv[0];
+
+      /*
+       * In the case of an append-only file, O_APPEND
+       * cannot be cleared
+       */
+      result = EPERM;
+      if (ofile_lst[desc].oflag&O_APPEND || oflag & O_APPEND) {
+         ofile_lst[desc].oflag &= ~(O_APPEND | O_NONBLOCK);
+         ofile_lst[desc].oflag |= oflag & (O_APPEND | O_NONBLOCK);
+         result = 0;
+      }else{
+         ofile_lst[desc].oflag = oflag;
       }
-	   break;
+   }
+   break;
 
-      default:
-	      result = EINVAL;
-	   break;
-    }
+   default:
+      result = EINVAL;
+      break;
+   }
 
-    return result;
+   return result;
 }
 
 /*--------------------------------------------
@@ -679,11 +679,11 @@ int _sys_pthread_create(kernel_pthread_t** new_kernel_pthread, kernel_pthread_t*
    kernel_pthread_t* pthread_ptr;
    //malloc kernel_pthread_t
    if( !(*new_kernel_pthread = (kernel_pthread_t*)malloc(sizeof(kernel_pthread_t))) )
-      return -1;//kernel panic!!!
+      return -1;  //kernel panic!!!
 
    //malloc stack
    if( !(attr->stackaddr = (char*)malloc(attr->stacksize)) )
-      return -1;//kernel panic!!!
+      return -1;  //kernel panic!!!
 
    memset((void *)(*new_kernel_pthread), 0, sizeof(kernel_pthread_t));
    //disable context switch
@@ -703,16 +703,17 @@ int _sys_pthread_create(kernel_pthread_t** new_kernel_pthread, kernel_pthread_t*
    memcpy(pthread_ptr->sigaction_lst,parent_pthread_ptr->sigaction_lst,sizeof(sigaction_dfl_lst));
 
    //thread sigqueue
-   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    memcpy(&pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
-   pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &pthread_ptr->kernel_sigqueue);
-   #endif
+   pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head,
+                                            &pthread_ptr->kernel_sigqueue);
+#endif
    //load static library
-   #ifdef __KERNEL_LOAD_LIB
-      #if __KERNEL_LOAD_LIB_PTHREAD
-      load_lib(pthread_ptr);
-      #endif
+#ifdef __KERNEL_LOAD_LIB
+   #if __KERNEL_LOAD_LIB_PTHREAD
+   load_lib(pthread_ptr);
    #endif
+#endif
    //backup thread start context (see vfork() backup stack operation
    __bckup_thread_start_context(pthread_ptr->start_context,pthread_ptr);
 
@@ -735,10 +736,10 @@ int _sys_pthread_cancel(kernel_pthread_t* kernel_pthread,pid_t pid){
    if(kernel_pthread->pid!=pid)
       return -1;
 
-    //disable context switch
+   //disable context switch
    __atomic_in();
    //unlock io desc if needed
-   if(kernel_pthread->io_desc!=-1){
+   if(kernel_pthread->io_desc!=-1) {
       //kernel_pthread_mutex_owner_destroy(kernel_pthread,&ofile_lst[kernel_pthread->io_desc].mutex);
       //to do: check if another procress took the sem and take the value to reinit the sem with this value
       kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_read);
@@ -784,7 +785,7 @@ int _sys_pthread_cancel_for_exit(kernel_pthread_t* kernel_pthread,pid_t pid){
    //disable context switch
    __atomic_in();
    //unlock io desc if needed
-   if(kernel_pthread->io_desc!=-1){
+   if(kernel_pthread->io_desc!=-1) {
       //kernel_pthread_mutex_owner_destroy(kernel_pthread,&ofile_lst[kernel_pthread->io_desc].mutex);
       //to do: check if another procress took the sem and take the value to reinit the sem with this value
       kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_read);
@@ -821,9 +822,9 @@ int _sys_pthread_cancel_all_except(pid_t pid,kernel_pthread_t* except_pthread_pt
    //__atomic_in();
    //
 
-   while(pthread_ptr){
+   while(pthread_ptr) {
       kernel_pthread_t* next_pthread_ptr=pthread_ptr->next;
-      if(pthread_ptr!=except_pthread_ptr){
+      if(pthread_ptr!=except_pthread_ptr) {
          _sys_pthread_cancel(pthread_ptr,pid);
       }
       //next
@@ -853,7 +854,8 @@ void* process_routine(void* arg){
       invoke_app_ctr();
    }
 
-   process_lst[pid]->status = process_lst[pid]->process_routine(process_lst[pid]->argc,process_lst[pid]->argv);
+   process_lst[pid]->status =
+      process_lst[pid]->process_routine(process_lst[pid]->argc,process_lst[pid]->argv);
    process_lst[pid]->pthread_ptr->exit=NULL;
 
    //printf("process_routine [%d]\r\n", pid);
@@ -881,8 +883,8 @@ void invoke_app_ctr(void) {
       if(*p == tauon_cplusplus_ctor) {
          ok=1;
       }
-      if(ok){
-         (*p) ();
+      if(ok) {
+         (*p)();
       }
    }
    //do it ONE time
@@ -905,19 +907,19 @@ int find_exec(const char* path,exec_file_t* exec_file){
 
    //
    desc=_vfs_open((char*)path,O_RDONLY,0);
-   if(desc<0){//error: file not exist
-      for(i=0;i<max_env;i++){
+   if(desc<0) { //error: file not exist
+      for(i=0; i<max_env; i++) {
 
          strcpy(env_path,__kernel_env[i]);
 
-         if(path[0]!='/'){
+         if(path[0]!='/') {
             int len = strlen(env_path);
             env_path[len]='/';
             env_path[len+1]='\0';
          }
          //to do: chek length of env_path+path
          strcat(env_path,path);
-         if((desc = _vfs_open((char*)env_path,O_RDONLY,0))>=0){
+         if((desc = _vfs_open((char*)env_path,O_RDONLY,0))>=0) {
             //test if ref is a directory
             if(!(ofile_lst[desc].attr&S_IFDIR))
                break;
@@ -944,15 +946,15 @@ int find_exec(const char* path,exec_file_t* exec_file){
 | See:
 ---------------------------------------------*/
 pid_t _sys_krnl_exec(const char* path,
-                  const char* argv[],
-                  const char* envp,
-                  pid_t ppid,
-                  pid_t pid){
+                     const char* argv[],
+                     const char* envp,
+                     pid_t ppid,
+                     pid_t pid){
 
    pid_t _pid  = 0;
    void* arg   = (void*)argv;
    pthread_attr_t attr={0};
-   exec_file_t    exec_file;
+   exec_file_t exec_file;
    int argc;
    int l;
    char* p;
@@ -960,7 +962,7 @@ pid_t _sys_krnl_exec(const char* path,
 
    //open binary file
    if(find_exec(path,&exec_file)<0)
-      return -1;//cannot open binary file
+      return -1;  //cannot open binary file
 
    //check binary signature
    if(exec_file.signature!=EXEC_SIGNT)
@@ -974,7 +976,7 @@ pid_t _sys_krnl_exec(const char* path,
 
    //alloc process_t control block for the new process
    p = malloc(sizeof(process_t));
-   if(!p)//kernel panic!!!
+   if(!p) //kernel panic!!!
       return -ENOMEM;
 
    //
@@ -984,16 +986,16 @@ pid_t _sys_krnl_exec(const char* path,
    //alloc main thread stack for the new process
    attr.stackaddr = malloc(bin_lst[exec_file.index].stacksize); //(p + sizeof(process_t));
    if(!attr.stackaddr)
-      return -ENOMEM;//kernel panic!!!
+      return -ENOMEM;  //kernel panic!!!
    //
 
    attr.stacksize = bin_lst[exec_file.index].stacksize;
    attr.timeslice = bin_lst[exec_file.index].timeslice;
 
    process_lst[_pid]->process_routine = bin_lst[exec_file.index].start_routine;
-   process_lst[_pid]->pthread_ptr=(kernel_pthread_t*)malloc(sizeof(kernel_pthread_t));//kernel panic!!!
+   process_lst[_pid]->pthread_ptr=(kernel_pthread_t*)malloc(sizeof(kernel_pthread_t)); //kernel panic!!!
    if(!process_lst[_pid]->pthread_ptr)
-      return -ENOMEM;//kernel panic!!!
+      return -ENOMEM;  //kernel panic!!!
 
    //
    memset(process_lst[_pid]->pthread_ptr,0,sizeof(kernel_pthread_t));
@@ -1007,12 +1009,12 @@ pid_t _sys_krnl_exec(const char* path,
    //argument parser
    //to do: test len of argument: warning exception!!!.
    //reset argument list
-   for(argc=0;argc<ARG_MAX;argc++){
+   for(argc=0; argc<ARG_MAX; argc++) {
       process_lst[_pid]->argv[argc]=(char*)0;
    }
 
    strcpy(process_lst[_pid]->arg,path);
-   for(argc=1;argc<ARG_MAX;argc++){
+   for(argc=1; argc<ARG_MAX; argc++) {
       strcat(process_lst[_pid]->arg," ");
       if(!argv || !argv[argc]) break;
       strcat(process_lst[_pid]->arg,argv[argc]);
@@ -1026,20 +1028,20 @@ pid_t _sys_krnl_exec(const char* path,
    process_lst[_pid]->argv[argc]=p;
    l = strlen(path);
    process_lst[_pid]->argv[argc][l]='\0';
-   while(argv[++argc]){
+   while(argv[++argc]) {
       p = p+l+1;
-      process_lst[_pid]->argv[argc]= p/*strtok(0," ")*/;
+      process_lst[_pid]->argv[argc]= p /*strtok(0," ")*/;
       l = strlen(argv[argc]);
       process_lst[_pid]->argv[argc][l]='\0';
    }
    process_lst[_pid]->argc=argc;
 
    //heritage  pid <- ppid
-   if(ppid){
+   if(ppid) {
       process_lst[_pid]->inode_curdir = process_lst[ppid]->inode_curdir;
       process_lst[_pid]->pgid = process_lst[ppid]->pgid;
    }else{
-      process_lst[_pid]->pgid = ppid;//in this case 0 it's a kernel process daemon
+      process_lst[_pid]->pgid = ppid; //in this case 0 it's a kernel process daemon
       process_lst[_pid]->inode_curdir = 0;
    }
 
@@ -1053,7 +1055,7 @@ pid_t _sys_krnl_exec(const char* path,
 //   process_lst[_pid]->pthread_ptr->kernel_stack = malloc(KERNEL_STACK*sizeof(char));
 //   if(!process_lst[_pid]->pthread_ptr->kernel_stack)
 //      return -ENOMEM;
-   //
+//
 
    //attach thread with process
    process_lst[_pid]->pthread_ptr->pid = _pid;
@@ -1067,7 +1069,7 @@ pid_t _sys_krnl_exec(const char* path,
    //
    process_lst[_pid]->pthread_ptr->stat=PTHREAD_STATUS_NULL;
    //
-   process_lst[_pid]->pthread_ptr->time_out  = (time_t)-1;//for alarm()
+   process_lst[_pid]->pthread_ptr->time_out  = (time_t)-1; //for alarm()
    //
    process_lst[_pid]->pthread_ptr->parent_pthread_ptr = (kernel_pthread_t*)0;
    //
@@ -1079,29 +1081,33 @@ pid_t _sys_krnl_exec(const char* path,
    memcpy(process_lst[_pid]->pthread_ptr->sigaction_lst,sigaction_dfl_lst,sizeof(sigaction_dfl_lst));
 
 //   //thread sigqueue
-   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[_pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
-   process_lst[_pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[_pid]->kernel_object_head, &process_lst[_pid]->pthread_ptr->kernel_sigqueue);
-   #endif
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
+   memcpy(&process_lst[_pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
+          sizeof(kernel_sigqueue_t));
+   process_lst[_pid]->pthread_ptr->kernel_sigqueue.constructor(
+      &process_lst[_pid]->kernel_object_head, &process_lst[_pid]->pthread_ptr->kernel_sigqueue);
+#endif
 //
-   //atexit registred functions
-   #if ATEXIT_MAX>0
-      process_lst[_pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca( process_lst[_pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
-   #endif
+//atexit registred functions
+#if ATEXIT_MAX>0
+   process_lst[_pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca(
+      process_lst[_pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
+#endif
 
    //load static library
-   #if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
+#if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
    load_lib(process_lst[_pid]->pthread_ptr);
-   #endif
+#endif
 
    //
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __clr_irq();
-   #endif
-   __bckup_thread_start_context(process_lst[_pid]->pthread_ptr->start_context,process_lst[_pid]->pthread_ptr);
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#endif
+   __bckup_thread_start_context(process_lst[_pid]->pthread_ptr->start_context,
+                                process_lst[_pid]->pthread_ptr);
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();
-   #endif
+#endif
 
    return _pid;
 }
@@ -1115,13 +1121,13 @@ pid_t _sys_krnl_exec(const char* path,
 | See:
 ---------------------------------------------*/
 pid_t _sys_exec(const char* path,
-                  const char* argv[],
-                  const char* envp,
-                  kernel_pthread_t* pthread_ptr){
+                const char* argv[],
+                const char* envp,
+                kernel_pthread_t* pthread_ptr){
 
    void* arg   = (void*)argv;
    pthread_attr_t attr;
-   exec_file_t    exec_file;
+   exec_file_t exec_file;
    int argc;
    int l;
    char* p=0;
@@ -1138,21 +1144,21 @@ pid_t _sys_exec(const char* path,
 
    //open binary file
    if(find_exec(path,&exec_file)<0)
-      return -1;//cannot open binary file
+      return -1;  //cannot open binary file
 
-    //check binary signature
+   //check binary signature
    if(exec_file.signature!=EXEC_SIGNT)
       return -1;
 
    //argument parser
    //to do: test len of argument: warning exception!!!.
    //reset argument list
-   for(argc=0;argc<ARG_MAX;argc++){
+   for(argc=0; argc<ARG_MAX; argc++) {
       process_lst[pid]->argv[argc]=(char*)0;
    }
 
    strcpy(process_lst[pid]->arg,path);
-   for(argc=1;argc<ARG_MAX;argc++){
+   for(argc=1; argc<ARG_MAX; argc++) {
       strcat(process_lst[pid]->arg," ");
       if(!argv || !argv[argc]) break;
       strcat(process_lst[pid]->arg,argv[argc]);
@@ -1165,9 +1171,9 @@ pid_t _sys_exec(const char* path,
    process_lst[pid]->argv[argc]=p;
    l = strlen(path);
    process_lst[pid]->argv[argc][l]='\0';
-   while(argv[++argc]){
+   while(argv[++argc]) {
       p = p+l+1;
-      process_lst[pid]->argv[argc]= p/*strtok(0," ")*/;
+      process_lst[pid]->argv[argc]= p /*strtok(0," ")*/;
       l = strlen(argv[argc]);
       process_lst[pid]->argv[argc][l]='\0';
    }
@@ -1182,10 +1188,12 @@ pid_t _sys_exec(const char* path,
    __stop_sched();
 
    //destroy previous process
-   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr && process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK){
+   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr &&
+      process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK) {
       //
       kernel_pthread_t* _pthread_ptr = process_lst[pid]->pthread_ptr;
-      kernel_pthread_t* backup_parent_pthread_ptr = process_lst[pid]->pthread_ptr->parent_pthread_ptr;
+      kernel_pthread_t* backup_parent_pthread_ptr =
+         process_lst[pid]->pthread_ptr->parent_pthread_ptr;
 
       //put all kernel object from chained list (see _sys_vfork_exit() )
       //must be use before all pthreads stack destroyed and local variable too.
@@ -1228,7 +1236,7 @@ pid_t _sys_exec(const char* path,
    }
 
    attr.stackaddr = malloc(bin_lst[exec_file.index].stacksize);
-   if(!attr.stackaddr){//kernel panic!!!
+   if(!attr.stackaddr) { //kernel panic!!!
       __restart_sched();
       __atomic_out();
       //__set_irq();
@@ -1247,11 +1255,11 @@ pid_t _sys_exec(const char* path,
    // set thread name
    attr.name = process_lst[pid]->arg;
    //create thread
-   if(kernel_pthread_create(process_lst[pid]->pthread_ptr, &attr,process_routine,arg)<0){
+   if(kernel_pthread_create(process_lst[pid]->pthread_ptr, &attr,process_routine,arg)<0) {
       __restart_sched();
       __atomic_out();
       //__set_irq();
-      return -ENOMEM;//to do: free memory attr stack addr
+      return -ENOMEM; //to do: free memory attr stack addr
    }
 
    //attach thread with process
@@ -1269,38 +1277,44 @@ pid_t _sys_exec(const char* path,
    //restore default sig handler
    memcpy(process_lst[pid]->pthread_ptr->sigaction_lst,sigaction_dfl_lst,sizeof(sigaction_dfl_lst));
    //
-   process_lst[pid]->pthread_ptr->time_out  = (time_t)-1;//for alarm()
+   process_lst[pid]->pthread_ptr->time_out  = (time_t)-1; //for alarm()
    //
    process_lst[pid]->pthread_ptr->stat=PTHREAD_STATUS_NULL;
 
    //thread sigqueue
-   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
-   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
-   #endif
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
+   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
+          sizeof(kernel_sigqueue_t));
+   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(
+      &process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
+#endif
 //
-   //atexit registred functions
-   #if ATEXIT_MAX>0
-      process_lst[pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca( process_lst[pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
-   #endif
+//atexit registred functions
+#if ATEXIT_MAX>0
+   process_lst[pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca(
+      process_lst[pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
+#endif
 
    //load static library
-   #if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
+#if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
    load_lib(process_lst[pid]->pthread_ptr);
-   #endif
+#endif
 
    //
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __clr_irq();
-   #endif
-   __bckup_thread_start_context(process_lst[pid]->pthread_ptr->start_context,process_lst[pid]->pthread_ptr);
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#endif
+   __bckup_thread_start_context(process_lst[pid]->pthread_ptr->start_context,
+                                process_lst[pid]->pthread_ptr);
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();
-   #endif
+#endif
 
    //profiler
    __kernel_profiler_stop(process_lst[pid]->pthread_ptr);
-   __profiler_add_result(process_lst[pid]->pthread_ptr,_SYSCALL_EXECVE,__kernel_profiler_get_counter(process_lst[pid]->pthread_ptr));
+   __profiler_add_result(process_lst[pid]->pthread_ptr,_SYSCALL_EXECVE,
+                         __kernel_profiler_get_counter(
+                            process_lst[pid]->pthread_ptr));
    return pid;
 }
 
@@ -1317,11 +1331,12 @@ int _sys_adopt(pid_t pid){
    pid_t _pid;
    pid_t ppid = 0;
    //procesus adoption
-   for(_pid=1;_pid<=PROCESS_MAX;_pid++){
-      if(!process_lst[_pid] || process_lst[_pid]->ppid!=pid || !process_lst[_pid]->pthread_ptr)continue;
+   for(_pid=1; _pid<=PROCESS_MAX; _pid++) {
+      if(!process_lst[_pid] || process_lst[_pid]->ppid!=pid ||
+         !process_lst[_pid]->pthread_ptr) continue;
 
       ppid = process_lst[pid]->ppid;
-      if(ppid){
+      if(ppid) {
          process_lst[_pid]->ppid=ppid;
          //parent thread of main thread always null except in vfork()
          process_lst[_pid]->pthread_ptr->parent_pthread_ptr = (kernel_pthread_t*)0;
@@ -1331,8 +1346,8 @@ int _sys_adopt(pid_t pid){
          process_lst[_pid]->pthread_ptr->parent_pthread_ptr = (kernel_pthread_t*)0;
       }
 
-      if(process_lst[pid]->pgid==pid)//lead process
-         process_lst[_pid]->pgid = _pid;//become lead process
+      if(process_lst[pid]->pgid==pid) //lead process
+         process_lst[_pid]->pgid = _pid;  //become lead process
 
    }
    return 0;
@@ -1405,111 +1420,115 @@ void _sys_exit(pid_t pid,int status){
 ---------------------------------------------*/
 pid_t _sys_waitpid(pid_t pid,pid_t child_pid,int options,int* status)
 {
-	int r = -1;
+   int r = -1;
 
-	*status = 0;
-	if(child_pid==0){
-		//check if process has child.
-		pid_t _pid;
-		//check all child procesus (_pid)
-		for(_pid=1;_pid<=PROCESS_MAX;_pid++){
-			if(!process_lst[_pid]
-			                || process_lst[_pid]->pgid!=process_lst[pid]->pgid
-			                || process_lst[_pid]->ppid!=pid)		continue;
-			//
-			if(!(process_lst[_pid]->pthread_ptr)||
-               (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)) {
-			   kernel_pthread_t * _pthread_ptr = process_lst[process_lst[_pid]->ppid]->pthread_ptr;
-			   //WNOHANG
-			   if(options&0x0001) {
-			      _sys_do_waitpid(_pthread_ptr, _pid, pid);
-			      return _pid;
-			   }
-			   else {
-			      //search right waiting pthread
-			      while(_pthread_ptr) {
-			         if(_pthread_ptr->reg.syscall==_SYSCALL_WAITPID){
-			            _sys_do_waitpid(_pthread_ptr, _pid, pid);
-			            return _pid;
-			         }
-			         _pthread_ptr = _pthread_ptr->next;
-			      }
-			   }
-			}
-			else{
-				r = 0;
-			}
-		}
-		//if r=-1 then no child process
-		//if r=0 childs processes still running: no zombi.
-		return r;
-	}else if(child_pid<0){
-		//check if process has child.
-		pid_t _pid;
-		//procesus adoption
-		for(_pid=1;_pid<=PROCESS_MAX;_pid++){
-			if(!process_lst[_pid]
-			                || process_lst[_pid]->ppid!=pid )continue;
+   *status = 0;
+   if(child_pid==0) {
+      //check if process has child.
+      pid_t _pid;
+      //check all child procesus (_pid)
+      for(_pid=1; _pid<=PROCESS_MAX; _pid++) {
+         if(!process_lst[_pid]
+            || process_lst[_pid]->pgid!=process_lst[pid]->pgid
+            || process_lst[_pid]->ppid!=pid) continue;
+         //
+         if(!(process_lst[_pid]->pthread_ptr)||
+            (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)) {
+            kernel_pthread_t * _pthread_ptr = process_lst[process_lst[_pid]->ppid]->pthread_ptr;
+            //WNOHANG
+            if(options&0x0001) {
+               _sys_do_waitpid(_pthread_ptr, _pid, pid);
+               return _pid;
+            }
+            else {
+               //search right waiting pthread
+               while(_pthread_ptr) {
+                  if(_pthread_ptr->reg.syscall==_SYSCALL_WAITPID) {
+                     _sys_do_waitpid(_pthread_ptr, _pid, pid);
+                     return _pid;
+                  }
+                  _pthread_ptr = _pthread_ptr->next;
+               }
+            }
+         }
+         else{
+            r = 0;
+         }
+      }
+      //if r=-1 then no child process
+      //if r=0 childs processes still running: no zombi.
+      return r;
+   }else if(child_pid<0) {
+      //check if process has child.
+      pid_t _pid;
+      //procesus adoption
+      for(_pid=1; _pid<=PROCESS_MAX; _pid++) {
+         if(!process_lst[_pid]
+            || process_lst[_pid]->ppid!=pid ) continue;
 
-			//
-			if(!(process_lst[_pid]->pthread_ptr) ||
-			      (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)) {
-				kernel_pthread_t * _pthread_ptr = process_lst[process_lst[_pid]->ppid]->pthread_ptr;
-				//WNOHANG
-				if(options&0x0001) {
-				   _sys_do_waitpid(_pthread_ptr, _pid, pid);
-				   return _pid;
-				}
-				else {
-				   //search right waiting pthread
-				   while(_pthread_ptr) {
-				      if(_pthread_ptr->reg.syscall==_SYSCALL_WAITPID){
-				         _sys_do_waitpid(_pthread_ptr, _pid, pid);
-				         return _pid;
-				      }
-				      _pthread_ptr = _pthread_ptr->next;
-				   }
-				}
-				//
-			}
-			else{
-				r = 0;
-			}
-		}
-		//if r=-1 then no child process
-		//if r=0 childs processes still running: no zombi.
-		return r;
-	}else if(child_pid>0){
-		if( (!process_lst[child_pid])){
-			return -1;
-		}else if(process_lst[child_pid]->ppid==pid
-		      && process_lst[child_pid]->pthread_ptr
-				&& /*process_lst[child_pid]->pthread_ptr*/!(process_lst[child_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)){
-			return 0;//child process still running.
-		}
-		else if( (process_lst[child_pid]->ppid==pid)
-				&& (!(process_lst[child_pid]->pthread_ptr) || (process_lst[child_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI))/*(process_lst[child_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)*/){
+         //
+         if(!(process_lst[_pid]->pthread_ptr) ||
+            (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)) {
+            kernel_pthread_t * _pthread_ptr = process_lst[process_lst[_pid]->ppid]->pthread_ptr;
+            //WNOHANG
+            if(options&0x0001) {
+               _sys_do_waitpid(_pthread_ptr, _pid, pid);
+               return _pid;
+            }
+            else {
+               //search right waiting pthread
+               while(_pthread_ptr) {
+                  if(_pthread_ptr->reg.syscall==_SYSCALL_WAITPID) {
+                     _sys_do_waitpid(_pthread_ptr, _pid, pid);
+                     return _pid;
+                  }
+                  _pthread_ptr = _pthread_ptr->next;
+               }
+            }
+            //
+         }
+         else{
+            r = 0;
+         }
+      }
+      //if r=-1 then no child process
+      //if r=0 childs processes still running: no zombi.
+      return r;
+   }else if(child_pid>0) {
+      if( (!process_lst[child_pid])) {
+         return -1;
+      }else if(process_lst[child_pid]->ppid==pid
+               && process_lst[child_pid]->pthread_ptr
+               && /*process_lst[child_pid]->pthread_ptr*/ !(process_lst[child_pid]->pthread_ptr->
+                                                            stat&PTHREAD_STATUS_ZOMBI)) {
+         return 0;               //child process still running.
+      }
+      else if( (process_lst[child_pid]->ppid==pid)
+               && (!(process_lst[child_pid]->pthread_ptr) ||
+                   (process_lst[child_pid]->pthread_ptr->stat&
+                    PTHREAD_STATUS_ZOMBI)) /*(process_lst[child_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)*/)
+      {
 
-		   kernel_pthread_t * _pthread_ptr = process_lst[process_lst[child_pid]->ppid]->pthread_ptr;
-		   //WNOHANG
-		   if(options&0x0001) {
-		      _sys_do_waitpid(_pthread_ptr, child_pid, pid);
-		      return child_pid;
-		   }
-		   else {
-		      //search right waiting pthread
-		      while(_pthread_ptr) {
-		         if(_pthread_ptr->reg.syscall==_SYSCALL_WAITPID){
-		            _sys_do_waitpid(_pthread_ptr, child_pid, pid);
-		            return child_pid;
-		         }
-		         _pthread_ptr = _pthread_ptr->next;
-		      }
-		   }
-		}
-	}
+         kernel_pthread_t * _pthread_ptr = process_lst[process_lst[child_pid]->ppid]->pthread_ptr;
+         //WNOHANG
+         if(options&0x0001) {
+            _sys_do_waitpid(_pthread_ptr, child_pid, pid);
+            return child_pid;
+         }
+         else {
+            //search right waiting pthread
+            while(_pthread_ptr) {
+               if(_pthread_ptr->reg.syscall==_SYSCALL_WAITPID) {
+                  _sys_do_waitpid(_pthread_ptr, child_pid, pid);
+                  return child_pid;
+               }
+               _pthread_ptr = _pthread_ptr->next;
+            }
+         }
+      }
+   }
 
-	return -1;
+   return -1;
 }
 
 
@@ -1558,50 +1577,50 @@ int _sys_sigprocmask(kernel_pthread_t* pthread_ptr,int how,sigset_t* set,sigset_
 
    if(!set && !oset) return -EINVAL;
 
-   switch(how){
-      //
-      case SIG_SETMASK:
-         if(oset){
-            oset->std = pthread_ptr->sig_mask.std;
-            oset->rt = pthread_ptr->sig_mask.rt;
-         }
+   switch(how) {
+   //
+   case SIG_SETMASK:
+      if(oset) {
+         oset->std = pthread_ptr->sig_mask.std;
+         oset->rt = pthread_ptr->sig_mask.rt;
+      }
 
-         if(set){
-            pthread_ptr->sig_mask.std = set->std;
-            pthread_ptr->sig_mask.rt = set->rt;
-         }
+      if(set) {
+         pthread_ptr->sig_mask.std = set->std;
+         pthread_ptr->sig_mask.rt = set->rt;
+      }
 
       break;
 
-      //
-      case SIG_BLOCK:
-         if(oset!=NULL){
-            oset->std = pthread_ptr->sig_mask.std;
-            oset->rt = pthread_ptr->sig_mask.rt;
-         }
+   //
+   case SIG_BLOCK:
+      if(oset!=NULL) {
+         oset->std = pthread_ptr->sig_mask.std;
+         oset->rt = pthread_ptr->sig_mask.rt;
+      }
 
-         if(set){
-            pthread_ptr->sig_mask.std |= set->std; // set U oset
-            pthread_ptr->sig_mask.rt |= set->rt; // set U oset
-         }
+      if(set) {
+         pthread_ptr->sig_mask.std |= set->std;    // set U oset
+         pthread_ptr->sig_mask.rt |= set->rt;    // set U oset
+      }
       break;
 
-      //
-      case SIG_UNBLOCK:
-         if(oset!=NULL){
-            oset->std = pthread_ptr->sig_mask.std;
-            oset->rt = pthread_ptr->sig_mask.rt;
-         }
+   //
+   case SIG_UNBLOCK:
+      if(oset!=NULL) {
+         oset->std = pthread_ptr->sig_mask.std;
+         oset->rt = pthread_ptr->sig_mask.rt;
+      }
 
-         if(set){
-            pthread_ptr->sig_mask.std &= ~(set->std); // set - oset
-            pthread_ptr->sig_mask.rt &= ~(set->rt); // set - oset
-         }
+      if(set) {
+         pthread_ptr->sig_mask.std &= ~(set->std);    // set - oset
+         pthread_ptr->sig_mask.rt &= ~(set->rt);    // set - oset
+      }
       break;
 
-      //
-      default:
-         return -EINVAL;
+   //
+   default:
+      return -EINVAL;
 
    }
 
@@ -1634,7 +1653,8 @@ int _sys_sigpending(kernel_pthread_t* pthread_ptr,sigset_t* set){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sys_sigaction(kernel_pthread_t* pthread_ptr,int sig,struct sigaction* act,struct sigaction* oact){
+int _sys_sigaction(kernel_pthread_t* pthread_ptr,int sig,struct sigaction* act,
+                   struct sigaction* oact){
 
    if(!sig || (sig>NSIG && sig<SIGRTMIN) || sig>SIGRTMAX ) return -EINVAL;
 
@@ -1678,102 +1698,102 @@ int _signal_release_sync(kernel_pthread_t* pthread_ptr) {
 | See:
 ---------------------------------------------*/
 int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic){
-	pid_t pid=pthread_ptr->pid;
+   pid_t pid=pthread_ptr->pid;
 
-	if(pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)//cannot kill zombi process!.
-		return -1;
+   if(pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)     //cannot kill zombi process!.
+      return -1;
 
 
-	if(sig<NSIG){
-		//standard signal
-		//
-		if((unsigned long)(pthread_ptr->sigaction_lst[sig].sa_handler)==SIG_IGN)
-			return 0;
+   if(sig<NSIG) {
+      //standard signal
+      //
+      if((unsigned long)(pthread_ptr->sigaction_lst[sig].sa_handler)==SIG_IGN)
+         return 0;
 
-		//to do: support for SIGSTOP(suspend process) and SIGCONT(resume process)
-		//       see sighandler in signal.c
-		if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER){
-			//already in sighandler
-			pthread_ptr->sig_pending.std|= (1 << (sig-1));
-			return 0;
-		}
+      //to do: support for SIGSTOP(suspend process) and SIGCONT(resume process)
+      //       see sighandler in signal.c
+      if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) {
+         //already in sighandler
+         pthread_ptr->sig_pending.std|= (1 << (sig-1));
+         return 0;
+      }
 
-		if( (((pthread_ptr->sig_mask.std)>>(sig-1))&0x01) )
-			return 0; //sig is blocked
+      if( (((pthread_ptr->sig_mask.std)>>(sig-1))&0x01) )
+         return 0;                //sig is blocked
 
-		//BEGIN OF ATOMIC SECTION
+      //BEGIN OF ATOMIC SECTION
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-		if(atomic){
-			__clr_irq();
-		}
+      if(atomic) {
+         __clr_irq();
+      }
 #endif
 
-		//block sig
-		pthread_ptr->sig_mask.std|= (1 << (sig-1));
-	}else if(sig>=SIGRTMIN && sig<SIGRTMAX){
-		//realtime signal
-	   //TODO add 06/01/2010
-	   //sig ignore?
-	   if((unsigned long)(pthread_ptr->sigaction_lst[sig].sa_handler)==SIG_IGN)
-	      return 0;
+      //block sig
+      pthread_ptr->sig_mask.std|= (1 << (sig-1));
+   }else if(sig>=SIGRTMIN && sig<SIGRTMAX) {
+      //realtime signal
+      //TODO add 06/01/2010
+      //sig ignore?
+      if((unsigned long)(pthread_ptr->sigaction_lst[sig].sa_handler)==SIG_IGN)
+         return 0;
 
-	   //sig is blocked ?
-	   if( (((pthread_ptr->sig_mask.rt)>>(sig-SIGRTMIN))&0x01) ){
-	      kernel_sigevent_t kernel_sigevent={0};
+      //sig is blocked ?
+      if( (((pthread_ptr->sig_mask.rt)>>(sig-SIGRTMIN))&0x01) ) {
+         kernel_sigevent_t kernel_sigevent={0};
 
-	      //put signal in queue only if it's blocked sa_flags==SA_SIGINFO
-	      if( (pthread_ptr->sigaction_lst[sig].sa_flags&SA_SIGINFO) ){
-	         //init sigevent
-	         kernel_sigevent.from=(unsigned long)0x00;
-	         kernel_sigevent.si_code = SI_USER;
-	         kernel_sigevent._sigevent.sigev_signo=sig;
-	         pthread_ptr->kernel_sigqueue.send(pthread_ptr,&kernel_sigevent);
-	         //release all sync object attach to pthread and set PTHREAD_STATUS_SIGHANDLER
-	         _signal_release_sync(pthread_ptr);
-	      }
-	      return 0; //sig is blocked
-	   }
+         //put signal in queue only if it's blocked sa_flags==SA_SIGINFO
+         if( (pthread_ptr->sigaction_lst[sig].sa_flags&SA_SIGINFO) ) {
+            //init sigevent
+            kernel_sigevent.from=(unsigned long)0x00;
+            kernel_sigevent.si_code = SI_USER;
+            kernel_sigevent._sigevent.sigev_signo=sig;
+            pthread_ptr->kernel_sigqueue.send(pthread_ptr,&kernel_sigevent);
+            //release all sync object attach to pthread and set PTHREAD_STATUS_SIGHANDLER
+            _signal_release_sync(pthread_ptr);
+         }
+         return 0;      //sig is blocked
+      }
 
-	   //see sighandler in signal.c
-	   if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER){
-	      //already in sighandler
-	      pthread_ptr->sig_pending.rt|= (1 << (sig-SIGRTMIN));
-	      return 0;
-	   }
-		//BEGIN OF ATOMIC SECTION
+      //see sighandler in signal.c
+      if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) {
+         //already in sighandler
+         pthread_ptr->sig_pending.rt|= (1 << (sig-SIGRTMIN));
+         return 0;
+      }
+      //BEGIN OF ATOMIC SECTION
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-		if(atomic){
-			__clr_irq();
-		}
+      if(atomic) {
+         __clr_irq();
+      }
 #endif
 
-	}else{
-		return -1;
-	}
+   }else{
+      return -1;
+   }
 
-	//set siginfo for handler
-	pthread_ptr->siginfo.si_signo = sig;
-	pthread_ptr->siginfo.si_code = SI_USER;
+   //set siginfo for handler
+   pthread_ptr->siginfo.si_signo = sig;
+   pthread_ptr->siginfo.si_code = SI_USER;
 
-	//route execution flow (sighandler: see kernel/signal.c)
-	//2 cas dans cette macro
-	//cas du thread (1) qui envoie un signal à un autre thread (2) : modif de la stucture sauvegardée
-	//sur la pile du thread (2)
-	//cas ou il s'envoie un signal à lui même : modif de l'adresse de retour dans la pile du thread courant
-	__swap_signal_handler(pthread_ptr,sighandler);
+   //route execution flow (sighandler: see kernel/signal.c)
+   //2 cas dans cette macro
+   //cas du thread (1) qui envoie un signal à un autre thread (2) : modif de la stucture sauvegardée
+   //sur la pile du thread (2)
+   //cas ou il s'envoie un signal à lui même : modif de l'adresse de retour dans la pile du thread courant
+   __swap_signal_handler(pthread_ptr,sighandler);
 
-	//set process status
-	pthread_ptr->stat=pthread_ptr->stat | PTHREAD_STATUS_SIGHANDLER;
+   //set process status
+   pthread_ptr->stat=pthread_ptr->stat | PTHREAD_STATUS_SIGHANDLER;
 
-	//release all sync object attach to pthread and set PTHREAD_STATUS_SIGHANDLER
-	_signal_release_sync(pthread_ptr);
+   //release all sync object attach to pthread and set PTHREAD_STATUS_SIGHANDLER
+   _signal_release_sync(pthread_ptr);
 
-	//END OF ATOMIC SECTION
+   //END OF ATOMIC SECTION
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
-	if(atomic)
-		__set_irq();
+   if(atomic)
+      __set_irq();
 #endif
-	return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -1787,9 +1807,9 @@ int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic){
 int _sys_kill_exit(kernel_pthread_t* pthread_ptr){
    int sig;
 
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __clr_irq();
-   #endif
+#endif
 
    __exit_signal_handler(pthread_ptr);
 
@@ -1797,33 +1817,33 @@ int _sys_kill_exit(kernel_pthread_t* pthread_ptr){
    pthread_ptr->stat=(pthread_ptr->stat &(~PTHREAD_STATUS_SIGHANDLER) );
 
    //standard sig/realtime sig
-   if(pthread_ptr->siginfo.si_signo<NSIG){
+   if(pthread_ptr->siginfo.si_signo<NSIG) {
       //unblock sig
       pthread_ptr->sig_mask.std &= ~(1 << (pthread_ptr->siginfo.si_signo-1));
       //reset sig_info
       pthread_ptr->siginfo.si_signo=0;
       //
-      if(!pthread_ptr->sig_pending.std){
+      if(!pthread_ptr->sig_pending.std) {
          //no pending signal
-         #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
          __set_irq();
-         #endif
+#endif
          return 0;
       }
       //to do: unqueue sig pending not yet tested
-      for(sig=0;sig<NSIG;sig++){
-         if(((pthread_ptr->sig_pending.std>>(sig-1))&0x01)){
+      for(sig=0; sig<NSIG; sig++) {
+         if(((pthread_ptr->sig_pending.std>>(sig-1))&0x01)) {
             //now it's not a pending sig
             pthread_ptr->sig_pending.std &= ~(1 << (sig-1));
             return _sys_kill(pthread_ptr,sig,0);
          }
       }
-   }else if(pthread_ptr->siginfo.si_signo>=SIGRTMIN && pthread_ptr->siginfo.si_signo<SIGRTMAX){
+   }else if(pthread_ptr->siginfo.si_signo>=SIGRTMIN && pthread_ptr->siginfo.si_signo<SIGRTMAX) {
       //realtime signal
       //reset sig_info
       pthread_ptr->siginfo.si_signo=0;
       //
-      if(!pthread_ptr->sig_pending.rt){
+      if(!pthread_ptr->sig_pending.rt) {
          //no pending signal
          /*modif phlb 19/01/2009*/
          __set_active_pthread(pthread_ptr);
@@ -1833,8 +1853,8 @@ int _sys_kill_exit(kernel_pthread_t* pthread_ptr){
          return 0;
       }
       //to do: unqueue sig pending not yet tested
-      for(sig=SIGRTMIN;sig<SIGRTMAX;sig++){
-         if(((pthread_ptr->sig_pending.rt>>(sig-SIGRTMIN))&0x01)){
+      for(sig=SIGRTMIN; sig<SIGRTMAX; sig++) {
+         if(((pthread_ptr->sig_pending.rt>>(sig-SIGRTMIN))&0x01)) {
             pthread_ptr->sig_pending.rt&= ~(1 << (sig-SIGRTMIN));
             return _sys_kill(pthread_ptr,sig,0);
          }
@@ -1842,9 +1862,9 @@ int _sys_kill_exit(kernel_pthread_t* pthread_ptr){
    }
 
    //no pending signal
-   #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();
-   #endif
+#endif
 
    return 0;
 }
@@ -1872,25 +1892,25 @@ int _sys_raise(pid_t pid, int sig){
 ---------------------------------------------*/
 int _sys_get_start_stack(void)
 {
-	 pid_t pid=-1;
+   pid_t pid=-1;
 
-	 kernel_pthread_t* pthread = kernel_pthread_self();
+   kernel_pthread_t* pthread = kernel_pthread_self();
 
-	 if(!pthread)
-	      return -1;
+   if(!pthread)
+      return -1;
 
-	 if(!(pid= pthread->pid))
-	      return -1;
+   if(!(pid= pthread->pid))
+      return -1;
 
-	 if(!process_lst[pid])
-	      return -1;
+   if(!process_lst[pid])
+      return -1;
 
-	 if( (pthread->stat&(PTHREAD_STATUS_ZOMBI)) )
-	      return -1;
+   if( (pthread->stat&(PTHREAD_STATUS_ZOMBI)) )
+      return -1;
 
-	 __bckup_thread_start_context(pthread->start_context,pthread);
+   __bckup_thread_start_context(pthread->start_context,pthread);
 
-	 return 0;
+   return 0;
 }
 
 /*============================================

@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------
- *         ATMEL Microcontroller Software Support 
+ *         ATMEL Microcontroller Software Support
  * ----------------------------------------------------------------------------
  * Copyright (c) 2008, Atmel Corporation
  *
@@ -117,20 +117,20 @@
 //dummy
 void ConfigureLeds(void)
 {
-    LED_Configure(0);
-    LED_Configure(1);
+   LED_Configure(0);
+   LED_Configure(1);
 }
 
 void dummy_debug() {
    unsigned long j=0;
    int k=0;
    //for(;;) {
-   for(k=0;k<10;k++) {
-      for(j=0;j<133300000;j++);
+   for(k=0; k<10; k++) {
+      for(j=0; j<133300000; j++) ;
       //LED_Toggle(1);
       LED_Toggle(0);
       LED_Toggle(1);
-      for(j=0;j<133300000;j++);
+      for(j=0; j<133300000; j++) ;
    }
    //}
 }

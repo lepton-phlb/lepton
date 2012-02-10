@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -67,9 +67,9 @@ Implementation
 int _trylock_io(kernel_pthread_t* pthread_ptr, desc_t desc, int oflag){
    int r;
    __atomic_in();
-   if( (r=__trylock_io(desc,oflag))!=EBUSY){
+   if( (r=__trylock_io(desc,oflag))!=EBUSY) {
       pthread_ptr->io_desc = desc;
-      /*kernel_pthread_mutex_lock(&ofile_lst[__desc__].mutex);*/\
+      /*kernel_pthread_mutex_lock(&ofile_lst[__desc__].mutex);*/ \
    }
    __atomic_out();
    return r;
@@ -114,7 +114,7 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
    lr.quot = 10; //10 ms;
 
    //check and lock internal file descriptor
-   for(b=0;b<sizeof(fd_set)|| b<nfds;b++){
+   for(b=0; b<sizeof(fd_set)|| b<nfds; b++) {
       desc_t desc;
 
       //check
@@ -126,17 +126,17 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
       */
 
       //read
-      if( ((rfds>>b) & 0x0001) ){
+      if( ((rfds>>b) & 0x0001) ) {
          pthread_ptr->io_desc = desc;
-         if(_trylock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY)!=EBUSY){
+         if(_trylock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY)!=EBUSY) {
             //__atomic_in();
             {
                desc_t _desc=ofile_lst[desc].desc;
                //
-               if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr){
-                  do{
+               if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr) {
+                  do {
                      //check
-                     if(ofile_lst[_desc].used<=0){
+                     if(ofile_lst[_desc].used<=0) {
                         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
                         return -1; //error, stream not coherent :(
                      }
@@ -150,28 +150,28 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
                      __disable_interrupt_section_out();
                      //
                      //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-                  }while((_desc=ofile_lst[_desc].desc_nxt[0])>=0);
+                  } while((_desc=ofile_lst[_desc].desc_nxt[0])>=0);
                }
             }
             //__atomic_out();
-         }else if (readfds){
+         }else if (readfds) {
             *readfds=(*readfds&(~(0x01<<b)));
          }
          continue;
       }
 
       //write
-      if( ((wfds>>b) & 0x0001) ){
+      if( ((wfds>>b) & 0x0001) ) {
          pthread_ptr->io_desc = desc;
-         if(_trylock_io(pthread_ptr,desc,O_WRONLY)!=EBUSY){
+         if(_trylock_io(pthread_ptr,desc,O_WRONLY)!=EBUSY) {
             __atomic_in();
             {
                desc_t _desc=ofile_lst[desc].desc;
                //
-               if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr){
-                  do{
+               if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr) {
+                  do {
                      //check
-                     if(ofile_lst[_desc].used<=0){
+                     if(ofile_lst[_desc].used<=0) {
                         __atomic_out();
                         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
                         return -1; //error, stream not coherent :(
@@ -186,20 +186,20 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
                      __disable_interrupt_section_out();
                      //
                      //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-                  }while((_desc=ofile_lst[_desc].desc_nxt[1])>=0);
+                  } while((_desc=ofile_lst[_desc].desc_nxt[1])>=0);
                }
             }
             __atomic_out();
-         }else if(writefds){
+         }else if(writefds) {
             *writefds=(*writefds&(~(0x01<<b)));
          }
          continue;
       }
 
       //exception
-      if( ((efds>>b) & 0x0001) ){
+      if( ((efds>>b) & 0x0001) ) {
          pthread_ptr->io_desc = desc;
-         if(_trylock_io(pthread_ptr,desc,O_WRONLY)!=EBUSY){
+         if(_trylock_io(pthread_ptr,desc,O_WRONLY)!=EBUSY) {
             //begin of section: protection from io interrupt
             __disable_interrupt_section_in();
             //
@@ -235,7 +235,7 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
    unlock_efds=efds;
 
 start:
-   for(b=0;b<sizeof(fd_set)|| b<nfds;b++){
+   for(b=0; b<sizeof(fd_set)|| b<nfds; b++) {
       desc_t desc;
       int isset=0;
 
@@ -248,32 +248,32 @@ start:
       */
 
       //read
-      if( ((rfds>>b) & 0x0001) ){
+      if( ((rfds>>b) & 0x0001) ) {
 
-         if(!ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)){
+         if(!ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
             isset=1;
             if(readfds)
                *readfds=(*readfds|((0x01<<b)));
-         }else if(readfds){
+         }else if(readfds) {
             *readfds=(*readfds&(~(0x01<<b)));
          }
          //continue;
       }
 
       //write
-      if( ((wfds>>b) & 0x0001) ){
-         if(!ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc)){
+      if( ((wfds>>b) & 0x0001) ) {
+         if(!ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc)) {
             isset=1;
             if(writefds)
                *writefds=(*writefds|((0x01<<b)));
-         }else if(writefds){
+         }else if(writefds) {
             *writefds=(*writefds&(~(0x01<<b)));
          }
          //continue;
       }
 
       //exception
-      if( ((efds>>b) & 0x0001) ){
+      if( ((efds>>b) & 0x0001) ) {
          //to do: select on exception
          //continue;
       }
@@ -283,17 +283,17 @@ start:
    }
 
    //wait
-   if(!count && !wait){
+   if(!count && !wait) {
       struct timespec abs_timeout;
       //
-      if(timeout){
+      if(timeout) {
          abs_timeout.tv_sec   = timeout->tv_sec;
          abs_timeout.tv_nsec  = timeout->tv_usec*1000;
          __wait_io_int2(pthread_ptr,&abs_timeout);
       }else{
-      /*   abs_timeout.tv_sec   = 0;
-         abs_timeout.tv_nsec  = 0; */
-    	 __wait_io_int2(pthread_ptr,NULL);
+         /*   abs_timeout.tv_sec   = 0;
+            abs_timeout.tv_nsec  = 0; */
+         __wait_io_int2(pthread_ptr,NULL);
       }
       //
 
@@ -303,7 +303,7 @@ start:
    }
 
    //unlock internal file descriptor
-   for(b=0;b<sizeof(fd_set)|| b<nfds;b++){
+   for(b=0; b<sizeof(fd_set)|| b<nfds; b++) {
       desc_t desc;
       int isset=0;
 
@@ -316,16 +316,16 @@ start:
       */
 
       //unlock descriptor
-      if( ((unlock_rfds>>b) & 0x0001) ){
-         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);//yes isset=1 or wait =1 then select is terminated
+      if( ((unlock_rfds>>b) & 0x0001) ) {
+         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY); //yes isset=1 or wait =1 then select is terminated
       }
-      if( ((unlock_wfds>>b) & 0x0001) ){
-         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);//yes isset=1 or wait =1 then select is terminated
+      if( ((unlock_wfds>>b) & 0x0001) ) {
+         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY); //yes isset=1 or wait =1 then select is terminated
       }
    }
 
    //reset file descriptor vector
-   if(!count){
+   if(!count) {
       if(readfds)
          memset(readfds,0,sizeof(fd_set));
       if(writefds)

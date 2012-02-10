@@ -12,13 +12,13 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#include "dev_dskimg.h" 
+#include "dev_dskimg.h"
 
 /*===========================================
 Declaration
 =============================================*/
 
-//#define (null) 
+//#define (null)
 
 #define __KERNEL_CPU_FREQ 100000000L
 

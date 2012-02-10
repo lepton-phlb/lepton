@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -32,7 +32,7 @@ either the MPL or the [eCos GPL] License."
  */
 
 /**
- * \addtogroup hard_dev_m16c 
+ * \addtogroup hard_dev_m16c
  * @{
  *
  */
@@ -42,7 +42,7 @@ either the MPL or the [eCos GPL] License."
  * @{
  *
  * fonction de base pour les pilotes de périphériques de type eeprom i2c.
- *    
+ *
  */
 
 
@@ -66,35 +66,35 @@ Includes
 /**
  *
  * taille des eeprom.
- * 
+ *
  */
-const long   I2CEEPROM_24XXX_SIZE =  32L*1024L;//(32Ko)
+const long I2CEEPROM_24XXX_SIZE =  32L*1024L;  //(32Ko)
 
 /**
  *
  * nombre de eeprom.
- * 
+ *
  */
 #define     EEPROM_24XXX_NB      3
 
 /**
  *
  * adresse de la première eeprom.
- * 
+ *
  */
 #define     I2CEEPROM_24XXX_1    (0x0a0>>1)
 
 /**
  *
  * adresse de la seconde eeprom.
- * 
+ *
  */
 #define     I2CEEPROM_24XXX_2    (0x0a1>>1)
 
 /**
  *
  * adresse de la troisième eeprom.
- * 
+ *
  */
 #define     I2CEEPROM_24XXX_3    (0x0a2>>1)
 
@@ -136,13 +136,13 @@ dev_map_t dev_eeprom_24xxx_map={
    __fdev_not_implemented //ioctl
 };
 
-#define __desc2nb(desc)\
+#define __desc2nb(desc) \
    (pdev_lst[ofile_lst[desc].ext.dev]->dev_name[3]>>1)
 
 
-static fdev_read_t   _if_i2c_master_read  = (fdev_read_t)0;
-static fdev_write_t  _if_i2c_master_write = (fdev_write_t)0;
-static fdev_seek_t   _if_i2c_master_seek  = (fdev_seek_t)0;
+static fdev_read_t _if_i2c_master_read  = (fdev_read_t)0;
+static fdev_write_t _if_i2c_master_write = (fdev_write_t)0;
+static fdev_seek_t _if_i2c_master_seek  = (fdev_seek_t)0;
 
 
 /*===========================================
@@ -172,7 +172,7 @@ int dev_eeprom_24xxx_load(void){
 | See:
 ---------------------------------------------*/
 int dev_eeprom_24xxx_isset_read(desc_t desc){
-  return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -202,20 +202,20 @@ int dev_eeprom_24xxx_open(desc_t desc, int o_flag){
       return -1;
 
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
       _if_i2c_master_read = _l_kernel_if_i2c_master->fdev_read;
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
       _if_i2c_master_write = _l_kernel_if_i2c_master->fdev_write;
    }
 
-   dev_current_nb    = __desc2nb(desc);//0x0a0>>1;
-   ofile_lst[desc].offset = 0;//dev_current_addr  = 0;
+   dev_current_nb    = __desc2nb(desc); //0x0a0>>1;
+   ofile_lst[desc].offset = 0; //dev_current_addr  = 0;
 
    return 0;
 }
- 
+
 /*-------------------------------------------
 | Name:dev_eeprom_24xxx_close
 | Description:
@@ -237,23 +237,23 @@ int dev_eeprom_24xxx_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_eeprom_24xxx_seek(desc_t desc,int offset,int origin){
-   unsigned char dev_current_nb = __desc2nb(desc);//dev_current_nb    = 0x0a0>>1;
+   unsigned char dev_current_nb = __desc2nb(desc); //dev_current_nb    = 0x0a0>>1;
    unsigned short dev_current_addr = (unsigned short)ofile_lst[desc].offset;
 
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         dev_current_addr  = (unsigned short)(offset%(I2CEEPROM_24XXX_SIZE));
+   case SEEK_SET:
+      dev_current_addr  = (unsigned short)(offset%(I2CEEPROM_24XXX_SIZE));
       break;
 
-      case SEEK_CUR:
-         dev_current_addr+=(unsigned short)(offset%(I2CEEPROM_24XXX_SIZE));
-         offset = dev_current_addr;
+   case SEEK_CUR:
+      dev_current_addr+=(unsigned short)(offset%(I2CEEPROM_24XXX_SIZE));
+      offset = dev_current_addr;
       break;
 
-      case SEEK_END:
-         dev_current_addr=(unsigned short)I2CEEPROM_24XXX_SIZE;
-         offset = dev_current_addr;
+   case SEEK_END:
+      dev_current_addr=(unsigned short)I2CEEPROM_24XXX_SIZE;
+      offset = dev_current_addr;
       break;
 
    }
@@ -286,12 +286,12 @@ int dev_eeprom_24xxx_seek(desc_t desc,int offset,int origin){
 | See:
 ---------------------------------------------*/
 int dev_eeprom_24xxx_read(desc_t desc, char* buf,int cb){
-   unsigned char  dev_current_nb = __desc2nb(desc);
+   unsigned char dev_current_nb = __desc2nb(desc);
    unsigned short dev_current_addr = (unsigned short)ofile_lst[desc].offset;
 
-   if( (ofile_lst[desc].offset+(long)cb)>I2CEEPROM_24XXX_SIZE){
+   if( (ofile_lst[desc].offset+(long)cb)>I2CEEPROM_24XXX_SIZE) {
       if(!(cb = I2CEEPROM_24XXX_SIZE-ofile_lst[desc].offset))
-         return 0;//end of device.
+         return 0;  //end of device.
    }
 
    if(cb>=DEV_EEPROM24XXX_BUFFERSIZE)
@@ -300,12 +300,12 @@ int dev_eeprom_24xxx_read(desc_t desc, char* buf,int cb){
    //profiler
    __io_profiler_start(desc);
 
-   dev_eeprom_buffer[0] = (unsigned char) dev_current_nb ;
+   dev_eeprom_buffer[0] = (unsigned char) dev_current_nb;
    dev_eeprom_buffer[1] = (unsigned char) 2;
-   dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8) ;
-   dev_eeprom_buffer[3] = (unsigned char) dev_current_addr ;
+   dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8);
+   dev_eeprom_buffer[3] = (unsigned char) dev_current_addr;
 
-   
+
    //addr size = 0, pos is set with driverEEPROM24XXXSeek
    //use current position
    //_i2c_core_read(dev_current_nb,dev_eeprom_buffer,(unsigned char)cb,2);
@@ -341,12 +341,12 @@ int dev_eeprom_24xxx_read(desc_t desc, char* buf,int cb){
 int dev_eeprom_24xxx_write(desc_t desc, const char* buf,int cb){
 
    int segment;
-   unsigned char  dev_current_nb = __desc2nb(desc);
+   unsigned char dev_current_nb = __desc2nb(desc);
    unsigned short dev_current_addr = (unsigned short)ofile_lst[desc].offset;
 
-   if( (ofile_lst[desc].offset+(long)cb)>I2CEEPROM_24XXX_SIZE){
+   if( (ofile_lst[desc].offset+(long)cb)>I2CEEPROM_24XXX_SIZE) {
       if(!(cb = I2CEEPROM_24XXX_SIZE-ofile_lst[desc].offset))
-         return 0;//end of device.
+         return 0;  //end of device.
    }
 
    //profiler
@@ -354,14 +354,14 @@ int dev_eeprom_24xxx_write(desc_t desc, const char* buf,int cb){
 
    if(cb>=DEV_EEPROM24XXX_BUFFERSIZE)
       cb = DEV_EEPROM24XXX_BUFFERSIZE;
-   
-   segment = dev_current_addr>>6;//(driverEEPROM24XXXCurrentAddr/64)
 
-   if(segment == ((dev_current_addr + (cb-1))>>6) ){
-      dev_eeprom_buffer[0] = (unsigned char) dev_current_nb ;
+   segment = dev_current_addr>>6; //(driverEEPROM24XXXCurrentAddr/64)
+
+   if(segment == ((dev_current_addr + (cb-1))>>6) ) {
+      dev_eeprom_buffer[0] = (unsigned char) dev_current_nb;
       dev_eeprom_buffer[1] = (unsigned char) 2;
-      dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8) ;
-      dev_eeprom_buffer[3] = (unsigned char) dev_current_addr ;
+      dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8);
+      dev_eeprom_buffer[3] = (unsigned char) dev_current_addr;
 
       memcpy(&dev_eeprom_buffer[4],buf,cb);
       //_i2c_core_write(dev_current_nb,dev_eeprom_buffer,(unsigned char)cb,2);
@@ -373,10 +373,10 @@ int dev_eeprom_24xxx_write(desc_t desc, const char* buf,int cb){
    }else{
       unsigned char size = ((segment+1)<<6 ) - dev_current_addr;
 
-      dev_eeprom_buffer[0] = (unsigned char) dev_current_nb ;
+      dev_eeprom_buffer[0] = (unsigned char) dev_current_nb;
       dev_eeprom_buffer[1] = (unsigned char) 2;
-      dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8) ;
-      dev_eeprom_buffer[3] = (unsigned char) dev_current_addr ;
+      dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8);
+      dev_eeprom_buffer[3] = (unsigned char) dev_current_addr;
 
       memcpy(&dev_eeprom_buffer[4],buf,size);
       //_i2c_core_write(dev_current_nb,dev_eeprom_buffer,size,2);
@@ -386,11 +386,11 @@ int dev_eeprom_24xxx_write(desc_t desc, const char* buf,int cb){
       dev_current_addr+=size;
 
       //
-      dev_eeprom_buffer[0] = (unsigned char) dev_current_nb ;
+      dev_eeprom_buffer[0] = (unsigned char) dev_current_nb;
       dev_eeprom_buffer[1] = (unsigned char) 2;
-      dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8) ;
-      dev_eeprom_buffer[3] = (unsigned char) dev_current_addr ;
-      
+      dev_eeprom_buffer[2] = (unsigned char) (dev_current_addr >> 8);
+      dev_eeprom_buffer[3] = (unsigned char) dev_current_addr;
+
       memcpy(&dev_eeprom_buffer[4],&buf[size],cb-size);
       //_i2c_core_write(dev_current_nb,dev_eeprom_buffer,(unsigned char)(cb-size),2);
       _if_i2c_master_write(__get_if_i2c_master_desc(),dev_eeprom_buffer,(unsigned char)(cb-size)+4);

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -71,7 +71,8 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-static const char banner[] = "\
+static const char banner[] =
+   "\
 lepton (tauon) posix os\r\n\
 $Revision: 1.3 $ $Date: 2009-06-18 13:43:22 $\r\n\
 ";
@@ -130,30 +131,30 @@ int initd_main(int argc,char* argv[]){
    setpgid(0,0);
 
    //get option
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               case 't'://timeout
-                  opt |= OPT_MSK_T;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
+            case 't':   //timeout
+               opt |= OPT_MSK_T;
                break;
 
-               case 's'://
-                  opt |= OPT_MSK_S;
+            case 's':   //
+               opt |= OPT_MSK_S;
                break;
 
-               case 'i'://stdin
-                  opt |= OPT_MSK_I;
+            case 'i':   //stdin
+               opt |= OPT_MSK_I;
                break;
 
-               case 'o'://stdout
-                  opt |= OPT_MSK_O;//ms
+            case 'o':   //stdout
+               opt |= OPT_MSK_O;   //ms
                break;
 
-               case 'e'://stderr
-                  opt |= OPT_MSK_E;//ms
+            case 'e':   //stderr
+               opt |= OPT_MSK_E;   //ms
                break;
 
             }
@@ -162,19 +163,19 @@ int initd_main(int argc,char* argv[]){
          if(!argv[i])
             return -1;
 
-         if(opt&OPT_MSK_T){
-            timeout = atoi(argv[i])/10;//timebase in select());
-         }else if(opt&OPT_MSK_I){
+         if(opt&OPT_MSK_T) {
+            timeout = atoi(argv[i])/10; //timebase in select());
+         }else if(opt&OPT_MSK_I) {
             _stdin = argv[i];
-         }else if(opt&OPT_MSK_O){
+         }else if(opt&OPT_MSK_O) {
             _stdout = argv[i];
-         }else if(opt&OPT_MSK_E){
-         }else if(opt&OPT_MSK_S){
+         }else if(opt&OPT_MSK_E) {
+         }else if(opt&OPT_MSK_S) {
          }else{
             _init_script_path=argv[i];
          }
 
-        opt=0;
+         opt=0;
       }
    }
 
@@ -225,7 +226,7 @@ int initd_main(int argc,char* argv[]){
       //get lcd info
       ioctl(fd, FBIOGET_DISPINFO, &fb_info);
       fb_info.cmap=(void*)0; //color map from screen
-      fb_info.cmap_len=0;//color map length
+      fb_info.cmap_len=0; //color map length
       fb_info.desc_w=-1;
       fb_info.next=(void*)0; //next framebuffer data
 
@@ -267,15 +268,16 @@ int initd_main(int argc,char* argv[]){
       ioctl(STDOUT_FILENO,I_LINK,fd_fb0);
    }
    #else
-      fd=open("/dev/lcd0",O_WRONLY,0);
-      ioctl(STDOUT_FILENO,I_LINK,fd);
+   fd=open("/dev/lcd0",O_WRONLY,0);
+   ioctl(STDOUT_FILENO,I_LINK,fd);
    #endif
 #endif
    //
 
    //print kernel information
    printf(banner);
-   printf("\r\n\nversion %s kernel compilation date: %s - %s\r\n",__LEPTON_VERSION,__KERNEL_DATE,__KERNEL_TIME);
+   printf("\r\n\nversion %s kernel compilation date: %s - %s\r\n",__LEPTON_VERSION,__KERNEL_DATE,
+          __KERNEL_TIME);
    cur_time = time(&cur_time);
    printf("\r\n%s\r\n\r\n",ctime(&cur_time));
 
@@ -289,30 +291,30 @@ int initd_main(int argc,char* argv[]){
    //
    if(!timeout)
       go = 1;
-   while(!go){
+   while(!go) {
       //
       time_out.tv_sec = timeout/1000;
       time_out.tv_usec = (timeout%1000)*1000;
       //
-      FD_SET(STDIN_FILENO,&readfs);//stdin
+      FD_SET(STDIN_FILENO,&readfs); //stdin
 
-      switch( select(STDIN_FILENO+1,&readfs,0,0,&time_out) ){
-         case 0:
-            if(!(timeout%100))
-               printf("elapse time:%d s.\r\n",timeout/100);
-            if(--timeout<0)
-               go = 1;
+      switch( select(STDIN_FILENO+1,&readfs,0,0,&time_out) ) {
+      case 0:
+         if(!(timeout%100))
+            printf("elapse time:%d s.\r\n",timeout/100);
+         if(--timeout<0)
+            go = 1;
          break;
 
-         default:
-            //
-            if(FD_ISSET(STDIN_FILENO,&readfs)){ //stdin
-               c = getchar();
-               if(c =='\x18') //ctrl-x
-                 go = 2;
-               else
-                 go = 1;
-            }
+      default:
+         //
+         if(FD_ISSET(STDIN_FILENO,&readfs)) {   //stdin
+            c = getchar();
+            if(c =='\x18')    //ctrl-x
+               go = 2;
+            else
+               go = 1;
+         }
          break;
       }
 
@@ -327,26 +329,26 @@ int initd_main(int argc,char* argv[]){
    //printf("\r\n test printf %+05.2f!\r\n\r\n\r\n",1.2345);
 
    //start shell with '.init' script?
-   if((pid=vfork())==0){
-      if(opt&OPT_MSK_S){
+   if((pid=vfork())==0) {
+      if(opt&OPT_MSK_S) {
          close(STDOUT_FILENO);
          open(_stdout,O_WRONLY,0);
       }
-      if(go == 1){
+      if(go == 1) {
          if(_init_script_path)
             execl("/usr/sbin/lsh","/usr/sbin/lsh",_init_script_path,NULL);
          else
             execl("/usr/sbin/lsh","/usr/sbin/lsh","/usr/etc/.init",NULL);
-      }else if(go == 2){
+      }else if(go == 2) {
          execl("/usr/sbin/lsh","/usr/sbin/lsh",NULL);
       }
       exit(0);
    }
 
    //
-   while((pid=waitpid((pid_t)-1,&status,0))>=0){
+   while((pid=waitpid((pid_t)-1,&status,0))>=0) {
       if(!pid) continue;
-         printf(":[%d] done(%d)\r\n",pid,status);
+      printf(":[%d] done(%d)\r\n",pid,status);
    };
 
    if(!pid)

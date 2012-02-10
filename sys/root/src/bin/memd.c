@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include "kernel/signal.h"
 #include "kernel/libstd.h"
@@ -51,7 +51,7 @@ either the MPL or the [eCos GPL] License."
 #include "libc/misc/crc.h"
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 #define  OPT_MSK_I 0x01L //-i define input device
@@ -66,17 +66,17 @@ const char* __f_memd =".memd";
 typedef uint16_t addr_t;
 typedef uint16_t sz_t;
 
-typedef struct{
-   sz_t     sz;
-   addr_t   addr;
+typedef struct {
+   sz_t sz;
+   addr_t addr;
 }mem_header_t;
 
 typedef uchar8_t mem_data_t;
 
 #pragma pack(pop)
 
-typedef struct{
-   int fd;// /dev/mem
+typedef struct {
+   int fd; // /dev/mem
 }mem_init_t;
 
 
@@ -87,15 +87,15 @@ typedef struct{
 #define MAX_SYNC 50
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 /*--------------------------------------------
 | Name:        memd_init
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int memd_init(int fd,int *p_addr_lst,int *addr_lst_sz,int* data_sz_max){
    FILE* stream;
@@ -114,14 +114,14 @@ int memd_init(int fd,int *p_addr_lst,int *addr_lst_sz,int* data_sz_max){
 
    rewind(stream);
 
-   while((fscanf(stream,"@ 0x%x ; # %d ; %2s \n",&addr,&size,op)!=EOF) && i<MAX_MEM_ADDR){
+   while((fscanf(stream,"@ 0x%x ; # %d ; %2s \n",&addr,&size,op)!=EOF) && i<MAX_MEM_ADDR) {
       if(addr<0 || size <0)
-         continue;//error
+         continue;  //error
 
       c1= op[0];
       c2= op[1];
 
-      if(c1=='+' || c2=='+'){
+      if(c1=='+' || c2=='+') {
          void *p = malloc(size);
          //dynamic allocation
          ioctl(fd,MEMADD,addr,size,p);
@@ -129,7 +129,7 @@ int memd_init(int fd,int *p_addr_lst,int *addr_lst_sz,int* data_sz_max){
          ioctl(fd,MEMADD,addr,size,(void*)0);
       }
 
-      if(c1=='r' || c2=='r'){
+      if(c1=='r' || c2=='r') {
          if(size>*data_sz_max) *data_sz_max = size;
          ioctl(fd,MEMREG,addr);
          p_addr_lst[i]=addr;
@@ -150,11 +150,11 @@ int memd_init(int fd,int *p_addr_lst,int *addr_lst_sz,int* data_sz_max){
 
 /*--------------------------------------------
 | Name:        memd_copy_from_cpu
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 uint32_t memd_rec_error_crc = 0uL;
 uint32_t memd_rec_error_pksz = 0uL;
@@ -177,7 +177,7 @@ int memd_copy_from_cpu(int fd[]){
    fds = open("/dev/mem",O_RDWR,0);
 
    //read from distant cpu
-   while((cb=read(fd[0],p_mem_packet,sizeof(mem_header_t)+MAX_DATA_SZ))>0){
+   while((cb=read(fd[0],p_mem_packet,sizeof(mem_header_t)+MAX_DATA_SZ))>0) {
       crc16_t crc;
       int crc_byte_no=0;
       uchar8_t* p_crc_mem_packet=((uchar8_t*)p_mem_packet);
@@ -186,29 +186,29 @@ int memd_copy_from_cpu(int fd[]){
          continue;
       //detect crc
       if( (cb>(int)(p_mem_packet->sz+sizeof(mem_header_t)))
-         && ( (cb-(p_mem_packet->sz+sizeof(mem_header_t))) == sizeof(crc16_t) ) ){
+          && ( (cb-(p_mem_packet->sz+sizeof(mem_header_t))) == sizeof(crc16_t) ) ) {
          //crc
          __init_crc16(crc);
          //
-         for(crc_byte_no=0;crc_byte_no<((int)((cb-sizeof(crc16_t)) ));crc_byte_no++){
+         for(crc_byte_no=0; crc_byte_no<((int)((cb-sizeof(crc16_t)) )); crc_byte_no++) {
             crc=crc16(crc,p_crc_mem_packet[crc_byte_no]);
          }
-         if( p_crc_mem_packet[crc_byte_no++] != ( ((uchar8_t)(crc&0xff00)) >> 8 ) ){//msb
+         if( p_crc_mem_packet[crc_byte_no++] != ( ((uchar8_t)(crc&0xff00)) >> 8 ) ) { //msb
             //error continue???
             ++memd_rec_error_crc;
             continue;
          }
-         if( p_crc_mem_packet[crc_byte_no] != ( ((uchar8_t)(crc&0x00ff)) ) ){//lsb
+         if( p_crc_mem_packet[crc_byte_no] != ( ((uchar8_t)(crc&0x00ff)) ) ) { //lsb
             //error continue???
             ++memd_rec_error_crc;
             continue;
          }
       }else{
          unsigned long command=TCIFLUSH;
-        //error invalid packet size
-        ++memd_rec_error_pksz;
-        ioctl(fd[0],TCFLSH,command);
-        continue;
+         //error invalid packet size
+         ++memd_rec_error_pksz;
+         ioctl(fd[0],TCFLSH,command);
+         continue;
       }
       //
       lseek(fds,p_mem_packet->addr,SEEK_SET);
@@ -220,11 +220,11 @@ int memd_copy_from_cpu(int fd[]){
 
 /*--------------------------------------------
 | Name:        memd_copy_to_cpu
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int memd_copy_to_cpu(int fd[],int secure){
 
@@ -233,9 +233,9 @@ int memd_copy_to_cpu(int fd[],int secure){
    mem_header_t* p_mem_packet;
    mem_data_t*    p_data_packet;
 
-   int   addr_lst[MAX_MEM_ADDR];
-   int   addr_lst_sz;
-   int   data_sz_max;
+   int addr_lst[MAX_MEM_ADDR];
+   int addr_lst_sz;
+   int data_sz_max;
 
    //mem replication initialisation
    if(memd_init(fd[2],addr_lst,&addr_lst_sz,&data_sz_max)<0)
@@ -247,18 +247,18 @@ int memd_copy_to_cpu(int fd[],int secure){
    p_data_packet = ((mem_data_t*)(p_mem_packet))+sizeof(mem_header_t);
 
    //wait notification
-   for(;;){
+   for(;; ) {
       int i=0;
 
-      for(i=0;i<addr_lst_sz;i++){
+      for(i=0; i<addr_lst_sz; i++) {
          lseek(fd[2],addr_lst[i],SEEK_SET);
 
          cb = read(fd[2],p_data_packet,data_sz_max);
-         if(cb>0){
+         if(cb>0) {
             p_mem_packet->addr = addr_lst[i];
             p_mem_packet->sz   = cb;
 
-            if(secure){
+            if(secure) {
                crc16_t crc;
                int crc_byte_no=0;
                uchar8_t* p_crc_mem_packet=((uchar8_t*)p_mem_packet);
@@ -266,11 +266,11 @@ int memd_copy_to_cpu(int fd[],int secure){
                //crc
                __init_crc16(crc);
                //
-               for(crc_byte_no=0;crc_byte_no<((int)(sizeof(mem_header_t)+cb));crc_byte_no++){
+               for(crc_byte_no=0; crc_byte_no<((int)(sizeof(mem_header_t)+cb)); crc_byte_no++) {
                   crc=crc16(crc,p_crc_mem_packet[crc_byte_no]);
                }
-               p_crc_mem_packet[crc_byte_no++]  = ( ((uchar8_t)(crc&0xff00)) >> 8 );//msb
-               p_crc_mem_packet[crc_byte_no]    = ( ((uchar8_t)(crc&0x00ff)) );//lsb
+               p_crc_mem_packet[crc_byte_no++]  = ( ((uchar8_t)(crc&0xff00)) >> 8 ); //msb
+               p_crc_mem_packet[crc_byte_no]    = ( ((uchar8_t)(crc&0x00ff)) ); //lsb
                cb+=sizeof(crc16_t);
             }
             //write to distant cpu
@@ -286,11 +286,11 @@ int memd_copy_to_cpu(int fd[],int secure){
 
 /*--------------------------------------------
 | Name:        memd_thread_copy_from_cpu
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void* memd_thread_copy_from_cpu(void* p){
    int *fd=(int*)p;
@@ -302,11 +302,11 @@ void* memd_thread_copy_from_cpu(void* p){
 
 /*--------------------------------------------
 | Name:        memd_cpu_sync
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int memd_cpu_sync(void){
 
@@ -320,12 +320,12 @@ int memd_cpu_sync(void){
 
    //set timeout
    tcgetattr(STDIN_FILENO,&_termios);
-   _termios.c_cc[VTIME]=1;//read timeout 1*0.1s= 100 ms
+   _termios.c_cc[VTIME]=1; //read timeout 1*0.1s= 100 ms
    tcsetattr(STDIN_FILENO,TCSANOW,&_termios);
    //
-   while(sync_c!=SYNC_C && sync_s!=SYNC_S){
+   while(sync_c!=SYNC_C && sync_s!=SYNC_S) {
       //send 'c'
-      if(sync_c!=SYNC_C){
+      if(sync_c!=SYNC_C) {
          char _c=SYNC_C;
          write(STDOUT_FILENO,&_c,1);
       }
@@ -334,13 +334,13 @@ int memd_cpu_sync(void){
          continue;
 
       //receive 'c' and send 's' for synchro with distant cpu
-      if(c==SYNC_C && !sync_s){
+      if(c==SYNC_C && !sync_s) {
          sync_s=SYNC_S;
          write(STDOUT_FILENO,&sync_s,1);
       }
 
       //receive 's' after send 'c' for synchro with distant cpu
-      if(c==SYNC_S){
+      if(c==SYNC_S) {
          sync_c=SYNC_C;
       }
 
@@ -349,7 +349,7 @@ int memd_cpu_sync(void){
    }
    //
    tcgetattr(STDIN_FILENO,&_termios);
-   _termios.c_cc[VTIME]=0;//no read timeout
+   _termios.c_cc[VTIME]=0; //no read timeout
    tcsetattr(STDIN_FILENO,TCSANOW,&_termios);
    //
    if(cpt<=0)
@@ -360,11 +360,11 @@ int memd_cpu_sync(void){
 
 /*--------------------------------------------
 | Name:        memd_main
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int memd_main(int argc,char* argv[]){
 
@@ -381,54 +381,54 @@ int memd_main(int argc,char* argv[]){
    char* __stdout=0;
 
    //get option
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               case 'i':
-                  opt |= OPT_MSK_I;
-                  //get stdin device
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  if(argv[i][c+1])
-                     break;
-                  if(argv[i+1][0]=='-')
-                     break;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
+            case 'i':
+               opt |= OPT_MSK_I;
+               //get stdin device
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               if(argv[i][c+1])
+                  break;
+               if(argv[i+1][0]=='-')
+                  break;
 
-                  i++;
-                  if(argv[i])
-                     __stdin = argv[i];
-                  if((opt&OPT_MSK_O) && !__stdout)
-                     __stdout = __stdin;
-
-               break;
-
-               case 'o':
-                  opt |= OPT_MSK_O;
-                  //get stdin device
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  if(argv[i][c+1])
-                     break;
-                  if(argv[i+1][0]=='-')
-                     break;
-
-                  i++;
-                  if(argv[i])
-                     __stdout = argv[i];
-                  if((opt&OPT_MSK_I) && !__stdin)
-                     __stdin = __stdout;
+               i++;
+               if(argv[i])
+                  __stdin = argv[i];
+               if((opt&OPT_MSK_O) && !__stdout)
+                  __stdout = __stdin;
 
                break;
 
-               case 'c':// only copy from cpu mode
-                  opt |= OPT_MSK_C;
+            case 'o':
+               opt |= OPT_MSK_O;
+               //get stdin device
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               if(argv[i][c+1])
+                  break;
+               if(argv[i+1][0]=='-')
+                  break;
+
+               i++;
+               if(argv[i])
+                  __stdout = argv[i];
+               if((opt&OPT_MSK_I) && !__stdin)
+                  __stdin = __stdout;
+
                break;
 
-               case 's':// secure mode (crc)
-                  opt |= OPT_MSK_S;
+            case 'c':   // only copy from cpu mode
+               opt |= OPT_MSK_C;
+               break;
+
+            case 's':   // secure mode (crc)
+               opt |= OPT_MSK_S;
                break;
 
             }
@@ -438,34 +438,34 @@ int memd_main(int argc,char* argv[]){
    }
 
    //open stdin
-   if((opt&OPT_MSK_I) && __stdin){
+   if((opt&OPT_MSK_I) && __stdin) {
       //close stdin
       close(STDIN_FILENO);
       //open keyboard
-      if((fd[0]=open(__stdin,O_RDONLY,0))<0){
+      if((fd[0]=open(__stdin,O_RDONLY,0))<0) {
          fprintf(stderr,"error: cannot open %s\r\n",__stdin);
          return -1;
       }
    }
 
    //open stdout
-   if((opt&OPT_MSK_O) && __stdout){
+   if((opt&OPT_MSK_O) && __stdout) {
       //close stdin
       close(STDOUT_FILENO);
       //open keyboard
-      if((fd[1]=open(__stdout,O_WRONLY,0))<0){
+      if((fd[1]=open(__stdout,O_WRONLY,0))<0) {
          fprintf(stderr,"error: cannot open %s\r\n",__stdout);
          return -1;
       }
    }
 
    //
-   if((fd[0] = open("/dev/net/slip",O_RDONLY,0))<0){
+   if((fd[0] = open("/dev/net/slip",O_RDONLY,0))<0) {
       printf("error: cannot open device /dev/slip \r\n");
       return 0;
    }
 
-   if((fd[1] = open("/dev/net/slip",O_WRONLY,0))<0){
+   if((fd[1] = open("/dev/net/slip",O_WRONLY,0))<0) {
       printf("error: cannot open device /dev/slip \r\n");
       return 0;
    }
@@ -477,14 +477,14 @@ int memd_main(int argc,char* argv[]){
    ioctl(fd[0],I_LINK,STDIN_FILENO);
    ioctl(fd[1],I_LINK,STDOUT_FILENO);
 
-   if(!(opt&OPT_MSK_C)){
+   if(!(opt&OPT_MSK_C)) {
       // copy_from_cpu and copy_to_cpu mode
       //thread com
-      #if __KERNEL_CPU_ARCH == CPU_ARCH_32
-         thread_attr.stacksize = 2048/*512*/;//m16c 512
-      #else
-         thread_attr.stacksize = 512;//m16c 512
-      #endif
+#if __KERNEL_CPU_ARCH == CPU_ARCH_32
+      thread_attr.stacksize = 2048 /*512*/;  //m16c 512
+#else
+      thread_attr.stacksize = 512;   //m16c 512
+#endif
       thread_attr.stackaddr = NULL;
       thread_attr.priority  = 100;
       thread_attr.timeslice = 1;

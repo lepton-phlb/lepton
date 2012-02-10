@@ -24,8 +24,8 @@
 /* four x8 devices interleaved to form x32              */
 /* #define LLD_CONFIGURATION X8_AS_X32 */
 
-/* two x16 devices interleaved to form x32              */ 
-//#define LLD_CONFIGURATION X16_AS_X32                 
+/* two x16 devices interleaved to form x32              */
+//#define LLD_CONFIGURATION X16_AS_X32
 
 /* two xx/x16 devices interleaved to for x32            */
 /* #define LLD_CONFIGURATION X8X16_AS_X32 */
@@ -57,13 +57,13 @@
 
 #ifdef TRACE
 /* This is a good place to add instrumentation.               */
-#define FLASH_WR(b,o,d)         FlashWrite(b, o, d)
-#define FLASH_RD(b,o)           FlashRead(b, o)
+   #define FLASH_WR(b,o,d)         FlashWrite(b, o, d)
+   #define FLASH_RD(b,o)           FlashRead(b, o)
 
 #else
 
-#define FLASH_WR(b,o,d)         FLASH_OFFSET((b),(o)) = (d)
-#define FLASH_RD(b,o)           FLASH_OFFSET((b),(o))
+   #define FLASH_WR(b,o,d)         FLASH_OFFSET((b),(o)) = (d)
+   #define FLASH_RD(b,o)           FLASH_OFFSET((b),(o))
 
 #endif
 
@@ -108,41 +108,41 @@
 /* Some of the functions require minimal delays.        */
 /* You need to provide info relative to your system     */
 #ifndef REMOVE_DELAY_MILLISECONDS
-#define DELAY_MS(milliseconds) DelayMilliseconds(milliseconds)
+   #define DELAY_MS(milliseconds) DelayMilliseconds(milliseconds)
 #endif
 #ifndef REMOVE_DELAY_MICROSECONDS
-#define DELAY_US(microseconds) DelayMicroseconds(microseconds)
+   #define DELAY_US(microseconds) DelayMicroseconds(microseconds)
 #endif
 /* Tell the LLD how many for loops of i=i it takes to burn    */
 /* up 1 microsecond of time.                                  */
-#define DELAY_1us 38//150 38:ARM7 at 32 MHz
+#define DELAY_1us 38 //150 38:ARM7 at 32 MHz
 
 /* NOTICE
-MirrorBit flash devices requires 4us from the time    
-a programming command is issued before the data polling 
+MirrorBit flash devices requires 4us from the time
+a programming command is issued before the data polling
 bits can be read.  Without the delay, it is likely
 that you will read invalid status from the flash.
 The invalid status may lead the software to believe
-that programming finished early without problems or 
-that programming failed.  If your system has more 
-than 4us of delay inherently, you don't need any 
-additional delay.  Otherwise, change the #undef to 
+that programming finished early without problems or
+that programming failed.  If your system has more
+than 4us of delay inherently, you don't need any
+additional delay.  Otherwise, change the #undef to
 a #define
 WAIT_4us_FOR_DATA_POLLING_BITS_TO_BECOME_ACTIVE
-in lld.h.  Make sure your optimization does not          
-remove the delay loop.  You must replace DELAY_4us    
-with a value which makes sense for your system.       
+in lld.h.  Make sure your optimization does not
+remove the delay loop.  You must replace DELAY_4us
+with a value which makes sense for your system.
 
-It is possible to suspend the erase operation 
-with such frequency that it is unable to complete 
-the erase operation and eventually times-out.                                            
-Change the #undef to #define PAUSE_BETWEEN_ERASE_SUSPENDS 
-in lld.h if you are using erase suspend and the 
+It is possible to suspend the erase operation
+with such frequency that it is unable to complete
+the erase operation and eventually times-out.
+Change the #undef to #define PAUSE_BETWEEN_ERASE_SUSPENDS
+in lld.h if you are using erase suspend and the
 following is true.
-Time between suspends is less that 10 milliseconds    
-AND total number of suspends per erase can exceed 5000.         
-Make sure that your optimization does not remove the  
-delay loop.  You must replace DELAY_10ms with a value 
+Time between suspends is less that 10 milliseconds
+AND total number of suspends per erase can exceed 5000.
+Make sure that your optimization does not remove the
+delay loop.  You must replace DELAY_10ms with a value
 which make sense in your system.
 
 If you are using MirrorBit devices, change the macro
@@ -154,8 +154,8 @@ email us at software@spansion.com or go to www.ask.amd.com.
 #define MIRRORBIT_DEVICE
 
 #ifdef MIRRORBIT_DEVICE
-#define WAIT_4us_FOR_DATA_POLLING_BITS_TO_BECOME_ACTIVE
-#undef  PAUSE_BETWEEN_ERASE_SUSPENDS
+   #define WAIT_4us_FOR_DATA_POLLING_BITS_TO_BECOME_ACTIVE
+   #undef  PAUSE_BETWEEN_ERASE_SUSPENDS
 #endif
 
 

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -59,40 +59,40 @@ either the MPL or the [eCos GPL] License."
 
 // Uart Generic base Information for RS232
 //
-typedef struct{
+typedef struct {
    AT91_REG        *base_adr;
-   unsigned char   periph_id;   // peripheric ID
+   unsigned char periph_id;     // peripheric ID
 
-   int   ind_pio_rxd;
-   int   ind_pio_txd;
+   int ind_pio_rxd;
+   int ind_pio_txd;
 
-   int             o_flag;
-   desc_t          desc_r;
-   desc_t          desc_w;
+   int o_flag;
+   desc_t desc_r;
+   desc_t desc_w;
 
-   void            (* f_timer_call_back)(void);
-   int             loaded;
+   void (* f_timer_call_back)(void);
+   int loaded;
 
-   kernel_pthread_mutex_t   mutex;
+   kernel_pthread_mutex_t mutex;
 
    fifo_buf_pool_t fifo_buf_pool[MAX_POOL];
-   char            fifo_input_buffer[UART_FIFO_INPUT_BUFFER_SZ+1];
-   volatile int             buf_in_dma_no;
-   volatile int             buf_in_rcv_no;
-   char            output_buffer[UART_OUTPUT_BUFFER_SIZE+1];
-   volatile signed int      input_r;
-   volatile signed int      input_w;
-   volatile signed int      output_r;
-   volatile signed int      output_w;
-   desc_t          desc_rd;
-   desc_t          desc_wr;
+   char fifo_input_buffer[UART_FIFO_INPUT_BUFFER_SZ+1];
+   volatile int buf_in_dma_no;
+   volatile int buf_in_rcv_no;
+   char output_buffer[UART_OUTPUT_BUFFER_SIZE+1];
+   volatile signed int input_r;
+   volatile signed int input_w;
+   volatile signed int output_r;
+   volatile signed int output_w;
+   desc_t desc_rd;
+   desc_t desc_wr;
 
    //VTIME timer in units of 0.1 seconds (posix specification).
    tmr_t timer;
    rttmr_attr_t timer_attr;
-   char            inter_char_timer;
-   unsigned char   XMIT;
-	int rcv_flag;
+   char inter_char_timer;
+   unsigned char XMIT;
+   int rcv_flag;
    struct termios ttys_termios;
 
 }board_inf_uart_t;

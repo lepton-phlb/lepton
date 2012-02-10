@@ -6,9 +6,9 @@
 | Source:          tstsd.c
 | Path:
 | Authors:
-| Plateform:   	GNU/Linux
+| Plateform:    GNU/Linux
 | Created:
-| Revision/Date: 	$Revision:$ / $Date:$
+| Revision/Date:        $Revision:$ / $Date:$
 | Description:
 |---------------------------------------------*/
 
@@ -43,17 +43,17 @@
 #define BLOCK_SIZE   512
 #define MAX_BUF_SIZE 4096
 
-#define MIN(__x__, __y__)  ((__x__)>(__y__))?(__y__):(__x__)
-#define MAX(__x__, __y__)  ((__x__)>(__y__))?(__x__):(__y__)
+#define MIN(__x__, __y__)  ((__x__)>(__y__)) ? (__y__) : (__x__)
+#define MAX(__x__, __y__)  ((__x__)>(__y__)) ? (__x__) : (__y__)
 
 #if defined(CPU_GNU32)
-#define SD_DEV       "/dev/sdcard0"
+   #define SD_DEV       "/dev/sdcard0"
 #else
-#if defined(CPU_ARM9)
-#define SD_DEV       "/dev/hd/sd0"
-#else //CORTEXM
-#define SD_DEV       "/dev/hd/sdhc0"
-#endif
+   #if defined(CPU_ARM9)
+      #define SD_DEV       "/dev/hd/sd0"
+   #else //CORTEXM
+      #define SD_DEV       "/dev/hd/sdhc0"
+   #endif
 #endif
 
 static char buf_wr[MAX_BUF_SIZE];
@@ -61,14 +61,14 @@ static char buf_rd[MAX_BUF_SIZE];
 
 #define BUF_SIZE_VALUES_NB_TEST2    8
 static unsigned int tstsd_buffer_size_value[BUF_SIZE_VALUES_NB_TEST2] = {
-      15,
-      2048,
-      511,
-      3051,
-      46,
-      127,
-      728,
-      30
+   15,
+   2048,
+   511,
+   3051,
+   46,
+   127,
+   728,
+   30
 };
 
 static unsigned int tstsd_max_time_wr[BUF_SIZE_VALUES_NB_TEST2];
@@ -90,8 +90,8 @@ static unsigned int tstsd_diff_time(unsigned int  *time_memo);
 | See:
 ----------------------------------------------*/
 unsigned int tstsd_diff_time(unsigned int  *time_memo) {
-   unsigned int  time_cur;
-   unsigned int  val;
+   unsigned int time_cur;
+   unsigned int val;
    struct    timespec tp;
 
    clock_gettime(CLOCK_MONOTONIC, &tp);
@@ -158,7 +158,7 @@ int tstsd_main(int argc,char* argv[]) {
 
       w = 0;
       cb_wr = 0;
-      while((cb_wr+=w) < tstsd_buffer_size_value[index]){
+      while((cb_wr+=w) < tstsd_buffer_size_value[index]) {
          if((w=write(fd, buf_wr+cb_wr, tstsd_buffer_size_value[index]-cb_wr))<=0) {
             close(fd);
             fprintf(stderr, "close cb_wr : %d [%d]\r\n", cb_wr, total_wr);
@@ -174,7 +174,8 @@ int tstsd_main(int argc,char* argv[]) {
       }
 
       tstsd_max_time_wr[index] = MAX(tstsd_max_time_wr[index], diff_wr);
-      tstsd_min_time_wr[index] = (tstsd_min_time_wr[index] == 0)? diff_wr:tstsd_min_time_wr[index];
+      tstsd_min_time_wr[index] =
+         (tstsd_min_time_wr[index] == 0) ? diff_wr : tstsd_min_time_wr[index];
       tstsd_min_time_wr[index] = MIN(tstsd_min_time_wr[index], diff_wr);
 
       printf("%d) WR %c (%d) %d ms\r\n", count_wr, c, cb_wr, diff_wr);
@@ -186,12 +187,12 @@ int tstsd_main(int argc,char* argv[]) {
 
       r=0;
       cb_rd=0;
-      while((cb_rd+=r) < cb_wr){
+      while((cb_rd+=r) < cb_wr) {
          if((r=read(fd, buf_rd+cb_rd, cb_wr-cb_rd)) <= 0) {
             close(fd);
             fprintf(stderr, "[close] cb_rd : %d r : %d [%d]\r\n", cb_rd, r, total_wr);
             ok = 0;
-            break;//return -1;
+            break; //return -1;
          }
          count_rd++;
       }
@@ -202,7 +203,8 @@ int tstsd_main(int argc,char* argv[]) {
       }
 
       tstsd_max_time_rd[index] = MAX(tstsd_max_time_rd[index], diff_rd);
-      tstsd_min_time_rd[index] = (tstsd_min_time_rd[index] == 0)? diff_rd:tstsd_min_time_rd[index];
+      tstsd_min_time_rd[index] =
+         (tstsd_min_time_rd[index] == 0) ? diff_rd : tstsd_min_time_rd[index];
       tstsd_min_time_rd[index] = MIN(tstsd_min_time_rd[index], diff_rd);
 
       printf("%d] rd (%d) %ld ms\r\n", count_rd, cb_rd, diff_rd);

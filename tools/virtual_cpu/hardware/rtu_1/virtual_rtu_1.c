@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -46,7 +46,7 @@ either the MPL or the [eCos GPL] License."
 #include "virtual_ioctl.h"
 
 #ifndef  DEV_RTU1
-#define  DEV_RTU1  "/dev/ttyS1"
+   #define  DEV_RTU1  "/dev/ttyS1"
 #endif
 
 char rtu1_name[] = DEV_RTU1;
@@ -89,14 +89,14 @@ int virtual_rtu1_open(void * data) {
 
    //descriptor and memory are already available
    if(virtual_rtu1.fd>0)  {
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       DEBUG_TRACE("(F) Already open %s [%d:%d]\n", virtual_rtu1.name, cmd.hdwr_id, cmd.cmd);
       return 0;
    }
 
    //try to open rtu descriptor
    if((virtual_rtu1.fd = open(virtual_rtu1.name, O_RDWR| O_NONBLOCK))<0) {
-      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+      while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
       DEBUG_TRACE("(F) Can't open %s\n", virtual_rtu1.name);
       perror("open");
       return -1;
@@ -130,7 +130,7 @@ int virtual_rtu1_open(void * data) {
    }
 
 
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    DEBUG_TRACE("(F) %d open rtu1 ok..\n", virtual_rtu1.fd);
 
    return 0;
@@ -143,7 +143,7 @@ int virtual_rtu1_close(void * data) {
    DEBUG_TRACE("(F) virtual_rtu1_close\n");
    close(virtual_rtu1.fd);
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    return 0;
 }
 
@@ -152,16 +152,17 @@ int virtual_rtu1_read(void * data) {
    virtual_cmd_t cmd={SERIAL_1, OPS_READ};
    virtual_cpu_t * vcpu = (virtual_cpu_t *)data;
    //
-   if((rtu_1_data->size_in = read(virtual_rtu1.fd, (void *)rtu_1_data->data_in, SHM_SERIAL_SIZE)) < 0) {
+   if((rtu_1_data->size_in =
+          read(virtual_rtu1.fd, (void *)rtu_1_data->data_in, SHM_SERIAL_SIZE)) < 0) {
       return -1;
    }
 
    kill(getppid(), SIGIO);
-   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //
    DEBUG_TRACE("(F) virtual_rtu1_read\n");
    //
-   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //
    DEBUG_TRACE("(F) virtual_rtu1_read2:[%d-%d]\n", cmd.hdwr_id, cmd.cmd);
    return 0;
@@ -176,15 +177,15 @@ int virtual_rtu1_write(void * data) {
    write(virtual_rtu1.fd, (const void *)rtu_1_data->data_out, rtu_1_data->size_out);
    DEBUG_TRACE("(F)********[%d]*******\n", rtu_1_data->size_out);
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    cmd.cmd =OPS_WRITE;
    cmd.hdwr_id=SERIAL_1;
    //
    kill(getppid(), SIGIO);
    //manage IRQ
-   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(vcpu->app2synth, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //kill(getppid(), SIGIO);
-   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(read(vcpu->synth2app, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
    //
    DEBUG_TRACE("(F)++++++++\n[%d-%d]\n", cmd.hdwr_id, cmd.cmd);
    return 0;
@@ -205,7 +206,7 @@ int virtual_rtu1_ioctl(void * data) {
    memcpy((void *)&request, (void *)rtu_1_data->data_ioctl, sizeof(int));
    DEBUG_TRACE("request : %d\n", request);
    switch(request) {
-   case V_TIOCSSERIAL :
+   case V_TIOCSSERIAL:
    {
       //get speed
       unsigned long speed;
@@ -223,10 +224,10 @@ int virtual_rtu1_ioctl(void * data) {
 
    default:
       DEBUG_TRACE("default\n");
-   break;
+      break;
    }
    //
-   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t));
+   while(write(1, (void *)&cmd, sizeof(virtual_cmd_t)) !=sizeof(virtual_cmd_t)) ;
 
    return 0;
 }

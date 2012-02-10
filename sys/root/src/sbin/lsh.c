@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -138,12 +138,12 @@ int check_script(char* ref, int* argc, char* argv[], const char* arge[]){
 
    //open exec file
    fd=open(ref,O_RDONLY,0);
-   if(fd<0){//error: file not exist
-      while(arge[i]){
+   if(fd<0) { //error: file not exist
+      while(arge[i]) {
 
          strcpy(env_path,arge[i]);
 
-         if(ref[0]!='/'){
+         if(ref[0]!='/') {
             int len = strlen(arge[i]);
             env_path[len]='/';
             env_path[len+1]='\0';
@@ -155,31 +155,31 @@ int check_script(char* ref, int* argc, char* argv[], const char* arge[]){
          i++;
       }
       if(fd<0)
-         return 0;//cannot find.
-         //is not an error.
+         return 0;  //cannot find.
+      //is not an error.
    }
 
-   if(fstat(fd,&_stat)<0){
+   if(fstat(fd,&_stat)<0) {
       close(fd);
       return -1;
    }
 
    //must be a regular file
-   if(!S_ISREG(_stat.st_mode)){
+   if(!S_ISREG(_stat.st_mode)) {
       close(fd);
       return -1;
    }
    //check
    read(fd,buf,1);
-   if(buf[0]==0x1b){
+   if(buf[0]==0x1b) {
       close(fd);
-      return 0;//is not a shell script :( it's a binary file.
+      return 0; //is not a shell script :( it's a binary file.
       //is not an error.
    }
    close(fd);
 
    //it's a shell script :)
-   for(i=*argc;i>0;i--){
+   for(i=*argc; i>0; i--) {
       argv[i] = argv[i-1];
    }
 
@@ -198,8 +198,9 @@ int check_script(char* ref, int* argc, char* argv[], const char* arge[]){
 | Comments:
 | See:
 ---------------------------------------------*/
-static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],unsigned int* p_opt,char verbose){
-   int   argc=0;
+static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],unsigned int* p_opt,
+                     char verbose){
+   int argc=0;
    char* argv[ARG_MAX]={0};
 
    int error = 0;
@@ -226,22 +227,22 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
       return 0;
 
    //save original stdin
-   fdin = dup(STDIN_FILENO);//WARNING!!! dont forget to close it before return;
+   fdin = dup(STDIN_FILENO); //WARNING!!! dont forget to close it before return;
    if(fdin<0)
       return -1;
 
    if(p[0]=='#')
       st=GET_COMMENT;
    //
-   for(i=0;(i<=len && p);i++){
+   for(i=0; (i<=len && p); i++) {
 
       if( (string[i]==sep_cmd || string[i]=='\'')
-         && (st==GET_CMD || st==GET_ARG) ){
+          && (st==GET_CMD || st==GET_ARG) ) {
 
-         if(string[i]=='\'' && sep_cmd==' '){
+         if(string[i]=='\'' && sep_cmd==' ') {
             sep_cmd = '\'';
             st=GET_ARG;
-         }else if(string[i]=='\'' && sep_cmd=='\''){
+         }else if(string[i]=='\'' && sep_cmd=='\'') {
             sep_cmd = ' ';
             st=GET_CMD;
          }
@@ -251,24 +252,24 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          p = &string[i+1];
          if(p[0]=='#')
             st=GET_COMMENT;
-      }else if(string[i]==' ' && st==GET_STDIN){
+      }else if(string[i]==' ' && st==GET_STDIN) {
          string[i]=0x00;
-         if(strlen(p)){
+         if(strlen(p)) {
             __stdin=p;
             st=GET_CMD;
          }
          p = &string[i+1];
-      }else if(string[i]==' ' && st==GET_STDOUT){
+      }else if(string[i]==' ' && st==GET_STDOUT) {
          string[i]=0x00;
-         if(strlen(p)){
+         if(strlen(p)) {
             __stdout=p;
             st=GET_CMD;
          }
          p = &string[i+1];
-      }else if(string[i]==' ' && st==GET_POSPRM){
+      }else if(string[i]==' ' && st==GET_POSPRM) {
          //postionnal parameter $1 $2 ...
          string[i]=0x00;
-         if(strlen(p)){
+         if(strlen(p)) {
             //0:"/usr/bin/lsh"; 1:"script name"; 2:"first parameter"; 3:"second parameter" etc...
             int pos= atoi(p)+1;
             if( (pos < p_argc) && (pos< ARG_MAX) )
@@ -278,32 +279,32 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          }
          st=GET_CMD;
          p = &string[i+1];
-      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '<' ){
+      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '<' ) {
          st=GET_STDIN;
          string[i]=0x00;
          if(strlen(p))
             argv[argc++]=p;
          p = &string[i+1];
-      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '>' ){
+      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '>' ) {
          st=GET_STDOUT;
          string[i]=0x00;
          if(strlen(p))
             argv[argc++]=p;
          p = &string[i+1];
-      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '$' ){
-         st=GET_POSPRM;//postionnal parameter $1 $2 ...
+      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '$' ) {
+         st=GET_POSPRM; //postionnal parameter $1 $2 ...
          string[i]=0x00;
          if(strlen(p))
             argv[argc++]=p;
          p = &string[i+1];
-      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '!' ){
+      }else if(st!=GET_COMMENT && st!=GET_ARG && string[i] == '!' ) {
          if(!last_cmd)
             continue;
          //insert last cmd
          if(string[i+1]!='!')
             continue;
          if((i+strlen(&string[i+2]))>=CMD_MAX)
-            return -1;//command too long
+            return -1;  //command too long
 
          strcat(last_cmd,&string[i+2]);
          strcpy(&string[i],last_cmd);
@@ -312,9 +313,9 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          flg_recall_lastcmd = 1;
          continue;
       }else if(string[i] == ';'
-            || string[i] == '|'
-            || string[i] == '\n'
-            || string[i] == '\0'){
+               || string[i] == '|'
+               || string[i] == '\n'
+               || string[i] == '\0') {
          char sep = string[i];
          int error=0;
          int fd[2];
@@ -322,11 +323,11 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          fd[1]=-1;
 
          //last cmd
-         if(string[i]=='\n' || string[i]=='\0'){
-            if(last_cmd){
+         if(string[i]=='\n' || string[i]=='\0') {
+            if(last_cmd) {
                int j;
                memcpy(last_cmd,string,CMD_MAX);
-               for(j=0;j<len;j++){
+               for(j=0; j<len; j++) {
                   if(!last_cmd[j])
                      last_cmd[j]=' ';
                }
@@ -343,8 +344,8 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
 
          //
          string[i]=0x00;
-         if(strlen(p)){
-            if(st==GET_COMMENT){
+         if(strlen(p)) {
+            if(st==GET_COMMENT) {
                if(fdin>=0)
                   close(fdin);
                return error;
@@ -354,7 +355,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
                __stdin=p;
             else if(st==GET_STDOUT)
                __stdout=p;
-            else if(st==GET_POSPRM){
+            else if(st==GET_POSPRM) {
                //postionnal parameter $1 $2 ...
                int pos= atoi(p);
                if( (pos < p_argc) && (pos< ARG_MAX) )
@@ -362,7 +363,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
                else
                   argv[argc]=(char*)0;
             }
-         }else if(!argc){
+         }else if(!argc) {
             if(fdin>=0)
                close(fdin);
             return error;
@@ -370,25 +371,25 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          p = &string[i+1];
 
          //
-         if(!argc){
+         if(!argc) {
             error = -1;
             break;
          }
 
          //inline command
-         if(!strcmp(argv[0],"cd")){
+         if(!strcmp(argv[0],"cd")) {
             //inline command: cd.
-            if(argc<2){//not enough argument
+            if(argc<2) { //not enough argument
                error = -1;
                break;
             }
 
-            if(argc>2){//too much argument
+            if(argc>2) { //too much argument
                error = -1;
                break;
             }
 
-            if(argv[1]=='\0'){
+            if(argv[1]=='\0') {
                error = -1;
                break;
             }
@@ -397,7 +398,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
                close(fdin);
 
             return chdir(argv[1]);
-         }else if(!strcmp(argv[0],"exit")){
+         }else if(!strcmp(argv[0],"exit")) {
             int exit_code=1;
             if(fdin>=0)
                close(fdin);
@@ -406,52 +407,52 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
                exit_code = atoi(argv[1]);
 
             return exit_code;
-         }else if( !strcmp(argv[0],"set") || !strcmp(argv[0],"unset")){
+         }else if( !strcmp(argv[0],"set") || !strcmp(argv[0],"unset")) {
             int i;
-            int setunset=0;//0: unset, 1: set:
+            int setunset=0; //0: unset, 1: set:
             if( !strcmp(argv[0],"set") )
-               setunset = 1;//set
+               setunset = 1;  //set
 
-            if(argc<2){//no parameter
-               if(setunset){//set
+            if(argc<2) { //no parameter
+               if(setunset) { //set
                   //show all
                   printf("option=");
-                  if((*p_opt)&OPT_MSK_X){
+                  if((*p_opt)&OPT_MSK_X) {
                      printf(SET_OPT_XONXOFF);
                   }
                   printf(";\r\n");
                   return 0;
-               }else{//unset
-                  //no action
+               }else{ //unset
+                      //no action
                   return 0;
                }
             }
 
-            for(i=1;i<argc;i++){
+            for(i=1; i<argc; i++) {
                if(!argv[i])
                   return 0;
-               if(!strcmp(argv[i],SET_OPT_XONXOFF)){
-                  if(setunset)//set
+               if(!strcmp(argv[i],SET_OPT_XONXOFF)) {
+                  if(setunset) //set
                      (*p_opt) = ((*p_opt) |OPT_MSK_X);
-                  else//unset
+                  else //unset
                      (*p_opt) = ((*p_opt) & (~(OPT_MSK_X)) );
                   //xon/xoff flow control synchro
                }else{
                   printf(" %s is not a valid option\r\n",argv[i]);
                }
 
-            }//end for
+            } //end for
 
             return 0;
          }
 
          //
-         if(__stdin!=0){
+         if(__stdin!=0) {
             struct stat _stat;
             //printf("open __stdin %s\r\n",__stdin);
             if(stat(__stdin,&_stat)<0)
                return -1;
-            if(S_ISFIFO(_stat.st_mode)){
+            if(S_ISFIFO(_stat.st_mode)) {
                int oflag;
                if((fd[0]=open(__stdin,O_RDONLY|O_NONBLOCK,0))<0)
                   return -1;
@@ -464,7 +465,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
             }
          }
 
-         if(__stdout!=0){
+         if(__stdout!=0) {
             //printf("open __stdout %s\r\n",__stdout);
             fd[1]=open(__stdout,O_WRONLY|O_CREAT|O_TRUNC,0);
          }
@@ -473,7 +474,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          error=check_script(argv[0],&argc,argv,lsh_env);
 
          //
-         if(!error && sep == '|'){
+         if(!error && sep == '|') {
             //to do: if flg_bckg_process == 1 grammatical error
             int pp[2];
             pp[0]=-1;
@@ -486,9 +487,9 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
                fd[1]=pp[1];
 
 
-            if(!(pid = vfork())){
+            if(!(pid = vfork())) {
                //printf("exec 1 %s\r\n",argv[0]);
-               if(fd[1]>=0){
+               if(fd[1]>=0) {
                   close(STDOUT_FILENO);
                   dup(fd[1]);
                   close(fd[1]);
@@ -507,7 +508,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
             }
 
             //
-            if(fd[0]>=0){
+            if(fd[0]>=0) {
                close(STDIN_FILENO);
                dup(fd[0]);
                close(fd[0]);
@@ -515,21 +516,21 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
             }
 
             //
-            if(fd[1]>=0){
+            if(fd[1]>=0) {
                close(fd[1]);
                fd[1]=-1;
             }
-         }else if(!error){
+         }else if(!error) {
 
             //
-            if(!(pid = vfork())){
+            if(!(pid = vfork())) {
                //printf("exec 2 %s\r\n",argv[0]);
-               if(fd[0]>=0){
+               if(fd[0]>=0) {
                   close(STDIN_FILENO);
                   dup(fd[0]);
                   close(fd[0]);
                }
-               if(fd[1]>=0){
+               if(fd[1]>=0) {
                   close(STDOUT_FILENO);
                   dup(fd[1]);
                   close(fd[1]);
@@ -555,16 +556,16 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
             if(fd[1]>=0)
                close(fd[1]);
 
-            if(!error && !flg_bckg_process && pid>0 &&  sep != '|'){
-               while((pid=waitpid((pid_t)0,&status,0))>0){
+            if(!error && !flg_bckg_process && pid>0 &&  sep != '|') {
+               while((pid=waitpid((pid_t)0,&status,0))>0) {
                   if(!status && verbose)
                      printf("[%d] done(%d)\r\n",pid,status);
-                  else if(status){
+                  else if(status) {
                      fprintf(stderr,"error: [%d] done(%d)\r\n",pid,status);
                      //to do: print on console explicit message
                   }
                };
-            //printf("\r\n");
+               //printf("\r\n");
             }
 
          }
@@ -574,7 +575,7 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
          __stdin=0;
          __stdout=0;
          st=GET_CMD;
-      }else if(st!=GET_COMMENT && string[i] == '&' ){
+      }else if(st!=GET_COMMENT && string[i] == '&' ) {
          //set flag bakground process flg_bckg_process;
          flg_bckg_process = 1;
          string[i]=0x00;
@@ -595,40 +596,40 @@ static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],uns
 ---------------------------------------------*/
 static int rdstream(FILE* fin,FILE* fout,char *buf, int len)
 {
-	int i = 0;
-	signed char ch;
+   int i = 0;
+   signed char ch;
 
-	while(1){
+   while(1) {
 
       ch = fgetc(fin);
       //to do: up down key filter.
 
-		switch(ch){
+      switch(ch) {
       case -1:
          return -1;
 
 
-      case 127://DEL
-		case   8://^H
-			if(i>0){
-				putc(8,fout);//^H
-            putc(' ',fout);//^H
-            putc(8,fout);//^H
-				i --;
-			}
-			break;
+      case 127: //DEL
+      case   8:          //^H
+         if(i>0) {
+            putc(8,fout);                    //^H
+            putc(' ',fout); //^H
+            putc(8,fout); //^H
+            i--;
+         }
+         break;
 
       //
-      case '\x18'://ctrl-x:exit
+      case '\x18': //ctrl-x:exit
          putc('\r',fout);
-			putc('\n',fout);
+         putc('\n',fout);
          exit(0);
-      break;
+         break;
 
       //
       case '\0':
 //#if defined(CPU_GNU32)
-//    	  if(!i)	continue;
+//        if(!i)	continue;
 //#endif
          buf[i] = 0;
          return i;
@@ -641,31 +642,31 @@ static int rdstream(FILE* fin,FILE* fout,char *buf, int len)
          putc('\r',fout);
          return i;
 #endif
-      break;
+         break;
 
       case '\r':
-			buf[i] = 0;
+         buf[i] = 0;
          putc(ch,fout);
          putc('\n',fout);
-      	return i;
+         return i;
 
       //
-		default:
+      default:
          if(ch<32 || ch>126)
             break;
 
-			buf[i] = ch;
+         buf[i] = ch;
 //#if !defined(CPU_GNU32)
-			putc(ch,fout);
+         putc(ch,fout);
 //#endif
-			if(++i==len){
+         if(++i==len) {
             fprintf(stderr,"\r\nerror: command line is too long (60 char max).\r\n");
             return ENOMEM;
          }
-		}
-	}
+      }
+   }
 
-	return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -678,22 +679,22 @@ static int rdstream(FILE* fin,FILE* fout,char *buf, int len)
 ---------------------------------------------*/
 static int rdstream_noecho(FILE* fstream,char *buf, int len)
 {
-	int i = 0;
-	signed char ch;
+   int i = 0;
+   signed char ch;
 
-	while(1){
+   while(1) {
 
       ch = fgetc(fstream);
       //to do: up down key filter.
 
-		switch(ch){
+      switch(ch) {
       case -1:
          return -1;
 
       //
-      case '\x18'://ctrl-x:exit
+      case '\x18': //ctrl-x:exit
          exit(0);
-      break;
+         break;
 
       //
       case '\0':
@@ -702,28 +703,28 @@ static int rdstream_noecho(FILE* fstream,char *buf, int len)
 
       //
       case '\n':
-        buf[i] = 0;
-        return i;
+         buf[i] = 0;
+         return i;
       //break;
 
       case '\r':
-			buf[i] = 0;
-      	return i;
+         buf[i] = 0;
+         return i;
 
       //
-		default:
+      default:
          if(ch<32 || ch>126)
             break;
 
-			buf[i] = ch;
-         if(++i==len){
+         buf[i] = ch;
+         if(++i==len) {
             fprintf(stderr,"\r\nerror: command line is too long (60 char max).\r\n");
             return ENOMEM;
          }
-		}
-	}
+      }
+   }
 
-	return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -758,27 +759,27 @@ int lsh_main(int argc, char* argv[])
 
    //silent mode for script shell
    //get option
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               case 'v':
-                  opt |= OPT_MSK_V;
-                  //verbose
-                  verbose = 1;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
+            case 'v':
+               opt |= OPT_MSK_V;
+               //verbose
+               verbose = 1;
                break;
 
-               case 'e':
-                  opt |= OPT_MSK_E;
-                  //echo
-                  fout = stderr;
+            case 'e':
+               opt |= OPT_MSK_E;
+               //echo
+               fout = stderr;
                break;
 
-               case 'x':
-                  opt |= OPT_MSK_X;
-                  //xon/xof flow control
+            case 'x':
+               opt |= OPT_MSK_X;
+               //xon/xof flow control
                break;
             }
          }
@@ -792,12 +793,12 @@ int lsh_main(int argc, char* argv[])
          //execute script
          fstream = fopen(argv[i],"r");
          //
-         if(!fstream){//error: file not exist
-            while(lsh_env[e]){
+         if(!fstream) { //error: file not exist
+            while(lsh_env[e]) {
 
                strcpy(buf,lsh_env[e]);
 
-               if(argv[i][0]!='/'){
+               if(argv[i][0]!='/') {
                   int len = strlen(lsh_env[e]);
                   buf[len]='/';
                   buf[len+1]='\0';
@@ -808,7 +809,7 @@ int lsh_main(int argc, char* argv[])
                   break;
                e++;
             }
-            if(!fstream){
+            if(!fstream) {
                fprintf(stderr,"cannot open script file : %s\r\n",argv[i]);
                return -1;
             }
@@ -817,16 +818,16 @@ int lsh_main(int argc, char* argv[])
          //
          //setpgid(0,0);
          //
-         if(!verbose){
-            while(rdstream_noecho(fstream,buf,CMD_MAX)>=0){
-               if((exit_code = parse_cmd((char*)0/*last_cmd*/,buf,argc,argv,&opt,verbose))>0){
+         if(!verbose) {
+            while(rdstream_noecho(fstream,buf,CMD_MAX)>=0) {
+               if((exit_code = parse_cmd((char*)0 /*last_cmd*/,buf,argc,argv,&opt,verbose))>0) {
                   fclose(fstream);
                   exit(exit_code);
                }
             }
          }else{
-            while(rdstream(fstream,stdout,buf,CMD_MAX)>=0){
-               if((exit_code = parse_cmd((char*)0/*last_cmd*/,buf,argc,argv,&opt,verbose))>0){
+            while(rdstream(fstream,stdout,buf,CMD_MAX)>=0) {
+               if((exit_code = parse_cmd((char*)0 /*last_cmd*/,buf,argc,argv,&opt,verbose))>0) {
                   fclose(fstream);
                   exit(exit_code);
                }
@@ -845,7 +846,7 @@ int lsh_main(int argc, char* argv[])
    //
 
    //
-   for(;;){
+   for(;; ) {
       int status;
       pid_t _pid;
       int error;
@@ -860,16 +861,16 @@ int lsh_main(int argc, char* argv[])
       if(opt&OPT_MSK_X)
          write(1,&_c_xon_,1);
 
-      if(!(opt&OPT_MSK_E) && ((error=rdstream(stdin,fout,buf,CMD_MAX))<0)){
+      if(!(opt&OPT_MSK_E) && ((error=rdstream(stdin,fout,buf,CMD_MAX))<0)) {
          if(error==ENOMEM)
-            continue;//line too long
+            continue;  //line too long
          //else
-         return 0;//end of file or remote connection down.
-      }else if((opt&OPT_MSK_E) && ((error=rdstream_noecho(stdin,buf,CMD_MAX))<0)){
+         return 0; //end of file or remote connection down.
+      }else if((opt&OPT_MSK_E) && ((error=rdstream_noecho(stdin,buf,CMD_MAX))<0)) {
          if(error==ENOMEM)
-            continue;//line too long
+            continue;  //line too long
          //else
-         return 0;//end of file or remote connection down.
+         return 0; //end of file or remote connection down.
       }
 
       //send xoff: wait end of command
@@ -879,11 +880,11 @@ int lsh_main(int argc, char* argv[])
       //
 
       //interpret command line
-      if((exit_code=parse_cmd((char*)0/*last_cmd*/,buf,argc,argv,&opt,verbose))>0)
+      if((exit_code=parse_cmd((char*)0 /*last_cmd*/,buf,argc,argv,&opt,verbose))>0)
          exit(exit_code);
 
       //wait backgroud process termination (&)
-      while((_pid=waitpid((pid_t)-1,&status,WNOHANG))>0){
+      while((_pid=waitpid((pid_t)-1,&status,WNOHANG))>0) {
          if(!status && verbose)
             printf("+[%d] done(%d)\r\n",_pid,status);
          else if(status)
@@ -891,7 +892,7 @@ int lsh_main(int argc, char* argv[])
       };
    }
 
-	return 0;
+   return 0;
 }
 
 

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -39,13 +39,13 @@ Includes
 #include <string.h>
 
 #if defined(GNU_GCC)
-#include <stdlib.h>
+   #include <stdlib.h>
 #endif
 /*===========================================
 Global Declaration
 =============================================*/
 #if defined(USE_ECOS)
-	#include <cyg/hal/hal_io.h>
+   #include <cyg/hal/hal_io.h>
 #endif
 
 #define __KERNEL_PTHREAD_ID_LIMIT 1024
@@ -76,15 +76,15 @@ int kernel_init_pthread(kernel_pthread_t* p){
    p->io_desc =(desc_t)-1;
 
    //init counter
-   g_pthread_id=((g_pthread_id<__KERNEL_PTHREAD_ID_LIMIT)?g_pthread_id+1:0);
+   g_pthread_id=((g_pthread_id<__KERNEL_PTHREAD_ID_LIMIT) ? g_pthread_id+1 : 0);
    pthread_ptr=g_pthread_lst;
    //
-   while(pthread_ptr){
-      if(pthread_ptr->id==g_pthread_id){
-         g_pthread_id=((g_pthread_id<__KERNEL_PTHREAD_ID_LIMIT)?g_pthread_id+1:0);
+   while(pthread_ptr) {
+      if(pthread_ptr->id==g_pthread_id) {
+         g_pthread_id=((g_pthread_id<__KERNEL_PTHREAD_ID_LIMIT) ? g_pthread_id+1 : 0);
          pthread_ptr=g_pthread_lst;
          if((++counter)>__KERNEL_PTHREAD_ID_LIMIT)
-            return -1;//error no id available
+            return -1;  //error no id available
          continue;
       }
       pthread_ptr=pthread_ptr->gnext;
@@ -188,13 +188,13 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
    //to do:must be check with current stack addr
    p_heap_1byte+=(unsigned long)size;
    {
-     uint32_t _stack_addr = (uint32_t)p_heap_1byte;
-     uchar8_t _align = (uchar8_t)(4-(_stack_addr%4));
-     p_heap_1byte+=(_align*sizeof(uchar8_t));
-     size+=(_align*sizeof(uchar8_t));
+      uint32_t _stack_addr = (uint32_t)p_heap_1byte;
+      uchar8_t _align = (uchar8_t)(4-(_stack_addr%4));
+      p_heap_1byte+=(_align*sizeof(uchar8_t));
+      size+=(_align*sizeof(uchar8_t));
    }
    p->heap_top = p_heap_1byte;
-  //clear heap mem allocated
+   //clear heap mem allocated
    memset(p_heap,0,size);
 
    return p_heap;
@@ -218,15 +218,15 @@ __begin_pthread(pthread_routine){
    //to do: call kernel. signal thread termination
 
    //if
-   if(pthread->pid<1){
-      kernel_pthread_cancel(pthread);//native kernel pthread: no process container
+   if(pthread->pid<1) {
+      kernel_pthread_cancel(pthread); //native kernel pthread: no process container
    }else{
       //pthread in process container
       //use syscall
       pthread_exit_t pthread_exit_dt;
       pthread_exit_dt.kernel_pthread = pthread;
       pthread_exit_dt.value_ptr = (void*)0;
-       //to do check if it's the main thread call exit
+      //to do check if it's the main thread call exit
       //BEWARE : need syscall.h
       __mk_syscall(_SYSCALL_PTHREAD_EXIT,pthread_exit_dt);
    }
@@ -242,70 +242,74 @@ __end_pthread()
 | Comments:
 | See:
 ---------------------------------------------*/
-int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,start_routine_t start_routine, void *arg){
+int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,
+                            start_routine_t start_routine,
+                            void *arg){
 
-	if(!thread)
-		return -EINVAL;
+   if(!thread)
+      return -EINVAL;
 
-	thread->attr.stacksize  = attr->stacksize;
-	thread->attr.stackaddr  = attr->stackaddr;
-	thread->attr.priority   = attr->priority;
-	thread->attr.timeslice  = attr->timeslice;
-	thread->attr.name       = attr->name;
+   thread->attr.stacksize  = attr->stacksize;
+   thread->attr.stackaddr  = attr->stackaddr;
+   thread->attr.priority   = attr->priority;
+   thread->attr.timeslice  = attr->timeslice;
+   thread->attr.name       = attr->name;
 
-	thread->arg             = arg;
-	thread->start_routine   = start_routine;
+   thread->arg             = arg;
+   thread->start_routine   = start_routine;
 
-	//heap see kernel_pthread_alloca().
-	thread->heap_floor = thread->attr.stackaddr;
-	thread->heap_top   = thread->heap_floor;
+   //heap see kernel_pthread_alloca().
+   thread->heap_floor = thread->attr.stackaddr;
+   thread->heap_top   = thread->heap_floor;
 
-	thread->pid=(pid_t)-1;
+   thread->pid=(pid_t)-1;
 
 #ifdef USE_ECOS
-	thread->thr_id = 0;
-	if( !(thread->tcb=malloc(sizeof(tcb_t))) )
-		return -EAGAIN;
+   thread->thr_id = 0;
+   if( !(thread->tcb=malloc(sizeof(tcb_t))) )
+      return -EAGAIN;
 
-	kernel_sem_init(&thread->sem_wait, 0, 0);
+   kernel_sem_init(&thread->sem_wait, 0, 0);
 #endif
 
-	if( kernel_get_pthread_id(thread)==-EAGAIN)
-		return -EAGAIN;
+   if( kernel_get_pthread_id(thread)==-EAGAIN)
+      return -EAGAIN;
 
-	//
-	thread->kernel_stack = malloc(KERNEL_STACK*sizeof(char));
-	if(!thread->kernel_stack)
-	   return -EAGAIN;
+   //
+   thread->kernel_stack = malloc(KERNEL_STACK*sizeof(char));
+   if(!thread->kernel_stack)
+      return -EAGAIN;
 
-	//création d'une tache eCos
+   //création d'une tache eCos
 #ifdef USE_ECOS
-	{
-		char * thr_name = (char *)thread->attr.name;
-		pid_t pid = thread->pid;
-		if(thr_name)
-			thr_name = thread->attr.name;
-		else
-			thr_name = "deamon_ecos_kernel_thread";
+   {
+      char * thr_name = (char *)thread->attr.name;
+      pid_t pid = thread->pid;
+      if(thr_name)
+         thr_name = thread->attr.name;
+      else
+         thr_name = "deamon_ecos_kernel_thread";
 
-		//appel à la routine eCos pour la création de la tache
-		cyg_thread_create(thread->attr.priority, (void *)pthread_routine, (cyg_addrword_t) thread->arg, thr_name,
-				thread->attr.stackaddr, thread->attr.stacksize,
-				&thread->thr_id, thread->tcb);
-		//thread->id = (pthread_id_t) thread->thr_id;
-		//init IO flag
-#if defined(__KERNEL_IO_EVENT)
-		cyg_flag_init(&thread->io_flag);
-#elif defined(__KERNEL_IO_SEM)
-		kernel_sem_init(&thread->io_sem,0,0);
+      //appel à la routine eCos pour la création de la tache
+      cyg_thread_create(thread->attr.priority, (void *)pthread_routine,
+                        (cyg_addrword_t) thread->arg, thr_name,
+                        thread->attr.stackaddr, thread->attr.stacksize,
+                        &thread->thr_id,
+                        thread->tcb);
+      //thread->id = (pthread_id_t) thread->thr_id;
+      //init IO flag
+   #if defined(__KERNEL_IO_EVENT)
+      cyg_flag_init(&thread->io_flag);
+   #elif defined(__KERNEL_IO_SEM)
+      kernel_sem_init(&thread->io_sem,0,0);
+   #endif
+
+      cyg_thread_resume(thread->thr_id);
+   }
+
 #endif
 
-		cyg_thread_resume(thread->thr_id);
-	}
-
-#endif
-
-	return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -336,36 +340,36 @@ int   kernel_pthread_kill(kernel_pthread_t* thread, int sig){
 ---------------------------------------------*/
 int   kernel_pthread_cancel(kernel_pthread_t* thread){
 #ifdef USE_ECOS
-	thr_id_t current_id;
+   thr_id_t current_id;
 #endif
-	desc_t desc;
+   desc_t desc;
 
-	//   __atomic_in();
-	//__disable_interrupt_section_in();
+   //   __atomic_in();
+   //__disable_interrupt_section_in();
 
-	desc=0;
+   desc=0;
 
 #ifdef USE_ECOS
-	current_id = thread->thr_id;
-	if(thread->thr_id==0)
-		return 0;
+   current_id = thread->thr_id;
+   if(thread->thr_id==0)
+      return 0;
 #endif
-	//begin of section: protection from io interrupt
-	__disable_interrupt_section_in();
-	__atomic_in();
-	if(kernel_put_pthread_id(thread)==-ESRCH) {
-	   __disable_interrupt_section_out();
-	   __syscall_unlock();
-	   __atomic_out();
-		return -ESRCH;
-	}
+   //begin of section: protection from io interrupt
+   __disable_interrupt_section_in();
+   __atomic_in();
+   if(kernel_put_pthread_id(thread)==-ESRCH) {
+      __disable_interrupt_section_out();
+      __syscall_unlock();
+      __atomic_out();
+      return -ESRCH;
+   }
 
-	//unreference this thread in pthread owner from desc.
-   for(desc=0;desc<MAX_OPEN_FILE;desc++){
-      if(!ofile_lst[desc].used 
-         || 
-         ( ofile_lst[desc].owner_pthread_ptr_read!=thread 
-          && ofile_lst[desc].owner_pthread_ptr_write!=thread ) )
+   //unreference this thread in pthread owner from desc.
+   for(desc=0; desc<MAX_OPEN_FILE; desc++) {
+      if(!ofile_lst[desc].used
+         ||
+         ( ofile_lst[desc].owner_pthread_ptr_read!=thread
+           && ofile_lst[desc].owner_pthread_ptr_write!=thread ) )
          continue;
       //
       if(ofile_lst[desc].owner_pthread_ptr_read==thread)
@@ -373,41 +377,41 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
       if(ofile_lst[desc].owner_pthread_ptr_write==thread)
          ofile_lst[desc].owner_pthread_ptr_write   =(kernel_pthread_t*)0;
    }
-	//
+   //
 
-	__disable_interrupt_section_out();
-	//
-	if(thread->stat & PTHREAD_STATUS_KERNEL) {
-	   __syscall_unlock();
+   __disable_interrupt_section_out();
+   //
+   if(thread->stat & PTHREAD_STATUS_KERNEL) {
+      __syscall_unlock();
       __atomic_out();
-	}
+   }
 
 #ifdef USE_ECOS
-	kernel_sem_destroy(&thread->sem_wait);
+   kernel_sem_destroy(&thread->sem_wait);
 
-#if defined(__KERNEL_IO_EVENT)
+   #if defined(__KERNEL_IO_EVENT)
    cyg_flag_destroy(&thread->io_flag);
-#elif defined(__KERNEL_IO_SEM)
+   #elif defined(__KERNEL_IO_SEM)
    kernel_sem_destroy(&thread->io_sem);
+   #endif
+
+   //release all objects the thread is waiting on
+   cyg_thread_release(thread->thr_id);
 #endif
 
-	//release all objects the thread is waiting on
-	cyg_thread_release(thread->thr_id);
-#endif
-
-	//NOT ADVISE BY ECOS DEVELOPER
-	//cyg_thread_exit();
-	free(thread->kernel_stack);
-	free(thread->attr.stackaddr);
-	free(thread->tcb);
-	free(thread);
+   //NOT ADVISE BY ECOS DEVELOPER
+   //cyg_thread_exit();
+   free(thread->kernel_stack);
+   free(thread->attr.stackaddr);
+   free(thread->tcb);
+   free(thread);
 
 #ifdef USE_ECOS
-	cyg_thread_delete(current_id);
+   cyg_thread_delete(current_id);
 #endif
-	//__disable_interrupt_section_out();
+   //__disable_interrupt_section_out();
 
-	return 0;
+   return 0;
 }
 
 
@@ -423,8 +427,8 @@ kernel_pthread_t* kernel_pthread_self(void){
    kernel_pthread_t* p;
    __atomic_in();
    p=g_pthread_lst;
-   while(p){
-      if( __is_thread_self(p) ){
+   while(p) {
+      if( __is_thread_self(p) ) {
          __atomic_out();
          return p;
       }

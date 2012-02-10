@@ -59,18 +59,30 @@ int telnetd_main(int argc, char* argv[]);
 Global Declaration
 =============================================*/
 static const bin_t _bin_lst[]={
-{         "initd",			                 initd_main,			10,			2048,			5},
-{           "lsh",			                   lsh_main,			10,			2048,			5},
-{         "mount",			                 mount_main,			10,			2048,			5},
-{        "umount",			                umount_main,			10,			2048,			5},
-{            "ls",			                    ls_main,			10,			2048,			5},
-{            "ps",			                    ps_main,			10,			2048,			5},
-{           "cat",			                   cat_main,			10,			2048,			5},
-{            "df",			                    df_main,			10,			2048,			5},
-{         "uname",			                 uname_main,			10,			2048,			5},
-{          "test",			                  test_main,			10,			1024,			5},
-{      "ifconfig",			              ifconfig_main,			10,			2048,			5},
-{       "telnetd",			               telnetd_main,			10,			2048,			5}
+   {         "initd",                                       initd_main,                    10,
+             2048,                   5},
+   {           "lsh",                                         lsh_main,                    10,
+               2048,                   5},
+   {         "mount",                                       mount_main,                    10,
+             2048,                   5},
+   {        "umount",                                      umount_main,                    10,
+            2048,                   5},
+   {            "ls",                                          ls_main,                    10,
+                2048,                   5},
+   {            "ps",                                          ps_main,                    10,
+                2048,                   5},
+   {           "cat",                                         cat_main,                    10,
+               2048,                   5},
+   {            "df",                                          df_main,                    10,
+                2048,                   5},
+   {         "uname",                                       uname_main,                    10,
+             2048,                   5},
+   {          "test",                                        test_main,                    10,
+              1024,                   5},
+   {      "ifconfig",                                    ifconfig_main,                    10,
+          2048,                   5},
+   {       "telnetd",                                     telnetd_main,                    10,
+           2048,                   5}
 };
 
 const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);

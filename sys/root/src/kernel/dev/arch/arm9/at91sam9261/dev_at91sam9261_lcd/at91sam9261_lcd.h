@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -29,22 +29,22 @@ either the MPL or the [eCos GPL] License."
 
 
 /*============================================
-| Compiler Directive   
+| Compiler Directive
 ==============================================*/
 #ifndef _AT91SAM9261_LCD_H
 #define _AT91SAM9261_LCD_H
 
 
 /*============================================
-| Includes 
+| Includes
 ==============================================*/
 #include "kernel/core/etypes.h"
 
 #if defined(USE_ECOS)
-#include "cyg/hal/at91sam9261.h"
+   #include "cyg/hal/at91sam9261.h"
 #endif
 /*============================================
-| Declaration  
+| Declaration
 ==============================================*/
 #define AT91C_MASTER_CLOCK              DEV_AT91SAM9261_MASTER_CLOCK
 #define AT91C_MASTER_CLOCK_FOR_I2S      DEV_AT91SAM9261_MASTER_CLOCK
@@ -54,20 +54,20 @@ either the MPL or the [eCos GPL] License."
 #define AT91C_VERSION   "VER 1.0"
 
 
-#define LCD_MONOCHROME	     0
-#define LCD_COLOR2	        1
-#define LCD_COLOR4	        2
-#define LCD_COLOR8	        3
-#define LCD_COLOR16	        4
+#define LCD_MONOCHROME       0
+#define LCD_COLOR2              1
+#define LCD_COLOR4              2
+#define LCD_COLOR8              3
+#define LCD_COLOR16             4
 
-#define AT91C_FRAME_BUFFER_0	0x22000000L    // Adresse du Frame buffer ds la SDRAM
-#define AT91C_FRAME_BUFFER_1	0x22080000L     // Adresse du Frame buffer ds la SDRAM
+#define AT91C_FRAME_BUFFER_0    0x22000000L    // Adresse du Frame buffer ds la SDRAM
+#define AT91C_FRAME_BUFFER_1    0x22080000L     // Adresse du Frame buffer ds la SDRAM
 #define MEMO_ECRAN            0x22100000L    // Adresse de la recopie d'cran ds la SDRAM
 
 /*   Frame buffer memory information    */
 #if defined(USE_SEGGER)
-extern char *lcd_base;		     // Start of framebuffer memory
-extern char *lcd_console_address;	// Start of console buffer
+extern char *lcd_base;               // Start of framebuffer memory
+extern char *lcd_console_address;       // Start of console buffer
 extern short console_col;
 extern short console_row;
 extern char lcd_is_enabled;
@@ -87,60 +87,60 @@ struct lcdc_info
 /** LCD Controller structure for AT91SAM9261 **/
 typedef struct dev_panel_info
 {
-   uint16_t	vl_col;		// Number of columns (i.e. 640)
-   uint16_t	vl_row;		// Number of rows (i.e. 480)
-   uint16_t	vl_width;	     // Width of display area in millimeters
-   uint16_t	vl_height;	// Height of display area in millimeters
-   uint32_t	vl_pixclock;	// pixel clock in ps
+   uint16_t vl_col;             // Number of columns (i.e. 640)
+   uint16_t vl_row;             // Number of rows (i.e. 480)
+   uint16_t vl_width;                // Width of display area in millimeters
+   uint16_t vl_height;          // Height of display area in millimeters
+   uint32_t vl_pixclock;        // pixel clock in ps
 
    /* LCD configuration register */
-   uchar8_t	vl_clkp;	     // Clock polarity
-   uchar8_t	vl_oep;		// Output Enable polarity
-   uchar8_t	vl_hsp;		// Horizontal Sync polarity
-   uchar8_t	vl_vsp;		// Vertical Sync polarity
-   uchar8_t	vl_dp;		// Data polarity
-   uchar8_t	vl_bpix;	     // Bits per pixel, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
-   uchar8_t	vl_lbw;		// LCD Bus width, 0 = 4, 1 = 8
-   uchar8_t	vl_splt;	     // Split display, 0 = single-scan, 1 = dual-scan
-   uchar8_t	vl_clor;	     // Color, 0 = mono, 1 = color
-   uchar8_t	vl_tft;		// 0 = passive, 1 = TFT
+   uchar8_t vl_clkp;                 // Clock polarity
+   uchar8_t vl_oep;             // Output Enable polarity
+   uchar8_t vl_hsp;             // Horizontal Sync polarity
+   uchar8_t vl_vsp;             // Vertical Sync polarity
+   uchar8_t vl_dp;              // Data polarity
+   uchar8_t vl_bpix;                 // Bits per pixel, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
+   uchar8_t vl_lbw;             // LCD Bus width, 0 = 4, 1 = 8
+   uchar8_t vl_splt;                 // Split display, 0 = single-scan, 1 = dual-scan
+   uchar8_t vl_clor;                 // Color, 0 = mono, 1 = color
+   uchar8_t vl_tft;             // 0 = passive, 1 = TFT
 
    /* Horizontal control register. Timing from data sheet */
-   uint16_t	vl_hpw;		// Horz sync pulse width
-   uchar8_t	vl_blw;		// Wait before of line
-   uchar8_t	vl_elw;		// Wait end of line
+   uint16_t vl_hpw;             // Horz sync pulse width
+   uchar8_t vl_blw;             // Wait before of line
+   uchar8_t vl_elw;             // Wait end of line
 
    /* Vertical control register. */
-   uchar8_t	vl_vpw;		// Vertical sync pulse width
-   uchar8_t	vl_bfw;		// Wait before of frame
-   uchar8_t	vl_efw;		// Wait end of frame
+   uchar8_t vl_vpw;             // Vertical sync pulse width
+   uchar8_t vl_bfw;             // Wait before of frame
+   uchar8_t vl_efw;             // Wait end of frame
 
    /* PXA LCD controller params */
-   struct	lcdc_info controller;
+   struct       lcdc_info controller;
 } dev_panel_info_t;
 
 
 #define LCD_BPP  LCD_COLOR8
 //#define LCD_BPP LCD_MONOCHROME
 
-#define FB_SYNC_HOR_HIGH_ACT	     1	/* horizontal sync high active	*/
-#define FB_SYNC_VERT_HIGH_ACT	     2	/* vertical sync high active	*/
+#define FB_SYNC_HOR_HIGH_ACT         1  /* horizontal sync high active	*/
+#define FB_SYNC_VERT_HIGH_ACT        2  /* vertical sync high active	*/
 
 /* More or less configurable parameters for LCDC controller*/
-#define SIDSAFB_FIFO_SIZE	     512
-#define SIDSAFB_DMA_BURST_LEN	     127
+#define SIDSAFB_FIFO_SIZE            512
+#define SIDSAFB_DMA_BURST_LEN        127
 #define SIDSAFB_CRST_VAL           0xc8   // 0xda
 
 #define AT91C_PMC_HCK1        ((unsigned int) 0x1 << 17) // (PMC) AHB LCDCK Clock Output
 
- //AT91PS_SYS  AT91_SYS = (AT91PS_SYS)AT91C_BASE_SYS;
+//AT91PS_SYS  AT91_SYS = (AT91PS_SYS)AT91C_BASE_SYS;
 
 
 /* Video functions */
 
-void	lcd_putc	(const char c);
-void	lcd_puts	(const char *s);
-void	lcd_printf	(const char *fmt, ...);
+void    lcd_putc        (const char c);
+void    lcd_puts        (const char *s);
+void    lcd_printf      (const char *fmt, ...);
 
 
 
@@ -154,16 +154,16 @@ void	lcd_printf	(const char *fmt, ...);
 /*----------------------------------------------------------------------*/
 /* Default to 8bpp if bit depth not specified */
 #ifndef LCD_BPP
-  # define LCD_BPP  LCD_COLOR8
+   # define LCD_BPP  LCD_COLOR8
 #endif
 
 #ifndef LCD_DF
-  # define LCD_DF   1
+   # define LCD_DF   1
 #endif
 
 /* Calculate nr. of bits per pixel  and nr. of colors */
-#define NBITS(bit_code)		(1 << (bit_code))
-#define NCOLORS(bit_code)	(1 << NBITS(bit_code))
+#define NBITS(bit_code)         (1 << (bit_code))
+#define NCOLORS(bit_code)       (1 << NBITS(bit_code))
 
 /***********************************/
 /*        CONSOLE CONSTANTS        */
@@ -176,18 +176,18 @@ void	lcd_printf	(const char *fmt, ...);
 #define  CONSOLE_COLOR_MAGENTA    5
 #define  CONSOLE_COLOR_CYAN       6
 #define  CONSOLE_COLOR_GREY       14
-#define  CONSOLE_COLOR_WHITE      255	// Must remain last / highest
+#define  CONSOLE_COLOR_WHITE      255   // Must remain last / highest
 
 
 /************************************************************************/
 #ifndef PAGE_SIZE
-  # define PAGE_SIZE     4096
+   # define PAGE_SIZE     4096
 #endif
 
 /**************************************************/
 /*        CONSOLE DEFINITIONS & FUNCTIONS         */
 /**************************************************/
-#define   CONSOLE_ROWS		(panel_info.vl_row / VIDEO_FONT_HEIGHT)
+#define   CONSOLE_ROWS          (panel_info.vl_row / VIDEO_FONT_HEIGHT)
 #define   CONSOLE_COLS        (panel_info.vl_col / VIDEO_FONT_WIDTH)
 #define   CONSOLE_ROW_SIZE    (VIDEO_FONT_HEIGHT * lcd_line_length)
 #define   CONSOLE_ROW_FIRST   (lcd_console_address)
@@ -196,7 +196,7 @@ void	lcd_printf	(const char *fmt, ...);
 #define   CONSOLE_SIZE        (CONSOLE_ROW_SIZE * CONSOLE_ROWS)
 #define   CONSOLE_SCROLL_SIZE (CONSOLE_SIZE - CONSOLE_ROW_SIZE)
 
-#define COLOR_MASK(c)		(c)
+#define COLOR_MASK(c)           (c)
 
 
 #define   N25    0
@@ -218,4 +218,4 @@ extern unsigned long at91sam9261_lcd_calc_frame_buffer_size(void);
 extern PALETTEENTRY * at91sam9261_lcd_get_palette(void);
 extern dev_panel_info_t* at91sam9261_lcd_get_panel_info(void);
 
-#endif	/* _LCD_H_ */
+#endif  /* _LCD_H_ */

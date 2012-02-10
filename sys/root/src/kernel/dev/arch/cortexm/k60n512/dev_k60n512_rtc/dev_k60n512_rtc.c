@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -71,8 +71,8 @@ dev_map_t dev_k60n512_rtc_map={
 #define RTC_STABILIZATION_DELAY     (0x600000/200)
 
 //
-#define KINETIS_RTC_VECTOR_PRIORITY		3
-#define KINETIS_RTC_IRQ            67//66
+#define KINETIS_RTC_VECTOR_PRIORITY             3
+#define KINETIS_RTC_IRQ            67 //66
 
 #if defined(USE_ECOS)
 static cyg_uint32 _kinetis_rtc_isr(cyg_vector_t vector, cyg_addrword_t data);
@@ -98,40 +98,40 @@ Implementation
 ---------------------------------------------*/
 int dev_k60n512_rtc_load(void){
    volatile unsigned int reg_val = 0;
-   
+
    //enable clock gating (SIM->SCGC6 |= SIM_SCGC6_RTC_MASK)
    HAL_READ_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
    reg_val |= REG_SIM_SCGC6_RTC_MASK;
    HAL_WRITE_UINT32(REG_SIM_SCGC6_ADDR, reg_val);
-   
+
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
-   
+
    if(reg_val & REG_RTC_SR_TIF_MASK) {
       //software reset
-      HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, 
-      REG_RTC_CR_SWR_MASK);
+      HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR,
+                       REG_RTC_CR_SWR_MASK);
       HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
       reg_val &= ~REG_RTC_CR_SWR_MASK;
       HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
-      
+
       //write a 01/01/2012 as default date
       HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, 0x4effa200);
    }
-   
+
    //enable oscillation and wait stabilization
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
    reg_val |= REG_RTC_CR_OSCE_MASK;
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_CR, reg_val);
-   
-   for(reg_val=0; reg_val<RTC_STABILIZATION_DELAY; reg_val++);
-   
+
+   for(reg_val=0; reg_val<RTC_STABILIZATION_DELAY; reg_val++) ;
+
    //set timer compensation
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TCR,
-   REG_RTC_TCR_CIR(0) | REG_RTC_TCR_TCR(0));
-   
+                    REG_RTC_TCR_CIR(0) | REG_RTC_TCR_TCR(0));
+
    //continue counting
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TAR, 0);
-   
+
    return 0;
 }
 
@@ -144,25 +144,25 @@ int dev_k60n512_rtc_load(void){
 | See:
 ---------------------------------------------*/
 int dev_k60n512_rtc_open(desc_t desc, int o_flag) {
-   cyg_handle_t  irq_handle;
-	cyg_interrupt irq_it;
+   cyg_handle_t irq_handle;
+   cyg_interrupt irq_it;
    volatile unsigned int reg_val = 0;
-   
-   if(o_flag & O_RDONLY){
-		if(kinetis_rtc_info.desc_r<0) {
-			kinetis_rtc_info.desc_r = desc;
-		}
-		else {
-         ofile_lst[desc].p = (void *)&kinetis_rtc_info;
-			return 0; //already open
+
+   if(o_flag & O_RDONLY) {
+      if(kinetis_rtc_info.desc_r<0) {
+         kinetis_rtc_info.desc_r = desc;
       }
-	}
-   
+      else {
+         ofile_lst[desc].p = (void *)&kinetis_rtc_info;
+         return 0;                //already open
+      }
+   }
+
    if(ofile_lst[desc].p)
       return -1;
-   
+
    ofile_lst[desc].p = (void *)&kinetis_rtc_info;
-   
+
    //enable counting
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
    reg_val |= REG_RTC_SR_TCE_MASK;
@@ -196,10 +196,10 @@ int dev_k60n512_rtc_read(desc_t desc, char* buf,int size){
 
    if(size!=sizeof(time_t))
       return -1;
-   
+
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, reg_val);
    memcpy((void *)buf, (void *)&reg_val, size);
-   
+
    return size;
 }
 
@@ -217,21 +217,21 @@ int dev_k60n512_rtc_write(desc_t desc, const char* buf,int size){
 
    if(size!=sizeof(time_t))
       return -1;
-   
+
    memcpy((void *)&time_val, (void *)buf, 4);
-   
+
    //disable counter and write new value
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
    reg_val &= ~REG_RTC_SR_TCE_MASK;
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
-   
+
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TSR, time_val);
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_TPR, 0);
-   
+
    HAL_READ_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
    reg_val |= REG_RTC_SR_TCE_MASK;
    HAL_WRITE_UINT32(kinetis_rtc_info.rtc_base + REG_RTC_SR, reg_val);
-   
+
    return size;
 }
 

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -111,10 +111,10 @@ int dev_fb_load(void) {
 | See:
 ----------------------------------------------*/
 int dev_fb_open(desc_t desc,int o_flag) {
-   if(ofile_lst[desc].oflag & O_RDONLY){
+   if(ofile_lst[desc].oflag & O_RDONLY) {
    }
 
-   if(ofile_lst[desc].oflag & O_WRONLY){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
    }
 
    return 0;
@@ -129,8 +129,8 @@ int dev_fb_open(desc_t desc,int o_flag) {
 | See:
 ----------------------------------------------*/
 int dev_fb_close(desc_t desc) {
-   if(ofile_lst[desc].oflag & O_RDONLY){
-      if(!ofile_lst[desc].nb_reader){
+   if(ofile_lst[desc].oflag & O_RDONLY) {
+      if(!ofile_lst[desc].nb_reader) {
          //don't remove generic fb
          if(ofile_lst[desc].p!=(void *)g_p_fb_list) {
             ofile_lst[desc].p=NULL;
@@ -138,9 +138,9 @@ int dev_fb_close(desc_t desc) {
       }
    }
 
-   if(ofile_lst[desc].oflag & O_WRONLY){
-      if(!ofile_lst[desc].nb_writer){
-         if(!ofile_lst[desc].nb_reader){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      if(!ofile_lst[desc].nb_writer) {
+         if(!ofile_lst[desc].nb_reader) {
             //don't remove generic fb
             if(ofile_lst[desc].p!=(void *)g_p_fb_list) {
                ofile_lst[desc].p=NULL;
@@ -304,7 +304,7 @@ int dev_fb_ioctl(desc_t desc,int request,va_list ap) {
             g_p_fb_list->desc_w = ofile_lst[desc].desc_nxt[1];
       }
 
-   break;
+      break;
 
    case I_UNLINK: {
       int fb_num = va_arg(ap, int);
@@ -339,7 +339,7 @@ int dev_fb_ioctl(desc_t desc,int request,va_list ap) {
    }
    break;
 
-   case FBIOGET_DISPINFO : {
+   case FBIOGET_DISPINFO: {
       //get x_res, y_res, bpp, linelen and fb_no
       fb_info_t * fb_info = va_arg(ap, fb_info_t *);
       unsigned int fb_num;
@@ -362,7 +362,7 @@ int dev_fb_ioctl(desc_t desc,int request,va_list ap) {
    break;
 
    default:
-   break;
+      break;
    }
    //
    return 0;
@@ -415,7 +415,7 @@ int fb_set_config(fb_info_t * fb, unsigned short no) {
    //begin with first after generic framebuffer
    while(no-- !=1) {
       tmp_addr += tmp_fb->next->y_res*
-         tmp_fb->next->line_len*(tmp_fb->next->bpp/8);
+                  tmp_fb->next->line_len*(tmp_fb->next->bpp/8);
       tmp_fb = tmp_fb->next;
    }
    tmp_fb->next = tmp;
@@ -484,7 +484,7 @@ void fb_delete_instance(unsigned short no) {
 
    //more than one entry
    no--;
-   while(no--)    tmp=tmp->next;
+   while(no--) tmp=tmp->next;
    save = tmp->next->next;
    _sys_free(tmp->next);
    tmp->next = save;

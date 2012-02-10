@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -62,13 +62,20 @@ static int _sd_cmd9(board_inf_sd_t * p_inf_sd, desc_t desc_next);
 static int _sd_cmd12(board_inf_sd_t * p_inf_sd, desc_t desc_next);
 static int _sd_cmd13(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned int *pStatus);
 static int _sd_cmd16(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short blockLength);
-static int _sd_cmd17(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData, unsigned int address);
-static int _sd_cmd18(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock, unsigned char *pData, unsigned int address);
-static int _sd_cmd24(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData, unsigned int address);
-static int _sd_cmd25(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock, unsigned char *pData, unsigned int address);
+static int _sd_cmd17(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData,
+                     unsigned int address);
+static int _sd_cmd18(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock,
+                     unsigned char *pData,
+                     unsigned int address);
+static int _sd_cmd24(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData,
+                     unsigned int address);
+static int _sd_cmd25(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock,
+                     unsigned char *pData,
+                     unsigned int address);
 static int _sd_cmd55(board_inf_sd_t * p_inf_sd, desc_t desc_next);
 static int _sd_acmd6(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char busWidth);
-static int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char hcs, unsigned char *pCCS);
+static int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char hcs,
+                      unsigned char *pCCS);
 
 //
 static unsigned char g_sd_buf_rcv[SD_BUFFER_SIZE_NO_CACHE_RCV+SD_BLOCK_SIZE]
@@ -88,7 +95,7 @@ __attribute((aligned(4)))
 ;
 
 //
-#define  SD_RETRIES_CMD  5//3
+#define  SD_RETRIES_CMD  5 //3
 
 //
 #define SD_ERROR_TAB_SIZE  16
@@ -108,7 +115,7 @@ static unsigned short _sd_error_cb;
       _sd_error_tab[_sd_error_cb].error = __error__; \
       _sd_error_tab[_sd_error_cb].status = __status__; \
       _sd_error_cb = (_sd_error_cb + 1) & (SD_ERROR_TAB_SIZE -1); \
-      }
+}
 
 typedef struct csd_info_st {
    unsigned int taac;
@@ -196,10 +203,10 @@ int _sd_write(int desc, const char* buf, int cb) {
       if(nb_blocks_to_write == 1) {
          //write single block
          error = _sd_cmd24(p_inf_sd, ofile_lst[desc].desc_nxt[0], (unsigned char *)g_sd_buf_snd,
-               SD_ADDRESS(p_inf_sd,block_addr));
+                           SD_ADDRESS(p_inf_sd,block_addr));
          if(error) {
             __sd_rec_err(24, retries, error, 0);
-            continue;//return -1;
+            continue; //return -1;
          }
          else {
             break;
@@ -207,11 +214,14 @@ int _sd_write(int desc, const char* buf, int cb) {
       }
       else {
          //write multiple block
-         error = _sd_cmd25(p_inf_sd, ofile_lst[desc].desc_nxt[0], nb_blocks_to_write, (unsigned char *)g_sd_buf_snd,
-               SD_ADDRESS(p_inf_sd,block_addr));
+         error =
+            _sd_cmd25(p_inf_sd, ofile_lst[desc].desc_nxt[0], nb_blocks_to_write,
+                      (unsigned char *)g_sd_buf_snd,
+                      SD_ADDRESS(p_inf_sd,
+                                 block_addr));
          if(error) {
             __sd_rec_err(25, retries, error, 0);
-            continue;//return -1;
+            continue; //return -1;
          }
          else {
             break;
@@ -219,7 +229,7 @@ int _sd_write(int desc, const char* buf, int cb) {
       }
    }
 
-   return error;//0;
+   return error; //0;
 }
 
 /*-------------------------------------------
@@ -270,7 +280,7 @@ int _sd_read(int desc, char* buf, int cb, unsigned char no_off) {
    while(retries--) {
       //
       do {
-         error = _sd_cmd13(p_inf_sd, ofile_lst[desc].desc_nxt[0], &_sd_status_cmd13_rd/*&status*/);
+         error = _sd_cmd13(p_inf_sd, ofile_lst[desc].desc_nxt[0], &_sd_status_cmd13_rd /*&status*/);
          if (error) {
             return -1;
          }
@@ -282,10 +292,10 @@ int _sd_read(int desc, char* buf, int cb, unsigned char no_off) {
       if(nb_blocks == 1) {
          // read single block
          error = _sd_cmd17(p_inf_sd, ofile_lst[desc].desc_nxt[0], (unsigned char *)g_sd_buf_rcv,
-               SD_ADDRESS(p_inf_sd,block_addr));
+                           SD_ADDRESS(p_inf_sd,block_addr));
          if(error) {
             __sd_rec_err(17, retries, error, 0);
-            continue;//return -1;
+            continue; //return -1;
          }
          else {
             break;
@@ -293,11 +303,14 @@ int _sd_read(int desc, char* buf, int cb, unsigned char no_off) {
       }
       else {
          // read multiple block
-         error = _sd_cmd18(p_inf_sd, ofile_lst[desc].desc_nxt[0], nb_blocks, (unsigned char *)g_sd_buf_rcv,
-               SD_ADDRESS(p_inf_sd,block_addr));
+         error =
+            _sd_cmd18(p_inf_sd, ofile_lst[desc].desc_nxt[0], nb_blocks,
+                      (unsigned char *)g_sd_buf_rcv,
+                      SD_ADDRESS(p_inf_sd,
+                                 block_addr));
          if (error) {
             __sd_rec_err(18, retries, error, 0);
-            continue;//return -1;
+            continue; //return -1;
          }
          else {
             break;
@@ -308,7 +321,7 @@ int _sd_read(int desc, char* buf, int cb, unsigned char no_off) {
    //copy buffer in a non cache zone
    memcpy((void *)buf, g_sd_buf_rcv+block_offset, cb);
 
-   return error;//0;
+   return error; //0;
 }
 
 /*-------------------------------------------
@@ -344,7 +357,7 @@ int _sd_init(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    // driver stage register setting (lowest speed, highest driving current capability).
 
    if((error = _sd_low_level_init(p_inf_sd, desc_next))) {
-      return -1;//error;
+      return -1; //error;
    }
 
    // In the case of a Standard Capacity SD Memory Card, this command sets the
@@ -360,7 +373,7 @@ int _sd_init(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    if (p_inf_sd->card_type == CARD_SD) {
       error = _sd_cmd16(p_inf_sd, desc_next, SD_BLOCK_SIZE);
       if (error) {
-         return -1;//error;
+         return -1; //error;
       }
    }
 
@@ -375,7 +388,7 @@ int _sd_init(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    }
 
    if (p_inf_sd->card_type == UNKNOWN_CARD) {
-      return -1;//SD_ERROR_NOT_INITIALIZED;
+      return -1; //SD_ERROR_NOT_INITIALIZED;
    }
 
    //set new speed
@@ -538,7 +551,8 @@ int _sd_send_command(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    unsigned int i;
 
    // Send command
-   error = ofile_lst[desc_next].pfsop->fdev.fdev_ioctl(desc_next, HDSD_SENDCOMMAND, p_inf_sd->command);
+   error = ofile_lst[desc_next].pfsop->fdev.fdev_ioctl(desc_next, HDSD_SENDCOMMAND,
+                                                       p_inf_sd->command);
    if (error) {
       return SD_ERROR_DRIVER;
    }
@@ -669,7 +683,8 @@ int _sd_cmd55(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char hcs, unsigned char *pCCS) {
+int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char hcs,
+               unsigned char *pCCS) {
    unsigned char error;
    unsigned int response;
 
@@ -715,31 +730,31 @@ int _sd_acmd41(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char hcs, u
 | See:
 ---------------------------------------------*/
 int _sd_cmd1(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
-    unsigned char error;
-    unsigned int response;
+   unsigned char error;
+   unsigned int response;
 
-    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
+   memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
 
-    //
-    p_inf_sd->command->cmd = SEND_OP_COND;
-    p_inf_sd->command->arg = OCR_MMC_HOST_VOLTAGE_RANGE;
-    p_inf_sd->command->resp_type = R3;
-    p_inf_sd->command->p_resp = &response;
+   //
+   p_inf_sd->command->cmd = SEND_OP_COND;
+   p_inf_sd->command->arg = OCR_MMC_HOST_VOLTAGE_RANGE;
+   p_inf_sd->command->resp_type = R3;
+   p_inf_sd->command->p_resp = &response;
 
-    // Set SD command state
-    p_inf_sd->state = SD_STATE_STBY;
+   // Set SD command state
+   p_inf_sd->state = SD_STATE_STBY;
 
-    //
-    error = _sd_send_command(p_inf_sd, desc_next);
-    if (error) {
-        return error;
-    }
-    if ((response & OCR_CARD_POWER_UP_BUSY) == OCR_CARD_POWER_UP_BUSY) {
-        return 0;
-    }
-    else {
-        return SD_ERROR_DRIVER;
-    }
+   //
+   error = _sd_send_command(p_inf_sd, desc_next);
+   if (error) {
+      return error;
+   }
+   if ((response & OCR_CARD_POWER_UP_BUSY) == OCR_CARD_POWER_UP_BUSY) {
+      return 0;
+   }
+   else {
+      return SD_ERROR_DRIVER;
+   }
 }
 
 /*-------------------------------------------
@@ -752,18 +767,18 @@ int _sd_cmd1(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
 ---------------------------------------------*/
 int _sd_cmd2(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned int *pCid) {
 
-    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
+   memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
 
-    //
-    p_inf_sd->command->cmd = ALL_SEND_CID;
-    p_inf_sd->command->resp_type = R2;
-    p_inf_sd->command->p_resp = pCid;
+   //
+   p_inf_sd->command->cmd = ALL_SEND_CID;
+   p_inf_sd->command->resp_type = R2;
+   p_inf_sd->command->p_resp = pCid;
 
-    // Set SD command state
-    p_inf_sd->state = SD_STATE_STBY;
+   // Set SD command state
+   p_inf_sd->state = SD_STATE_STBY;
 
-    //
-    return _sd_send_command(p_inf_sd, desc_next);
+   //
+   return _sd_send_command(p_inf_sd, desc_next);
 }
 
 /*-------------------------------------------
@@ -869,20 +884,20 @@ int _sd_cmd9(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
 | See:
 ---------------------------------------------*/
 int _sd_cmd12(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
-    unsigned int response;
+   unsigned int response;
 
-    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
+   memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
 
-    //
-    p_inf_sd->command->cmd = STOP_TRANSMISSION;
-    p_inf_sd->command->resp_type = R1b;
-    p_inf_sd->command->p_resp = &response;
+   //
+   p_inf_sd->command->cmd = STOP_TRANSMISSION;
+   p_inf_sd->command->resp_type = R1b;
+   p_inf_sd->command->p_resp = &response;
 
-    //
-    p_inf_sd->state = SD_STATE_STBY;
+   //
+   p_inf_sd->state = SD_STATE_STBY;
 
-    //
-    return _sd_send_command(p_inf_sd, desc_next);
+   //
+   return _sd_send_command(p_inf_sd, desc_next);
 }
 /*-------------------------------------------
 | Name:_sd_cmd13
@@ -944,7 +959,8 @@ int _sd_cmd16(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short blockL
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sd_cmd17(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData, unsigned int address) {
+int _sd_cmd17(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData,
+              unsigned int address) {
    unsigned int response;
 
    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
@@ -974,7 +990,9 @@ int _sd_cmd17(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData,
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sd_cmd18(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock, unsigned char *pData, unsigned int address) {
+int _sd_cmd18(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock,
+              unsigned char *pData,
+              unsigned int address) {
    unsigned int response;
 
    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
@@ -1004,7 +1022,8 @@ int _sd_cmd18(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBloc
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sd_cmd24(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData, unsigned int address) {
+int _sd_cmd24(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData,
+              unsigned int address) {
    unsigned int response;
 
    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
@@ -1032,26 +1051,28 @@ int _sd_cmd24(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned char *pData,
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sd_cmd25(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock, unsigned char *pData, unsigned int address) {
-    unsigned int response;
+int _sd_cmd25(board_inf_sd_t * p_inf_sd, desc_t desc_next, unsigned short nbBlock,
+              unsigned char *pData,
+              unsigned int address) {
+   unsigned int response;
 
-    memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
+   memset((void *)p_inf_sd->command, 0, sizeof(sd_cmd_t));
 
-    //
-    p_inf_sd->command->cmd = WRITE_MULTIPLE_BLOCK;
-    p_inf_sd->command->arg = address;
-    p_inf_sd->command->block_size = SD_BLOCK_SIZE;
-    p_inf_sd->command->block_count = nbBlock;
-    p_inf_sd->command->p_data = pData;
-    p_inf_sd->command->is_read = 0;
-    p_inf_sd->command->resp_type = R1;
-    p_inf_sd->command->p_resp = &response;
+   //
+   p_inf_sd->command->cmd = WRITE_MULTIPLE_BLOCK;
+   p_inf_sd->command->arg = address;
+   p_inf_sd->command->block_size = SD_BLOCK_SIZE;
+   p_inf_sd->command->block_count = nbBlock;
+   p_inf_sd->command->p_data = pData;
+   p_inf_sd->command->is_read = 0;
+   p_inf_sd->command->resp_type = R1;
+   p_inf_sd->command->p_resp = &response;
 
-    //
-    p_inf_sd->state = SD_STATE_DATA;
+   //
+   p_inf_sd->state = SD_STATE_DATA;
 
-    //
-    return _sd_send_command(p_inf_sd, desc_next);
+   //
+   return _sd_send_command(p_inf_sd, desc_next);
 }
 
 /*-------------------------------------------

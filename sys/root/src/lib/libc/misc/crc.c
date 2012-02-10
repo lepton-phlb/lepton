@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,24 +15,24 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include "crc.h"
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 crc16_t const crc16_array[256] = {
@@ -67,22 +67,22 @@ crc16_t const crc16_array[256] = {
    0x8801,0x48C0,0x4980,0x8941,0x4B00,0x8BC1,0x8A81,0x4A40,
    0x4E00,0x8EC1,0x8F81,0x4F40,0x8D01,0x4DC0,0x4C80,0x8C41,
    0x4400,0x84C1,0x8581,0x4540,0x8701,0x47C0,0x4680,0x8641,
-   0x8201,0x42C0,0x4380,0x8341,0x4100,0x81C1,0x8081,0x4040 
-   };
+   0x8201,0x42C0,0x4380,0x8341,0x4100,0x81C1,0x8081,0x4040
+};
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 
 /*--------------------------------------------
 | Name:        crc16
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 crc16_t crc16(crc16_t prev_crc,unsigned char byte){
-   crc16_t  crc   = prev_crc;
+   crc16_t crc   = prev_crc;
    unsigned char c     = byte ^ crc;
    //
    crc   = prev_crc;

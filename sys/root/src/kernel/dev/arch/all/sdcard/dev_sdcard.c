@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -70,20 +70,20 @@ dev_map_t dev_sdcard_map={
    dev_sdcard_ioctl
 };
 
-fdev_read_t   _if_spi_master_read  = (fdev_read_t)0;
-fdev_write_t  _if_spi_master_write = (fdev_write_t)0;
+fdev_read_t _if_spi_master_read  = (fdev_read_t)0;
+fdev_write_t _if_spi_master_write = (fdev_write_t)0;
 
-typedef struct{
+typedef struct {
    t_media media_sdcard;
 }sdcard_info_t;
 
 /**
  *
  * SDCARD Size
- * 
+ *
  */
 //const int   SDCARD_SIZE =  10L*1024L*1024L;//(10 MB)
-#define SDCARD_SIZE 	(int)(((sdcard_info_t *)ofile_lst[desc].p)->media_sdcard.size)
+#define SDCARD_SIZE     (int)(((sdcard_info_t *)ofile_lst[desc].p)->media_sdcard.size)
 
 static kernel_pthread_mutex_t s_sd_mutex;
 
@@ -104,10 +104,10 @@ Implementation
 | See:
 ---------------------------------------------*/
 int dev_sdcard_load(void)
-{      
+{
    // initialization
-   pthread_mutexattr_t  mutex_attr=0;
-   kernel_pthread_mutex_init(&s_sd_mutex, &mutex_attr);          
+   pthread_mutexattr_t mutex_attr=0;
+   kernel_pthread_mutex_init(&s_sd_mutex, &mutex_attr);
 
    return 0;
 }
@@ -122,10 +122,10 @@ int dev_sdcard_load(void)
 ---------------------------------------------*/
 int dev_sdcard_open(desc_t desc, int o_flag)
 {
-   ofile_lst[desc].offset = 0;      
+   ofile_lst[desc].offset = 0;
    return 0;
 }
- 
+
 /*-------------------------------------------
 | Name:dev_sdcard_close
 | Description:
@@ -148,35 +148,35 @@ int dev_sdcard_close(desc_t desc)
 | See:
 ---------------------------------------------*/
 int dev_sdcard_seek(desc_t desc,int offset,int origin)
-{    
-	int  dev_current_addr;
-	
-	// Semaphore protect
-    __sd_lock();
-   
-	dev_current_addr = (int)ofile_lst[desc].offset; 
-  
-   	switch(origin)
-   	{
-      case SEEK_SET:
-            dev_current_addr = (int)(offset%(SDCARD_SIZE));
-         break;
+{
+   int dev_current_addr;
 
-      case SEEK_CUR:
-        dev_current_addr += (int)(offset%(SDCARD_SIZE));
-         break;
+   // Semaphore protect
+   __sd_lock();
 
-      case SEEK_END:
-         dev_current_addr=(int)SDCARD_SIZE;
-         break;
-   	}
+   dev_current_addr = (int)ofile_lst[desc].offset;
 
-   	ofile_lst[desc].offset = dev_current_addr;
-    
+   switch(origin)
+   {
+   case SEEK_SET:
+      dev_current_addr = (int)(offset%(SDCARD_SIZE));
+      break;
+
+   case SEEK_CUR:
+      dev_current_addr += (int)(offset%(SDCARD_SIZE));
+      break;
+
+   case SEEK_END:
+      dev_current_addr=(int)SDCARD_SIZE;
+      break;
+   }
+
+   ofile_lst[desc].offset = dev_current_addr;
+
    // Semaphore protect
    __sd_unlock();
-       
-   	return ofile_lst[desc].offset;
+
+   return ofile_lst[desc].offset;
 }
 
 /*-------------------------------------------
@@ -189,32 +189,32 @@ int dev_sdcard_seek(desc_t desc,int offset,int origin)
 ---------------------------------------------*/
 int dev_sdcard_read(desc_t desc, char* buf,int cb)
 {
-   int result;  
-   
+   int result;
+
    // Semaphore protect
    __sd_lock();
-   
-   int  dev_current_addr = (int)ofile_lst[desc].offset;  
-   
+
+   int dev_current_addr = (int)ofile_lst[desc].offset;
+
    if ((dev_current_addr + (long)cb) > SDCARD_SIZE)
    {
       if(!(cb = SDCARD_SIZE-dev_current_addr))
-         return 0;//end of device.
+         return 0;  //end of device.
    }
 
    //use current position
    if (__get_if_spi_master_desc() < 0)
       return -1;
-   
+
    // Call sdcard driver
    result = sdcard_read(desc,
-   						(unsigned char *)buf, 
-                        (unsigned long)dev_current_addr, 
+                        (unsigned char *)buf,
+                        (unsigned long)dev_current_addr,
                         (unsigned long)cb);
-   
+
    if (result == -1)    // Test default
-     return -1;
-   
+      return -1;
+
    dev_current_addr += cb;
 
    ofile_lst[desc].offset = dev_current_addr;
@@ -239,74 +239,74 @@ int dev_sdcard_write(desc_t desc, const char* buf,int cb)
 
    // Semaphore protect
    __sd_lock();
-   
-   int  dev_current_addr = (int)ofile_lst[desc].offset;    
-     
+
+   int dev_current_addr = (int)ofile_lst[desc].offset;
+
    if( (dev_current_addr + (long)cb) > SDCARD_SIZE)
    {
       if(!(cb = SDCARD_SIZE-dev_current_addr))
-         return 0;//end of device.
+         return 0;  //end of device.
    }
 
    if(__get_if_spi_master_desc() < 0)
-    return -1;
-      
+      return -1;
+
    // Call sdcard driver
-   result = sdcard_write(desc,(unsigned char *)buf, 
-                         (unsigned long)dev_current_addr, 
+   result = sdcard_write(desc,(unsigned char *)buf,
+                         (unsigned long)dev_current_addr,
                          (unsigned long)cb);
-  
+
    if (result == -1)     // Test default
       return -1;
-   
+
    dev_current_addr += cb;
-     
+
    ofile_lst[desc].offset = dev_current_addr;
 
    // Semaphore protect
    __sd_unlock();
-   
+
    return cb;
 }
 
 /*--------------------------------------------
 | Name:        dev_sdcard_ioctl
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int dev_sdcard_ioctl(desc_t desc,int request,va_list ap){
-   switch(request){
+   switch(request) {
 
-      case HDGETSZ:{
-         long* hdsz_p= va_arg( ap, long*);
-         if(!hdsz_p)
-            return -1;
-         *hdsz_p= ((sdcard_info_t*)ofile_lst[desc].p)->media_sdcard.size;
-         // *hdsz_p = SDCARD_SIZE;
-      }
-      break;
+   case HDGETSZ: {
+      long* hdsz_p= va_arg( ap, long*);
+      if(!hdsz_p)
+         return -1;
+      *hdsz_p= ((sdcard_info_t*)ofile_lst[desc].p)->media_sdcard.size;
+      // *hdsz_p = SDCARD_SIZE;
+   }
+   break;
 
-      case I_LINK:{
-         if( !(ofile_lst[desc].p = _sys_malloc(sizeof(sdcard_info_t))) )
-            return -1;
-         
-         sdcard_init(desc,&((sdcard_info_t*)ofile_lst[desc].p)->media_sdcard);
-      }
-      break;
+   case I_LINK: {
+      if( !(ofile_lst[desc].p = _sys_malloc(sizeof(sdcard_info_t))) )
+         return -1;
 
-      case I_UNLINK:{
-         if(ofile_lst[desc].p)
-            _sys_free(ofile_lst[desc].p);
-      }
-      break;
+      sdcard_init(desc,&((sdcard_info_t*)ofile_lst[desc].p)->media_sdcard);
+   }
+   break;
 
-      //
-      
-      default:
-      	return -1;
+   case I_UNLINK: {
+      if(ofile_lst[desc].p)
+         _sys_free(ofile_lst[desc].p);
+   }
+   break;
+
+   //
+
+   default:
+      return -1;
    }
 
    return 0;

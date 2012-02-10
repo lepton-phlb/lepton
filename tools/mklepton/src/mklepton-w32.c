@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is ______________________________________.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): ______________________________________.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -128,7 +128,7 @@ const char* cpu_type_list[]={
 };
 
 //kernel configuration
-typedef struct kernel_conf_t{
+typedef struct kernel_conf_t {
    char* str_cpu_type;
    char* str_cpu_freq;
    char* str_heap_size;
@@ -148,9 +148,9 @@ typedef struct kernel_conf_t{
    int descriptors_max;
    int network_used;
    long cpufs_size;
-   int  cpufs_node;
-   int  cpufs_block;
-   int  cpufs_blocksz;
+   int cpufs_node;
+   int cpufs_block;
+   int cpufs_blocksz;
    char* str_cpufs_option;
 };
 
@@ -158,10 +158,10 @@ FILE* f_kernelconf   = NULL;
 struct kernel_conf_t g_kernel_conf={0};
 
 const char dflt_kernel_conf_filepath[] = "kernel_mkconf.h";
-#define MK_KERNELCONF_FILEPATH   kernel_conf_filepath  
+#define MK_KERNELCONF_FILEPATH   kernel_conf_filepath
 char * kernel_conf_filepath = (char*)dflt_kernel_conf_filepath; //see xml_elmt_mklepton()
 const char kernelconf_top_header[]=
-"/*===========================================\n\
+   "/*===========================================\n\
 Compiler Directive\n\
 =============================================*/\n\
 #ifndef _KERNEL_MKCONF_H\n\
@@ -171,7 +171,7 @@ Includes\n\
 =============================================*/\n\n";
 
 const char kernelconf_decl_header[]=
-"\n/*===========================================\n\
+   "\n/*===========================================\n\
 Declaration\n\
 =============================================*/\n\n";
 
@@ -189,21 +189,21 @@ const char kernelconf_network_define[]="#define __KERNEL_NET_IPSTACK";
 //boot configuration
 FILE* f_bootconf   = NULL;
 const char dflt_boot_filepath[] = ".boot";
-#define MK_BOOT_FILEPATH   boot_filepath  
+#define MK_BOOT_FILEPATH   boot_filepath
 char * boot_filepath = (char*)dflt_boot_filepath; //see xml_elmt_mklepton()
 
 const char dflt_boot_dev[] = "/dev/kb0";
-#define MK_BOOT_DEV   boot_dev  
+#define MK_BOOT_DEV   boot_dev
 char * boot_dev = (char*)dflt_boot_dev;
 
 const char dflt_boot_delay[] = "0";
 char * boot_delay = (char*)dflt_boot_delay;
 
-typedef struct boot_t{
+typedef struct boot_t {
    char* kb_val;
    char* arg;
-   struct boot_t* pprev; 
-   struct boot_t* pnext; 
+   struct boot_t* pprev;
+   struct boot_t* pnext;
 };
 
 struct boot_t* pboot_lst_end=0;
@@ -212,15 +212,15 @@ struct boot_t* pboot_lst_start=0;
 //mount configuration
 FILE* f_mountconf   = NULL;
 const char dflt_mount_filepath[] = ".mount";
-#define MK_MOUNT_FILEPATH   mount_filepath  
+#define MK_MOUNT_FILEPATH   mount_filepath
 char * mount_filepath = (char*)dflt_mount_filepath; //see xml_elmt_mklepton()
-typedef struct mount_t{
+typedef struct mount_t {
    char* fstype;
    char* dev;
    char* mount_point;
 
-   struct mount_t* pprev; 
-   struct mount_t* pnext; 
+   struct mount_t* pprev;
+   struct mount_t* pnext;
 };
 
 struct mount_t* pmount_lst_end=0;
@@ -230,9 +230,9 @@ struct mount_t* pmount_lst_start=0;
 FILE* f_devconf   = NULL;
 const char dflt_dev_conf_filepath[] = "dev_mkconf.c";
 char * dev_conf_filepath = (char*)dflt_dev_conf_filepath; //see xml_elmt_mklepton()
-#define MK_DEVCONF_FILEPATH   dev_conf_filepath   
+#define MK_DEVCONF_FILEPATH   dev_conf_filepath
 const char devconf_top_header[]=
-"/*-------------------------------------------\n\
+   "/*-------------------------------------------\n\
 | Copyright(C) 2007 CHAUVIN-ARNOUX\n\
 ---------------------------------------------\n\
 | Project:\n\
@@ -265,7 +265,8 @@ const char dev_lst_open_declaration[]="\n\npdev_map_t const dev_lst[]={\n";
 const char dev_lst_close_declaration[]="\n};\n\n";
 
 //
-const char devconf_bottom_header[]="pdev_map_t const * pdev_lst=&dev_lst[0];\n\
+const char devconf_bottom_header[]=
+   "pdev_map_t const * pdev_lst=&dev_lst[0];\n\
 const char max_dev = sizeof(dev_lst)/sizeof(pdev_map_t);\n\
 /*===========================================\n\
 Implementation\n\
@@ -287,10 +288,10 @@ End of Source dev_mkconf.c\n\
 #define MK_DEV_RTCX1203       "DEV_RTCX1203"         // /dev/rtc1
 #define MK_DEV_KBCPLD_A0383   "DEV_KBCPLD_A0383"     // /dev/kb0
 
-typedef struct mkdev_t{
+typedef struct mkdev_t {
    char*   dev_map_name;
-   struct mkdev_t* pprev; 
-   struct mkdev_t* pnext; 
+   struct mkdev_t* pprev;
+   struct mkdev_t* pnext;
 };
 
 struct mkdev_t* pdev_lst_end=0;
@@ -301,10 +302,10 @@ struct mkdev_t* pdev_lst_start=0;
 FILE* f_binconf  = NULL;
 const char dflt_bin_conf_filepath[] = "bin_mkconf.c";
 char * bin_conf_filepath = (char*)dflt_bin_conf_filepath; //see xml_elmt_mklepton()
-#define MK_BINCONF_FILEPATH   bin_conf_filepath   
+#define MK_BINCONF_FILEPATH   bin_conf_filepath
 
 const char binconf_top_header[]=
-"/*-------------------------------------------\n\
+   "/*-------------------------------------------\n\
 | Copyright(C) 2007 CHAUVIN-ARNOUX\n\
 ---------------------------------------------\n\
 | Project:\n\
@@ -323,44 +324,44 @@ const char binconf_top_header[]=
 ---------------------------------------------*/\n\n\n";
 
 const char binconf_include_header[]=
-"/*===========================================\n\
+   "/*===========================================\n\
 Includes\n\
 =============================================*/\n";
 
 const char binconf_globaldecl_header[]=
-"\n\n/*===========================================\n\
+   "\n\n/*===========================================\n\
 Global Declaration\n\
 =============================================*/\n";
 
 const char binconf_implementation_header[]=
-"\n\n/*===========================================\n\
+   "\n\n/*===========================================\n\
 Implementation\n\
 =============================================*/\n";
 
 const char binconf_bottom_header[]=
-"\n/*===========================================\n\
+   "\n/*===========================================\n\
 End of Source mklepton.c\n\
 =============================================*/\n";
 
 const char binconf_decl_bin_lst[]=
-"const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);\n\
+   "const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);\n\
 const bin_t* bin_lst = &_bin_lst[0];\n";
 
 
 static char* bin_src_path  =0;
 static char* bin_dest_path =0;
-static int   bin_index     =0;
+static int bin_index     =0;
 
-typedef struct mkbin_t{
-   int   bin_index;
+typedef struct mkbin_t {
+   int bin_index;
    char* src_path;
    char* dest_path;
    char* bin_name;
    char* stack;
-   char* priority; 
-   char* timeslice; 
-   struct mkbin_t* pprev; 
-   struct mkbin_t* pnext; 
+   char* priority;
+   char* timeslice;
+   struct mkbin_t* pprev;
+   struct mkbin_t* pnext;
 };
 
 struct mkbin_t* pbin_lst_end=0;
@@ -370,20 +371,21 @@ struct mkbin_t* pbin_lst_start=0;
 
 //disk image configuration
 const char pattern_start_c[]="const unsigned char filecpu_memory[]={";
-const char pattern_end_c[]="0x00};\r\n\r\n//\r\nconst unsigned long filecpu_memory_size = sizeof(filecpu_memory);";
+const char pattern_end_c[]=
+   "0x00};\r\n\r\n//\r\nconst unsigned long filecpu_memory_size = sizeof(filecpu_memory);";
 
 const char fname_src[]=".\\fsflash.o";
 //const char fname_dest[]="dev_dskimg.c";
 const char dflt_dskimg_conf_filepath[] = "dev_dskimg.c";
 char * dskimg_conf_filepath = (char*)dflt_dskimg_conf_filepath; //see xml_elmt_mklepton()
-#define MK_DSKIMG_FILEPATH   dskimg_conf_filepath   
+#define MK_DSKIMG_FILEPATH   dskimg_conf_filepath
 
 const char dflt_dskimg_conf_header_filepath[] = "dev_dskimg.h";
 char * dskimg_conf_header_filepath = (char*)dflt_dskimg_conf_header_filepath; //see xml_elmt_mklepton()
-#define MK_DSKIMG_HEADER_FILEPATH   dskimg_conf_header_filepath 
+#define MK_DSKIMG_HEADER_FILEPATH   dskimg_conf_header_filepath
 
 const char dskimg_top_header[]=
-"/*===========================================\n\
+   "/*===========================================\n\
 Compiler Directive\n\
 =============================================*/\n\
 #ifndef _DEV_DSKIMG_H\n\
@@ -392,35 +394,35 @@ Compiler Directive\n\
 \n";
 
 const char dskimg_include_header[]=
-"\n/*===========================================\n\
+   "\n/*===========================================\n\
 Includes\n\
 =============================================*/\n";
 
 const char dskimg_decl_header[]=
-"\n\n/*===========================================\n\
+   "\n\n/*===========================================\n\
 Declaration\n\
 =============================================*/\n";
 
 const char dskimg_bottom_header[]=
-"\n\n\
+   "\n\n\
 #endif\n\
 \n\
 /*===========================================\n\
 End of Source mklepton.c\n\
 =============================================*/\n";
-  
+
 //
 static int fsrc=-1;
 static int fdest=-1;
 
 
-//file 
-typedef struct mkfile_t{
+//file
+typedef struct mkfile_t {
    char* src_file;
    char* dest_path;
    char* file_name;
-   struct mkfile_t* pprev; 
-   struct mkfile_t* pnext; 
+   struct mkfile_t* pprev;
+   struct mkfile_t* pnext;
 };
 
 struct mkfile_t* pfile_lst_end=0;
@@ -465,7 +467,7 @@ Implementation
 ---------------------------------------------*/
 int xml_elmt_start_kernel(const char **attr){
 
-   if(!(f_kernelconf = fopen(MK_KERNELCONF_FILEPATH,"w+"))){
+   if(!(f_kernelconf = fopen(MK_KERNELCONF_FILEPATH,"w+"))) {
       printf("error! cannot open files %s\n",MK_KERNELCONF_FILEPATH);
       exit(0);
    }
@@ -494,7 +496,7 @@ int xml_elmt_start_kernel(const char **attr){
 ---------------------------------------------*/
 int xml_elmt_end_kernel(void){
    char buf[255]={0};
-   
+
    //include
    //#include dev_diskimg.h
    fprintf(f_kernelconf,"#include \"%s\" \n",MK_DSKIMG_HEADER_FILEPATH);
@@ -504,38 +506,38 @@ int xml_elmt_end_kernel(void){
    fwrite(kernelconf_decl_header,sizeof(char),strlen(kernelconf_decl_header),f_kernelconf);
 
    //
-   if(g_kernel_conf.str_cpu_type){
+   if(g_kernel_conf.str_cpu_type) {
       fprintf(f_kernelconf,"#define %s \n\n",cpu_type_list[g_kernel_conf.cpu_type]);
    }else{
       fprintf(f_kernelconf,"#define %s \n\n",cpu_type_list[CPU_TYPE_WIN32]);
    }
 
    if(g_kernel_conf.cpu_freq
-      && g_kernel_conf.str_cpu_freq){
+      && g_kernel_conf.str_cpu_freq) {
       fprintf(f_kernelconf,"%s %ldL\n\n",kernelconf_cpu_freq_define,g_kernel_conf.cpu_freq);
    }
-   
+
    //
-   if(g_kernel_conf.heap_size 
-      && g_kernel_conf.str_heap_size){
+   if(g_kernel_conf.heap_size
+      && g_kernel_conf.str_heap_size) {
       fprintf(f_kernelconf,"%s %d\n\n",kernelconf_heap_define,g_kernel_conf.heap_size);
    }
    //
    if(   (g_kernel_conf.thread_max && g_kernel_conf.str_thread_max)
-      || g_kernel_conf.process_max && g_kernel_conf.str_process_max){
+         || g_kernel_conf.process_max && g_kernel_conf.str_process_max) {
       //check values
-      if(!g_kernel_conf.thread_max && g_kernel_conf.process_max){
+      if(!g_kernel_conf.thread_max && g_kernel_conf.process_max) {
          if(g_kernel_conf.network_used)
-            g_kernel_conf.thread_max = g_kernel_conf.process_max+2; //(kernel thread + ip stack thread)
+            g_kernel_conf.thread_max = g_kernel_conf.process_max+2;  //(kernel thread + ip stack thread)
          else
-            g_kernel_conf.thread_max = g_kernel_conf.process_max+1; //(kernel thread)
-      }else if(g_kernel_conf.thread_max && !g_kernel_conf.process_max){
+            g_kernel_conf.thread_max = g_kernel_conf.process_max+1;  //(kernel thread)
+      }else if(g_kernel_conf.thread_max && !g_kernel_conf.process_max) {
          if(g_kernel_conf.network_used)
-            g_kernel_conf.process_max = g_kernel_conf.thread_max-2; //(kernel thread + ip stack thread)
+            g_kernel_conf.process_max = g_kernel_conf.thread_max-2;  //(kernel thread + ip stack thread)
          else
-            g_kernel_conf.process_max = g_kernel_conf.thread_max-1; //(kernel thread)
+            g_kernel_conf.process_max = g_kernel_conf.thread_max-1;  //(kernel thread)
       }else{
-         if(g_kernel_conf.network_used){
+         if(g_kernel_conf.network_used) {
             if(g_kernel_conf.process_max>(g_kernel_conf.thread_max-2))
                perror("\nerror: too many process\n");
          }else{
@@ -551,15 +553,15 @@ int xml_elmt_end_kernel(void){
       perror("\nerror: thread max or process max must be set\n");
    }
    //
-   if(g_kernel_conf.openfiles_max && g_kernel_conf.str_openfiles_max){
+   if(g_kernel_conf.openfiles_max && g_kernel_conf.str_openfiles_max) {
       fprintf(f_kernelconf,"%s %d\n\n",kernelconf_openfiles_define,g_kernel_conf.openfiles_max);
    }
    //
-   if(g_kernel_conf.descriptors_max && g_kernel_conf.str_descriptors_max){
+   if(g_kernel_conf.descriptors_max && g_kernel_conf.str_descriptors_max) {
       fprintf(f_kernelconf,"%s %d\n\n",kernelconf_descriptors_define,g_kernel_conf.descriptors_max);
    }
    //
-   if(g_kernel_conf.str_env_path){
+   if(g_kernel_conf.str_env_path) {
       char *token;
       fprintf(f_kernelconf,"%s {",kernelconf_env_path_define);
       token = strtok(g_kernel_conf.str_env_path,";");
@@ -574,7 +576,7 @@ int xml_elmt_end_kernel(void){
       fprintf(f_kernelconf,"}\n\n");
    }
    //
-   if(g_kernel_conf.network_used && g_kernel_conf.str_network_used){
+   if(g_kernel_conf.network_used && g_kernel_conf.str_network_used) {
       fprintf(f_kernelconf,"%s\n\n",kernelconf_network_define);
    }
 
@@ -585,7 +587,7 @@ int xml_elmt_end_kernel(void){
    fclose(f_kernelconf);
 
    printf("make kernel:%s ok!\n",MK_KERNELCONF_FILEPATH);
-   
+
    return 0;
 }
 
@@ -607,29 +609,29 @@ int xml_elmt_kernel_cpu(const char **attr){
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_FREQ)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_FREQ)) {
          g_kernel_conf.str_cpu_freq =strdup(attr_val);
          //modif since support sma7se. 29/07/2007
          g_kernel_conf.cpu_freq = atol(attr_val);
          if( !(g_kernel_conf.cpu_freq/1000000L) )
-            g_kernel_conf.cpu_freq = atol(attr_val)*1000000L;//define in MHz in xml else define in Hz.
-        
+            g_kernel_conf.cpu_freq = atol(attr_val)*1000000L;  //define in MHz in xml else define in Hz.
+
          if(g_kernel_conf.cpu_freq<=0)
             return -1;
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_TYPE)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_TYPE)) {
          cpu_type_enum_t cpu_type_enum=CPU_TYPE_WIN32;
-         
+
          g_kernel_conf.str_cpu_type =strdup(attr_val);
-         while(cpu_type_list[cpu_type_enum]){
+         while(cpu_type_list[cpu_type_enum]) {
             if(!stricmp(g_kernel_conf.str_cpu_type,cpu_type_list[cpu_type_enum]))
                break;
             cpu_type_enum++;
          }
          g_kernel_conf.cpu_type = cpu_type_enum;
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 /*-------------------------------------------
@@ -650,13 +652,13 @@ int xml_elmt_kernel_heap(const char **attr){
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_SIZE)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_SIZE)) {
          g_kernel_conf.str_heap_size =strdup(attr_val);
          g_kernel_conf.heap_size = atoi(attr_val);
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -673,18 +675,18 @@ int xml_elmt_kernel_thread(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)) {
          g_kernel_conf.str_thread_max =strdup(attr_val);
          g_kernel_conf.thread_max = atoi(attr_val);
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -701,18 +703,18 @@ int xml_elmt_kernel_process(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)) {
          g_kernel_conf.str_process_max =strdup(attr_val);
          g_kernel_conf.process_max = atoi(attr_val);
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -729,18 +731,18 @@ int xml_elmt_kernel_openfiles(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)) {
          g_kernel_conf.str_openfiles_max =strdup(attr_val);
          g_kernel_conf.openfiles_max = atoi(attr_val);
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -757,18 +759,18 @@ int xml_elmt_kernel_descriptors(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_MAX)) {
          g_kernel_conf.str_descriptors_max=strdup(attr_val);
          g_kernel_conf.descriptors_max = atoi(attr_val);
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -785,25 +787,25 @@ int xml_elmt_kernel_cpufs(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_SIZE)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_SIZE)) {
          g_kernel_conf.cpufs_size=atol(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_NODE)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_NODE)) {
          g_kernel_conf.cpufs_node=atoi(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_BLOCK)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_BLOCK)) {
          g_kernel_conf.cpufs_block=atoi(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_BLOCKSZ)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_BLOCKSZ)) {
          g_kernel_conf.cpufs_blocksz=atoi(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_OPTION)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_OPTION)) {
          g_kernel_conf.str_cpufs_option=strdup(attr_val);
       }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -820,17 +822,17 @@ int xml_elmt_kernel_env(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_PATH)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_PATH)) {
          g_kernel_conf.str_env_path=strdup(attr_val);
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -847,21 +849,21 @@ int xml_elmt_kernel_network(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_USE)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_USE)) {
          g_kernel_conf.str_network_used =strdup(attr_val);
          if(!stricmp(attr_val,"on"))
             g_kernel_conf.network_used = 1;
          else
             g_kernel_conf.network_used = 0;
-      }else 
+      }else
          return -1;
    }
-   
+
    return 0;
 }
 
@@ -878,7 +880,7 @@ int xml_elmt_start_boot(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    printf("read xml boot...\n");
 
    for (i = 0; attr[i]; i += 2) {
@@ -886,15 +888,15 @@ int xml_elmt_start_boot(const char **attr){
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
 
-      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)) {
          //boot
          char* path =malloc(strlen(attr_val)+strlen(boot_filepath)+1);
          sprintf(path,"%s/%s",attr_val,boot_filepath);
          boot_filepath = path;
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_DEV)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_DEV)) {
          //multi boot devices
          boot_dev = strdup(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_DELAY)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_DELAY)) {
          //boot delay in ms
          boot_delay = strdup(attr_val);
       }
@@ -935,14 +937,14 @@ int xml_elmt_boot_command(const char **attr){
    char* dest_path   = 0;
 
    struct boot_t* pboot=0;
-     
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_ARG)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_ARG)) {
          arg=strdup(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_VALUE)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_VALUE)) {
          kb_val=strdup(attr_val);
       }
    }
@@ -985,7 +987,7 @@ int xml_elmt_start_mount(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    printf("read xml mount...\n");
 
    for (i = 0; attr[i]; i += 2) {
@@ -993,7 +995,7 @@ int xml_elmt_start_mount(const char **attr){
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
 
-      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)) {
          //boot
          char* path =malloc(strlen(attr_val)+strlen(mount_filepath)+1);
          sprintf(path,"%s/%s",attr_val,mount_filepath);
@@ -1033,24 +1035,24 @@ int xml_elmt_mount_command(const char **attr){
    char* fstype      = 0;
    char* dev         = 0;
    char* mount_point = 0;
-   
+
    struct mount_t* pmount=0;
-     
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_TYPE)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_TYPE)) {
          fstype=strdup(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_DEV)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_DEV)) {
          dev=strdup(attr_val);
-      }else if(!stricmp(attr_name,XML_TAG_ATTR_POINT)){
+      }else if(!stricmp(attr_name,XML_TAG_ATTR_POINT)) {
          mount_point=strdup(attr_val);
       }
    }
 
    //
-   if(!fstype 
+   if(!fstype
       ||!dev
       ||!mount_point)
       return -1;
@@ -1060,7 +1062,7 @@ int xml_elmt_mount_command(const char **attr){
    pmount->fstype       = fstype;
    pmount->dev          = dev;
    pmount->mount_point  = mount_point;
-   
+
    //
    if(pmount_lst_end)
       pmount_lst_end->pprev   = pmount;
@@ -1114,7 +1116,7 @@ int xml_elmt_end_devices(void){
    fclose(f_devconf);
 
    printf("make devices:%s ok!\n",MK_DEVCONF_FILEPATH);
-   
+
    return 0;
 }
 
@@ -1130,14 +1132,14 @@ int xml_elmt_dev(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-     
+
    char* dev_name = NULL;
 
    struct mkdev_t* pdev;
-   
+
    if(!f_devconf)
       return -1;
-     
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
@@ -1145,8 +1147,8 @@ int xml_elmt_dev(const char **attr){
 
       if(!stricmp(attr_name,XML_TAG_ATTR_NAME))
          dev_name = attr_val;
-      else if(!stricmp(attr_name,XML_TAG_ATTR_USE)){
-         if(!stricmp(attr_val,XML_DEV_VALUE_ON)){
+      else if(!stricmp(attr_name,XML_TAG_ATTR_USE)) {
+         if(!stricmp(attr_val,XML_DEV_VALUE_ON)) {
             //insert dev;
             pdev = malloc(sizeof(struct mkdev_t));
             pdev->dev_map_name = strdup(dev_name);
@@ -1165,7 +1167,7 @@ int xml_elmt_dev(const char **attr){
       }
    }
 
-   
+
    return 0;
 }
 
@@ -1181,7 +1183,7 @@ int xml_elmt_start_binaries(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    printf("read xml binaries:%s ...\n",MK_BINCONF_FILEPATH);
 
    for (i = 0; attr[i]; i += 2) {
@@ -1206,9 +1208,9 @@ int xml_elmt_start_binaries(const char **attr){
 | See:
 ---------------------------------------------*/
 int xml_elmt_end_binaries(void){
-   
+
    printf("read xml binaries:%s ok!\n",MK_BINCONF_FILEPATH);
-   
+
    return 0;
 }
 
@@ -1228,11 +1230,11 @@ int xml_elmt_bin(const char **attr){
 
    char* bin_name    = 0;
    char* stack       = 0;
-   char* priority    = 0; 
-   char* timeslice   = 0; 
+   char* priority    = 0;
+   char* timeslice   = 0;
 
    struct mkbin_t* pbin;
-     
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
@@ -1276,7 +1278,7 @@ int xml_elmt_bin(const char **attr){
    pbin_lst_end = pbin;
 
    bin_index++;
-   
+
 
    return 0;
 }
@@ -1311,7 +1313,7 @@ int xml_elmt_file(const char **attr){
    char* dest_path   = 0;
 
    struct mkfile_t* pfile=0;
-     
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
@@ -1322,7 +1324,7 @@ int xml_elmt_file(const char **attr){
          src_file = attr_val;
       else if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH))
          dest_path = attr_val;
-      
+
    }
 
    if(!file_name || !src_file || !dest_path)
@@ -1359,12 +1361,12 @@ int xml_elmt_mklepton(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)) {
          char* path;
          //kernel
          path =malloc(strlen(attr_val)+strlen(kernel_conf_filepath)+1);
@@ -1406,12 +1408,12 @@ int xml_elmt_arch(const char **attr){
    int i;
    char* attr_name;
    char* attr_val;
-   
+
    for (i = 0; attr[i]; i += 2) {
       attr_name = (char*)attr[i];
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
-      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_DESTPATH)) {
          char* path;
          //kernel
          path =malloc(strlen(attr_val)+strlen(kernel_conf_filepath)+1);
@@ -1458,7 +1460,7 @@ int xml_elmt_start_target(const char **attr){
       attr_val  = (char*)attr[i + 1];
       if(!attr_name || !attr_val) continue;
 
-      if(!stricmp(attr_name,XML_TAG_ATTR_NAME)){
+      if(!stricmp(attr_name,XML_TAG_ATTR_NAME)) {
          xml_current_target=strdup(attr_val);
          printf("xml target=%s\n",xml_current_target);
       }
@@ -1475,7 +1477,7 @@ int xml_elmt_start_target(const char **attr){
 | See:
 ---------------------------------------------*/
 int xml_elmt_end_target(void){
-   
+
    if(xml_current_target)
       free(xml_current_target);
    xml_current_target=(char*)0;
@@ -1493,65 +1495,65 @@ int xml_elmt_end_target(void){
 ---------------------------------------------*/
 static void start(void *data, const char *el, const char **attr){
    int error=0;
-   
-   if(!stricmp(el,XML_TAG_ELMT_TARGET)){
-     error=xml_elmt_start_target(attr);
+
+   if(!stricmp(el,XML_TAG_ELMT_TARGET)) {
+      error=xml_elmt_start_target(attr);
    }else {
       //target filter
       if(   mk_current_target
-         && xml_current_target
-         && stricmp(xml_current_target,mk_current_target))
+            && xml_current_target
+            && stricmp(xml_current_target,mk_current_target))
          return;
 
       if(!mk_current_target && xml_current_target)
-         return;//filter not set
+         return;  //filter not set
       //
-      if(!stricmp(el,XML_TAG_ELMT_MKLEPTON)){
+      if(!stricmp(el,XML_TAG_ELMT_MKLEPTON)) {
          error=xml_elmt_mklepton(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_ARCH)){
+      }else if(!stricmp(el,XML_TAG_ELMT_ARCH)) {
          error=xml_elmt_arch(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_KERNEL) && (opt&OPT_MSK_K) ){
+      }else if(!stricmp(el,XML_TAG_ELMT_KERNEL) && (opt&OPT_MSK_K) ) {
          error=xml_elmt_start_kernel(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_CPU) && (opt&OPT_MSK_K)){
+      }else if(!stricmp(el,XML_TAG_ELMT_CPU) && (opt&OPT_MSK_K)) {
          error=xml_elmt_kernel_cpu(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_HEAP) && (opt&OPT_MSK_K)){
+      }else if(!stricmp(el,XML_TAG_ELMT_HEAP) && (opt&OPT_MSK_K)) {
          error=xml_elmt_kernel_heap(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_THREAD) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_thread(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_PROCESS) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_process(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_OPENFILES) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_openfiles(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_DESCRIPTORS) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_descriptors(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_CPUFS) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_cpufs(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_ENV) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_env(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_NETWORK) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_network(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_BOOT) && (opt&OPT_MSK_K) ){
-        error=xml_elmt_start_boot(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_MOUNT) && (opt&OPT_MSK_K) ){
-        error=xml_elmt_start_mount(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_COMMAND) && (opt&OPT_MSK_K) ){
-        error=xml_elmt_boot_command(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_DISK) && (opt&OPT_MSK_K) ){
-        error=xml_elmt_mount_command(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_OPENFILES) && (opt&OPT_MSK_K)){
-        error=xml_elmt_kernel_openfiles(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_DEVICES) && (opt&OPT_MSK_D) ){
-        error=xml_elmt_start_devices(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_DEV) && (opt&OPT_MSK_D)){
-        error=xml_elmt_dev(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_BINARIES) && (opt&OPT_MSK_B)){
-        error=xml_elmt_start_binaries(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_BIN) && (opt&OPT_MSK_B) ){
-        error=xml_elmt_bin(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_FILES) && (opt&OPT_MSK_F)){
-        error=xml_elmt_files(attr);
-      }else if(!stricmp(el,XML_TAG_ELMT_FILE) && (opt&OPT_MSK_F)){
-        error=xml_elmt_file(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_THREAD) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_thread(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_PROCESS) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_process(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_OPENFILES) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_openfiles(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_DESCRIPTORS) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_descriptors(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_CPUFS) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_cpufs(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_ENV) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_env(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_NETWORK) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_network(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_BOOT) && (opt&OPT_MSK_K) ) {
+         error=xml_elmt_start_boot(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_MOUNT) && (opt&OPT_MSK_K) ) {
+         error=xml_elmt_start_mount(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_COMMAND) && (opt&OPT_MSK_K) ) {
+         error=xml_elmt_boot_command(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_DISK) && (opt&OPT_MSK_K) ) {
+         error=xml_elmt_mount_command(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_OPENFILES) && (opt&OPT_MSK_K)) {
+         error=xml_elmt_kernel_openfiles(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_DEVICES) && (opt&OPT_MSK_D) ) {
+         error=xml_elmt_start_devices(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_DEV) && (opt&OPT_MSK_D)) {
+         error=xml_elmt_dev(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_BINARIES) && (opt&OPT_MSK_B)) {
+         error=xml_elmt_start_binaries(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_BIN) && (opt&OPT_MSK_B) ) {
+         error=xml_elmt_bin(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_FILES) && (opt&OPT_MSK_F)) {
+         error=xml_elmt_files(attr);
+      }else if(!stricmp(el,XML_TAG_ELMT_FILE) && (opt&OPT_MSK_F)) {
+         error=xml_elmt_file(attr);
       }
    }
 
@@ -1572,31 +1574,31 @@ static void start(void *data, const char *el, const char **attr){
 static void end(void *data, const char *el)
 {
    Depth--;
-   if(!stricmp(el,XML_TAG_ELMT_TARGET)){
-     xml_elmt_end_target();
+   if(!stricmp(el,XML_TAG_ELMT_TARGET)) {
+      xml_elmt_end_target();
    }else {
       if(   mk_current_target
-         && xml_current_target
-         && stricmp(xml_current_target,mk_current_target))
+            && xml_current_target
+            && stricmp(xml_current_target,mk_current_target))
          return;
 
       if(!mk_current_target && xml_current_target)
-         return;//filter not set
+         return;  //filter not set
 
-      if(!stricmp(el,XML_TAG_ELMT_KERNEL) && (opt&OPT_MSK_K)){
+      if(!stricmp(el,XML_TAG_ELMT_KERNEL) && (opt&OPT_MSK_K)) {
          xml_elmt_end_kernel();
-      }else if(!stricmp(el,XML_TAG_ELMT_DEVICES) && (opt&OPT_MSK_D)){
+      }else if(!stricmp(el,XML_TAG_ELMT_DEVICES) && (opt&OPT_MSK_D)) {
          xml_elmt_end_devices();
-      }else if(!stricmp(el,XML_TAG_ELMT_BOOT) && (opt&OPT_MSK_K)){
+      }else if(!stricmp(el,XML_TAG_ELMT_BOOT) && (opt&OPT_MSK_K)) {
          xml_elmt_end_boot();
-      }else if(!stricmp(el,XML_TAG_ELMT_MOUNT) && (opt&OPT_MSK_K)){
+      }else if(!stricmp(el,XML_TAG_ELMT_MOUNT) && (opt&OPT_MSK_K)) {
          xml_elmt_end_mount();
-      }else if(!stricmp(el,XML_TAG_ELMT_DEV) && (opt&OPT_MSK_D)){
-      }else if(!stricmp(el,XML_TAG_ELMT_BINARIES) && (opt&OPT_MSK_B)){
+      }else if(!stricmp(el,XML_TAG_ELMT_DEV) && (opt&OPT_MSK_D)) {
+      }else if(!stricmp(el,XML_TAG_ELMT_BINARIES) && (opt&OPT_MSK_B)) {
          xml_elmt_end_binaries();
-      }else if(!stricmp(el,XML_TAG_ELMT_BIN)){
-      }else if(!stricmp(el,XML_TAG_ELMT_FILES)){
-      }else if(!stricmp(el,XML_TAG_ELMT_FILE)){
+      }else if(!stricmp(el,XML_TAG_ELMT_BIN)) {
+      }else if(!stricmp(el,XML_TAG_ELMT_FILES)) {
+      }else if(!stricmp(el,XML_TAG_ELMT_FILE)) {
       }
    }
 }
@@ -1615,13 +1617,13 @@ int _mk_conf(char* file_conf){
 
    XML_Parser p = XML_ParserCreate(NULL);
 
-   if (! p) {
+   if (!p) {
       fprintf(stderr, "Couldn't allocate memory for parser\n");
       exit(-1);
    }
 
    //
-   if( (stream  = fopen( file_conf, "r" )) == 0 ){
+   if( (stream  = fopen( file_conf, "r" )) == 0 ) {
       printf("error: cannot open xml file:%s\n",file_conf);
       return -1;
    }
@@ -1630,7 +1632,7 @@ int _mk_conf(char* file_conf){
 
    XML_SetElementHandler(p, start, end);
 
-   for (;;) {
+   for (;; ) {
       int done;
       int len;
 
@@ -1644,8 +1646,8 @@ int _mk_conf(char* file_conf){
 
       if (XML_Parse(p, Buff, len, done) == XML_STATUS_ERROR) {
          fprintf(stderr, "Parse error at line %d:\n%s\n",
-               XML_GetCurrentLineNumber(p),
-               XML_ErrorString(XML_GetErrorCode(p)));
+                 XML_GetCurrentLineNumber(p),
+                 XML_ErrorString(XML_GetErrorCode(p)));
          exit(-1);
       }
 
@@ -1666,34 +1668,34 @@ int _mk_conf(char* file_conf){
 | See:
 ---------------------------------------------*/
 int _mk_binaries(void){
-   
+
    struct mkbin_t* pbin = pbin_lst_start;
    struct vfs_formatopt_t vfs_formatopt;
-   struct statvfs  statvfs;
+   struct statvfs statvfs;
    char current_path[MAX_PATH] = {0};
    char path[MAX_PATH] = {0};
    char ref[MAX_PATH] = {0};
    desc_t desc;
-   
-   
+
+
    printf("make binaries:%s ...\n",MK_BINCONF_FILEPATH);
 
    //list all binaries;
-   while(pbin){
+   while(pbin) {
       printf("(%d):%s/%s\n",pbin->bin_index,
-                                 pbin->dest_path,
-                                 pbin->bin_name);
+             pbin->dest_path,
+             pbin->bin_name);
       pbin = pbin->pprev;
    }
 
    //create fileflash dev
    desc=_vfs_open("/dev/hd/hdc",O_RDWR,0);
-   if(desc<0){
+   if(desc<0) {
       printf("error! cannot open /dev/hd/hdc\n");
       return -1;
    }
 
-   if(_vfs_ioctl(desc,HDSETSZ,g_kernel_conf.cpufs_size)<0){
+   if(_vfs_ioctl(desc,HDSETSZ,g_kernel_conf.cpufs_size)<0) {
       printf("error! cannot set size (%d bytes) on /dev/hd/hdc\n",g_kernel_conf.cpufs_size);
       return -1;
    }
@@ -1704,14 +1706,14 @@ int _mk_binaries(void){
       vfs_formatopt.dev_sz=g_kernel_conf.cpufs_size;
 
    _vfs_close(desc);
-   
-   
+
+
    vfs_formatopt.max_blk   = g_kernel_conf.cpufs_size/g_kernel_conf.cpufs_blocksz; //500//16Ko;
-   vfs_formatopt.max_node  = (g_kernel_conf.cpufs_node>0?g_kernel_conf.cpufs_node:120);//120
+   vfs_formatopt.max_node  = (g_kernel_conf.cpufs_node>0 ? g_kernel_conf.cpufs_node : 120); //120
    vfs_formatopt.blk_sz    = g_kernel_conf.cpufs_blocksz;
    printf("makefs hdc\n");
    _vfs_makefs(fs_ufs,"/dev/hd/hdc",&vfs_formatopt);
-   
+
    //mount /dev/hd/hdc on /usr.
    printf("mount /dev/hd/hdc on /usr\n");
    _vfs_mount(fs_ufs,"/dev/hd/hdc","/usr");
@@ -1721,12 +1723,12 @@ int _mk_binaries(void){
 
    //create files
    pbin = pbin_lst_start;
-   while(pbin){
+   while(pbin) {
       exec_file_t exec_file;
       int cb = 0;
 
       //create new directory
-      if(strcmp(current_path,pbin->dest_path)){
+      if(strcmp(current_path,pbin->dest_path)) {
          strcpy(current_path,pbin->dest_path);
          strcpy(path,"/usr/");
          strcat(path,pbin->dest_path);
@@ -1734,10 +1736,10 @@ int _mk_binaries(void){
          if(_vfs_mkdir(path,0)<0)
             printf("%s already exist\n",path);
       }
-  
+
       //create binary
       exec_file.signature  = EXEC_SIGNT;
-      exec_file.index      = pbin->bin_index; 
+      exec_file.index      = pbin->bin_index;
       exec_file.priority   = atoi(pbin->priority);
       exec_file.stacksize  = atoi(pbin->stack);
       exec_file.timeslice  = atoi(pbin->timeslice);
@@ -1758,22 +1760,22 @@ int _mk_binaries(void){
    //check files
    current_path[0]='\0';
    pbin = pbin_lst_start;
-   while(pbin){
+   while(pbin) {
 
-      if(strcmp(current_path,pbin->dest_path)){
+      if(strcmp(current_path,pbin->dest_path)) {
          strcpy(current_path,pbin->dest_path);
          strcpy(path,"/usr/");
          strcat(path,pbin->dest_path);
          printf("mkdir %s\n",path);
          _vfs_ls(path);
       }
-  
+
       pbin = pbin->pprev;
    }
 
    //create c file for binary
    if(!(f_binconf = fopen(MK_BINCONF_FILEPATH,"w+")))
-         return -1;
+      return -1;
 
    //top header
    fwrite(binconf_top_header,sizeof(char),strlen(binconf_top_header),f_binconf);
@@ -1782,7 +1784,7 @@ int _mk_binaries(void){
    fwrite(binconf_include_header,sizeof(char),strlen(binconf_include_header),f_binconf);
    pbin = pbin_lst_start;
    fprintf(f_binconf, "#include \"kernel/core/bin.h\"\n");
-   while(pbin){
+   while(pbin) {
       //fprintf(f_binconf, "#include \"%s/%s.h\"\n",pbin->src_path,pbin->bin_name);
       fprintf(f_binconf, "//see \"%s/%s.c\"\n",pbin->src_path,pbin->bin_name);
       fprintf(f_binconf, "int %s_main(int argc, char* argv[]);\n\n",pbin->bin_name);
@@ -1794,15 +1796,15 @@ int _mk_binaries(void){
 
    pbin = pbin_lst_start;
    fprintf(f_binconf, "static const bin_t _bin_lst[]={\n");
-   while(pbin){
+   while(pbin) {
       char str_bin_buf[20];
       sprintf(str_bin_buf,"\"%s\"",pbin->bin_name);
-                       //{"init",    init_main,     100,    512,        1},         
+      //{"init",    init_main,     100,    512,        1},
       fprintf(f_binconf,"{%16s,\t\t\t%22s_main,\t\t\t%.8s,\t\t\t%.8s,\t\t\t%.8s}",
-                        str_bin_buf,pbin->bin_name,
-                        pbin->priority,
-                        pbin->stack,
-                        pbin->timeslice);
+              str_bin_buf,pbin->bin_name,
+              pbin->priority,
+              pbin->stack,
+              pbin->timeslice);
       pbin = pbin->pprev;
       if(pbin)
          fprintf(f_binconf,",\n");
@@ -1813,7 +1815,8 @@ int _mk_binaries(void){
    fwrite(binconf_decl_bin_lst,sizeof(char),strlen(binconf_decl_bin_lst),f_binconf);
 
    //implementation header
-   fwrite(binconf_implementation_header,sizeof(char),strlen(binconf_implementation_header),f_binconf);
+   fwrite(binconf_implementation_header,sizeof(char),strlen(
+             binconf_implementation_header),f_binconf);
 
    //bottom header
    fwrite(binconf_bottom_header,sizeof(char),strlen(binconf_bottom_header),f_binconf);
@@ -1822,7 +1825,7 @@ int _mk_binaries(void){
 
    _vfs_statvfs("/usr",&statvfs );
    printf("/usr free block:%d free size=%d bytes\r\n",
-                              statvfs.f_bfree,statvfs.f_bfree*statvfs.f_bsize);
+          statvfs.f_bfree,statvfs.f_bfree*statvfs.f_bsize);
 
    //unmount /dev/hd/hdc on /usr.
    printf("umount /usr\n");
@@ -1843,7 +1846,7 @@ int _mk_binaries(void){
 ---------------------------------------------*/
 int _mk_file(void){
    struct mkfile_t* pfile = pfile_lst_start;
-   struct statvfs  statvfs;
+   struct statvfs statvfs;
    char dest_path_buf[MAX_PATH];
    char* dest_path=(char*)&dest_path_buf;
    char current_path[MAX_PATH] = {0};
@@ -1852,21 +1855,21 @@ int _mk_file(void){
    desc_t desc;
    int fd;
    char fbuf[9];
-   
+
    int err=0;
 
    if(!pfile_lst_start)
       return 0;
 
    printf("make files: ...\n");
-   
+
    //mount /dev/hd/hdc on /usr.
    printf("mount /dev/hd/hdc on /usr\n");
    _vfs_mount(fs_ufs,"/dev/hd/hdc","/usr");
 
    //create files
    pfile = pfile_lst_start;
-   while(pfile){
+   while(pfile) {
       int i =0;
       int cb = 0;
 
@@ -1876,7 +1879,7 @@ int _mk_file(void){
       strcpy(dest_path,pfile->dest_path);
 
       //create new directory
-      for(i=0;i<=strlen(dest_path);i++){
+      for(i=0; i<=strlen(dest_path); i++) {
          int brk = 0;
          char token[MAX_PATH]={0};
          if(dest_path[i] != '/'
@@ -1887,13 +1890,13 @@ int _mk_file(void){
 
          dest_path[i] = '\0';
          strcpy(token,dest_path);
-         
 
-         if(strcmp(current_path,token)){
+
+         if(strcmp(current_path,token)) {
             strcpy(current_path,token);
             strcat(path,token);
             printf("mkdir %s\n",path);
-            if(_vfs_mkdir(path,0)<0){
+            if(_vfs_mkdir(path,0)<0) {
                printf("warning! mkdir %s\n",path);
             }
          }
@@ -1906,9 +1909,9 @@ int _mk_file(void){
          i=0;
 
       }
-      
+
       //create file
-      if( (fd = _open(pfile->src_file,_O_RDONLY|_O_BINARY,_S_IREAD)) <0 ){
+      if( (fd = _open(pfile->src_file,_O_RDONLY|_O_BINARY,_S_IREAD)) <0 ) {
          printf("error! cannot open file:%s\n",pfile->src_file);
          pfile = pfile->pprev;
          err=-1;
@@ -1920,16 +1923,16 @@ int _mk_file(void){
       strcat(ref,"/");
       strcat(ref,pfile->file_name);
       printf("creat %s\n",ref);
-      if((desc= _vfs_open(ref,O_CREAT|O_WRONLY,0))<0){
+      if((desc= _vfs_open(ref,O_CREAT|O_WRONLY,0))<0) {
          printf("error! cannot open file:%s\n",ref);
          pfile = pfile->pprev;
          err=-1;
          continue;
       }
 
-      while((cb=_read(fd,fbuf,sizeof(fbuf)-1))>0){
+      while((cb=_read(fd,fbuf,sizeof(fbuf)-1))>0) {
          cb=_vfs_write(desc,fbuf,cb);
-         if(cb<0){
+         if(cb<0) {
             printf("error! cannot write file:%s\n",ref);
             pfile = pfile->pprev;
             err=-1;
@@ -1948,23 +1951,23 @@ int _mk_file(void){
    //check files
    current_path[0]='\0';
    pfile = pfile_lst_start;
-   while(pfile){
+   while(pfile) {
 
-      if(strcmp(current_path,pfile->dest_path)){
+      if(strcmp(current_path,pfile->dest_path)) {
          strcpy(current_path,pfile->dest_path);
          strcpy(path,"/usr/");
          strcat(path,pfile->dest_path);
          printf("mkdir %s\n",path);
          _vfs_ls(path);
       }
-  
+
       pfile = pfile->pprev;
    }
 
    //
    _vfs_statvfs("/usr",&statvfs );
    printf("/usr free block:%d free size=%d bytes\r\n",
-                              statvfs.f_bfree,statvfs.f_bfree*statvfs.f_bsize);
+          statvfs.f_bfree,statvfs.f_bfree*statvfs.f_bsize);
 
    //unmount /dev/hd/hdc on /usr.
    printf("umount /usr\n");
@@ -1997,7 +2000,7 @@ int _mk_boot(void){
    //
    printf("make boot: ...\n");
    //create file
-   if(!(f_bootconf = fopen(MK_BOOT_FILEPATH,"w+")) ){
+   if(!(f_bootconf = fopen(MK_BOOT_FILEPATH,"w+")) ) {
       fprintf(stderr,"error! cannot create file :%s\n",MK_BOOT_FILEPATH);
       return -1;
    }
@@ -2006,7 +2009,7 @@ int _mk_boot(void){
    fprintf(f_bootconf,"%s;\n",boot_delay);
    //create .boot files
    pboot = pboot_lst_start;
-   while(pboot){
+   while(pboot) {
       int cb = 0;
       fprintf(f_bootconf,"%s:%s;\n",pboot->kb_val,pboot->arg);
       //
@@ -2038,14 +2041,14 @@ int _mk_mount(void){
    //
    printf("make mount: ...\n");
    //create file
-   if(!(f_mountconf = fopen(MK_MOUNT_FILEPATH,"w+")) ){
+   if(!(f_mountconf = fopen(MK_MOUNT_FILEPATH,"w+")) ) {
       fprintf(stderr,"error! cannot create file :%s\n",MK_MOUNT_FILEPATH);
       return -1;
    }
 
    //create .boot files
    pmount = pmount_lst_start;
-   while(pmount){
+   while(pmount) {
       int cb = 0;
       //ex:ufs /dev/hd/hdb /etc
       fprintf(f_mountconf,"%s %s %s\n",pmount->fstype,pmount->dev,pmount->mount_point);
@@ -2076,8 +2079,8 @@ int _mk_dev(void){
 
    printf("make dev: ...\n");
 
-      //create file
-   if(!(f_devconf = fopen(MK_DEVCONF_FILEPATH,"w+")) ){
+   //create file
+   if(!(f_devconf = fopen(MK_DEVCONF_FILEPATH,"w+")) ) {
       fprintf(stderr,"error! cannot create file :%s\n",MK_DEVCONF_FILEPATH);
       return -1;
    }
@@ -2088,7 +2091,7 @@ int _mk_dev(void){
    //create dev list
    //extern declaration
    pdev = pdev_lst_start;
-   while(pdev){
+   while(pdev) {
       int cb = 0;
       //cb=_write(fd,pboot->arg,strlen(pboot->arg));
       fprintf(f_devconf,"%s %s;\n",dev_map_t_extern_declaration,pdev->dev_map_name);
@@ -2101,7 +2104,7 @@ int _mk_dev(void){
    pdev = pdev_lst_start;
    fprintf(f_devconf,"&%s",pdev->dev_map_name);
    pdev = pdev->pprev;
-   while(pdev){
+   while(pdev) {
       int cb = 0;
       //cb=_write(fd,pboot->arg,strlen(pboot->arg));
       fprintf(f_devconf,",\n&%s",pdev->dev_map_name);
@@ -2132,7 +2135,7 @@ int _mk_dev(void){
 //cpu variant
 #define CPUFS_SPLIT_OPTION_M16C62_FLAG (0x01)
 const char pattern_split_option_m16c62_iar_begin_c[]=
-"\n\
+   "\n\
 /*\n\
 be aware ( jcvd ;) ) -split option in .xml !!! :\n\
 must be used with the following directive in iar linker command file (.xcl):\n\
@@ -2142,7 +2145,7 @@ must be used with the following directive in iar linker command file (.xcl):\n\
 const char pattern_split_option_m16c62_iar_end_c[]="\n#pragma memory = default\n";
 
 const char pattern_split_option_m16c62_iar_header_c[]=
-"\n\
+   "\n\
 /*\n\
 be aware ( jcvd ;) ) -split option in .xml !!! :\n\
 must be used with the following directive in iar linker command file (.xcl):\n\
@@ -2154,7 +2157,7 @@ extern  const unsigned long filecpu_memory_size;\n\
 #pragma memory = default\n";
 
 const char pattern_no_split_option_default_header_c[]=
-"extern  const unsigned char filecpu_memory[];\n\
+   "extern  const unsigned char filecpu_memory[];\n\
 extern  const unsigned long filecpu_memory_size;\n";
 
 
@@ -2166,24 +2169,24 @@ int _mk_dskimg(int argc, char* argv[])
    unsigned long cpufs_option_mask=0;
 
    //source file
-   if( (fsrc = _open (fname_src,_O_RDONLY|_O_EXCL|_O_BINARY,_S_IREAD)) == -1 ){
-         DWORD dwError=GetLastError();
-         printf("cannot open file %s\n",fname_src);
-         return -1;
+   if( (fsrc = _open (fname_src,_O_RDONLY|_O_EXCL|_O_BINARY,_S_IREAD)) == -1 ) {
+      DWORD dwError=GetLastError();
+      printf("cannot open file %s\n",fname_src);
+      return -1;
    }
 
    //parse cpufs option
-   if(g_kernel_conf.str_cpufs_option){
+   if(g_kernel_conf.str_cpufs_option) {
       cpufs_option_token = strtok(g_kernel_conf.str_cpufs_option," ");
-      while(cpufs_option_token){
-         if(!strcmp(cpufs_option_token,CPUFS_SPLIT_OPTION)){
-            switch(g_kernel_conf.cpu_type){
-               //
-               case CPU_TYPE_M16C62:
-                  cpufs_option_mask|=CPUFS_SPLIT_OPTION_M16C62_FLAG;
+      while(cpufs_option_token) {
+         if(!strcmp(cpufs_option_token,CPUFS_SPLIT_OPTION)) {
+            switch(g_kernel_conf.cpu_type) {
+            //
+            case CPU_TYPE_M16C62:
+               cpufs_option_mask|=CPUFS_SPLIT_OPTION_M16C62_FLAG;
                break;
-               //
-               default:
+            //
+            default:
                break;
             }
          }
@@ -2194,13 +2197,17 @@ int _mk_dskimg(int argc, char* argv[])
 
    //dev_dskimg.c
    //destination file
-   if( (fdest = _open( MK_DSKIMG_FILEPATH,_O_RDWR|_O_CREAT|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
+   if( (fdest =
+           _open( MK_DSKIMG_FILEPATH,_O_RDWR|_O_CREAT|_O_TRUNC|_O_EXCL|_O_BINARY,
+                  _S_IREAD|_S_IWRITE)) == -1 ) {
       DWORD dwError=GetLastError();
 
       if(dwError!=ERROR_FILE_EXISTS)
          return -1;
 
-      if( (fdest = _open( MK_DSKIMG_FILEPATH,_O_RDWR |_O_TRUNC |_O_BINARY,_S_IREAD|_S_IWRITE )) == -1 ){
+      if( (fdest =
+              _open( MK_DSKIMG_FILEPATH,_O_RDWR |_O_TRUNC |_O_BINARY,
+                     _S_IREAD|_S_IWRITE )) == -1 ) {
          printf("cannot open file %s\n",MK_DSKIMG_FILEPATH);
          return -1;
       }
@@ -2210,22 +2217,23 @@ int _mk_dskimg(int argc, char* argv[])
    //reset position at begining of file.
    _lseek( fsrc, 0, SEEK_SET );
    _lseek( fdest, 0, SEEK_SET );
-   
-   //write split option pattern for m16c62 and iar 
-   if(cpufs_option_mask&CPUFS_SPLIT_OPTION_M16C62_FLAG){
-      _write(fdest,pattern_split_option_m16c62_iar_begin_c,strlen(pattern_split_option_m16c62_iar_begin_c));
+
+   //write split option pattern for m16c62 and iar
+   if(cpufs_option_mask&CPUFS_SPLIT_OPTION_M16C62_FLAG) {
+      _write(fdest,pattern_split_option_m16c62_iar_begin_c,
+             strlen(pattern_split_option_m16c62_iar_begin_c));
    }
 
    //write start
    _write(fdest,pattern_start_c,strlen(pattern_start_c));
 
    //read src file
-   while((r=_read(fsrc,buf_src,sizeof(buf_src)))>0){
+   while((r=_read(fsrc,buf_src,sizeof(buf_src)))>0) {
       int i;
       cb+=r;
 
       //format
-      for(i=0;i<r;i++){
+      for(i=0; i<r; i++) {
          size++;
          sprintf(buf_dest,"0x%.2x",buf_src[i]);
          buf_dest[4]=',';
@@ -2233,7 +2241,7 @@ int _mk_dskimg(int argc, char* argv[])
          _write(fdest,buf_dest,6);
          if(!(size%(1*25)))
             _write(fdest,"\r\n",2);
-         
+
       }
 
    }
@@ -2241,9 +2249,10 @@ int _mk_dskimg(int argc, char* argv[])
    //write end
    _write(fdest,pattern_end_c,strlen(pattern_end_c));
 
-   //write split option pattern for m16c62 and iar 
-   if(cpufs_option_mask&CPUFS_SPLIT_OPTION_M16C62_FLAG){
-      _write(fdest,pattern_split_option_m16c62_iar_end_c,strlen(pattern_split_option_m16c62_iar_end_c));
+   //write split option pattern for m16c62 and iar
+   if(cpufs_option_mask&CPUFS_SPLIT_OPTION_M16C62_FLAG) {
+      _write(fdest,pattern_split_option_m16c62_iar_end_c,
+             strlen(pattern_split_option_m16c62_iar_end_c));
    }
 
    _close(fsrc);
@@ -2251,13 +2260,17 @@ int _mk_dskimg(int argc, char* argv[])
 
    //dev_dskimg.h
    //destination file
-   if( (fdest = _open( MK_DSKIMG_HEADER_FILEPATH,_O_RDWR|_O_CREAT|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
+   if( (fdest =
+           _open( MK_DSKIMG_HEADER_FILEPATH,_O_RDWR|_O_CREAT|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|
+                  _S_IWRITE)) == -1 ) {
       DWORD dwError=GetLastError();
 
       if(dwError!=ERROR_FILE_EXISTS)
          return -1;
 
-      if( (fdest = _open( MK_DSKIMG_HEADER_FILEPATH,_O_RDWR |_O_TRUNC |_O_BINARY,_S_IREAD|_S_IWRITE )) == -1 ){
+      if( (fdest =
+              _open( MK_DSKIMG_HEADER_FILEPATH,_O_RDWR |_O_TRUNC |_O_BINARY,_S_IREAD|
+                     _S_IWRITE )) == -1 ) {
          printf("cannot open file %s\n",MK_DSKIMG_HEADER_FILEPATH);
          return -1;
       }
@@ -2273,11 +2286,13 @@ int _mk_dskimg(int argc, char* argv[])
    _write(fdest,dskimg_decl_header,strlen(dskimg_decl_header));
 
 
-   //write split option pattern for m16c62 and iar 
-   if(cpufs_option_mask&CPUFS_SPLIT_OPTION_M16C62_FLAG){
-      _write(fdest,pattern_split_option_m16c62_iar_header_c,strlen(pattern_split_option_m16c62_iar_header_c));
+   //write split option pattern for m16c62 and iar
+   if(cpufs_option_mask&CPUFS_SPLIT_OPTION_M16C62_FLAG) {
+      _write(fdest,pattern_split_option_m16c62_iar_header_c,
+             strlen(pattern_split_option_m16c62_iar_header_c));
    }else{
-      _write(fdest,pattern_no_split_option_default_header_c,strlen(pattern_no_split_option_default_header_c));
+      _write(fdest,pattern_no_split_option_default_header_c,
+             strlen(pattern_no_split_option_default_header_c));
    }
 
    //bottom header
@@ -2289,7 +2304,7 @@ int _mk_dskimg(int argc, char* argv[])
 
    printf("(%d bytes) ok.\n",cb);
 
-	return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -2303,7 +2318,7 @@ int _mk_dskimg(int argc, char* argv[])
 int _mk_rtc(void){
    desc_t desc;
    char buf[8]={0};
-   struct tm _tm={ 0, 0, 12, 28, 0, 103 };//init for test
+   struct tm _tm={ 0, 0, 12, 28, 0, 103 }; //init for test
    time_t time=0;
 
    //set kernel time from rtc
@@ -2313,7 +2328,7 @@ int _mk_rtc(void){
 
    if(desc<0)
       return -1;
-     
+
    //
    memset(&_tm,0,sizeof(struct tm));
    //
@@ -2331,7 +2346,7 @@ int _mk_rtc(void){
    xtime.tv_usec=0;
    xtime.tv_sec = time;
    _vfs_close(desc);
-   
+
    return 0;
 }
 
@@ -2350,47 +2365,47 @@ int main( int argc, char *argv[])
 
    printf("\nmkelpton xml version: %s-%s\n\n",__DATE__,__TIME__);
 
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               case 'a'://all
-                  opt = OPT_MSK_ALL;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
+            case 'a':   //all
+               opt = OPT_MSK_ALL;
                break;
 
-               case 'b'://binaries
-                  opt |= OPT_MSK_B;
+            case 'b':   //binaries
+               opt |= OPT_MSK_B;
                break;
 
-               case 'd'://devices
-                  opt |= OPT_MSK_D;
+            case 'd':   //devices
+               opt |= OPT_MSK_D;
                break;
 
-               case 'f'://files
-                  opt |= OPT_MSK_F;
+            case 'f':   //files
+               opt |= OPT_MSK_F;
                break;
 
-               case 'k'://kernel
-                  opt |= OPT_MSK_K;
+            case 'k':   //kernel
+               opt |= OPT_MSK_K;
                break;
 
-               case 't'://target
-               {
-                  opt |= OPT_MSK_T;
-                  if((i+1) == argc)//not enough parameter
-                     return -1;
-                  if(argv[i][c+1])
-                     break;
-                  if(argv[i+1][0]=='-')
-                     break;
+            case 't':   //target
+            {
+               opt |= OPT_MSK_T;
+               if((i+1) == argc)   //not enough parameter
+                  return -1;
+               if(argv[i][c+1])
+                  break;
+               if(argv[i+1][0]=='-')
+                  break;
 
-                  i++;
-                  if(argv[i])
-                     mk_current_target=argv[i];
-               }
-               break;
+               i++;
+               if(argv[i])
+                  mk_current_target=argv[i];
+            }
+            break;
             }
          }
       }else{
@@ -2401,7 +2416,7 @@ int main( int argc, char *argv[])
 
    if(!opt || (opt == OPT_MSK_T))
       opt = OPT_MSK_ALL;
-      
+
    //
    _vfs();
 
@@ -2413,63 +2428,63 @@ int main( int argc, char *argv[])
    _kernel_warmup_rtc();
    //
    _kernel_warmup_mount();
-   
+
 
    //rtc init
-   if(_mk_rtc()<0){
+   if(_mk_rtc()<0) {
       perror("\nerror: rtc cannot be used!\n");
       return -1;
    }
-   
+
 
    //read xml config file:mkconf.xml
-   if(ref && _mk_conf(ref)<0){
+   if(ref && _mk_conf(ref)<0) {
       perror("\nerror: _mk_conf from");
       printf(" %s!",ref);
       return -1;
-   }else if(!ref && _mk_conf("mkconf.xml")<0){
+   }else if(!ref && _mk_conf("mkconf.xml")<0) {
       perror("\nerror: _mk_conf from default ref mkconf.xml!\n");
       return -1;
    }
    printf("\n_mk_conf ok!\n\n");
 
    //make devices list
-   if( (opt&OPT_MSK_D) && _mk_dev()<0){
+   if( (opt&OPT_MSK_D) && _mk_dev()<0) {
       perror("\nerror: _mk_dev failed!\n");
       return -1;
    }
    printf("\n_mk_dev ok!\n\n");
 
-   //make mount files (.boot) 
-   if( (opt&OPT_MSK_K) && _mk_mount()<0){
+   //make mount files (.boot)
+   if( (opt&OPT_MSK_K) && _mk_mount()<0) {
       perror("\nerror: _mk_mount failed!\n");
       return -1;
    }
    printf("\n_mk_mount ok!\n\n");
-   
-   //make boot files (.boot) 
-   if( (opt&OPT_MSK_K) && _mk_boot()<0){
+
+   //make boot files (.boot)
+   if( (opt&OPT_MSK_K) && _mk_boot()<0) {
       perror("\nerror: _mk_boot failed!\n");
       return -1;
    }
    printf("\n_mk_boot ok!\n\n");
 
-   //make binaries 
-   if( (opt&OPT_MSK_B) && _mk_binaries()<0){
+   //make binaries
+   if( (opt&OPT_MSK_B) && _mk_binaries()<0) {
       perror("\nerror: _mk_binaries failed!\n");
       return -1;
    }
    printf("\n_mk_binaries ok!\n\n");
-      
-   //make files 
-   if((opt&OPT_MSK_F) && _mk_file()<0){
+
+   //make files
+   if((opt&OPT_MSK_F) && _mk_file()<0) {
       perror("\nerror: _mk_file failed!\n");
       return -1;
    }
    printf("\n_mk_file ok!\n\n");
 
    //make disk image
-   if( (opt& (OPT_MSK_B|OPT_MSK_F)) && _mk_dskimg(0,0)<0){
+   if( (opt& (OPT_MSK_B|OPT_MSK_F)) && _mk_dskimg(0,0)<0) {
       perror("\nerror: _mk_dskimg failed!\n");
       return -1;
    }

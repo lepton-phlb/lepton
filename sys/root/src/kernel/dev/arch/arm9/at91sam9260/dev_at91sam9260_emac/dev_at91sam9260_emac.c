@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 
 // Lepton
@@ -94,44 +94,44 @@ either the MPL or the [eCos GPL] License."
 #define CIRC_CNT(head,tail,size) (((head) - (tail)) & ((size)-1))
 
 // Return space available, 0..size-1
-// We always leave one free char as a completely full buffer 
+// We always leave one free char as a completely full buffer
 // has head == tail, which is the same as empty
 #define CIRC_SPACE(head,tail,size) CIRC_CNT((tail),((head)+1),(size))
 
-// Return count up to the end of the buffer.  
+// Return count up to the end of the buffer.
 // Carefully avoid accessing head and tail more than once,
 // so they can change underneath us without returning inconsistent results
 #define CIRC_CNT_TO_END(head,tail,size) \
    ({int end = (size) - (tail); \
      int n = ((head) + end) & ((size)-1); \
-     n < end ? n : end;})
+     n < end ? n : end; })
 
 // Return space available up to the end of the buffer
 #define CIRC_SPACE_TO_END(head,tail,size) \
    ({int end = (size) - 1 - (head); \
      int n = (end + (tail)) & ((size)-1); \
-     n <= end ? n : end+1;})
+     n <= end ? n : end+1; })
 
 // Increment head or tail
 #define CIRC_INC(headortail,size) \
-        headortail++;             \
-        if(headortail >= size) {  \
-            headortail = 0;       \
-        }
+   headortail++;             \
+   if(headortail >= size) {  \
+      headortail = 0;       \
+   }
 
 #define CIRC_EMPTY(circ)     ((circ)->head == (circ)->tail)
 #define CIRC_CLEAR(circ)     ((circ)->head = (circ)->tail = 0)
 
 /// Describes the type and attribute of Receive Transfer descriptor.
 typedef struct _EmacRxTDescriptor {
-    unsigned int addr;
-    unsigned int status;
+   unsigned int addr;
+   unsigned int status;
 } __attribute__((packed, aligned(8))) EmacRxTDescriptor, *PEmacRxTDescriptor;
 
 /// Describes the type and attribute of Transmit Transfer descriptor.
 typedef struct _EmacTxTDescriptor {
-    unsigned int addr;
-    unsigned int status;
+   unsigned int addr;
+   unsigned int status;
 } __attribute__((packed, aligned(8))) EmacTxTDescriptor, *PEmacTxTDescriptor;
 
 /// Descriptors for RX (required aligned by 8)
@@ -152,18 +152,18 @@ typedef struct {
 //-----------------------------------------------------------------------------
 typedef struct _EmacStats {
 
-    // TX errors
-    unsigned int tx_packets;    /// Total Number of packets sent
-    unsigned int tx_comp;       /// Packet complete
-    unsigned int tx_errors;     /// TX errors ( Retry Limit Exceed )
-    unsigned int collisions;    /// Collision
-    unsigned int tx_exausts;    /// Buffer exhausted
-    unsigned int tx_underruns;  /// Under Run, not able to read from memory
-    // RX errors
-    unsigned int rx_packets;    /// Total Number of packets RX
-    unsigned int rx_eof;        /// No EOF error
-    unsigned int rx_ovrs;       /// Over Run, not able to store to memory
-    unsigned int rx_bnas;       /// Buffer is not available
+   // TX errors
+   unsigned int tx_packets;     /// Total Number of packets sent
+   unsigned int tx_comp;        /// Packet complete
+   unsigned int tx_errors;      /// TX errors ( Retry Limit Exceed )
+   unsigned int collisions;     /// Collision
+   unsigned int tx_exausts;     /// Buffer exhausted
+   unsigned int tx_underruns;   /// Under Run, not able to read from memory
+   // RX errors
+   unsigned int rx_packets;     /// Total Number of packets RX
+   unsigned int rx_eof;         /// No EOF error
+   unsigned int rx_ovrs;        /// Over Run, not able to store to memory
+   unsigned int rx_bnas;        /// Buffer is not available
 
 } EmacStats, *PEmacStats;
 
@@ -178,9 +178,13 @@ static volatile TxTd txTd __attribute__ ((aligned (4), section (".no_cache")));
 /// Send Buffer
 // Section 3.6 of AMBA 2.0 spec states that burst should not cross 1K Boundaries.
 // Receive buffer manager writes are burst of 2 words => 3 lsb bits of the address shall be set to 0
-static volatile unsigned char pTxBuffer[TX_BUFFERS * EMAC_TX_UNITSIZE] __attribute__ ((aligned (4), section (".no_cache"))); //__attribute__((aligned(8)));
+static volatile unsigned char pTxBuffer[TX_BUFFERS *
+                                        EMAC_TX_UNITSIZE] __attribute__ ((aligned (4),
+                                                                          section (".no_cache")));                           //__attribute__((aligned(8)));
 /// Receive Buffer
-static volatile unsigned char pRxBuffer[RX_BUFFERS * EMAC_RX_UNITSIZE] __attribute__ ((aligned (4), section (".no_cache"))); //__attribute__((aligned(8)));
+static volatile unsigned char pRxBuffer[RX_BUFFERS *
+                                        EMAC_RX_UNITSIZE] __attribute__ ((aligned (4),
+                                                                          section (".no_cache")));                           //__attribute__((aligned(8)));
 /// Statistics
 static volatile EmacStats EmacStatistics __attribute__ ((aligned (4), section (".no_cache")));
 
@@ -239,7 +243,7 @@ static at91_eth_priv_t g_board_info;
 
 //============================================================================
 // Interfaces Lepton
-// 
+//
 
 extern void emac_set_link_speed(unsigned char speed, unsigned char fullduplex);
 extern void emac_enable_rmii( void );
@@ -309,8 +313,8 @@ static int dev_at91sam9260_emac_load(void)
 
    // Clear all status bits in the transmit status register
    AT91C_BASE_EMACB->EMAC_TSR = ( AT91C_EMAC_UBR | AT91C_EMAC_COL | AT91C_EMAC_RLES
-                              | AT91C_EMAC_BEX | AT91C_EMAC_COMP
-                              | AT91C_EMAC_UND );
+                                  | AT91C_EMAC_BEX | AT91C_EMAC_COMP
+                                  | AT91C_EMAC_UND );
 
    // Clear interrupts
    AT91C_BASE_EMACB->EMAC_ISR;
@@ -387,18 +391,18 @@ static int dev_at91sam9260_emac_open(desc_t desc, int o_flag)
 
    // Setup the interrupts for Rx, TX and errors
    AT91C_BASE_EMACB->EMAC_IER = AT91C_EMAC_RXUBR
-                           | AT91C_EMAC_TUNDR
-                           | AT91C_EMAC_RLEX
-                           | AT91C_EMAC_TXERR
-                           | AT91C_EMAC_TCOMP
-                           | AT91C_EMAC_RCOMP
-                           | AT91C_EMAC_ROVR
-                           | AT91C_EMAC_HRESP;
+                                | AT91C_EMAC_TUNDR
+                                | AT91C_EMAC_RLEX
+                                | AT91C_EMAC_TXERR
+                                | AT91C_EMAC_TCOMP
+                                | AT91C_EMAC_RCOMP
+                                | AT91C_EMAC_ROVR
+                                | AT91C_EMAC_HRESP;
 
    //
    cyg_interrupt_create(emac_vector, emac_prior, 0,
-         &at91_eth_isr, &at91_eth_dsr,
-         &g_board_info.emac_handle, &g_board_info.emac_it);
+                        &at91_eth_isr, &at91_eth_dsr,
+                        &g_board_info.emac_handle, &g_board_info.emac_it);
    cyg_interrupt_attach(g_board_info.emac_handle);
    cyg_interrupt_unmask(emac_vector);
 
@@ -412,13 +416,13 @@ static int dev_at91sam9260_emac_close(desc_t desc)
    // disable
    AT91C_BASE_EMACB->EMAC_IDR = ~0;
 
-   if(ofile_lst[desc].oflag & O_RDONLY){
-      if(!ofile_lst[desc].nb_reader){
+   if(ofile_lst[desc].oflag & O_RDONLY) {
+      if(!ofile_lst[desc].nb_reader) {
          g_board_info.desc_rd = -1;
       }
    }
-   if(ofile_lst[desc].oflag & O_WRONLY){
-      if(!ofile_lst[desc].nb_writer){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      if(!ofile_lst[desc].nb_writer) {
          g_board_info.desc_wr = -1;
       }
    }
@@ -428,14 +432,14 @@ static int dev_at91sam9260_emac_close(desc_t desc)
 
 static int dev_at91sam9260_emac_isset_read(desc_t desc)
 {
-   unsigned int   tmpIdx = rxTd.idx;
+   unsigned int tmpIdx = rxTd.idx;
    volatile EmacRxTDescriptor *pRxTd = rxTd.td + rxTd.idx;
 
    // Process received RxTd
    while ((pRxTd->addr & EMAC_RX_OWNERSHIP_BIT) == EMAC_RX_OWNERSHIP_BIT) {
       // An end of frame has been received
       if ((pRxTd->status & EMAC_RX_EOF_BIT) == EMAC_RX_EOF_BIT) {
-         return 0;        
+         return 0;
       }
       // Increment the pointer
       CIRC_INC(tmpIdx, RX_BUFFERS);
@@ -473,13 +477,13 @@ unsigned char EMAC_Poll(unsigned char *pFrame,
 static int dev_at91sam9260_emac_read(desc_t desc, char* buf,int size)
 {
    unsigned short bufferLength;
-   unsigned int   tmpFrameSize=0;
+   unsigned int tmpFrameSize=0;
    char  *pTmpFrame=0;
-   unsigned int   tmpIdx = rxTd.idx;
+   unsigned int tmpIdx = rxTd.idx;
    volatile EmacRxTDescriptor *pRxTd = rxTd.td + rxTd.idx;
    int pRcvSize;
 
-  //  ASSERT(pFrame, "F: EMAC_Poll\n\r");
+   //  ASSERT(pFrame, "F: EMAC_Poll\n\r");
 
    char isFrame = 0;
    // Set the default return value
@@ -492,9 +496,9 @@ static int dev_at91sam9260_emac_read(desc_t desc, char* buf,int size)
       if ((pRxTd->status & EMAC_RX_SOF_BIT) == EMAC_RX_SOF_BIT) {
          // Skip previous fragment
          while (tmpIdx != rxTd.idx) {
-               pRxTd = rxTd.td + rxTd.idx;
-               pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
-               CIRC_INC(rxTd.idx, RX_BUFFERS);
+            pRxTd = rxTd.td + rxTd.idx;
+            pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
+            CIRC_INC(rxTd.idx, RX_BUFFERS);
          }
          // Reset the temporary frame pointer
          pTmpFrame = buf;
@@ -509,44 +513,44 @@ static int dev_at91sam9260_emac_read(desc_t desc, char* buf,int size)
       // Copy data in the frame buffer
       if (isFrame) {
          if (tmpIdx == rxTd.idx) {
-               //TRACE_INFO("no EOF (Invalid of buffers too small)\n\r");
-               do {
-                  pRxTd = rxTd.td + rxTd.idx;
-                  pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
-                  CIRC_INC(rxTd.idx, RX_BUFFERS);
-               } while(tmpIdx != rxTd.idx);
-               return -1;
+            //TRACE_INFO("no EOF (Invalid of buffers too small)\n\r");
+            do {
+               pRxTd = rxTd.td + rxTd.idx;
+               pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
+               CIRC_INC(rxTd.idx, RX_BUFFERS);
+            } while(tmpIdx != rxTd.idx);
+            return -1;
          }
          // Copy the buffer into the application frame
          bufferLength = EMAC_RX_UNITSIZE;
          if ((tmpFrameSize + bufferLength) > size) {
-               bufferLength = size - tmpFrameSize;
+            bufferLength = size - tmpFrameSize;
          }
 
          memcpy(pTmpFrame, (void*)(pRxTd->addr & EMAC_ADDRESS_MASK), bufferLength);
          pTmpFrame += bufferLength;
          tmpFrameSize += bufferLength;
-         
+
          // An end of frame has been received, return the data
          if ((pRxTd->status & EMAC_RX_EOF_BIT) == EMAC_RX_EOF_BIT) {
-               // Frame size from the EMAC
-               pRcvSize = (pRxTd->status & EMAC_LENGTH_FRAME);
-               
-               // Application frame buffer is too small all data have not been copied
-               if (tmpFrameSize < pRcvSize) {
-                  //printf("size req %d size allocated %d\n\r", *pRcvSize, size);
-                  return tmpFrameSize;
-               }
-               
+            // Frame size from the EMAC
+            pRcvSize = (pRxTd->status & EMAC_LENGTH_FRAME);
+
+            // Application frame buffer is too small all data have not been copied
+            if (tmpFrameSize < pRcvSize) {
+               //printf("size req %d size allocated %d\n\r", *pRcvSize, size);
+               return tmpFrameSize;
+            }
+
             //  TRACE_DEBUG("packet %d-%d (%d)\n\r", rxTd.idx, tmpIdx, pRcvSize);
-               // All data have been copied in the application frame buffer => release TD
-               while (rxTd.idx != tmpIdx) {
-                  pRxTd = rxTd.td + rxTd.idx;
-                  pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
-                  CIRC_INC(rxTd.idx, RX_BUFFERS);
-               }
-               EmacStatistics.rx_packets++;
-               return pRcvSize;
+            // All data have been copied in the application frame buffer => release TD
+            while (rxTd.idx != tmpIdx) {
+               pRxTd = rxTd.td + rxTd.idx;
+               pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
+               CIRC_INC(rxTd.idx, RX_BUFFERS);
+            }
+            EmacStatistics.rx_packets++;
+            return pRcvSize;
          }
       }
       // SOF has not been detected, skip the fragment
@@ -554,12 +558,12 @@ static int dev_at91sam9260_emac_read(desc_t desc, char* buf,int size)
          pRxTd->addr &= ~(EMAC_RX_OWNERSHIP_BIT);
          rxTd.idx = tmpIdx;
       }
-      
+
       // Process the next buffer
       pRxTd = rxTd.td + tmpIdx;
    }
-    
-    //TRACE_DEBUG("E");
+
+   //TRACE_DEBUG("E");
    // return EMAC_RX_NO_DATA;
    return -1;
 }
@@ -575,9 +579,9 @@ static int dev_at91sam9260_emac_write(desc_t desc, const char* buf,int size)
    // Check parameter
    if (size > EMAC_TX_UNITSIZE) {
 
-    //  TRACE_ERROR("EMAC driver does not split send packets.");
-    //  TRACE_ERROR(" It can send %d bytes max in one packet (%d bytes requested)\n\r",
-    //     EMAC_TX_UNITSIZE, size);
+      //  TRACE_ERROR("EMAC driver does not split send packets.");
+      //  TRACE_ERROR(" It can send %d bytes max in one packet (%d bytes requested)\n\r",
+      //     EMAC_TX_UNITSIZE, size);
       //return EMAC_TX_INVALID_PACKET;
       kernel_pthread_mutex_unlock(&g_board_info.mutex);
       return -1;
@@ -605,7 +609,7 @@ static int dev_at91sam9260_emac_write(desc_t desc, const char* buf,int size)
    }
 
    // Tx Callback
- //  *pTxCb = fEMAC_TxCallback;
+   //  *pTxCb = fEMAC_TxCallback;
 
    // Update TD status
    // The buffer size defined is length of ethernet frame
@@ -636,39 +640,39 @@ static int dev_at91sam9260_emac_seek(desc_t desc,int offset,int origin)
 
 static int dev_at91sam9260_emac_ioctl(desc_t desc,int request,va_list ap)
 {
-   switch(request){
-      //reset interface
-      case ETHRESET:{
+   switch(request) {
+   //reset interface
+   case ETHRESET: {
+      return -1;
+   }
+   break;
+
+   //status interface
+   case ETHSTAT: {
+      return -1;
+   }
+   break;
+
+   case ETHSETHWADDRESS: {
+      return -1;
+   }
+   break;
+
+   case ETHGETHWADDRESS: {
+      unsigned char* p_eth_hwaddr = va_arg( ap, unsigned char*);
+      if(!p_eth_hwaddr)
          return -1;
-      }
-      break;
+      p_eth_hwaddr[0] = g_board_info.mac_addr[0];
+      p_eth_hwaddr[1] = g_board_info.mac_addr[1];
+      p_eth_hwaddr[2] = g_board_info.mac_addr[2];
+      p_eth_hwaddr[3] = g_board_info.mac_addr[3];
+      p_eth_hwaddr[4] = g_board_info.mac_addr[4];
+      p_eth_hwaddr[5] = g_board_info.mac_addr[5];
+   }
+   break;
 
-      //status interface
-      case ETHSTAT:{
-         return -1;
-      }
-      break;
-
-      case ETHSETHWADDRESS:{
-         return -1;
-      }
-      break;
-
-      case ETHGETHWADDRESS:{
-         unsigned char* p_eth_hwaddr = va_arg( ap, unsigned char*);
-         if(!p_eth_hwaddr)
-            return -1;
-         p_eth_hwaddr[0] = g_board_info.mac_addr[0];
-         p_eth_hwaddr[1] = g_board_info.mac_addr[1];
-         p_eth_hwaddr[2] = g_board_info.mac_addr[2];
-         p_eth_hwaddr[3] = g_board_info.mac_addr[3];
-         p_eth_hwaddr[4] = g_board_info.mac_addr[4];
-         p_eth_hwaddr[5] = g_board_info.mac_addr[5];
-      }
-      break;
-
-      //
-      default:
+   //
+   default:
       return -1;
    }
    return 0;
@@ -683,12 +687,12 @@ static int dev_at91sam9260_emac_ioctl(desc_t desc,int request,va_list ap)
 static void at91_set_mac(cyg_uint8 * enaddr)
 {
    AT91C_BASE_EMACB->EMAC_SA1L = ( ((unsigned int)enaddr[3] << 24)
-                                     | ((unsigned int)enaddr[2] << 16)
-                                     | ((unsigned int)enaddr[1] << 8 )
-                                     | enaddr[0] );
+                                   | ((unsigned int)enaddr[2] << 16)
+                                   | ((unsigned int)enaddr[1] << 8 )
+                                   | enaddr[0] );
 
    AT91C_BASE_EMACB->EMAC_SA1H = ( ((unsigned int)enaddr[5] << 8 )
-                                     | enaddr[4] );
+                                   | enaddr[4] );
 }
 
 
@@ -754,62 +758,62 @@ static void at91_eth_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t
       //   rxTd.rxCb(rxStatusFlag);
       //}
       if(g_board_info.desc_rd >= 0)
-            __fire_io_int(ofile_lst[g_board_info.desc_rd].owner_pthread_ptr_read);
+         __fire_io_int(ofile_lst[g_board_info.desc_rd].owner_pthread_ptr_read);
    }
 
-    // TX packet
-    if ((isr & AT91C_EMAC_TCOMP) || (tsr & AT91C_EMAC_COMP)) {
-        txStatusFlag = AT91C_EMAC_COMP;
-        EmacStatistics.tx_comp ++;
+   // TX packet
+   if ((isr & AT91C_EMAC_TCOMP) || (tsr & AT91C_EMAC_COMP)) {
+      txStatusFlag = AT91C_EMAC_COMP;
+      EmacStatistics.tx_comp++;
 
-        // A frame transmitted
-        // Check RLE
-        if (tsr & AT91C_EMAC_RLES) {
-            txStatusFlag |= AT91C_EMAC_RLES;
-            EmacStatistics.tx_errors++;
-        }
-        // Check COL
-        if (tsr & AT91C_EMAC_COL) {
-            txStatusFlag |= AT91C_EMAC_COL;
-            EmacStatistics.collisions++;
-        }
-        // Check BEX
-        if (tsr & AT91C_EMAC_BEX) {
-            txStatusFlag |= AT91C_EMAC_BEX;
-            EmacStatistics.tx_exausts++;
-        }
-        // Check UND
-        if (tsr & AT91C_EMAC_UND) {
-            txStatusFlag |= AT91C_EMAC_UND;
-            EmacStatistics.tx_underruns++;
-        }
-        // Clear status
-        AT91C_BASE_EMACB->EMAC_TSR |= txStatusFlag;
+      // A frame transmitted
+      // Check RLE
+      if (tsr & AT91C_EMAC_RLES) {
+         txStatusFlag |= AT91C_EMAC_RLES;
+         EmacStatistics.tx_errors++;
+      }
+      // Check COL
+      if (tsr & AT91C_EMAC_COL) {
+         txStatusFlag |= AT91C_EMAC_COL;
+         EmacStatistics.collisions++;
+      }
+      // Check BEX
+      if (tsr & AT91C_EMAC_BEX) {
+         txStatusFlag |= AT91C_EMAC_BEX;
+         EmacStatistics.tx_exausts++;
+      }
+      // Check UND
+      if (tsr & AT91C_EMAC_UND) {
+         txStatusFlag |= AT91C_EMAC_UND;
+         EmacStatistics.tx_underruns++;
+      }
+      // Clear status
+      AT91C_BASE_EMACB->EMAC_TSR |= txStatusFlag;
 
-        // Sanity check: Tx buffers have to be scheduled
+      // Sanity check: Tx buffers have to be scheduled
       //  ASSERT(!CIRC_EMPTY(&txTd),
       //      "-F- EMAC Tx interrupt received meanwhile no TX buffers has been scheduled\n\r");
-        
-        // Check the buffers
-        while (CIRC_CNT(txTd.head, txTd.tail, TX_BUFFERS)) {
-            pTxTd = txTd.td + txTd.tail;
 
-            // Exit if buffer has not been sent yet
-            if ((pTxTd->status & EMAC_TX_USED_BIT) == 0) {
-                break;
-            }
-            
-            // Notify upper layer that packet has been sent
-            //if (*pTxCb) {
-            //    (*pTxCb)(txStatusFlag);
-            //}
-            if(g_board_info.desc_wr >= 0)
-               __fire_io_int(ofile_lst[g_board_info.desc_wr].owner_pthread_ptr_write);
-            
-            CIRC_INC( txTd.tail, TX_BUFFERS );
-        }
-    }
-    cyg_interrupt_unmask(vector);
+      // Check the buffers
+      while (CIRC_CNT(txTd.head, txTd.tail, TX_BUFFERS)) {
+         pTxTd = txTd.td + txTd.tail;
+
+         // Exit if buffer has not been sent yet
+         if ((pTxTd->status & EMAC_TX_USED_BIT) == 0) {
+            break;
+         }
+
+         // Notify upper layer that packet has been sent
+         //if (*pTxCb) {
+         //    (*pTxCb)(txStatusFlag);
+         //}
+         if(g_board_info.desc_wr >= 0)
+            __fire_io_int(ofile_lst[g_board_info.desc_wr].owner_pthread_ptr_write);
+
+         CIRC_INC( txTd.tail, TX_BUFFERS );
+      }
+   }
+   cyg_interrupt_unmask(vector);
 }
 
 

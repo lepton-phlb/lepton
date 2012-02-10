@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -44,15 +44,15 @@ either the MPL or the [eCos GPL] License."
 #include "at91sam9261_lcd.h"
 
 #if defined(USE_SEGGER)
-#include <ioat91sam9261.h>
-#include "kernel/core/ucore/embOSARM7_332/arch/cpu_at91sam9261/at91sam9261_init.h"
+   #include <ioat91sam9261.h>
+   #include "kernel/core/ucore/embOSARM7_332/arch/cpu_at91sam9261/at91sam9261_init.h"
 #endif
 
 #include "kernel/dev/arch/arm9/at91sam9261/dev_at91sam9261_cpu/dev_at91sam9261_cpu.h"
 
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 
@@ -64,14 +64,14 @@ either the MPL or the [eCos GPL] License."
 static int at91sam9261_lcd_contrast    = DFLT_CONTRAST;
 static int at91sam9261_lcd_luminosity  = DFLT_LUMINOSITY;
 
-static int  at91sam9261_lcd_frame_buffer_sz=0;
+static int at91sam9261_lcd_frame_buffer_sz=0;
 
 static char f_at91sam9261_lcd_open_count=0;
 
 const char dev_at91sam9261_lcd_name[]="lcd0\0";
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 
 /*-------------------------------------------
@@ -112,15 +112,15 @@ int dev_at91sam9261_lcd_load(dev_panel_info_t* p_dev_panel_info){
 int dev_at91sam9261_lcd_open(desc_t desc, int o_flag){
 
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
       return -1;
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
 
-      if((f_at91sam9261_lcd_open_count++)>0)//already initialized
+      if((f_at91sam9261_lcd_open_count++)>0) //already initialized
          return 0;
-  
+
    }
 
    ofile_lst[desc].offset=0;
@@ -138,9 +138,10 @@ int dev_at91sam9261_lcd_open(desc_t desc, int o_flag){
 ---------------------------------------------*/
 int dev_at91sam9261_lcd_close(desc_t desc){
 
-   if(ofile_lst[desc].oflag & O_WRONLY){
-      f_at91sam9261_lcd_open_count = (f_at91sam9261_lcd_open_count>0?f_at91sam9261_lcd_open_count-1:0);
-      if(!ofile_lst[desc].nb_writer){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      f_at91sam9261_lcd_open_count =
+         (f_at91sam9261_lcd_open_count>0 ? f_at91sam9261_lcd_open_count-1 : 0);
+      if(!ofile_lst[desc].nb_writer) {
       }
    }
 
@@ -186,7 +187,7 @@ int dev_at91sam9261_lcd_read(desc_t desc, char* buf,int size){
 
    if(ofile_lst[desc].offset+size>=at91sam9261_lcd_frame_buffer_sz)
       cb=(at91sam9261_lcd_frame_buffer_sz-ofile_lst[desc].offset);
-   
+
    memcpy(buf,p_vmem,cb);
 
    ofile_lst[desc].offset+=cb;
@@ -227,18 +228,18 @@ int dev_at91sam9261_lcd_write(desc_t desc, const char* buf,int size){
 | See:
 ---------------------------------------------*/
 int dev_at91sam9261_lcd_seek(desc_t desc,int offset,int origin){
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_CUR:
+      ofile_lst[desc].offset+=offset;
       break;
 
-      case SEEK_END:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_END:
+      ofile_lst[desc].offset+=offset;
       break;
    }
 
@@ -247,120 +248,120 @@ int dev_at91sam9261_lcd_seek(desc_t desc,int offset,int origin){
 
 /*--------------------------------------------
 | Name:        dev_at91sam9261_lcd_ioctl
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int dev_at91sam9261_lcd_ioctl(desc_t desc,int request,va_list ap){
 
-   switch(request){
-      //flush internal buffer of lcd device driver 
-      case LCDFLSBUF:{
-         at91sam9261_lcd_switch_active_frame_buffer();
-      }
-      break;
+   switch(request) {
+   //flush internal buffer of lcd device driver
+   case LCDFLSBUF: {
+      at91sam9261_lcd_switch_active_frame_buffer();
+   }
+   break;
 
-      //get physical video buffer address
-      case LCDGETVADDR:{
-          unsigned long* vaddr= va_arg( ap, unsigned long*);
-          *vaddr=at91sam9261_lcd_get_current_frame_buffer();
-      }
-      break;
+   //get physical video buffer address
+   case LCDGETVADDR: {
+      unsigned long* vaddr= va_arg( ap, unsigned long*);
+      *vaddr=at91sam9261_lcd_get_current_frame_buffer();
+   }
+   break;
 
-      
-      case LCDGETCONTRAST:{
-         unsigned int* p_v= va_arg( ap, int*);
-         *p_v = at91sam9261_lcd_contrast;
-      }
-      break;
 
-      case LCDGETLUMINOSITY:{
-         unsigned int* p_v= va_arg( ap, int*);
-         *p_v = at91sam9261_lcd_luminosity;
-      }
-      break;
+   case LCDGETCONTRAST: {
+      unsigned int* p_v= va_arg( ap, int*);
+      *p_v = at91sam9261_lcd_contrast;
+   }
+   break;
 
-      case LCDSETCONTRAST:{
-         unsigned int p_v= va_arg( ap, int);
-         at91sam9261_lcd_contrast= p_v;
-      }
-      break;
+   case LCDGETLUMINOSITY: {
+      unsigned int* p_v= va_arg( ap, int*);
+      *p_v = at91sam9261_lcd_luminosity;
+   }
+   break;
 
-      case LCDSETLUMINOSITY:{
-         unsigned int p_v= va_arg( ap, int);
-         at91sam9261_lcd_luminosity= p_v;
-      }
-      break;
+   case LCDSETCONTRAST: {
+      unsigned int p_v= va_arg( ap, int);
+      at91sam9261_lcd_contrast= p_v;
+   }
+   break;
 
-      case LCDSETBACKLIGHTON:{
-      }
-      break;
+   case LCDSETLUMINOSITY: {
+      unsigned int p_v= va_arg( ap, int);
+      at91sam9261_lcd_luminosity= p_v;
+   }
+   break;
 
-      case LCDSETBACKLIGHTOFF:{
-      }
-      break;
+   case LCDSETBACKLIGHTON: {
+   }
+   break;
 
-      //color map (palette)
-      case FBIOGETCMAP:{
-         unsigned int * fbcmap_len = va_arg(ap, unsigned int *);
-         fbcmap_t** fbcmap= va_arg( ap, fbcmap_t**);
-         //same fields
-         *fbcmap_len = 256;
-         *fbcmap = (fbcmap_t*)at91sam9261_lcd_get_palette();
-      }
-      break;
+   case LCDSETBACKLIGHTOFF: {
+   }
+   break;
 
-      case FBIOPUTCMAP:{
-         fbcmap_t* fbcmap= va_arg( ap, fbcmap_t*);
-         at91sam9261_lcd_set_lut((const PALETTEENTRY *)fbcmap);
-      }
-      break;
+   //color map (palette)
+   case FBIOGETCMAP: {
+      unsigned int * fbcmap_len = va_arg(ap, unsigned int *);
+      fbcmap_t** fbcmap= va_arg( ap, fbcmap_t**);
+      //same fields
+      *fbcmap_len = 256;
+      *fbcmap = (fbcmap_t*)at91sam9261_lcd_get_palette();
+   }
+   break;
 
-      case FBIOGET_DISPINFO:{
-         fb_info_t * fb_info = va_arg(ap, fb_info_t*);
-         if(!fb_info)
-            return -1;
-         dev_panel_info_t* p_dev_panel_info= at91sam9261_lcd_get_panel_info();
-         //fb_info_t fb_info = {FB_USER_X,FB_USER_Y,FB_USER_BPP,FB_USER_X,0,0,NULL,0,-1,NULL};
+   case FBIOPUTCMAP: {
+      fbcmap_t* fbcmap= va_arg( ap, fbcmap_t*);
+      at91sam9261_lcd_set_lut((const PALETTEENTRY *)fbcmap);
+   }
+   break;
 
-         fb_info->x_res=p_dev_panel_info->vl_col; //x res
-         fb_info->y_res=p_dev_panel_info->vl_row; //y res
-
-         switch(p_dev_panel_info->vl_bpix){//Bits per pixel, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
-            case 0:
-               fb_info->bpp=1; //bits per pixel
-            break;
-            case 1:
-               fb_info->bpp=2; //bits per pixel
-            break;
-            case 2:
-               fb_info->bpp=4; //bits per pixel
-            break;
-            case 3:
-               fb_info->bpp=8; //bits per pixel
-            break;
-            case 4:
-               fb_info->bpp=16; //bits per pixel
-            break;
-         }
-
-         fb_info->line_len=p_dev_panel_info->vl_col; //line lenght
-
-         fb_info->smem_start=at91sam9261_lcd_get_current_frame_buffer(); //addr of framebuffer
-         fb_info->smem_len=0; //size of framebuffer
-
-         fb_info->cmap=(fbcmap_t*)at91sam9261_lcd_get_palette(); //color map from screen
-         fb_info->cmap_len=256;//color map length
-
-         fb_info->desc_w=-1;
-         fb_info->next=(void*)0; //next framebuffer data
-      }
-      break;
-      //
-      default:
+   case FBIOGET_DISPINFO: {
+      fb_info_t * fb_info = va_arg(ap, fb_info_t*);
+      if(!fb_info)
          return -1;
+      dev_panel_info_t* p_dev_panel_info= at91sam9261_lcd_get_panel_info();
+      //fb_info_t fb_info = {FB_USER_X,FB_USER_Y,FB_USER_BPP,FB_USER_X,0,0,NULL,0,-1,NULL};
+
+      fb_info->x_res=p_dev_panel_info->vl_col;    //x res
+      fb_info->y_res=p_dev_panel_info->vl_row;    //y res
+
+      switch(p_dev_panel_info->vl_bpix) {  //Bits per pixel, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
+      case 0:
+         fb_info->bpp=1;       //bits per pixel
+         break;
+      case 1:
+         fb_info->bpp=2;       //bits per pixel
+         break;
+      case 2:
+         fb_info->bpp=4;       //bits per pixel
+         break;
+      case 3:
+         fb_info->bpp=8;       //bits per pixel
+         break;
+      case 4:
+         fb_info->bpp=16;       //bits per pixel
+         break;
+      }
+
+      fb_info->line_len=p_dev_panel_info->vl_col;    //line lenght
+
+      fb_info->smem_start=at91sam9261_lcd_get_current_frame_buffer();    //addr of framebuffer
+      fb_info->smem_len=0;    //size of framebuffer
+
+      fb_info->cmap=(fbcmap_t*)at91sam9261_lcd_get_palette();    //color map from screen
+      fb_info->cmap_len=256;   //color map length
+
+      fb_info->desc_w=-1;
+      fb_info->next=(void*)0;    //next framebuffer data
+   }
+   break;
+   //
+   default:
+      return -1;
 
    }
 

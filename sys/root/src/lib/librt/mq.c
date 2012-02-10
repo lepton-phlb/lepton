@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include <stdarg.h>
 #include "kernel/core/types.h"
@@ -50,21 +50,21 @@ either the MPL or the [eCos GPL] License."
 
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 extern dev_map_t dev_posix_mqueue_map;
 
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 /*--------------------------------------------
 | Name:        mq_open
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 mqd_t _mq_open(const char* name,int oflag,...){
    va_list ap;
@@ -76,7 +76,7 @@ mqd_t _mq_open(const char* name,int oflag,...){
    if(!name)
       return -1;
 
-   if(oflag&O_CREAT){
+   if(oflag&O_CREAT) {
 
       int fd_head;
       int fd_mqueue_read;
@@ -97,17 +97,17 @@ mqd_t _mq_open(const char* name,int oflag,...){
 
       if(!p_attr)
          return -1;
-   
+
       //
       if((fd_head=open("/dev/head",O_RDWR,0))<0)
          return -1;
 
-      if((fd_mqueue_read=open("/dev/mqueue",O_RDONLY,0))<0){
+      if((fd_mqueue_read=open("/dev/mqueue",O_RDONLY,0))<0) {
          close(fd_head);
          return -1;
       }
 
-      if((fd_mqueue_write=open("/dev/mqueue",O_WRONLY,0))<0){
+      if((fd_mqueue_write=open("/dev/mqueue",O_WRONLY,0))<0) {
          close(fd_head);
          close(fd_mqueue_read);
          return -1;
@@ -117,14 +117,14 @@ mqd_t _mq_open(const char* name,int oflag,...){
       oflag&=~(O_CREAT|O_EXCL);
       p_attr->mq_flags=oflag;
 
-      if(ioctl(fd_head,I_LINK,fd_mqueue_read,p_attr)<0){
+      if(ioctl(fd_head,I_LINK,fd_mqueue_read,p_attr)<0) {
          close(fd_head);
          close(fd_mqueue_read);
          close(fd_mqueue_write);
          return -1;
       }
 
-      if(ioctl(fd_head,I_LINK,fd_mqueue_write,p_attr)<0){
+      if(ioctl(fd_head,I_LINK,fd_mqueue_write,p_attr)<0) {
          close(fd_head);
          close(fd_mqueue_read);
          close(fd_mqueue_write);
@@ -147,20 +147,21 @@ mqd_t _mq_open(const char* name,int oflag,...){
    oflag&=~(O_CREAT|O_EXCL);
    //
    if((fd=open(name,oflag,mode))<0)
-         return -1;
+      return -1;
 
    return fd;
-} 
+}
 
 /*--------------------------------------------
 | Name:        _mq_receive
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
-ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int* msg_prio,const struct timespec *abs_timeout){
+ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int* msg_prio,
+                         const struct timespec *abs_timeout){
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    desc_t desc;
@@ -186,9 +187,9 @@ ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsig
 
    if(!(ofile_lst[desc].oflag&O_RDONLY))
       return -1;
-   
-   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR|S_IFBLK)){
-     return -1;
+
+   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR|S_IFBLK)) {
+      return -1;
    }
 
    //is not implemented for this device dev?
@@ -196,8 +197,8 @@ ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsig
       return -1;
 
    //check is mqueue?
-   desc_link=ofile_lst[desc].desc;//head
-   desc_link=ofile_lst[desc_link].desc_nxt[0];//mqueue
+   desc_link=ofile_lst[desc].desc; //head
+   desc_link=ofile_lst[desc_link].desc_nxt[0]; //mqueue
    if(ofile_lst[desc_link].pfsop!=(pfsop_t)&dev_posix_mqueue_map)
       return -1;
 
@@ -208,10 +209,10 @@ ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsig
    {
       desc_t _desc=ofile_lst[desc].desc;
       //
-      if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr){
-         do{
+      if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr) {
+         do {
             //check
-            if(ofile_lst[_desc].used<=0){
+            if(ofile_lst[_desc].used<=0) {
                __atomic_out();
                __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
                return -1; //error, stream not coherent :(
@@ -226,19 +227,20 @@ ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsig
             __disable_interrupt_section_out();
             //
             //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         }while((_desc=ofile_lst[_desc].desc_nxt[0])>=0);
+         } while((_desc=ofile_lst[_desc].desc_nxt[0])>=0);
       }
    }
    __atomic_out();
 
    //
-   if((ofile_lst[desc_link].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)){
-      fdev_posix_mqueue_read_t fdev_posix_mqueue_read = (fdev_posix_mqueue_read_t)ofile_lst[desc_link].pfsop->fdev.fdev_read; 
+   if((ofile_lst[desc_link].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
+      fdev_posix_mqueue_read_t fdev_posix_mqueue_read =
+         (fdev_posix_mqueue_read_t)ofile_lst[desc_link].pfsop->fdev.fdev_read;
 
-      while(ofile_lst[desc_link].pfsop->fdev.fdev_isset_read 
-         && ofile_lst[desc_link].pfsop->fdev.fdev_isset_read(desc_link)){
-            if(__wait_io_int_abstime(pthread_ptr,abs_timeout)<0)//wait incomming data
-               break;
+      while(ofile_lst[desc_link].pfsop->fdev.fdev_isset_read
+            && ofile_lst[desc_link].pfsop->fdev.fdev_isset_read(desc_link)) {
+         if(__wait_io_int_abstime(pthread_ptr,abs_timeout)<0)   //wait incomming data
+            break;
       }
       //
       cb=fdev_posix_mqueue_read(desc_link,(void*)0,0,(void*)msg_ptr,msg_len,msg_prio,abs_timeout);
@@ -248,8 +250,9 @@ ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsig
       //
       __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
       return cb;
-   }else if((ofile_lst[desc_link].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)){
-      fdev_posix_mqueue_read_t fdev_posix_mqueue_read = (fdev_posix_mqueue_read_t)ofile_lst[desc_link].pfsop->fdev.fdev_read; 
+   }else if((ofile_lst[desc_link].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
+      fdev_posix_mqueue_read_t fdev_posix_mqueue_read =
+         (fdev_posix_mqueue_read_t)ofile_lst[desc_link].pfsop->fdev.fdev_read;
       //profiler
       __io_profiler_start(desc);
       cb=fdev_posix_mqueue_read(desc_link,(void*)0,0,(void*)msg_ptr,msg_len,msg_prio,abs_timeout);
@@ -266,13 +269,14 @@ ssize_t _mq_timedreceive(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsig
 
 /*--------------------------------------------
 | Name:        _mq_send
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
-int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int msg_prio,const struct timespec *abs_timeout){
+int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int msg_prio,
+                  const struct timespec *abs_timeout){
 
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
@@ -300,17 +304,17 @@ int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int
    if(!(ofile_lst[desc].oflag&O_WRONLY))
       return -1;
 
-   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR|S_IFBLK)){
+   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR|S_IFBLK)) {
       return -1;
    }
-   
+
    //is not implemented for this device dev?
    if(!ofile_lst[desc].pfsop->fdev.fdev_write)
       return -1;
 
    //check is mqueue?
-   desc_link=ofile_lst[desc].desc;//head
-   desc_link=ofile_lst[desc_link].desc_nxt[1];//mqueue
+   desc_link=ofile_lst[desc].desc; //head
+   desc_link=ofile_lst[desc_link].desc_nxt[1]; //mqueue
    if(ofile_lst[desc_link].pfsop!=(pfsop_t)&dev_posix_mqueue_map)
       return -1;
 
@@ -321,10 +325,10 @@ int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int
    {
       desc_t _desc=ofile_lst[desc].desc;
       //
-      if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr){
-         do{
+      if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr) {
+         do {
             //check
-            if(ofile_lst[_desc].used<=0){
+            if(ofile_lst[_desc].used<=0) {
                __atomic_out();
                __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
                return -1; //error, stream not coherent :(
@@ -339,18 +343,21 @@ int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int
             __disable_interrupt_section_out();
             //
             //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         }while((_desc=ofile_lst[_desc].desc_nxt[1])>=0);
+         } while((_desc=ofile_lst[_desc].desc_nxt[1])>=0);
       }
    }
    __atomic_out();
 
    //
-   if((ofile_lst[desc_link].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)){
-      fdev_posix_mqueue_write_t fdev_posix_mqueue_write = (fdev_posix_mqueue_write_t)ofile_lst[desc_link].pfsop->fdev.fdev_write;
+   if((ofile_lst[desc_link].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
+      fdev_posix_mqueue_write_t fdev_posix_mqueue_write =
+         (fdev_posix_mqueue_write_t)ofile_lst[desc_link].pfsop->fdev.fdev_write;
       //profiler
       __io_profiler_start(desc);
       //
-      if((cb=fdev_posix_mqueue_write(desc_link,(void*)0,0,(void*)msg_ptr,msg_len,msg_prio,abs_timeout))<0){
+      if((cb=
+             fdev_posix_mqueue_write(desc_link,(void*)0,0,(void*)msg_ptr,msg_len,msg_prio,
+                                     abs_timeout))<0) {
          //profiler
          __io_profiler_stop(desc);
          __io_profiler_add_result(desc,O_WRONLY,0,0);
@@ -359,17 +366,18 @@ int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int
          return -1;
       }
 
-      do{
-         __wait_io_int(pthread_ptr);//wait all data are transmitted
-      }while(ofile_lst[desc_link].pfsop->fdev.fdev_isset_write 
-         && ofile_lst[desc_link].pfsop->fdev.fdev_isset_write(desc_link));
+      do {
+         __wait_io_int(pthread_ptr); //wait all data are transmitted
+      } while(ofile_lst[desc_link].pfsop->fdev.fdev_isset_write
+              && ofile_lst[desc_link].pfsop->fdev.fdev_isset_write(desc_link));
       //profiler
       __io_profiler_stop(desc);
       __io_profiler_add_result(desc,O_WRONLY,msg_len,__io_profiler_get_counter(desc));
       //
       //printf("__wait_io_int ok\n");
-   }else if((ofile_lst[desc_link].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)){
-      fdev_posix_mqueue_write_t fdev_posix_mqueue_write = (fdev_posix_mqueue_write_t)ofile_lst[desc_link].pfsop->fdev.fdev_write;
+   }else if((ofile_lst[desc_link].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
+      fdev_posix_mqueue_write_t fdev_posix_mqueue_write =
+         (fdev_posix_mqueue_write_t)ofile_lst[desc_link].pfsop->fdev.fdev_write;
       //profiler
       __io_profiler_start(desc);
       //
@@ -387,11 +395,11 @@ int _mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int
 
 /*--------------------------------------------
 | Name:        _mq_getattr
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _mq_getattr(mqd_t mqdes,struct mq_attr* attr){
    pid_t pid;
@@ -418,12 +426,12 @@ int _mq_getattr(mqd_t mqdes,struct mq_attr* attr){
    if(desc<0)
       return -1;
 
-   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR|S_IFBLK)){
+   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR|S_IFBLK)) {
       return -1;
    }
 
    //check is mqueue?
-   desc_head=ofile_lst[desc].desc;//head
+   desc_head=ofile_lst[desc].desc; //head
    if(desc_head<0)
       return -1;
 
@@ -436,18 +444,18 @@ int _mq_getattr(mqd_t mqdes,struct mq_attr* attr){
       return -1;
 
    //get mq device attr
-   p_dev_mq_attr=(dev_mq_attr_t*)ofile_lst[desc_head].p;//mqueue
+   p_dev_mq_attr=(dev_mq_attr_t*)ofile_lst[desc_head].p; //mqueue
    if(!p_dev_mq_attr)
       return -1;
-   
-   //lock 
+
+   //lock
    kernel_pthread_mutex_lock(&p_dev_mq_attr->kernel_pthread_mutex);
    //
    attr->mq_curmsgs = p_dev_mq_attr->attr.mq_curmsgs;
    attr->mq_flags   = p_dev_mq_attr->attr.mq_flags;
    attr->mq_maxmsg  = p_dev_mq_attr->attr.mq_maxmsg;
    attr->mq_msgsize = p_dev_mq_attr->attr.mq_msgsize;
-   //unlock 
+   //unlock
    kernel_pthread_mutex_unlock(&p_dev_mq_attr->kernel_pthread_mutex);
    //
    return 0;

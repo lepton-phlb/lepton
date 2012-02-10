@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -65,27 +65,38 @@ int _fat16_init(fat16_core_info_t * fat_info, desc_t dev_desc) {
    }
    //init fat info
    if(buf[FAT16_BS_NBSEC16_OFF]==0 && buf[FAT16_BS_NBSEC16_OFF+1]==0) {
-      fat_info->media_size   = (buf[FAT16_BS_NBSEC32_OFF]+((fat16_u32_t)buf[FAT16_BS_NBSEC32_OFF+1]<<8)+((fat16_u32_t)buf[FAT16_BS_NBSEC32_OFF+2]<<16)+((fat16_u32_t)buf[FAT16_BS_NBSEC32_OFF+3]<<24))*FAT16_BS_BPS_VAL;  // Taille totale du media en octets
+      fat_info->media_size   =
+         (buf[FAT16_BS_NBSEC32_OFF]+
+          ((fat16_u32_t)buf[FAT16_BS_NBSEC32_OFF+
+                            1]<<
+           8)+
+          ((fat16_u32_t)buf[FAT16_BS_NBSEC32_OFF+
+                            2]<<
+           16)+((fat16_u32_t)buf[FAT16_BS_NBSEC32_OFF+3]<<24))*FAT16_BS_BPS_VAL;                                                                                                                                          // Taille totale du media en octets
    }
    else {
-      fat_info->media_size   = (buf[FAT16_BS_NBSEC16_OFF]+((fat16_u32_t)buf[FAT16_BS_NBSEC16_OFF+1]<<8))*FAT16_BS_BPS_VAL;  // Taille totale du media en octets
+      fat_info->media_size   =
+         (buf[FAT16_BS_NBSEC16_OFF]+((fat16_u32_t)buf[FAT16_BS_NBSEC16_OFF+1]<<8))*FAT16_BS_BPS_VAL;                        // Taille totale du media en octets
    }
 
    //nd sectors per cluster
    fat_info->nbsec_per_clus = buf[FAT16_BS_SPC_OFF];
    //boot sector address and size
    fat_info->bs_addr  = FAT16_BS_ADDR;
-   fat_info->bs_size = (buf[FAT16_BS_RSVSEC_OFF]+((fat16_u32_t)buf[FAT16_BS_RSVSEC_OFF+1]<<8))*FAT16_BS_BPS_VAL;
+   fat_info->bs_size =
+      (buf[FAT16_BS_RSVSEC_OFF]+((fat16_u32_t)buf[FAT16_BS_RSVSEC_OFF+1]<<8))*FAT16_BS_BPS_VAL;
    ////FOR MOMENT IGNORING THIS VALUE
    fat_info->hs_addr   = fat_info->bs_addr + fat_info->bs_size;
    fat_info->hs_size = 0;
 
    //fat address and size
    fat_info->fat_addr   = fat_info->hs_addr + fat_info->hs_size;
-   fat_info->fat_size  = (buf[FAT16_BS_FATBS_OFF] + ((fat16_u32_t)buf[FAT16_BS_FATBS_OFF+1]<<8))*FAT16_BS_BPS_VAL;
+   fat_info->fat_size  =
+      (buf[FAT16_BS_FATBS_OFF] + ((fat16_u32_t)buf[FAT16_BS_FATBS_OFF+1]<<8))*FAT16_BS_BPS_VAL;
    //root directory address and size
    fat_info->rd_addr = fat_info->fat_addr + (fat_info->fat_size * FAT16_BS_NBFAT_VAL);
-   fat_info->rd_size = RD_SIZE * (buf[FAT16_BS_NBROOTENT_OFF]+((fat16_u32_t)buf[FAT16_BS_NBROOTENT_OFF+1]<<8));
+   fat_info->rd_size = RD_SIZE *
+                       (buf[FAT16_BS_NBROOTENT_OFF]+((fat16_u32_t)buf[FAT16_BS_NBROOTENT_OFF+1]<<8));
    //user dara address and size
    fat_info->ud_addr = fat_info->rd_addr + fat_info->rd_size;
    fat_info->ud_size = fat_info->media_size - fat_info->ud_addr;
@@ -104,7 +115,8 @@ int _fat16_init(fat16_core_info_t * fat_info, desc_t dev_desc) {
       return -1;
 
    //check fat type : must be FAT or FAT16
-   if((buf[FAT16_BS_FSTYPE_OFF]!='F')||(buf[FAT16_BS_FSTYPE_OFF+1]!='A')||(buf[FAT16_BS_FSTYPE_OFF+2]!='T')) return(-1);
+   if((buf[FAT16_BS_FSTYPE_OFF]!='F')||(buf[FAT16_BS_FSTYPE_OFF+1]!='A')||
+      (buf[FAT16_BS_FSTYPE_OFF+2]!='T')) return(-1);
    if((buf[FAT16_BS_FSTYPE_OFF+4]=='1')&&(buf[FAT16_BS_FSTYPE_OFF+5]!='6')) return(-1);
 
    //add root directory to fat16 open file
@@ -144,7 +156,8 @@ fat16_u32_t _fat16_cluster_add(fat16_core_info_t * fat_info, fat16_u16_t cluster
 | Comments:
 | See:
 ---------------------------------------------*/
-fat16_u16_t _fat16_cluster_suiv(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster) {
+fat16_u16_t _fat16_cluster_suiv(fat16_core_info_t * fat_info, desc_t dev_desc,
+                                fat16_u16_t cluster) {
    fat16_u8_t buf[FAT16_CLUSSZ];
    fat16_u16_t cluster_suiv;
 
@@ -180,7 +193,8 @@ fat16_u16_t _fat16_cluster_suiv(fat16_core_info_t * fat_info, desc_t dev_desc, f
 | Comments:
 | See:
 ---------------------------------------------*/
-fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb) {
+fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc,
+                           bios_param_block_t * bpb) {
    fat16_u16_t cluster = FAT16_CLUSMIN-1;
    fat16_u8_t buf[FAT16_CLUSSZ];
    int i,j;
@@ -192,7 +206,7 @@ fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_p
    //looking in cache fat
    p_cluster = (unsigned short *)fat_info->fat_cache;
    p_cluster += FAT16_CLUSMIN;
-   for(cluster=FAT16_CLUSMIN; cluster<FAT16_CLUSMAX ;cluster++, p_cluster++) {
+   for(cluster=FAT16_CLUSMIN; cluster<FAT16_CLUSMAX; cluster++, p_cluster++) {
       if(!(*p_cluster)) {
          break;
       }
@@ -200,9 +214,10 @@ fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_p
 
 #else
    //looking for first free cluster in FAT
-   for(i=0; i<(fat_info->fat_size/FAT_16_CLEAN_BUFFER_SIZE) ;i++) {
+   for(i=0; i<(fat_info->fat_size/FAT_16_CLEAN_BUFFER_SIZE); i++) {
       //read block in cache
-      if(_fat_read_data(dev_desc,fat_info->fat_addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,FAT_16_CLEAN_BUFFER_SIZE)<0) {
+      if(_fat_read_data(dev_desc,fat_info->fat_addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,
+                        FAT_16_CLEAN_BUFFER_SIZE)<0) {
          return 0;
       }
       //
@@ -234,7 +249,8 @@ fat16_u16_t _fat16_getclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_p
    if(_fat_write_data(dev_desc,fat_info->fat_addr+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
       return 0;
    }
-   if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
+   if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,
+                      FAT16_CLUSSZ)<0) {
       return 0;
    }
 
@@ -265,7 +281,8 @@ int _fat16_putclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cl
    if(_fat_write_data(dev_desc,fat_info->fat_addr+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
       return -1;
    }
-   if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
+   if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,
+                      FAT16_CLUSSZ)<0) {
       return -1;
    }
 
@@ -285,7 +302,8 @@ int _fat16_putclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cl
 | Comments:
 | See:
 ---------------------------------------------*/
-int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster_curr, fat16_u16_t cluster_next) {
+int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t cluster_curr,
+                     fat16_u16_t cluster_next) {
    fat16_u32_t addr = 0;
    unsigned char buf[FAT16_CLUSSZ]={0};
 
@@ -326,12 +344,12 @@ int _fat16_chainclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t 
 void _fat16_delcluslist(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t cluster) {
    fat16_u16_t cluster_suiv;
 
-   do{
+   do {
       //keep next cluster and free it
       cluster_suiv = _fat16_cluster_suiv(fat_info,__get_dev_desc(desc),cluster);
       _fat16_putclus(fat_info,__get_dev_desc(desc),cluster);
       cluster = cluster_suiv;
-   }while (cluster != FAT16_LCLUSMAX);//while cluster remain
+   } while (cluster != FAT16_LCLUSMAX); //while cluster remain
    return;
 }
 
@@ -349,7 +367,7 @@ int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc) {
    fat16_u32_t addr;
    int flag_fin=0, nument;
 
-   do{
+   do {
       addr = _fat16_cluster_add(fat_info, cluster);
       if(addr == 0)
          return -1;
@@ -369,7 +387,8 @@ int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc) {
             flag_fin=1;
          }
          nument++;
-      } while((flag_fin==0)&&(nument<((fat16_u16_t)fat_info->nbsec_per_clus/RD_SIZE*FAT16_BS_BPS_VAL)));
+      } while((flag_fin==0)&&
+              (nument<((fat16_u16_t)fat_info->nbsec_per_clus/RD_SIZE*FAT16_BS_BPS_VAL)));
 
       //
       cluster = _fat16_cluster_suiv(fat_info, __get_dev_desc(desc), cluster);
@@ -379,7 +398,7 @@ int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc) {
       if (cluster==FAT16_LCLUSMAX) {
          flag_fin=1;
       }
-   }while(flag_fin!=1);
+   } while(flag_fin!=1);
 
    return 0;
 }
@@ -392,7 +411,9 @@ int _fat16_checkdirempty(fat16_core_info_t * fat_info, desc_t desc) {
 | Comments:
 | See:
 ---------------------------------------------*/
-int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus, fat16_u16_t* offset, unsigned char prev_flag) {
+int _fat16_offsetinfo(fat16_core_info_t * fat_info, desc_t desc, fat16_u16_t* clus,
+                      fat16_u16_t* offset,
+                      unsigned char prev_flag) {
    fat16_u32_t off = ofile_lst[desc].offset;
    fat16_u16_t prev;
 
@@ -486,7 +507,8 @@ int _fat16_lastclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t c
    if(_fat_write_data(dev_desc,fat_info->fat_addr+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
       return -1;
    }
-   if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,FAT16_CLUSSZ)<0) {
+   if(_fat_write_data(dev_desc,fat_info->fat_addr+fat_info->fat_size+(cluster*FAT16_CLUSSZ),buf,
+                      FAT16_CLUSSZ)<0) {
       return -1;
    }
 
@@ -506,7 +528,8 @@ int _fat16_lastclus(fat16_core_info_t * fat_info, desc_t dev_desc, fat16_u16_t c
 | Comments:
 | See:
 ---------------------------------------------*/
-int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb, fat16_u16_t cluster) {
+int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_block_t * bpb,
+                     fat16_u16_t cluster) {
 
    fat16_u32_t addr;
    int i;
@@ -519,8 +542,9 @@ int _fat16_cleanclus(fat16_core_info_t * fat_info, desc_t dev_desc, bios_param_b
 
    //
    count = (bpb->BPB_BytesPerSec*bpb->BPB_SecPerClust)/FAT_16_CLEAN_BUFFER_SIZE;
-   for(i=0;i<count;i++) {
-      if(_fat_write_data(dev_desc,addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,FAT_16_CLEAN_BUFFER_SIZE)<0) {
+   for(i=0; i<count; i++) {
+      if(_fat_write_data(dev_desc,addr+(i*FAT_16_CLEAN_BUFFER_SIZE),clean_buf,
+                         FAT_16_CLEAN_BUFFER_SIZE)<0) {
          return 0;
       }
    }
@@ -608,7 +632,9 @@ fat16_u16_t _fat16_create_fat_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t d
 
    if(attr == S_IFDIR) {
       msdos_entry->DIR_Attr = RD_ATTR_DIRECTORY;
-      cluster = _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
+      cluster =
+         _fat16_getclus(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, __get_dev_desc(
+                           desc), &ofile_lst[desc].pmntdev->fs_info.fat_info.fat_boot_info->bpb);
       //error
       if(!cluster)
          return INVALID_INODE_NB;
@@ -648,8 +674,11 @@ fat16_u16_t _fat16_create_fat_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t d
 | Comments:
 | See:_fat16_getdatetime
 ---------------------------------------------*/
-int _fat16_create_fat_directory_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t desc, fat16_u16_t cluster, fat16_u16_t parent_cluster) {
-   fat16_u32_t addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info, cluster);
+int _fat16_create_fat_directory_entry(fat_msdos_dir_entry_t *msdos_entry, desc_t desc,
+                                      fat16_u16_t cluster,
+                                      fat16_u16_t parent_cluster) {
+   fat16_u32_t addr = _fat16_cluster_add(ofile_lst[desc].pmntdev->fs_info.fat_info.fat_core_info,
+                                         cluster);
 
    if(!addr)
       return INVALID_INODE_NB;
@@ -719,11 +748,14 @@ int _fat16_getdesc(desc_t desc, fat16_u32_t addr) {
    //fill entry in fat16 open files
    fat16_ofile_lst[desc].entry_phys_addr = addr;
 
-   if(_fat_read_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr,(unsigned char *)&fat_entry.msdos_entry,RD_SIZE)<0) {
+   if(_fat_read_data(__get_dev_desc(desc),fat16_ofile_lst[desc].entry_infos_addr,
+                     (unsigned char *)&fat_entry.msdos_entry,RD_SIZE)<0) {
       return -1;
    }
 
-   fat16_ofile_lst[desc].entry_data_cluster = fat_entry.msdos_entry.DIR_FstClusLO[0]+((fat16_u16_t)fat_entry.msdos_entry.DIR_FstClusLO[1]<<8);
+   fat16_ofile_lst[desc].entry_data_cluster = fat_entry.msdos_entry.DIR_FstClusLO[0]+
+                                              ((fat16_u16_t)fat_entry.msdos_entry.DIR_FstClusLO[1]
+                                               <<8);
    fat16_ofile_lst[desc].entry_attr = fat_entry.msdos_entry.DIR_Attr;
 
    if (fat_entry.msdos_entry.DIR_Attr == RD_ATTR_ARCHIVE) {
@@ -735,7 +767,8 @@ int _fat16_getdesc(desc_t desc, fat16_u32_t addr) {
 
    ofile_lst[desc].size = fat_entry.msdos_entry.DIR_FileSize;
    //need to calculate ctime
-   ofile_lst[desc].cmtime = _fat16_converttime(fat_entry.msdos_entry.DIR_WrtDate,fat_entry.msdos_entry.DIR_WrtTime);
+   ofile_lst[desc].cmtime = _fat16_converttime(fat_entry.msdos_entry.DIR_WrtDate,
+                                               fat_entry.msdos_entry.DIR_WrtTime);
    ofile_lst[desc].offset = 0;
 
    return 0;

@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -75,7 +75,7 @@ static volatile unsigned char if_pointtopoint_no=0;
 //
 /*
 struct ethernetif {
-	struct eth_addr *ethaddr;
+        struct eth_addr *ethaddr;
    desc_t desc_r;
    desc_t desc_w;
    kernel_pthread_mutex_t     mutex_lowlevel_output;
@@ -114,41 +114,41 @@ extern int packet_send(void *buffer, int len);
 ----------------------------------------------*/
 static void low_level_init(struct netif *netif){
    kernel_pthread_t* pthread_ptr;
-   pthread_mutexattr_t  mutex_attr=0;
+   pthread_mutexattr_t mutex_attr=0;
 
-	struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
+   struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
 
    //to do: to fix.
-   #if defined(CPU_WIN32)
-      //win32
-      memcpy(&lwip_ethaddr,p_lwip_if->ethaddr,6);
-   #elif defined(CPU_GNU32)
-      memcpy(p_lwip_if->ethaddr,lwip_ethaddr,6);
-   #else
+#if defined(CPU_WIN32)
+   //win32
+   memcpy(&lwip_ethaddr,p_lwip_if->ethaddr,6);
+#elif defined(CPU_GNU32)
+   memcpy(p_lwip_if->ethaddr,lwip_ethaddr,6);
+#else
    {
       unsigned char lowlevel_ethaddr[6]={0};
       //arm7
-	   //memcpy(p_lwip_if->ethaddr,&lwip_ethaddr,6);
+      //memcpy(p_lwip_if->ethaddr,&lwip_ethaddr,6);
       //get hardware MAC address from ethernet interface.
-      __atomic_in();//critical section in. begin of parano�ac protection.
+      __atomic_in(); //critical section in. begin of parano�ac protection.
       //_vfs_ioctl(p_lwip_if->desc_r,ETHGETHWADDRESS,p_lwip_if->ethaddr);
       _vfs_ioctl(p_lwip_if->desc_r,ETHGETHWADDRESS,(unsigned char*)&lowlevel_ethaddr[0]);
       memcpy(p_lwip_if->ethaddr,&lowlevel_ethaddr[0],6);
 
-      __atomic_out();//critical section out. end of parano�ac protection.
+      __atomic_out(); //critical section out. end of parano�ac protection.
    }
-   #endif
+#endif
 
-   #ifdef NETIF_DEBUG
-	   LWIP_DEBUGF(NETIF_DEBUG, ("pktif: eth_addr %02X%02X%02X%02X%02X%02X\n",
-                                p_lwip_if->ethaddr->addr[0],
-                                p_lwip_if->ethaddr->addr[1],
-                                p_lwip_if->ethaddr->addr[2],
-                                p_lwip_if->ethaddr->addr[3],
-                                p_lwip_if->ethaddr->addr[4],
-                                p_lwip_if->ethaddr->addr[5]));
-   #endif /* NETIF_DEBUG */
-	/* Do whatever else is needed to initialize interface. */
+#ifdef NETIF_DEBUG
+   LWIP_DEBUGF(NETIF_DEBUG, ("pktif: eth_addr %02X%02X%02X%02X%02X%02X\n",
+                             p_lwip_if->ethaddr->addr[0],
+                             p_lwip_if->ethaddr->addr[1],
+                             p_lwip_if->ethaddr->addr[2],
+                             p_lwip_if->ethaddr->addr[3],
+                             p_lwip_if->ethaddr->addr[4],
+                             p_lwip_if->ethaddr->addr[5]));
+#endif    /* NETIF_DEBUG */
+          /* Do whatever else is needed to initialize interface. */
 
    pthread_ptr = kernel_pthread_self();
 
@@ -197,19 +197,19 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
    struct pbuf *q;
    //gloups bug :'(
    static unsigned char buffer[1600];
-	unsigned char *ptr;
+   unsigned char *ptr;
    int packet_len=0;
 
    kernel_pthread_t* pthread_ptr;
 
    struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
-	desc_t desc= p_lwip_if->desc_w;
+   desc_t desc= p_lwip_if->desc_w;
 
    pthread_ptr = kernel_pthread_self();
 
    /* initiate transfer(); */
    if (p->tot_len>=1600)
- 		return ERR_BUF;
+      return ERR_BUF;
 
    //lock
    kernel_pthread_mutex_lock(&p_lwip_if->mutex_lowlevel_output);
@@ -225,14 +225,17 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
          time. The size of the data in each pbuf is kept in the ->len
          variable. */
       /* send data from(q->payload, q->len); */
-      #ifdef NETIF_DEBUG
-		   LWIP_DEBUGF(NETIF_DEBUG, ("netif: send ptr %p q->payload %p q->len %i q->next %p\n", ptr, q->payload, (int)q->len, q->next));
-      #endif
+#ifdef NETIF_DEBUG
+      LWIP_DEBUGF(NETIF_DEBUG,
+                  ("netif: send ptr %p q->payload %p q->len %i q->next %p\n", ptr, q->payload,
+                   (int)q->len,
+                   q->next));
+#endif
 
       //profiler
       __io_profiler_start(desc);
       //init new current packet
-      if(!packet_len){
+      if(!packet_len) {
          ptr=buffer;
          packet_len=p->tot_len;
       }
@@ -242,33 +245,33 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
       //next part of current packet;
       ptr+=q->len;
       //
-      if(!packet_len){//all packet is copied in buffer. now send current packet.
-      
+      if(!packet_len) { //all packet is copied in buffer. now send current packet.
+
          /* signal that packet should be sent(); */
-         if (ofile_lst[desc].pfsop->fdev.fdev_write(desc,buffer,p->tot_len) < 0){
+         if (ofile_lst[desc].pfsop->fdev.fdev_write(desc,buffer,p->tot_len) < 0) {
             //unlock
             kernel_pthread_mutex_unlock(&p_lwip_if->mutex_lowlevel_output);
-	         return ERR_BUF;
+            return ERR_BUF;
          }
 
          //
          while(ofile_lst[desc].pfsop->fdev.fdev_isset_write
-            && ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc)){
+               && ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc)) {
             //
             struct timespec abs_timeout;
 
             abs_timeout.tv_sec   = (ETHIF_CORE_OUTPUT_DELAY/1000);
-            abs_timeout.tv_nsec  = (ETHIF_CORE_OUTPUT_DELAY%1000)*1000000;//ms->ns
+            abs_timeout.tv_nsec  = (ETHIF_CORE_OUTPUT_DELAY%1000)*1000000; //ms->ns
 
             //wait all data are transmitted
-            if((__wait_io_int2(pthread_ptr,&abs_timeout))<0){
-               if(!(--eth_timeout_s))//timeout system
+            if((__wait_io_int2(pthread_ptr,&abs_timeout))<0) {
+               if(!(--eth_timeout_s)) //timeout system
                   break;
             }
 
          }
          //
-         if(!eth_timeout_s){
+         if(!eth_timeout_s) {
             p_lwip_if->timeout_error++;
             //ofile_lst[desc].pfsop->fdev.fdev_ioctl(
             //to do reset interface
@@ -278,14 +281,14 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
             __io_profiler_stop(desc);
             __io_profiler_add_result(desc,O_WRONLY,p->tot_len,__io_profiler_get_counter(desc));
          }
-      //end if(!packet_len)
+         //end if(!packet_len)
       }
-      
+
    }
 
-   #ifdef LINK_STATS
-      lwip_stats.link.xmit++;
-   #endif /* LINK_STATS */
+#ifdef LINK_STATS
+   lwip_stats.link.xmit++;
+#endif    /* LINK_STATS */
 
    //unlock
    kernel_pthread_mutex_unlock(&p_lwip_if->mutex_lowlevel_output);
@@ -309,20 +312,20 @@ static struct pbuf *low_level_input(struct netif *netif){
    unsigned char buffer[1600];
 
    struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
-	desc_t desc= p_lwip_if->desc_r;
+   desc_t desc= p_lwip_if->desc_r;
 
 
    /* Obtain the size of the packet and put it into the "len"
       variable. */
    length = ofile_lst[desc].pfsop->fdev.fdev_read(desc,buffer,sizeof(buffer));
    if (length<=0)
-	   return NULL;
+      return NULL;
 
    /* We allocate a pbuf chain of pbufs from the pool. */
    p = pbuf_alloc(PBUF_LINK, (u16_t)length, PBUF_POOL);
-   #ifdef NETIF_DEBUG
-	   LWIP_DEBUGF(NETIF_DEBUG, ("netif: recv length %i p->tot_len %i\n", length, (int)p->tot_len));
-   #endif
+#ifdef NETIF_DEBUG
+   LWIP_DEBUGF(NETIF_DEBUG, ("netif: recv length %i p->tot_len %i\n", length, (int)p->tot_len));
+#endif
 
    if (p != NULL) {
       /* We iterate over the pbuf chain until we have read the entire
@@ -333,20 +336,23 @@ static struct pbuf *low_level_input(struct netif *netif){
             available data in the pbuf is given by the q->len
             variable. */
          /* read data into(q->payload, q->len); */
-         #ifdef NETIF_DEBUG
-	         LWIP_DEBUGF(NETIF_DEBUG, ("netif: recv start %i length %i q->payload %p q->len %i q->next %p\n", start, length, q->payload, (int)q->len, q->next));
-         #endif
+#ifdef NETIF_DEBUG
+         LWIP_DEBUGF(NETIF_DEBUG,
+                     ("netif: recv start %i length %i q->payload %p q->len %i q->next %p\n", start,
+                      length,
+                      q->payload, (int)q->len, q->next));
+#endif
          memcpy(q->payload,&buffer[start],q->len);
-		   start+=q->len;
-		   length-=q->len;
-		   if (length<=0)
-		   break;
+         start+=q->len;
+         length-=q->len;
+         if (length<=0)
+            break;
       }
       /* acknowledge that packet has been read(); */
       //cur_length=0;
-      #ifdef LINK_STATS
-         lwip_stats.link.recv++;
-      #endif /* LINK_STATS */
+#ifdef LINK_STATS
+      lwip_stats.link.recv++;
+#endif       /* LINK_STATS */
 
       //profiler
       __io_profiler_stop(desc);
@@ -355,13 +361,13 @@ static struct pbuf *low_level_input(struct netif *netif){
    }else{
       /* drop packet(); */
       //cur_length=0;
-      #ifdef LINK_STATS
-         lwip_stats.link.memerr++;
-         lwip_stats.link.drop++;
-      #endif /* LINK_STATS */
-  }
+#ifdef LINK_STATS
+      lwip_stats.link.memerr++;
+      lwip_stats.link.drop++;
+#endif       /* LINK_STATS */
+   }
 
-  return p;
+   return p;
 }
 
 /*--------------------------------------------
@@ -376,11 +382,11 @@ static struct pbuf *low_level_input(struct netif *netif){
 | See:
 ----------------------------------------------*/
 static err_t ethif_core_output(struct netif *netif, struct pbuf *p, struct ip_addr *ipaddr){
-  if(netif->hwaddr_len){//only for ethernet interface
-     return etharp_output(netif, p,ipaddr);
-  }else{//only for slip interface
-     return low_level_output(netif,p);
-  }
+   if(netif->hwaddr_len) { //only for ethernet interface
+      return etharp_output(netif, p,ipaddr);
+   }else{ //only for slip interface
+      return low_level_output(netif,p);
+   }
 }
 
 /*--------------------------------------------
@@ -400,7 +406,7 @@ int ethif_core_input(struct netif *netif)
    struct eth_hdr *ethhdr;
    struct pbuf *p;
    struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
-	desc_t desc= p_lwip_if->desc_r;
+   desc_t desc= p_lwip_if->desc_r;
 
    int r=-1;
 
@@ -408,37 +414,37 @@ int ethif_core_input(struct netif *netif)
    if(desc<0)
       return -1;
    //
-   if(!(r=ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc))){
+   if(!(r=ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc))) {
       p = low_level_input(netif);
-      if (p !=NULL){
-        /* points to packet payload, which starts with an Ethernet header */
-        ethhdr = p->payload;
-        switch (htons(ethhdr->type)) {
-           /* IP or ARP packet? */
-           case ETHTYPE_IP:
-           case ETHTYPE_ARP:
-         #if PPPOE_SUPPORT
-           /* PPPoE packet? */
-           case ETHTYPE_PPPOEDISC:
-           case ETHTYPE_PPPOE:
-         #endif /* PPPOE_SUPPORT */
-             /* full packet send to tcpip_thread to process */
-             if (netif->input(p, netif)!=ERR_OK) {
+      if (p !=NULL) {
+         /* points to packet payload, which starts with an Ethernet header */
+         ethhdr = p->payload;
+         switch (htons(ethhdr->type)) {
+         /* IP or ARP packet? */
+         case ETHTYPE_IP:
+         case ETHTYPE_ARP:
+#if PPPOE_SUPPORT
+         /* PPPoE packet? */
+         case ETHTYPE_PPPOEDISC:
+         case ETHTYPE_PPPOE:
+#endif          /* PPPOE_SUPPORT */
+                /* full packet send to tcpip_thread to process */
+            if (netif->input(p, netif)!=ERR_OK) {
                LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
                pbuf_free(p);
                p = NULL;
-             }
-           break;
+            }
+            break;
 
-           default:
-             pbuf_free(p);
-             p = NULL;
-           break;
+         default:
+            pbuf_free(p);
+            p = NULL;
+            break;
          }
       }
    }else{
-     //profiler
-     __io_profiler_start(desc);
+      //profiler
+      __io_profiler_start(desc);
    }
 
    return r;
@@ -449,7 +455,7 @@ int ethif_core_input_1_2_1(struct netif *netif)
    struct eth_hdr *ethhdr;
    struct pbuf *p;
    struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
-	desc_t desc= p_lwip_if->desc_r;
+   desc_t desc= p_lwip_if->desc_r;
 
    int r;
 
@@ -457,44 +463,44 @@ int ethif_core_input_1_2_1(struct netif *netif)
    if(desc<0)
       return -1;
    //
-   if(!(r=ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc))){
-     //
-     p = low_level_input(netif);
-     if (p != NULL) {
+   if(!(r=ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc))) {
+      //
+      p = low_level_input(netif);
+      if (p != NULL) {
 
-         #ifdef LINK_STATS
-            lwip_stats.link.recv++;
-         #endif /* LINK_STATS */
+#ifdef LINK_STATS
+         lwip_stats.link.recv++;
+#endif          /* LINK_STATS */
 
 
-         if(netif->hwaddr_len){//only for ethernet interface
+         if(netif->hwaddr_len) { //only for ethernet interface
             int header_sz = sizeof(struct eth_hdr);
 
             ethhdr = p->payload;
             switch (htons(ethhdr->type)) {
 
-               case ETHTYPE_IP:
-                  etharp_ip_input(netif, p);
-                  pbuf_header(p, -header_sz);//-14
-                  netif->input(p, netif);
+            case ETHTYPE_IP:
+               etharp_ip_input(netif, p);
+               pbuf_header(p, -header_sz);   //-14
+               netif->input(p, netif);
                break;
 
-               case ETHTYPE_ARP:
-                  etharp_arp_input(netif, p_lwip_if->ethaddr, p);
+            case ETHTYPE_ARP:
+               etharp_arp_input(netif, p_lwip_if->ethaddr, p);
                break;
 
-               default:
-                  pbuf_free(p);
+            default:
+               pbuf_free(p);
                break;
-            }// switch
-         }else{//only for slip interface
+            } // switch
+         }else{ //only for slip interface
             if (netif->input(p, netif) != ERR_OK) {
                pbuf_free(p);
                p = NULL;
             }
          }
-      }// if p!=NULL
-   }//while
+      } // if p!=NULL
+   } //while
 
    return r;
 }
@@ -513,16 +519,16 @@ int ethif_core_periodic_input(struct lwip_if_st *lwip_if_head){
    static kernel_pthread_t* ethif_core_pthread= (kernel_pthread_t*)0;
    int r=-1;
 
-   if(!ethif_core_pthread){
+   if(!ethif_core_pthread) {
       ethif_core_pthread = kernel_pthread_self();
    }
 
-   while(p_lwip_if){
+   while(p_lwip_if) {
       //set interface parameter
-      if(ethif_core_pthread!=ofile_lst[p_lwip_if->desc_r].owner_pthread_ptr_read){
+      if(ethif_core_pthread!=ofile_lst[p_lwip_if->desc_r].owner_pthread_ptr_read) {
          ofile_lst[p_lwip_if->desc_r].owner_pthread_ptr_read = ethif_core_pthread;
       }
-      if(ofile_lst[p_lwip_if->desc_r].nb_reader<=0){
+      if(ofile_lst[p_lwip_if->desc_r].nb_reader<=0) {
          //interface reset
          low_level_ioctl(p_lwip_if->desc_r,ETHRESET,0);
          ofile_lst[p_lwip_if->desc_r].nb_reader++;
@@ -535,9 +541,9 @@ int ethif_core_periodic_input(struct lwip_if_st *lwip_if_head){
       struct timespec abs_timeout;
 
       abs_timeout.tv_sec   = (ETHIF_CORE_INPUT_DELAY/1000);
-      abs_timeout.tv_nsec  = (ETHIF_CORE_INPUT_DELAY%1000)*1000000;//ms->ns
+      abs_timeout.tv_nsec  = (ETHIF_CORE_INPUT_DELAY%1000)*1000000; //ms->ns
 
-      __wait_io_int2(ethif_core_pthread,&abs_timeout);//100ms
+      __wait_io_int2(ethif_core_pthread,&abs_timeout); //100ms
    }
    //
    return 0;
@@ -570,7 +576,7 @@ static void arp_timer(void *arg){
 err_t ethif_core_init(struct netif *netif){
    struct lwip_if_st *p_lwip_if=(struct lwip_if_st *)netif->state;
 
-   if(p_lwip_if->if_config.if_flags&IFF_BROADCAST){
+   if(p_lwip_if->if_config.if_flags&IFF_BROADCAST) {
       netif->name[0] = 'e';
       netif->name[1] = '0'+if_broadcast_no++;
 
@@ -579,10 +585,10 @@ err_t ethif_core_init(struct netif *netif){
       netif->flags = NETIF_FLAG_BROADCAST| NETIF_FLAG_ETHARP | NETIF_FLAG_IGMP | NETIF_FLAG_LINK_UP;
       netif->hwaddr_len = ETHARP_HWADDR_LEN;
 
-   }else if(p_lwip_if->if_config.if_flags&IFF_POINTTOPOINT){
+   }else if(p_lwip_if->if_config.if_flags&IFF_POINTTOPOINT) {
       netif->name[0] = 's';
       netif->name[1] = '0'+if_pointtopoint_no++;
-       //slip connection type
+      //slip connection type
       netif->mtu = 1500;
       netif->flags = NETIF_FLAG_POINTTOPOINT;
       netif->hwaddr_len=0;

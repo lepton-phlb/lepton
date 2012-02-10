@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -36,47 +36,48 @@ extern "C" {
 //WIN32
 #ifndef _WCHAR_T_DEFINED
 typedef unsigned short wchar_t;
-#define _WCHAR_T_DEFINED
+   #define _WCHAR_T_DEFINED
 #endif
 
 #ifndef _MAC
-#ifndef _WCTYPE_T_DEFINED
+   #ifndef _WCTYPE_T_DEFINED
 typedef wchar_t wint_t;
 typedef wchar_t wctype_t;
-#define _WCTYPE_T_DEFINED
-#endif
+      #define _WCTYPE_T_DEFINED
+   #endif
 
-#ifndef WEOF
-#define WEOF (wint_t)(0xFFFF)
-#endif
+   #ifndef WEOF
+      #define WEOF (wint_t)(0xFFFF)
+   #endif
 #endif  /* ndef _MAC */
 //WIN32
-//#include "ctype/ctype.h"  
+//#include "ctype/ctype.h"
 #include  <ctype.h>
 //endof lepton patch
 
-#define ANYSIZE_ARRAY 1       
+#define ANYSIZE_ARRAY 1
 
 #if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
-#define RESTRICTED_POINTER __restrict
+   #define RESTRICTED_POINTER __restrict
 #else
-#define RESTRICTED_POINTER
+   #define RESTRICTED_POINTER
 #endif
 
-#if defined(_M_MRX000) || defined(_M_ALPHA) || defined(_M_PPC) || (defined(_M_IA64) && !defined(__ICL))
-#define UNALIGNED __unaligned
+#if defined(_M_MRX000) || defined(_M_ALPHA) || defined(_M_PPC) || (defined(_M_IA64) && \
+   !defined(__ICL))
+   #define UNALIGNED __unaligned
 #else
-#define UNALIGNED
+   #define UNALIGNED
 #endif
 
 #if defined(_M_IA64) && defined(_GENIA64_)
-#define __ptr64
+   #define __ptr64
 #endif
 
 #if defined(_WIN64) || defined(_M_ALPHA)
-#define MAX_NATURAL_ALIGNMENT sizeof(ULONGLONG)
+   #define MAX_NATURAL_ALIGNMENT sizeof(ULONGLONG)
 #else
-#define MAX_NATURAL_ALIGNMENT sizeof(DWORD)
+   #define MAX_NATURAL_ALIGNMENT sizeof(DWORD)
 #endif
 
 //
@@ -86,9 +87,9 @@ typedef wchar_t wctype_t;
 
 #ifndef __cplusplus
 
-#pragma warning(disable:4116)
-#define TYPE_ALIGNMENT( t ) \
-    FIELD_OFFSET( struct { char x; t test; }, test )
+   #pragma warning(disable:4116)
+   #define TYPE_ALIGNMENT( t ) \
+   FIELD_OFFSET( struct { char x; t test; }, test )
 
 #endif
 
@@ -99,40 +100,43 @@ typedef wchar_t wctype_t;
 // An assertion failure results in error C2118: negative subscript.
 //
 
-#define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
+#define C_ASSERT(e) typedef char __C_ASSERT__[(e) ? 1 : -1]
 
-#if !defined(_MAC) && (defined(_M_MRX000) || defined(_M_ALPHA) || defined(_M_IA64)) && (_MSC_VER >= 1100) && !(defined(MIDL_PASS) || defined(RC_INVOKED))
-#define POINTER_64 __ptr64
+#if !defined(_MAC) && (defined(_M_MRX000) || defined(_M_ALPHA) || defined(_M_IA64)) && (_MSC_VER >= \
+                                                                                        1100) && \
+   !(defined(MIDL_PASS) || defined(RC_INVOKED))
+   #define POINTER_64 __ptr64
 typedef unsigned __int64 POINTER_64_INT;
-#if defined(_AXP64_)
-#define POINTER_32 __ptr32
+   #if defined(_AXP64_)
+      #define POINTER_32 __ptr32
+   #else
+      #define POINTER_32
+   #endif
 #else
-#define POINTER_32
-#endif
-#else
-#if defined(_MAC) && defined(_MAC_INT_64)
-#define POINTER_64 __ptr64
+   #if defined(_MAC) && defined(_MAC_INT_64)
+      #define POINTER_64 __ptr64
 typedef unsigned __int64 POINTER_64_INT;
-#else
-#define POINTER_64
+   #else
+      #define POINTER_64
 typedef unsigned long POINTER_64_INT;
-#endif
-#define POINTER_32
+   #endif
+   #define POINTER_32
 #endif
 
 #include <basetsd.h>
 
 
-#if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC) || defined(_M_IA64)) && !defined(MIDL_PASS)
-#define DECLSPEC_IMPORT __declspec(dllimport)
+#if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC) || \
+   defined(_M_IA64)) && !defined(MIDL_PASS)
+   #define DECLSPEC_IMPORT __declspec(dllimport)
 #else
-#define DECLSPEC_IMPORT
+   #define DECLSPEC_IMPORT
 #endif
 
 #if (_MSC_VER >= 1200)
-#define DECLSPEC_NORETURN __declspec(noreturn)
+   #define DECLSPEC_NORETURN __declspec(noreturn)
 #else
-#define DECLSPEC_NORETURN
+   #define DECLSPEC_NORETURN
 #endif
 
 typedef void *PVOID;
@@ -140,10 +144,10 @@ typedef void * POINTER_64 PVOID64;
 
 
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
-#define NTAPI __stdcall
+   #define NTAPI __stdcall
 #else
-#define _cdecl
-#define NTAPI
+   #define _cdecl
+   #define NTAPI
 #endif
 
 //
@@ -151,9 +155,9 @@ typedef void * POINTER_64 PVOID64;
 //
 
 #if !defined(_NTSYSTEM_)
-#define NTSYSAPI DECLSPEC_IMPORT
+   #define NTSYSAPI DECLSPEC_IMPORT
 #else
-#define NTSYSAPI
+   #define NTSYSAPI
 #endif
 
 
@@ -162,7 +166,7 @@ typedef void * POINTER_64 PVOID64;
 //
 
 #ifndef VOID
-#define VOID void
+   #define VOID void
 typedef char CHAR;
 typedef short SHORT;
 typedef long LONG;
@@ -203,44 +207,44 @@ typedef CONST CHAR *LPCSTR, *PCSTR;
 //
 #ifdef  UNICODE                     // r_winnt
 
-#ifndef _TCHAR_DEFINED
+   #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
-typedef WCHAR TBYTE , *PTBYTE ;
-#define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+typedef WCHAR TBYTE, *PTBYTE;
+      #define _TCHAR_DEFINED
+   #endif /* !_TCHAR_DEFINED */
 
 typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
 typedef LPCWSTR LPCTSTR;
 typedef LPWSTR LP;
-#define __TEXT(quote) L##quote      // r_winnt
+   #define __TEXT(quote) L ## quote   // r_winnt
 
-#else   /* UNICODE */               // r_winnt
+#else /* UNICODE */                 // r_winnt
 
-#ifndef _TCHAR_DEFINED
+   #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
-typedef unsigned char TBYTE , *PTBYTE ;
-#define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+typedef unsigned char TBYTE, *PTBYTE;
+      #define _TCHAR_DEFINED
+   #endif /* !_TCHAR_DEFINED */
 
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR;
 typedef LPCSTR LPCTSTR;
-#define __TEXT(quote) quote         // r_winnt
+   #define __TEXT(quote) quote      // r_winnt
 
 #endif /* UNICODE */                // r_winnt
 #define TEXT(quote) __TEXT(quote)   // r_winnt
 
 
-typedef SHORT *PSHORT;  
-typedef LONG *PLONG;    
+typedef SHORT *PSHORT;
+typedef LONG *PLONG;
 
 #ifdef STRICT
 typedef void *HANDLE;
-#define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+   #define DECLARE_HANDLE(name) struct name ## __ { int unused; }; typedef struct name ## __ *name
 #else
 typedef PVOID HANDLE;
-#define DECLARE_HANDLE(name) typedef HANDLE name
+   #define DECLARE_HANDLE(name) typedef HANDLE name
 #endif
 typedef HANDLE *PHANDLE;
 
@@ -248,45 +252,45 @@ typedef HANDLE *PHANDLE;
 // Flag (bit) fields
 //
 
-typedef BYTE   FCHAR;
-typedef WORD   FSHORT;
-typedef DWORD  FLONG;
+typedef BYTE FCHAR;
+typedef WORD FSHORT;
+typedef DWORD FLONG;
 
 // Component Object Model defines, and macros
 
 #ifndef _HRESULT_DEFINED
-#define _HRESULT_DEFINED
+   #define _HRESULT_DEFINED
 typedef LONG HRESULT;
 
 #endif // !_HRESULT_DEFINED
 
 #ifdef __cplusplus
-    #define EXTERN_C    extern "C"
+   #define EXTERN_C    extern "C"
 #else
-    #define EXTERN_C    extern
+   #define EXTERN_C    extern
 #endif
 
 #if defined(_WIN32) || defined(_MPPC_)
 
 // Win32 doesn't support __export
 
-#ifdef _68K_
-#define STDMETHODCALLTYPE       __cdecl
+   #ifdef _68K_
+      #define STDMETHODCALLTYPE       __cdecl
+   #else
+      #define STDMETHODCALLTYPE       __stdcall
+   #endif
+   #define STDMETHODVCALLTYPE      __cdecl
+
+   #define STDAPICALLTYPE          __stdcall
+   #define STDAPIVCALLTYPE         __cdecl
+
 #else
-#define STDMETHODCALLTYPE       __stdcall
-#endif
-#define STDMETHODVCALLTYPE      __cdecl
 
-#define STDAPICALLTYPE          __stdcall
-#define STDAPIVCALLTYPE         __cdecl
+   #define STDMETHODCALLTYPE       __export __stdcall
+   #define STDMETHODVCALLTYPE      __export __cdecl
 
-#else
-
-#define STDMETHODCALLTYPE       __export __stdcall
-#define STDMETHODVCALLTYPE      __export __cdecl
-
-#define STDAPICALLTYPE          __export __stdcall
-#define STDAPIVCALLTYPE         __export __cdecl
+   #define STDAPICALLTYPE          __export __stdcall
+   #define STDAPIVCALLTYPE         __export __cdecl
 
 #endif
 
@@ -305,12 +309,12 @@ typedef LONG HRESULT;
 #define STDMETHODIMPV           HRESULT STDMETHODVCALLTYPE
 #define STDMETHODIMPV_(type)    type STDMETHODVCALLTYPE
 
-typedef char CCHAR;          
-typedef DWORD LCID;         
-typedef PDWORD PLCID;       
-typedef WORD   LANGID;      
-/*lint -e624 */  
-/*lint +e624 */  
+typedef char CCHAR;
+typedef DWORD LCID;
+typedef PDWORD PLCID;
+typedef WORD LANGID;
+/*lint -e624 */
+/*lint +e624 */
 #define APPLICATION_ERROR_MASK       0x20000000
 #define ERROR_SEVERITY_SUCCESS       0x00000000
 #define ERROR_SEVERITY_INFORMATIONAL 0x40000000
@@ -333,8 +337,8 @@ typedef WORD   LANGID;
 //
 
 typedef struct _FLOAT128 {
-    __int64 LowPart;
-    __int64 HighPart;
+   __int64 LowPart;
+   __int64 HighPart;
 } FLOAT128;
 
 typedef FLOAT128 *PFLOAT128;
@@ -342,7 +346,7 @@ typedef FLOAT128 *PFLOAT128;
 
 #if defined(_M_IA64)
 
-#pragma force_align _FLOAT128 16
+   #pragma force_align _FLOAT128 16
 
 #endif // _M_IA64
 
@@ -353,22 +357,23 @@ typedef FLOAT128 *PFLOAT128;
 //
 
 #define _ULONGLONG_
-#if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
+#if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || \
+   (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
 typedef __int64 LONGLONG;
 typedef unsigned __int64 ULONGLONG;
 
-#define MAXLONGLONG                      (0x7fffffffffffffff)
+   #define MAXLONGLONG                      (0x7fffffffffffffff)
 #else
 
-#if defined(_MAC) && defined(_MAC_INT_64)
+   #if defined(_MAC) && defined(_MAC_INT_64)
 typedef __int64 LONGLONG;
 typedef unsigned __int64 ULONGLONG;
 
-#define MAXLONGLONG                      (0x7fffffffffffffff)
-#else
+      #define MAXLONGLONG                      (0x7fffffffffffffff)
+   #else
 typedef double LONGLONG;
 typedef double ULONGLONG;
-#endif //_MAC and int64
+   #endif //_MAC and int64
 
 #endif
 
@@ -383,16 +388,16 @@ typedef LONGLONG USN;
 typedef struct _LARGE_INTEGER {
 #else // MIDL_PASS
 typedef union _LARGE_INTEGER {
-    struct {
-        DWORD LowPart;
-        LONG HighPart;
-    };
-    struct {
-        DWORD LowPart;
-        LONG HighPart;
-    } u;
+   struct {
+      DWORD LowPart;
+      LONG HighPart;
+   };
+   struct {
+      DWORD LowPart;
+      LONG HighPart;
+   } u;
 #endif //MIDL_PASS
-    LONGLONG QuadPart;
+   LONGLONG QuadPart;
 } LARGE_INTEGER;
 
 typedef LARGE_INTEGER *PLARGE_INTEGER;
@@ -402,16 +407,16 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 typedef struct _ULARGE_INTEGER {
 #else // MIDL_PASS
 typedef union _ULARGE_INTEGER {
-    struct {
-        DWORD LowPart;
-        DWORD HighPart;
-    };
-    struct {
-        DWORD LowPart;
-        DWORD HighPart;
-    } u;
+   struct {
+      DWORD LowPart;
+      DWORD HighPart;
+   };
+   struct {
+      DWORD LowPart;
+      DWORD HighPart;
+   } u;
 #endif //MIDL_PASS
-    ULONGLONG QuadPart;
+   ULONGLONG QuadPart;
 } ULARGE_INTEGER;
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
@@ -424,12 +429,12 @@ typedef ULARGE_INTEGER *PULARGE_INTEGER;
 //
 
 typedef struct _LUID {
-    DWORD LowPart;
-    LONG HighPart;
+   DWORD LowPart;
+   LONG HighPart;
 } LUID, *PLUID;
 
 #define _DWORDLONG_
-typedef ULONGLONG  DWORDLONG;
+typedef ULONGLONG DWORDLONG;
 typedef DWORDLONG *PDWORDLONG;
 
 
@@ -446,12 +451,12 @@ typedef DWORDLONG *PDWORDLONG;
 // form a 64-bit product.
 //
 
-#define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
-#define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
+   #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
+   #define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
 
-#define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
-#define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
-#define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
+   #define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
+   #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
+   #define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
 
 #elif defined(_M_MRX000)
 
@@ -460,62 +465,62 @@ typedef DWORDLONG *PDWORDLONG;
 // 32-bits times 32-bits to 64-bits.
 //
 
-#define Int32x32To64 __emul
-#define UInt32x32To64 __emulu
+   #define Int32x32To64 __emul
+   #define UInt32x32To64 __emulu
 
-#define Int64ShllMod32 __ll_lshift
-#define Int64ShraMod32 __ll_rshift
-#define Int64ShrlMod32 __ull_rshift
+   #define Int64ShllMod32 __ll_lshift
+   #define Int64ShraMod32 __ll_rshift
+   #define Int64ShrlMod32 __ull_rshift
 
-#if defined (__cplusplus)
+   #if defined (__cplusplus)
 extern "C" {
-#endif
+   #endif
 
 LONGLONG
 NTAPI
 Int32x32To64 (
-    LONG Multiplier,
-    LONG Multiplicand
-    );
+   LONG Multiplier,
+   LONG Multiplicand
+   );
 
 ULONGLONG
 NTAPI
 UInt32x32To64 (
-    DWORD Multiplier,
-    DWORD Multiplicand
-    );
+   DWORD Multiplier,
+   DWORD Multiplicand
+   );
 
 ULONGLONG
 NTAPI
 Int64ShllMod32 (
-    ULONGLONG Value,
-    DWORD ShiftCount
-    );
+   ULONGLONG Value,
+   DWORD ShiftCount
+   );
 
 LONGLONG
 NTAPI
 Int64ShraMod32 (
-    LONGLONG Value,
-    DWORD ShiftCount
-    );
+   LONGLONG Value,
+   DWORD ShiftCount
+   );
 
 ULONGLONG
 NTAPI
 Int64ShrlMod32 (
-    ULONGLONG Value,
-    DWORD ShiftCount
-    );
+   ULONGLONG Value,
+   DWORD ShiftCount
+   );
 
-#if defined (__cplusplus)
+   #if defined (__cplusplus)
 };
-#endif
+   #endif
 
-#pragma intrinsic(__emul)
-#pragma intrinsic(__emulu)
+   #pragma intrinsic(__emul)
+   #pragma intrinsic(__emulu)
 
-#pragma intrinsic(__ll_lshift)
-#pragma intrinsic(__ll_rshift)
-#pragma intrinsic(__ull_rshift)
+   #pragma intrinsic(__ll_lshift)
+   #pragma intrinsic(__ll_rshift)
+   #pragma intrinsic(__ull_rshift)
 
 #elif defined(_M_IX86)
 
@@ -526,81 +531,81 @@ Int64ShrlMod32 (
 // generate the optimal code inline.
 //
 
-#define Int32x32To64( a, b ) (LONGLONG)((LONGLONG)(LONG)(a) * (LONG)(b))
-#define UInt32x32To64( a, b ) (ULONGLONG)((ULONGLONG)(DWORD)(a) * (DWORD)(b))
+   #define Int32x32To64( a, b ) (LONGLONG)((LONGLONG)(LONG)(a) * (LONG)(b))
+   #define UInt32x32To64( a, b ) (ULONGLONG)((ULONGLONG)(DWORD)(a) * (DWORD)(b))
 
 ULONGLONG
 NTAPI
 Int64ShllMod32 (
-    ULONGLONG Value,
-    DWORD ShiftCount
-    );
+   ULONGLONG Value,
+   DWORD ShiftCount
+   );
 
 LONGLONG
 NTAPI
 Int64ShraMod32 (
-    LONGLONG Value,
-    DWORD ShiftCount
-    );
+   LONGLONG Value,
+   DWORD ShiftCount
+   );
 
 ULONGLONG
 NTAPI
 Int64ShrlMod32 (
-    ULONGLONG Value,
-    DWORD ShiftCount
-    );
+   ULONGLONG Value,
+   DWORD ShiftCount
+   );
 
-#pragma warning(disable:4035)               // re-enable below
+   #pragma warning(disable:4035) // re-enable below
 
 __inline ULONGLONG
 NTAPI
 Int64ShllMod32 (
-    ULONGLONG Value,
-    DWORD ShiftCount
-    )
+   ULONGLONG Value,
+   DWORD ShiftCount
+   )
 {
-    __asm    {
-        mov     ecx, ShiftCount
-        mov     eax, dword ptr [Value]
-        mov     edx, dword ptr [Value+4]
-        shld    edx, eax, cl
-        shl     eax, cl
-    }
+   __asm    {
+      mov ecx, ShiftCount
+      mov eax, dword ptr [Value]
+      mov edx, dword ptr [Value+4]
+      shld edx, eax, cl
+      shl eax, cl
+   }
 }
 
 __inline LONGLONG
 NTAPI
 Int64ShraMod32 (
-    LONGLONG Value,
-    DWORD ShiftCount
-    )
+   LONGLONG Value,
+   DWORD ShiftCount
+   )
 {
-    __asm {
-        mov     ecx, ShiftCount
-        mov     eax, dword ptr [Value]
-        mov     edx, dword ptr [Value+4]
-        shrd    eax, edx, cl
-        sar     edx, cl
-    }
+   __asm {
+      mov ecx, ShiftCount
+      mov eax, dword ptr [Value]
+      mov edx, dword ptr [Value+4]
+      shrd eax, edx, cl
+      sar edx, cl
+   }
 }
 
 __inline ULONGLONG
 NTAPI
 Int64ShrlMod32 (
-    ULONGLONG Value,
-    DWORD ShiftCount
-    )
+   ULONGLONG Value,
+   DWORD ShiftCount
+   )
 {
-    __asm    {
-        mov     ecx, ShiftCount
-        mov     eax, dword ptr [Value]
-        mov     edx, dword ptr [Value+4]
-        shrd    eax, edx, cl
-        shr     edx, cl
-    }
+   __asm    {
+      mov ecx, ShiftCount
+      mov eax, dword ptr [Value]
+      mov edx, dword ptr [Value+4]
+      shrd eax, edx, cl
+      shr edx, cl
+   }
 }
 
-#pragma warning(default:4035)
+   #pragma warning(default:4035)
 
 #elif defined(_M_ALPHA)
 
@@ -611,22 +616,22 @@ Int64ShrlMod32 (
 // product.
 //
 
-#define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
-#define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
+   #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
+   #define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
 
-#define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
-#define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
-#define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
+   #define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
+   #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
+   #define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
 
 
 #elif defined(_M_PPC)
 
-#define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
-#define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
+   #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
+   #define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
 
-#define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
-#define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
-#define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
+   #define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
+   #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
+   #define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
 
 #elif defined(_68K_) || defined(_MPPC_)
 
@@ -634,12 +639,12 @@ Int64ShrlMod32 (
 // The Macintosh 68K and PowerPC compilers do not currently support int64.
 //
 
-#define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
-#define UInt32x32To64(a, b) ((DWORDLONG)((DWORD)(a)) * (DWORDLONG)((DWORD)(b)))
+   #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
+   #define UInt32x32To64(a, b) ((DWORDLONG)((DWORD)(a)) * (DWORDLONG)((DWORD)(b)))
 
-#define Int64ShllMod32(a, b) ((DWORDLONG)(a) << (b))
-#define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
-#define Int64ShrlMod32(a, b) ((DWORDLONG)(a) >> (b))
+   #define Int64ShllMod32(a, b) ((DWORDLONG)(a) << (b))
+   #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
+   #define Int64ShrlMod32(a, b) ((DWORDLONG)(a) >> (b))
 
 #elif defined(_M_IA64)
 
@@ -650,23 +655,23 @@ Int64ShrlMod32 (
 // product.
 //
 
-#define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
-#define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
+   #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
+   #define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
 
-#define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
-#define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
-#define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
+   #define Int64ShllMod32(a, b) ((ULONGLONG)(a) << (b))
+   #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
+   #define Int64ShrlMod32(a, b) ((ULONGLONG)(a) >> (b))
 
 #else
 
-#error Must define a target architecture.
+   #error Must define a target architecture.
 
 #endif
 
-#define ANSI_NULL ((CHAR)0)     
-#define UNICODE_NULL ((WCHAR)0) 
-typedef BYTE  BOOLEAN;           
-typedef BOOLEAN *PBOOLEAN;       
+#define ANSI_NULL ((CHAR)0)
+#define UNICODE_NULL ((WCHAR)0)
+typedef BYTE BOOLEAN;
+typedef BOOLEAN *PBOOLEAN;
 //
 //  Doubly linked list structure.  Can be used as either a list head, or
 //  as link words.
@@ -683,7 +688,7 @@ typedef struct _LIST_ENTRY {
 //
 
 typedef struct _SINGLE_LIST_ENTRY {
-    struct _SINGLE_LIST_ENTRY *Next;
+   struct _SINGLE_LIST_ENTRY *Next;
 } SINGLE_LIST_ENTRY, *PSINGLE_LIST_ENTRY;
 
 //
@@ -691,35 +696,35 @@ typedef struct _SINGLE_LIST_ENTRY {
 //
 
 #ifndef GUID_DEFINED
-#define GUID_DEFINED
+   #define GUID_DEFINED
 
 typedef struct _GUID {          // size is 16
-    DWORD Data1;
-    WORD   Data2;
-    WORD   Data3;
-    BYTE  Data4[8];
+   DWORD Data1;
+   WORD Data2;
+   WORD Data3;
+   BYTE Data4[8];
 } GUID;
 
 #endif // !GUID_DEFINED
 
 #ifndef __OBJECTID_DEFINED
-#define __OBJECTID_DEFINED
+   #define __OBJECTID_DEFINED
 
 typedef struct  _OBJECTID {     // size is 20
-    GUID Lineage;
-    DWORD Uniquifier;
+   GUID Lineage;
+   DWORD Uniquifier;
 } OBJECTID;
 #endif // !_OBJECTID_DEFINED
 
-#define MINCHAR     0x80        
-#define MAXCHAR     0x7f        
-#define MINSHORT    0x8000      
-#define MAXSHORT    0x7fff      
-#define MINLONG     0x80000000  
-#define MAXLONG     0x7fffffff  
-#define MAXBYTE     0xff        
-#define MAXWORD     0xffff      
-#define MAXDWORD    0xffffffff  
+#define MINCHAR     0x80
+#define MAXCHAR     0x7f
+#define MINSHORT    0x8000
+#define MAXSHORT    0x7fff
+#define MINLONG     0x80000000
+#define MAXLONG     0x7fffffff
+#define MAXBYTE     0xff
+#define MAXWORD     0xffff
+#define MAXDWORD    0xffffffff
 //
 // Calculate the byte offset of a field in a structure of type type.
 //
@@ -733,8 +738,8 @@ typedef struct  _OBJECTID {     // size is 20
 //
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
-                                                  (PCHAR)(address) - \
-                                                  (UINT_PTR)(&((type *)0)->field)))
+                                                    (PCHAR)(address) - \
+                                                    (UINT_PTR)(&((type *)0)->field)))
 
 
 //
@@ -1005,10 +1010,10 @@ typedef struct  _OBJECTID {     // size is 20
 #define NLS_VALID_LOCALE_MASK  0x000fffff
 
 #define MAKELCID(lgid, srtid)  ((DWORD)((((DWORD)((WORD  )(srtid))) << 16) |  \
-                                         ((DWORD)((WORD  )(lgid)))))
+                                        ((DWORD)((WORD  )(lgid)))))
 #define MAKESORTLCID(lgid, srtid, ver)                                            \
-                               ((DWORD)((MAKELCID(lgid, srtid)) |             \
-                                    (((DWORD)((WORD  )(ver))) << 20)))
+   ((DWORD)((MAKELCID(lgid, srtid)) |             \
+            (((DWORD)((WORD  )(ver))) << 20)))
 #define LANGIDFROMLCID(lcid)   ((WORD  )(lcid))
 #define SORTIDFROMLCID(lcid)   ((WORD  )((((DWORD)(lcid)) >> 16) & 0xf))
 #define SORTVERSIONFROMLCID(lcid)  ((WORD  )((((DWORD)(lcid)) >> 20) & 0xf))
@@ -1025,7 +1030,7 @@ typedef struct  _OBJECTID {     // size is 20
 #define LOCALE_USER_DEFAULT    (MAKELCID(LANG_USER_DEFAULT, SORT_DEFAULT))
 
 #define LOCALE_NEUTRAL                                                        \
-          (MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), SORT_DEFAULT))
+   (MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), SORT_DEFAULT))
 
 
 // begin_ntminiport begin_ntndis begin_ntminitape
@@ -1047,10 +1052,10 @@ typedef struct  _OBJECTID {     // size is 20
 // is unfinished work.
 //
 
-#if ! (defined(lint) || defined(_lint))
-#define UNREFERENCED_PARAMETER(P)          (P)
-#define DBG_UNREFERENCED_PARAMETER(P)      (P)
-#define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
+#if !(defined(lint) || defined(_lint))
+   #define UNREFERENCED_PARAMETER(P)          (P)
+   #define DBG_UNREFERENCED_PARAMETER(P)      (P)
+   #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
 
 #else // lint or _lint
 
@@ -1058,65 +1063,65 @@ typedef struct  _OBJECTID {     // size is 20
 // this.  line +e530 turns that checking back on.  Error 527 has to do with
 // unreachable code.
 
-#define UNREFERENCED_PARAMETER(P)          \
-    /*lint -e527 -e530 */ \
-    { \
-        (P) = (P); \
-    } \
-    /*lint +e527 +e530 */
-#define DBG_UNREFERENCED_PARAMETER(P)      \
-    /*lint -e527 -e530 */ \
-    { \
-        (P) = (P); \
-    } \
-    /*lint +e527 +e530 */
-#define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
-    /*lint -e527 -e530 */ \
-    { \
-        (V) = (V); \
-    } \
-    /*lint +e527 +e530 */
+   #define UNREFERENCED_PARAMETER(P)          \
+   /*lint -e527 -e530 */ \
+   { \
+      (P) = (P); \
+   } \
+   /*lint +e527 +e530 */
+   #define DBG_UNREFERENCED_PARAMETER(P)      \
+   /*lint -e527 -e530 */ \
+   { \
+      (P) = (P); \
+   } \
+   /*lint +e527 +e530 */
+   #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
+   /*lint -e527 -e530 */ \
+   { \
+      (V) = (V); \
+   } \
+   /*lint +e527 +e530 */
 
 #endif // lint or _lint
 
 
-#ifndef WIN32_NO_STATUS 
-/*lint -save -e767 */  
-#define STATUS_WAIT_0                    ((DWORD   )0x00000000L)    
-#define STATUS_ABANDONED_WAIT_0          ((DWORD   )0x00000080L)    
-#define STATUS_USER_APC                  ((DWORD   )0x000000C0L)    
-#define STATUS_TIMEOUT                   ((DWORD   )0x00000102L)    
-#define STATUS_PENDING                   ((DWORD   )0x00000103L)    
-#define STATUS_SEGMENT_NOTIFICATION      ((DWORD   )0x40000005L)    
-#define STATUS_GUARD_PAGE_VIOLATION      ((DWORD   )0x80000001L)    
-#define STATUS_DATATYPE_MISALIGNMENT     ((DWORD   )0x80000002L)    
-#define STATUS_BREAKPOINT                ((DWORD   )0x80000003L)    
-#define STATUS_SINGLE_STEP               ((DWORD   )0x80000004L)    
-#define STATUS_ACCESS_VIOLATION          ((DWORD   )0xC0000005L)    
-#define STATUS_IN_PAGE_ERROR             ((DWORD   )0xC0000006L)    
-#define STATUS_INVALID_HANDLE            ((DWORD   )0xC0000008L)    
-#define STATUS_NO_MEMORY                 ((DWORD   )0xC0000017L)    
-#define STATUS_ILLEGAL_INSTRUCTION       ((DWORD   )0xC000001DL)    
-#define STATUS_NONCONTINUABLE_EXCEPTION  ((DWORD   )0xC0000025L)    
-#define STATUS_INVALID_DISPOSITION       ((DWORD   )0xC0000026L)    
-#define STATUS_ARRAY_BOUNDS_EXCEEDED     ((DWORD   )0xC000008CL)    
-#define STATUS_FLOAT_DENORMAL_OPERAND    ((DWORD   )0xC000008DL)    
-#define STATUS_FLOAT_DIVIDE_BY_ZERO      ((DWORD   )0xC000008EL)    
-#define STATUS_FLOAT_INEXACT_RESULT      ((DWORD   )0xC000008FL)    
-#define STATUS_FLOAT_INVALID_OPERATION   ((DWORD   )0xC0000090L)    
-#define STATUS_FLOAT_OVERFLOW            ((DWORD   )0xC0000091L)    
-#define STATUS_FLOAT_STACK_CHECK         ((DWORD   )0xC0000092L)    
-#define STATUS_FLOAT_UNDERFLOW           ((DWORD   )0xC0000093L)    
-#define STATUS_INTEGER_DIVIDE_BY_ZERO    ((DWORD   )0xC0000094L)    
-#define STATUS_INTEGER_OVERFLOW          ((DWORD   )0xC0000095L)    
-#define STATUS_PRIVILEGED_INSTRUCTION    ((DWORD   )0xC0000096L)    
-#define STATUS_STACK_OVERFLOW            ((DWORD   )0xC00000FDL)    
-#define STATUS_CONTROL_C_EXIT            ((DWORD   )0xC000013AL)    
-#define STATUS_FLOAT_MULTIPLE_FAULTS     ((DWORD   )0xC00002B4L)    
-#define STATUS_FLOAT_MULTIPLE_TRAPS      ((DWORD   )0xC00002B5L)    
-#define STATUS_ILLEGAL_VLM_REFERENCE     ((DWORD   )0xC00002C0L)     
-/*lint -restore */  
-#endif 
+#ifndef WIN32_NO_STATUS
+/*lint -save -e767 */
+   #define STATUS_WAIT_0                    ((DWORD   )0x00000000L)
+   #define STATUS_ABANDONED_WAIT_0          ((DWORD   )0x00000080L)
+   #define STATUS_USER_APC                  ((DWORD   )0x000000C0L)
+   #define STATUS_TIMEOUT                   ((DWORD   )0x00000102L)
+   #define STATUS_PENDING                   ((DWORD   )0x00000103L)
+   #define STATUS_SEGMENT_NOTIFICATION      ((DWORD   )0x40000005L)
+   #define STATUS_GUARD_PAGE_VIOLATION      ((DWORD   )0x80000001L)
+   #define STATUS_DATATYPE_MISALIGNMENT     ((DWORD   )0x80000002L)
+   #define STATUS_BREAKPOINT                ((DWORD   )0x80000003L)
+   #define STATUS_SINGLE_STEP               ((DWORD   )0x80000004L)
+   #define STATUS_ACCESS_VIOLATION          ((DWORD   )0xC0000005L)
+   #define STATUS_IN_PAGE_ERROR             ((DWORD   )0xC0000006L)
+   #define STATUS_INVALID_HANDLE            ((DWORD   )0xC0000008L)
+   #define STATUS_NO_MEMORY                 ((DWORD   )0xC0000017L)
+   #define STATUS_ILLEGAL_INSTRUCTION       ((DWORD   )0xC000001DL)
+   #define STATUS_NONCONTINUABLE_EXCEPTION  ((DWORD   )0xC0000025L)
+   #define STATUS_INVALID_DISPOSITION       ((DWORD   )0xC0000026L)
+   #define STATUS_ARRAY_BOUNDS_EXCEEDED     ((DWORD   )0xC000008CL)
+   #define STATUS_FLOAT_DENORMAL_OPERAND    ((DWORD   )0xC000008DL)
+   #define STATUS_FLOAT_DIVIDE_BY_ZERO      ((DWORD   )0xC000008EL)
+   #define STATUS_FLOAT_INEXACT_RESULT      ((DWORD   )0xC000008FL)
+   #define STATUS_FLOAT_INVALID_OPERATION   ((DWORD   )0xC0000090L)
+   #define STATUS_FLOAT_OVERFLOW            ((DWORD   )0xC0000091L)
+   #define STATUS_FLOAT_STACK_CHECK         ((DWORD   )0xC0000092L)
+   #define STATUS_FLOAT_UNDERFLOW           ((DWORD   )0xC0000093L)
+   #define STATUS_INTEGER_DIVIDE_BY_ZERO    ((DWORD   )0xC0000094L)
+   #define STATUS_INTEGER_OVERFLOW          ((DWORD   )0xC0000095L)
+   #define STATUS_PRIVILEGED_INSTRUCTION    ((DWORD   )0xC0000096L)
+   #define STATUS_STACK_OVERFLOW            ((DWORD   )0xC00000FDL)
+   #define STATUS_CONTROL_C_EXIT            ((DWORD   )0xC000013AL)
+   #define STATUS_FLOAT_MULTIPLE_FAULTS     ((DWORD   )0xC00002B4L)
+   #define STATUS_FLOAT_MULTIPLE_TRAPS      ((DWORD   )0xC00002B5L)
+   #define STATUS_ILLEGAL_VLM_REFERENCE     ((DWORD   )0xC00002C0L)
+/*lint -restore */
+#endif
 #define MAXIMUM_WAIT_OBJECTS 64     // Maximum number of wait objects
 
 #define MAXIMUM_SUSPEND_COUNT MAXCHAR // Maximum times thread can be suspended
@@ -1130,13 +1135,13 @@ typedef KSPIN_LOCK *PKSPIN_LOCK;
 
 #ifdef _ALPHA_                          // winnt
 void *_rdteb(void);                     // winnt
-#if defined(_M_ALPHA)                   // winnt
-#pragma intrinsic(_rdteb)               // winnt
-#endif                                  // winnt
+   #if defined(_M_ALPHA)                // winnt
+      #pragma intrinsic(_rdteb) // winnt
+   #endif                               // winnt
 #endif                                  // winnt
 
 #if defined(_M_ALPHA)
-#define NtCurrentTeb() ((struct _TEB *)_rdteb())
+   #define NtCurrentTeb() ((struct _TEB *)_rdteb())
 #else
 struct _TEB *
 NtCurrentTeb(void);
@@ -1149,28 +1154,28 @@ NtCurrentTeb(void);
 
 #ifdef _ALPHA_
 
-#define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
-#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
+   #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
+   #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_PORTABLE_32BIT     0x00100000
-#define CONTEXT_ALPHA              0x00020000
+      #define CONTEXT_PORTABLE_32BIT     0x00100000
+      #define CONTEXT_ALPHA              0x00020000
 
-#define CONTEXT_CONTROL         (CONTEXT_ALPHA | 0x00000001L)
-#define CONTEXT_FLOATING_POINT  (CONTEXT_ALPHA | 0x00000002L)
-#define CONTEXT_INTEGER         (CONTEXT_ALPHA | 0x00000004L)
+      #define CONTEXT_CONTROL         (CONTEXT_ALPHA | 0x00000001L)
+      #define CONTEXT_FLOATING_POINT  (CONTEXT_ALPHA | 0x00000002L)
+      #define CONTEXT_INTEGER         (CONTEXT_ALPHA | 0x00000004L)
 
-#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+      #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
 
-#endif
+   #endif
 
-#ifndef _PORTABLE_32BIT_CONTEXT
+   #ifndef _PORTABLE_32BIT_CONTEXT
 
 //
 // Context Frame
@@ -1189,130 +1194,130 @@ NtCurrentTeb(void);
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_FLOATING_POINT.
+   //
 
-    ULONGLONG FltF0;
-    ULONGLONG FltF1;
-    ULONGLONG FltF2;
-    ULONGLONG FltF3;
-    ULONGLONG FltF4;
-    ULONGLONG FltF5;
-    ULONGLONG FltF6;
-    ULONGLONG FltF7;
-    ULONGLONG FltF8;
-    ULONGLONG FltF9;
-    ULONGLONG FltF10;
-    ULONGLONG FltF11;
-    ULONGLONG FltF12;
-    ULONGLONG FltF13;
-    ULONGLONG FltF14;
-    ULONGLONG FltF15;
-    ULONGLONG FltF16;
-    ULONGLONG FltF17;
-    ULONGLONG FltF18;
-    ULONGLONG FltF19;
-    ULONGLONG FltF20;
-    ULONGLONG FltF21;
-    ULONGLONG FltF22;
-    ULONGLONG FltF23;
-    ULONGLONG FltF24;
-    ULONGLONG FltF25;
-    ULONGLONG FltF26;
-    ULONGLONG FltF27;
-    ULONGLONG FltF28;
-    ULONGLONG FltF29;
-    ULONGLONG FltF30;
-    ULONGLONG FltF31;
+   ULONGLONG FltF0;
+   ULONGLONG FltF1;
+   ULONGLONG FltF2;
+   ULONGLONG FltF3;
+   ULONGLONG FltF4;
+   ULONGLONG FltF5;
+   ULONGLONG FltF6;
+   ULONGLONG FltF7;
+   ULONGLONG FltF8;
+   ULONGLONG FltF9;
+   ULONGLONG FltF10;
+   ULONGLONG FltF11;
+   ULONGLONG FltF12;
+   ULONGLONG FltF13;
+   ULONGLONG FltF14;
+   ULONGLONG FltF15;
+   ULONGLONG FltF16;
+   ULONGLONG FltF17;
+   ULONGLONG FltF18;
+   ULONGLONG FltF19;
+   ULONGLONG FltF20;
+   ULONGLONG FltF21;
+   ULONGLONG FltF22;
+   ULONGLONG FltF23;
+   ULONGLONG FltF24;
+   ULONGLONG FltF25;
+   ULONGLONG FltF26;
+   ULONGLONG FltF27;
+   ULONGLONG FltF28;
+   ULONGLONG FltF29;
+   ULONGLONG FltF30;
+   ULONGLONG FltF31;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, and ra are defined in this section, but are
-    //  considered part of the control context rather than part of the integer
-    //  context.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_INTEGER.
+   //
+   // N.B. The registers gp, sp, and ra are defined in this section, but are
+   //  considered part of the control context rather than part of the integer
+   //  context.
+   //
 
-    ULONGLONG IntV0;    //  $0: return value register, v0
-    ULONGLONG IntT0;    //  $1: temporary registers, t0 - t7
-    ULONGLONG IntT1;    //  $2:
-    ULONGLONG IntT2;    //  $3:
-    ULONGLONG IntT3;    //  $4:
-    ULONGLONG IntT4;    //  $5:
-    ULONGLONG IntT5;    //  $6:
-    ULONGLONG IntT6;    //  $7:
-    ULONGLONG IntT7;    //  $8:
-    ULONGLONG IntS0;    //  $9: nonvolatile registers, s0 - s5
-    ULONGLONG IntS1;    // $10:
-    ULONGLONG IntS2;    // $11:
-    ULONGLONG IntS3;    // $12:
-    ULONGLONG IntS4;    // $13:
-    ULONGLONG IntS5;    // $14:
-    ULONGLONG IntFp;    // $15: frame pointer register, fp/s6
-    ULONGLONG IntA0;    // $16: argument registers, a0 - a5
-    ULONGLONG IntA1;    // $17:
-    ULONGLONG IntA2;    // $18:
-    ULONGLONG IntA3;    // $19:
-    ULONGLONG IntA4;    // $20:
-    ULONGLONG IntA5;    // $21:
-    ULONGLONG IntT8;    // $22: temporary registers, t8 - t11
-    ULONGLONG IntT9;    // $23:
-    ULONGLONG IntT10;   // $24:
-    ULONGLONG IntT11;   // $25:
-    ULONGLONG IntRa;    // $26: return address register, ra
-    ULONGLONG IntT12;   // $27: temporary register, t12
-    ULONGLONG IntAt;    // $28: assembler temp register, at
-    ULONGLONG IntGp;    // $29: global pointer register, gp
-    ULONGLONG IntSp;    // $30: stack pointer register, sp
-    ULONGLONG IntZero;  // $31: zero register, zero
+   ULONGLONG IntV0;     //  $0: return value register, v0
+   ULONGLONG IntT0;     //  $1: temporary registers, t0 - t7
+   ULONGLONG IntT1;     //  $2:
+   ULONGLONG IntT2;     //  $3:
+   ULONGLONG IntT3;     //  $4:
+   ULONGLONG IntT4;     //  $5:
+   ULONGLONG IntT5;     //  $6:
+   ULONGLONG IntT6;     //  $7:
+   ULONGLONG IntT7;     //  $8:
+   ULONGLONG IntS0;     //  $9: nonvolatile registers, s0 - s5
+   ULONGLONG IntS1;     // $10:
+   ULONGLONG IntS2;     // $11:
+   ULONGLONG IntS3;     // $12:
+   ULONGLONG IntS4;     // $13:
+   ULONGLONG IntS5;     // $14:
+   ULONGLONG IntFp;     // $15: frame pointer register, fp/s6
+   ULONGLONG IntA0;     // $16: argument registers, a0 - a5
+   ULONGLONG IntA1;     // $17:
+   ULONGLONG IntA2;     // $18:
+   ULONGLONG IntA3;     // $19:
+   ULONGLONG IntA4;     // $20:
+   ULONGLONG IntA5;     // $21:
+   ULONGLONG IntT8;     // $22: temporary registers, t8 - t11
+   ULONGLONG IntT9;     // $23:
+   ULONGLONG IntT10;    // $24:
+   ULONGLONG IntT11;    // $25:
+   ULONGLONG IntRa;     // $26: return address register, ra
+   ULONGLONG IntT12;    // $27: temporary register, t12
+   ULONGLONG IntAt;     // $28: assembler temp register, at
+   ULONGLONG IntGp;     // $29: global pointer register, gp
+   ULONGLONG IntSp;     // $30: stack pointer register, sp
+   ULONGLONG IntZero;   // $31: zero register, zero
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_FLOATING_POINT.
+   //
 
-    ULONGLONG Fpcr;     // floating point control register
-    ULONGLONG SoftFpcr; // software extension to FPCR
+   ULONGLONG Fpcr;      // floating point control register
+   ULONGLONG SoftFpcr;  // software extension to FPCR
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
-    // N.B. The registers gp, sp, and ra are defined in the integer section,
-    //   but are considered part of the control context rather than part of
-    //   the integer context.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_CONTROL.
+   //
+   // N.B. The registers gp, sp, and ra are defined in the integer section,
+   //   but are considered part of the control context rather than part of
+   //   the integer context.
+   //
 
-    ULONGLONG Fir;      // (fault instruction) continuation address
-    DWORD Psr;          // processor status
+   ULONGLONG Fir;       // (fault instruction) continuation address
+   DWORD Psr;           // processor status
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+   //
+   // The flags values within this flag control the contents of
+   // a CONTEXT record.
+   //
+   // If the context record is used as an input parameter, then
+   // for each portion of the context record controlled by a flag
+   // whose value is set, it is assumed that that portion of the
+   // context record contains valid context. If the context record
+   // is being used to modify a thread's context, then only that
+   // portion of the threads context will be modified.
+   //
+   // If the context record is used as an IN OUT parameter to capture
+   // the context of a thread, then only those portions of the thread's
+   // context corresponding to set flags will be returned.
+   //
+   // The context record is never used as an OUT only parameter.
+   //
 
-    DWORD ContextFlags;
-    DWORD Fill[4];      // padding for 16-byte stack frame alignment
+   DWORD ContextFlags;
+   DWORD Fill[4];       // padding for 16-byte stack frame alignment
 
 } CONTEXT, *PCONTEXT;
 
-#else
+   #else
 
 //
 // 32-bit Context Frame
@@ -1343,157 +1348,157 @@ typedef struct _CONTEXT {
 
 typedef struct _CONTEXT {
 
-    DWORD FltF0;
-    DWORD FltF1;
-    DWORD FltF2;
-    DWORD FltF3;
-    DWORD FltF4;
-    DWORD FltF5;
-    DWORD FltF6;
-    DWORD FltF7;
-    DWORD FltF8;
-    DWORD FltF9;
-    DWORD FltF10;
-    DWORD FltF11;
-    DWORD FltF12;
-    DWORD FltF13;
-    DWORD FltF14;
-    DWORD FltF15;
-    DWORD FltF16;
-    DWORD FltF17;
-    DWORD FltF18;
-    DWORD FltF19;
-    DWORD FltF20;
-    DWORD FltF21;
-    DWORD FltF22;
-    DWORD FltF23;
-    DWORD FltF24;
-    DWORD FltF25;
-    DWORD FltF26;
-    DWORD FltF27;
-    DWORD FltF28;
-    DWORD FltF29;
-    DWORD FltF30;
-    DWORD FltF31;
+   DWORD FltF0;
+   DWORD FltF1;
+   DWORD FltF2;
+   DWORD FltF3;
+   DWORD FltF4;
+   DWORD FltF5;
+   DWORD FltF6;
+   DWORD FltF7;
+   DWORD FltF8;
+   DWORD FltF9;
+   DWORD FltF10;
+   DWORD FltF11;
+   DWORD FltF12;
+   DWORD FltF13;
+   DWORD FltF14;
+   DWORD FltF15;
+   DWORD FltF16;
+   DWORD FltF17;
+   DWORD FltF18;
+   DWORD FltF19;
+   DWORD FltF20;
+   DWORD FltF21;
+   DWORD FltF22;
+   DWORD FltF23;
+   DWORD FltF24;
+   DWORD FltF25;
+   DWORD FltF26;
+   DWORD FltF27;
+   DWORD FltF28;
+   DWORD FltF29;
+   DWORD FltF30;
+   DWORD FltF31;
 
-    DWORD IntV0;        //  $0: return value register, v0
-    DWORD IntT0;        //  $1: temporary registers, t0 - t7
-    DWORD IntT1;        //  $2:
-    DWORD IntT2;        //  $3:
-    DWORD IntT3;        //  $4:
-    DWORD IntT4;        //  $5:
-    DWORD IntT5;        //  $6:
-    DWORD IntT6;        //  $7:
-    DWORD IntT7;        //  $8:
-    DWORD IntS0;        //  $9: nonvolatile registers, s0 - s5
-    DWORD IntS1;        // $10:
-    DWORD IntS2;        // $11:
-    DWORD IntS3;        // $12:
-    DWORD IntS4;        // $13:
-    DWORD IntS5;        // $14:
-    DWORD IntFp;        // $15: frame pointer register, fp/s6
-    DWORD IntA0;        // $16: argument registers, a0 - a5
-    DWORD IntA1;        // $17:
-    DWORD IntA2;        // $18:
-    DWORD IntA3;        // $19:
-    DWORD IntA4;        // $20:
-    DWORD IntA5;        // $21:
-    DWORD IntT8;        // $22: temporary registers, t8 - t11
-    DWORD IntT9;        // $23:
-    DWORD IntT10;       // $24:
-    DWORD IntT11;       // $25:
-    DWORD IntRa;        // $26: return address register, ra
-    DWORD IntT12;       // $27: temporary register, t12
-    DWORD IntAt;        // $28: assembler temp register, at
-    DWORD IntGp;        // $29: global pointer register, gp
-    DWORD IntSp;        // $30: stack pointer register, sp
-    DWORD IntZero;      // $31: zero register, zero
+   DWORD IntV0;         //  $0: return value register, v0
+   DWORD IntT0;         //  $1: temporary registers, t0 - t7
+   DWORD IntT1;         //  $2:
+   DWORD IntT2;         //  $3:
+   DWORD IntT3;         //  $4:
+   DWORD IntT4;         //  $5:
+   DWORD IntT5;         //  $6:
+   DWORD IntT6;         //  $7:
+   DWORD IntT7;         //  $8:
+   DWORD IntS0;         //  $9: nonvolatile registers, s0 - s5
+   DWORD IntS1;         // $10:
+   DWORD IntS2;         // $11:
+   DWORD IntS3;         // $12:
+   DWORD IntS4;         // $13:
+   DWORD IntS5;         // $14:
+   DWORD IntFp;         // $15: frame pointer register, fp/s6
+   DWORD IntA0;         // $16: argument registers, a0 - a5
+   DWORD IntA1;         // $17:
+   DWORD IntA2;         // $18:
+   DWORD IntA3;         // $19:
+   DWORD IntA4;         // $20:
+   DWORD IntA5;         // $21:
+   DWORD IntT8;         // $22: temporary registers, t8 - t11
+   DWORD IntT9;         // $23:
+   DWORD IntT10;        // $24:
+   DWORD IntT11;        // $25:
+   DWORD IntRa;         // $26: return address register, ra
+   DWORD IntT12;        // $27: temporary register, t12
+   DWORD IntAt;         // $28: assembler temp register, at
+   DWORD IntGp;         // $29: global pointer register, gp
+   DWORD IntSp;         // $30: stack pointer register, sp
+   DWORD IntZero;       // $31: zero register, zero
 
-    DWORD Fpcr;         // floating point control register
-    DWORD SoftFpcr;     // software extension to FPCR
+   DWORD Fpcr;          // floating point control register
+   DWORD SoftFpcr;      // software extension to FPCR
 
-    DWORD Fir;          // (fault instruction) continuation address
+   DWORD Fir;           // (fault instruction) continuation address
 
-    DWORD Psr;          // processor status
-    DWORD ContextFlags;
+   DWORD Psr;           // processor status
+   DWORD ContextFlags;
 
-    //
-    // Beginning of the "second half".
-    // The name "High" parallels the HighPart of a LargeInteger.
-    //
+   //
+   // Beginning of the "second half".
+   // The name "High" parallels the HighPart of a LargeInteger.
+   //
 
-    DWORD HighFltF0;
-    DWORD HighFltF1;
-    DWORD HighFltF2;
-    DWORD HighFltF3;
-    DWORD HighFltF4;
-    DWORD HighFltF5;
-    DWORD HighFltF6;
-    DWORD HighFltF7;
-    DWORD HighFltF8;
-    DWORD HighFltF9;
-    DWORD HighFltF10;
-    DWORD HighFltF11;
-    DWORD HighFltF12;
-    DWORD HighFltF13;
-    DWORD HighFltF14;
-    DWORD HighFltF15;
-    DWORD HighFltF16;
-    DWORD HighFltF17;
-    DWORD HighFltF18;
-    DWORD HighFltF19;
-    DWORD HighFltF20;
-    DWORD HighFltF21;
-    DWORD HighFltF22;
-    DWORD HighFltF23;
-    DWORD HighFltF24;
-    DWORD HighFltF25;
-    DWORD HighFltF26;
-    DWORD HighFltF27;
-    DWORD HighFltF28;
-    DWORD HighFltF29;
-    DWORD HighFltF30;
-    DWORD HighFltF31;
+   DWORD HighFltF0;
+   DWORD HighFltF1;
+   DWORD HighFltF2;
+   DWORD HighFltF3;
+   DWORD HighFltF4;
+   DWORD HighFltF5;
+   DWORD HighFltF6;
+   DWORD HighFltF7;
+   DWORD HighFltF8;
+   DWORD HighFltF9;
+   DWORD HighFltF10;
+   DWORD HighFltF11;
+   DWORD HighFltF12;
+   DWORD HighFltF13;
+   DWORD HighFltF14;
+   DWORD HighFltF15;
+   DWORD HighFltF16;
+   DWORD HighFltF17;
+   DWORD HighFltF18;
+   DWORD HighFltF19;
+   DWORD HighFltF20;
+   DWORD HighFltF21;
+   DWORD HighFltF22;
+   DWORD HighFltF23;
+   DWORD HighFltF24;
+   DWORD HighFltF25;
+   DWORD HighFltF26;
+   DWORD HighFltF27;
+   DWORD HighFltF28;
+   DWORD HighFltF29;
+   DWORD HighFltF30;
+   DWORD HighFltF31;
 
-    DWORD HighIntV0;        //  $0: return value register, v0
-    DWORD HighIntT0;        //  $1: temporary registers, t0 - t7
-    DWORD HighIntT1;        //  $2:
-    DWORD HighIntT2;        //  $3:
-    DWORD HighIntT3;        //  $4:
-    DWORD HighIntT4;        //  $5:
-    DWORD HighIntT5;        //  $6:
-    DWORD HighIntT6;        //  $7:
-    DWORD HighIntT7;        //  $8:
-    DWORD HighIntS0;        //  $9: nonvolatile registers, s0 - s5
-    DWORD HighIntS1;        // $10:
-    DWORD HighIntS2;        // $11:
-    DWORD HighIntS3;        // $12:
-    DWORD HighIntS4;        // $13:
-    DWORD HighIntS5;        // $14:
-    DWORD HighIntFp;        // $15: frame pointer register, fp/s6
-    DWORD HighIntA0;        // $16: argument registers, a0 - a5
-    DWORD HighIntA1;        // $17:
-    DWORD HighIntA2;        // $18:
-    DWORD HighIntA3;        // $19:
-    DWORD HighIntA4;        // $20:
-    DWORD HighIntA5;        // $21:
-    DWORD HighIntT8;        // $22: temporary registers, t8 - t11
-    DWORD HighIntT9;        // $23:
-    DWORD HighIntT10;       // $24:
-    DWORD HighIntT11;       // $25:
-    DWORD HighIntRa;        // $26: return address register, ra
-    DWORD HighIntT12;       // $27: temporary register, t12
-    DWORD HighIntAt;        // $28: assembler temp register, at
-    DWORD HighIntGp;        // $29: global pointer register, gp
-    DWORD HighIntSp;        // $30: stack pointer register, sp
-    DWORD HighIntZero;      // $31: zero register, zero
+   DWORD HighIntV0;         //  $0: return value register, v0
+   DWORD HighIntT0;         //  $1: temporary registers, t0 - t7
+   DWORD HighIntT1;         //  $2:
+   DWORD HighIntT2;         //  $3:
+   DWORD HighIntT3;         //  $4:
+   DWORD HighIntT4;         //  $5:
+   DWORD HighIntT5;         //  $6:
+   DWORD HighIntT6;         //  $7:
+   DWORD HighIntT7;         //  $8:
+   DWORD HighIntS0;         //  $9: nonvolatile registers, s0 - s5
+   DWORD HighIntS1;         // $10:
+   DWORD HighIntS2;         // $11:
+   DWORD HighIntS3;         // $12:
+   DWORD HighIntS4;         // $13:
+   DWORD HighIntS5;         // $14:
+   DWORD HighIntFp;         // $15: frame pointer register, fp/s6
+   DWORD HighIntA0;         // $16: argument registers, a0 - a5
+   DWORD HighIntA1;         // $17:
+   DWORD HighIntA2;         // $18:
+   DWORD HighIntA3;         // $19:
+   DWORD HighIntA4;         // $20:
+   DWORD HighIntA5;         // $21:
+   DWORD HighIntT8;         // $22: temporary registers, t8 - t11
+   DWORD HighIntT9;         // $23:
+   DWORD HighIntT10;        // $24:
+   DWORD HighIntT11;        // $25:
+   DWORD HighIntRa;         // $26: return address register, ra
+   DWORD HighIntT12;        // $27: temporary register, t12
+   DWORD HighIntAt;         // $28: assembler temp register, at
+   DWORD HighIntGp;         // $29: global pointer register, gp
+   DWORD HighIntSp;         // $30: stack pointer register, sp
+   DWORD HighIntZero;       // $31: zero register, zero
 
-    DWORD HighFpcr;         // floating point control register
-    DWORD HighSoftFpcr;     // software extension to FPCR
-    DWORD HighFir;          // processor status
+   DWORD HighFpcr;          // floating point control register
+   DWORD HighSoftFpcr;      // software extension to FPCR
+   DWORD HighFir;           // processor status
 
-    double DoNotUseThisField; // to force quadword structure alignment
-    DWORD HighFill[2];      // padding for 16-byte stack frame alignment
+   double DoNotUseThisField;  // to force quadword structure alignment
+   DWORD HighFill[2];       // padding for 16-byte stack frame alignment
 
 } CONTEXT, *PCONTEXT;
 
@@ -1502,10 +1507,10 @@ typedef struct _CONTEXT {
 // that overlay the Psr and ContextFlags in the normal structure.
 //
 
-#define _QUAD_PSR_OFFSET   HighSoftFpcr
-#define _QUAD_FLAGS_OFFSET HighFir
+      #define _QUAD_PSR_OFFSET   HighSoftFpcr
+      #define _QUAD_FLAGS_OFFSET HighFir
 
-#endif // _PORTABLE_32BIT_CONTEXT
+   #endif // _PORTABLE_32BIT_CONTEXT
 
 // end_ntddk end_nthal
 
@@ -1516,9 +1521,9 @@ typedef struct _CONTEXT {
 
 VOID
 __jump_unwind (
-    PVOID VirtualFramePointer,
-    PVOID TargetPc
-    );
+   PVOID VirtualFramePointer,
+   PVOID TargetPc
+   );
 
 #endif // _ALPHA_
 
@@ -1530,33 +1535,36 @@ __jump_unwind (
 // writers to not leave them inadvertantly in their code.
 //
 
-#if !defined(MIDL_PASS)
-#if !defined(RC_INVOKED)
+   #if !defined(MIDL_PASS)
+      #if !defined(RC_INVOKED)
 
-#pragma warning(disable:4164)   // disable C4164 warning so that apps that
-                                // build with /Od don't get weird errors !
-#ifdef _M_IX86
-#pragma function(_enable)
-#pragma function(_disable)
-#endif
+         #pragma warning(disable:4164) // disable C4164 warning so that apps that
+// build with /Od don't get weird errors !
+         #ifdef _M_IX86
+            #pragma function(_enable)
+            #pragma function(_disable)
+         #endif
 
-#pragma warning(default:4164)   // reenable C4164 warning
+         #pragma warning(default:4164) // reenable C4164 warning
 
-#endif
-#endif
+      #endif
+   #endif
 
 
-#if !defined(MIDL_PASS) && defined(_M_IX86)
-#pragma warning (disable:4035)        // disable 4035 (function must return something)
-_inline PVOID GetFiberData( void ) { __asm {
-                                        mov eax, fs:[0x10]
-                                        mov eax,[eax]
-                                        }
-                                     }
-_inline PVOID GetCurrentFiber( void ) { __asm mov eax, fs:[0x10] }
+   #if !defined(MIDL_PASS) && defined(_M_IX86)
+      #pragma warning (disable:4035) // disable 4035 (function must return something)
+_inline PVOID GetFiberData( void ) {
+   __asm {
+      mov eax, fs :[0x10]
+      mov eax,[eax]
+   }
+}
+_inline PVOID GetCurrentFiber( void ) {
+   __asm mov eax, fs :[0x10]
+}
 
-#pragma warning (default:4035)        // Reenable it
-#endif
+      #pragma warning (default:4035) // Reenable it
+   #endif
 
 // begin_ntddk begin_wx86
 
@@ -1564,45 +1572,45 @@ _inline PVOID GetCurrentFiber( void ) { __asm mov eax, fs:[0x10] }
 //  Define the size of the 80387 save area, which is in the context frame.
 //
 
-#define SIZE_OF_80387_REGISTERS      80
+   #define SIZE_OF_80387_REGISTERS      80
 
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_i386    0x00010000    // this assumes that i386 and
-#define CONTEXT_i486    0x00010000    // i486 have identical context records
+      #define CONTEXT_i386    0x00010000 // this assumes that i386 and
+      #define CONTEXT_i486    0x00010000 // i486 have identical context records
 
 // end_wx86
 
-#define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
-#define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
-#define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
-#define CONTEXT_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L) // 387 state
-#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
-#define CONTEXT_EXTENDED_REGISTERS  (CONTEXT_i386 | 0x00000020L) // cpu specific extensions
+      #define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
+      #define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
+      #define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
+      #define CONTEXT_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L) // 387 state
+      #define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
+      #define CONTEXT_EXTENDED_REGISTERS  (CONTEXT_i386 | 0x00000020L) // cpu specific extensions
 
-#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER |\
-                      CONTEXT_SEGMENTS)
+      #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER | \
+                            CONTEXT_SEGMENTS)
 
 // begin_wx86
 
-#endif
+   #endif
 
-#define MAXIMUM_SUPPORTED_EXTENSION     512
+   #define MAXIMUM_SUPPORTED_EXTENSION     512
 
 typedef struct _FLOATING_SAVE_AREA {
-    DWORD   ControlWord;
-    DWORD   StatusWord;
-    DWORD   TagWord;
-    DWORD   ErrorOffset;
-    DWORD   ErrorSelector;
-    DWORD   DataOffset;
-    DWORD   DataSelector;
-    BYTE    RegisterArea[SIZE_OF_80387_REGISTERS];
-    DWORD   Cr0NpxState;
+   DWORD ControlWord;
+   DWORD StatusWord;
+   DWORD TagWord;
+   DWORD ErrorOffset;
+   DWORD ErrorSelector;
+   DWORD DataOffset;
+   DWORD DataSelector;
+   BYTE RegisterArea[SIZE_OF_80387_REGISTERS];
+   DWORD Cr0NpxState;
 } FLOATING_SAVE_AREA;
 
 typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
@@ -1619,87 +1627,87 @@ typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
 
 typedef struct _CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a threads context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+   //
+   // The flags values within this flag control the contents of
+   // a CONTEXT record.
+   //
+   // If the context record is used as an input parameter, then
+   // for each portion of the context record controlled by a flag
+   // whose value is set, it is assumed that that portion of the
+   // context record contains valid context. If the context record
+   // is being used to modify a threads context, then only that
+   // portion of the threads context will be modified.
+   //
+   // If the context record is used as an IN OUT parameter to capture
+   // the context of a thread, then only those portions of the thread's
+   // context corresponding to set flags will be returned.
+   //
+   // The context record is never used as an OUT only parameter.
+   //
 
-    DWORD ContextFlags;
+   DWORD ContextFlags;
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
+   //
+   // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
+   // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
+   // included in CONTEXT_FULL.
+   //
 
-    DWORD   Dr0;
-    DWORD   Dr1;
-    DWORD   Dr2;
-    DWORD   Dr3;
-    DWORD   Dr6;
-    DWORD   Dr7;
+   DWORD Dr0;
+   DWORD Dr1;
+   DWORD Dr2;
+   DWORD Dr3;
+   DWORD Dr6;
+   DWORD Dr7;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
+   //
 
-    FLOATING_SAVE_AREA FloatSave;
+   FLOATING_SAVE_AREA FloatSave;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_SEGMENTS.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_SEGMENTS.
+   //
 
-    DWORD   SegGs;
-    DWORD   SegFs;
-    DWORD   SegEs;
-    DWORD   SegDs;
+   DWORD SegGs;
+   DWORD SegFs;
+   DWORD SegEs;
+   DWORD SegDs;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_INTEGER.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_INTEGER.
+   //
 
-    DWORD   Edi;
-    DWORD   Esi;
-    DWORD   Ebx;
-    DWORD   Edx;
-    DWORD   Ecx;
-    DWORD   Eax;
+   DWORD Edi;
+   DWORD Esi;
+   DWORD Ebx;
+   DWORD Edx;
+   DWORD Ecx;
+   DWORD Eax;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_CONTROL.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_CONTROL.
+   //
 
-    DWORD   Ebp;
-    DWORD   Eip;
-    DWORD   SegCs;              // MUST BE SANITIZED
-    DWORD   EFlags;             // MUST BE SANITIZED
-    DWORD   Esp;
-    DWORD   SegSs;
+   DWORD Ebp;
+   DWORD Eip;
+   DWORD SegCs;                 // MUST BE SANITIZED
+   DWORD EFlags;                // MUST BE SANITIZED
+   DWORD Esp;
+   DWORD SegSs;
 
-    //
-    // This section is specified/returned if the ContextFlags word
-    // contains the flag CONTEXT_EXTENDED_REGISTERS.
-    // The format and contexts are processor specific
-    //
+   //
+   // This section is specified/returned if the ContextFlags word
+   // contains the flag CONTEXT_EXTENDED_REGISTERS.
+   // The format and contexts are processor specific
+   //
 
-    BYTE    ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];
+   BYTE ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];
 
 } CONTEXT;
 
@@ -1713,31 +1721,31 @@ typedef CONTEXT *PCONTEXT;
 
 
 #ifndef _LDT_ENTRY_DEFINED
-#define _LDT_ENTRY_DEFINED
+   #define _LDT_ENTRY_DEFINED
 
 typedef struct _LDT_ENTRY {
-    WORD    LimitLow;
-    WORD    BaseLow;
-    union {
-        struct {
-            BYTE    BaseMid;
-            BYTE    Flags1;     // Declare as bytes to avoid alignment
-            BYTE    Flags2;     // Problems.
-            BYTE    BaseHi;
-        } Bytes;
-        struct {
-            DWORD   BaseMid : 8;
-            DWORD   Type : 5;
-            DWORD   Dpl : 2;
-            DWORD   Pres : 1;
-            DWORD   LimitHi : 4;
-            DWORD   Sys : 1;
-            DWORD   Reserved_0 : 1;
-            DWORD   Default_Big : 1;
-            DWORD   Granularity : 1;
-            DWORD   BaseHi : 8;
-        } Bits;
-    } HighWord;
+   WORD LimitLow;
+   WORD BaseLow;
+   union {
+      struct {
+         BYTE BaseMid;
+         BYTE Flags1;           // Declare as bytes to avoid alignment
+         BYTE Flags2;           // Problems.
+         BYTE BaseHi;
+      } Bytes;
+      struct {
+         DWORD BaseMid : 8;
+         DWORD Type : 5;
+         DWORD Dpl : 2;
+         DWORD Pres : 1;
+         DWORD LimitHi : 4;
+         DWORD Sys : 1;
+         DWORD Reserved_0 : 1;
+         DWORD Default_Big : 1;
+         DWORD Granularity : 1;
+         DWORD BaseHi : 8;
+      } Bits;
+   } HighWord;
 } LDT_ENTRY, *PLDT_ENTRY;
 
 #endif
@@ -1750,28 +1758,28 @@ typedef struct _LDT_ENTRY {
 // current fiber data.
 //
 
-#define GetCurrentFiber() ((*(PNT_TIB *)0x7ffff4a8)->FiberData)
-#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
+   #define GetCurrentFiber() ((*(PNT_TIB *)0x7ffff4a8)->FiberData)
+   #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_R4000   0x00010000    // r4000 context
+      #define CONTEXT_R4000   0x00010000 // r4000 context
 
-#define CONTEXT_CONTROL          (CONTEXT_R4000 | 0x00000001)
-#define CONTEXT_FLOATING_POINT   (CONTEXT_R4000 | 0x00000002)
-#define CONTEXT_INTEGER          (CONTEXT_R4000 | 0x00000004)
-#define CONTEXT_EXTENDED_FLOAT   (CONTEXT_FLOATING_POINT | 0x00000008)
-#define CONTEXT_EXTENDED_INTEGER (CONTEXT_INTEGER | 0x00000010)
+      #define CONTEXT_CONTROL          (CONTEXT_R4000 | 0x00000001)
+      #define CONTEXT_FLOATING_POINT   (CONTEXT_R4000 | 0x00000002)
+      #define CONTEXT_INTEGER          (CONTEXT_R4000 | 0x00000004)
+      #define CONTEXT_EXTENDED_FLOAT   (CONTEXT_FLOATING_POINT | 0x00000008)
+      #define CONTEXT_EXTENDED_INTEGER (CONTEXT_INTEGER | 0x00000010)
 
-#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | \
-                      CONTEXT_INTEGER | CONTEXT_EXTENDED_INTEGER)
+      #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | \
+                            CONTEXT_INTEGER | CONTEXT_EXTENDED_INTEGER)
 
-#endif
+   #endif
 
 //
 // Context Frame
@@ -1789,302 +1797,302 @@ typedef struct _LDT_ENTRY {
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is always present and is used as an argument build
-    // area.
-    //
-    // N.B. Context records are 0 mod 8 aligned starting with NT 4.0.
-    //
+   //
+   // This section is always present and is used as an argument build
+   // area.
+   //
+   // N.B. Context records are 0 mod 8 aligned starting with NT 4.0.
+   //
 
-    union {
-        DWORD Argument[4];
-        ULONGLONG Alignment;
-    };
+   union {
+      DWORD Argument[4];
+      ULONGLONG Alignment;
+   };
 
-    //
-    // The following union defines the 32-bit and 64-bit register context.
-    //
+   //
+   // The following union defines the 32-bit and 64-bit register context.
+   //
 
-    union {
+   union {
 
-        //
-        // 32-bit context.
-        //
+      //
+      // 32-bit context.
+      //
 
-        struct {
+      struct {
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
-            // N.B. This section contains the 16 double floating registers f0,
-            //      f2, ..., f30.
-            //
+         //
+         // This section is specified/returned if the ContextFlags contains
+         // the flag CONTEXT_FLOATING_POINT.
+         //
+         // N.B. This section contains the 16 double floating registers f0,
+         //      f2, ..., f30.
+         //
 
-            DWORD FltF0;
-            DWORD FltF1;
-            DWORD FltF2;
-            DWORD FltF3;
-            DWORD FltF4;
-            DWORD FltF5;
-            DWORD FltF6;
-            DWORD FltF7;
-            DWORD FltF8;
-            DWORD FltF9;
-            DWORD FltF10;
-            DWORD FltF11;
-            DWORD FltF12;
-            DWORD FltF13;
-            DWORD FltF14;
-            DWORD FltF15;
-            DWORD FltF16;
-            DWORD FltF17;
-            DWORD FltF18;
-            DWORD FltF19;
-            DWORD FltF20;
-            DWORD FltF21;
-            DWORD FltF22;
-            DWORD FltF23;
-            DWORD FltF24;
-            DWORD FltF25;
-            DWORD FltF26;
-            DWORD FltF27;
-            DWORD FltF28;
-            DWORD FltF29;
-            DWORD FltF30;
-            DWORD FltF31;
+         DWORD FltF0;
+         DWORD FltF1;
+         DWORD FltF2;
+         DWORD FltF3;
+         DWORD FltF4;
+         DWORD FltF5;
+         DWORD FltF6;
+         DWORD FltF7;
+         DWORD FltF8;
+         DWORD FltF9;
+         DWORD FltF10;
+         DWORD FltF11;
+         DWORD FltF12;
+         DWORD FltF13;
+         DWORD FltF14;
+         DWORD FltF15;
+         DWORD FltF16;
+         DWORD FltF17;
+         DWORD FltF18;
+         DWORD FltF19;
+         DWORD FltF20;
+         DWORD FltF21;
+         DWORD FltF22;
+         DWORD FltF23;
+         DWORD FltF24;
+         DWORD FltF25;
+         DWORD FltF26;
+         DWORD FltF27;
+         DWORD FltF28;
+         DWORD FltF29;
+         DWORD FltF30;
+         DWORD FltF31;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_INTEGER.
-            //
-            // N.B. The registers gp, sp, and ra are defined in this section,
-            //      but are considered part of the control context rather than
-            //      part of the integer context.
-            //
-            // N.B. Register zero is not stored in the frame.
-            //
+         //
+         // This section is specified/returned if the ContextFlags contains
+         // the flag CONTEXT_INTEGER.
+         //
+         // N.B. The registers gp, sp, and ra are defined in this section,
+         //      but are considered part of the control context rather than
+         //      part of the integer context.
+         //
+         // N.B. Register zero is not stored in the frame.
+         //
 
-            DWORD IntZero;
-            DWORD IntAt;
-            DWORD IntV0;
-            DWORD IntV1;
-            DWORD IntA0;
-            DWORD IntA1;
-            DWORD IntA2;
-            DWORD IntA3;
-            DWORD IntT0;
-            DWORD IntT1;
-            DWORD IntT2;
-            DWORD IntT3;
-            DWORD IntT4;
-            DWORD IntT5;
-            DWORD IntT6;
-            DWORD IntT7;
-            DWORD IntS0;
-            DWORD IntS1;
-            DWORD IntS2;
-            DWORD IntS3;
-            DWORD IntS4;
-            DWORD IntS5;
-            DWORD IntS6;
-            DWORD IntS7;
-            DWORD IntT8;
-            DWORD IntT9;
-            DWORD IntK0;
-            DWORD IntK1;
-            DWORD IntGp;
-            DWORD IntSp;
-            DWORD IntS8;
-            DWORD IntRa;
-            DWORD IntLo;
-            DWORD IntHi;
+         DWORD IntZero;
+         DWORD IntAt;
+         DWORD IntV0;
+         DWORD IntV1;
+         DWORD IntA0;
+         DWORD IntA1;
+         DWORD IntA2;
+         DWORD IntA3;
+         DWORD IntT0;
+         DWORD IntT1;
+         DWORD IntT2;
+         DWORD IntT3;
+         DWORD IntT4;
+         DWORD IntT5;
+         DWORD IntT6;
+         DWORD IntT7;
+         DWORD IntS0;
+         DWORD IntS1;
+         DWORD IntS2;
+         DWORD IntS3;
+         DWORD IntS4;
+         DWORD IntS5;
+         DWORD IntS6;
+         DWORD IntS7;
+         DWORD IntT8;
+         DWORD IntT9;
+         DWORD IntK0;
+         DWORD IntK1;
+         DWORD IntGp;
+         DWORD IntSp;
+         DWORD IntS8;
+         DWORD IntRa;
+         DWORD IntLo;
+         DWORD IntHi;
 
-            //
-            // This section is specified/returned if the ContextFlags word contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
+         //
+         // This section is specified/returned if the ContextFlags word contains
+         // the flag CONTEXT_FLOATING_POINT.
+         //
 
-            DWORD Fsr;
+         DWORD Fsr;
 
-            //
-            // This section is specified/returned if the ContextFlags word contains
-            // the flag CONTEXT_CONTROL.
-            //
-            // N.B. The registers gp, sp, and ra are defined in the integer section,
-            //   but are considered part of the control context rather than part of
-            //   the integer context.
-            //
+         //
+         // This section is specified/returned if the ContextFlags word contains
+         // the flag CONTEXT_CONTROL.
+         //
+         // N.B. The registers gp, sp, and ra are defined in the integer section,
+         //   but are considered part of the control context rather than part of
+         //   the integer context.
+         //
 
-            DWORD Fir;
-            DWORD Psr;
+         DWORD Fir;
+         DWORD Psr;
 
-            //
-            // The flags values within this flag control the contents of
-            // a CONTEXT record.
-            //
-            // If the context record is used as an input parameter, then
-            // for each portion of the context record controlled by a flag
-            // whose value is set, it is assumed that that portion of the
-            // context record contains valid context. If the context record
-            // is being used to modify a thread's context, then only that
-            // portion of the threads context will be modified.
-            //
-            // If the context record is used as an IN OUT parameter to capture
-            // the context of a thread, then only those portions of the thread's
-            // context corresponding to set flags will be returned.
-            //
-            // The context record is never used as an OUT only parameter.
-            //
+         //
+         // The flags values within this flag control the contents of
+         // a CONTEXT record.
+         //
+         // If the context record is used as an input parameter, then
+         // for each portion of the context record controlled by a flag
+         // whose value is set, it is assumed that that portion of the
+         // context record contains valid context. If the context record
+         // is being used to modify a thread's context, then only that
+         // portion of the threads context will be modified.
+         //
+         // If the context record is used as an IN OUT parameter to capture
+         // the context of a thread, then only those portions of the thread's
+         // context corresponding to set flags will be returned.
+         //
+         // The context record is never used as an OUT only parameter.
+         //
 
-            DWORD ContextFlags;
-        };
+         DWORD ContextFlags;
+      };
 
-        //
-        // 64-bit context.
-        //
+      //
+      // 64-bit context.
+      //
 
-        struct {
+      struct {
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_EXTENDED_FLOAT.
-            //
-            // N.B. This section contains the 32 double floating registers f0,
-            //      f1, ..., f31.
-            //
+         //
+         // This section is specified/returned if the ContextFlags contains
+         // the flag CONTEXT_EXTENDED_FLOAT.
+         //
+         // N.B. This section contains the 32 double floating registers f0,
+         //      f1, ..., f31.
+         //
 
-            ULONGLONG XFltF0;
-            ULONGLONG XFltF1;
-            ULONGLONG XFltF2;
-            ULONGLONG XFltF3;
-            ULONGLONG XFltF4;
-            ULONGLONG XFltF5;
-            ULONGLONG XFltF6;
-            ULONGLONG XFltF7;
-            ULONGLONG XFltF8;
-            ULONGLONG XFltF9;
-            ULONGLONG XFltF10;
-            ULONGLONG XFltF11;
-            ULONGLONG XFltF12;
-            ULONGLONG XFltF13;
-            ULONGLONG XFltF14;
-            ULONGLONG XFltF15;
-            ULONGLONG XFltF16;
-            ULONGLONG XFltF17;
-            ULONGLONG XFltF18;
-            ULONGLONG XFltF19;
-            ULONGLONG XFltF20;
-            ULONGLONG XFltF21;
-            ULONGLONG XFltF22;
-            ULONGLONG XFltF23;
-            ULONGLONG XFltF24;
-            ULONGLONG XFltF25;
-            ULONGLONG XFltF26;
-            ULONGLONG XFltF27;
-            ULONGLONG XFltF28;
-            ULONGLONG XFltF29;
-            ULONGLONG XFltF30;
-            ULONGLONG XFltF31;
+         ULONGLONG XFltF0;
+         ULONGLONG XFltF1;
+         ULONGLONG XFltF2;
+         ULONGLONG XFltF3;
+         ULONGLONG XFltF4;
+         ULONGLONG XFltF5;
+         ULONGLONG XFltF6;
+         ULONGLONG XFltF7;
+         ULONGLONG XFltF8;
+         ULONGLONG XFltF9;
+         ULONGLONG XFltF10;
+         ULONGLONG XFltF11;
+         ULONGLONG XFltF12;
+         ULONGLONG XFltF13;
+         ULONGLONG XFltF14;
+         ULONGLONG XFltF15;
+         ULONGLONG XFltF16;
+         ULONGLONG XFltF17;
+         ULONGLONG XFltF18;
+         ULONGLONG XFltF19;
+         ULONGLONG XFltF20;
+         ULONGLONG XFltF21;
+         ULONGLONG XFltF22;
+         ULONGLONG XFltF23;
+         ULONGLONG XFltF24;
+         ULONGLONG XFltF25;
+         ULONGLONG XFltF26;
+         ULONGLONG XFltF27;
+         ULONGLONG XFltF28;
+         ULONGLONG XFltF29;
+         ULONGLONG XFltF30;
+         ULONGLONG XFltF31;
 
-            //
-            // The following sections must exactly overlay the 32-bit context.
-            //
+         //
+         // The following sections must exactly overlay the 32-bit context.
+         //
 
-            DWORD Fill1;
-            DWORD Fill2;
+         DWORD Fill1;
+         DWORD Fill2;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
+         //
+         // This section is specified/returned if the ContextFlags contains
+         // the flag CONTEXT_FLOATING_POINT.
+         //
 
-            DWORD XFsr;
+         DWORD XFsr;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_CONTROL.
-            //
-            // N.B. The registers gp, sp, and ra are defined in the integer
-            //      section, but are considered part of the control context
-            //      rather than part of the integer context.
-            //
+         //
+         // This section is specified/returned if the ContextFlags contains
+         // the flag CONTEXT_CONTROL.
+         //
+         // N.B. The registers gp, sp, and ra are defined in the integer
+         //      section, but are considered part of the control context
+         //      rather than part of the integer context.
+         //
 
-            DWORD XFir;
-            DWORD XPsr;
+         DWORD XFir;
+         DWORD XPsr;
 
-            //
-            // The flags values within this flag control the contents of
-            // a CONTEXT record.
-            //
-            // If the context record is used as an input parameter, then
-            // for each portion of the context record controlled by a flag
-            // whose value is set, it is assumed that that portion of the
-            // context record contains valid context. If the context record
-            // is being used to modify a thread's context, then only that
-            // portion of the threads context will be modified.
-            //
-            // If the context record is used as an IN OUT parameter to capture
-            // the context of a thread, then only those portions of the thread's
-            // context corresponding to set flags will be returned.
-            //
-            // The context record is never used as an OUT only parameter.
-            //
+         //
+         // The flags values within this flag control the contents of
+         // a CONTEXT record.
+         //
+         // If the context record is used as an input parameter, then
+         // for each portion of the context record controlled by a flag
+         // whose value is set, it is assumed that that portion of the
+         // context record contains valid context. If the context record
+         // is being used to modify a thread's context, then only that
+         // portion of the threads context will be modified.
+         //
+         // If the context record is used as an IN OUT parameter to capture
+         // the context of a thread, then only those portions of the thread's
+         // context corresponding to set flags will be returned.
+         //
+         // The context record is never used as an OUT only parameter.
+         //
 
-            DWORD XContextFlags;
+         DWORD XContextFlags;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_EXTENDED_INTEGER.
-            //
-            // N.B. The registers gp, sp, and ra are defined in this section,
-            //      but are considered part of the control context rather than
-            //      part of the integer  context.
-            //
-            // N.B. Register zero is not stored in the frame.
-            //
+         //
+         // This section is specified/returned if the ContextFlags contains
+         // the flag CONTEXT_EXTENDED_INTEGER.
+         //
+         // N.B. The registers gp, sp, and ra are defined in this section,
+         //      but are considered part of the control context rather than
+         //      part of the integer  context.
+         //
+         // N.B. Register zero is not stored in the frame.
+         //
 
-            ULONGLONG XIntZero;
-            ULONGLONG XIntAt;
-            ULONGLONG XIntV0;
-            ULONGLONG XIntV1;
-            ULONGLONG XIntA0;
-            ULONGLONG XIntA1;
-            ULONGLONG XIntA2;
-            ULONGLONG XIntA3;
-            ULONGLONG XIntT0;
-            ULONGLONG XIntT1;
-            ULONGLONG XIntT2;
-            ULONGLONG XIntT3;
-            ULONGLONG XIntT4;
-            ULONGLONG XIntT5;
-            ULONGLONG XIntT6;
-            ULONGLONG XIntT7;
-            ULONGLONG XIntS0;
-            ULONGLONG XIntS1;
-            ULONGLONG XIntS2;
-            ULONGLONG XIntS3;
-            ULONGLONG XIntS4;
-            ULONGLONG XIntS5;
-            ULONGLONG XIntS6;
-            ULONGLONG XIntS7;
-            ULONGLONG XIntT8;
-            ULONGLONG XIntT9;
-            ULONGLONG XIntK0;
-            ULONGLONG XIntK1;
-            ULONGLONG XIntGp;
-            ULONGLONG XIntSp;
-            ULONGLONG XIntS8;
-            ULONGLONG XIntRa;
-            ULONGLONG XIntLo;
-            ULONGLONG XIntHi;
-        };
-    };
+         ULONGLONG XIntZero;
+         ULONGLONG XIntAt;
+         ULONGLONG XIntV0;
+         ULONGLONG XIntV1;
+         ULONGLONG XIntA0;
+         ULONGLONG XIntA1;
+         ULONGLONG XIntA2;
+         ULONGLONG XIntA3;
+         ULONGLONG XIntT0;
+         ULONGLONG XIntT1;
+         ULONGLONG XIntT2;
+         ULONGLONG XIntT3;
+         ULONGLONG XIntT4;
+         ULONGLONG XIntT5;
+         ULONGLONG XIntT6;
+         ULONGLONG XIntT7;
+         ULONGLONG XIntS0;
+         ULONGLONG XIntS1;
+         ULONGLONG XIntS2;
+         ULONGLONG XIntS3;
+         ULONGLONG XIntS4;
+         ULONGLONG XIntS5;
+         ULONGLONG XIntS6;
+         ULONGLONG XIntS7;
+         ULONGLONG XIntT8;
+         ULONGLONG XIntT9;
+         ULONGLONG XIntK0;
+         ULONGLONG XIntK1;
+         ULONGLONG XIntGp;
+         ULONGLONG XIntSp;
+         ULONGLONG XIntS8;
+         ULONGLONG XIntRa;
+         ULONGLONG XIntLo;
+         ULONGLONG XIntHi;
+      };
+   };
 } CONTEXT, *PCONTEXT;
 
 // end_ntddk end_nthal
 
-#define CONTEXT32_LENGTH 0x130          // The original 32-bit Context length (pre NT 4.0)
+   #define CONTEXT32_LENGTH 0x130       // The original 32-bit Context length (pre NT 4.0)
 
 #endif // MIPS
 
@@ -2093,9 +2101,9 @@ typedef struct _CONTEXT {
 
 VOID
 __jump_unwind (
-    PVOID Fp,
-    PVOID TargetPc
-    );
+   PVOID Fp,
+   PVOID TargetPc
+   );
 
 #endif // MIPS
 
@@ -2109,38 +2117,38 @@ __jump_unwind (
 // the compiler intrinsic to access it directly from GPR 13.
 //
 
-#if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
+   #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 unsigned __gregister_get( unsigned const regnum );
-#define NtCurrentTeb() ((struct _TEB *)__gregister_get(13))
-#elif defined(_M_PPC)
+      #define NtCurrentTeb() ((struct _TEB *)__gregister_get(13))
+   #elif defined(_M_PPC)
 struct _TEB * __builtin_get_gpr13(VOID);
-#define NtCurrentTeb() ((struct _TEB *)__builtin_get_gpr13())
-#endif
+      #define NtCurrentTeb() ((struct _TEB *)__builtin_get_gpr13())
+   #endif
 
-
+
 //
 // Define functions to get the address of the current fiber and the
 // current fiber data.
 //
 
-#define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
-#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
+   #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
+   #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_CONTROL         0x00000001L
-#define CONTEXT_FLOATING_POINT  0x00000002L
-#define CONTEXT_INTEGER         0x00000004L
-#define CONTEXT_DEBUG_REGISTERS 0x00000008L
+      #define CONTEXT_CONTROL         0x00000001L
+      #define CONTEXT_FLOATING_POINT  0x00000002L
+      #define CONTEXT_INTEGER         0x00000004L
+      #define CONTEXT_DEBUG_REGISTERS 0x00000008L
 
-#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+      #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
 
-#endif
+   #endif
 
 //
 // Context Frame
@@ -2158,131 +2166,131 @@ struct _TEB * __builtin_get_gpr13(VOID);
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_FLOATING_POINT.
+   //
 
-    double Fpr0;                        // Floating registers 0..31
-    double Fpr1;
-    double Fpr2;
-    double Fpr3;
-    double Fpr4;
-    double Fpr5;
-    double Fpr6;
-    double Fpr7;
-    double Fpr8;
-    double Fpr9;
-    double Fpr10;
-    double Fpr11;
-    double Fpr12;
-    double Fpr13;
-    double Fpr14;
-    double Fpr15;
-    double Fpr16;
-    double Fpr17;
-    double Fpr18;
-    double Fpr19;
-    double Fpr20;
-    double Fpr21;
-    double Fpr22;
-    double Fpr23;
-    double Fpr24;
-    double Fpr25;
-    double Fpr26;
-    double Fpr27;
-    double Fpr28;
-    double Fpr29;
-    double Fpr30;
-    double Fpr31;
-    double Fpscr;                       // Floating point status/control reg
+   double Fpr0;                         // Floating registers 0..31
+   double Fpr1;
+   double Fpr2;
+   double Fpr3;
+   double Fpr4;
+   double Fpr5;
+   double Fpr6;
+   double Fpr7;
+   double Fpr8;
+   double Fpr9;
+   double Fpr10;
+   double Fpr11;
+   double Fpr12;
+   double Fpr13;
+   double Fpr14;
+   double Fpr15;
+   double Fpr16;
+   double Fpr17;
+   double Fpr18;
+   double Fpr19;
+   double Fpr20;
+   double Fpr21;
+   double Fpr22;
+   double Fpr23;
+   double Fpr24;
+   double Fpr25;
+   double Fpr26;
+   double Fpr27;
+   double Fpr28;
+   double Fpr29;
+   double Fpr30;
+   double Fpr31;
+   double Fpscr;                        // Floating point status/control reg
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_INTEGER.
+   //
 
-    DWORD Gpr0;                         // General registers 0..31
-    DWORD Gpr1;
-    DWORD Gpr2;
-    DWORD Gpr3;
-    DWORD Gpr4;
-    DWORD Gpr5;
-    DWORD Gpr6;
-    DWORD Gpr7;
-    DWORD Gpr8;
-    DWORD Gpr9;
-    DWORD Gpr10;
-    DWORD Gpr11;
-    DWORD Gpr12;
-    DWORD Gpr13;
-    DWORD Gpr14;
-    DWORD Gpr15;
-    DWORD Gpr16;
-    DWORD Gpr17;
-    DWORD Gpr18;
-    DWORD Gpr19;
-    DWORD Gpr20;
-    DWORD Gpr21;
-    DWORD Gpr22;
-    DWORD Gpr23;
-    DWORD Gpr24;
-    DWORD Gpr25;
-    DWORD Gpr26;
-    DWORD Gpr27;
-    DWORD Gpr28;
-    DWORD Gpr29;
-    DWORD Gpr30;
-    DWORD Gpr31;
+   DWORD Gpr0;                          // General registers 0..31
+   DWORD Gpr1;
+   DWORD Gpr2;
+   DWORD Gpr3;
+   DWORD Gpr4;
+   DWORD Gpr5;
+   DWORD Gpr6;
+   DWORD Gpr7;
+   DWORD Gpr8;
+   DWORD Gpr9;
+   DWORD Gpr10;
+   DWORD Gpr11;
+   DWORD Gpr12;
+   DWORD Gpr13;
+   DWORD Gpr14;
+   DWORD Gpr15;
+   DWORD Gpr16;
+   DWORD Gpr17;
+   DWORD Gpr18;
+   DWORD Gpr19;
+   DWORD Gpr20;
+   DWORD Gpr21;
+   DWORD Gpr22;
+   DWORD Gpr23;
+   DWORD Gpr24;
+   DWORD Gpr25;
+   DWORD Gpr26;
+   DWORD Gpr27;
+   DWORD Gpr28;
+   DWORD Gpr29;
+   DWORD Gpr30;
+   DWORD Gpr31;
 
-    DWORD Cr;                           // Condition register
-    DWORD Xer;                          // Fixed point exception register
+   DWORD Cr;                            // Condition register
+   DWORD Xer;                           // Fixed point exception register
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_CONTROL.
+   //
 
-    DWORD Msr;                          // Machine status register
-    DWORD Iar;                          // Instruction address register
-    DWORD Lr;                           // Link register
-    DWORD Ctr;                          // Count register
+   DWORD Msr;                           // Machine status register
+   DWORD Iar;                           // Instruction address register
+   DWORD Lr;                            // Link register
+   DWORD Ctr;                           // Count register
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+   //
+   // The flags values within this flag control the contents of
+   // a CONTEXT record.
+   //
+   // If the context record is used as an input parameter, then
+   // for each portion of the context record controlled by a flag
+   // whose value is set, it is assumed that that portion of the
+   // context record contains valid context. If the context record
+   // is being used to modify a thread's context, then only that
+   // portion of the threads context will be modified.
+   //
+   // If the context record is used as an IN OUT parameter to capture
+   // the context of a thread, then only those portions of the thread's
+   // context corresponding to set flags will be returned.
+   //
+   // The context record is never used as an OUT only parameter.
+   //
 
-    DWORD ContextFlags;
+   DWORD ContextFlags;
 
-    DWORD Fill[3];                      // Pad out to multiple of 16 bytes
+   DWORD Fill[3];                       // Pad out to multiple of 16 bytes
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
-    DWORD Dr0;                          // Breakpoint Register 1
-    DWORD Dr1;                          // Breakpoint Register 2
-    DWORD Dr2;                          // Breakpoint Register 3
-    DWORD Dr3;                          // Breakpoint Register 4
-    DWORD Dr4;                          // Breakpoint Register 5
-    DWORD Dr5;                          // Breakpoint Register 6
-    DWORD Dr6;                          // Debug Status Register
-    DWORD Dr7;                          // Debug Control Register
+   //
+   // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
+   // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
+   // included in CONTEXT_FULL.
+   //
+   DWORD Dr0;                           // Breakpoint Register 1
+   DWORD Dr1;                           // Breakpoint Register 2
+   DWORD Dr2;                           // Breakpoint Register 3
+   DWORD Dr3;                           // Breakpoint Register 4
+   DWORD Dr4;                           // Breakpoint Register 5
+   DWORD Dr5;                           // Breakpoint Register 6
+   DWORD Dr6;                           // Debug Status Register
+   DWORD Dr7;                           // Debug Control Register
 
 } CONTEXT, *PCONTEXT;
 
@@ -2302,30 +2310,30 @@ typedef struct _CONTEXT {
 //   Minimum alignment is 8 bytes
 
 typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
-    DWORD BackChain;                    // Addr of previous frame
-    DWORD GlueSaved1;                   // Used by glue code
-    DWORD GlueSaved2;
-    DWORD Reserved1;                    // Reserved
-    DWORD Spare1;                       // Used by tracing, profiling, ...
-    DWORD Spare2;
+   DWORD BackChain;                     // Addr of previous frame
+   DWORD GlueSaved1;                    // Used by glue code
+   DWORD GlueSaved2;
+   DWORD Reserved1;                     // Reserved
+   DWORD Spare1;                        // Used by tracing, profiling, ...
+   DWORD Spare2;
 
-    DWORD Parameter0;                   // First 8 parameter words are
-    DWORD Parameter1;                   //   always present
-    DWORD Parameter2;
-    DWORD Parameter3;
-    DWORD Parameter4;
-    DWORD Parameter5;
-    DWORD Parameter6;
-    DWORD Parameter7;
+   DWORD Parameter0;                    // First 8 parameter words are
+   DWORD Parameter1;                    //   always present
+   DWORD Parameter2;
+   DWORD Parameter3;
+   DWORD Parameter4;
+   DWORD Parameter5;
+   DWORD Parameter6;
+   DWORD Parameter7;
 
 } STACK_FRAME_HEADER,*PSTACK_FRAME_HEADER;
 
 
 VOID
 __jump_unwind (
-    PVOID Fp,
-    PVOID TargetPc
-    );
+   PVOID Fp,
+   PVOID TargetPc
+   );
 
 #endif // defined(_PPC_)
 
@@ -2338,38 +2346,38 @@ __jump_unwind (
 // the compiler intrinsic to access it directly from GPR 13.
 //
 
-#if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
+   #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 unsigned __gregister_get( unsigned const regnum );
-#define NtCurrentTeb() ((struct _TEB *)__gregister_get(13))
-#elif defined(_M_PPC)
+      #define NtCurrentTeb() ((struct _TEB *)__gregister_get(13))
+   #elif defined(_M_PPC)
 struct _TEB * __builtin_get_gpr13(VOID);
-#define NtCurrentTeb() ((struct _TEB *)__builtin_get_gpr13())
-#endif
+      #define NtCurrentTeb() ((struct _TEB *)__builtin_get_gpr13())
+   #endif
 
-
+
 //
 // Define functions to get the address of the current fiber and the
 // current fiber data.
 //
 
-#define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
-#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
+   #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
+   #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_CONTROL         0x00000001L
-#define CONTEXT_FLOATING_POINT  0x00000002L
-#define CONTEXT_INTEGER         0x00000004L
-#define CONTEXT_DEBUG_REGISTERS 0x00000008L
+      #define CONTEXT_CONTROL         0x00000001L
+      #define CONTEXT_FLOATING_POINT  0x00000002L
+      #define CONTEXT_INTEGER         0x00000004L
+      #define CONTEXT_DEBUG_REGISTERS 0x00000008L
 
-#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+      #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
 
-#endif
+   #endif
 
 //
 // Context Frame
@@ -2387,131 +2395,131 @@ struct _TEB * __builtin_get_gpr13(VOID);
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_FLOATING_POINT.
+   //
 
-    double Fpr0;                        // Floating registers 0..31
-    double Fpr1;
-    double Fpr2;
-    double Fpr3;
-    double Fpr4;
-    double Fpr5;
-    double Fpr6;
-    double Fpr7;
-    double Fpr8;
-    double Fpr9;
-    double Fpr10;
-    double Fpr11;
-    double Fpr12;
-    double Fpr13;
-    double Fpr14;
-    double Fpr15;
-    double Fpr16;
-    double Fpr17;
-    double Fpr18;
-    double Fpr19;
-    double Fpr20;
-    double Fpr21;
-    double Fpr22;
-    double Fpr23;
-    double Fpr24;
-    double Fpr25;
-    double Fpr26;
-    double Fpr27;
-    double Fpr28;
-    double Fpr29;
-    double Fpr30;
-    double Fpr31;
-    double Fpscr;                       // Floating point status/control reg
+   double Fpr0;                         // Floating registers 0..31
+   double Fpr1;
+   double Fpr2;
+   double Fpr3;
+   double Fpr4;
+   double Fpr5;
+   double Fpr6;
+   double Fpr7;
+   double Fpr8;
+   double Fpr9;
+   double Fpr10;
+   double Fpr11;
+   double Fpr12;
+   double Fpr13;
+   double Fpr14;
+   double Fpr15;
+   double Fpr16;
+   double Fpr17;
+   double Fpr18;
+   double Fpr19;
+   double Fpr20;
+   double Fpr21;
+   double Fpr22;
+   double Fpr23;
+   double Fpr24;
+   double Fpr25;
+   double Fpr26;
+   double Fpr27;
+   double Fpr28;
+   double Fpr29;
+   double Fpr30;
+   double Fpr31;
+   double Fpscr;                        // Floating point status/control reg
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_INTEGER.
+   //
 
-    DWORD Gpr0;                         // General registers 0..31
-    DWORD Gpr1;
-    DWORD Gpr2;
-    DWORD Gpr3;
-    DWORD Gpr4;
-    DWORD Gpr5;
-    DWORD Gpr6;
-    DWORD Gpr7;
-    DWORD Gpr8;
-    DWORD Gpr9;
-    DWORD Gpr10;
-    DWORD Gpr11;
-    DWORD Gpr12;
-    DWORD Gpr13;
-    DWORD Gpr14;
-    DWORD Gpr15;
-    DWORD Gpr16;
-    DWORD Gpr17;
-    DWORD Gpr18;
-    DWORD Gpr19;
-    DWORD Gpr20;
-    DWORD Gpr21;
-    DWORD Gpr22;
-    DWORD Gpr23;
-    DWORD Gpr24;
-    DWORD Gpr25;
-    DWORD Gpr26;
-    DWORD Gpr27;
-    DWORD Gpr28;
-    DWORD Gpr29;
-    DWORD Gpr30;
-    DWORD Gpr31;
+   DWORD Gpr0;                          // General registers 0..31
+   DWORD Gpr1;
+   DWORD Gpr2;
+   DWORD Gpr3;
+   DWORD Gpr4;
+   DWORD Gpr5;
+   DWORD Gpr6;
+   DWORD Gpr7;
+   DWORD Gpr8;
+   DWORD Gpr9;
+   DWORD Gpr10;
+   DWORD Gpr11;
+   DWORD Gpr12;
+   DWORD Gpr13;
+   DWORD Gpr14;
+   DWORD Gpr15;
+   DWORD Gpr16;
+   DWORD Gpr17;
+   DWORD Gpr18;
+   DWORD Gpr19;
+   DWORD Gpr20;
+   DWORD Gpr21;
+   DWORD Gpr22;
+   DWORD Gpr23;
+   DWORD Gpr24;
+   DWORD Gpr25;
+   DWORD Gpr26;
+   DWORD Gpr27;
+   DWORD Gpr28;
+   DWORD Gpr29;
+   DWORD Gpr30;
+   DWORD Gpr31;
 
-    DWORD Cr;                           // Condition register
-    DWORD Xer;                          // Fixed point exception register
+   DWORD Cr;                            // Condition register
+   DWORD Xer;                           // Fixed point exception register
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_CONTROL.
+   //
 
-    DWORD Msr;                          // Machine status register
-    DWORD Iar;                          // Instruction address register
-    DWORD Lr;                           // Link register
-    DWORD Ctr;                          // Count register
+   DWORD Msr;                           // Machine status register
+   DWORD Iar;                           // Instruction address register
+   DWORD Lr;                            // Link register
+   DWORD Ctr;                           // Count register
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+   //
+   // The flags values within this flag control the contents of
+   // a CONTEXT record.
+   //
+   // If the context record is used as an input parameter, then
+   // for each portion of the context record controlled by a flag
+   // whose value is set, it is assumed that that portion of the
+   // context record contains valid context. If the context record
+   // is being used to modify a thread's context, then only that
+   // portion of the threads context will be modified.
+   //
+   // If the context record is used as an IN OUT parameter to capture
+   // the context of a thread, then only those portions of the thread's
+   // context corresponding to set flags will be returned.
+   //
+   // The context record is never used as an OUT only parameter.
+   //
 
-    DWORD ContextFlags;
+   DWORD ContextFlags;
 
-    DWORD Fill[3];                      // Pad out to multiple of 16 bytes
+   DWORD Fill[3];                       // Pad out to multiple of 16 bytes
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
-    DWORD Dr0;                          // Breakpoint Register 1
-    DWORD Dr1;                          // Breakpoint Register 2
-    DWORD Dr2;                          // Breakpoint Register 3
-    DWORD Dr3;                          // Breakpoint Register 4
-    DWORD Dr4;                          // Breakpoint Register 5
-    DWORD Dr5;                          // Breakpoint Register 6
-    DWORD Dr6;                          // Debug Status Register
-    DWORD Dr7;                          // Debug Control Register
+   //
+   // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
+   // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
+   // included in CONTEXT_FULL.
+   //
+   DWORD Dr0;                           // Breakpoint Register 1
+   DWORD Dr1;                           // Breakpoint Register 2
+   DWORD Dr2;                           // Breakpoint Register 3
+   DWORD Dr3;                           // Breakpoint Register 4
+   DWORD Dr4;                           // Breakpoint Register 5
+   DWORD Dr5;                           // Breakpoint Register 6
+   DWORD Dr6;                           // Debug Status Register
+   DWORD Dr7;                           // Debug Control Register
 
 } CONTEXT, *PCONTEXT;
 
@@ -2531,46 +2539,46 @@ typedef struct _CONTEXT {
 //   Minimum alignment is 8 bytes
 
 typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
-    DWORD BackChain;                    // Addr of previous frame
-    DWORD GlueSaved1;                   // Used by glue code
-    DWORD GlueSaved2;
-    DWORD Reserved1;                    // Reserved
-    DWORD Spare1;                       // Used by tracing, profiling, ...
-    DWORD Spare2;
+   DWORD BackChain;                     // Addr of previous frame
+   DWORD GlueSaved1;                    // Used by glue code
+   DWORD GlueSaved2;
+   DWORD Reserved1;                     // Reserved
+   DWORD Spare1;                        // Used by tracing, profiling, ...
+   DWORD Spare2;
 
-    DWORD Parameter0;                   // First 8 parameter words are
-    DWORD Parameter1;                   //   always present
-    DWORD Parameter2;
-    DWORD Parameter3;
-    DWORD Parameter4;
-    DWORD Parameter5;
-    DWORD Parameter6;
-    DWORD Parameter7;
+   DWORD Parameter0;                    // First 8 parameter words are
+   DWORD Parameter1;                    //   always present
+   DWORD Parameter2;
+   DWORD Parameter3;
+   DWORD Parameter4;
+   DWORD Parameter5;
+   DWORD Parameter6;
+   DWORD Parameter7;
 
 } STACK_FRAME_HEADER,*PSTACK_FRAME_HEADER;
 
 
 VOID
 __jump_unwind (
-    PVOID Fp,
-    PVOID TargetPc
-    );
+   PVOID Fp,
+   PVOID TargetPc
+   );
 
 #endif // defined(_MPPC_)
 
 #if !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
 
 void *_rdteb(void);
-#pragma intrinsic (_rdteb)
-#define NtCurrentTeb()      ((struct _TEB *)_rdteb())
+   #pragma intrinsic (_rdteb)
+   #define NtCurrentTeb()      ((struct _TEB *)_rdteb())
 
 //
 // Define functions to get the address of the current fiber and the
 // current fiber data.
 //
 
-#define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
-#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
+   #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
+   #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 #endif  // !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
 
@@ -2582,48 +2590,50 @@ void *_rdteb(void);
 // Pointer swizzling operation: 32-bit pointer to 64-bit pointer
 //
 
-#if !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
+   #if !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
 
-#ifdef _WIN64
-#define P32ToP64(p64)   ( (ULONGLONG)(p64) )
-#else
-#define P32ToP64(p32)   ( (ULONGLONG)_P32ToP64(p32) )
-#endif
+      #ifdef _WIN64
+         #define P32ToP64(p64)   ( (ULONGLONG)(p64) )
+      #else
+         #define P32ToP64(p32)   ( (ULONGLONG)_P32ToP64(p32) )
+      #endif
 
 extern ULONGLONG _P32ToP64(PVOID);
 
-#else
+   #else
 
-#if defined(_M_IX86) || defined(_M_ALPHA)
-#define P32ToP64(p32)   ( (ULONGLONG)_P32ToP64(p32) )
+      #if defined(_M_IX86) || defined(_M_ALPHA)
+         #define P32ToP64(p32)   ( (ULONGLONG)_P32ToP64(p32) )
 
 static ULONGLONG _P32ToP64(DWORD *p)
 {
-    ULONGLONG P32ToP64Local = (LONG)p; // sign extend p to 64-bit
-    return P32ToP64Local;
+   ULONGLONG P32ToP64Local = (LONG)p;  // sign extend p to 64-bit
+   return P32ToP64Local;
 }
-#endif //  (_M_IX86 || _M_ALPHA_)
+      #endif //  (_M_IX86 || _M_ALPHA_)
 
-#endif  // !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
+   #endif // !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
 
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_IA64                    0x00080000    // IA64 context
+      #define CONTEXT_IA64                    0x00080000 // IA64 context
 
-#define CONTEXT_CONTROL                 (CONTEXT_IA64 | 0x00000001L)
-#define CONTEXT_LOWER_FLOATING_POINT    (CONTEXT_IA64 | 0x00000002L)
-#define CONTEXT_HIGHER_FLOATING_POINT   (CONTEXT_IA64 | 0x00000004L)
-#define CONTEXT_INTEGER                 (CONTEXT_IA64 | 0x00000008L)
-#define CONTEXT_DEBUG                   (CONTEXT_IA64 | 0x00000010L)
+      #define CONTEXT_CONTROL                 (CONTEXT_IA64 | 0x00000001L)
+      #define CONTEXT_LOWER_FLOATING_POINT    (CONTEXT_IA64 | 0x00000002L)
+      #define CONTEXT_HIGHER_FLOATING_POINT   (CONTEXT_IA64 | 0x00000004L)
+      #define CONTEXT_INTEGER                 (CONTEXT_IA64 | 0x00000008L)
+      #define CONTEXT_DEBUG                   (CONTEXT_IA64 | 0x00000010L)
 
-#define CONTEXT_FLOATING_POINT          (CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT)
-#define CONTEXT_FULL                    (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+      #define CONTEXT_FLOATING_POINT          (CONTEXT_LOWER_FLOATING_POINT | \
+                                               CONTEXT_HIGHER_FLOATING_POINT)
+      #define CONTEXT_FULL                    (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | \
+                                               CONTEXT_INTEGER)
 
-#endif // !defined(RC_INVOKED)
+   #endif // !defined(RC_INVOKED)
 
 //
 // Context Frame
@@ -2640,291 +2650,291 @@ static ULONGLONG _P32ToP64(DWORD *p)
 
 typedef struct _CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+   //
+   // The flags values within this flag control the contents of
+   // a CONTEXT record.
+   //
+   // If the context record is used as an input parameter, then
+   // for each portion of the context record controlled by a flag
+   // whose value is set, it is assumed that that portion of the
+   // context record contains valid context. If the context record
+   // is being used to modify a thread's context, then only that
+   // portion of the threads context will be modified.
+   //
+   // If the context record is used as an IN OUT parameter to capture
+   // the context of a thread, then only those portions of the thread's
+   // context corresponding to set flags will be returned.
+   //
+   // The context record is never used as an OUT only parameter.
+   //
 
-    DWORD ContextFlags;
-    DWORD Fill1[3];         // for alignment of following on 16-byte boundary
+   DWORD ContextFlags;
+   DWORD Fill1[3];          // for alignment of following on 16-byte boundary
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_DEBUG.
-    //
-    // N.B. CONTEXT_DEBUG is *not* part of CONTEXT_FULL.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_DEBUG.
+   //
+   // N.B. CONTEXT_DEBUG is *not* part of CONTEXT_FULL.
+   //
 
-    ULONGLONG DbI0;                         // Instruction debug registers *
-    ULONGLONG DbI1;
-    ULONGLONG DbI2;
-    ULONGLONG DbI3;
-    ULONGLONG DbI4;
-    ULONGLONG DbI5;
-    ULONGLONG DbI6;
-    ULONGLONG DbI7;
+   ULONGLONG DbI0;                          // Instruction debug registers *
+   ULONGLONG DbI1;
+   ULONGLONG DbI2;
+   ULONGLONG DbI3;
+   ULONGLONG DbI4;
+   ULONGLONG DbI5;
+   ULONGLONG DbI6;
+   ULONGLONG DbI7;
 
-    ULONGLONG DbD0;                         // Data debug registers *
-    ULONGLONG DbD1;
-    ULONGLONG DbD2;
-    ULONGLONG DbD3;
-    ULONGLONG DbD4;
-    ULONGLONG DbD5;
-    ULONGLONG DbD6;
-    ULONGLONG DbD7;
+   ULONGLONG DbD0;                          // Data debug registers *
+   ULONGLONG DbD1;
+   ULONGLONG DbD2;
+   ULONGLONG DbD3;
+   ULONGLONG DbD4;
+   ULONGLONG DbD5;
+   ULONGLONG DbD6;
+   ULONGLONG DbD7;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_LOWER_FLOATING_POINT.
+   //
 
-    FLOAT128 FltS0;                         // Lower floating point (f2-f5) - saved (preserved)
-    FLOAT128 FltS1;
-    FLOAT128 FltS2;
-    FLOAT128 FltS3;
-    FLOAT128 FltT0;                         // Lower floating point (f6-f15) - temporary (volatile)
-    FLOAT128 FltT1;
-    FLOAT128 FltT2;
-    FLOAT128 FltT3;
-    FLOAT128 FltT4;
-    FLOAT128 FltT5;
-    FLOAT128 FltT6;
-    FLOAT128 FltT7;
-    FLOAT128 FltT8;
-    FLOAT128 FltT9;
+   FLOAT128 FltS0;                          // Lower floating point (f2-f5) - saved (preserved)
+   FLOAT128 FltS1;
+   FLOAT128 FltS2;
+   FLOAT128 FltS3;
+   FLOAT128 FltT0;                          // Lower floating point (f6-f15) - temporary (volatile)
+   FLOAT128 FltT1;
+   FLOAT128 FltT2;
+   FLOAT128 FltT3;
+   FLOAT128 FltT4;
+   FLOAT128 FltT5;
+   FLOAT128 FltT6;
+   FLOAT128 FltT7;
+   FLOAT128 FltT8;
+   FLOAT128 FltT9;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_HIGHER_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_HIGHER_FLOATING_POINT.
+   //
 
-    FLOAT128 FltS4;                         // Higher floating point (f16-f31) - saved (preserved)
-    FLOAT128 FltS5;
-    FLOAT128 FltS6;
-    FLOAT128 FltS7;
-    FLOAT128 FltS8;
-    FLOAT128 FltS9;
-    FLOAT128 FltS10;
-    FLOAT128 FltS11;
-    FLOAT128 FltS12;
-    FLOAT128 FltS13;
-    FLOAT128 FltS14;
-    FLOAT128 FltS15;
-    FLOAT128 FltS16;
-    FLOAT128 FltS17;
-    FLOAT128 FltS18;
-    FLOAT128 FltS19;
+   FLOAT128 FltS4;                          // Higher floating point (f16-f31) - saved (preserved)
+   FLOAT128 FltS5;
+   FLOAT128 FltS6;
+   FLOAT128 FltS7;
+   FLOAT128 FltS8;
+   FLOAT128 FltS9;
+   FLOAT128 FltS10;
+   FLOAT128 FltS11;
+   FLOAT128 FltS12;
+   FLOAT128 FltS13;
+   FLOAT128 FltS14;
+   FLOAT128 FltS15;
+   FLOAT128 FltS16;
+   FLOAT128 FltS17;
+   FLOAT128 FltS18;
+   FLOAT128 FltS19;
 
-    FLOAT128 FltF32;                        // Higher floating point (f32-f127) - temporary (volatile)
-    FLOAT128 FltF33;
-    FLOAT128 FltF34;
-    FLOAT128 FltF35;
-    FLOAT128 FltF36;
-    FLOAT128 FltF37;
-    FLOAT128 FltF38;
-    FLOAT128 FltF39;
+   FLOAT128 FltF32;                         // Higher floating point (f32-f127) - temporary (volatile)
+   FLOAT128 FltF33;
+   FLOAT128 FltF34;
+   FLOAT128 FltF35;
+   FLOAT128 FltF36;
+   FLOAT128 FltF37;
+   FLOAT128 FltF38;
+   FLOAT128 FltF39;
 
-    FLOAT128 FltF40;
-    FLOAT128 FltF41;
-    FLOAT128 FltF42;
-    FLOAT128 FltF43;
-    FLOAT128 FltF44;
-    FLOAT128 FltF45;
-    FLOAT128 FltF46;
-    FLOAT128 FltF47;
-    FLOAT128 FltF48;
-    FLOAT128 FltF49;
+   FLOAT128 FltF40;
+   FLOAT128 FltF41;
+   FLOAT128 FltF42;
+   FLOAT128 FltF43;
+   FLOAT128 FltF44;
+   FLOAT128 FltF45;
+   FLOAT128 FltF46;
+   FLOAT128 FltF47;
+   FLOAT128 FltF48;
+   FLOAT128 FltF49;
 
-    FLOAT128 FltF50;
-    FLOAT128 FltF51;
-    FLOAT128 FltF52;
-    FLOAT128 FltF53;
-    FLOAT128 FltF54;
-    FLOAT128 FltF55;
-    FLOAT128 FltF56;
-    FLOAT128 FltF57;
-    FLOAT128 FltF58;
-    FLOAT128 FltF59;
+   FLOAT128 FltF50;
+   FLOAT128 FltF51;
+   FLOAT128 FltF52;
+   FLOAT128 FltF53;
+   FLOAT128 FltF54;
+   FLOAT128 FltF55;
+   FLOAT128 FltF56;
+   FLOAT128 FltF57;
+   FLOAT128 FltF58;
+   FLOAT128 FltF59;
 
-    FLOAT128 FltF60;
-    FLOAT128 FltF61;
-    FLOAT128 FltF62;
-    FLOAT128 FltF63;
-    FLOAT128 FltF64;
-    FLOAT128 FltF65;
-    FLOAT128 FltF66;
-    FLOAT128 FltF67;
-    FLOAT128 FltF68;
-    FLOAT128 FltF69;
+   FLOAT128 FltF60;
+   FLOAT128 FltF61;
+   FLOAT128 FltF62;
+   FLOAT128 FltF63;
+   FLOAT128 FltF64;
+   FLOAT128 FltF65;
+   FLOAT128 FltF66;
+   FLOAT128 FltF67;
+   FLOAT128 FltF68;
+   FLOAT128 FltF69;
 
-    FLOAT128 FltF70;
-    FLOAT128 FltF71;
-    FLOAT128 FltF72;
-    FLOAT128 FltF73;
-    FLOAT128 FltF74;
-    FLOAT128 FltF75;
-    FLOAT128 FltF76;
-    FLOAT128 FltF77;
-    FLOAT128 FltF78;
-    FLOAT128 FltF79;
+   FLOAT128 FltF70;
+   FLOAT128 FltF71;
+   FLOAT128 FltF72;
+   FLOAT128 FltF73;
+   FLOAT128 FltF74;
+   FLOAT128 FltF75;
+   FLOAT128 FltF76;
+   FLOAT128 FltF77;
+   FLOAT128 FltF78;
+   FLOAT128 FltF79;
 
-    FLOAT128 FltF80;
-    FLOAT128 FltF81;
-    FLOAT128 FltF82;
-    FLOAT128 FltF83;
-    FLOAT128 FltF84;
-    FLOAT128 FltF85;
-    FLOAT128 FltF86;
-    FLOAT128 FltF87;
-    FLOAT128 FltF88;
-    FLOAT128 FltF89;
+   FLOAT128 FltF80;
+   FLOAT128 FltF81;
+   FLOAT128 FltF82;
+   FLOAT128 FltF83;
+   FLOAT128 FltF84;
+   FLOAT128 FltF85;
+   FLOAT128 FltF86;
+   FLOAT128 FltF87;
+   FLOAT128 FltF88;
+   FLOAT128 FltF89;
 
-    FLOAT128 FltF90;
-    FLOAT128 FltF91;
-    FLOAT128 FltF92;
-    FLOAT128 FltF93;
-    FLOAT128 FltF94;
-    FLOAT128 FltF95;
-    FLOAT128 FltF96;
-    FLOAT128 FltF97;
-    FLOAT128 FltF98;
-    FLOAT128 FltF99;
+   FLOAT128 FltF90;
+   FLOAT128 FltF91;
+   FLOAT128 FltF92;
+   FLOAT128 FltF93;
+   FLOAT128 FltF94;
+   FLOAT128 FltF95;
+   FLOAT128 FltF96;
+   FLOAT128 FltF97;
+   FLOAT128 FltF98;
+   FLOAT128 FltF99;
 
-    FLOAT128 FltF100;
-    FLOAT128 FltF101;
-    FLOAT128 FltF102;
-    FLOAT128 FltF103;
-    FLOAT128 FltF104;
-    FLOAT128 FltF105;
-    FLOAT128 FltF106;
-    FLOAT128 FltF107;
-    FLOAT128 FltF108;
-    FLOAT128 FltF109;
+   FLOAT128 FltF100;
+   FLOAT128 FltF101;
+   FLOAT128 FltF102;
+   FLOAT128 FltF103;
+   FLOAT128 FltF104;
+   FLOAT128 FltF105;
+   FLOAT128 FltF106;
+   FLOAT128 FltF107;
+   FLOAT128 FltF108;
+   FLOAT128 FltF109;
 
-    FLOAT128 FltF110;
-    FLOAT128 FltF111;
-    FLOAT128 FltF112;
-    FLOAT128 FltF113;
-    FLOAT128 FltF114;
-    FLOAT128 FltF115;
-    FLOAT128 FltF116;
-    FLOAT128 FltF117;
-    FLOAT128 FltF118;
-    FLOAT128 FltF119;
+   FLOAT128 FltF110;
+   FLOAT128 FltF111;
+   FLOAT128 FltF112;
+   FLOAT128 FltF113;
+   FLOAT128 FltF114;
+   FLOAT128 FltF115;
+   FLOAT128 FltF116;
+   FLOAT128 FltF117;
+   FLOAT128 FltF118;
+   FLOAT128 FltF119;
 
-    FLOAT128 FltF120;
-    FLOAT128 FltF121;
-    FLOAT128 FltF122;
-    FLOAT128 FltF123;
-    FLOAT128 FltF124;
-    FLOAT128 FltF125;
-    FLOAT128 FltF126;
-    FLOAT128 FltF127;
+   FLOAT128 FltF120;
+   FLOAT128 FltF121;
+   FLOAT128 FltF122;
+   FLOAT128 FltF123;
+   FLOAT128 FltF124;
+   FLOAT128 FltF125;
+   FLOAT128 FltF126;
+   FLOAT128 FltF127;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT | CONTEXT_CONTROL.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT | CONTEXT_CONTROL.
+   //
 
-    ULONGLONG StFPSR;                       // FP status
-    ULONGLONG StFSR;                        // x86 FP status (a copy of AR28)
-    ULONGLONG StFIR;                        // x86 FP status (a copy of AR29)
-    ULONGLONG StFDR;                        // x86 FP status (a copy of AR30)
+   ULONGLONG StFPSR;                        // FP status
+   ULONGLONG StFSR;                         // x86 FP status (a copy of AR28)
+   ULONGLONG StFIR;                         // x86 FP status (a copy of AR29)
+   ULONGLONG StFDR;                         // x86 FP status (a copy of AR30)
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, rp are part of the control context
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_INTEGER.
+   //
+   // N.B. The registers gp, sp, rp are part of the control context
+   //
 
-    ULONGLONG IntGp;                        // global pointer (r1) - temporary (volatile)
-    ULONGLONG IntT0;                        // integer registers (r2-r3) - temporary (volatile)
-    ULONGLONG IntT1;
-    ULONGLONG IntS0;                        // integer registers (r4-r7) - saved (preserved)
-    ULONGLONG IntS1;
-    ULONGLONG IntS2;
-    ULONGLONG IntS3;
-    ULONGLONG IntV0;                        // return value (r8) - temporary (volatile)
-    ULONGLONG IntT2;                        // integer registers (r9-r11) - temporary (volatile)
-    ULONGLONG IntT3;
-    ULONGLONG IntT4;
-    ULONGLONG IntSp;                        // stack pointer (r12) - special
-    ULONGLONG IntTeb;                       // teb (r13) - special
-    ULONGLONG IntT5;                        // integer registers (r14-r31) - temporary (volatile)
-    ULONGLONG IntT6;
-    ULONGLONG IntT7;
-    ULONGLONG IntT8;
-    ULONGLONG IntT9;
-    ULONGLONG IntT10;
-    ULONGLONG IntT11;
-    ULONGLONG IntT12;
-    ULONGLONG IntT13;
-    ULONGLONG IntT14;
-    ULONGLONG IntT15;
-    ULONGLONG IntT16;
-    ULONGLONG IntT17;
-    ULONGLONG IntT18;
-    ULONGLONG IntT19;
-    ULONGLONG IntT20;
-    ULONGLONG IntT21;
-    ULONGLONG IntT22;
+   ULONGLONG IntGp;                         // global pointer (r1) - temporary (volatile)
+   ULONGLONG IntT0;                         // integer registers (r2-r3) - temporary (volatile)
+   ULONGLONG IntT1;
+   ULONGLONG IntS0;                         // integer registers (r4-r7) - saved (preserved)
+   ULONGLONG IntS1;
+   ULONGLONG IntS2;
+   ULONGLONG IntS3;
+   ULONGLONG IntV0;                         // return value (r8) - temporary (volatile)
+   ULONGLONG IntT2;                         // integer registers (r9-r11) - temporary (volatile)
+   ULONGLONG IntT3;
+   ULONGLONG IntT4;
+   ULONGLONG IntSp;                         // stack pointer (r12) - special
+   ULONGLONG IntTeb;                        // teb (r13) - special
+   ULONGLONG IntT5;                         // integer registers (r14-r31) - temporary (volatile)
+   ULONGLONG IntT6;
+   ULONGLONG IntT7;
+   ULONGLONG IntT8;
+   ULONGLONG IntT9;
+   ULONGLONG IntT10;
+   ULONGLONG IntT11;
+   ULONGLONG IntT12;
+   ULONGLONG IntT13;
+   ULONGLONG IntT14;
+   ULONGLONG IntT15;
+   ULONGLONG IntT16;
+   ULONGLONG IntT17;
+   ULONGLONG IntT18;
+   ULONGLONG IntT19;
+   ULONGLONG IntT20;
+   ULONGLONG IntT21;
+   ULONGLONG IntT22;
 
-    ULONGLONG IntNats;                      // Nat bits for general registers
+   ULONGLONG IntNats;                       // Nat bits for general registers
                                             // r1-r31 in bit positions 1 to 31.
-    ULONGLONG Preds;                        // predicates - saved (preserved)
+   ULONGLONG Preds;                         // predicates - saved (preserved)
 
-    ULONGLONG BrRp;                         // return pointer (b0) - saved (preserved)
-    ULONGLONG BrS0;                         // branch registers (b1-b5) - saved (preserved)
-    ULONGLONG BrS1;
-    ULONGLONG BrS2;
-    ULONGLONG BrS3;
-    ULONGLONG BrS4;
-    ULONGLONG BrT0;                         // branch registers (b6-b7) - temporary (volatile)
-    ULONGLONG BrT1;
-    // iA32 related Interger registers
-    ULONGLONG SegCSD;                       // iA32 CSDescriptor (Ar25)
-    ULONGLONG SegSSD;                       // iA32 SSDescriptor (Ar26)
+   ULONGLONG BrRp;                          // return pointer (b0) - saved (preserved)
+   ULONGLONG BrS0;                          // branch registers (b1-b5) - saved (preserved)
+   ULONGLONG BrS1;
+   ULONGLONG BrS2;
+   ULONGLONG BrS3;
+   ULONGLONG BrS4;
+   ULONGLONG BrT0;                          // branch registers (b6-b7) - temporary (volatile)
+   ULONGLONG BrT1;
+   // iA32 related Interger registers
+   ULONGLONG SegCSD;                        // iA32 CSDescriptor (Ar25)
+   ULONGLONG SegSSD;                        // iA32 SSDescriptor (Ar26)
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+   //
+   // This section is specified/returned if the ContextFlags word contains
+   // the flag CONTEXT_CONTROL.
+   //
 
-    // Other application registers
-    ULONGLONG ApUNAT;                       // User Nat collection register - saved (preserved)
-    ULONGLONG ApLC;                         // Loop counter register - saved (preserved)
-    ULONGLONG ApEC;                         // Epilog counter register - saved (preserved)
-    ULONGLONG ApCCV;                        // CMPXCHG value register - temporary (volatile)
-    ULONGLONG ApDCR;                        // Default control register (TBD)
+   // Other application registers
+   ULONGLONG ApUNAT;                        // User Nat collection register - saved (preserved)
+   ULONGLONG ApLC;                          // Loop counter register - saved (preserved)
+   ULONGLONG ApEC;                          // Epilog counter register - saved (preserved)
+   ULONGLONG ApCCV;                         // CMPXCHG value register - temporary (volatile)
+   ULONGLONG ApDCR;                         // Default control register (TBD)
 
-    // Register stack info
-    ULONGLONG RsPFS;                        // Previous function state - saved (preserved)
-    ULONGLONG RsBSP;                        // Backing store pointer - saved (preserved)
-    ULONGLONG RsBSPSTORE;                   // BSP Store - saved (preserved)
-    ULONGLONG RsRSC;                        // RSE configuration - temporary (volatile)
-    ULONGLONG RsRNAT;                       // RSE Nat collection register - saved (preserved)
-    // iA32 related control registers
-    ULONGLONG Eflag;                        // Eflag  copy of Ar24
-    ULONGLONG Cflag;                        // Cr0+Cr4 copy of Ar27
+   // Register stack info
+   ULONGLONG RsPFS;                         // Previous function state - saved (preserved)
+   ULONGLONG RsBSP;                         // Backing store pointer - saved (preserved)
+   ULONGLONG RsBSPSTORE;                    // BSP Store - saved (preserved)
+   ULONGLONG RsRSC;                         // RSE configuration - temporary (volatile)
+   ULONGLONG RsRNAT;                        // RSE Nat collection register - saved (preserved)
+   // iA32 related control registers
+   ULONGLONG Eflag;                         // Eflag  copy of Ar24
+   ULONGLONG Cflag;                         // Cr0+Cr4 copy of Ar27
 
-    // Trap Status Information
-    ULONGLONG StIPSR;                       // Interruption Processor Status
-    ULONGLONG StIIP;                        // Interruption IP
-    ULONGLONG StIFS;                        // Interruption Function State
+   // Trap Status Information
+   ULONGLONG StIPSR;                        // Interruption Processor Status
+   ULONGLONG StIIP;                         // Interruption IP
+   ULONGLONG StIFS;                         // Interruption Function State
 } CONTEXT, *PCONTEXT;
 
 //BUGBUG what happens with remote debugging.
@@ -2932,9 +2942,9 @@ typedef struct _CONTEXT {
 //BUGBUG compiled with non alignment.  This is a problem because the current
 //BUGBUG MS5.0 compiler does not support this pragma623
 
-#ifdef _M_IA64
-#pragma force_align _CONTEXT 16
-#endif  // _IA64_
+   #ifdef _M_IA64
+      #pragma force_align _CONTEXT 16
+   #endif // _IA64_
 
 //
 // Followings are the data structures that required to support Legacy x86
@@ -2945,39 +2955,39 @@ typedef struct _CONTEXT {
 //  Define the size of the 80387 save area, which is in the context frame.
 //
 
-#define SIZE_OF_80387_REGISTERS      80
+   #define SIZE_OF_80387_REGISTERS      80
 
 //
 // The following flags control the contents of the CONTEXT structure.
 //
 
-#if !defined(RC_INVOKED)
+   #if !defined(RC_INVOKED)
 
-#define CONTEXT_i386    0x00010000    // this assumes that i386 and
-#define CONTEXT_i486    0x00010000    // i486 have identical context records
-#define CONTEXT_X86     0x00010000    // X86 have identical context records
+      #define CONTEXT_i386    0x00010000 // this assumes that i386 and
+      #define CONTEXT_i486    0x00010000 // i486 have identical context records
+      #define CONTEXT_X86     0x00010000 // X86 have identical context records
 
-#define CONTEXT86_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
-#define CONTEXT86_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
-#define CONTEXT86_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
-#define CONTEXT86_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L) // 387 state
-#define CONTEXT86_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
+      #define CONTEXT86_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
+      #define CONTEXT86_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
+      #define CONTEXT86_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
+      #define CONTEXT86_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L) // 387 state
+      #define CONTEXT86_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
 
-#define CONTEXT86_FULL (CONTEXT86_CONTROL | CONTEXT86_INTEGER |\
-                      CONTEXT86_SEGMENTS)    // context corresponding to set flags will be returned.
+      #define CONTEXT86_FULL (CONTEXT86_CONTROL | CONTEXT86_INTEGER | \
+                              CONTEXT86_SEGMENTS) // context corresponding to set flags will be returned.
 
-#endif // !defined(RC_INVOKED)
+   #endif // !defined(RC_INVOKED)
 
 typedef struct _FLOATING_SAVE_AREA {
-    DWORD   ControlWord;
-    DWORD   StatusWord;
-    DWORD   TagWord;
-    DWORD   ErrorOffset;
-    DWORD   ErrorSelector;
-    DWORD   DataOffset;
-    DWORD   DataSelector;
-    BYTE    RegisterArea[SIZE_OF_80387_REGISTERS];
-    DWORD   Cr0NpxState;
+   DWORD ControlWord;
+   DWORD StatusWord;
+   DWORD TagWord;
+   DWORD ErrorOffset;
+   DWORD ErrorSelector;
+   DWORD DataOffset;
+   DWORD DataSelector;
+   BYTE RegisterArea[SIZE_OF_80387_REGISTERS];
+   DWORD Cr0NpxState;
 } FLOATING_SAVE_AREA;
 
 typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
@@ -2994,117 +3004,117 @@ typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
 
 typedef struct _CONTEXT86 {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a threads context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+   //
+   // The flags values within this flag control the contents of
+   // a CONTEXT record.
+   //
+   // If the context record is used as an input parameter, then
+   // for each portion of the context record controlled by a flag
+   // whose value is set, it is assumed that that portion of the
+   // context record contains valid context. If the context record
+   // is being used to modify a threads context, then only that
+   // portion of the threads context will be modified.
+   //
+   // If the context record is used as an IN OUT parameter to capture
+   // the context of a thread, then only those portions of the thread's
+   // context corresponding to set flags will be returned.
+   //
+   // The context record is never used as an OUT only parameter.
+   //
 
-    DWORD ContextFlags;
+   DWORD ContextFlags;
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
+   //
+   // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
+   // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
+   // included in CONTEXT_FULL.
+   //
 
-    DWORD   Dr0;
-    DWORD   Dr1;
-    DWORD   Dr2;
-    DWORD   Dr3;
-    DWORD   Dr6;
-    DWORD   Dr7;
+   DWORD Dr0;
+   DWORD Dr1;
+   DWORD Dr2;
+   DWORD Dr3;
+   DWORD Dr6;
+   DWORD Dr7;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
+   //
 
-    FLOATING_SAVE_AREA FloatSave;
+   FLOATING_SAVE_AREA FloatSave;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_SEGMENTS.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_SEGMENTS.
+   //
 
-    DWORD   SegGs;
-    DWORD   SegFs;
-    DWORD   SegEs;
-    DWORD   SegDs;
+   DWORD SegGs;
+   DWORD SegFs;
+   DWORD SegEs;
+   DWORD SegDs;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_INTEGER.
-    //
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_INTEGER.
+   //
+   //
 
-    DWORD   Edi;
-    DWORD   Esi;
-    DWORD   Ebx;
-    DWORD   Edx;
-    DWORD   Ecx;
-    DWORD   Eax;
+   DWORD Edi;
+   DWORD Esi;
+   DWORD Ebx;
+   DWORD Edx;
+   DWORD Ecx;
+   DWORD Eax;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_CONTROL.
-    //
+   //
+   // This section is specified/returned if the
+   // ContextFlags word contians the flag CONTEXT_CONTROL.
+   //
 
-    DWORD   Ebp;
-    DWORD   Eip;
-    DWORD   SegCs;              // MUST BE SANITIZED
-    DWORD   EFlags;             // MUST BE SANITIZED
-    DWORD   Esp;
-    DWORD   SegSs;
+   DWORD Ebp;
+   DWORD Eip;
+   DWORD SegCs;                 // MUST BE SANITIZED
+   DWORD EFlags;                // MUST BE SANITIZED
+   DWORD Esp;
+   DWORD SegSs;
 
 } CONTEXT86;
 
 
-#ifndef _LDT_ENTRY_DEFINED
-#define _LDT_ENTRY_DEFINED
+   #ifndef _LDT_ENTRY_DEFINED
+      #define _LDT_ENTRY_DEFINED
 
 //
 //  LDT descriptor entry
 //
 
 typedef struct _LDT_ENTRY {
-    WORD    LimitLow;
-    WORD    BaseLow;
-    union {
-        struct {
-            BYTE    BaseMid;
-            BYTE    Flags1;     // Declare as bytes to avoid alignment
-            BYTE    Flags2;     // Problems.
-            BYTE    BaseHi;
-        } Bytes;
-        struct {
-            DWORD   BaseMid : 8;
-            DWORD   Type : 5;
-            DWORD   Dpl : 2;
-            DWORD   Pres : 1;
-            DWORD   LimitHi : 4;
-            DWORD   Sys : 1;
-            DWORD   Reserved_0 : 1;
-            DWORD   Default_Big : 1;
-            DWORD   Granularity : 1;
-            DWORD   BaseHi : 8;
-        } Bits;
-    } HighWord;
+   WORD LimitLow;
+   WORD BaseLow;
+   union {
+      struct {
+         BYTE BaseMid;
+         BYTE Flags1;           // Declare as bytes to avoid alignment
+         BYTE Flags2;           // Problems.
+         BYTE BaseHi;
+      } Bytes;
+      struct {
+         DWORD BaseMid : 8;
+         DWORD Type : 5;
+         DWORD Dpl : 2;
+         DWORD Pres : 1;
+         DWORD LimitHi : 4;
+         DWORD Sys : 1;
+         DWORD Reserved_0 : 1;
+         DWORD Default_Big : 1;
+         DWORD Granularity : 1;
+         DWORD BaseHi : 8;
+      } Bits;
+   } HighWord;
 } LDT_ENTRY, *PLDT_ENTRY;
 
-#endif // _LDT_ENTRY_DEFINED
+   #endif // _LDT_ENTRY_DEFINED
 
 
 //
@@ -3126,25 +3136,25 @@ typedef struct _PLABEL_DESCRIPTOR {
 // Until the VC 6.0 header files get checked in always define CRTAPI.
 //
 
-#ifndef _CRTAPI1
-#define _CRTAPI1 __cdecl
-#endif
+   #ifndef _CRTAPI1
+      #define _CRTAPI1 __cdecl
+   #endif
 
 
 /* Define _CRTAPI2 (for compatibility with the NT SDK) */
 
-#ifndef _CRTAPI2
-#define _CRTAPI2 __cdecl
-#endif
+   #ifndef _CRTAPI2
+      #define _CRTAPI2 __cdecl
+   #endif
 
 
 
 VOID
 __jump_unwind (
-    ULONGLONG TargetMsFrame,
-    ULONGLONG TargetBsFrame,
-    ULONGLONG TargetPc
-    );
+   ULONGLONG TargetMsFrame,
+   ULONGLONG TargetBsFrame,
+   ULONGLONG TargetPc
+   );
 
 #endif // _IA64_
 
@@ -3156,13 +3166,13 @@ __jump_unwind (
 //
 
 typedef struct _EXCEPTION_RECORD {
-    DWORD    ExceptionCode;
-    DWORD ExceptionFlags;
-    struct _EXCEPTION_RECORD *ExceptionRecord;
-    PVOID ExceptionAddress;
-    DWORD NumberParameters;
-    UINT_PTR ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
-    } EXCEPTION_RECORD;
+   DWORD ExceptionCode;
+   DWORD ExceptionFlags;
+   struct _EXCEPTION_RECORD *ExceptionRecord;
+   PVOID ExceptionAddress;
+   DWORD NumberParameters;
+   UINT_PTR ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
+} EXCEPTION_RECORD;
 
 typedef EXCEPTION_RECORD *PEXCEPTION_RECORD;
 
@@ -3171,12 +3181,12 @@ typedef EXCEPTION_RECORD *PEXCEPTION_RECORD;
 //
 
 typedef struct _EXCEPTION_POINTERS {
-    PEXCEPTION_RECORD ExceptionRecord;
-    PCONTEXT ContextRecord;
+   PEXCEPTION_RECORD ExceptionRecord;
+   PCONTEXT ContextRecord;
 } EXCEPTION_POINTERS, *PEXCEPTION_POINTERS;
-typedef PVOID PACCESS_TOKEN;            
-typedef PVOID PSECURITY_DESCRIPTOR;     
-typedef PVOID PSID;     
+typedef PVOID PACCESS_TOKEN;
+typedef PVOID PSECURITY_DESCRIPTOR;
+typedef PVOID PSID;
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
 //                             ACCESS MASK                            //
@@ -3275,10 +3285,10 @@ typedef ACCESS_MASK *PACCESS_MASK;
 //
 
 typedef struct _GENERIC_MAPPING {
-    ACCESS_MASK GenericRead;
-    ACCESS_MASK GenericWrite;
-    ACCESS_MASK GenericExecute;
-    ACCESS_MASK GenericAll;
+   ACCESS_MASK GenericRead;
+   ACCESS_MASK GenericWrite;
+   ACCESS_MASK GenericExecute;
+   ACCESS_MASK GenericAll;
 } GENERIC_MAPPING;
 typedef GENERIC_MAPPING *PGENERIC_MAPPING;
 
@@ -3296,9 +3306,9 @@ typedef GENERIC_MAPPING *PGENERIC_MAPPING;
 #include <pshpack4.h>
 
 typedef struct _LUID_AND_ATTRIBUTES {
-    LUID Luid;
-    DWORD Attributes;
-    } LUID_AND_ATTRIBUTES, * PLUID_AND_ATTRIBUTES;
+   LUID Luid;
+   DWORD Attributes;
+} LUID_AND_ATTRIBUTES, * PLUID_AND_ATTRIBUTES;
 typedef LUID_AND_ATTRIBUTES LUID_AND_ATTRIBUTES_ARRAY[ANYSIZE_ARRAY];
 typedef LUID_AND_ATTRIBUTES_ARRAY *PLUID_AND_ATTRIBUTES_ARRAY;
 
@@ -3336,24 +3346,24 @@ typedef LUID_AND_ATTRIBUTES_ARRAY *PLUID_AND_ATTRIBUTES_ARRAY;
 // begin_ntifs
 
 #ifndef SID_IDENTIFIER_AUTHORITY_DEFINED
-#define SID_IDENTIFIER_AUTHORITY_DEFINED
+   #define SID_IDENTIFIER_AUTHORITY_DEFINED
 typedef struct _SID_IDENTIFIER_AUTHORITY {
-    BYTE  Value[6];
+   BYTE Value[6];
 } SID_IDENTIFIER_AUTHORITY, *PSID_IDENTIFIER_AUTHORITY;
 #endif
 
 
 #ifndef SID_DEFINED
-#define SID_DEFINED
+   #define SID_DEFINED
 typedef struct _SID {
-   BYTE  Revision;
-   BYTE  SubAuthorityCount;
+   BYTE Revision;
+   BYTE SubAuthorityCount;
    SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
-#ifdef MIDL_PASS
+   #ifdef MIDL_PASS
    [size_is(SubAuthorityCount)] DWORD SubAuthority[*];
-#else // MIDL_PASS
+   #else // MIDL_PASS
    DWORD SubAuthority[ANYSIZE_ARRAY];
-#endif // MIDL_PASS
+   #endif // MIDL_PASS
 } SID, *PISID;
 #endif
 
@@ -3363,27 +3373,27 @@ typedef struct _SID {
                                                 // in a future release.
 
 typedef enum _SID_NAME_USE {
-    SidTypeUser = 1,
-    SidTypeGroup,
-    SidTypeDomain,
-    SidTypeAlias,
-    SidTypeWellKnownGroup,
-    SidTypeDeletedAccount,
-    SidTypeInvalid,
-    SidTypeUnknown,
-    SidTypeComputer
+   SidTypeUser = 1,
+   SidTypeGroup,
+   SidTypeDomain,
+   SidTypeAlias,
+   SidTypeWellKnownGroup,
+   SidTypeDeletedAccount,
+   SidTypeInvalid,
+   SidTypeUnknown,
+   SidTypeComputer
 } SID_NAME_USE, *PSID_NAME_USE;
 
 typedef struct _SID_AND_ATTRIBUTES {
-    PSID Sid;
-    DWORD Attributes;
-    } SID_AND_ATTRIBUTES, * PSID_AND_ATTRIBUTES;
+   PSID Sid;
+   DWORD Attributes;
+} SID_AND_ATTRIBUTES, * PSID_AND_ATTRIBUTES;
 
 typedef SID_AND_ATTRIBUTES SID_AND_ATTRIBUTES_ARRAY[ANYSIZE_ARRAY];
 typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
-
+
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // Universal well-known SIDs                                               //
@@ -3471,7 +3481,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-
+
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // well-known domain relative sub-authority values (RIDs)...               //
@@ -3550,7 +3560,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 // (None yet defined.)
 
 
-
+
 
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
@@ -3596,11 +3606,11 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define MAX_ACL_REVISION ACL_REVISION4
 
 typedef struct _ACL {
-    BYTE  AclRevision;
-    BYTE  Sbz1;
-    WORD   AclSize;
-    WORD   AceCount;
-    WORD   Sbz2;
+   BYTE AclRevision;
+   BYTE Sbz1;
+   WORD AclSize;
+   WORD AceCount;
+   WORD Sbz2;
 } ACL;
 typedef ACL *PACL;
 
@@ -3625,9 +3635,9 @@ typedef ACL *PACL;
 //  AceFlags are the Ace flags for audit and inheritance, defined shortly.
 
 typedef struct _ACE_HEADER {
-    BYTE  AceType;
-    BYTE  AceFlags;
-    WORD   AceSize;
+   BYTE AceType;
+   BYTE AceFlags;
+   WORD AceSize;
 } ACE_HEADER;
 typedef ACE_HEADER *PACE_HEADER;
 
@@ -3723,31 +3733,31 @@ typedef ACE_HEADER *PACE_HEADER;
 
 
 typedef struct _ACCESS_ALLOWED_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD SidStart;
 } ACCESS_ALLOWED_ACE;
 
 typedef ACCESS_ALLOWED_ACE *PACCESS_ALLOWED_ACE;
 
 typedef struct _ACCESS_DENIED_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD SidStart;
 } ACCESS_DENIED_ACE;
 typedef ACCESS_DENIED_ACE *PACCESS_DENIED_ACE;
 
 typedef struct _SYSTEM_AUDIT_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD SidStart;
 } SYSTEM_AUDIT_ACE;
 typedef SYSTEM_AUDIT_ACE *PSYSTEM_AUDIT_ACE;
 
 typedef struct _SYSTEM_ALARM_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD SidStart;
 } SYSTEM_ALARM_ACE;
 typedef SYSTEM_ALARM_ACE *PSYSTEM_ALARM_ACE;
 
@@ -3755,39 +3765,39 @@ typedef SYSTEM_ALARM_ACE *PSYSTEM_ALARM_ACE;
 
 
 typedef struct _ACCESS_ALLOWED_OBJECT_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD Flags;
-    GUID ObjectType;
-    GUID InheritedObjectType;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD Flags;
+   GUID ObjectType;
+   GUID InheritedObjectType;
+   DWORD SidStart;
 } ACCESS_ALLOWED_OBJECT_ACE, *PACCESS_ALLOWED_OBJECT_ACE;
 
 typedef struct _ACCESS_DENIED_OBJECT_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD Flags;
-    GUID ObjectType;
-    GUID InheritedObjectType;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD Flags;
+   GUID ObjectType;
+   GUID InheritedObjectType;
+   DWORD SidStart;
 } ACCESS_DENIED_OBJECT_ACE, *PACCESS_DENIED_OBJECT_ACE;
 
 typedef struct _SYSTEM_AUDIT_OBJECT_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD Flags;
-    GUID ObjectType;
-    GUID InheritedObjectType;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD Flags;
+   GUID ObjectType;
+   GUID InheritedObjectType;
+   DWORD SidStart;
 } SYSTEM_AUDIT_OBJECT_ACE, *PSYSTEM_AUDIT_OBJECT_ACE;
 
 typedef struct _SYSTEM_ALARM_OBJECT_ACE {
-    ACE_HEADER Header;
-    ACCESS_MASK Mask;
-    DWORD Flags;
-    GUID ObjectType;
-    GUID InheritedObjectType;
-    DWORD SidStart;
+   ACE_HEADER Header;
+   ACCESS_MASK Mask;
+   DWORD Flags;
+   GUID ObjectType;
+   GUID InheritedObjectType;
+   DWORD SidStart;
 } SYSTEM_ALARM_OBJECT_ACE, *PSYSTEM_ALARM_OBJECT_ACE;
 
 //
@@ -3797,7 +3807,7 @@ typedef struct _SYSTEM_ALARM_OBJECT_ACE {
 #define ACE_OBJECT_TYPE_PRESENT           0x1
 #define ACE_INHERITED_OBJECT_TYPE_PRESENT 0x2
 
-
+
 //
 //  The following declarations are used for setting and querying information
 //  about and ACL.  First are the various information classes available to
@@ -3805,8 +3815,8 @@ typedef struct _SYSTEM_ALARM_OBJECT_ACE {
 //
 
 typedef enum _ACL_INFORMATION_CLASS {
-    AclRevisionInformation = 1,
-    AclSizeInformation
+   AclRevisionInformation = 1,
+   AclSizeInformation
 } ACL_INFORMATION_CLASS;
 
 //
@@ -3815,7 +3825,7 @@ typedef enum _ACL_INFORMATION_CLASS {
 //
 
 typedef struct _ACL_REVISION_INFORMATION {
-    DWORD AclRevision;
+   DWORD AclRevision;
 } ACL_REVISION_INFORMATION;
 typedef ACL_REVISION_INFORMATION *PACL_REVISION_INFORMATION;
 
@@ -3824,9 +3834,9 @@ typedef ACL_REVISION_INFORMATION *PACL_REVISION_INFORMATION;
 //
 
 typedef struct _ACL_SIZE_INFORMATION {
-    DWORD AceCount;
-    DWORD AclBytesInUse;
-    DWORD AclBytesFree;
+   DWORD AceCount;
+   DWORD AclBytesInUse;
+   DWORD AclBytesFree;
 } ACL_SIZE_INFORMATION;
 typedef ACL_SIZE_INFORMATION *PACL_SIZE_INFORMATION;
 
@@ -3855,7 +3865,7 @@ typedef ACL_SIZE_INFORMATION *PACL_SIZE_INFORMATION;
 #define SECURITY_DESCRIPTOR_MIN_LENGTH   (sizeof(SECURITY_DESCRIPTOR))
 
 
-typedef WORD   SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
+typedef WORD SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
 
 #define SE_OWNER_DEFAULTED               (0x0001)
 #define SE_GROUP_DEFAULTED               (0x0002)
@@ -3945,25 +3955,25 @@ typedef WORD   SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
 //
 
 typedef struct _SECURITY_DESCRIPTOR_RELATIVE {
-    BYTE  Revision;
-    BYTE  Sbz1;
-    SECURITY_DESCRIPTOR_CONTROL Control;
-    DWORD Owner;
-    DWORD Group;
-    DWORD Sacl;
-    DWORD Dacl;
-    } SECURITY_DESCRIPTOR_RELATIVE, *PISECURITY_DESCRIPTOR_RELATIVE;
+   BYTE Revision;
+   BYTE Sbz1;
+   SECURITY_DESCRIPTOR_CONTROL Control;
+   DWORD Owner;
+   DWORD Group;
+   DWORD Sacl;
+   DWORD Dacl;
+} SECURITY_DESCRIPTOR_RELATIVE, *PISECURITY_DESCRIPTOR_RELATIVE;
 
 typedef struct _SECURITY_DESCRIPTOR {
-   BYTE  Revision;
-   BYTE  Sbz1;
+   BYTE Revision;
+   BYTE Sbz1;
    SECURITY_DESCRIPTOR_CONTROL Control;
    PSID Owner;
    PSID Group;
    PACL Sacl;
    PACL Dacl;
 
-   } SECURITY_DESCRIPTOR, *PISECURITY_DESCRIPTOR;
+} SECURITY_DESCRIPTOR, *PISECURITY_DESCRIPTOR;
 
 // end_ntifs
 
@@ -4014,9 +4024,9 @@ typedef struct _SECURITY_DESCRIPTOR {
 ////////////////////////////////////////////////////////////////////////
 
 typedef struct _OBJECT_TYPE_LIST {
-    WORD   Level;
-    WORD   Sbz;
-    GUID *ObjectType;
+   WORD Level;
+   WORD Sbz;
+   GUID *ObjectType;
 } OBJECT_TYPE_LIST, *POBJECT_TYPE_LIST;
 
 //
@@ -4034,8 +4044,8 @@ typedef struct _OBJECT_TYPE_LIST {
 //
 
 typedef enum _AUDIT_EVENT_TYPE {
-    AuditEventObjectAccess,
-    AuditEventDirectoryServiceAccess
+   AuditEventObjectAccess,
+   AuditEventDirectoryServiceAccess
 } AUDIT_EVENT_TYPE, *PAUDIT_EVENT_TYPE;
 
 #define AUDIT_ALLOW_NO_PRIVILEGE 0x1
@@ -4083,10 +4093,10 @@ typedef enum _AUDIT_EVENT_TYPE {
 //
 
 typedef struct _PRIVILEGE_SET {
-    DWORD PrivilegeCount;
-    DWORD Control;
-    LUID_AND_ATTRIBUTES Privilege[ANYSIZE_ARRAY];
-    } PRIVILEGE_SET, * PPRIVILEGE_SET;
+   DWORD PrivilegeCount;
+   DWORD Control;
+   LUID_AND_ATTRIBUTES Privilege[ANYSIZE_ARRAY];
+} PRIVILEGE_SET, * PPRIVILEGE_SET;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -4138,11 +4148,11 @@ typedef struct _PRIVILEGE_SET {
 //
 
 typedef enum _SECURITY_IMPERSONATION_LEVEL {
-    SecurityAnonymous,
-    SecurityIdentification,
-    SecurityImpersonation,
-    SecurityDelegation
-    } SECURITY_IMPERSONATION_LEVEL, * PSECURITY_IMPERSONATION_LEVEL;
+   SecurityAnonymous,
+   SecurityIdentification,
+   SecurityImpersonation,
+   SecurityDelegation
+} SECURITY_IMPERSONATION_LEVEL, * PSECURITY_IMPERSONATION_LEVEL;
 
 #define SECURITY_MAX_IMPERSONATION_LEVEL SecurityDelegation
 
@@ -4171,25 +4181,25 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 #define TOKEN_ADJUST_DEFAULT    (0x0080)
 #define TOKEN_ADJUST_SESSIONID  (0x0100)
 
-#define TOKEN_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED  |\
-                          TOKEN_ASSIGN_PRIMARY      |\
-                          TOKEN_DUPLICATE           |\
-                          TOKEN_IMPERSONATE         |\
-                          TOKEN_QUERY               |\
-                          TOKEN_QUERY_SOURCE        |\
-                          TOKEN_ADJUST_PRIVILEGES   |\
-                          TOKEN_ADJUST_GROUPS       |\
-                          TOKEN_ADJUST_SESSIONID    |\
+#define TOKEN_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED  | \
+                          TOKEN_ASSIGN_PRIMARY      | \
+                          TOKEN_DUPLICATE           | \
+                          TOKEN_IMPERSONATE         | \
+                          TOKEN_QUERY               | \
+                          TOKEN_QUERY_SOURCE        | \
+                          TOKEN_ADJUST_PRIVILEGES   | \
+                          TOKEN_ADJUST_GROUPS       | \
+                          TOKEN_ADJUST_SESSIONID    | \
                           TOKEN_ADJUST_DEFAULT)
 
 
-#define TOKEN_READ       (STANDARD_RIGHTS_READ      |\
+#define TOKEN_READ       (STANDARD_RIGHTS_READ      | \
                           TOKEN_QUERY)
 
 
-#define TOKEN_WRITE      (STANDARD_RIGHTS_WRITE     |\
-                          TOKEN_ADJUST_PRIVILEGES   |\
-                          TOKEN_ADJUST_GROUPS       |\
+#define TOKEN_WRITE      (STANDARD_RIGHTS_WRITE     | \
+                          TOKEN_ADJUST_PRIVILEGES   | \
+                          TOKEN_ADJUST_GROUPS       | \
                           TOKEN_ADJUST_DEFAULT)
 
 #define TOKEN_EXECUTE    (STANDARD_RIGHTS_EXECUTE)
@@ -4201,9 +4211,9 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 //
 
 typedef enum _TOKEN_TYPE {
-    TokenPrimary = 1,
-    TokenImpersonation
-    } TOKEN_TYPE;
+   TokenPrimary = 1,
+   TokenImpersonation
+} TOKEN_TYPE;
 typedef TOKEN_TYPE *PTOKEN_TYPE;
 
 
@@ -4213,18 +4223,18 @@ typedef TOKEN_TYPE *PTOKEN_TYPE;
 
 
 typedef enum _TOKEN_INFORMATION_CLASS {
-    TokenUser = 1,
-    TokenGroups,
-    TokenPrivileges,
-    TokenOwner,
-    TokenPrimaryGroup,
-    TokenDefaultDacl,
-    TokenSource,
-    TokenType,
-    TokenImpersonationLevel,
-    TokenStatistics,
-    TokenRestrictedSids,
-    TokenSessionId
+   TokenUser = 1,
+   TokenGroups,
+   TokenPrivileges,
+   TokenOwner,
+   TokenPrimaryGroup,
+   TokenDefaultDacl,
+   TokenSource,
+   TokenType,
+   TokenImpersonationLevel,
+   TokenStatistics,
+   TokenRestrictedSids,
+   TokenSessionId
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
 
 //
@@ -4233,33 +4243,33 @@ typedef enum _TOKEN_INFORMATION_CLASS {
 
 
 typedef struct _TOKEN_USER {
-    SID_AND_ATTRIBUTES User;
+   SID_AND_ATTRIBUTES User;
 } TOKEN_USER, *PTOKEN_USER;
 
 typedef struct _TOKEN_GROUPS {
-    DWORD GroupCount;
-    SID_AND_ATTRIBUTES Groups[ANYSIZE_ARRAY];
+   DWORD GroupCount;
+   SID_AND_ATTRIBUTES Groups[ANYSIZE_ARRAY];
 } TOKEN_GROUPS, *PTOKEN_GROUPS;
 
 
 typedef struct _TOKEN_PRIVILEGES {
-    DWORD PrivilegeCount;
-    LUID_AND_ATTRIBUTES Privileges[ANYSIZE_ARRAY];
+   DWORD PrivilegeCount;
+   LUID_AND_ATTRIBUTES Privileges[ANYSIZE_ARRAY];
 } TOKEN_PRIVILEGES, *PTOKEN_PRIVILEGES;
 
 
 typedef struct _TOKEN_OWNER {
-    PSID Owner;
+   PSID Owner;
 } TOKEN_OWNER, *PTOKEN_OWNER;
 
 
 typedef struct _TOKEN_PRIMARY_GROUP {
-    PSID PrimaryGroup;
+   PSID PrimaryGroup;
 } TOKEN_PRIMARY_GROUP, *PTOKEN_PRIMARY_GROUP;
 
 
 typedef struct _TOKEN_DEFAULT_DACL {
-    PACL DefaultDacl;
+   PACL DefaultDacl;
 } TOKEN_DEFAULT_DACL, *PTOKEN_DEFAULT_DACL;
 
 
@@ -4267,32 +4277,32 @@ typedef struct _TOKEN_DEFAULT_DACL {
 #define TOKEN_SOURCE_LENGTH 8
 
 typedef struct _TOKEN_SOURCE {
-    CHAR SourceName[TOKEN_SOURCE_LENGTH];
-    LUID SourceIdentifier;
+   CHAR SourceName[TOKEN_SOURCE_LENGTH];
+   LUID SourceIdentifier;
 } TOKEN_SOURCE, *PTOKEN_SOURCE;
 
 
 typedef struct _TOKEN_STATISTICS {
-    LUID TokenId;
-    LUID AuthenticationId;
-    LARGE_INTEGER ExpirationTime;
-    TOKEN_TYPE TokenType;
-    SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
-    DWORD DynamicCharged;
-    DWORD DynamicAvailable;
-    DWORD GroupCount;
-    DWORD PrivilegeCount;
-    LUID ModifiedId;
+   LUID TokenId;
+   LUID AuthenticationId;
+   LARGE_INTEGER ExpirationTime;
+   TOKEN_TYPE TokenType;
+   SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
+   DWORD DynamicCharged;
+   DWORD DynamicAvailable;
+   DWORD GroupCount;
+   DWORD PrivilegeCount;
+   LUID ModifiedId;
 } TOKEN_STATISTICS, *PTOKEN_STATISTICS;
 
 
 
 typedef struct _TOKEN_CONTROL {
-    LUID TokenId;
-    LUID AuthenticationId;
-    LUID ModifiedId;
-    TOKEN_SOURCE TokenSource;
-    } TOKEN_CONTROL, *PTOKEN_CONTROL;
+   LUID TokenId;
+   LUID AuthenticationId;
+   LUID ModifiedId;
+   TOKEN_SOURCE TokenSource;
+} TOKEN_CONTROL, *PTOKEN_CONTROL;
 
 //
 // Security Tracking Mode
@@ -4302,7 +4312,7 @@ typedef struct _TOKEN_CONTROL {
 #define SECURITY_STATIC_TRACKING       (FALSE)
 
 typedef BOOLEAN SECURITY_CONTEXT_TRACKING_MODE,
-                    * PSECURITY_CONTEXT_TRACKING_MODE;
+* PSECURITY_CONTEXT_TRACKING_MODE;
 
 
 
@@ -4311,11 +4321,11 @@ typedef BOOLEAN SECURITY_CONTEXT_TRACKING_MODE,
 //
 
 typedef struct _SECURITY_QUALITY_OF_SERVICE {
-    DWORD Length;
-    SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
-    SECURITY_CONTEXT_TRACKING_MODE ContextTrackingMode;
-    BOOLEAN EffectiveOnly;
-    } SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
+   DWORD Length;
+   SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
+   SECURITY_CONTEXT_TRACKING_MODE ContextTrackingMode;
+   BOOLEAN EffectiveOnly;
+} SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
 
 
 //
@@ -4323,10 +4333,10 @@ typedef struct _SECURITY_QUALITY_OF_SERVICE {
 //
 
 typedef struct _SE_IMPERSONATION_STATE {
-    PACCESS_TOKEN Token;
-    BOOLEAN CopyOnOpen;
-    BOOLEAN EffectiveOnly;
-    SECURITY_IMPERSONATION_LEVEL Level;
+   PACCESS_TOKEN Token;
+   BOOLEAN CopyOnOpen;
+   BOOLEAN EffectiveOnly;
+   SECURITY_IMPERSONATION_LEVEL Level;
 } SE_IMPERSONATION_STATE, *PSE_IMPERSONATION_STATE;
 
 
@@ -4336,17 +4346,17 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 #define GROUP_SECURITY_INFORMATION       (0X00000002L)
 #define DACL_SECURITY_INFORMATION        (0X00000004L)
 #define SACL_SECURITY_INFORMATION        (0X00000008L)
-#define PROCESS_TERMINATE         (0x0001)  
-#define PROCESS_CREATE_THREAD     (0x0002)  
-#define PROCESS_SET_SESSIONID     (0x0004)  
-#define PROCESS_VM_OPERATION      (0x0008)  
-#define PROCESS_VM_READ           (0x0010)  
-#define PROCESS_VM_WRITE          (0x0020)  
-#define PROCESS_DUP_HANDLE        (0x0040)  
-#define PROCESS_CREATE_PROCESS    (0x0080)  
-#define PROCESS_SET_QUOTA         (0x0100)  
-#define PROCESS_SET_INFORMATION   (0x0200)  
-#define PROCESS_QUERY_INFORMATION (0x0400)  
+#define PROCESS_TERMINATE         (0x0001)
+#define PROCESS_CREATE_THREAD     (0x0002)
+#define PROCESS_SET_SESSIONID     (0x0004)
+#define PROCESS_VM_OPERATION      (0x0008)
+#define PROCESS_VM_READ           (0x0010)
+#define PROCESS_VM_WRITE          (0x0020)
+#define PROCESS_DUP_HANDLE        (0x0040)
+#define PROCESS_CREATE_PROCESS    (0x0080)
+#define PROCESS_SET_QUOTA         (0x0100)
+#define PROCESS_SET_INFORMATION   (0x0200)
+#define PROCESS_QUERY_INFORMATION (0x0400)
 #define PROCESS_ALL_ACCESS        (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
                                    0xFFF)
 
@@ -4354,12 +4364,12 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 
 #define MAXIMUM_PROCESSORS 32
 
-#define THREAD_TERMINATE               (0x0001)  
-#define THREAD_SUSPEND_RESUME          (0x0002)  
-#define THREAD_GET_CONTEXT             (0x0008)  
-#define THREAD_SET_CONTEXT             (0x0010)  
-#define THREAD_SET_INFORMATION         (0x0020)  
-#define THREAD_QUERY_INFORMATION       (0x0040)  
+#define THREAD_TERMINATE               (0x0001)
+#define THREAD_SUSPEND_RESUME          (0x0002)
+#define THREAD_GET_CONTEXT             (0x0008)
+#define THREAD_SET_CONTEXT             (0x0010)
+#define THREAD_SET_INFORMATION         (0x0020)
+#define THREAD_QUERY_INFORMATION       (0x0040)
 #define THREAD_SET_THREAD_TOKEN        (0x0080)
 #define THREAD_IMPERSONATE             (0x0100)
 #define THREAD_DIRECT_IMPERSONATION    (0x0200)
@@ -4375,25 +4385,25 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 #define JOB_OBJECT_TERMINATE                (0x0008)
 #define JOB_OBJECT_SET_SECURITY_ATTRIBUTES  (0x0010)
 #define JOB_OBJECT_ALL_ACCESS       (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
-                                        0x1F )
-#define TLS_MINIMUM_AVAILABLE 64    
+                                     0x1F )
+#define TLS_MINIMUM_AVAILABLE 64
 
 typedef struct _NT_TIB {
-    struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
-    PVOID StackBase;
-    PVOID StackLimit;
-    PVOID SubSystemTib;
-    union {
-        PVOID FiberData;
-        DWORD Version;
-    };
-    PVOID ArbitraryUserPointer;
-    struct _NT_TIB *Self;
+   struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
+   PVOID StackBase;
+   PVOID StackLimit;
+   PVOID SubSystemTib;
+   union {
+      PVOID FiberData;
+      DWORD Version;
+   };
+   PVOID ArbitraryUserPointer;
+   struct _NT_TIB *Self;
 } NT_TIB;
 typedef NT_TIB *PNT_TIB;
 
 #if !defined(_X86_) && !defined(_IA64_)
-#define WX86
+   #define WX86
 #endif
 
 #define THREAD_BASE_PRIORITY_LOWRT  15  // value that gets a thread to LowRealtime-1
@@ -4402,64 +4412,64 @@ typedef NT_TIB *PNT_TIB;
 #define THREAD_BASE_PRIORITY_IDLE   -15 // value that gets a thread to idle
 
 typedef struct _QUOTA_LIMITS {
-    SIZE_T PagedPoolLimit;
-    SIZE_T NonPagedPoolLimit;
-    DWORD MinimumWorkingSetSize;
-    DWORD MaximumWorkingSetSize;
-    SIZE_T PagefileLimit;
-    LARGE_INTEGER TimeLimit;
+   SIZE_T PagedPoolLimit;
+   SIZE_T NonPagedPoolLimit;
+   DWORD MinimumWorkingSetSize;
+   DWORD MaximumWorkingSetSize;
+   SIZE_T PagefileLimit;
+   LARGE_INTEGER TimeLimit;
 } QUOTA_LIMITS;
 typedef QUOTA_LIMITS *PQUOTA_LIMITS;
 
 //
 
 typedef struct _JOBOBJECT_BASIC_ACCOUNTING_INFORMATION {
-    LARGE_INTEGER TotalUserTime;
-    LARGE_INTEGER TotalKernelTime;
-    LARGE_INTEGER ThisPeriodTotalUserTime;
-    LARGE_INTEGER ThisPeriodTotalKernelTime;
-    DWORD TotalPageFaultCount;
-    DWORD TotalProcesses;
-    DWORD ActiveProcesses;
-    DWORD TotalTerminatedProcesses;
+   LARGE_INTEGER TotalUserTime;
+   LARGE_INTEGER TotalKernelTime;
+   LARGE_INTEGER ThisPeriodTotalUserTime;
+   LARGE_INTEGER ThisPeriodTotalKernelTime;
+   DWORD TotalPageFaultCount;
+   DWORD TotalProcesses;
+   DWORD ActiveProcesses;
+   DWORD TotalTerminatedProcesses;
 } JOBOBJECT_BASIC_ACCOUNTING_INFORMATION, *PJOBOBJECT_BASIC_ACCOUNTING_INFORMATION;
 
 typedef struct _JOBOBJECT_BASIC_LIMIT_INFORMATION {
-    LARGE_INTEGER PerProcessUserTimeLimit;
-    LARGE_INTEGER PerJobUserTimeLimit;
-    DWORD LimitFlags;
-    DWORD MinimumWorkingSetSize;
-    DWORD MaximumWorkingSetSize;
-    DWORD ActiveProcessLimit;
-    DWORD Affinity;
-    DWORD PriorityClass;
+   LARGE_INTEGER PerProcessUserTimeLimit;
+   LARGE_INTEGER PerJobUserTimeLimit;
+   DWORD LimitFlags;
+   DWORD MinimumWorkingSetSize;
+   DWORD MaximumWorkingSetSize;
+   DWORD ActiveProcessLimit;
+   DWORD Affinity;
+   DWORD PriorityClass;
 } JOBOBJECT_BASIC_LIMIT_INFORMATION, *PJOBOBJECT_BASIC_LIMIT_INFORMATION;
 
 typedef struct _JOBOBJECT_BASIC_PROCESS_ID_LIST {
-    DWORD NumberOfAssignedProcesses;
-    DWORD NumberOfProcessIdsInList;
-    UINT_PTR ProcessIdList[1];
+   DWORD NumberOfAssignedProcesses;
+   DWORD NumberOfProcessIdsInList;
+   UINT_PTR ProcessIdList[1];
 } JOBOBJECT_BASIC_PROCESS_ID_LIST, *PJOBOBJECT_BASIC_PROCESS_ID_LIST;
 
 typedef struct _JOBOBJECT_BASIC_UI_RESTRICTIONS {
-    DWORD UIRestrictionsClass;
+   DWORD UIRestrictionsClass;
 } JOBOBJECT_BASIC_UI_RESTRICTIONS, *PJOBOBJECT_BASIC_UI_RESTRICTIONS;
 
 typedef struct _JOBOBJECT_SECURITY_LIMIT_INFORMATION {
-    DWORD SecurityLimitFlags ;
-    HANDLE JobToken ;
-    PTOKEN_GROUPS SidsToDisable ;
-    PTOKEN_PRIVILEGES PrivilegesToDelete ;
-    PTOKEN_GROUPS RestrictedSids ;
-} JOBOBJECT_SECURITY_LIMIT_INFORMATION, *PJOBOBJECT_SECURITY_LIMIT_INFORMATION ;
+   DWORD SecurityLimitFlags;
+   HANDLE JobToken;
+   PTOKEN_GROUPS SidsToDisable;
+   PTOKEN_PRIVILEGES PrivilegesToDelete;
+   PTOKEN_GROUPS RestrictedSids;
+} JOBOBJECT_SECURITY_LIMIT_INFORMATION, *PJOBOBJECT_SECURITY_LIMIT_INFORMATION;
 
 typedef struct _JOBOBJECT_END_OF_JOB_TIME_INFORMATION {
-    DWORD EndOfJobTimeAction;
+   DWORD EndOfJobTimeAction;
 } JOBOBJECT_END_OF_JOB_TIME_INFORMATION, *PJOBOBJECT_END_OF_JOB_TIME_INFORMATION;
 
 typedef struct _JOBOBJECT_ASSOCIATE_COMPLETION_PORT {
-    PVOID CompletionKey;
-    HANDLE CompletionPort;
+   PVOID CompletionKey;
+   HANDLE CompletionPort;
 } JOBOBJECT_ASSOCIATE_COMPLETION_PORT, *PJOBOBJECT_ASSOCIATE_COMPLETION_PORT;
 
 #define JOB_OBJECT_TERMINATE_AT_END_OF_JOB  0
@@ -4514,24 +4524,24 @@ typedef struct _JOBOBJECT_ASSOCIATE_COMPLETION_PORT {
 #define JOB_OBJECT_SECURITY_VALID_FLAGS         0x0000000f
 
 typedef enum _JOBOBJECTINFOCLASS {
-    JobObjectBasicAccountingInformation = 1,
-    JobObjectBasicLimitInformation,
-    JobObjectBasicProcessIdList,
-    JobObjectBasicUIRestrictions,
-    JobObjectSecurityLimitInformation,
-    JobObjectEndOfJobTimeInformation,
-    JobObjectAssociateCompletionPortInformation,
-    MaxJobObjectInfoClass
-    } JOBOBJECTINFOCLASS;
+   JobObjectBasicAccountingInformation = 1,
+   JobObjectBasicLimitInformation,
+   JobObjectBasicProcessIdList,
+   JobObjectBasicUIRestrictions,
+   JobObjectSecurityLimitInformation,
+   JobObjectEndOfJobTimeInformation,
+   JobObjectAssociateCompletionPortInformation,
+   MaxJobObjectInfoClass
+} JOBOBJECTINFOCLASS;
 //
-#define EVENT_MODIFY_STATE      0x0002  
-#define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
+#define EVENT_MODIFY_STATE      0x0002
+#define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
 #define MUTANT_QUERY_STATE      0x0001
 
-#define MUTANT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|\
-                          MUTANT_QUERY_STATE)
-#define SEMAPHORE_MODIFY_STATE      0x0002  
-#define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
+#define MUTANT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE| \
+                           MUTANT_QUERY_STATE)
+#define SEMAPHORE_MODIFY_STATE      0x0002
+#define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
 //
 // Timer Specific Access Rights.
 //
@@ -4539,7 +4549,7 @@ typedef enum _JOBOBJECTINFOCLASS {
 #define TIMER_QUERY_STATE       0x0001
 #define TIMER_MODIFY_STATE      0x0002
 
-#define TIMER_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|\
+#define TIMER_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE| \
                           TIMER_QUERY_STATE|TIMER_MODIFY_STATE)
 
 
@@ -4578,40 +4588,40 @@ typedef enum _JOBOBJECTINFOCLASS {
 #define PROCESSOR_ARCHITECTURE_ALPHA64 7
 #define PROCESSOR_ARCHITECTURE_UNKNOWN 0xFFFF
 
-#define PF_FLOATING_POINT_PRECISION_ERRATA  0   
-#define PF_FLOATING_POINT_EMULATED          1   
-#define PF_COMPARE_EXCHANGE_DOUBLE          2   
-#define PF_MMX_INSTRUCTIONS_AVAILABLE       3   
-#define PF_PPC_MOVEMEM_64BIT_OK             4   
-#define PF_ALPHA_BYTE_INSTRUCTIONS          5   
-#define PF_XMMI_INSTRUCTIONS_AVAILABLE      6   
-#define PF_AMD3D_INSTRUCTIONS_AVAILABLE     7   
-#define SYSTEM_FLAG_REMOTE_BOOT_CLIENT 0x00000001   
-#define SYSTEM_FLAG_DISKLESS_CLIENT    0x00000002   
+#define PF_FLOATING_POINT_PRECISION_ERRATA  0
+#define PF_FLOATING_POINT_EMULATED          1
+#define PF_COMPARE_EXCHANGE_DOUBLE          2
+#define PF_MMX_INSTRUCTIONS_AVAILABLE       3
+#define PF_PPC_MOVEMEM_64BIT_OK             4
+#define PF_ALPHA_BYTE_INSTRUCTIONS          5
+#define PF_XMMI_INSTRUCTIONS_AVAILABLE      6
+#define PF_AMD3D_INSTRUCTIONS_AVAILABLE     7
+#define SYSTEM_FLAG_REMOTE_BOOT_CLIENT 0x00000001
+#define SYSTEM_FLAG_DISKLESS_CLIENT    0x00000002
 typedef struct _MEMORY_BASIC_INFORMATION {
-    PVOID BaseAddress;
-    PVOID AllocationBase;
-    DWORD AllocationProtect;
-    SIZE_T RegionSize;
-    DWORD State;
-    DWORD Protect;
-    DWORD Type;
+   PVOID BaseAddress;
+   PVOID AllocationBase;
+   DWORD AllocationProtect;
+   SIZE_T RegionSize;
+   DWORD State;
+   DWORD Protect;
+   DWORD Type;
 } MEMORY_BASIC_INFORMATION, *PMEMORY_BASIC_INFORMATION;
 
 typedef struct _MEMORY_BASIC_INFORMATION_VLM {
-    union {
-        PVOID64 BaseAddress;
-        ULONGLONG BaseAddressAsUlongLong;
-    };
-    union {
-        PVOID64 AllocationBase;
-        ULONGLONG AllocationBaseAsUlongLong;
-    };
-    ULONGLONG RegionSize;
-    DWORD AllocationProtect;
-    DWORD State;
-    DWORD Protect;
-    DWORD Type;
+   union {
+      PVOID64 BaseAddress;
+      ULONGLONG BaseAddressAsUlongLong;
+   };
+   union {
+      PVOID64 AllocationBase;
+      ULONGLONG AllocationBaseAsUlongLong;
+   };
+   ULONGLONG RegionSize;
+   DWORD AllocationProtect;
+   DWORD State;
+   DWORD Protect;
+   DWORD Type;
 } MEMORY_BASIC_INFORMATION_VLM, *PMEMORY_BASIC_INFORMATION_VLM;
 #define SECTION_QUERY       0x0001
 #define SECTION_MAP_WRITE   0x0002
@@ -4619,39 +4629,39 @@ typedef struct _MEMORY_BASIC_INFORMATION_VLM {
 #define SECTION_MAP_EXECUTE 0x0008
 #define SECTION_EXTEND_SIZE 0x0010
 
-#define SECTION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SECTION_QUERY|\
+#define SECTION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SECTION_QUERY| \
                             SECTION_MAP_WRITE |      \
                             SECTION_MAP_READ |       \
                             SECTION_MAP_EXECUTE |    \
                             SECTION_EXTEND_SIZE)
-#define PAGE_NOACCESS          0x01     
-#define PAGE_READONLY          0x02     
-#define PAGE_READWRITE         0x04     
-#define PAGE_WRITECOPY         0x08     
-#define PAGE_EXECUTE           0x10     
-#define PAGE_EXECUTE_READ      0x20     
-#define PAGE_EXECUTE_READWRITE 0x40     
-#define PAGE_EXECUTE_WRITECOPY 0x80     
-#define PAGE_GUARD            0x100     
-#define PAGE_NOCACHE          0x200     
-#define PAGE_WRITECOMBINE     0x400     
-#define MEM_COMMIT           0x1000     
-#define MEM_RESERVE          0x2000     
-#define MEM_DECOMMIT         0x4000     
-#define MEM_RELEASE          0x8000     
-#define MEM_FREE            0x10000     
-#define MEM_PRIVATE         0x20000     
-#define MEM_MAPPED          0x40000     
-#define MEM_RESET           0x80000     
-#define MEM_TOP_DOWN       0x100000     
-#define MEM_4MB_PAGES    0x80000000     
-#define SEC_FILE           0x800000     
-#define SEC_IMAGE         0x1000000     
-#define SEC_VLM           0x2000000     
-#define SEC_RESERVE       0x4000000     
-#define SEC_COMMIT        0x8000000     
-#define SEC_NOCACHE      0x10000000     
-#define MEM_IMAGE         SEC_IMAGE     
+#define PAGE_NOACCESS          0x01
+#define PAGE_READONLY          0x02
+#define PAGE_READWRITE         0x04
+#define PAGE_WRITECOPY         0x08
+#define PAGE_EXECUTE           0x10
+#define PAGE_EXECUTE_READ      0x20
+#define PAGE_EXECUTE_READWRITE 0x40
+#define PAGE_EXECUTE_WRITECOPY 0x80
+#define PAGE_GUARD            0x100
+#define PAGE_NOCACHE          0x200
+#define PAGE_WRITECOMBINE     0x400
+#define MEM_COMMIT           0x1000
+#define MEM_RESERVE          0x2000
+#define MEM_DECOMMIT         0x4000
+#define MEM_RELEASE          0x8000
+#define MEM_FREE            0x10000
+#define MEM_PRIVATE         0x20000
+#define MEM_MAPPED          0x40000
+#define MEM_RESET           0x80000
+#define MEM_TOP_DOWN       0x100000
+#define MEM_4MB_PAGES    0x80000000
+#define SEC_FILE           0x800000
+#define SEC_IMAGE         0x1000000
+#define SEC_VLM           0x2000000
+#define SEC_RESERVE       0x4000000
+#define SEC_COMMIT        0x8000000
+#define SEC_NOCACHE      0x10000000
+#define MEM_IMAGE         SEC_IMAGE
 
 //
 // Define access rights to files and directories
@@ -4691,79 +4701,79 @@ typedef struct _MEMORY_BASIC_INFORMATION_VLM {
 
 #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x3FF)
 
-#define FILE_GENERIC_READ         (STANDARD_RIGHTS_READ     |\
-                                   FILE_READ_DATA           |\
-                                   FILE_READ_ATTRIBUTES     |\
-                                   FILE_READ_EA             |\
+#define FILE_GENERIC_READ         (STANDARD_RIGHTS_READ     | \
+                                   FILE_READ_DATA           | \
+                                   FILE_READ_ATTRIBUTES     | \
+                                   FILE_READ_EA             | \
                                    SYNCHRONIZE)
 
 
-#define FILE_GENERIC_WRITE        (STANDARD_RIGHTS_WRITE    |\
-                                   FILE_WRITE_DATA          |\
-                                   FILE_WRITE_ATTRIBUTES    |\
-                                   FILE_WRITE_EA            |\
-                                   FILE_APPEND_DATA         |\
+#define FILE_GENERIC_WRITE        (STANDARD_RIGHTS_WRITE    | \
+                                   FILE_WRITE_DATA          | \
+                                   FILE_WRITE_ATTRIBUTES    | \
+                                   FILE_WRITE_EA            | \
+                                   FILE_APPEND_DATA         | \
                                    SYNCHRONIZE)
 
 
-#define FILE_GENERIC_EXECUTE      (STANDARD_RIGHTS_EXECUTE  |\
-                                   FILE_READ_ATTRIBUTES     |\
-                                   FILE_EXECUTE             |\
+#define FILE_GENERIC_EXECUTE      (STANDARD_RIGHTS_EXECUTE  | \
+                                   FILE_READ_ATTRIBUTES     | \
+                                   FILE_EXECUTE             | \
                                    SYNCHRONIZE)
 
-#define FILE_SHARE_READ                 0x00000001  
-#define FILE_SHARE_WRITE                0x00000002  
-#define FILE_SHARE_DELETE               0x00000004  
-#define FILE_ATTRIBUTE_READONLY             0x00000001  
-#define FILE_ATTRIBUTE_HIDDEN               0x00000002  
-#define FILE_ATTRIBUTE_SYSTEM               0x00000004  
-#define FILE_ATTRIBUTE_DIRECTORY            0x00000010  
-#define FILE_ATTRIBUTE_ARCHIVE              0x00000020  
-#define FILE_ATTRIBUTE_ENCRYPTED            0x00000040  
-#define FILE_ATTRIBUTE_NORMAL               0x00000080  
-#define FILE_ATTRIBUTE_TEMPORARY            0x00000100  
-#define FILE_ATTRIBUTE_SPARSE_FILE          0x00000200  
-#define FILE_ATTRIBUTE_REPARSE_POINT        0x00000400  
-#define FILE_ATTRIBUTE_COMPRESSED           0x00000800  
-#define FILE_ATTRIBUTE_OFFLINE              0x00001000  
-#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  0x00002000  
-#define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001   
-#define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002   
-#define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004   
-#define FILE_NOTIFY_CHANGE_SIZE         0x00000008   
-#define FILE_NOTIFY_CHANGE_LAST_WRITE   0x00000010   
-#define FILE_NOTIFY_CHANGE_LAST_ACCESS  0x00000020   
-#define FILE_NOTIFY_CHANGE_CREATION     0x00000040   
-#define FILE_NOTIFY_CHANGE_SECURITY     0x00000100   
-#define FILE_ACTION_ADDED                   0x00000001   
-#define FILE_ACTION_REMOVED                 0x00000002   
-#define FILE_ACTION_MODIFIED                0x00000003   
-#define FILE_ACTION_RENAMED_OLD_NAME        0x00000004   
-#define FILE_ACTION_RENAMED_NEW_NAME        0x00000005   
-#define MAILSLOT_NO_MESSAGE             ((DWORD)-1) 
-#define MAILSLOT_WAIT_FOREVER           ((DWORD)-1) 
-#define FILE_CASE_SENSITIVE_SEARCH      0x00000001  
-#define FILE_CASE_PRESERVED_NAMES       0x00000002  
-#define FILE_UNICODE_ON_DISK            0x00000004  
-#define FILE_PERSISTENT_ACLS            0x00000008  
-#define FILE_FILE_COMPRESSION           0x00000010  
-#define FILE_VOLUME_QUOTAS              0x00000020  
-#define FILE_SUPPORTS_SPARSE_FILES      0x00000040  
-#define FILE_SUPPORTS_REPARSE_POINTS    0x00000080  
-#define FILE_SUPPORTS_REMOTE_STORAGE    0x00000100  
-#define FILE_VOLUME_IS_COMPRESSED       0x00008000  
-#define FILE_SUPPORTS_OBJECT_IDS        0x00010000  
-#define FILE_SUPPORTS_ENCRYPTION        0x00020000  
+#define FILE_SHARE_READ                 0x00000001
+#define FILE_SHARE_WRITE                0x00000002
+#define FILE_SHARE_DELETE               0x00000004
+#define FILE_ATTRIBUTE_READONLY             0x00000001
+#define FILE_ATTRIBUTE_HIDDEN               0x00000002
+#define FILE_ATTRIBUTE_SYSTEM               0x00000004
+#define FILE_ATTRIBUTE_DIRECTORY            0x00000010
+#define FILE_ATTRIBUTE_ARCHIVE              0x00000020
+#define FILE_ATTRIBUTE_ENCRYPTED            0x00000040
+#define FILE_ATTRIBUTE_NORMAL               0x00000080
+#define FILE_ATTRIBUTE_TEMPORARY            0x00000100
+#define FILE_ATTRIBUTE_SPARSE_FILE          0x00000200
+#define FILE_ATTRIBUTE_REPARSE_POINT        0x00000400
+#define FILE_ATTRIBUTE_COMPRESSED           0x00000800
+#define FILE_ATTRIBUTE_OFFLINE              0x00001000
+#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  0x00002000
+#define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001
+#define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002
+#define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004
+#define FILE_NOTIFY_CHANGE_SIZE         0x00000008
+#define FILE_NOTIFY_CHANGE_LAST_WRITE   0x00000010
+#define FILE_NOTIFY_CHANGE_LAST_ACCESS  0x00000020
+#define FILE_NOTIFY_CHANGE_CREATION     0x00000040
+#define FILE_NOTIFY_CHANGE_SECURITY     0x00000100
+#define FILE_ACTION_ADDED                   0x00000001
+#define FILE_ACTION_REMOVED                 0x00000002
+#define FILE_ACTION_MODIFIED                0x00000003
+#define FILE_ACTION_RENAMED_OLD_NAME        0x00000004
+#define FILE_ACTION_RENAMED_NEW_NAME        0x00000005
+#define MAILSLOT_NO_MESSAGE             ((DWORD)-1)
+#define MAILSLOT_WAIT_FOREVER           ((DWORD)-1)
+#define FILE_CASE_SENSITIVE_SEARCH      0x00000001
+#define FILE_CASE_PRESERVED_NAMES       0x00000002
+#define FILE_UNICODE_ON_DISK            0x00000004
+#define FILE_PERSISTENT_ACLS            0x00000008
+#define FILE_FILE_COMPRESSION           0x00000010
+#define FILE_VOLUME_QUOTAS              0x00000020
+#define FILE_SUPPORTS_SPARSE_FILES      0x00000040
+#define FILE_SUPPORTS_REPARSE_POINTS    0x00000080
+#define FILE_SUPPORTS_REMOTE_STORAGE    0x00000100
+#define FILE_VOLUME_IS_COMPRESSED       0x00008000
+#define FILE_SUPPORTS_OBJECT_IDS        0x00010000
+#define FILE_SUPPORTS_ENCRYPTION        0x00020000
 
 //
 // Define the file notification information structure
 //
 
 typedef struct _FILE_NOTIFY_INFORMATION {
-    DWORD NextEntryOffset;
-    DWORD Action;
-    DWORD FileNameLength;
-    WCHAR FileName[1];
+   DWORD NextEntryOffset;
+   DWORD Action;
+   DWORD FileNameLength;
+   WCHAR FileName[1];
 } FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
 
 
@@ -4772,8 +4782,8 @@ typedef struct _FILE_NOTIFY_INFORMATION {
 //
 
 typedef union _FILE_SEGMENT_ELEMENT {
-    PVOID64 Buffer;
-    ULONGLONG Alignment;
+   PVOID64 Buffer;
+   ULONGLONG Alignment;
 }FILE_SEGMENT_ELEMENT, *PFILE_SEGMENT_ELEMENT;
 
 //
@@ -4787,28 +4797,28 @@ typedef union _FILE_SEGMENT_ELEMENT {
 //
 
 typedef struct _REPARSE_DATA_BUFFER {
-    DWORD  ReparseTag;
-    WORD   ReparseDataLength;
-    WORD   Reserved;
-    union {
-        struct {
-            WORD   SubstituteNameOffset;
-            WORD   SubstituteNameLength;
-            WORD   PrintNameOffset;
-            WORD   PrintNameLength;
-            WCHAR PathBuffer[1];
-        } SymbolicLinkReparseBuffer;
-        struct {
-            WORD   SubstituteNameOffset;
-            WORD   SubstituteNameLength;
-            WORD   PrintNameOffset;
-            WORD   PrintNameLength;
-            WCHAR PathBuffer[1];
-        } MountPointReparseBuffer;
-        struct {
-            BYTE   DataBuffer[1];
-        } GenericReparseBuffer;
-    };
+   DWORD ReparseTag;
+   WORD ReparseDataLength;
+   WORD Reserved;
+   union {
+      struct {
+         WORD SubstituteNameOffset;
+         WORD SubstituteNameLength;
+         WORD PrintNameOffset;
+         WORD PrintNameLength;
+         WCHAR PathBuffer[1];
+      } SymbolicLinkReparseBuffer;
+      struct {
+         WORD SubstituteNameOffset;
+         WORD SubstituteNameLength;
+         WORD PrintNameOffset;
+         WORD PrintNameLength;
+         WCHAR PathBuffer[1];
+      } MountPointReparseBuffer;
+      struct {
+         BYTE DataBuffer[1];
+      } GenericReparseBuffer;
+   };
 } REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
 
 #define REPARSE_DATA_BUFFER_HEADER_SIZE   FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer)
@@ -4823,16 +4833,17 @@ typedef struct _REPARSE_DATA_BUFFER {
 //
 
 typedef struct _REPARSE_GUID_DATA_BUFFER {
-    DWORD  ReparseTag;
-    WORD   ReparseDataLength;
-    WORD   Reserved;
-    GUID   ReparseGuid;
-    struct {
-        BYTE   DataBuffer[1];
-    } GenericReparseBuffer;
+   DWORD ReparseTag;
+   WORD ReparseDataLength;
+   WORD Reserved;
+   GUID ReparseGuid;
+   struct {
+      BYTE DataBuffer[1];
+   } GenericReparseBuffer;
 } REPARSE_GUID_DATA_BUFFER, *PREPARSE_GUID_DATA_BUFFER;
 
-#define REPARSE_GUID_DATA_BUFFER_HEADER_SIZE   FIELD_OFFSET(REPARSE_GUID_DATA_BUFFER, GenericReparseBuffer)
+#define REPARSE_GUID_DATA_BUFFER_HEADER_SIZE   FIELD_OFFSET(REPARSE_GUID_DATA_BUFFER, \
+                                                            GenericReparseBuffer)
 
 
 //
@@ -4841,8 +4852,8 @@ typedef struct _REPARSE_GUID_DATA_BUFFER {
 //
 
 typedef struct _REPARSE_POINT_INFORMATION {
-    WORD   ReparseDataLength;
-    WORD   UnparsedNameLength;
+   WORD ReparseDataLength;
+   WORD UnparsedNameLength;
 } REPARSE_POINT_INFORMATION, *PREPARSE_POINT_INFORMATION;
 
 //
@@ -4897,8 +4908,8 @@ typedef struct _REPARSE_POINT_INFORMATION {
 //
 
 #define IsReparseTagMicrosoft(_tag) (              \
-                           ((_tag) & 0x80000000)   \
-                           )
+      ((_tag) & 0x80000000)   \
+      )
 
 //
 // Macro to determine whether a reparse point tag corresponds to a file
@@ -4906,8 +4917,8 @@ typedef struct _REPARSE_POINT_INFORMATION {
 //
 
 #define IsReparseTagHighLatency(_tag) (            \
-                           ((_tag) & 0x40000000)   \
-                           )
+      ((_tag) & 0x40000000)   \
+      )
 
 //
 // Macro to determine whether a reparse point tag corresponds to a file
@@ -4915,8 +4926,8 @@ typedef struct _REPARSE_POINT_INFORMATION {
 //
 
 #define IsReparseTagNameSurrogate(_tag) (          \
-                           ((_tag) & 0x20000000)   \
-                           )
+      ((_tag) & 0x20000000)   \
+      )
 
 //
 // The following constant represents the bits that are valid to use in
@@ -4930,9 +4941,9 @@ typedef struct _REPARSE_POINT_INFORMATION {
 //
 
 #define IsReparseTagValid(_tag) (                               \
-                  !((_tag) & ~IO_REPARSE_TAG_VALID_VALUES) &&   \
-                  ((_tag) > IO_REPARSE_TAG_RESERVED_RANGE)      \
-                 )
+      !((_tag) & ~IO_REPARSE_TAG_VALID_VALUES) &&   \
+      ((_tag) > IO_REPARSE_TAG_RESERVED_RANGE)      \
+      )
 
 //
 // Microsoft tags for reparse points.
@@ -4946,10 +4957,10 @@ typedef struct _REPARSE_POINT_INFORMATION {
 #define IO_REPARSE_TAG_SIS                       (0x80000007)
 #define IO_REPARSE_TAG_DFS                       (0x80000008)
 
-#define IO_COMPLETION_MODIFY_STATE  0x0002  
-#define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
-#define DUPLICATE_CLOSE_SOURCE      0x00000001  
-#define DUPLICATE_SAME_ACCESS       0x00000002  
+#define IO_COMPLETION_MODIFY_STATE  0x0002
+#define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
+#define DUPLICATE_CLOSE_SOURCE      0x00000001
+#define DUPLICATE_SAME_ACCESS       0x00000002
 
 #define ES_SYSTEM_REQUIRED  ((DWORD)0x00000001)
 #define ES_DISPLAY_REQUIRED ((DWORD)0x00000002)
@@ -4959,14 +4970,14 @@ typedef struct _REPARSE_POINT_INFORMATION {
 typedef DWORD EXECUTION_STATE;
 
 typedef enum {
-    LT_DONT_CARE,
-    LT_LOWEST_LATENCY
+   LT_DONT_CARE,
+   LT_LOWEST_LATENCY
 } LATENCY_TIME;
 
 // wmi
 typedef struct _POWER_DEVICE_TIMEOUTS {
-    DWORD   ConservationIdleTime;
-    DWORD   PerformanceIdleTime;
+   DWORD ConservationIdleTime;
+   DWORD PerformanceIdleTime;
 } POWER_DEVICE_TIMEOUTS, *PPOWER_DEVICE_TIMEOUTS;
 
 
@@ -4978,137 +4989,137 @@ typedef struct _POWER_DEVICE_TIMEOUTS {
 
 #ifndef _MAC
 
-#include "pshpack4.h"                   // 4 byte packing is the default
+   #include "pshpack4.h"                // 4 byte packing is the default
 
-#define IMAGE_DOS_SIGNATURE                 0x5A4D      // MZ
-#define IMAGE_OS2_SIGNATURE                 0x454E      // NE
-#define IMAGE_OS2_SIGNATURE_LE              0x454C      // LE
-#define IMAGE_VXD_SIGNATURE                 0x454C      // LE
-#define IMAGE_NT_SIGNATURE                  0x00004550  // PE00
+   #define IMAGE_DOS_SIGNATURE                 0x5A4D   // MZ
+   #define IMAGE_OS2_SIGNATURE                 0x454E   // NE
+   #define IMAGE_OS2_SIGNATURE_LE              0x454C   // LE
+   #define IMAGE_VXD_SIGNATURE                 0x454C   // LE
+   #define IMAGE_NT_SIGNATURE                  0x00004550 // PE00
 
-#include "pshpack2.h"                   // 16 bit headers are 2 byte packed
+   #include "pshpack2.h"                // 16 bit headers are 2 byte packed
 
 #else
 
-#include "pshpack1.h"
+   #include "pshpack1.h"
 
-#define IMAGE_DOS_SIGNATURE                 0x4D5A      // MZ
-#define IMAGE_OS2_SIGNATURE                 0x4E45      // NE
-#define IMAGE_OS2_SIGNATURE_LE              0x4C45      // LE
-#define IMAGE_NT_SIGNATURE                  0x50450000  // PE00
+   #define IMAGE_DOS_SIGNATURE                 0x4D5A   // MZ
+   #define IMAGE_OS2_SIGNATURE                 0x4E45   // NE
+   #define IMAGE_OS2_SIGNATURE_LE              0x4C45   // LE
+   #define IMAGE_NT_SIGNATURE                  0x50450000 // PE00
 #endif
 
 typedef struct _IMAGE_DOS_HEADER {      // DOS .EXE header
-    WORD   e_magic;                     // Magic number
-    WORD   e_cblp;                      // Bytes on last page of file
-    WORD   e_cp;                        // Pages in file
-    WORD   e_crlc;                      // Relocations
-    WORD   e_cparhdr;                   // Size of header in paragraphs
-    WORD   e_minalloc;                  // Minimum extra paragraphs needed
-    WORD   e_maxalloc;                  // Maximum extra paragraphs needed
-    WORD   e_ss;                        // Initial (relative) SS value
-    WORD   e_sp;                        // Initial SP value
-    WORD   e_csum;                      // Checksum
-    WORD   e_ip;                        // Initial IP value
-    WORD   e_cs;                        // Initial (relative) CS value
-    WORD   e_lfarlc;                    // File address of relocation table
-    WORD   e_ovno;                      // Overlay number
-    WORD   e_res[4];                    // Reserved words
-    WORD   e_oemid;                     // OEM identifier (for e_oeminfo)
-    WORD   e_oeminfo;                   // OEM information; e_oemid specific
-    WORD   e_res2[10];                  // Reserved words
-    LONG   e_lfanew;                    // File address of new exe header
-  } IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;
+   WORD e_magic;                        // Magic number
+   WORD e_cblp;                         // Bytes on last page of file
+   WORD e_cp;                           // Pages in file
+   WORD e_crlc;                         // Relocations
+   WORD e_cparhdr;                      // Size of header in paragraphs
+   WORD e_minalloc;                     // Minimum extra paragraphs needed
+   WORD e_maxalloc;                     // Maximum extra paragraphs needed
+   WORD e_ss;                           // Initial (relative) SS value
+   WORD e_sp;                           // Initial SP value
+   WORD e_csum;                         // Checksum
+   WORD e_ip;                           // Initial IP value
+   WORD e_cs;                           // Initial (relative) CS value
+   WORD e_lfarlc;                       // File address of relocation table
+   WORD e_ovno;                         // Overlay number
+   WORD e_res[4];                       // Reserved words
+   WORD e_oemid;                        // OEM identifier (for e_oeminfo)
+   WORD e_oeminfo;                      // OEM information; e_oemid specific
+   WORD e_res2[10];                     // Reserved words
+   LONG e_lfanew;                       // File address of new exe header
+} IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;
 
 typedef struct _IMAGE_OS2_HEADER {      // OS/2 .EXE header
-    WORD   ne_magic;                    // Magic number
-    CHAR   ne_ver;                      // Version number
-    CHAR   ne_rev;                      // Revision number
-    WORD   ne_enttab;                   // Offset of Entry Table
-    WORD   ne_cbenttab;                 // Number of bytes in Entry Table
-    LONG   ne_crc;                      // Checksum of whole file
-    WORD   ne_flags;                    // Flag word
-    WORD   ne_autodata;                 // Automatic data segment number
-    WORD   ne_heap;                     // Initial heap allocation
-    WORD   ne_stack;                    // Initial stack allocation
-    LONG   ne_csip;                     // Initial CS:IP setting
-    LONG   ne_sssp;                     // Initial SS:SP setting
-    WORD   ne_cseg;                     // Count of file segments
-    WORD   ne_cmod;                     // Entries in Module Reference Table
-    WORD   ne_cbnrestab;                // Size of non-resident name table
-    WORD   ne_segtab;                   // Offset of Segment Table
-    WORD   ne_rsrctab;                  // Offset of Resource Table
-    WORD   ne_restab;                   // Offset of resident name table
-    WORD   ne_modtab;                   // Offset of Module Reference Table
-    WORD   ne_imptab;                   // Offset of Imported Names Table
-    LONG   ne_nrestab;                  // Offset of Non-resident Names Table
-    WORD   ne_cmovent;                  // Count of movable entries
-    WORD   ne_align;                    // Segment alignment shift count
-    WORD   ne_cres;                     // Count of resource segments
-    BYTE   ne_exetyp;                   // Target Operating system
-    BYTE   ne_flagsothers;              // Other .EXE flags
-    WORD   ne_pretthunks;               // offset to return thunks
-    WORD   ne_psegrefbytes;             // offset to segment ref. bytes
-    WORD   ne_swaparea;                 // Minimum code swap area size
-    WORD   ne_expver;                   // Expected Windows version number
-  } IMAGE_OS2_HEADER, *PIMAGE_OS2_HEADER;
+   WORD ne_magic;                       // Magic number
+   CHAR ne_ver;                         // Version number
+   CHAR ne_rev;                         // Revision number
+   WORD ne_enttab;                      // Offset of Entry Table
+   WORD ne_cbenttab;                    // Number of bytes in Entry Table
+   LONG ne_crc;                         // Checksum of whole file
+   WORD ne_flags;                       // Flag word
+   WORD ne_autodata;                    // Automatic data segment number
+   WORD ne_heap;                        // Initial heap allocation
+   WORD ne_stack;                       // Initial stack allocation
+   LONG ne_csip;                        // Initial CS:IP setting
+   LONG ne_sssp;                        // Initial SS:SP setting
+   WORD ne_cseg;                        // Count of file segments
+   WORD ne_cmod;                        // Entries in Module Reference Table
+   WORD ne_cbnrestab;                   // Size of non-resident name table
+   WORD ne_segtab;                      // Offset of Segment Table
+   WORD ne_rsrctab;                     // Offset of Resource Table
+   WORD ne_restab;                      // Offset of resident name table
+   WORD ne_modtab;                      // Offset of Module Reference Table
+   WORD ne_imptab;                      // Offset of Imported Names Table
+   LONG ne_nrestab;                     // Offset of Non-resident Names Table
+   WORD ne_cmovent;                     // Count of movable entries
+   WORD ne_align;                       // Segment alignment shift count
+   WORD ne_cres;                        // Count of resource segments
+   BYTE ne_exetyp;                      // Target Operating system
+   BYTE ne_flagsothers;                 // Other .EXE flags
+   WORD ne_pretthunks;                  // offset to return thunks
+   WORD ne_psegrefbytes;                // offset to segment ref. bytes
+   WORD ne_swaparea;                    // Minimum code swap area size
+   WORD ne_expver;                      // Expected Windows version number
+} IMAGE_OS2_HEADER, *PIMAGE_OS2_HEADER;
 
 typedef struct _IMAGE_VXD_HEADER {      // Windows VXD header
-    WORD   e32_magic;                   // Magic number
-    BYTE   e32_border;                  // The byte ordering for the VXD
-    BYTE   e32_worder;                  // The word ordering for the VXD
-    DWORD  e32_level;                   // The EXE format level for now = 0
-    WORD   e32_cpu;                     // The CPU type
-    WORD   e32_os;                      // The OS type
-    DWORD  e32_ver;                     // Module version
-    DWORD  e32_mflags;                  // Module flags
-    DWORD  e32_mpages;                  // Module # pages
-    DWORD  e32_startobj;                // Object # for instruction pointer
-    DWORD  e32_eip;                     // Extended instruction pointer
-    DWORD  e32_stackobj;                // Object # for stack pointer
-    DWORD  e32_esp;                     // Extended stack pointer
-    DWORD  e32_pagesize;                // VXD page size
-    DWORD  e32_lastpagesize;            // Last page size in VXD
-    DWORD  e32_fixupsize;               // Fixup section size
-    DWORD  e32_fixupsum;                // Fixup section checksum
-    DWORD  e32_ldrsize;                 // Loader section size
-    DWORD  e32_ldrsum;                  // Loader section checksum
-    DWORD  e32_objtab;                  // Object table offset
-    DWORD  e32_objcnt;                  // Number of objects in module
-    DWORD  e32_objmap;                  // Object page map offset
-    DWORD  e32_itermap;                 // Object iterated data map offset
-    DWORD  e32_rsrctab;                 // Offset of Resource Table
-    DWORD  e32_rsrccnt;                 // Number of resource entries
-    DWORD  e32_restab;                  // Offset of resident name table
-    DWORD  e32_enttab;                  // Offset of Entry Table
-    DWORD  e32_dirtab;                  // Offset of Module Directive Table
-    DWORD  e32_dircnt;                  // Number of module directives
-    DWORD  e32_fpagetab;                // Offset of Fixup Page Table
-    DWORD  e32_frectab;                 // Offset of Fixup Record Table
-    DWORD  e32_impmod;                  // Offset of Import Module Name Table
-    DWORD  e32_impmodcnt;               // Number of entries in Import Module Name Table
-    DWORD  e32_impproc;                 // Offset of Import Procedure Name Table
-    DWORD  e32_pagesum;                 // Offset of Per-Page Checksum Table
-    DWORD  e32_datapage;                // Offset of Enumerated Data Pages
-    DWORD  e32_preload;                 // Number of preload pages
-    DWORD  e32_nrestab;                 // Offset of Non-resident Names Table
-    DWORD  e32_cbnrestab;               // Size of Non-resident Name Table
-    DWORD  e32_nressum;                 // Non-resident Name Table Checksum
-    DWORD  e32_autodata;                // Object # for automatic data object
-    DWORD  e32_debuginfo;               // Offset of the debugging information
-    DWORD  e32_debuglen;                // The length of the debugging info. in bytes
-    DWORD  e32_instpreload;             // Number of instance pages in preload section of VXD file
-    DWORD  e32_instdemand;              // Number of instance pages in demand load section of VXD file
-    DWORD  e32_heapsize;                // Size of heap - for 16-bit apps
-    BYTE   e32_res3[12];                // Reserved words
-    DWORD  e32_winresoff;
-    DWORD  e32_winreslen;
-    WORD   e32_devid;                   // Device ID for VxD
-    WORD   e32_ddkver;                  // DDK version for VxD
-  } IMAGE_VXD_HEADER, *PIMAGE_VXD_HEADER;
+   WORD e32_magic;                      // Magic number
+   BYTE e32_border;                     // The byte ordering for the VXD
+   BYTE e32_worder;                     // The word ordering for the VXD
+   DWORD e32_level;                     // The EXE format level for now = 0
+   WORD e32_cpu;                        // The CPU type
+   WORD e32_os;                         // The OS type
+   DWORD e32_ver;                       // Module version
+   DWORD e32_mflags;                    // Module flags
+   DWORD e32_mpages;                    // Module # pages
+   DWORD e32_startobj;                  // Object # for instruction pointer
+   DWORD e32_eip;                       // Extended instruction pointer
+   DWORD e32_stackobj;                  // Object # for stack pointer
+   DWORD e32_esp;                       // Extended stack pointer
+   DWORD e32_pagesize;                  // VXD page size
+   DWORD e32_lastpagesize;              // Last page size in VXD
+   DWORD e32_fixupsize;                 // Fixup section size
+   DWORD e32_fixupsum;                  // Fixup section checksum
+   DWORD e32_ldrsize;                   // Loader section size
+   DWORD e32_ldrsum;                    // Loader section checksum
+   DWORD e32_objtab;                    // Object table offset
+   DWORD e32_objcnt;                    // Number of objects in module
+   DWORD e32_objmap;                    // Object page map offset
+   DWORD e32_itermap;                   // Object iterated data map offset
+   DWORD e32_rsrctab;                   // Offset of Resource Table
+   DWORD e32_rsrccnt;                   // Number of resource entries
+   DWORD e32_restab;                    // Offset of resident name table
+   DWORD e32_enttab;                    // Offset of Entry Table
+   DWORD e32_dirtab;                    // Offset of Module Directive Table
+   DWORD e32_dircnt;                    // Number of module directives
+   DWORD e32_fpagetab;                  // Offset of Fixup Page Table
+   DWORD e32_frectab;                   // Offset of Fixup Record Table
+   DWORD e32_impmod;                    // Offset of Import Module Name Table
+   DWORD e32_impmodcnt;                 // Number of entries in Import Module Name Table
+   DWORD e32_impproc;                   // Offset of Import Procedure Name Table
+   DWORD e32_pagesum;                   // Offset of Per-Page Checksum Table
+   DWORD e32_datapage;                  // Offset of Enumerated Data Pages
+   DWORD e32_preload;                   // Number of preload pages
+   DWORD e32_nrestab;                   // Offset of Non-resident Names Table
+   DWORD e32_cbnrestab;                 // Size of Non-resident Name Table
+   DWORD e32_nressum;                   // Non-resident Name Table Checksum
+   DWORD e32_autodata;                  // Object # for automatic data object
+   DWORD e32_debuginfo;                 // Offset of the debugging information
+   DWORD e32_debuglen;                  // The length of the debugging info. in bytes
+   DWORD e32_instpreload;               // Number of instance pages in preload section of VXD file
+   DWORD e32_instdemand;                // Number of instance pages in demand load section of VXD file
+   DWORD e32_heapsize;                  // Size of heap - for 16-bit apps
+   BYTE e32_res3[12];                   // Reserved words
+   DWORD e32_winresoff;
+   DWORD e32_winreslen;
+   WORD e32_devid;                      // Device ID for VxD
+   WORD e32_ddkver;                     // DDK version for VxD
+} IMAGE_VXD_HEADER, *PIMAGE_VXD_HEADER;
 
 #ifndef _MAC
-#include "poppack.h"                    // Back to 4 byte packing
+   #include "poppack.h"                 // Back to 4 byte packing
 #endif
 
 //
@@ -5116,13 +5127,13 @@ typedef struct _IMAGE_VXD_HEADER {      // Windows VXD header
 //
 
 typedef struct _IMAGE_FILE_HEADER {
-    WORD    Machine;
-    WORD    NumberOfSections;
-    DWORD   TimeDateStamp;
-    DWORD   PointerToSymbolTable;
-    DWORD   NumberOfSymbols;
-    WORD    SizeOfOptionalHeader;
-    WORD    Characteristics;
+   WORD Machine;
+   WORD NumberOfSections;
+   DWORD TimeDateStamp;
+   DWORD PointerToSymbolTable;
+   DWORD NumberOfSymbols;
+   WORD SizeOfOptionalHeader;
+   WORD Characteristics;
 } IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;
 
 
@@ -5169,8 +5180,8 @@ typedef struct _IMAGE_FILE_HEADER {
 //
 
 typedef struct _IMAGE_DATA_DIRECTORY {
-    DWORD   VirtualAddress;
-    DWORD   Size;
+   DWORD VirtualAddress;
+   DWORD Size;
 } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
 
 #define IMAGE_NUMBEROF_DIRECTORY_ENTRIES    16
@@ -5180,95 +5191,95 @@ typedef struct _IMAGE_DATA_DIRECTORY {
 //
 
 typedef struct _IMAGE_OPTIONAL_HEADER {
-    //
-    // Standard fields.
-    //
+   //
+   // Standard fields.
+   //
 
-    WORD    Magic;
-    BYTE    MajorLinkerVersion;
-    BYTE    MinorLinkerVersion;
-    DWORD   SizeOfCode;
-    DWORD   SizeOfInitializedData;
-    DWORD   SizeOfUninitializedData;
-    DWORD   AddressOfEntryPoint;
-    DWORD   BaseOfCode;
-    DWORD   BaseOfData;
+   WORD Magic;
+   BYTE MajorLinkerVersion;
+   BYTE MinorLinkerVersion;
+   DWORD SizeOfCode;
+   DWORD SizeOfInitializedData;
+   DWORD SizeOfUninitializedData;
+   DWORD AddressOfEntryPoint;
+   DWORD BaseOfCode;
+   DWORD BaseOfData;
 
-    //
-    // NT additional fields.
-    //
+   //
+   // NT additional fields.
+   //
 
-    DWORD   ImageBase;
-    DWORD   SectionAlignment;
-    DWORD   FileAlignment;
-    WORD    MajorOperatingSystemVersion;
-    WORD    MinorOperatingSystemVersion;
-    WORD    MajorImageVersion;
-    WORD    MinorImageVersion;
-    WORD    MajorSubsystemVersion;
-    WORD    MinorSubsystemVersion;
-    DWORD   Win32VersionValue;
-    DWORD   SizeOfImage;
-    DWORD   SizeOfHeaders;
-    DWORD   CheckSum;
-    WORD    Subsystem;
-    WORD    DllCharacteristics;
-    DWORD   SizeOfStackReserve;
-    DWORD   SizeOfStackCommit;
-    DWORD   SizeOfHeapReserve;
-    DWORD   SizeOfHeapCommit;
-    DWORD   LoaderFlags;
-    DWORD   NumberOfRvaAndSizes;
-    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+   DWORD ImageBase;
+   DWORD SectionAlignment;
+   DWORD FileAlignment;
+   WORD MajorOperatingSystemVersion;
+   WORD MinorOperatingSystemVersion;
+   WORD MajorImageVersion;
+   WORD MinorImageVersion;
+   WORD MajorSubsystemVersion;
+   WORD MinorSubsystemVersion;
+   DWORD Win32VersionValue;
+   DWORD SizeOfImage;
+   DWORD SizeOfHeaders;
+   DWORD CheckSum;
+   WORD Subsystem;
+   WORD DllCharacteristics;
+   DWORD SizeOfStackReserve;
+   DWORD SizeOfStackCommit;
+   DWORD SizeOfHeapReserve;
+   DWORD SizeOfHeapCommit;
+   DWORD LoaderFlags;
+   DWORD NumberOfRvaAndSizes;
+   IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 } IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;
 
 typedef struct _IMAGE_ROM_OPTIONAL_HEADER {
-    WORD   Magic;
-    BYTE   MajorLinkerVersion;
-    BYTE   MinorLinkerVersion;
-    DWORD  SizeOfCode;
-    DWORD  SizeOfInitializedData;
-    DWORD  SizeOfUninitializedData;
-    DWORD  AddressOfEntryPoint;
-    DWORD  BaseOfCode;
-    DWORD  BaseOfData;
-    DWORD  BaseOfBss;
-    DWORD  GprMask;
-    DWORD  CprMask[4];
-    DWORD  GpValue;
+   WORD Magic;
+   BYTE MajorLinkerVersion;
+   BYTE MinorLinkerVersion;
+   DWORD SizeOfCode;
+   DWORD SizeOfInitializedData;
+   DWORD SizeOfUninitializedData;
+   DWORD AddressOfEntryPoint;
+   DWORD BaseOfCode;
+   DWORD BaseOfData;
+   DWORD BaseOfBss;
+   DWORD GprMask;
+   DWORD CprMask[4];
+   DWORD GpValue;
 } IMAGE_ROM_OPTIONAL_HEADER, *PIMAGE_ROM_OPTIONAL_HEADER;
 
 typedef struct _IMAGE_OPTIONAL_HEADER64 {
-    WORD        Magic;
-    BYTE        MajorLinkerVersion;
-    BYTE        MinorLinkerVersion;
-    DWORD       SizeOfCode;
-    DWORD       SizeOfInitializedData;
-    DWORD       SizeOfUninitializedData;
-    DWORD       AddressOfEntryPoint;
-    DWORD       BaseOfCode;
-    ULONGLONG   ImageBase;
-    DWORD       SectionAlignment;
-    DWORD       FileAlignment;
-    WORD        MajorOperatingSystemVersion;
-    WORD        MinorOperatingSystemVersion;
-    WORD        MajorImageVersion;
-    WORD        MinorImageVersion;
-    WORD        MajorSubsystemVersion;
-    WORD        MinorSubsystemVersion;
-    DWORD       Win32VersionValue;
-    DWORD       SizeOfImage;
-    DWORD       SizeOfHeaders;
-    DWORD       CheckSum;
-    WORD        Subsystem;
-    WORD        DllCharacteristics;
-    ULONGLONG   SizeOfStackReserve;
-    ULONGLONG   SizeOfStackCommit;
-    ULONGLONG   SizeOfHeapReserve;
-    ULONGLONG   SizeOfHeapCommit;
-    DWORD       LoaderFlags;
-    DWORD       NumberOfRvaAndSizes;
-    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+   WORD Magic;
+   BYTE MajorLinkerVersion;
+   BYTE MinorLinkerVersion;
+   DWORD SizeOfCode;
+   DWORD SizeOfInitializedData;
+   DWORD SizeOfUninitializedData;
+   DWORD AddressOfEntryPoint;
+   DWORD BaseOfCode;
+   ULONGLONG ImageBase;
+   DWORD SectionAlignment;
+   DWORD FileAlignment;
+   WORD MajorOperatingSystemVersion;
+   WORD MinorOperatingSystemVersion;
+   WORD MajorImageVersion;
+   WORD MinorImageVersion;
+   WORD MajorSubsystemVersion;
+   WORD MinorSubsystemVersion;
+   DWORD Win32VersionValue;
+   DWORD SizeOfImage;
+   DWORD SizeOfHeaders;
+   DWORD CheckSum;
+   WORD Subsystem;
+   WORD DllCharacteristics;
+   ULONGLONG SizeOfStackReserve;
+   ULONGLONG SizeOfStackCommit;
+   ULONGLONG SizeOfHeapReserve;
+   ULONGLONG SizeOfHeapCommit;
+   DWORD LoaderFlags;
+   DWORD NumberOfRvaAndSizes;
+   IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 } IMAGE_OPTIONAL_HEADER64, *PIMAGE_OPTIONAL_HEADER64;
 
 #define IMAGE_SIZEOF_ROM_OPTIONAL_HEADER      56
@@ -5281,54 +5292,56 @@ typedef struct _IMAGE_OPTIONAL_HEADER64 {
 #define IMAGE_ROM_OPTIONAL_HDR_MAGIC       0x107
 
 #ifdef _WIN64
-typedef IMAGE_OPTIONAL_HEADER64             IMAGE_OPTIONAL_HEADER;
-typedef PIMAGE_OPTIONAL_HEADER64            PIMAGE_OPTIONAL_HEADER;
-#define IMAGE_SIZEOF_NT_OPTIONAL_HEADER     IMAGE_SIZEOF_NT_OPTIONAL64_HEADER
-#define IMAGE_NT_OPTIONAL_HDR_MAGIC         IMAGE_NT_OPTIONAL_HDR64_MAGIC
+typedef IMAGE_OPTIONAL_HEADER64 IMAGE_OPTIONAL_HEADER;
+typedef PIMAGE_OPTIONAL_HEADER64 PIMAGE_OPTIONAL_HEADER;
+   #define IMAGE_SIZEOF_NT_OPTIONAL_HEADER     IMAGE_SIZEOF_NT_OPTIONAL64_HEADER
+   #define IMAGE_NT_OPTIONAL_HDR_MAGIC         IMAGE_NT_OPTIONAL_HDR64_MAGIC
 #else
-typedef IMAGE_OPTIONAL_HEADER32             IMAGE_OPTIONAL_HEADER;
-typedef PIMAGE_OPTIONAL_HEADER32            PIMAGE_OPTIONAL_HEADER;
-#define IMAGE_SIZEOF_NT_OPTIONAL_HEADER     IMAGE_SIZEOF_NT_OPTIONAL32_HEADER
-#define IMAGE_NT_OPTIONAL_HDR_MAGIC         IMAGE_NT_OPTIONAL_HDR32_MAGIC
+typedef IMAGE_OPTIONAL_HEADER32 IMAGE_OPTIONAL_HEADER;
+typedef PIMAGE_OPTIONAL_HEADER32 PIMAGE_OPTIONAL_HEADER;
+   #define IMAGE_SIZEOF_NT_OPTIONAL_HEADER     IMAGE_SIZEOF_NT_OPTIONAL32_HEADER
+   #define IMAGE_NT_OPTIONAL_HDR_MAGIC         IMAGE_NT_OPTIONAL_HDR32_MAGIC
 #endif
 
 typedef struct _IMAGE_NT_HEADERS64 {
-    DWORD Signature;
-    IMAGE_FILE_HEADER FileHeader;
-    IMAGE_OPTIONAL_HEADER64 OptionalHeader;
+   DWORD Signature;
+   IMAGE_FILE_HEADER FileHeader;
+   IMAGE_OPTIONAL_HEADER64 OptionalHeader;
 } IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;
 
 typedef struct _IMAGE_NT_HEADERS {
-    DWORD Signature;
-    IMAGE_FILE_HEADER FileHeader;
-    IMAGE_OPTIONAL_HEADER32 OptionalHeader;
+   DWORD Signature;
+   IMAGE_FILE_HEADER FileHeader;
+   IMAGE_OPTIONAL_HEADER32 OptionalHeader;
 } IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32;
 
 typedef struct _IMAGE_ROM_HEADERS {
-    IMAGE_FILE_HEADER FileHeader;
-    IMAGE_ROM_OPTIONAL_HEADER OptionalHeader;
+   IMAGE_FILE_HEADER FileHeader;
+   IMAGE_ROM_OPTIONAL_HEADER OptionalHeader;
 } IMAGE_ROM_HEADERS, *PIMAGE_ROM_HEADERS;
 
 #define IMAGE_FIRST_SECTION64( ntheader ) ((PIMAGE_SECTION_HEADER)        \
-    ((UINT_PTR)ntheader +                                                  \
-     FIELD_OFFSET( IMAGE_NT_HEADERS64, OptionalHeader ) +                 \
-     ((PIMAGE_NT_HEADERS64)(ntheader))->FileHeader.SizeOfOptionalHeader   \
-    ))
+                                           ((UINT_PTR)ntheader +                                                  \
+                                            FIELD_OFFSET( IMAGE_NT_HEADERS64, OptionalHeader ) +                 \
+                                            ((PIMAGE_NT_HEADERS64)(ntheader))->FileHeader. \
+                                            SizeOfOptionalHeader   \
+                                           ))
 
 #define IMAGE_FIRST_SECTION32( ntheader ) ((PIMAGE_SECTION_HEADER)        \
-    ((UINT_PTR)ntheader +                                                  \
-     FIELD_OFFSET( IMAGE_NT_HEADERS32, OptionalHeader ) +                 \
-     ((PIMAGE_NT_HEADERS32)(ntheader))->FileHeader.SizeOfOptionalHeader   \
-    ))
+                                           ((UINT_PTR)ntheader +                                                  \
+                                            FIELD_OFFSET( IMAGE_NT_HEADERS32, OptionalHeader ) +                 \
+                                            ((PIMAGE_NT_HEADERS32)(ntheader))->FileHeader. \
+                                            SizeOfOptionalHeader   \
+                                           ))
 
 #ifdef _WIN64
-typedef IMAGE_NT_HEADERS64                  IMAGE_NT_HEADERS;
-typedef PIMAGE_NT_HEADERS64                 PIMAGE_NT_HEADERS;
-#define IMAGE_FIRST_SECTION(ntheader)       IMAGE_FIRST_SECTION64(ntheader)
+typedef IMAGE_NT_HEADERS64 IMAGE_NT_HEADERS;
+typedef PIMAGE_NT_HEADERS64 PIMAGE_NT_HEADERS;
+   #define IMAGE_FIRST_SECTION(ntheader)       IMAGE_FIRST_SECTION64(ntheader)
 #else
-typedef IMAGE_NT_HEADERS32                  IMAGE_NT_HEADERS;
-typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
-#define IMAGE_FIRST_SECTION(ntheader)       IMAGE_FIRST_SECTION32(ntheader)
+typedef IMAGE_NT_HEADERS32 IMAGE_NT_HEADERS;
+typedef PIMAGE_NT_HEADERS32 PIMAGE_NT_HEADERS;
+   #define IMAGE_FIRST_SECTION(ntheader)       IMAGE_FIRST_SECTION32(ntheader)
 #endif
 
 
@@ -5377,19 +5390,19 @@ typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
 #define IMAGE_SIZEOF_SHORT_NAME              8
 
 typedef struct _IMAGE_SECTION_HEADER {
-    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];
-    union {
-            DWORD   PhysicalAddress;
-            DWORD   VirtualSize;
-    } Misc;
-    DWORD   VirtualAddress;
-    DWORD   SizeOfRawData;
-    DWORD   PointerToRawData;
-    DWORD   PointerToRelocations;
-    DWORD   PointerToLinenumbers;
-    WORD    NumberOfRelocations;
-    WORD    NumberOfLinenumbers;
-    DWORD   Characteristics;
+   BYTE Name[IMAGE_SIZEOF_SHORT_NAME];
+   union {
+      DWORD PhysicalAddress;
+      DWORD VirtualSize;
+   } Misc;
+   DWORD VirtualAddress;
+   DWORD SizeOfRawData;
+   DWORD PointerToRawData;
+   DWORD PointerToRelocations;
+   DWORD PointerToLinenumbers;
+   WORD NumberOfRelocations;
+   WORD NumberOfLinenumbers;
+   DWORD Characteristics;
 } IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
 
 #define IMAGE_SIZEOF_SECTION_HEADER          40
@@ -5455,7 +5468,7 @@ typedef struct _IMAGE_SECTION_HEADER {
 #define IMAGE_SCN_SCALE_INDEX                0x00000001  // Tls index is scaled
 
 #ifndef _MAC
-#include "pshpack2.h"                       // Symbols, relocs, and linenumbers are 2 byte packed
+   #include "pshpack2.h"                    // Symbols, relocs, and linenumbers are 2 byte packed
 #endif
 
 //
@@ -5463,19 +5476,19 @@ typedef struct _IMAGE_SECTION_HEADER {
 //
 
 typedef struct _IMAGE_SYMBOL {
-    union {
-        BYTE    ShortName[8];
-        struct {
-            DWORD   Short;     // if 0, use LongName
-            DWORD   Long;      // offset into string table
-        } Name;
-        PBYTE   LongName[2];
-    } N;
-    DWORD   Value;
-    SHORT   SectionNumber;
-    WORD    Type;
-    BYTE    StorageClass;
-    BYTE    NumberOfAuxSymbols;
+   union {
+      BYTE ShortName[8];
+      struct {
+         DWORD Short;          // if 0, use LongName
+         DWORD Long;           // offset into string table
+      } Name;
+      PBYTE LongName[2];
+   } N;
+   DWORD Value;
+   SHORT SectionNumber;
+   WORD Type;
+   BYTE StorageClass;
+   BYTE NumberOfAuxSymbols;
 } IMAGE_SYMBOL;
 typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 
@@ -5572,30 +5585,31 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 
 // Is x a pointer?
 #ifndef ISPTR
-#define ISPTR(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_POINTER << N_BTSHFT))
+   #define ISPTR(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_POINTER << N_BTSHFT))
 #endif
 
 // Is x a function?
 #ifndef ISFCN
-#define ISFCN(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_FUNCTION << N_BTSHFT))
+   #define ISFCN(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_FUNCTION << N_BTSHFT))
 #endif
 
 // Is x an array?
 
 #ifndef ISARY
-#define ISARY(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_ARRAY << N_BTSHFT))
+   #define ISARY(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_ARRAY << N_BTSHFT))
 #endif
 
 // Is x a structure, union, or enumeration TAG?
 #ifndef ISTAG
-#define ISTAG(x) ((x)==IMAGE_SYM_CLASS_STRUCT_TAG || (x)==IMAGE_SYM_CLASS_UNION_TAG || (x)==IMAGE_SYM_CLASS_ENUM_TAG)
+   #define ISTAG(x) ((x)==IMAGE_SYM_CLASS_STRUCT_TAG || (x)==IMAGE_SYM_CLASS_UNION_TAG || (x)== \
+                     IMAGE_SYM_CLASS_ENUM_TAG)
 #endif
 
 #ifndef INCREF
-#define INCREF(x) ((((x)&~N_BTMASK)<<N_TSHIFT)|(IMAGE_SYM_DTYPE_POINTER<<N_BTSHFT)|((x)&N_BTMASK))
+   #define INCREF(x) ((((x)&~N_BTMASK)<<N_TSHIFT)|(IMAGE_SYM_DTYPE_POINTER<<N_BTSHFT)|((x)&N_BTMASK))
 #endif
 #ifndef DECREF
-#define DECREF(x) ((((x)>>N_TSHIFT)&~N_BTMASK)|((x)&N_BTMASK))
+   #define DECREF(x) ((((x)>>N_TSHIFT)&~N_BTMASK)|((x)&N_BTMASK))
 #endif
 
 //
@@ -5603,37 +5617,37 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 //
 
 typedef union _IMAGE_AUX_SYMBOL {
-    struct {
-        DWORD    TagIndex;                      // struct, union, or enum tag index
-        union {
-            struct {
-                WORD    Linenumber;             // declaration line number
-                WORD    Size;                   // size of struct, union, or enum
-            } LnSz;
-           DWORD    TotalSize;
-        } Misc;
-        union {
-            struct {                            // if ISFCN, tag, or .bb
-                DWORD    PointerToLinenumber;
-                DWORD    PointerToNextFunction;
-            } Function;
-            struct {                            // if ISARY, up to 4 dimen.
-                WORD     Dimension[4];
-            } Array;
-        } FcnAry;
-        WORD    TvIndex;                        // tv index
-    } Sym;
-    struct {
-        BYTE    Name[IMAGE_SIZEOF_SYMBOL];
-    } File;
-    struct {
-        DWORD   Length;                         // section length
-        WORD    NumberOfRelocations;            // number of relocation entries
-        WORD    NumberOfLinenumbers;            // number of line numbers
-        DWORD   CheckSum;                       // checksum for communal
-        SHORT   Number;                         // section number to associate with
-        BYTE    Selection;                      // communal selection type
-    } Section;
+   struct {
+      DWORD TagIndex;                           // struct, union, or enum tag index
+      union {
+         struct {
+            WORD Linenumber;                    // declaration line number
+            WORD Size;                          // size of struct, union, or enum
+         } LnSz;
+         DWORD TotalSize;
+      } Misc;
+      union {
+         struct {                               // if ISFCN, tag, or .bb
+            DWORD PointerToLinenumber;
+            DWORD PointerToNextFunction;
+         } Function;
+         struct {                               // if ISARY, up to 4 dimen.
+            WORD Dimension[4];
+         } Array;
+      } FcnAry;
+      WORD TvIndex;                             // tv index
+   } Sym;
+   struct {
+      BYTE Name[IMAGE_SIZEOF_SYMBOL];
+   } File;
+   struct {
+      DWORD Length;                             // section length
+      WORD NumberOfRelocations;                 // number of relocation entries
+      WORD NumberOfLinenumbers;                 // number of line numbers
+      DWORD CheckSum;                           // checksum for communal
+      SHORT Number;                             // section number to associate with
+      BYTE Selection;                           // communal selection type
+   } Section;
 } IMAGE_AUX_SYMBOL;
 typedef IMAGE_AUX_SYMBOL UNALIGNED *PIMAGE_AUX_SYMBOL;
 
@@ -5660,12 +5674,12 @@ typedef IMAGE_AUX_SYMBOL UNALIGNED *PIMAGE_AUX_SYMBOL;
 //
 
 typedef struct _IMAGE_RELOCATION {
-    union {
-        DWORD   VirtualAddress;
-        DWORD   RelocCount;             // Set to the real count when IMAGE_SCN_LNK_NRELOC_OVFL is set
-    };
-    DWORD   SymbolTableIndex;
-    WORD    Type;
+   union {
+      DWORD VirtualAddress;
+      DWORD RelocCount;                 // Set to the real count when IMAGE_SCN_LNK_NRELOC_OVFL is set
+   };
+   DWORD SymbolTableIndex;
+   WORD Type;
 } IMAGE_RELOCATION;
 typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 
@@ -5830,11 +5844,12 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_IA64_ADDEND           0x001F
 
 #define EXT_IMM64(Value, Address, Size, InstPos, ValPos)             \
-    Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)
+   Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)
 
 #define INS_IMM64(Value, Address, Size, InstPos, ValPos)  \
-    *(PDWORD)Address = (*(PDWORD)Address & ~(((1 << Size) - 1) << InstPos)) | \
-          ((DWORD)((((ULONGLONG)Value >> ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)
+   *(PDWORD)Address = (*(PDWORD)Address & ~(((1 << Size) - 1) << InstPos)) | \
+                      ((DWORD)((((ULONGLONG)Value >> \
+                                 ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)
 
 #define EMARCH_ENC_I17_IMM7B_INST_WORD_X         3
 #define EMARCH_ENC_I17_IMM7B_SIZE_X              7
@@ -5881,18 +5896,18 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 //
 
 typedef struct _IMAGE_LINENUMBER {
-    union {
-        DWORD   SymbolTableIndex;               // Symbol table index of function name if Linenumber is 0.
-        DWORD   VirtualAddress;                 // Virtual address of line number.
-    } Type;
-    WORD    Linenumber;                         // Line number.
+   union {
+      DWORD SymbolTableIndex;                   // Symbol table index of function name if Linenumber is 0.
+      DWORD VirtualAddress;                     // Virtual address of line number.
+   } Type;
+   WORD Linenumber;                             // Line number.
 } IMAGE_LINENUMBER;
 typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 
 #define IMAGE_SIZEOF_LINENUMBER              6
 
 #ifndef _MAC
-#include "poppack.h"                        // Back to 4 byte packing
+   #include "poppack.h"                     // Back to 4 byte packing
 #endif
 
 //
@@ -5900,8 +5915,8 @@ typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 //
 
 typedef struct _IMAGE_BASE_RELOCATION {
-    DWORD   VirtualAddress;
-    DWORD   SizeOfBlock;
+   DWORD VirtualAddress;
+   DWORD SizeOfBlock;
 //  WORD    TypeOffset[1];
 } IMAGE_BASE_RELOCATION;
 typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
@@ -5939,13 +5954,13 @@ typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
 #define IMAGE_ARCHIVE_LONGNAMES_MEMBER       "//              "
 
 typedef struct _IMAGE_ARCHIVE_MEMBER_HEADER {
-    BYTE     Name[16];                          // File member name - `/' terminated.
-    BYTE     Date[12];                          // File member date - decimal.
-    BYTE     UserID[6];                         // File member user id - decimal.
-    BYTE     GroupID[6];                        // File member group id - decimal.
-    BYTE     Mode[8];                           // File member mode - octal.
-    BYTE     Size[10];                          // File member size - decimal.
-    BYTE     EndHeader[2];                      // String to end header.
+   BYTE Name[16];                               // File member name - `/' terminated.
+   BYTE Date[12];                               // File member date - decimal.
+   BYTE UserID[6];                              // File member user id - decimal.
+   BYTE GroupID[6];                             // File member group id - decimal.
+   BYTE Mode[8];                                // File member mode - octal.
+   BYTE Size[10];                               // File member size - decimal.
+   BYTE EndHeader[2];                           // String to end header.
 } IMAGE_ARCHIVE_MEMBER_HEADER, *PIMAGE_ARCHIVE_MEMBER_HEADER;
 
 #define IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR      60
@@ -5959,17 +5974,17 @@ typedef struct _IMAGE_ARCHIVE_MEMBER_HEADER {
 //
 
 typedef struct _IMAGE_EXPORT_DIRECTORY {
-    DWORD   Characteristics;
-    DWORD   TimeDateStamp;
-    WORD    MajorVersion;
-    WORD    MinorVersion;
-    DWORD   Name;
-    DWORD   Base;
-    DWORD   NumberOfFunctions;
-    DWORD   NumberOfNames;
-    DWORD   AddressOfFunctions;     // RVA from base of image
-    DWORD   AddressOfNames;         // RVA from base of image
-    DWORD   AddressOfNameOrdinals;  // RVA from base of image
+   DWORD Characteristics;
+   DWORD TimeDateStamp;
+   WORD MajorVersion;
+   WORD MinorVersion;
+   DWORD Name;
+   DWORD Base;
+   DWORD NumberOfFunctions;
+   DWORD NumberOfNames;
+   DWORD AddressOfFunctions;        // RVA from base of image
+   DWORD AddressOfNames;            // RVA from base of image
+   DWORD AddressOfNameOrdinals;     // RVA from base of image
 } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
 
 //
@@ -5977,31 +5992,31 @@ typedef struct _IMAGE_EXPORT_DIRECTORY {
 //
 
 typedef struct _IMAGE_IMPORT_BY_NAME {
-    WORD    Hint;
-    BYTE    Name[1];
+   WORD Hint;
+   BYTE Name[1];
 } IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;
 
 #include "pshpack8.h"                       // Use align 8 for the 64-bit IAT.
 
 typedef struct _IMAGE_THUNK_DATA64 {
-    union {
-        PBYTE  ForwarderString;
-        PDWORD Function;
-        ULONGLONG Ordinal;
-        PIMAGE_IMPORT_BY_NAME  AddressOfData;
-    } u1;
+   union {
+      PBYTE ForwarderString;
+      PDWORD Function;
+      ULONGLONG Ordinal;
+      PIMAGE_IMPORT_BY_NAME AddressOfData;
+   } u1;
 } IMAGE_THUNK_DATA64;
 typedef IMAGE_THUNK_DATA64 * PIMAGE_THUNK_DATA64;
 
 #include "poppack.h"                        // Back to 4 byte packing
 
 typedef struct _IMAGE_THUNK_DATA32 {
-    union {
-        PBYTE  ForwarderString;
-        PDWORD Function;
-        DWORD Ordinal;
-        PIMAGE_IMPORT_BY_NAME  AddressOfData;
-    } u1;
+   union {
+      PBYTE ForwarderString;
+      PDWORD Function;
+      DWORD Ordinal;
+      PIMAGE_IMPORT_BY_NAME AddressOfData;
+   } u1;
 } IMAGE_THUNK_DATA32;
 typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
 
@@ -6017,63 +6032,63 @@ typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
 //
 
 typedef VOID
-(NTAPI *PIMAGE_TLS_CALLBACK) (
-    PVOID DllHandle,
-    DWORD Reason,
-    PVOID Reserved
-    );
+(NTAPI *PIMAGE_TLS_CALLBACK)(
+   PVOID DllHandle,
+   DWORD Reason,
+   PVOID Reserved
+   );
 
 typedef struct _IMAGE_TLS_DIRECTORY64 {
-    ULONGLONG   StartAddressOfRawData;
-    ULONGLONG   EndAddressOfRawData;
-    PDWORD  AddressOfIndex;
-    PIMAGE_TLS_CALLBACK *AddressOfCallBacks;
-    DWORD   SizeOfZeroFill;
-    DWORD   Characteristics;
+   ULONGLONG StartAddressOfRawData;
+   ULONGLONG EndAddressOfRawData;
+   PDWORD AddressOfIndex;
+   PIMAGE_TLS_CALLBACK *AddressOfCallBacks;
+   DWORD SizeOfZeroFill;
+   DWORD Characteristics;
 } IMAGE_TLS_DIRECTORY64;
 typedef IMAGE_TLS_DIRECTORY64 * PIMAGE_TLS_DIRECTORY64;
 
 typedef struct _IMAGE_TLS_DIRECTORY32 {
-    DWORD   StartAddressOfRawData;
-    DWORD   EndAddressOfRawData;
-    PDWORD  AddressOfIndex;
-    PIMAGE_TLS_CALLBACK *AddressOfCallBacks;
-    DWORD   SizeOfZeroFill;
-    DWORD   Characteristics;
+   DWORD StartAddressOfRawData;
+   DWORD EndAddressOfRawData;
+   PDWORD AddressOfIndex;
+   PIMAGE_TLS_CALLBACK *AddressOfCallBacks;
+   DWORD SizeOfZeroFill;
+   DWORD Characteristics;
 } IMAGE_TLS_DIRECTORY32;
 typedef IMAGE_TLS_DIRECTORY32 * PIMAGE_TLS_DIRECTORY32;
 
 #ifdef _WIN64
-#define IMAGE_ORDINAL_FLAG              IMAGE_ORDINAL_FLAG64
-#define IMAGE_ORDINAL(Ordinal)          IMAGE_ORDINAL64(Ordinal)
-typedef IMAGE_THUNK_DATA64              IMAGE_THUNK_DATA;
-typedef PIMAGE_THUNK_DATA64             PIMAGE_THUNK_DATA;
-#define IMAGE_SNAP_BY_ORDINAL(Ordinal)  IMAGE_SNAP_BY_ORDINAL64(Ordinal)
-typedef IMAGE_TLS_DIRECTORY64           IMAGE_TLS_DIRECTORY;
-typedef PIMAGE_TLS_DIRECTORY64          PIMAGE_TLS_DIRECTORY;
+   #define IMAGE_ORDINAL_FLAG              IMAGE_ORDINAL_FLAG64
+   #define IMAGE_ORDINAL(Ordinal)          IMAGE_ORDINAL64(Ordinal)
+typedef IMAGE_THUNK_DATA64 IMAGE_THUNK_DATA;
+typedef PIMAGE_THUNK_DATA64 PIMAGE_THUNK_DATA;
+   #define IMAGE_SNAP_BY_ORDINAL(Ordinal)  IMAGE_SNAP_BY_ORDINAL64(Ordinal)
+typedef IMAGE_TLS_DIRECTORY64 IMAGE_TLS_DIRECTORY;
+typedef PIMAGE_TLS_DIRECTORY64 PIMAGE_TLS_DIRECTORY;
 #else
-#define IMAGE_ORDINAL_FLAG              IMAGE_ORDINAL_FLAG32
-#define IMAGE_ORDINAL(Ordinal)          IMAGE_ORDINAL32(Ordinal)
-typedef IMAGE_THUNK_DATA32              IMAGE_THUNK_DATA;
-typedef PIMAGE_THUNK_DATA32             PIMAGE_THUNK_DATA;
-#define IMAGE_SNAP_BY_ORDINAL(Ordinal)  IMAGE_SNAP_BY_ORDINAL32(Ordinal)
-typedef IMAGE_TLS_DIRECTORY32           IMAGE_TLS_DIRECTORY;
-typedef PIMAGE_TLS_DIRECTORY32          PIMAGE_TLS_DIRECTORY;
+   #define IMAGE_ORDINAL_FLAG              IMAGE_ORDINAL_FLAG32
+   #define IMAGE_ORDINAL(Ordinal)          IMAGE_ORDINAL32(Ordinal)
+typedef IMAGE_THUNK_DATA32 IMAGE_THUNK_DATA;
+typedef PIMAGE_THUNK_DATA32 PIMAGE_THUNK_DATA;
+   #define IMAGE_SNAP_BY_ORDINAL(Ordinal)  IMAGE_SNAP_BY_ORDINAL32(Ordinal)
+typedef IMAGE_TLS_DIRECTORY32 IMAGE_TLS_DIRECTORY;
+typedef PIMAGE_TLS_DIRECTORY32 PIMAGE_TLS_DIRECTORY;
 #endif
 
 typedef struct _IMAGE_IMPORT_DESCRIPTOR {
-    union {
-        DWORD   Characteristics;            // 0 for terminating null import descriptor
-        DWORD   OriginalFirstThunk;         // RVA to original unbound IAT (PIMAGE_THUNK_DATA)
-    };
-    DWORD   TimeDateStamp;                  // 0 if not bound,
+   union {
+      DWORD Characteristics;                // 0 for terminating null import descriptor
+      DWORD OriginalFirstThunk;             // RVA to original unbound IAT (PIMAGE_THUNK_DATA)
+   };
+   DWORD TimeDateStamp;                     // 0 if not bound,
                                             // -1 if bound, and real date\time stamp
                                             //     in IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT (new BIND)
                                             // O.W. date/time stamp of DLL bound to (Old BIND)
 
-    DWORD   ForwarderChain;                 // -1 if no forwarders
-    DWORD   Name;
-    DWORD   FirstThunk;                     // RVA to IAT (if bound this IAT has actual addresses)
+   DWORD ForwarderChain;                    // -1 if no forwarders
+   DWORD Name;
+   DWORD FirstThunk;                        // RVA to IAT (if bound this IAT has actual addresses)
 } IMAGE_IMPORT_DESCRIPTOR;
 typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;
 
@@ -6082,16 +6097,16 @@ typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;
 //
 
 typedef struct _IMAGE_BOUND_IMPORT_DESCRIPTOR {
-    DWORD   TimeDateStamp;
-    WORD    OffsetModuleName;
-    WORD    NumberOfModuleForwarderRefs;
+   DWORD TimeDateStamp;
+   WORD OffsetModuleName;
+   WORD NumberOfModuleForwarderRefs;
 // Array of zero or more IMAGE_BOUND_FORWARDER_REF follows
 } IMAGE_BOUND_IMPORT_DESCRIPTOR,  *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
 
 typedef struct _IMAGE_BOUND_FORWARDER_REF {
-    DWORD   TimeDateStamp;
-    WORD    OffsetModuleName;
-    WORD    Reserved;
+   DWORD TimeDateStamp;
+   WORD OffsetModuleName;
+   WORD Reserved;
 } IMAGE_BOUND_FORWARDER_REF, *PIMAGE_BOUND_FORWARDER_REF;
 
 //
@@ -6100,9 +6115,9 @@ typedef struct _IMAGE_BOUND_FORWARDER_REF {
 #define IMAGE_MIX_ISA_LIMIT 2
 
 typedef struct _IMAGE_STUB_DIRECTORY {
-    DWORD   SecondaryImportAddressTable;           // RVA of Secondary IAT
-    WORD    ExpectedISA[IMAGE_MIX_ISA_LIMIT];      // Indicator of available ISA stubs
-    DWORD   StubAddressTable[IMAGE_MIX_ISA_LIMIT]; // RVA of Stub Address Tables
+   DWORD SecondaryImportAddressTable;              // RVA of Secondary IAT
+   WORD ExpectedISA[IMAGE_MIX_ISA_LIMIT];          // Indicator of available ISA stubs
+   DWORD StubAddressTable[IMAGE_MIX_ISA_LIMIT];    // RVA of Stub Address Tables
 } IMAGE_STUB_DIRECTORY, *PIMAGE_STUB_DIRECTORY;
 
 #define IA64_STUB_NOT_AVAILABLE     ((PVOID) -1)
@@ -6128,12 +6143,12 @@ typedef struct _IMAGE_STUB_DIRECTORY {
 //
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY {
-    DWORD   Characteristics;
-    DWORD   TimeDateStamp;
-    WORD    MajorVersion;
-    WORD    MinorVersion;
-    WORD    NumberOfNamedEntries;
-    WORD    NumberOfIdEntries;
+   DWORD Characteristics;
+   DWORD TimeDateStamp;
+   WORD MajorVersion;
+   WORD MinorVersion;
+   WORD NumberOfNamedEntries;
+   WORD NumberOfIdEntries;
 //  IMAGE_RESOURCE_DIRECTORY_ENTRY DirectoryEntries[];
 } IMAGE_RESOURCE_DIRECTORY, *PIMAGE_RESOURCE_DIRECTORY;
 
@@ -6155,21 +6170,21 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY {
 //
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
-    union {
-        struct {
-            DWORD NameOffset:31;
-            DWORD NameIsString:1;
-        };
-        DWORD   Name;
-        WORD    Id;
-    };
-    union {
-        DWORD   OffsetToData;
-        struct {
-            DWORD   OffsetToDirectory:31;
-            DWORD   DataIsDirectory:1;
-        };
-    };
+   union {
+      struct {
+         DWORD NameOffset : 31;
+         DWORD NameIsString : 1;
+      };
+      DWORD Name;
+      WORD Id;
+   };
+   union {
+      DWORD OffsetToData;
+      struct {
+         DWORD OffsetToDirectory : 31;
+         DWORD DataIsDirectory : 1;
+      };
+   };
 } IMAGE_RESOURCE_DIRECTORY_ENTRY, *PIMAGE_RESOURCE_DIRECTORY_ENTRY;
 
 //
@@ -6182,14 +6197,14 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
 //
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY_STRING {
-    WORD    Length;
-    CHAR    NameString[ 1 ];
+   WORD Length;
+   CHAR NameString[ 1 ];
 } IMAGE_RESOURCE_DIRECTORY_STRING, *PIMAGE_RESOURCE_DIRECTORY_STRING;
 
 
 typedef struct _IMAGE_RESOURCE_DIR_STRING_U {
-    WORD    Length;
-    WCHAR   NameString[ 1 ];
+   WORD Length;
+   WCHAR NameString[ 1 ];
 } IMAGE_RESOURCE_DIR_STRING_U, *PIMAGE_RESOURCE_DIR_STRING_U;
 
 
@@ -6203,10 +6218,10 @@ typedef struct _IMAGE_RESOURCE_DIR_STRING_U {
 //
 
 typedef struct _IMAGE_RESOURCE_DATA_ENTRY {
-    DWORD   OffsetToData;
-    DWORD   Size;
-    DWORD   CodePage;
-    DWORD   Reserved;
+   DWORD OffsetToData;
+   DWORD Size;
+   DWORD CodePage;
+   DWORD Reserved;
 } IMAGE_RESOURCE_DATA_ENTRY, *PIMAGE_RESOURCE_DATA_ENTRY;
 
 //
@@ -6214,24 +6229,24 @@ typedef struct _IMAGE_RESOURCE_DATA_ENTRY {
 //
 
 typedef struct _IMAGE_LOAD_CONFIG_DIRECTORY {
-    DWORD   Characteristics;
-    DWORD   TimeDateStamp;
-    WORD    MajorVersion;
-    WORD    MinorVersion;
-    DWORD   GlobalFlagsClear;
-    DWORD   GlobalFlagsSet;
-    DWORD   CriticalSectionDefaultTimeout;
-    DWORD   DeCommitFreeBlockThreshold;
-    DWORD   DeCommitTotalFreeThreshold;
-    PVOID   LockPrefixTable;
-    DWORD   MaximumAllocationSize;
-    DWORD   VirtualMemoryThreshold;
-    DWORD   ProcessHeapFlags;
-    DWORD   ProcessAffinityMask;
-    WORD    CSDVersion;
-    WORD    Reserved1;
-    PVOID   EditList;
-    DWORD   Reserved[ 1 ];
+   DWORD Characteristics;
+   DWORD TimeDateStamp;
+   WORD MajorVersion;
+   WORD MinorVersion;
+   DWORD GlobalFlagsClear;
+   DWORD GlobalFlagsSet;
+   DWORD CriticalSectionDefaultTimeout;
+   DWORD DeCommitFreeBlockThreshold;
+   DWORD DeCommitTotalFreeThreshold;
+   PVOID LockPrefixTable;
+   DWORD MaximumAllocationSize;
+   DWORD VirtualMemoryThreshold;
+   DWORD ProcessHeapFlags;
+   DWORD ProcessAffinityMask;
+   WORD CSDVersion;
+   WORD Reserved1;
+   PVOID EditList;
+   DWORD Reserved[ 1 ];
 } IMAGE_LOAD_CONFIG_DIRECTORY, *PIMAGE_LOAD_CONFIG_DIRECTORY;
 
 
@@ -6243,9 +6258,9 @@ typedef struct _IMAGE_LOAD_CONFIG_DIRECTORY {
 //
 
 typedef struct _IMAGE_IA64_RUNTIME_FUNCTION_ENTRY {
-    DWORD BeginAddress;
-    DWORD EndAddress;
-    DWORD UnwindInfoAddress;
+   DWORD BeginAddress;
+   DWORD EndAddress;
+   DWORD UnwindInfoAddress;
 } IMAGE_IA64_RUNTIME_FUNCTION_ENTRY, *PIMAGE_IA64_RUNTIME_FUNCTION_ENTRY;
 
 //
@@ -6256,22 +6271,22 @@ typedef struct _IMAGE_IA64_RUNTIME_FUNCTION_ENTRY {
 //
 
 typedef struct _IMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY {
-    DWORD BeginAddress;
-    DWORD EndAddress;
-    DWORD ExceptionHandler;
-    DWORD HandlerData;
-    DWORD PrologEndAddress;
+   DWORD BeginAddress;
+   DWORD EndAddress;
+   DWORD ExceptionHandler;
+   DWORD HandlerData;
+   DWORD PrologEndAddress;
 } IMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY, *PIMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY;
 
 typedef struct _IMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY {
-    ULONGLONG BeginAddress;
-    ULONGLONG EndAddress;
-    ULONGLONG ExceptionHandler;
-    ULONGLONG HandlerData;
-    ULONGLONG PrologEndAddress;
+   ULONGLONG BeginAddress;
+   ULONGLONG EndAddress;
+   ULONGLONG ExceptionHandler;
+   ULONGLONG HandlerData;
+   ULONGLONG PrologEndAddress;
 } IMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY, *PIMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY;
 
-typedef  IMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY  IMAGE_AXP64_RUNTIME_FUNCTION_ENTRY;
+typedef  IMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY IMAGE_AXP64_RUNTIME_FUNCTION_ENTRY;
 typedef PIMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY PIMAGE_AXP64_RUNTIME_FUNCTION_ENTRY;
 
 //
@@ -6279,21 +6294,21 @@ typedef PIMAGE_ALPHA64_RUNTIME_FUNCTION_ENTRY PIMAGE_AXP64_RUNTIME_FUNCTION_ENTR
 //
 
 typedef struct _IMAGE_CE_RUNTIME_FUNCTION_ENTRY {
-    DWORD FuncStart;
-    DWORD PrologLen : 8;
-    DWORD FuncLen : 22;
-    DWORD ThirtyTwoBit : 1;
-    DWORD ExceptionFlag : 1;
+   DWORD FuncStart;
+   DWORD PrologLen : 8;
+   DWORD FuncLen : 22;
+   DWORD ThirtyTwoBit : 1;
+   DWORD ExceptionFlag : 1;
 } IMAGE_CE_RUNTIME_FUNCTION_ENTRY, * PIMAGE_CE_RUNTIME_FUNCTION_ENTRY;
 
 #if defined(_IA64_)
 
-typedef  IMAGE_IA64_RUNTIME_FUNCTION_ENTRY  IMAGE_RUNTIME_FUNCTION_ENTRY;
+typedef  IMAGE_IA64_RUNTIME_FUNCTION_ENTRY IMAGE_RUNTIME_FUNCTION_ENTRY;
 typedef PIMAGE_IA64_RUNTIME_FUNCTION_ENTRY PIMAGE_RUNTIME_FUNCTION_ENTRY;
 
 #else
 
-typedef  IMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY  IMAGE_RUNTIME_FUNCTION_ENTRY;
+typedef  IMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY IMAGE_RUNTIME_FUNCTION_ENTRY;
 typedef PIMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY PIMAGE_RUNTIME_FUNCTION_ENTRY;
 
 #endif
@@ -6303,14 +6318,14 @@ typedef PIMAGE_ALPHA_RUNTIME_FUNCTION_ENTRY PIMAGE_RUNTIME_FUNCTION_ENTRY;
 //
 
 typedef struct _IMAGE_DEBUG_DIRECTORY {
-    DWORD   Characteristics;
-    DWORD   TimeDateStamp;
-    WORD    MajorVersion;
-    WORD    MinorVersion;
-    DWORD   Type;
-    DWORD   SizeOfData;
-    DWORD   AddressOfRawData;
-    DWORD   PointerToRawData;
+   DWORD Characteristics;
+   DWORD TimeDateStamp;
+   WORD MajorVersion;
+   WORD MinorVersion;
+   DWORD Type;
+   DWORD SizeOfData;
+   DWORD AddressOfRawData;
+   DWORD PointerToRawData;
 } IMAGE_DEBUG_DIRECTORY, *PIMAGE_DEBUG_DIRECTORY;
 
 #define IMAGE_DEBUG_TYPE_UNKNOWN          0
@@ -6327,14 +6342,14 @@ typedef struct _IMAGE_DEBUG_DIRECTORY {
 
 
 typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
-    DWORD   NumberOfSymbols;
-    DWORD   LvaToFirstSymbol;
-    DWORD   NumberOfLinenumbers;
-    DWORD   LvaToFirstLinenumber;
-    DWORD   RvaToFirstByteOfCode;
-    DWORD   RvaToLastByteOfCode;
-    DWORD   RvaToFirstByteOfData;
-    DWORD   RvaToLastByteOfData;
+   DWORD NumberOfSymbols;
+   DWORD LvaToFirstSymbol;
+   DWORD NumberOfLinenumbers;
+   DWORD LvaToFirstLinenumber;
+   DWORD RvaToFirstByteOfCode;
+   DWORD RvaToLastByteOfCode;
+   DWORD RvaToFirstByteOfData;
+   DWORD RvaToLastByteOfData;
 } IMAGE_COFF_SYMBOLS_HEADER, *PIMAGE_COFF_SYMBOLS_HEADER;
 
 #define FRAME_FPO       0
@@ -6343,16 +6358,16 @@ typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
 #define FRAME_NONFPO    3
 
 typedef struct _FPO_DATA {
-    DWORD       ulOffStart;             // offset 1st byte of function code
-    DWORD       cbProcSize;             // # bytes in function
-    DWORD       cdwLocals;              // # bytes in locals/4
-    WORD        cdwParams;              // # bytes in params/4
-    WORD        cbProlog : 8;           // # bytes in prolog
-    WORD        cbRegs   : 3;           // # regs saved
-    WORD        fHasSEH  : 1;           // TRUE if SEH in func
-    WORD        fUseBP   : 1;           // TRUE if EBP has been allocated
-    WORD        reserved : 1;           // reserved for future use
-    WORD        cbFrame  : 2;           // frame type
+   DWORD ulOffStart;                    // offset 1st byte of function code
+   DWORD cbProcSize;                    // # bytes in function
+   DWORD cdwLocals;                     // # bytes in locals/4
+   WORD cdwParams;                      // # bytes in params/4
+   WORD cbProlog : 8;                   // # bytes in prolog
+   WORD cbRegs   : 3;                   // # regs saved
+   WORD fHasSEH  : 1;                   // TRUE if SEH in func
+   WORD fUseBP   : 1;                   // TRUE if EBP has been allocated
+   WORD reserved : 1;                   // reserved for future use
+   WORD cbFrame  : 2;                   // frame type
 } FPO_DATA, *PFPO_DATA;
 #define SIZEOF_RFPO_DATA 16
 
@@ -6360,12 +6375,12 @@ typedef struct _FPO_DATA {
 #define IMAGE_DEBUG_MISC_EXENAME    1
 
 typedef struct _IMAGE_DEBUG_MISC {
-    DWORD       DataType;               // type of misc data, see defines
-    DWORD       Length;                 // total length of record, rounded to four
+   DWORD DataType;                      // type of misc data, see defines
+   DWORD Length;                        // total length of record, rounded to four
                                         // byte multiple.
-    BOOLEAN     Unicode;                // TRUE if data is unicode string
-    BYTE        Reserved[ 3 ];
-    BYTE        Data[ 1 ];              // Actual data
+   BOOLEAN Unicode;                     // TRUE if data is unicode string
+   BYTE Reserved[ 3 ];
+   BYTE Data[ 1 ];                      // Actual data
 } IMAGE_DEBUG_MISC, *PIMAGE_DEBUG_MISC;
 
 
@@ -6378,24 +6393,24 @@ typedef struct _IMAGE_DEBUG_MISC {
 #if defined(_IA64_)
 
 typedef struct _IMAGE_FUNCTION_ENTRY {
-    DWORD   StartingAddress;
-    DWORD   EndingAddress;
-    DWORD   UnwindInfoAddress;
+   DWORD StartingAddress;
+   DWORD EndingAddress;
+   DWORD UnwindInfoAddress;
 } IMAGE_FUNCTION_ENTRY, *PIMAGE_FUNCTION_ENTRY;
 
 #else
 
 typedef struct _IMAGE_FUNCTION_ENTRY {
-    DWORD   StartingAddress;
-    DWORD   EndingAddress;
-    DWORD   EndOfPrologue;
+   DWORD StartingAddress;
+   DWORD EndingAddress;
+   DWORD EndOfPrologue;
 } IMAGE_FUNCTION_ENTRY, *PIMAGE_FUNCTION_ENTRY;
 
 #endif
 typedef struct _IMAGE_FUNCTION_ENTRY64 {
-    ULONGLONG   StartingAddress;
-    ULONGLONG   EndingAddress;
-    ULONGLONG   EndOfPrologue;
+   ULONGLONG StartingAddress;
+   ULONGLONG EndingAddress;
+   ULONGLONG EndOfPrologue;
 } IMAGE_FUNCTION_ENTRY64, *PIMAGE_FUNCTION_ENTRY64;
 
 //
@@ -6419,25 +6434,25 @@ typedef struct _IMAGE_FUNCTION_ENTRY64 {
 //
 
 typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
-    WORD        Signature;
-    WORD        Flags;
-    WORD        Machine;
-    WORD        Characteristics;
-    DWORD       TimeDateStamp;
-    DWORD       CheckSum;
-    DWORD       ImageBase;
-    DWORD       SizeOfImage;
-    DWORD       NumberOfSections;
-    DWORD       ExportedNamesSize;
-    DWORD       DebugDirectorySize;
-    DWORD       SectionAlignment;
-    DWORD       Reserved[2];
+   WORD Signature;
+   WORD Flags;
+   WORD Machine;
+   WORD Characteristics;
+   DWORD TimeDateStamp;
+   DWORD CheckSum;
+   DWORD ImageBase;
+   DWORD SizeOfImage;
+   DWORD NumberOfSections;
+   DWORD ExportedNamesSize;
+   DWORD DebugDirectorySize;
+   DWORD SectionAlignment;
+   DWORD Reserved[2];
 } IMAGE_SEPARATE_DEBUG_HEADER, *PIMAGE_SEPARATE_DEBUG_HEADER;
 
 #ifndef _MAC
-#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
+   #define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
 #else
-#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4449
+   #define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4449
 #endif
 
 #define IMAGE_SEPARATE_DEBUG_FLAGS_MASK 0x8000
@@ -6453,17 +6468,17 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
 //
 
 typedef struct _ImageArchitectureHeader {
-    unsigned int AmaskValue: 1;                 // 1 -> code section depends on mask bit
+   unsigned int AmaskValue : 1;                 // 1 -> code section depends on mask bit
                                                 // 0 -> new instruction depends on mask bit
-    int :7;                                     // MBZ
-    unsigned int AmaskShift: 8;                 // Amask bit in question for this fixup
-    int :16;                                    // MBZ
-    DWORD FirstEntryRVA;                        // RVA into .arch section to array of ARCHITECTURE_ENTRY's
+   int : 7;                                     // MBZ
+   unsigned int AmaskShift : 8;                 // Amask bit in question for this fixup
+   int : 16;                                    // MBZ
+   DWORD FirstEntryRVA;                         // RVA into .arch section to array of ARCHITECTURE_ENTRY's
 } IMAGE_ARCHITECTURE_HEADER, *PIMAGE_ARCHITECTURE_HEADER;
 
 typedef struct _ImageArchitectureEntry {
-    DWORD FixupInstRVA;                         // RVA of instruction to fixup
-    DWORD NewInst;                              // fixup instruction (see alphaops.h)
+   DWORD FixupInstRVA;                          // RVA of instruction to fixup
+   DWORD NewInst;                               // fixup instruction (see alphaops.h)
 } IMAGE_ARCHITECTURE_ENTRY, *PIMAGE_ARCHITECTURE_ENTRY;
 
 #include "poppack.h"                // Back to the initial value
@@ -6476,36 +6491,36 @@ typedef struct _ImageArchitectureEntry {
 #define IMPORT_OBJECT_HDR_SIG2  0xffff
 
 typedef struct IMPORT_OBJECT_HEADER {
-    WORD    Sig1;                       // Must be IMAGE_FILE_MACHINE_UNKNOWN
-    WORD    Sig2;                       // Must be IMPORT_OBJECT_HDR_SIG2.
-    WORD    Version;
-    WORD    Machine;
-    DWORD   TimeDateStamp;              // Time/date stamp
-    DWORD   SizeOfData;                 // particularly useful for incremental links
+   WORD Sig1;                           // Must be IMAGE_FILE_MACHINE_UNKNOWN
+   WORD Sig2;                           // Must be IMPORT_OBJECT_HDR_SIG2.
+   WORD Version;
+   WORD Machine;
+   DWORD TimeDateStamp;                 // Time/date stamp
+   DWORD SizeOfData;                    // particularly useful for incremental links
 
-    union {
-        WORD    Ordinal;                // if grf & IMPORT_OBJECT_ORDINAL
-        WORD    Hint;
-    };
+   union {
+      WORD Ordinal;                     // if grf & IMPORT_OBJECT_ORDINAL
+      WORD Hint;
+   };
 
-    WORD    Type : 2;                   // IMPORT_TYPE
-    WORD    NameType : 3;               // IMPORT_NAME_TYPE
-    WORD    Reserved : 11;              // Reserved. Must be zero.
+   WORD Type : 2;                       // IMPORT_TYPE
+   WORD NameType : 3;                   // IMPORT_NAME_TYPE
+   WORD Reserved : 11;                  // Reserved. Must be zero.
 } IMPORT_OBJECT_HEADER;
 
 typedef enum IMPORT_OBJECT_TYPE
 {
-    IMPORT_OBJECT_CODE = 0,
-    IMPORT_OBJECT_DATA = 1,
-    IMPORT_OBJECT_CONST = 2,
+   IMPORT_OBJECT_CODE = 0,
+   IMPORT_OBJECT_DATA = 1,
+   IMPORT_OBJECT_CONST = 2,
 } IMPORT_OBJECT_TYPE;
 
 typedef enum IMPORT_OBJECT_NAME_TYPE
 {
-    IMPORT_OBJECT_ORDINAL = 0,          // Import by ordinal
-    IMPORT_OBJECT_NAME = 1,             // Import name == public symbol name.
-    IMPORT_OBJECT_NAME_NO_PREFIX = 2,   // Import name == public symbol name skipping leading ?, @, or optionally _.
-    IMPORT_OBJECT_NAME_UNDECORATE = 3,  // Import name == public symbol name skipping leading ?, @, or optionally _
+   IMPORT_OBJECT_ORDINAL = 0,           // Import by ordinal
+   IMPORT_OBJECT_NAME = 1,              // Import name == public symbol name.
+   IMPORT_OBJECT_NAME_NO_PREFIX = 2,    // Import name == public symbol name skipping leading ?, @, or optionally _.
+   IMPORT_OBJECT_NAME_UNDECORATE = 3,   // Import name == public symbol name skipping leading ?, @, or optionally _
                                         // and truncating at first @
 } IMPORT_OBJECT_NAME_TYPE;
 
@@ -6517,27 +6532,27 @@ typedef enum IMPORT_OBJECT_NAME_TYPE
 // for move macros
 //
 #ifdef _MAC
-#ifndef _INC_STRING
-#include <string.h>
-#endif /* _INC_STRING */
+   #ifndef _INC_STRING
+      #include <string.h>
+   #endif /* _INC_STRING */
 #else
-#include <string.h>
+   #include <string.h>
 #endif // _MAC
 
-#define HEAP_NO_SERIALIZE               0x00000001      
-#define HEAP_GROWABLE                   0x00000002      
-#define HEAP_GENERATE_EXCEPTIONS        0x00000004      
-#define HEAP_ZERO_MEMORY                0x00000008      
-#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010      
-#define HEAP_TAIL_CHECKING_ENABLED      0x00000020      
-#define HEAP_FREE_CHECKING_ENABLED      0x00000040      
-#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080      
-#define HEAP_CREATE_ALIGN_16            0x00010000      
-#define HEAP_CREATE_ENABLE_TRACING      0x00020000      
-#define HEAP_MAXIMUM_TAG                0x0FFF              
-#define HEAP_PSEUDO_TAG_FLAG            0x8000              
-#define HEAP_TAG_SHIFT                  18                  
-#define HEAP_MAKE_TAG_FLAGS( b, o ) ((DWORD)((b) + ((o) << 18)))  
+#define HEAP_NO_SERIALIZE               0x00000001
+#define HEAP_GROWABLE                   0x00000002
+#define HEAP_GENERATE_EXCEPTIONS        0x00000004
+#define HEAP_ZERO_MEMORY                0x00000008
+#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010
+#define HEAP_TAIL_CHECKING_ENABLED      0x00000020
+#define HEAP_FREE_CHECKING_ENABLED      0x00000040
+#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080
+#define HEAP_CREATE_ALIGN_16            0x00010000
+#define HEAP_CREATE_ENABLE_TRACING      0x00020000
+#define HEAP_MAXIMUM_TAG                0x0FFF
+#define HEAP_PSEUDO_TAG_FLAG            0x8000
+#define HEAP_TAG_SHIFT                  18
+#define HEAP_MAKE_TAG_FLAGS( b, o ) ((DWORD)((b) + ((o) << 18)))
 
 #define IS_TEXT_UNICODE_ASCII16               0x0001
 #define IS_TEXT_UNICODE_REVERSE_ASCII16       0x0010
@@ -6561,25 +6576,25 @@ typedef enum IMPORT_OBJECT_NAME_TYPE
 #define IS_TEXT_UNICODE_NOT_UNICODE_MASK      0x0F00
 #define IS_TEXT_UNICODE_NOT_ASCII_MASK        0xF000
 
-#define COMPRESSION_FORMAT_NONE          (0x0000)   
-#define COMPRESSION_FORMAT_DEFAULT       (0x0001)   
-#define COMPRESSION_FORMAT_LZNT1         (0x0002)   
-#define COMPRESSION_ENGINE_STANDARD      (0x0000)   
-#define COMPRESSION_ENGINE_MAXIMUM       (0x0100)   
+#define COMPRESSION_FORMAT_NONE          (0x0000)
+#define COMPRESSION_FORMAT_DEFAULT       (0x0001)
+#define COMPRESSION_FORMAT_LZNT1         (0x0002)
+#define COMPRESSION_ENGINE_STANDARD      (0x0000)
+#define COMPRESSION_ENGINE_MAXIMUM       (0x0100)
 
 NTSYSAPI
 SIZE_T
 NTAPI
 RtlCompareMemory (
-    const VOID *Source1,
-    const VOID *Source2,
-    SIZE_T Length
-    );
+   const VOID *Source1,
+   const VOID *Source2,
+   SIZE_T Length
+   );
 
 #if defined(_M_AXP64) || defined(_M_IA64)
 
-#define RtlEqualMemory(Source1, Source2, Length) \
-    ((Length) == RtlCompareMemory(Source1, Source2, Length))
+   #define RtlEqualMemory(Source1, Source2, Length) \
+   ((Length) == RtlCompareMemory(Source1, Source2, Length))
 
 NTSYSAPI
 VOID
@@ -6614,7 +6629,7 @@ NTAPI
 RtlFillMemory (
    VOID UNALIGNED *Destination,
    SIZE_T Length,
-   BYTE  Fill
+   BYTE Fill
    );
 
 NTSYSAPI
@@ -6627,11 +6642,11 @@ RtlZeroMemory (
 
 #else
 
-#define RtlEqualMemory(Destination,Source,Length) (!memcmp((Destination),(Source),(Length)))
-#define RtlMoveMemory(Destination,Source,Length) memmove((Destination),(Source),(Length))
-#define RtlCopyMemory(Destination,Source,Length) memcpy((Destination),(Source),(Length))
-#define RtlFillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
-#define RtlZeroMemory(Destination,Length) memset((Destination),0,(Length))
+   #define RtlEqualMemory(Destination,Source,Length) (!memcmp((Destination),(Source),(Length)))
+   #define RtlMoveMemory(Destination,Source,Length) memmove((Destination),(Source),(Length))
+   #define RtlCopyMemory(Destination,Source,Length) memcpy((Destination),(Source),(Length))
+   #define RtlFillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
+   #define RtlZeroMemory(Destination,Length) memset((Destination),0,(Length))
 
 #endif
 
@@ -6653,7 +6668,7 @@ NTAPI
 RtlFillMemory64 (
    IN PVOID64 Destination,
    IN ULONGLONG Length,
-   IN BYTE  Fill
+   IN BYTE Fill
    );
 
 NTSYSAPI
@@ -6667,68 +6682,69 @@ RtlZeroMemory64 (
 #endif
 
 typedef struct _MESSAGE_RESOURCE_ENTRY {
-    WORD   Length;
-    WORD   Flags;
-    BYTE  Text[ 1 ];
+   WORD Length;
+   WORD Flags;
+   BYTE Text[ 1 ];
 } MESSAGE_RESOURCE_ENTRY, *PMESSAGE_RESOURCE_ENTRY;
 
 #define MESSAGE_RESOURCE_UNICODE 0x0001
 
 typedef struct _MESSAGE_RESOURCE_BLOCK {
-    DWORD LowId;
-    DWORD HighId;
-    DWORD OffsetToEntries;
+   DWORD LowId;
+   DWORD HighId;
+   DWORD OffsetToEntries;
 } MESSAGE_RESOURCE_BLOCK, *PMESSAGE_RESOURCE_BLOCK;
 
 typedef struct _MESSAGE_RESOURCE_DATA {
-    DWORD NumberOfBlocks;
-    MESSAGE_RESOURCE_BLOCK Blocks[ 1 ];
+   DWORD NumberOfBlocks;
+   MESSAGE_RESOURCE_BLOCK Blocks[ 1 ];
 } MESSAGE_RESOURCE_DATA, *PMESSAGE_RESOURCE_DATA;
 
 
 typedef struct _RTL_CRITICAL_SECTION_DEBUG {
-    WORD   Type;
-    WORD   CreatorBackTraceIndex;
-    struct _RTL_CRITICAL_SECTION *CriticalSection;
-    LIST_ENTRY ProcessLocksList;
-    DWORD EntryCount;
-    DWORD ContentionCount;
-    DWORD Spare[ 2 ];
-} RTL_CRITICAL_SECTION_DEBUG, *PRTL_CRITICAL_SECTION_DEBUG, RTL_RESOURCE_DEBUG, *PRTL_RESOURCE_DEBUG;
+   WORD Type;
+   WORD CreatorBackTraceIndex;
+   struct _RTL_CRITICAL_SECTION *CriticalSection;
+   LIST_ENTRY ProcessLocksList;
+   DWORD EntryCount;
+   DWORD ContentionCount;
+   DWORD Spare[ 2 ];
+} RTL_CRITICAL_SECTION_DEBUG, *PRTL_CRITICAL_SECTION_DEBUG, RTL_RESOURCE_DEBUG,
+*PRTL_RESOURCE_DEBUG;
 
 #define RTL_CRITSECT_TYPE 0
 #define RTL_RESOURCE_TYPE 1
 
 typedef struct _RTL_CRITICAL_SECTION {
-    PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
+   PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
 
-    //
-    //  The following three fields control entering and exiting the critical
-    //  section for the resource
-    //
+   //
+   //  The following three fields control entering and exiting the critical
+   //  section for the resource
+   //
 
-    LONG LockCount;
-    LONG RecursionCount;
-    HANDLE OwningThread;        // from the thread's ClientId->UniqueThread
-    HANDLE LockSemaphore;
-    DWORD SpinCount;
+   LONG LockCount;
+   LONG RecursionCount;
+   HANDLE OwningThread;         // from the thread's ClientId->UniqueThread
+   HANDLE LockSemaphore;
+   DWORD SpinCount;
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
 #define SEF_DACL_AUTO_INHERIT             0x1
 #define SEF_SACL_AUTO_INHERIT             0x2
 #define SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT 0x4
 #define SEF_AVOID_PRIVILEGE_CHECK         0x8
-#define WT_EXECUTEDEFAULT      0x00000000                           
-#define WT_EXECUTEINIOTHREAD   0x00000001                           
-#define WT_EXECUTEINUITHREAD   0x00000002                           
-#define WT_EXECUTEINWAITTHREAD 0x00000004                           
-#define WT_EXECUTEDELETEWAIT   0x00000008                           
-#define WT_EXECUTEINLONGTHREAD 0x00000010                           
-typedef VOID (NTAPI * WAITORTIMERCALLBACKFUNC) (PVOID, BOOLEAN );   
-typedef VOID (NTAPI * WORKERCALLBACKFUNC) (PVOID );                 
-#define DLL_PROCESS_ATTACH 1    
-#define DLL_THREAD_ATTACH  2    
-#define DLL_THREAD_DETACH  3    
-#define DLL_PROCESS_DETACH 0    
+#define WT_EXECUTEDEFAULT      0x00000000
+#define WT_EXECUTEINIOTHREAD   0x00000001
+#define WT_EXECUTEINUITHREAD   0x00000002
+#define WT_EXECUTEINWAITTHREAD 0x00000004
+#define WT_EXECUTEDELETEWAIT   0x00000008
+#define WT_EXECUTEINLONGTHREAD 0x00000010
+typedef VOID (NTAPI * WAITORTIMERCALLBACKFUNC)(PVOID, BOOLEAN );
+typedef VOID (NTAPI * WORKERCALLBACKFUNC)(PVOID );
+#define DLL_PROCESS_ATTACH 1
+#define DLL_THREAD_ATTACH  2
+#define DLL_THREAD_DETACH  3
+#define DLL_PROCESS_DETACH 0
 
 //
 // Defines for the READ flags for Eventlogging
@@ -6769,33 +6785,33 @@ typedef VOID (NTAPI * WORKERCALLBACKFUNC) (PVOID );
 //
 
 typedef struct _EVENTLOGRECORD {
-    DWORD  Length;        // Length of full record
-    DWORD  Reserved;      // Used by the service
-    DWORD  RecordNumber;  // Absolute record number
-    DWORD  TimeGenerated; // Seconds since 1-1-1970
-    DWORD  TimeWritten;   // Seconds since 1-1-1970
-    DWORD  EventID;
-    WORD   EventType;
-    WORD   NumStrings;
-    WORD   EventCategory;
-    WORD   ReservedFlags; // For use with paired events (auditing)
-    DWORD  ClosingRecordNumber; // For use with paired events (auditing)
-    DWORD  StringOffset;  // Offset from beginning of record
-    DWORD  UserSidLength;
-    DWORD  UserSidOffset;
-    DWORD  DataLength;
-    DWORD  DataOffset;    // Offset from beginning of record
-    //
-    // Then follow:
-    //
-    // WCHAR SourceName[]
-    // WCHAR Computername[]
-    // SID   UserSid
-    // WCHAR Strings[]
-    // BYTE  Data[]
-    // CHAR  Pad[]
-    // DWORD Length;
-    //
+   DWORD Length;          // Length of full record
+   DWORD Reserved;        // Used by the service
+   DWORD RecordNumber;    // Absolute record number
+   DWORD TimeGenerated;   // Seconds since 1-1-1970
+   DWORD TimeWritten;     // Seconds since 1-1-1970
+   DWORD EventID;
+   WORD EventType;
+   WORD NumStrings;
+   WORD EventCategory;
+   WORD ReservedFlags;    // For use with paired events (auditing)
+   DWORD ClosingRecordNumber;   // For use with paired events (auditing)
+   DWORD StringOffset;    // Offset from beginning of record
+   DWORD UserSidLength;
+   DWORD UserSidOffset;
+   DWORD DataLength;
+   DWORD DataOffset;      // Offset from beginning of record
+   //
+   // Then follow:
+   //
+   // WCHAR SourceName[]
+   // WCHAR Computername[]
+   // SID   UserSid
+   // WCHAR Strings[]
+   // BYTE  Data[]
+   // CHAR  Pad[]
+   // DWORD Length;
+   //
 } EVENTLOGRECORD, *PEVENTLOGRECORD;
 
 //SS: start of changes to support clustering
@@ -6803,27 +6819,27 @@ typedef struct _EVENTLOGRECORD {
 #define MAXLOGICALLOGNAMESIZE   256
 
 #pragma warning(disable : 4200)
-typedef struct _EVENTSFORLOGFILE{
-	DWORD			ulSize;
-    WCHAR   		szLogicalLogFile[MAXLOGICALLOGNAMESIZE];        //name of the logical file-security/application/system
-    DWORD			ulNumRecords;
-	EVENTLOGRECORD 	pEventLogRecords[];
+typedef struct _EVENTSFORLOGFILE {
+   DWORD ulSize;
+   WCHAR szLogicalLogFile[MAXLOGICALLOGNAMESIZE];                       //name of the logical file-security/application/system
+   DWORD ulNumRecords;
+   EVENTLOGRECORD pEventLogRecords[];
 }EVENTSFORLOGFILE, *PEVENTSFORLOGFILE;
 
-typedef struct _PACKEDEVENTINFO{
-    DWORD               ulSize;  //total size of the structure
-    DWORD               ulNumEventsForLogFile; //number of EventsForLogFile structure that follow
-    DWORD 				ulOffsets[];           //the offsets from the start of this structure to the EVENTSFORLOGFILE structure
+typedef struct _PACKEDEVENTINFO {
+   DWORD ulSize;                 //total size of the structure
+   DWORD ulNumEventsForLogFile;                //number of EventsForLogFile structure that follow
+   DWORD ulOffsets[];                                          //the offsets from the start of this structure to the EVENTSFORLOGFILE structure
 }PACKEDEVENTINFO, *PPACKEDEVENTINFO;
 
 #pragma warning(default : 4200)
 //SS: end of changes to support clustering
-#define DBG_CONTINUE                    ((DWORD   )0x00010002L) 
-#define DBG_TERMINATE_THREAD            ((DWORD   )0x40010003L) 
-#define DBG_TERMINATE_PROCESS           ((DWORD   )0x40010004L) 
-#define DBG_CONTROL_C                   ((DWORD   )0x40010005L) 
-#define DBG_CONTROL_BREAK               ((DWORD   )0x40010008L) 
-#define DBG_EXCEPTION_NOT_HANDLED       ((DWORD   )0x80010001L) 
+#define DBG_CONTINUE                    ((DWORD   )0x00010002L)
+#define DBG_TERMINATE_THREAD            ((DWORD   )0x40010003L)
+#define DBG_TERMINATE_PROCESS           ((DWORD   )0x40010004L)
+#define DBG_CONTROL_C                   ((DWORD   )0x40010005L)
+#define DBG_CONTROL_BREAK               ((DWORD   )0x40010008L)
+#define DBG_EXCEPTION_NOT_HANDLED       ((DWORD   )0x80010001L)
 //
 
 // begin_ntddk begin_wdm begin_nthal
@@ -6838,32 +6854,32 @@ typedef struct _PACKEDEVENTINFO{
 #define KEY_NOTIFY              (0x0010)
 #define KEY_CREATE_LINK         (0x0020)
 
-#define KEY_READ                ((STANDARD_RIGHTS_READ       |\
-                                  KEY_QUERY_VALUE            |\
-                                  KEY_ENUMERATE_SUB_KEYS     |\
+#define KEY_READ                ((STANDARD_RIGHTS_READ       | \
+                                  KEY_QUERY_VALUE            | \
+                                  KEY_ENUMERATE_SUB_KEYS     | \
                                   KEY_NOTIFY)                 \
-                                  &                           \
+                                 &                           \
                                  (~SYNCHRONIZE))
 
 
-#define KEY_WRITE               ((STANDARD_RIGHTS_WRITE      |\
-                                  KEY_SET_VALUE              |\
+#define KEY_WRITE               ((STANDARD_RIGHTS_WRITE      | \
+                                  KEY_SET_VALUE              | \
                                   KEY_CREATE_SUB_KEY)         \
-                                  &                           \
+                                 &                           \
                                  (~SYNCHRONIZE))
 
 #define KEY_EXECUTE             ((KEY_READ)                   \
-                                  &                           \
+                                 &                           \
                                  (~SYNCHRONIZE))
 
-#define KEY_ALL_ACCESS          ((STANDARD_RIGHTS_ALL        |\
-                                  KEY_QUERY_VALUE            |\
-                                  KEY_SET_VALUE              |\
-                                  KEY_CREATE_SUB_KEY         |\
-                                  KEY_ENUMERATE_SUB_KEYS     |\
-                                  KEY_NOTIFY                 |\
+#define KEY_ALL_ACCESS          ((STANDARD_RIGHTS_ALL        | \
+                                  KEY_QUERY_VALUE            | \
+                                  KEY_SET_VALUE              | \
+                                  KEY_CREATE_SUB_KEY         | \
+                                  KEY_ENUMERATE_SUB_KEYS     | \
+                                  KEY_NOTIFY                 | \
                                   KEY_CREATE_LINK)            \
-                                  &                           \
+                                 &                           \
                                  (~SYNCHRONIZE))
 
 //
@@ -6888,12 +6904,12 @@ typedef struct _PACKEDEVENTINFO{
 #define REG_OPTION_OPEN_LINK        (0x00000008L)   // Open symbolic link
 
 #define REG_LEGAL_OPTION            \
-                (REG_OPTION_RESERVED            |\
-                 REG_OPTION_NON_VOLATILE        |\
-                 REG_OPTION_VOLATILE            |\
-                 REG_OPTION_CREATE_LINK         |\
-                 REG_OPTION_BACKUP_RESTORE      |\
-                 REG_OPTION_OPEN_LINK)
+   (REG_OPTION_RESERVED            | \
+    REG_OPTION_NON_VOLATILE        | \
+    REG_OPTION_VOLATILE            | \
+    REG_OPTION_CREATE_LINK         | \
+    REG_OPTION_BACKUP_RESTORE      | \
+    REG_OPTION_OPEN_LINK)
 
 //
 // Key creation/open disposition
@@ -6921,10 +6937,10 @@ typedef struct _PACKEDEVENTINFO{
 #define REG_NOTIFY_CHANGE_SECURITY      (0x00000008L)
 
 #define REG_LEGAL_CHANGE_FILTER                 \
-                (REG_NOTIFY_CHANGE_NAME          |\
-                 REG_NOTIFY_CHANGE_ATTRIBUTES    |\
-                 REG_NOTIFY_CHANGE_LAST_SET      |\
-                 REG_NOTIFY_CHANGE_SECURITY)
+   (REG_NOTIFY_CHANGE_NAME          | \
+    REG_NOTIFY_CHANGE_ATTRIBUTES    | \
+    REG_NOTIFY_CHANGE_LAST_SET      | \
+    REG_NOTIFY_CHANGE_SECURITY)
 
 //
 //
@@ -6946,7 +6962,7 @@ typedef struct _PACKEDEVENTINFO{
 #define REG_RESOURCE_REQUIREMENTS_LIST ( 10 )
 
 // end_ntddk end_wdm end_nthal
-
+
 // begin_ntddk begin_wdm begin_nthal
 //
 // Service Types (Bit Mask)
@@ -6996,27 +7012,27 @@ typedef struct _PACKEDEVENTINFO{
 //
 
 typedef enum _CM_SERVICE_NODE_TYPE {
-    DriverType               = SERVICE_KERNEL_DRIVER,
-    FileSystemType           = SERVICE_FILE_SYSTEM_DRIVER,
-    Win32ServiceOwnProcess   = SERVICE_WIN32_OWN_PROCESS,
-    Win32ServiceShareProcess = SERVICE_WIN32_SHARE_PROCESS,
-    AdapterType              = SERVICE_ADAPTER,
-    RecognizerType           = SERVICE_RECOGNIZER_DRIVER
+   DriverType               = SERVICE_KERNEL_DRIVER,
+   FileSystemType           = SERVICE_FILE_SYSTEM_DRIVER,
+   Win32ServiceOwnProcess   = SERVICE_WIN32_OWN_PROCESS,
+   Win32ServiceShareProcess = SERVICE_WIN32_SHARE_PROCESS,
+   AdapterType              = SERVICE_ADAPTER,
+   RecognizerType           = SERVICE_RECOGNIZER_DRIVER
 } SERVICE_NODE_TYPE;
 
 typedef enum _CM_SERVICE_LOAD_TYPE {
-    BootLoad    = SERVICE_BOOT_START,
-    SystemLoad  = SERVICE_SYSTEM_START,
-    AutoLoad    = SERVICE_AUTO_START,
-    DemandLoad  = SERVICE_DEMAND_START,
-    DisableLoad = SERVICE_DISABLED
+   BootLoad    = SERVICE_BOOT_START,
+   SystemLoad  = SERVICE_SYSTEM_START,
+   AutoLoad    = SERVICE_AUTO_START,
+   DemandLoad  = SERVICE_DEMAND_START,
+   DisableLoad = SERVICE_DISABLED
 } SERVICE_LOAD_TYPE;
 
 typedef enum _CM_ERROR_CONTROL_TYPE {
-    IgnoreError   = SERVICE_ERROR_IGNORE,
-    NormalError   = SERVICE_ERROR_NORMAL,
-    SevereError   = SERVICE_ERROR_SEVERE,
-    CriticalError = SERVICE_ERROR_CRITICAL
+   IgnoreError   = SERVICE_ERROR_IGNORE,
+   NormalError   = SERVICE_ERROR_NORMAL,
+   SevereError   = SERVICE_ERROR_SEVERE,
+   CriticalError = SERVICE_ERROR_CRITICAL
 } SERVICE_ERROR_TYPE;
 
 
@@ -7029,8 +7045,8 @@ typedef enum _CM_ERROR_CONTROL_TYPE {
 #define TAPE_ERASE_LONG             1L
 
 typedef struct _TAPE_ERASE {
-    DWORD Type;
-    BOOLEAN Immediate;
+   DWORD Type;
+   BOOLEAN Immediate;
 } TAPE_ERASE, *PTAPE_ERASE;
 
 //
@@ -7045,8 +7061,8 @@ typedef struct _TAPE_ERASE {
 #define TAPE_FORMAT                 5L
 
 typedef struct _TAPE_PREPARE {
-    DWORD Operation;
-    BOOLEAN Immediate;
+   DWORD Operation;
+   BOOLEAN Immediate;
 } TAPE_PREPARE, *PTAPE_PREPARE;
 
 //
@@ -7059,9 +7075,9 @@ typedef struct _TAPE_PREPARE {
 #define TAPE_LONG_FILEMARKS         3L
 
 typedef struct _TAPE_WRITE_MARKS {
-    DWORD Type;
-    DWORD Count;
-    BOOLEAN Immediate;
+   DWORD Type;
+   DWORD Count;
+   BOOLEAN Immediate;
 } TAPE_WRITE_MARKS, *PTAPE_WRITE_MARKS;
 
 //
@@ -7073,9 +7089,9 @@ typedef struct _TAPE_WRITE_MARKS {
 #define TAPE_PSEUDO_LOGICAL_POSITION 2L
 
 typedef struct _TAPE_GET_POSITION {
-    DWORD Type;
-    DWORD Partition;
-    LARGE_INTEGER Offset;
+   DWORD Type;
+   DWORD Partition;
+   LARGE_INTEGER Offset;
 } TAPE_GET_POSITION, *PTAPE_GET_POSITION;
 
 //
@@ -7094,10 +7110,10 @@ typedef struct _TAPE_GET_POSITION {
 #define TAPE_SPACE_SEQUENTIAL_SMKS  9L
 
 typedef struct _TAPE_SET_POSITION {
-    DWORD Method;
-    DWORD Partition;
-    LARGE_INTEGER Offset;
-    BOOLEAN Immediate;
+   DWORD Method;
+   DWORD Partition;
+   LARGE_INTEGER Offset;
+   BOOLEAN Immediate;
 } TAPE_SET_POSITION, *PTAPE_SET_POSITION;
 
 //
@@ -7187,17 +7203,17 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_HIGH_FEATURES    0x80000000  //mask for high features flag
 
 typedef struct _TAPE_GET_DRIVE_PARAMETERS {
-    BOOLEAN ECC;
-    BOOLEAN Compression;
-    BOOLEAN DataPadding;
-    BOOLEAN ReportSetmarks;
-    DWORD DefaultBlockSize;
-    DWORD MaximumBlockSize;
-    DWORD MinimumBlockSize;
-    DWORD MaximumPartitionCount;
-    DWORD FeaturesLow;
-    DWORD FeaturesHigh;
-    DWORD EOTWarningZoneSize;
+   BOOLEAN ECC;
+   BOOLEAN Compression;
+   BOOLEAN DataPadding;
+   BOOLEAN ReportSetmarks;
+   DWORD DefaultBlockSize;
+   DWORD MaximumBlockSize;
+   DWORD MinimumBlockSize;
+   DWORD MaximumPartitionCount;
+   DWORD FeaturesLow;
+   DWORD FeaturesHigh;
+   DWORD EOTWarningZoneSize;
 } TAPE_GET_DRIVE_PARAMETERS, *PTAPE_GET_DRIVE_PARAMETERS;
 
 //
@@ -7205,11 +7221,11 @@ typedef struct _TAPE_GET_DRIVE_PARAMETERS {
 //
 
 typedef struct _TAPE_SET_DRIVE_PARAMETERS {
-    BOOLEAN ECC;
-    BOOLEAN Compression;
-    BOOLEAN DataPadding;
-    BOOLEAN ReportSetmarks;
-    DWORD EOTWarningZoneSize;
+   BOOLEAN ECC;
+   BOOLEAN Compression;
+   BOOLEAN DataPadding;
+   BOOLEAN ReportSetmarks;
+   DWORD EOTWarningZoneSize;
 } TAPE_SET_DRIVE_PARAMETERS, *PTAPE_SET_DRIVE_PARAMETERS;
 
 //
@@ -7217,11 +7233,11 @@ typedef struct _TAPE_SET_DRIVE_PARAMETERS {
 //
 
 typedef struct _TAPE_GET_MEDIA_PARAMETERS {
-    LARGE_INTEGER Capacity;
-    LARGE_INTEGER Remaining;
-    DWORD BlockSize;
-    DWORD PartitionCount;
-    BOOLEAN WriteProtected;
+   LARGE_INTEGER Capacity;
+   LARGE_INTEGER Remaining;
+   DWORD BlockSize;
+   DWORD PartitionCount;
+   BOOLEAN WriteProtected;
 } TAPE_GET_MEDIA_PARAMETERS, *PTAPE_GET_MEDIA_PARAMETERS;
 
 //
@@ -7229,7 +7245,7 @@ typedef struct _TAPE_GET_MEDIA_PARAMETERS {
 //
 
 typedef struct _TAPE_SET_MEDIA_PARAMETERS {
-    DWORD BlockSize;
+   DWORD BlockSize;
 } TAPE_SET_MEDIA_PARAMETERS, *PTAPE_SET_MEDIA_PARAMETERS;
 
 //
@@ -7241,9 +7257,9 @@ typedef struct _TAPE_SET_MEDIA_PARAMETERS {
 #define TAPE_INITIATOR_PARTITIONS   2L
 
 typedef struct _TAPE_CREATE_PARTITION {
-    DWORD Method;
-    DWORD Count;
-    DWORD Size;
+   DWORD Method;
+   DWORD Count;
+   DWORD Size;
 } TAPE_CREATE_PARTITION, *PTAPE_CREATE_PARTITION;
 
 

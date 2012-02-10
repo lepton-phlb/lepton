@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is ______________________________________.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): ______________________________________.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 #ifndef __LWIPOPTS_H__
@@ -33,7 +33,7 @@ either the MPL or the [eCos GPL] License."
 
 #define LWIP_IGMP                  1
 #define LWIP_ICMP                  1
-#define LWIP_SNMP                  0//1
+#define LWIP_SNMP                  0 //1
 
 #define LWIP_DNS                   1
 
@@ -41,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 
 #define TCP_LISTEN_BACKLOG         0
 
-#define LWIP_PROVIDE_ERRNO         1//lepton
+#define LWIP_PROVIDE_ERRNO         1 //lepton
 #define LWIP_COMPAT_SOCKETS        1
 #define LWIP_SO_RCVTIMEO           1
 #define LWIP_SO_RCVBUF             1
@@ -56,38 +56,39 @@ either the MPL or the [eCos GPL] License."
 #define MEM_LIBC_MALLOC 1 //lepton modifs use libc malloc instead   // default 0
 
 
-//#define LWIP_DEBUG                 
+//#define LWIP_DEBUG
 #ifdef LWIP_DEBUG
-#define LWIP_DBG_MIN_LEVEL         0
-#define PPP_DEBUG                  LWIP_DBG_OFF
-#define MEM_DEBUG                  LWIP_DBG_OFF
-#define MEMP_DEBUG                 LWIP_DBG_OFF
-#define PBUF_DEBUG                 LWIP_DBG_OFF
-#define API_LIB_DEBUG              LWIP_DBG_ON
-#define API_MSG_DEBUG              LWIP_DBG_ON
-#define TCPIP_DEBUG                LWIP_DBG_ON
-#define NETIF_DEBUG                LWIP_DBG_OFF
-#define SOCKETS_DEBUG              LWIP_DBG_ON
-#define DNS_DEBUG                  LWIP_DBG_OFF
-#define AUTOIP_DEBUG               LWIP_DBG_OFF
-#define DHCP_DEBUG                 LWIP_DBG_OFF
-#define IP_DEBUG                   LWIP_DBG_OFF
-#define IP_REASS_DEBUG             LWIP_DBG_OFF
-#define ICMP_DEBUG                 LWIP_DBG_OFF
-#define IGMP_DEBUG                 LWIP_DBG_OFF
-#define UDP_DEBUG                  LWIP_DBG_OFF
-#define TCP_DEBUG                  LWIP_DBG_ON
-#define TCP_INPUT_DEBUG            LWIP_DBG_OFF
-#define TCP_OUTPUT_DEBUG           LWIP_DBG_OFF
-#define TCP_RTO_DEBUG              LWIP_DBG_OFF
-#define TCP_CWND_DEBUG             LWIP_DBG_OFF
-#define TCP_WND_DEBUG              LWIP_DBG_OFF
-#define TCP_FR_DEBUG               LWIP_DBG_OFF
-#define TCP_QLEN_DEBUG             LWIP_DBG_OFF
-#define TCP_RST_DEBUG              LWIP_DBG_OFF
+   #define LWIP_DBG_MIN_LEVEL         0
+   #define PPP_DEBUG                  LWIP_DBG_OFF
+   #define MEM_DEBUG                  LWIP_DBG_OFF
+   #define MEMP_DEBUG                 LWIP_DBG_OFF
+   #define PBUF_DEBUG                 LWIP_DBG_OFF
+   #define API_LIB_DEBUG              LWIP_DBG_ON
+   #define API_MSG_DEBUG              LWIP_DBG_ON
+   #define TCPIP_DEBUG                LWIP_DBG_ON
+   #define NETIF_DEBUG                LWIP_DBG_OFF
+   #define SOCKETS_DEBUG              LWIP_DBG_ON
+   #define DNS_DEBUG                  LWIP_DBG_OFF
+   #define AUTOIP_DEBUG               LWIP_DBG_OFF
+   #define DHCP_DEBUG                 LWIP_DBG_OFF
+   #define IP_DEBUG                   LWIP_DBG_OFF
+   #define IP_REASS_DEBUG             LWIP_DBG_OFF
+   #define ICMP_DEBUG                 LWIP_DBG_OFF
+   #define IGMP_DEBUG                 LWIP_DBG_OFF
+   #define UDP_DEBUG                  LWIP_DBG_OFF
+   #define TCP_DEBUG                  LWIP_DBG_ON
+   #define TCP_INPUT_DEBUG            LWIP_DBG_OFF
+   #define TCP_OUTPUT_DEBUG           LWIP_DBG_OFF
+   #define TCP_RTO_DEBUG              LWIP_DBG_OFF
+   #define TCP_CWND_DEBUG             LWIP_DBG_OFF
+   #define TCP_WND_DEBUG              LWIP_DBG_OFF
+   #define TCP_FR_DEBUG               LWIP_DBG_OFF
+   #define TCP_QLEN_DEBUG             LWIP_DBG_OFF
+   #define TCP_RST_DEBUG              LWIP_DBG_OFF
 #endif
 
-#define LWIP_DBG_TYPES_ON         (LWIP_DBG_ON|LWIP_DBG_TRACE|LWIP_DBG_STATE|LWIP_DBG_FRESH|LWIP_DBG_HALT)
+#define LWIP_DBG_TYPES_ON         (LWIP_DBG_ON|LWIP_DBG_TRACE|LWIP_DBG_STATE|LWIP_DBG_FRESH| \
+                                   LWIP_DBG_HALT)
 
 
 /* ---------- Memory options ---------- */
@@ -96,11 +97,11 @@ either the MPL or the [eCos GPL] License."
    byte alignment -> define MEM_ALIGNMENT to 2. */
 /* MSVC port: intel processors don't need 4-byte alignment,
    but are faster that way! */
-#define MEM_ALIGNMENT           1//4
+#define MEM_ALIGNMENT           1 //4
 
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
-#define MEM_SIZE               128*1024//lepton modif /*10240*/
+#define MEM_SIZE               128*1024 //lepton modif /*10240*/
 
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
@@ -114,7 +115,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_UDP_PCB        4
 /* MEMP_NUM_TCP_PCB: the number of simulatenously active TCP
    connections. */
-#define MEMP_NUM_TCP_PCB        10//5
+#define MEMP_NUM_TCP_PCB        10 //5
 /* MEMP_NUM_TCP_PCB_LISTEN: the number of listening TCP
    connections. */
 #define MEMP_NUM_TCP_PCB_LISTEN 8
@@ -130,7 +131,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_NETBUF: the number of struct netbufs. */
 #define MEMP_NUM_NETBUF         256  //64 lepton modifs) //default 2
 /* MEMP_NUM_NETCONN: the number of struct netconns. */
-#define MEMP_NUM_NETCONN        15//10
+#define MEMP_NUM_NETCONN        15 //10
 /* MEMP_NUM_TCPIP_MSG_*: the number of struct tcpip_msg, which is used
    for sequential API communication and incoming packets. Used in
    src/api/tcpip.c. */
@@ -241,17 +242,17 @@ a lot of data that needs to be copied, this should be set high. */
 #define LWIP_STATS_DISPLAY      1
 
 #if LWIP_STATS
-#define LINK_STATS              1
-#define IP_STATS                1
-#define ICMP_STATS              1
-#define IGMP_STATS              1
-#define IPFRAG_STATS            1
-#define UDP_STATS               1
-#define TCP_STATS               1
-#define MEM_STATS               1
-#define MEMP_STATS              1
-#define PBUF_STATS              1
-#define SYS_STATS               1
+   #define LINK_STATS              1
+   #define IP_STATS                1
+   #define ICMP_STATS              1
+   #define IGMP_STATS              1
+   #define IPFRAG_STATS            1
+   #define UDP_STATS               1
+   #define TCP_STATS               1
+   #define MEM_STATS               1
+   #define MEMP_STATS              1
+   #define PBUF_STATS              1
+   #define SYS_STATS               1
 #endif /* LWIP_STATS */
 
 
@@ -261,23 +262,23 @@ a lot of data that needs to be copied, this should be set high. */
 
 #if PPP_SUPPORT
 
-#define NUM_PPP                 1      /* Max PPP sessions. */
+   #define NUM_PPP                 1   /* Max PPP sessions. */
 
 
 /* Select modules to enable.  Ideally these would be set in the makefile but
  * we're limited by the command line length so you need to modify the settings
  * in this file.
  */
-#define PPPOE_SUPPORT           1
-#define PPPOS_SUPPORT           1
+   #define PPPOE_SUPPORT           1
+   #define PPPOS_SUPPORT           1
 
-#define PAP_SUPPORT             1      /* Set > 0 for PAP. */
-#define CHAP_SUPPORT            1      /* Set > 0 for CHAP. */
-#define MSCHAP_SUPPORT          0      /* Set > 0 for MSCHAP (NOT FUNCTIONAL!) */
-#define CBCP_SUPPORT            0      /* Set > 0 for CBCP (NOT FUNCTIONAL!) */
-#define CCP_SUPPORT             0      /* Set > 0 for CCP (NOT FUNCTIONAL!) */
-#define VJ_SUPPORT              1      /* Set > 0 for VJ header compression. */
-#define MD5_SUPPORT             1      /* Set > 0 for MD5 (see also CHAP) */
+   #define PAP_SUPPORT             1   /* Set > 0 for PAP. */
+   #define CHAP_SUPPORT            1   /* Set > 0 for CHAP. */
+   #define MSCHAP_SUPPORT          0   /* Set > 0 for MSCHAP (NOT FUNCTIONAL!) */
+   #define CBCP_SUPPORT            0   /* Set > 0 for CBCP (NOT FUNCTIONAL!) */
+   #define CCP_SUPPORT             0   /* Set > 0 for CCP (NOT FUNCTIONAL!) */
+   #define VJ_SUPPORT              1   /* Set > 0 for VJ header compression. */
+   #define MD5_SUPPORT             1   /* Set > 0 for MD5 (see also CHAP) */
 
 #endif /* PPP_SUPPORT */
 

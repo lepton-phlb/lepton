@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -67,9 +67,9 @@ pid_t execl(const char* path, const char* arg,...){
    va_start(ptr, arg);
 
    //argv[0]= (char*)path;
-   if(arg){
+   if(arg) {
       argv[argc++] = (char*)arg;
-      for(;argc<ARG_MAX;argc++){
+      for(; argc<ARG_MAX; argc++) {
          argv[argc] = va_arg( ptr,char*);
          if(!argv[argc]) break;
       }
@@ -83,7 +83,7 @@ pid_t execl(const char* path, const char* arg,...){
    execve_dt.ppid=_sys_getppid();
 
    __mk_syscall(_SYSCALL_EXECVE,execve_dt)
-   
+
    return execve_dt.pid;
 }
 
@@ -104,7 +104,7 @@ pid_t execv(const char* path, const char* argv[]){
    execve_dt.ppid=_sys_getppid();
 
    __mk_syscall(_SYSCALL_EXECVE,execve_dt)
-   
+
    return execve_dt.pid;
 }
 
@@ -116,7 +116,7 @@ pid_t execv(const char* path, const char* argv[]){
 | Comments:
 | See:
 ---------------------------------------------*/
-pid_t execve(const char* path, const char* argv[],const  char* envp){
+pid_t execve(const char* path, const char* argv[],const char* envp){
    execve_t execve_dt;
 
    execve_dt.path=path;
@@ -125,7 +125,7 @@ pid_t execve(const char* path, const char* argv[],const  char* envp){
    execve_dt.ppid=_sys_getppid();
 
    __mk_syscall(_SYSCALL_EXECVE,execve_dt)
-   
+
    return execve_dt.pid;
 }
 
@@ -140,8 +140,8 @@ pid_t execve(const char* path, const char* argv[],const  char* envp){
 int pause(void){
    __mk_syscall2(_SYSCALL_PAUSE);
    //to do: return -1 if errno=[EINTR]
-   //A signal is caught by the calling process 
-   //and control is returned from the signal-catching function. 
+   //A signal is caught by the calling process
+   //and control is returned from the signal-catching function.
 
    return 0;
 }
@@ -201,7 +201,7 @@ int dup(int fildes){
 
    dup_dt.fd = fildes;
    __mk_syscall(_SYSCALL_DUP,dup_dt);
-   
+
    return dup_dt.fd;
 }
 
@@ -220,7 +220,7 @@ int dup2(int fildes, int fildes2){
    dup2_dt.fd2 = fildes2;
 
    __mk_syscall(_SYSCALL_DUP2,dup2_dt);
-   
+
    return dup2_dt.fd;
 }
 
@@ -234,7 +234,7 @@ int dup2(int fildes, int fildes2){
 ---------------------------------------------*/
 int pipe(int fildes[2]){
    pipe_t pipe_dt;
-   
+
    __mk_syscall(_SYSCALL_PIPE,pipe_dt);
 
    fildes[0]=pipe_dt.fd_r;
@@ -255,25 +255,25 @@ void _system_exit(int status){
    kernel_pthread_t* pthread_ptr= kernel_pthread_self();
    pid_t pid = pthread_ptr->pid;
    exit_t exit_dt;
-      
-   #if ATEXIT_MAX>0
+
+#if ATEXIT_MAX>0
    {
       atexit_func_t* p_atexit_func;
-      while( *(p_atexit_func = process_lst[pid]->p_atexit_func++) ){
+      while( *(p_atexit_func = process_lst[pid]->p_atexit_func++) ) {
          (*p_atexit_func)();
       }
    }
-   #endif
-   
+#endif
+
    //mutex stdio release
-   if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER){
+   if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) {
       //to do lonjmp() will must use this method to release semaphore;
       //release semaphore stdio_sem (instead of use atexit()???;)
-      #if !defined(__KERNEL_LOAD_LIB)
-         kernel_pthread_mutex_destroy(&stdin->mutex);
-         kernel_pthread_mutex_destroy(&stdout->mutex);
-         kernel_pthread_mutex_destroy(&stderr->mutex);
-      #endif
+#if !defined(__KERNEL_LOAD_LIB)
+      kernel_pthread_mutex_destroy(&stdin->mutex);
+      kernel_pthread_mutex_destroy(&stdout->mutex);
+      kernel_pthread_mutex_destroy(&stderr->mutex);
+#endif
    }
 
 
@@ -336,11 +336,11 @@ int chdir(const char *path){
 
 /*--------------------------------------------
 | Name:        sysctl
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int _system_sysctl(int *name, int namelen, void *oldp, int *oldlenp, void *newp,int newlen){
    sysctl_t sysctl_dt;
@@ -370,7 +370,7 @@ int _system_system(const char * command){
    //to do: block signal: see posix specification
    //to do: parse command for argv[]
 
-   if(!(pid = vfork())){
+   if(!(pid = vfork())) {
       execve("/bin/lsh",0,0);
    }
 
@@ -480,7 +480,7 @@ pid_t _system_setpgid(pid_t pid, pid_t id_grp){
    setpgid_t setpgid_dt;
 
    if(pid<0 || id_grp<0)
-      return(pid_t)-1;
+      return (pid_t)-1;
 
    if(!pid)
       setpgid_dt.pid = _sys_getpid();
@@ -506,7 +506,7 @@ pid_t _system_getpgrp(void){
    getpgrp_dt.pid = _sys_getpid();
 
    __mk_syscall(_SYSCALL_GETPGRP,getpgrp_dt);
-   
+
    return getpgrp_dt.id_grp;
 }
 
@@ -526,11 +526,11 @@ pid_t _system_getpgrp2(pid_t pid){
 
    if(!pid)
       getpgrp_dt.pid = _sys_getpid();
-   else 
+   else
       getpgrp_dt.pid = pid;
 
    __mk_syscall(_SYSCALL_GETPGRP,getpgrp_dt);
-      
+
    return getpgrp_dt.id_grp;
 }
 
@@ -549,16 +549,16 @@ int _system_usleep(useconds_t useconds){
 
 /*--------------------------------------------
 | Name:        _system_alloca
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 void* _system_alloca(size_t size){
    kernel_pthread_t* pthread_ptr= kernel_pthread_self();
    return kernel_pthread_alloca(pthread_ptr,size);
-   
+
 }
 
 /*===========================================

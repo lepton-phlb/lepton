@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,19 +15,19 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
 
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include <string.h>
 #include "kernel/core/kernelconf.h"
@@ -35,20 +35,20 @@ either the MPL or the [eCos GPL] License."
 #include "lib/pthread/pthread.h"
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
 
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 /*--------------------------------------------
 | Name:        pthread_mutex_init
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){
    pthread_mutex_init_t pthread_mutex_init_dt;
@@ -59,7 +59,7 @@ int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){
 
    if(!mutex)
       return -1;
-   
+
    //paranoïac protection ;)
    __atomic_in();
    memcpy(mutex,&default_pthread_mutex,sizeof(pthread_mutex_t));
@@ -76,16 +76,16 @@ int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){
 
 /*--------------------------------------------
 | Name:        pthread_mutex_destroy
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int pthread_mutex_destroy(pthread_mutex_t *mutex){
    pthread_mutex_destroy_t pthread_mutex_destroy_dt;
 
-   if(!mutex) 
+   if(!mutex)
       return -1;
    if(!mutex->kernel_object)
       return -1;
@@ -100,61 +100,64 @@ int pthread_mutex_destroy(pthread_mutex_t *mutex){
 
 /*--------------------------------------------
 | Name:        pthread_mutex_lock
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int pthread_mutex_lock(pthread_mutex_t *mutex){
    if(!mutex)
       return -1;
    //
-   if(mutex->kernel_object==PTHREAD_MUTEX_UNINITIALIZED){
+   if(mutex->kernel_object==PTHREAD_MUTEX_UNINITIALIZED) {
       //static mutex init
       if(pthread_mutex_init(mutex,&mutex->pthread_mutexattr)<0)
          return -1;
    }
    //
    if(mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_lock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_lock(
+                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
 /*--------------------------------------------
 | Name:        pthread_mutex_trylock
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int pthread_mutex_trylock(pthread_mutex_t *mutex){
    if(!mutex)
       return -1;
    //
-   if(mutex->kernel_object==PTHREAD_MUTEX_UNINITIALIZED){
+   if(mutex->kernel_object==PTHREAD_MUTEX_UNINITIALIZED) {
       //static mutex init
       if(pthread_mutex_init(mutex,&mutex->pthread_mutexattr)<0)
          return -1;
    }
    //
    if(mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_trylock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_trylock(
+                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
 /*--------------------------------------------
 | Name:        pthread_mutex_unlock
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int pthread_mutex_unlock(pthread_mutex_t *mutex){
-  if(mutex && mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_unlock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   if(mutex && mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
+      return kernel_pthread_mutex_unlock(
+                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 

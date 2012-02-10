@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -76,7 +76,7 @@ typedef struct ksz885x_stat_irq_st {
 
 //
 typedef struct board_ksz885x_net_info_st {
-   kernel_pthread_mutex_t     mutex;
+   kernel_pthread_mutex_t mutex;
 
    desc_t _eth_ksz885x_desc_rd;
    desc_t _eth_ksz885x_desc_wr;
@@ -93,7 +93,7 @@ typedef struct board_ksz885x_net_info_st {
    unsigned char xmit_flag;
 
    //for eCos IRQ
-   cyg_handle_t  _eth_ksz885x_handle;
+   cyg_handle_t _eth_ksz885x_handle;
    cyg_interrupt _eth_ksz885x_it;
 
    //for lepton event
@@ -107,12 +107,12 @@ typedef struct board_ksz885x_net_info_st {
    ksz885x_stat_irq_t * ksz885x_stats;
 
    //ethernet status
-   eth_stat_t  eth_stat;
+   eth_stat_t eth_stat;
 } board_ksz885x_net_info_t;
 
 //
 #define  RCV_BUFFER_SIZE  1500
-#define  RCV_POOL_SIZE  16//32//16
+#define  RCV_POOL_SIZE  16 //32//16
 typedef struct rcv_pool_st {
    unsigned char buffer[RCV_BUFFER_SIZE];
    unsigned short len;
@@ -121,7 +121,7 @@ typedef struct rcv_pool_st {
 
 //
 const char dev_eth_ksz885x_name[]="eth0\0";
-static rcv_pool_t  rx_pool[RCV_POOL_SIZE] __attribute((section(".no_cache")));
+static rcv_pool_t rx_pool[RCV_POOL_SIZE] __attribute((section(".no_cache")));
 static board_ksz885x_net_info_t g_net_ksz885x_inf __attribute((section(".no_cache")));
 static unsigned char dev_eth_ksz885x_mac_addr[] = {0x00, 0x10, 0xA1, 0x86, 0x95, 0x11};
 
@@ -146,52 +146,55 @@ int dev_eth_ksz885x_ioctl(desc_t desc,int request,va_list ap);
 #define STAT_KSZ885X
 
 #ifdef STAT_KSZ885X
-#define  __inc_tx(__stat_irq__)              __stat_irq__->tx++
-#define  __inc_tx_space(__stat_irq__)        __stat_irq__->tx_space++
-#define  __inc_tx_stopped(__stat_irq__)      __stat_irq__->tx_stopped++
-#define  __inc_tx_errors(__stat_irq__)       __stat_irq__->tx_errors++
-#define  __inc_rx(__stat_irq__)              __stat_irq__->rx++
-#define  __inc_rx_ov(__stat_irq__)           __stat_irq__->rx_ov++
-#define  __inc_rx_stopped(__stat_irq__)      __stat_irq__->rx_stopped++
-#define  __inc_rx_err_frame(__stat_irq__)    __stat_irq__->rx_err_frame++
-#define  __inc_rx_err_size(__stat_irq__)     __stat_irq__->rx_err_size++
-#define  __inc_phy(__stat_irq__)             __stat_irq__->phy++
-#define  __inc_wol_frame(__stat_irq__)       __stat_irq__->wol_frame++
-#define  __inc_wol_magic(__stat_irq__)       __stat_irq__->wol_magic++
-#define  __inc_wol_link(__stat_irq__)        __stat_irq__->wol_link++
-#define  __inc_wol_energy(__stat_irq__)      __stat_irq__->wol_energy++
-#define  __inc_dsr(__stat_irq__)             __stat_irq__->dsr++
-#define  __inc_dsr_tx(__stat_irq__)          __stat_irq__->dsr_tx++
-#define  __inc_dsr_rx(__stat_irq__)          __stat_irq__->dsr_rx++
-#define  __inc_isr(__stat_irq__)             __stat_irq__->isr++
+   #define  __inc_tx(__stat_irq__)              __stat_irq__->tx++
+   #define  __inc_tx_space(__stat_irq__)        __stat_irq__->tx_space++
+   #define  __inc_tx_stopped(__stat_irq__)      __stat_irq__->tx_stopped++
+   #define  __inc_tx_errors(__stat_irq__)       __stat_irq__->tx_errors++
+   #define  __inc_rx(__stat_irq__)              __stat_irq__->rx++
+   #define  __inc_rx_ov(__stat_irq__)           __stat_irq__->rx_ov++
+   #define  __inc_rx_stopped(__stat_irq__)      __stat_irq__->rx_stopped++
+   #define  __inc_rx_err_frame(__stat_irq__)    __stat_irq__->rx_err_frame++
+   #define  __inc_rx_err_size(__stat_irq__)     __stat_irq__->rx_err_size++
+   #define  __inc_phy(__stat_irq__)             __stat_irq__->phy++
+   #define  __inc_wol_frame(__stat_irq__)       __stat_irq__->wol_frame++
+   #define  __inc_wol_magic(__stat_irq__)       __stat_irq__->wol_magic++
+   #define  __inc_wol_link(__stat_irq__)        __stat_irq__->wol_link++
+   #define  __inc_wol_energy(__stat_irq__)      __stat_irq__->wol_energy++
+   #define  __inc_dsr(__stat_irq__)             __stat_irq__->dsr++
+   #define  __inc_dsr_tx(__stat_irq__)          __stat_irq__->dsr_tx++
+   #define  __inc_dsr_rx(__stat_irq__)          __stat_irq__->dsr_rx++
+   #define  __inc_isr(__stat_irq__)             __stat_irq__->isr++
 
 #else
-#define  __inc_tx(__stat_irq__)
-#define  __inc_tx_space(__stat_irq__)
-#define  __inc_tx_stopped(__stat_irq__)
-#define  __inc_tx_errors(__stat_irq__)
-#define  __inc_rx(__stat_irq__)
-#define  __inc_rx_ov(__stat_irq__)
-#define  __inc_rx_stopped(__stat_irq__)
-#define  __inc_rx_err_frame(__stat_irq__)
-#define  __inc_rx_err_size(__stat_irq__)
-#define  __inc_phy(__stat_irq__)
-#define  __inc_wol_frame(__stat_irq__)
-#define  __inc_wol_magic(__stat_irq__)
-#define  __inc_wol_link(__stat_irq__)
-#define  __inc_wol_energy(__stat_irq__)
-#define  __inc_dsr(__stat_irq__)
-#define  __inc_dsr_tx(__stat_irq__)
-#define  __inc_dsr_rx(__stat_irq__)
-#define  __inc_isr(__stat_irq__)
+   #define  __inc_tx(__stat_irq__)
+   #define  __inc_tx_space(__stat_irq__)
+   #define  __inc_tx_stopped(__stat_irq__)
+   #define  __inc_tx_errors(__stat_irq__)
+   #define  __inc_rx(__stat_irq__)
+   #define  __inc_rx_ov(__stat_irq__)
+   #define  __inc_rx_stopped(__stat_irq__)
+   #define  __inc_rx_err_frame(__stat_irq__)
+   #define  __inc_rx_err_size(__stat_irq__)
+   #define  __inc_phy(__stat_irq__)
+   #define  __inc_wol_frame(__stat_irq__)
+   #define  __inc_wol_magic(__stat_irq__)
+   #define  __inc_wol_link(__stat_irq__)
+   #define  __inc_wol_energy(__stat_irq__)
+   #define  __inc_dsr(__stat_irq__)
+   #define  __inc_dsr_tx(__stat_irq__)
+   #define  __inc_dsr_rx(__stat_irq__)
+   #define  __inc_isr(__stat_irq__)
 
 #endif //STAT_KSZ885X
 
 
 #define  ALLOWED_IRQs   (INT_TX | INT_RX)
-#define __ksz885x_enable_irq(__pksz885xHW__)     __ksz885x_write_reg(__pksz885xHW__, REG_INT_MASK, (__pksz885xHW__)->irq_mask)
-#define __ksz885x_disable_irq(__pksz885xHW__)    __ksz885x_write_reg(__pksz885xHW__, REG_INT_MASK, 0x0000)
-#define __ksz885x_ack_irq(__pksz885xHW__, __irq_mask__) __ksz885x_write_reg(__pksz885xHW__, REG_INT_STATUS, (unsigned short)__irq_mask__)
+#define __ksz885x_enable_irq(__pksz885xHW__)     __ksz885x_write_reg(__pksz885xHW__, REG_INT_MASK, \
+                                                                     (__pksz885xHW__)->irq_mask)
+#define __ksz885x_disable_irq(__pksz885xHW__)    __ksz885x_write_reg(__pksz885xHW__, REG_INT_MASK, \
+                                                                     0x0000)
+#define __ksz885x_ack_irq(__pksz885xHW__, __irq_mask__) __ksz885x_write_reg( \
+      __pksz885xHW__, REG_INT_STATUS, (unsigned short)__irq_mask__)
 
 /*============================================
 | Implementation
@@ -207,7 +210,7 @@ int dev_eth_ksz885x_ioctl(desc_t desc,int request,va_list ap);
 void _ksz885x_read_word(void * phw, unsigned short addr, unsigned short * data) {
    ksz885x_hw_t * pksz885xHW=(ksz885x_hw_t *)phw;
    __ksz885x_mio_word((pksz885xHW)->io_virt_addr + (pksz885xHW)->io_virt_data) =
-         (unsigned short)(addr) | ((BE1 | BE0) << (addr & 0x02));  
+      (unsigned short)(addr) | ((BE1 | BE0) << (addr & 0x02));
    *(data) = __ksz885x_mio_word((pksz885xHW)->io_virt_addr + CMD_LOW);
 }
 
@@ -223,7 +226,7 @@ void _ksz885x_read_word(void * phw, unsigned short addr, unsigned short * data) 
 void _ksz885x_write_word(void * phw, unsigned short addr,  unsigned short data) {
    ksz885x_hw_t * pksz885xHW=(ksz885x_hw_t *)phw;
    __ksz885x_mio_word((pksz885xHW)->io_virt_addr + (pksz885xHW)->io_virt_data ) =
-         (unsigned short)(addr) | ((BE1 | BE0) << (addr & 0x02));  
+      (unsigned short)(addr) | ((BE1 | BE0) << (addr & 0x02));
    __ksz885x_mio_word((pksz885xHW)->io_virt_addr + CMD_LOW) = (unsigned short)(data);
 }
 
@@ -251,8 +254,9 @@ void _ksz885x_read_data16(void * phw, unsigned short * data) {
 | See:
 ----------------------------------------------*/
 void _ksz885x_write_data16(void * phw, unsigned short data) {
-	ksz885x_hw_t * pksz885xHW=(ksz885x_hw_t *)phw;
-	__ksz885x_mio_word(((p_ksz885x_hw_t)(pksz885xHW))->io_virt_addr + CMD_LOW) = (unsigned short)(data);
+   ksz885x_hw_t * pksz885xHW=(ksz885x_hw_t *)phw;
+   __ksz885x_mio_word(((p_ksz885x_hw_t)(pksz885xHW))->io_virt_addr +
+                      CMD_LOW) = (unsigned short)(data);
 }
 
 
@@ -272,13 +276,13 @@ void _ksz885x_write_data_header(void *pksz885xHW,unsigned short uOrgLength) {
 }
 
 #define __ksz885x_write_data(pHw, pIn, p, len, sentLen) { \
-   unsigned short * pw; \
-   pw=(unsigned short *)pIn; \
-   while(len--) { \
-      sentLen+=DATA_ALIGNMENT; \
-      _ksz885x_write_data16(pHw,*pw++); \
-   }\
-   p=(unsigned char *)pw;\
+      unsigned short * pw; \
+      pw=(unsigned short *)pIn; \
+      while(len--) { \
+         sentLen+=DATA_ALIGNMENT; \
+         _ksz885x_write_data16(pHw,*pw++); \
+      } \
+      p=(unsigned char *)pw; \
 }
 
 /*--------------------------------------------
@@ -290,7 +294,8 @@ void _ksz885x_write_data_header(void *pksz885xHW,unsigned short uOrgLength) {
 | Comments:
 | See:
 ----------------------------------------------*/
-void _ksz885x_write_data_buffer(void * pksz885xHW, unsigned char *  pData, unsigned short uOrgPktLen) {
+void _ksz885x_write_data_buffer(void * pksz885xHW, unsigned char *  pData,
+                                unsigned short uOrgPktLen) {
    unsigned short tx_send = ((uOrgPktLen+3) & ~0x03)>>1;
    unsigned short tx_send_count=0;
    unsigned char * data_ptr=0;
@@ -309,8 +314,8 @@ void _ksz885x_write_data_buffer(void * pksz885xHW, unsigned char *  pData, unsig
 | See:
 ----------------------------------------------*/
 int _ksz885x_restart_auto_nego(p_ksz885x_hw_t pksz885xHW) {
-   unsigned short  RegData;
-   int    cnTimeOut;
+   unsigned short RegData;
+   int cnTimeOut;
 
    /* Set restart auto-negitiation to Port Control Register (P1CR) */
    __ksz885x_read_reg(pksz885xHW, REG_PORT_CTRL, &RegData );
@@ -338,17 +343,17 @@ int _ksz885x_restart_auto_nego(p_ksz885x_hw_t pksz885xHW) {
 | See:
 ----------------------------------------------*/
 void _ksz885x_enable_hw(p_ksz885x_hw_t pksz885xHW) {
-   unsigned short   txCntl;
-   unsigned short   rxCntl;
+   unsigned short txCntl;
+   unsigned short rxCntl;
 
    /* Enables QMU Transmit (TXCR). */
    __ksz885x_read_reg(pksz885xHW,REG_TX_CTRL,&txCntl);
-   txCntl |= TX_CTRL_ENABLE ;
+   txCntl |= TX_CTRL_ENABLE;
    __ksz885x_write_reg(pksz885xHW, REG_TX_CTRL, txCntl);
 
    /* Enables QMU Receive (RXCR1). */
    __ksz885x_read_reg(pksz885xHW,REG_RX_CTRL1,&rxCntl);
-   rxCntl |= RX_CTRL_ENABLE ;
+   rxCntl |= RX_CTRL_ENABLE;
    __ksz885x_write_reg(pksz885xHW, REG_RX_CTRL1, rxCntl);
    pksz885xHW->enabled = TRUE;
 }
@@ -363,17 +368,17 @@ void _ksz885x_enable_hw(p_ksz885x_hw_t pksz885xHW) {
 | See:
 ----------------------------------------------*/
 void _ksz885x_disable_hw(p_ksz885x_hw_t pksz885xHW ) {
-   unsigned short   txCntl;
-   unsigned short   rxCntl;
+   unsigned short txCntl;
+   unsigned short rxCntl;
 
    /* Disable QMU Transmit (TXCR). */
    __ksz885x_read_reg(pksz885xHW,REG_TX_CTRL,&txCntl);
-   txCntl &= ~TX_CTRL_ENABLE ;
+   txCntl &= ~TX_CTRL_ENABLE;
    __ksz885x_write_reg(pksz885xHW, REG_TX_CTRL, txCntl );
 
    /* Disable QMU Receive (RXCR1). */
    __ksz885x_read_reg(pksz885xHW,REG_RX_CTRL1,&rxCntl);
-   rxCntl &= ~RX_CTRL_ENABLE ;
+   rxCntl &= ~RX_CTRL_ENABLE;
    __ksz885x_write_reg(pksz885xHW, REG_RX_CTRL1, rxCntl );
 
    pksz885xHW->enabled = FALSE;
@@ -411,31 +416,31 @@ void _ksz885x_setup_hw(p_ksz885x_hw_t pksz885xHW) {
    __ksz885x_write_reg(pksz885xHW,REG_PHY_CNTL,w);
 
    txCntl = (
-         TX_CTRL_FLOW_ENABLE |
-         TX_CTRL_PAD_ENABLE |
-         TX_CTRL_CRC_ENABLE |
-         TX_CTRL_IP_CHECKSUM
-   );
+      TX_CTRL_FLOW_ENABLE |
+      TX_CTRL_PAD_ENABLE |
+      TX_CTRL_CRC_ENABLE |
+      TX_CTRL_IP_CHECKSUM
+      );
 
    __ksz885x_write_reg(pksz885xHW, REG_TX_CTRL, txCntl );
 
    //use with promiscious
    rxCntl = (
-         RX_CTRL_IPV6_UDP_NOCHECKSUM |
-         RX_CTRL_UDP_LITE_CHECKSUM |
-         RX_CTRL_ICMP_CHECKSUM
-   );
+      RX_CTRL_IPV6_UDP_NOCHECKSUM |
+      RX_CTRL_UDP_LITE_CHECKSUM |
+      RX_CTRL_ICMP_CHECKSUM
+      );
    __ksz885x_write_reg(pksz885xHW, REG_RX_CTRL2, rxCntl);
    rxCntl = (
-         RX_CTRL_UDP_CHECKSUM |
-         RX_CTRL_TCP_CHECKSUM |
-         RX_CTRL_IP_CHECKSUM|
-         RX_CTRL_FLOW_ENABLE |
-         RX_CTRL_BROADCAST |
-         RX_CTRL_UNICAST |
-         RX_CTRL_MAC_FILTER |
-         RX_CTRL_PROMISCUOUS
-   );
+      RX_CTRL_UDP_CHECKSUM |
+      RX_CTRL_TCP_CHECKSUM |
+      RX_CTRL_IP_CHECKSUM|
+      RX_CTRL_FLOW_ENABLE |
+      RX_CTRL_BROADCAST |
+      RX_CTRL_UNICAST |
+      RX_CTRL_MAC_FILTER |
+      RX_CTRL_PROMISCUOUS
+      );
    __ksz885x_write_reg(pksz885xHW, REG_RX_CTRL1, rxCntl);
 }
 
@@ -455,8 +460,9 @@ void _ksz885x_setup_hw(p_ksz885x_hw_t pksz885xHW) {
 | Comments:
 | See:
 ----------------------------------------------*/
-int _ksz885x_check_link (p_ksz885x_hw_t pksz885xHW, unsigned long  *pSpeed, unsigned long *pDuplex) {
-   unsigned short  RegData=0;
+int _ksz885x_check_link (p_ksz885x_hw_t pksz885xHW, unsigned long  *pSpeed,
+                         unsigned long *pDuplex) {
+   unsigned short RegData=0;
 
    /* Read Port Status Register (P1SR) */
    __ksz885x_read_reg(pksz885xHW, REG_PORT_STATUS, &RegData );
@@ -481,14 +487,14 @@ int _ksz885x_check_link (p_ksz885x_hw_t pksz885xHW, unsigned long  *pSpeed, unsi
          pksz885xHW->duplex = 1;
       }
 
-      return 1;  	/* Link is up */
+      return 1;         /* Link is up */
    }
    else {
       pksz885xHW->speed = ETH_STAT_LINK_DOWN;
       pksz885xHW->duplex = 0;
-      return 0;  	/* Link is down */
+      return 0;         /* Link is down */
    }
-} 
+}
 
 
 /*--------------------------------------------
@@ -556,20 +562,20 @@ void _ksz885x_set_mac_addr(p_ksz885x_hw_t pksz885xHW,unsigned char * pByte) {
    pw=(unsigned short *)pByte;
    u=*pw;
    w=(unsigned short)(((u&0xFF)<<8) | ((u>>8)&0xFF));
-   __ksz885x_write_reg(pksz885xHW, REG_MAC_ADDR_4  , w );
-   
+   __ksz885x_write_reg(pksz885xHW, REG_MAC_ADDR_4, w );
+
    pw++;
    u=*pw;
    w=(unsigned short)(((u&0xFF)<<8) | ((u>>8)&0xFF));
-   __ksz885x_write_reg(pksz885xHW, REG_MAC_ADDR_2  , w);
-   
+   __ksz885x_write_reg(pksz885xHW, REG_MAC_ADDR_2, w);
+
    pw++;
    u=*pw;
    w=(unsigned short)(((u&0xFF)<<8) | ((u>>8)&0xFF));
    __ksz885x_write_reg(pksz885xHW, REG_MAC_ADDR_0, w);
-   
-   for(i=0;i<6;i++)
-    pksz885xHW->mac_addr[i]=*(pByte+i);
+
+   for(i=0; i<6; i++)
+      pksz885xHW->mac_addr[i]=*(pByte+i);
 }
 
 
@@ -632,10 +638,10 @@ ksz885x_err_t  _ksz885x_init_hw(p_ksz885x_hw_t pksz885xHW) {
 | See:
 ----------------------------------------------*/
 int _ksz885x_init_phy(p_ksz885x_hw_t pksz885xHW) {
-   unsigned long    dwSpeed;
-   unsigned long    bDuplex;
-   int      linkStatus;
-   int      timeOut=100;
+   unsigned long dwSpeed;
+   unsigned long bDuplex;
+   int linkStatus;
+   int timeOut=100;
 
 
    /* Get device link status */
@@ -733,7 +739,7 @@ void _ksz885x_clean_rx_queue(p_ksz885x_hw_t pksz885xHW) {
 | See:
 ---------------------------------------------*/
 int dev_eth_ksz885x_load(dev_io_info_t* p_dev_io_info) {
-   pthread_mutexattr_t  mutex_attr=0;
+   pthread_mutexattr_t mutex_attr=0;
    unsigned short reg_val=0;
 
    //reset all values
@@ -769,19 +775,22 @@ int dev_eth_ksz885x_load(dev_io_info_t* p_dev_io_info) {
    _ksz885x_setup_irq(&g_net_ksz885x_inf.ksz885x_info);
 
 #if defined(USE_ECOS)
-   cyg_interrupt_create((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no, (cyg_priority_t)g_net_ksz885x_inf.dev_info.irq_prio,
-            (cyg_addrword_t)&g_net_ksz885x_inf,
-            &dev_eth_ksz885x_isr,
-            &dev_eth_ksz885x_dsr,
-            &g_net_ksz885x_inf._eth_ksz885x_handle, &g_net_ksz885x_inf._eth_ksz885x_it);
+   cyg_interrupt_create((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no,
+                        (cyg_priority_t)g_net_ksz885x_inf.dev_info.irq_prio,
+                        (cyg_addrword_t)&g_net_ksz885x_inf,
+                        &dev_eth_ksz885x_isr,
+                        &dev_eth_ksz885x_dsr,
+                        &g_net_ksz885x_inf._eth_ksz885x_handle,
+                        &g_net_ksz885x_inf._eth_ksz885x_it);
    //
-   cyg_interrupt_configure(g_net_ksz885x_inf.dev_info.irq_no, 0/*edge*/, 0 /*falling*/ );
+   cyg_interrupt_configure(g_net_ksz885x_inf.dev_info.irq_no, 0 /*edge*/, 0 /*falling*/ );
    cyg_interrupt_attach(g_net_ksz885x_inf._eth_ksz885x_handle);
 
 #endif
 
 #ifdef STAT_KSZ885X
-   if(!(g_net_ksz885x_inf.ksz885x_stats = (ksz885x_stat_irq_t *)malloc(sizeof(ksz885x_stat_irq_t)))) {
+   if(!(g_net_ksz885x_inf.ksz885x_stats =
+           (ksz885x_stat_irq_t *)malloc(sizeof(ksz885x_stat_irq_t)))) {
       return -1;
    }
    memset((void*)g_net_ksz885x_inf.ksz885x_stats, 0, sizeof(ksz885x_stat_irq_t));
@@ -800,30 +809,30 @@ int dev_eth_ksz885x_load(dev_io_info_t* p_dev_io_info) {
 ---------------------------------------------*/
 int dev_eth_ksz885x_open(desc_t desc, int o_flag) {
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
       if(g_net_ksz885x_inf._eth_ksz885x_desc_rd<0)
          g_net_ksz885x_inf._eth_ksz885x_desc_rd = desc;
       else
-         return -1; //already open
+         return -1;  //already open
 
       if(!ofile_lst[desc].p)
          ofile_lst[desc].p=&g_net_ksz885x_inf;
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
       if(g_net_ksz885x_inf._eth_ksz885x_desc_wr<0) {
          g_net_ksz885x_inf._eth_ksz885x_desc_wr = desc;
          g_net_ksz885x_inf._output_r = -1;
       }
       else
-         return -1; //already open
+         return -1;  //already open
 
       if(!ofile_lst[desc].p)
          ofile_lst[desc].p=&g_net_ksz885x_inf;
    }
 
    //unmask IRQ and enable ksz
-   if(g_net_ksz885x_inf._eth_ksz885x_desc_rd>0 && g_net_ksz885x_inf._eth_ksz885x_desc_wr>0){
+   if(g_net_ksz885x_inf._eth_ksz885x_desc_rd>0 && g_net_ksz885x_inf._eth_ksz885x_desc_wr>0) {
 #if defined(USE_ECOS)
       cyg_interrupt_acknowledge((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no);
       cyg_interrupt_unmask((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no);
@@ -842,14 +851,14 @@ int dev_eth_ksz885x_open(desc_t desc, int o_flag) {
 | See:
 ---------------------------------------------*/
 int dev_eth_ksz885x_close(desc_t desc) {
-   if(ofile_lst[desc].oflag & O_RDONLY){
-      if(!ofile_lst[desc].nb_reader){
+   if(ofile_lst[desc].oflag & O_RDONLY) {
+      if(!ofile_lst[desc].nb_reader) {
          g_net_ksz885x_inf._eth_ksz885x_desc_rd = -1;
       }
    }
 
-   if(ofile_lst[desc].oflag & O_WRONLY){
-      if(!ofile_lst[desc].nb_writer){
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      if(!ofile_lst[desc].nb_writer) {
          g_net_ksz885x_inf._eth_ksz885x_desc_wr = -1;
       }
    }
@@ -960,7 +969,8 @@ int dev_eth_ksz885x_write(desc_t desc, const char* buf,int size) {
    kernel_pthread_mutex_lock(&p_net_info->mutex);
 
    //check free space in TXQ
-   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_TX_MEM_INFO, (unsigned short *)&reg_val);
+   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_TX_MEM_INFO,
+                      (unsigned short *)&reg_val);
    if((reg_val & TX_MEM_AVAILABLE_MASK) < (size+4)) {
       //no available space in TXQ
       kernel_pthread_mutex_unlock(&p_net_info->mutex);
@@ -975,7 +985,8 @@ int dev_eth_ksz885x_write(desc_t desc, const char* buf,int size) {
    reg_val = 0;
    __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short *)&reg_val);
    reg_val |= RXQ_START;
-   __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short)(reg_val&0xff));
+   __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                       (unsigned short)(reg_val&0xff));
 
    //write packet
    _ksz885x_write_data_header(&p_net_info->ksz885x_info, (unsigned short)size);
@@ -985,7 +996,8 @@ int dev_eth_ksz885x_write(desc_t desc, const char* buf,int size) {
    reg_val = 0;
    __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short *)&reg_val);
    reg_val &= ~RXQ_START;
-   __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short)(reg_val&0xff));
+   __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                       (unsigned short)(reg_val&0xff));
 
    //manual TXQ
    reg_val = TXQ_ENQUEUE;
@@ -1024,97 +1036,97 @@ int dev_eth_ksz885x_seek(desc_t desc,int offset,int origin) {
 | See:
 ---------------------------------------------*/
 int dev_eth_ksz885x_ioctl(desc_t desc,int request,va_list ap) {
-   switch(request){
+   switch(request) {
 
-     //reset interface
-     case ETHRESET:{
-        board_ksz885x_net_info_t * p_net_info = (board_ksz885x_net_info_t *)ofile_lst[desc].p;
-        if(!p_net_info)
-           return -1;
+   //reset interface
+   case ETHRESET: {
+      board_ksz885x_net_info_t * p_net_info = (board_ksz885x_net_info_t *)ofile_lst[desc].p;
+      if(!p_net_info)
+         return -1;
 
-        cyg_interrupt_mask((cyg_vector_t)p_net_info->dev_info.irq_no);
-        _ksz885x_disable_hw(&p_net_info->ksz885x_info);
+      cyg_interrupt_mask((cyg_vector_t)p_net_info->dev_info.irq_no);
+      _ksz885x_disable_hw(&p_net_info->ksz885x_info);
 
-        _ksz885x_clean_tx_queue(&p_net_info->ksz885x_info);
-        _ksz885x_clean_rx_queue(&p_net_info->ksz885x_info);
-        p_net_info->_output_r = -1;
-        p_net_info->_input_r = p_net_info->_input_w;
+      _ksz885x_clean_tx_queue(&p_net_info->ksz885x_info);
+      _ksz885x_clean_rx_queue(&p_net_info->ksz885x_info);
+      p_net_info->_output_r = -1;
+      p_net_info->_input_r = p_net_info->_input_w;
 
-        _ksz885x_enable_hw(&p_net_info->ksz885x_info);
-        cyg_interrupt_unmask((cyg_vector_t)p_net_info->dev_info.irq_no);
-     }
-     break;
+      _ksz885x_enable_hw(&p_net_info->ksz885x_info);
+      cyg_interrupt_unmask((cyg_vector_t)p_net_info->dev_info.irq_no);
+   }
+   break;
 
-     //status interface
-     case ETHSTAT:{
-        eth_stat_t* p_eth_stat = va_arg( ap, eth_stat_t*);
-        board_ksz885x_net_info_t * p_net_info = (board_ksz885x_net_info_t *)ofile_lst[desc].p;
-        unsigned short reg_val=0;
+   //status interface
+   case ETHSTAT: {
+      eth_stat_t* p_eth_stat = va_arg( ap, eth_stat_t*);
+      board_ksz885x_net_info_t * p_net_info = (board_ksz885x_net_info_t *)ofile_lst[desc].p;
+      unsigned short reg_val=0;
 
-        if(!p_net_info || !p_eth_stat)
-           return -1;
+      if(!p_net_info || !p_eth_stat)
+         return -1;
 
-        //read port status register
-        __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_PORT_STATUS, &reg_val);
-        if(reg_val & PORT_STATUS_LINK_GOOD) {
-           if(reg_val & PORT_STAT_SPEED_100MBIT) {
-              p_net_info->eth_stat = ETH_STAT_LINK_100;
-           }
-           else {
-              p_net_info->eth_stat = ETH_STAT_LINK_10;
-           }
-        }
-        else {
-           p_net_info->eth_stat = ETH_STAT_LINK_DOWN;
-        }
-        *p_eth_stat = p_net_info->eth_stat;
-     }
-     break;
+      //read port status register
+      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_PORT_STATUS, &reg_val);
+      if(reg_val & PORT_STATUS_LINK_GOOD) {
+         if(reg_val & PORT_STAT_SPEED_100MBIT) {
+            p_net_info->eth_stat = ETH_STAT_LINK_100;
+         }
+         else {
+            p_net_info->eth_stat = ETH_STAT_LINK_10;
+         }
+      }
+      else {
+         p_net_info->eth_stat = ETH_STAT_LINK_DOWN;
+      }
+      *p_eth_stat = p_net_info->eth_stat;
+   }
+   break;
 
-     case ETHSETHWADDRESS:{
-        board_ksz885x_net_info_t* p_net_info=(board_ksz885x_net_info_t *)ofile_lst[desc].p;
-        unsigned char* p_eth_hwaddr = va_arg( ap, unsigned char*);
+   case ETHSETHWADDRESS: {
+      board_ksz885x_net_info_t* p_net_info=(board_ksz885x_net_info_t *)ofile_lst[desc].p;
+      unsigned char* p_eth_hwaddr = va_arg( ap, unsigned char*);
 
-        if(!p_net_info || !p_eth_hwaddr)
-           return -1;
+      if(!p_net_info || !p_eth_hwaddr)
+         return -1;
 
-        //stop ehternet interface
-        cyg_interrupt_mask((cyg_vector_t)p_net_info->dev_info.irq_no);
-        _ksz885x_disable_hw(&p_net_info->ksz885x_info);
+      //stop ehternet interface
+      cyg_interrupt_mask((cyg_vector_t)p_net_info->dev_info.irq_no);
+      _ksz885x_disable_hw(&p_net_info->ksz885x_info);
 
-        //set mac address
-        p_net_info->ksz885x_info.mac_addr[0] = p_eth_hwaddr[0];
-        p_net_info->ksz885x_info.mac_addr[1] = p_eth_hwaddr[1];
-        p_net_info->ksz885x_info.mac_addr[2] = p_eth_hwaddr[2];
-        p_net_info->ksz885x_info.mac_addr[3] = p_eth_hwaddr[3];
-        p_net_info->ksz885x_info.mac_addr[4] = p_eth_hwaddr[4];
-        p_net_info->ksz885x_info.mac_addr[5] = p_eth_hwaddr[5];
-        _ksz885x_set_mac_addr(&p_net_info->ksz885x_info, p_net_info->ksz885x_info.mac_addr);
+      //set mac address
+      p_net_info->ksz885x_info.mac_addr[0] = p_eth_hwaddr[0];
+      p_net_info->ksz885x_info.mac_addr[1] = p_eth_hwaddr[1];
+      p_net_info->ksz885x_info.mac_addr[2] = p_eth_hwaddr[2];
+      p_net_info->ksz885x_info.mac_addr[3] = p_eth_hwaddr[3];
+      p_net_info->ksz885x_info.mac_addr[4] = p_eth_hwaddr[4];
+      p_net_info->ksz885x_info.mac_addr[5] = p_eth_hwaddr[5];
+      _ksz885x_set_mac_addr(&p_net_info->ksz885x_info, p_net_info->ksz885x_info.mac_addr);
 
-        //renable ethernet interface
-        _ksz885x_enable_hw(&p_net_info->ksz885x_info);
-        cyg_interrupt_unmask((cyg_vector_t)p_net_info->dev_info.irq_no);
-     }
-     break;
+      //renable ethernet interface
+      _ksz885x_enable_hw(&p_net_info->ksz885x_info);
+      cyg_interrupt_unmask((cyg_vector_t)p_net_info->dev_info.irq_no);
+   }
+   break;
 
-     case ETHGETHWADDRESS:{
-        board_ksz885x_net_info_t * p_net_info = (board_ksz885x_net_info_t *)ofile_lst[desc].p;
-        unsigned char* p_eth_hwaddr = va_arg( ap, unsigned char*);
-        if(!p_net_info)
-           return -1;
+   case ETHGETHWADDRESS: {
+      board_ksz885x_net_info_t * p_net_info = (board_ksz885x_net_info_t *)ofile_lst[desc].p;
+      unsigned char* p_eth_hwaddr = va_arg( ap, unsigned char*);
+      if(!p_net_info)
+         return -1;
 
-        p_eth_hwaddr[0] = p_net_info->ksz885x_info.mac_addr[0];
-        p_eth_hwaddr[1] = p_net_info->ksz885x_info.mac_addr[1];
-        p_eth_hwaddr[2] = p_net_info->ksz885x_info.mac_addr[2];
-        p_eth_hwaddr[3] = p_net_info->ksz885x_info.mac_addr[3];
-        p_eth_hwaddr[4] = p_net_info->ksz885x_info.mac_addr[4];
-        p_eth_hwaddr[5] = p_net_info->ksz885x_info.mac_addr[5];
-     }
-     break;
+      p_eth_hwaddr[0] = p_net_info->ksz885x_info.mac_addr[0];
+      p_eth_hwaddr[1] = p_net_info->ksz885x_info.mac_addr[1];
+      p_eth_hwaddr[2] = p_net_info->ksz885x_info.mac_addr[2];
+      p_eth_hwaddr[3] = p_net_info->ksz885x_info.mac_addr[3];
+      p_eth_hwaddr[4] = p_net_info->ksz885x_info.mac_addr[4];
+      p_eth_hwaddr[5] = p_net_info->ksz885x_info.mac_addr[5];
+   }
+   break;
 
-     //
-     default:
-     return -1;
+   //
+   default:
+      return -1;
    }
    return 0;
 }
@@ -1143,8 +1155,10 @@ cyg_uint32 dev_eth_ksz885x_isr(cyg_vector_t vector, cyg_addrword_t data) {
    __ksz885x_disable_irq(&p_net_info->ksz885x_info);
 
    //read interrupt status register
-   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short *)&isr_status);
-   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_INT_MASK, (unsigned short *)&ier_status);
+   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                      (unsigned short *)&isr_status);
+   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_INT_MASK,
+                      (unsigned short *)&ier_status);
 
    if(isr_status & INT_TX) {
       if(!dev_eth_ksz885x_isr_send(p_net_info)) {
@@ -1153,7 +1167,8 @@ cyg_uint32 dev_eth_ksz885x_isr(cyg_vector_t vector, cyg_addrword_t data) {
       }
 
       reg_val = INT_TX;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                          (unsigned short)reg_val);
    }
 
    /*  Transmit space available */
@@ -1165,64 +1180,77 @@ cyg_uint32 dev_eth_ksz885x_isr(cyg_vector_t vector, cyg_addrword_t data) {
    if(isr_status & INT_TX_STOPPED) {
       __inc_tx_stopped(p_net_info->ksz885x_stats);
       reg_val = INT_TX_STOPPED;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_PHY) {
       __inc_phy(p_net_info->ksz885x_stats);
       reg_val = INT_PHY;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                          (unsigned short)reg_val);
       p_net_info->ksz885x_info.auto_nego_req = 1;
       p_net_info->xmit_flag=1;
    }
 
    if(isr_status & INT_RX_WOL_FRAME) {
       __inc_wol_frame(p_net_info->ksz885x_stats);
-      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short *)&reg_val);
+      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                         (unsigned short *)&reg_val);
       reg_val &= ~PMECR_WKEVT_MASK;
       reg_val |= PMECR_WKEVT_WAKEUP;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_RX_WOL_MAGIC) {
       __inc_wol_magic(p_net_info->ksz885x_stats);
-      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short *)&reg_val);
+      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                         (unsigned short *)&reg_val);
       reg_val &= ~PMECR_WKEVT_MASK;
       reg_val |= PMECR_WKEVT_MAGIC;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_RX_WOL_LINKUP) {
       __inc_wol_link(p_net_info->ksz885x_stats);
-      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short *)&reg_val);
+      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                         (unsigned short *)&reg_val);
       reg_val &= ~PMECR_WKEVT_MASK;
       reg_val |= PMECR_WKEVT_LINK;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_RX_WOL_ENERGY) {
       __inc_wol_energy(p_net_info->ksz885x_stats);
-      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short *)&reg_val);
+      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                         (unsigned short *)&reg_val);
       reg_val &= ~PMECR_WKEVT_MASK;
       reg_val |= PMECR_WKEVT_ENERGY;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_POWER_CNTL,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_RX_OVERRUN) {
       __inc_rx_ov(p_net_info->ksz885x_stats);
       reg_val = INT_RX_OVERRUN;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_RX_STOPPED) {
       __inc_rx_stopped(p_net_info->ksz885x_stats);
       reg_val = INT_RX_STOPPED;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                          (unsigned short)reg_val);
    }
 
    if(isr_status & INT_RX) {
       reg_val = INT_RX;
-      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS, (unsigned short)reg_val);
+      __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_INT_STATUS,
+                          (unsigned short)reg_val);
 
       if(!dev_eth_ksz885x_isr_receive(p_net_info)) {
          __inc_rx(p_net_info->ksz885x_stats);
@@ -1265,7 +1293,7 @@ void dev_eth_ksz885x_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t
       _ksz885x_clear_wol_event(&p_net_info->ksz885x_info, WAKEUP_EVENT_MASK);
       p_net_info->ksz885x_info.auto_nego_req = 0;
    }
-   
+
    if(p_net_info->_eth_ksz885x_desc_wr>0 && p_net_info->_flag_w_irq) {
       __inc_dsr_tx(p_net_info->ksz885x_stats);
       p_net_info->_flag_w_irq = 0;
@@ -1302,13 +1330,14 @@ int dev_eth_ksz885x_isr_send(board_ksz885x_net_info_t * p_net_info) {
       return -1;
 
    /* Read transmit status register (TXSR) */
-   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_TX_STATUS, (unsigned short *)&tx_status );
+   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_TX_STATUS,
+                      (unsigned short *)&tx_status );
 
    if(tx_status & TX_STAT_ERRORS) {
       __inc_tx_errors(p_net_info->ksz885x_stats);
       /* Disable QMU Transmit and Flush Transmit Queue (TXCR) */
       __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_TX_CTRL, (unsigned short *)&reg_val );
-      reg_val_tmp = reg_val ;
+      reg_val_tmp = reg_val;
 
       reg_val &= ~TX_CTRL_ENABLE;
       reg_val |= TX_CTRL_FLUSH_QUEUE;
@@ -1348,7 +1377,8 @@ int dev_eth_ksz885x_isr_receive(board_ksz885x_net_info_t * p_net_info) {
       return -1;
 
    //read frame count
-   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RX_FRAME_CNT_THRES, (unsigned short *)&rx_frame_count);
+   __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RX_FRAME_CNT_THRES,
+                      (unsigned short *)&rx_frame_count);
    rx_frame_count &= RX_FRAME_CNT_MASK;
    rx_frame_count = rx_frame_count >> 8;
 
@@ -1359,23 +1389,27 @@ int dev_eth_ksz885x_isr_receive(board_ksz885x_net_info_t * p_net_info) {
 
    while(rx_frame_count-->0) {
       //read status register
-      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RX_FHR_STATUS, (unsigned short *)&rx_status);
+      __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RX_FHR_STATUS,
+                         (unsigned short *)&rx_status);
       if(!(rx_status & RX_VALID)
-            || (rx_status & RX_ERRORS)) {
+         || (rx_status & RX_ERRORS)) {
          //error on received packet
          //release RX frame error
          reg_val = RXQ_CMD_CNTL|RXQ_CMD_FREE_PACKET;
-         __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short)reg_val);
+         __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                             (unsigned short)reg_val);
          __inc_rx_err_frame(p_net_info->ksz885x_stats);
       }
       else {
          //how many bytes to read
-         __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RX_FHR_BYTE_CNT, (unsigned short *)&rx_length);
+         __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RX_FHR_BYTE_CNT,
+                            (unsigned short *)&rx_length);
          rx_length &= RX_BYTE_CNT_MASK;
 
          if(rx_length <= 0) {
             reg_val = RXQ_CMD_CNTL|RXQ_CMD_FREE_PACKET;
-            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short)reg_val);
+            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                                (unsigned short)reg_val);
             __inc_rx_err_size(p_net_info->ksz885x_stats);
          }
          else {
@@ -1383,13 +1417,16 @@ int dev_eth_ksz885x_isr_receive(board_ksz885x_net_info_t * p_net_info) {
 
             //reset QMU RXQ frame pointer
             reg_val = 0x4000;
-            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RX_ADDR_PTR, (unsigned short)reg_val);
+            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RX_ADDR_PTR,
+                                (unsigned short)reg_val);
 
             //start QMU DMA
             reg_val = 0;
-            __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short *)&reg_val);
+            __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                               (unsigned short *)&reg_val);
             reg_val |= RXQ_START;
-            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short)reg_val);
+            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                                (unsigned short)reg_val);
 
             //dummy read from frame header QMU RXQ
             _ksz885x_read_data16((void *)&p_net_info->ksz885x_info, (unsigned short *)&reg_val);
@@ -1398,7 +1435,8 @@ int dev_eth_ksz885x_isr_receive(board_ksz885x_net_info_t * p_net_info) {
             //read count bytes from frame header QMU RXQ
             _ksz885x_read_data16((void *)&p_net_info->ksz885x_info, (unsigned short *)&reg_val);
 
-            rx_pool[p_net_info->_input_w].rx_len = ((rx_pool[p_net_info->_input_w].len+3) & ~0x03)>>1;
+            rx_pool[p_net_info->_input_w].rx_len =
+               ((rx_pool[p_net_info->_input_w].len+3) & ~0x03)>>1;
 
             //prepare receive buffer and read data
             rcv_ptr = (unsigned short *)rx_pool[p_net_info->_input_w].buffer;
@@ -1411,9 +1449,11 @@ int dev_eth_ksz885x_isr_receive(board_ksz885x_net_info_t * p_net_info) {
 
             //stop QMU DMA
             reg_val = 0;
-            __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short *)&reg_val);
+            __ksz885x_read_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                               (unsigned short *)&reg_val);
             reg_val &= ~RXQ_START;
-            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD, (unsigned short)reg_val);
+            __ksz885x_write_reg((void *)&p_net_info->ksz885x_info, REG_RXQ_CMD,
+                                (unsigned short)reg_val);
 
             //
             p_net_info->_flag_r_irq = 1;

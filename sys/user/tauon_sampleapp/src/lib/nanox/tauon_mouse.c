@@ -7,23 +7,23 @@
 #include "lib/libc/stdio/stdio.h"
 #include "device.h"
 
-#define	SCALE		3	/* default scaling factor for acceleration */
-#define	THRESH		5	/* default threshhold for acceleration */
+#define SCALE           3       /* default scaling factor for acceleration */
+#define THRESH          5       /* default threshhold for acceleration */
 
-static int  	mouse_Open(MOUSEDEVICE *pmd);
-static void 	mouse_Close(void);
-static int  	mouse_GetButtonInfo(void);
-static void	mouse_GetDefaultAccel(int *pscale,int *pthresh);
-static int  	mouse_Read(MWCOORD *dx, MWCOORD *dy, MWCOORD *dz, int *bp);
-static int  	mouse_Poll(void);
+static int      mouse_Open(MOUSEDEVICE *pmd);
+static void     mouse_Close(void);
+static int      mouse_GetButtonInfo(void);
+static void     mouse_GetDefaultAccel(int *pscale,int *pthresh);
+static int      mouse_Read(MWCOORD *dx, MWCOORD *dy, MWCOORD *dz, int *bp);
+static int      mouse_Poll(void);
 
 MOUSEDEVICE mousedev = {
-	mouse_Open,
-	mouse_Close,
-	mouse_GetButtonInfo,
-	mouse_GetDefaultAccel,
-	mouse_Read,
-	mouse_Poll
+   mouse_Open,
+   mouse_Close,
+   mouse_GetButtonInfo,
+   mouse_GetDefaultAccel,
+   mouse_Read,
+   mouse_Poll
 };
 
 /*

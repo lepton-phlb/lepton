@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -63,11 +63,11 @@ static WAVEFORMATEX waveform;
 
 //
 static HANDLE h_soundcard_thread;
-static DWORD  soundcard_thread_id;
+static DWORD soundcard_thread_id;
 
 static volatile int g_frequency=2000;
 static volatile int g_duration= 200;
-static volatile int g_duration_loop = 0;//ms
+static volatile int g_duration_loop = 0; //ms
 
 
 //
@@ -107,11 +107,11 @@ Implementation
 
 /*--------------------------------------------
 | Name:        soundcard_thread
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 DWORD WINAPI soundcard_thread(void* p){
    MSG Msg;
@@ -119,9 +119,9 @@ DWORD WINAPI soundcard_thread(void* p){
    MMRESULT mmres;
 
    long int i;
-   unsigned long  m_nSig;
-   double         m_fSim;
-   double         m_fs;
+   unsigned long m_nSig;
+   double m_fSim;
+   double m_fs;
 
    m_nSig=0;
    m_fSim=SAMPLERATE;
@@ -131,112 +131,112 @@ DWORD WINAPI soundcard_thread(void* p){
 
    //
    SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_TIME_CRITICAL);
- 
-   while (GetMessage (&Msg, NULL, 0, 0) == TRUE){
+
+   while (GetMessage (&Msg, NULL, 0, 0) == TRUE) {
       switch (Msg.message) {
+      //
+      case MM_WOM_OPEN:
+         pWaveHdrOut1->lpData = (LPSTR)pBufferOut1;
+         pWaveHdrOut1->dwBufferLength = BUFFER_SIZE;
+         pWaveHdrOut1->dwBytesRecorded = 0;
+         pWaveHdrOut1->dwUser = 0;
+         pWaveHdrOut1->dwFlags = 0;
+         pWaveHdrOut1->dwLoops = 0;
+         pWaveHdrOut1->lpNext = NULL;
+         pWaveHdrOut1->reserved = 0;
+         //mmres = waveOutPrepareHeader(hWaveOut,pWaveHdrOut1,sizeof(WAVEHDR));
+
+         pWaveHdrOut2->lpData = (LPSTR)pBufferOut2;
+         pWaveHdrOut2->dwBufferLength = BUFFER_SIZE;
+         pWaveHdrOut2->dwBytesRecorded = 0;
+         pWaveHdrOut2->dwUser = 0;
+         pWaveHdrOut2->dwFlags = 0;
+         pWaveHdrOut2->dwLoops = 0;
+         pWaveHdrOut2->lpNext = NULL;
+         pWaveHdrOut2->reserved = 0;
+         //waveOutPrepareHeader(hWaveOut,pWaveHdrOut2,sizeof(WAVEHDR));
+
+         pWaveHdrOut3->lpData = (LPSTR)pBufferOut3;
+         pWaveHdrOut3->dwBufferLength = BUFFER_SIZE;
+         pWaveHdrOut3->dwBytesRecorded = 0;
+         pWaveHdrOut3->dwUser = 0;
+         pWaveHdrOut3->dwFlags = 0;
+         pWaveHdrOut3->dwLoops = 0;
+         pWaveHdrOut3->lpNext = NULL;
+         pWaveHdrOut3->reserved = 0;
+         //waveOutPrepareHeader(hWaveOut,pWaveHdrOut3,sizeof(WAVEHDR));
+
          //
-         case MM_WOM_OPEN:
-            pWaveHdrOut1->lpData = (LPSTR)pBufferOut1;
-            pWaveHdrOut1->dwBufferLength = BUFFER_SIZE;
-            pWaveHdrOut1->dwBytesRecorded = 0;
-            pWaveHdrOut1->dwUser = 0;
-            pWaveHdrOut1->dwFlags = 0;
-            pWaveHdrOut1->dwLoops = 0;
-            pWaveHdrOut1->lpNext = NULL;
-            pWaveHdrOut1->reserved = 0;
-            //mmres = waveOutPrepareHeader(hWaveOut,pWaveHdrOut1,sizeof(WAVEHDR));
-
-            pWaveHdrOut2->lpData = (LPSTR)pBufferOut2;
-            pWaveHdrOut2->dwBufferLength = BUFFER_SIZE;
-            pWaveHdrOut2->dwBytesRecorded = 0;
-            pWaveHdrOut2->dwUser = 0;
-            pWaveHdrOut2->dwFlags = 0;
-            pWaveHdrOut2->dwLoops = 0;
-            pWaveHdrOut2->lpNext = NULL;
-            pWaveHdrOut2->reserved = 0;
-            //waveOutPrepareHeader(hWaveOut,pWaveHdrOut2,sizeof(WAVEHDR));
-
-            pWaveHdrOut3->lpData = (LPSTR)pBufferOut3;
-            pWaveHdrOut3->dwBufferLength = BUFFER_SIZE;
-            pWaveHdrOut3->dwBytesRecorded = 0;
-            pWaveHdrOut3->dwUser = 0;
-            pWaveHdrOut3->dwFlags = 0;
-            pWaveHdrOut3->dwLoops = 0;
-            pWaveHdrOut3->lpNext = NULL;
-            pWaveHdrOut3->reserved = 0;
-            //waveOutPrepareHeader(hWaveOut,pWaveHdrOut3,sizeof(WAVEHDR));
-
-            //
-            mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut1, sizeof(WAVEHDR));
-            //mmres= waveOutWrite(hWaveOut, pWaveHdrOut1, sizeof(WAVEHDR));
-            mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut2, sizeof(WAVEHDR));
-            //mmres= waveOutWrite(hWaveOut, pWaveHdrOut2, sizeof(WAVEHDR));
-            mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut3, sizeof(WAVEHDR));
-            //mmres= waveOutWrite(hWaveOut, pWaveHdrOut3, sizeof(WAVEHDR));
+         mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut1, sizeof(WAVEHDR));
+         //mmres= waveOutWrite(hWaveOut, pWaveHdrOut1, sizeof(WAVEHDR));
+         mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut2, sizeof(WAVEHDR));
+         //mmres= waveOutWrite(hWaveOut, pWaveHdrOut2, sizeof(WAVEHDR));
+         mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut3, sizeof(WAVEHDR));
+         //mmres= waveOutWrite(hWaveOut, pWaveHdrOut3, sizeof(WAVEHDR));
          break;
 
 
-         case MM_WOM_DONE:{
-            m_fs=g_frequency;
+      case MM_WOM_DONE: {
+         m_fs=g_frequency;
 
-            /*
-            if (OCTETS == 1){
-               for(i=0; i<BUFFER_SIZE; i++){
-                  angle = (float)(2 * pi * j * frequence[g_frequency] / SAMPLERATE);
-                  if (angle > 2 * pi) angle = (float)(angle - 2 * pi);
-                  val = 127 + 127 * sin(angle);
-                  Buffer[i] = (val & 255);
-                  j = j + 1;
-               }
-            }
-            */
-            if (OCTETS == 2){
-               for(i=0; i<(BUFFER_SIZE>>1); i++){
-                  float s;
-                  int sn;
-                  if( (++m_nSig%((long)(m_fSim/m_fs)) ) == 0) 
-                     m_nSig=0;
-
-                  s=(float)(32767*sin(2.0*pi*m_fs*m_nSig/m_fSim));
-                  sn=(int)s;
-
-                  Buffer[ 2*i] = (char)(sn & 255);
-                  Buffer[1+2*i] = (char)(sn >> 8);
-
-               }
-            }
-
-            if((--g_duration_loop)){
-               waveOutPause(hWaveOut);
-               waveOutReset(hWaveOut);
-            }else{
-               CopyMemory(((PWAVEHDR)Msg.lParam)->lpData, Buffer, BUFFER_SIZE);
-               waveOutPrepareHeader(hWaveOut, ((PWAVEHDR)Msg.lParam), sizeof(WAVEHDR));
-               waveOutWrite(hWaveOut, ((PWAVEHDR)Msg.lParam), sizeof(WAVEHDR));
+         /*
+         if (OCTETS == 1){
+            for(i=0; i<BUFFER_SIZE; i++){
+               angle = (float)(2 * pi * j * frequence[g_frequency] / SAMPLERATE);
+               if (angle > 2 * pi) angle = (float)(angle - 2 * pi);
+               val = 127 + 127 * sin(angle);
+               Buffer[i] = (val & 255);
+               j = j + 1;
             }
          }
-         break;
+         */
+         if (OCTETS == 2) {
+            for(i=0; i<(BUFFER_SIZE>>1); i++) {
+               float s;
+               int sn;
+               if( (++m_nSig%((long)(m_fSim/m_fs)) ) == 0)
+                  m_nSig=0;
+
+               s=(float)(32767*sin(2.0*pi*m_fs*m_nSig/m_fSim));
+               sn=(int)s;
+
+               Buffer[ 2*i] = (char)(sn & 255);
+               Buffer[1+2*i] = (char)(sn >> 8);
+
+            }
+         }
+
+         if((--g_duration_loop)) {
+            waveOutPause(hWaveOut);
+            waveOutReset(hWaveOut);
+         }else{
+            CopyMemory(((PWAVEHDR)Msg.lParam)->lpData, Buffer, BUFFER_SIZE);
+            waveOutPrepareHeader(hWaveOut, ((PWAVEHDR)Msg.lParam), sizeof(WAVEHDR));
+            waveOutWrite(hWaveOut, ((PWAVEHDR)Msg.lParam), sizeof(WAVEHDR));
+         }
+      }
+      break;
 
       }
    }
-  
+
    return 0;
-} 
+}
 
 /*--------------------------------------------
 | Name:        soundcard_load
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int soundcard_load(void){
    MMRESULT mmres=0;
 
-   unsigned long  m_nSig;
-   double         m_fSim;
-   double         m_fs;
+   unsigned long m_nSig;
+   double m_fSim;
+   double m_fs;
    int i=0;
 
    //
@@ -259,11 +259,11 @@ int soundcard_load(void){
    pBufferOut2 = (PBYTE)malloc(BUFFER_SIZE);
    pBufferOut3 = (PBYTE)malloc(BUFFER_SIZE);
 
-   if(!pBufferOut1 || !pBufferOut2 || !pBufferOut3){
+   if(!pBufferOut1 || !pBufferOut2 || !pBufferOut3) {
       if(pBufferOut1) free (pBufferOut1);
       if(pBufferOut2) free (pBufferOut2);
       if(pBufferOut3) free (pBufferOut3);
-      
+
       return -1;
    }
 
@@ -276,12 +276,12 @@ int soundcard_load(void){
    waveform.cbSize = 0;
 
    //
-   if (OCTETS == 2){
-      for(i=0; i<(BUFFER_SIZE>>1); i++){
+   if (OCTETS == 2) {
+      for(i=0; i<(BUFFER_SIZE>>1); i++) {
          float s;
          int sn;
 
-         if( (++m_nSig%((long)(m_fSim/m_fs)) ) == 0) 
+         if( (++m_nSig%((long)(m_fSim/m_fs)) ) == 0)
             m_nSig=0;
 
          s=(float)(32767*sin(2.0*pi*m_fs*m_nSig/m_fSim));
@@ -294,10 +294,10 @@ int soundcard_load(void){
       CopyMemory(pBufferOut1, Buffer, BUFFER_SIZE);
       CopyMemory(pBufferOut2, Buffer, BUFFER_SIZE);
       CopyMemory(pBufferOut3, Buffer, BUFFER_SIZE);
-   } 
-  
+   }
+
    //
-   if(waveOutOpen(&hWaveOut,WAVE_MAPPER,&waveform,(DWORD)soundcard_thread_id,0,CALLBACK_THREAD)){
+   if(waveOutOpen(&hWaveOut,WAVE_MAPPER,&waveform,(DWORD)soundcard_thread_id,0,CALLBACK_THREAD)) {
       free(pBufferOut1);
       free(pBufferOut2);
       free(pBufferOut3);
@@ -309,18 +309,18 @@ int soundcard_load(void){
 
 /*--------------------------------------------
 | Name:        soundcard_beep
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
-| Comments:    
-| See:         
+| Comments:
+| See:
 ----------------------------------------------*/
 int soundcard_beep(int freq, int duration ){
    MMRESULT mmres=0;
 
-   unsigned long  m_nSig;
-   double         m_fSim;
-   double         m_fs;
+   unsigned long m_nSig;
+   double m_fSim;
+   double m_fs;
    int i=0;
 
    waveOutReset(hWaveOut);
@@ -330,17 +330,17 @@ int soundcard_beep(int freq, int duration ){
    m_fs=freq;
 
    //
-   if(!(g_duration_loop = (SAMPLERATE*duration)/(BUFFER_SIZE/OCTETS*1000)));
-      g_duration_loop =1;
+   if(!(g_duration_loop = (SAMPLERATE*duration)/(BUFFER_SIZE/OCTETS*1000))) ;
+   g_duration_loop =1;
 
    g_frequency = freq;
 
-   if (OCTETS == 2){
-      for(i=0; i<(BUFFER_SIZE>>1); i++){
+   if (OCTETS == 2) {
+      for(i=0; i<(BUFFER_SIZE>>1); i++) {
          float s;
          int sn;
 
-         if( (++m_nSig%((long)(m_fSim/m_fs)) ) == 0) 
+         if( (++m_nSig%((long)(m_fSim/m_fs)) ) == 0)
             m_nSig=0;
 
          s=(float)(32767*sin(2.0*pi*m_fs*m_nSig/m_fSim));
@@ -353,7 +353,7 @@ int soundcard_beep(int freq, int duration ){
       CopyMemory(pBufferOut1, Buffer, BUFFER_SIZE);
       CopyMemory(pBufferOut2, Buffer, BUFFER_SIZE);
       CopyMemory(pBufferOut3, Buffer, BUFFER_SIZE);
-   } 
+   }
 
    mmres= waveOutPrepareHeader(hWaveOut, pWaveHdrOut1, sizeof(WAVEHDR));
    mmres= waveOutWrite(hWaveOut, pWaveHdrOut1, sizeof(WAVEHDR));
@@ -401,10 +401,10 @@ int dev_win32_board_load(void){
 int dev_win32_board_open(desc_t desc, int o_flag){
 
    //
-   if(o_flag & O_RDONLY){
+   if(o_flag & O_RDONLY) {
    }
 
-   if(o_flag & O_WRONLY){
+   if(o_flag & O_WRONLY) {
    }
 
    ofile_lst[desc].offset=0;
@@ -433,7 +433,7 @@ int dev_win32_board_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_win32_board_isset_read(desc_t desc){
-  return -1;
+   return -1;
 }
 
 /*-------------------------------------------
@@ -445,7 +445,7 @@ int dev_win32_board_isset_read(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_win32_board_isset_write(desc_t desc){
-      return -1;
+   return -1;
 }
 /*-------------------------------------------
 | Name:dev_win32_board_read
@@ -482,19 +482,19 @@ int dev_win32_board_write(desc_t desc, const char* buf,int size){
 ---------------------------------------------*/
 int dev_win32_board_seek(desc_t desc,int offset,int origin){
 
-   switch(origin){
+   switch(origin) {
 
-      case SEEK_SET:
-         ofile_lst[desc].offset=offset;
+   case SEEK_SET:
+      ofile_lst[desc].offset=offset;
       break;
 
-      case SEEK_CUR:
-         ofile_lst[desc].offset+=offset;
+   case SEEK_CUR:
+      ofile_lst[desc].offset+=offset;
       break;
 
-      case SEEK_END:
-         //to do: warning in SEEK_END (+ or -)????
-         ofile_lst[desc].offset-=offset;
+   case SEEK_END:
+      //to do: warning in SEEK_END (+ or -)????
+      ofile_lst[desc].offset-=offset;
       break;
    }
 
@@ -511,34 +511,34 @@ int dev_win32_board_seek(desc_t desc,int offset,int origin){
 ---------------------------------------------*/
 int dev_win32_board_ioctl(desc_t desc,int request,va_list ap){
 
-   switch(request){
-      case BRDPWRDOWN:
-      case BRDRESET:
-         printf("board win32 power down\n");
-         exit(0);
+   switch(request) {
+   case BRDPWRDOWN:
+   case BRDRESET:
+      printf("board win32 power down\n");
+      exit(0);
       break;
-      //
-      case BRDCFGPORT:{
-         struct board_port_t* board_port_p = va_arg( ap, struct board_port_t*);
-         if(!board_port_p)
-            return -1;
-      }
-      break;
-            
-      case BRDBEEP:{
-         struct board_beep_t* board_beep_p = va_arg( ap, struct board_beep_t*);
-         if(!board_beep_p)
-            return -1;
-         if(soundcard_loaded)
-            soundcard_beep(board_beep_p->frequency,board_beep_p->duration);
-         else
-            Beep(board_beep_p->frequency,board_beep_p->duration);
-      }
-      break;
-
-      //
-      default:
+   //
+   case BRDCFGPORT: {
+      struct board_port_t* board_port_p = va_arg( ap, struct board_port_t*);
+      if(!board_port_p)
          return -1;
+   }
+   break;
+
+   case BRDBEEP: {
+      struct board_beep_t* board_beep_p = va_arg( ap, struct board_beep_t*);
+      if(!board_beep_p)
+         return -1;
+      if(soundcard_loaded)
+         soundcard_beep(board_beep_p->frequency,board_beep_p->duration);
+      else
+         Beep(board_beep_p->frequency,board_beep_p->duration);
+   }
+   break;
+
+   //
+   default:
+      return -1;
 
    }
 

@@ -22,7 +22,7 @@
 #include "device.h"
 
 
-#define CTRL(x)	  ((x) & 0x1f)
+#define CTRL(x)   ((x) & 0x1f)
 
 extern int escape_quits;
 
@@ -33,19 +33,19 @@ static int  kb_Read(MWKEY *kbuf, MWKEYMOD *modifiers, MWSCANCODE *scancode);
 static int  kb_Poll(void);
 
 KBDDEVICE kbddev = {
-	kb_Open,
-	kb_Close,
-	kb_GetModifierInfo,
-	kb_Read,
+   kb_Open,
+   kb_Close,
+   kb_GetModifierInfo,
+   kb_Read,
 #if _MINIX
-	kb_Poll
+   kb_Poll
 #else
-	NULL
+   NULL
 #endif
 };
 
 #define KB_DEVICE    "/dev/kb0"
-static	int		fd;		/* file descriptor for keyboard */
+static int fd;                          /* file descriptor for keyboard */
 //static MWKEY mwkey_release;
 /*
  * Open the keyboard.
@@ -103,7 +103,7 @@ static void kb_GetModifierInfo(MWKEYMOD *modifiers, MWKEYMOD *curmodifiers) {
 static int kb_Read(MWKEY *kbuf, MWKEYMOD *modifiers, MWSCANCODE *scancode) {
    unsigned char buf;
 
-   int	cc;			//characters read
+   int cc;                      //characters read
    MWKEY mwkey;
 
    cc = read(fd, (void *)&buf, 1);
@@ -114,17 +114,17 @@ static int kb_Read(MWKEY *kbuf, MWKEYMOD *modifiers, MWSCANCODE *scancode) {
 
    mwkey = buf;
 
-   if (mwkey == CTRL('P'))			// ^P -> print
+   if (mwkey == CTRL('P'))                      // ^P -> print
       mwkey = MWKEY_PRINT;
-   
+
    if ((mwkey == MWKEY_ESCAPE) && escape_quits)
       mwkey = MWKEY_QUIT;
 
    //
-   *kbuf = mwkey;		//no translation
-   *modifiers = 0;		// no modifiers
-   *scancode = 0;		//no scancode
-   return 1;		// keypress
+   *kbuf = mwkey;               //no translation
+   *modifiers = 0;              // no modifiers
+   *scancode = 0;               //no scancode
+   return 1;            // keypress
 }
 
 static int kb_Poll(void) {

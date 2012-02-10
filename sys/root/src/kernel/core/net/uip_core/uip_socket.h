@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 #ifndef _OS_SOCKET_H
@@ -73,14 +73,14 @@ Declaration
 //
 #ifndef htons
    #if UIP_BYTE_ORDER == UIP_BIG_ENDIAN
-      //#pragma message ("htons UIP_BIG_ENDIAN")
+//#pragma message ("htons UIP_BIG_ENDIAN")
       #define htons(n) (n)
    #else /* BYTE_ORDER == BIG_ENDIAN */
-      //#pragma message ("htons UIP_LITTLE_ENDIAN")
+         //#pragma message ("htons UIP_LITTLE_ENDIAN")
       #define htons(n) ((((u16_t)((n) & 0xff)) << 8) | (((n) & 0xff00) >> 8))
    #endif /* BYTE_ORDER == BIG_ENDIAN */
 #else
-#pragma message ("htons already defined")
+   #pragma message ("htons already defined")
 #endif /* htons */
 
 #define ntohs(n) htons(n)
@@ -88,38 +88,38 @@ Declaration
 //
 struct _in_addr {
    union {
-          struct { unsigned char s_b1,s_b2,s_b3,s_b4; }   S_un_b;
-          struct { unsigned short s_w1,s_w2; }            S_un_w;
-          unsigned long                                   S_addr;
-  } S_un;
+      struct { unsigned char s_b1,s_b2,s_b3,s_b4; }   S_un_b;
+      struct { unsigned short s_w1,s_w2; }            S_un_w;
+      unsigned long S_addr;
+   } S_un;
 
-   #define s_addr  S_un.S_addr
-                                /* can be used for most tcp & ip code */
-   #define s_host  S_un.S_un_b.s_b2
-                                /* host on imp */
-   #define s_net   S_un.S_un_b.s_b1
-                                /* network */
-   #define s_imp   S_un.S_un_w.s_w2
-                                /* imp */
-   #define s_impno S_un.S_un_b.s_b4
-                                /* imp # */
-   #define s_lh    S_un.S_un_b.s_b3
-                                /* logical host */
+#define s_addr  S_un.S_addr
+   /* can be used for most tcp & ip code */
+#define s_host  S_un.S_un_b.s_b2
+   /* host on imp */
+#define s_net   S_un.S_un_b.s_b1
+   /* network */
+#define s_imp   S_un.S_un_w.s_w2
+   /* imp */
+#define s_impno S_un.S_un_b.s_b4
+   /* imp # */
+#define s_lh    S_un.S_un_b.s_b3
+   /* logical host */
 };
 
 //
 struct _sockaddr {
-    unsigned short sa_family;
-    char           sa_data[14];
+   unsigned short sa_family;
+   char sa_data[14];
 };
 #define sockaddr _sockaddr
 
 //
-struct _sockaddr_in{
-   short               sin_family;
-   unsigned short      sin_port;
-   struct   _in_addr   sin_addr;
-   char                sin_zero[8];
+struct _sockaddr_in {
+   short sin_family;
+   unsigned short sin_port;
+   struct   _in_addr sin_addr;
+   char sin_zero[8];
 };
 #define sockaddr_in _sockaddr_in
 

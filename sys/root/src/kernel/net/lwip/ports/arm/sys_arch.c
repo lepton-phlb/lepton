@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is ______________________________________.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): ______________________________________.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -53,7 +53,7 @@ either as a queue which allows multiple messages to be posted to a
 mailbox, or as a rendez-vous point where only one message can be
 posted at a time. lwIP works with both kinds, but the former type will
 be more efficient. A message in a mailbox is just a pointer, nothing
-more. 
+more.
 
 Semaphores are represented by the type "sys_sem_t" which is typedef'd
 in the sys_arch.h file. Mailboxes are equivalently represented by the
@@ -123,20 +123,20 @@ The following functions must be implemented by the sys_arch:
   timeout.
 
   Note that a function with a similar name, sys_mbox_fetch(), is
-  implemented by lwIP. 
-  
+  implemented by lwIP.
+
 - struct sys_timeouts *sys_arch_timeouts(void)
 
   Returns a pointer to the per-thread sys_timeouts structure. In lwIP,
   each thread has a list of timeouts which is repressented as a linked
   list of sys_timeout structures. The sys_timeouts structure holds a
   pointer to a linked list of timeouts. This function is called by
-  the lwIP timeout scheduler and must not return a NULL value. 
+  the lwIP timeout scheduler and must not return a NULL value.
 
   In a single threadd sys_arch implementation, this function will
   simply return a pointer to a global sys_timeouts variable stored in
   the sys_arch module.
-  
+
 If threads are supported by the underlying operating system and if
 such functionality is needed in lwIP, the following function will have
 to be implemented as well:
@@ -171,7 +171,7 @@ to be implemented as well:
 
 */
 /*============================================
-| Includes    
+| Includes
 ==============================================*/
 #include "lwip/opt.h"
 #include "arch/sys_arch.h"
@@ -182,47 +182,47 @@ to be implemented as well:
 #include "kernel/core/kernel_pthread_mutex.h"
 
 /*============================================
-| Global Declaration 
+| Global Declaration
 ==============================================*/
-//FIXME use CYG_HWR_whatever for RTC 
+//FIXME use CYG_HWR_whatever for RTC
 
 
-#define SYS_THREADS	2	/* polling thread and tcpip_thread */
+#define SYS_THREADS     2       /* polling thread and tcpip_thread */
 
 /* List of threads: associate eCos thread info with lwIP timeout info */
 
 struct lwip_thread {
-	struct lwip_thread * next;
-	struct sys_timeouts to;
-	//cyg_handle_t th;
-	kernel_pthread_t t;		
+   struct lwip_thread * next;
+   struct sys_timeouts to;
+   //cyg_handle_t th;
+   kernel_pthread_t t;
 } *threads;
 
 
-/* 
+/*
  * Timeout for threads which were not created by sys_thread_new
  * usually "main"
- */ 
+ */
 struct sys_timeouts to;
 
-static kernel_pthread_mutex_t     kernel_mutex_lwip_protect;
+static kernel_pthread_mutex_t kernel_mutex_lwip_protect;
 
 /*============================================
-| Implementation 
+| Implementation
 ==============================================*/
 
 
-/* 
+/*
  * Set up memory pools and threads
  */
 void sys_init(void){
-   pthread_mutexattr_t  mutex_attr=0;
+   pthread_mutexattr_t mutex_attr=0;
    kernel_pthread_mutex_init(&kernel_mutex_lwip_protect,&mutex_attr);
-	/*
-   cyg_mempool_var_create(memvar, sizeof(memvar), &var_mempool_h, &var_mempool);
-	threads = NULL;
-	to.next = NULL;
-   */
+   /*
+cyg_mempool_var_create(memvar, sizeof(memvar), &var_mempool_h, &var_mempool);
+   threads = NULL;
+   to.next = NULL;
+*/
 }
 
 /*
@@ -260,15 +260,15 @@ void sys_arch_unprotect(sys_prot_t pval){
 
 
 /*
- * Create a new mbox.If no memory is available return NULL 
+ * Create a new mbox.If no memory is available return NULL
  */
 sys_mbox_t sys_mbox_new(int size){
    sys_mbox_t p_sys_mbox;
    //
-   p_sys_mbox = (sys_mbox_t)_sys_malloc(sizeof(sys_mbox_st)) ;
+   p_sys_mbox = (sys_mbox_t)_sys_malloc(sizeof(sys_mbox_st));
    /* out of memory? */
-   if(!p_sys_mbox){
-		return SYS_MBOX_NULL;
+   if(!p_sys_mbox) {
+      return SYS_MBOX_NULL;
    }
    //
    if(!size)
@@ -276,13 +276,13 @@ sys_mbox_t sys_mbox_new(int size){
    //alloc mailbox buffer
    p_sys_mbox->p_buf = _sys_malloc(size*sizeof(void*));
    /* out of memory? */
-   if(!p_sys_mbox->p_buf){
-		return SYS_MBOX_NULL;
+   if(!p_sys_mbox->p_buf) {
+      return SYS_MBOX_NULL;
    }
-   //	
+   //
    OS_CreateMB(&p_sys_mbox->os_mailbox,sizeof(void*),size,p_sys_mbox->p_buf);
    //
-	return p_sys_mbox;
+   return p_sys_mbox;
 }
 
 /*
@@ -297,7 +297,7 @@ void sys_mbox_free(sys_mbox_t mbox){
    //
 }
 
-/* 
+/*
  * cyg_mbox_put should not be passed a NULL otherwise the cyg_mbox_get will not
  * know if it's real data or error condition. But lwIP does pass NULL on occasion
  * in cases when maybe using a semaphore would be better. So this dummy_msg replaces
@@ -306,14 +306,14 @@ void sys_mbox_free(sys_mbox_t mbox){
 
 int dummy_msg = 1;
 
-/* 
+/*
  * Post data to a mbox.
- */ 
+ */
 void sys_mbox_post(sys_mbox_t mbox, void *data)
 {
    long addr = (long)data;
-	if (!data)
-		data = &dummy_msg;
+   if (!data)
+      data = &dummy_msg;
 
    //printf("post mbox:0x%x = 0x%x\r\n",mbox,addr);
 
@@ -321,14 +321,14 @@ void sys_mbox_post(sys_mbox_t mbox, void *data)
 }
 
 
-/* 
+/*
  * Try post data to a mbox. new since lwip 1.3.0
- */ 
+ */
 err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
 {
    long addr = (long)data;
-	if (!data)
-		data = &dummy_msg;
+   if (!data)
+      data = &dummy_msg;
 
    //printf("post mbox:0x%x = 0x%x\r\n",mbox,addr);
 
@@ -338,29 +338,29 @@ err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
    return ERR_OK;
 }
 
-/* 
+/*
  * Fetch data from a mbox.Wait for at most timeout millisecs
  * Return -1 if timed out otherwise time spent waiting.
- */ 
+ */
 u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **data, u32_t timeout)
 {
-	long addr=0L;
+   long addr=0L;
    u32_t end_time = 0, start_time = 0;
    int err=0;
 
-	if (timeout) {
+   if (timeout) {
       start_time = OS_GetTime();
-      if(OS_GetMailTimed (&mbox->os_mailbox, &addr,timeout)){
+      if(OS_GetMailTimed (&mbox->os_mailbox, &addr,timeout)) {
          *data = NULL;
          return SYS_ARCH_TIMEOUT;
       }
       end_time = OS_GetTime();
 
    } else {
-		OS_GetMail(&mbox->os_mailbox,&addr);
-	}
+      OS_GetMail(&mbox->os_mailbox,&addr);
+   }
 
-   if(data){
+   if(data) {
       if (addr == (long)&dummy_msg)
          *data = NULL;
       else
@@ -375,23 +375,23 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **data, u32_t timeout)
    if((end_time - start_time)<0)
       return 0;
 
-	return (end_time - start_time);	
+   return (end_time - start_time);
 }
 
-/* 
+/*
  * Try fetch data from a mbox. new since lwip 1.3.0
- */ 
+ */
 u32_t sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data){
    long addr=0L;
    int err=0;
 
-   if(OS_GetMailCond(&mbox->os_mailbox,&addr)){
+   if(OS_GetMailCond(&mbox->os_mailbox,&addr)) {
       *data = NULL;
       //return SYS_MBOX_EMPTY;
       return SYS_ARCH_TIMEOUT;
    }
 
-   if(data){
+   if(data) {
       if (addr == (long)&dummy_msg)
          *data = NULL;
       else
@@ -403,87 +403,89 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data){
 
 /*
  * Create a new semaphore and initialize it.
- * If no memory is available return NULL 
+ * If no memory is available return NULL
  */
 sys_sem_t sys_sem_new(u8_t count)
 {
    //
    OS_CSEMA* p_sem = (OS_CSEMA*)_sys_malloc(sizeof(OS_CSEMA));
-	/* out of memory? */
-   if(!p_sem){
-		return SYS_SEM_NULL;
+   /* out of memory? */
+   if(!p_sem) {
+      return SYS_SEM_NULL;
    }
    //
    OS_CreateCSema(p_sem,count);
-	return p_sem;
+   return p_sem;
 }
 
 #if 0
 void
 sys_sem_wait(sys_sem_t sem)
 {
-	OS_WaitCSema(sem);
+   OS_WaitCSema(sem);
 
 }
 
 void
 sys_timeout(u16_t msecs, sys_timeout_handler h, void *arg)
-{}
+{
+}
 #endif
-/* 
+/*
  * Wait on a semaphore for at most timeout millisecs
  * Return -1 if timed out otherwise time spent waiting.
- */ 
+ */
 u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout)
 {
-	u32_t end_time = 0, start_time = 0;
+   u32_t end_time = 0, start_time = 0;
    int err=0;
 
-	if (timeout) {
-		start_time = OS_GetTime();
-		if(!OS_WaitCSemaTimed(sem, timeout))
+   if (timeout) {
+      start_time = OS_GetTime();
+      if(!OS_WaitCSemaTimed(sem, timeout))
          return SYS_ARCH_TIMEOUT;
-		end_time = OS_GetTime();
+      end_time = OS_GetTime();
 
-	} else {
-		OS_WaitCSema(sem);
-	}
+   } else {
+      OS_WaitCSema(sem);
+   }
 
    if((end_time - start_time)<0)
       return 0;
 
-	return (end_time - start_time);	
+   return (end_time - start_time);
 }
 
 /*
  * Signal a semaphore
- */ 
+ */
 void sys_sem_signal(sys_sem_t sem)
 {
-	OS_SignalCSema(sem);
-}
-
-/* 
- * Destroy the semaphore and release the space it took up in the pool 
- */
-void sys_sem_free(sys_sem_t sem)
-{
-	OS_DeleteCSema(sem);
-   //	
-   _sys_free(sem);
-   //	
+   OS_SignalCSema(sem);
 }
 
 /*
- * Create new thread 
+ * Destroy the semaphore and release the space it took up in the pool
  */
-sys_thread_t sys_thread_new(char *name, void (*function) (void *arg), void *arg, int stacksize, int prio)
+void sys_sem_free(sys_sem_t sem)
 {
-   
-   pthread_attr_t       thread_attr;
-	struct lwip_thread * nt;
-	//void * stack;
-	static int thread_count = 0;
+   OS_DeleteCSema(sem);
+   //
+   _sys_free(sem);
+   //
+}
+
+/*
+ * Create new thread
+ */
+sys_thread_t sys_thread_new(char *name, void (*function)(
+                               void *arg), void *arg, int stacksize, int prio)
+{
+
+   pthread_attr_t thread_attr;
+   struct lwip_thread * nt;
+   //void * stack;
+   static int thread_count = 0;
 
    if(!stacksize)
       stacksize = 4096;
@@ -491,14 +493,14 @@ sys_thread_t sys_thread_new(char *name, void (*function) (void *arg), void *arg,
    char * pstack = (char*)_sys_malloc(stacksize);
    if(pstack<=0)
       return (sys_thread_t)0;
-	//nt = (struct lwip_thread *)cyg_mempool_var_alloc(var_mempool_h, sizeof(struct lwip_thread));
+   //nt = (struct lwip_thread *)cyg_mempool_var_alloc(var_mempool_h, sizeof(struct lwip_thread));
    nt = (struct lwip_thread *)_sys_malloc(sizeof(struct lwip_thread));
 
 
-	nt->next = threads;
-	nt->to.next = NULL;
-	
-	threads = nt;
+   nt->next = threads;
+   nt->to.next = NULL;
+
+   threads = nt;
 
    thread_attr.stacksize = stacksize;
    thread_attr.stackaddr = (void*)pstack;
@@ -509,31 +511,31 @@ sys_thread_t sys_thread_new(char *name, void (*function) (void *arg), void *arg,
       thread_attr.name= "lwip_tread";
    else
       thread_attr.name= name;
-   
+
    kernel_pthread_create(&nt->t,&thread_attr,(start_routine_t)function,(char*)0);
 
-	return &nt->t;
+   return &nt->t;
 }
 
-/* 
+/*
  * Return current thread's timeout info
  */
 struct sys_timeouts *sys_arch_timeouts(void)
 {
-    struct lwip_thread *t;
+   struct lwip_thread *t;
    kernel_pthread_t* pthread;
 
    pthread = kernel_pthread_self();
 
    //p_task = OS_GetpCurrentTask();
-   	
-	for(t = threads; t; t = t->next)
-		if (&t->t == pthread)
-			return &(t->to);
-	
+
+   for(t = threads; t; t = t->next)
+      if (&t->t == pthread)
+         return &(t->to);
+
    //to.next=(struct sys_timeout *)0;//lwip 1.1.0
-   to.next=(struct sys_timeo *)0;//lwip 1.2.0
-	return &to;
+   to.next=(struct sys_timeo *)0; //lwip 1.2.0
+   return &to;
 }
 
 

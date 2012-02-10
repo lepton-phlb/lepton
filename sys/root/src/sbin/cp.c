@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -30,12 +30,12 @@ either the MPL or the [eCos GPL] License."
       -i interactive: ask user before crushing existing regular files.
       -f force: remove destination file if already exist.
       -v verbose.
-      
+
    \brief
       copy file from directory to another directory or file.
       only regular file or directory is supported.
       if -i or -f is not set and destination file already exist, cp return an error.
-      
+
    \use
       cp /dir1/f1 /dir2
       copy file 'f1' from directory 'dir1' to file 'f1' in 'dir2' directory.
@@ -82,7 +82,7 @@ Implementation
 ---------------------------------------------*/
 char *buildname(char* buf,char *dirname,char *filename){
    char  *cp;
-	if ((dirname == NULL) || (*dirname == '\0'))
+   if ((dirname == NULL) || (*dirname == '\0'))
       return filename;
    cp = strrchr(filename, '/');
    if (cp)
@@ -107,8 +107,8 @@ int cp_main(int argc,char* argv[]){
 
    int i,cb;
    unsigned int opt=0;
-   char* src=(char*)0;//source file
-   char* dst=(char*)0;//destination filename
+   char* src=(char*)0; //source file
+   char* dst=(char*)0; //destination filename
 
    int fd_src=-1;
    int fd_dst=-1;
@@ -119,22 +119,22 @@ int cp_main(int argc,char* argv[]){
    struct stat _stat;
 
    //get option
-   for(i=1;i<argc;i++){
-      if(argv[i][0]=='-'){
+   for(i=1; i<argc; i++) {
+      if(argv[i][0]=='-') {
          unsigned char c;
          unsigned char l=strlen(argv[i]);
-         for(c=1;c<l;c++){
-            switch(argv[i][c]){
-               case 'i':
-                  opt = OPT_MSK_I;
+         for(c=1; c<l; c++) {
+            switch(argv[i][c]) {
+            case 'i':
+               opt = OPT_MSK_I;
                break;
 
-               case 'f':
-                  opt = OPT_MSK_F;
+            case 'f':
+               opt = OPT_MSK_F;
                break;
 
-               case 'v':
-                  opt |= OPT_MSK_V;
+            case 'v':
+               opt |= OPT_MSK_V;
                break;
             }
          }
@@ -142,62 +142,62 @@ int cp_main(int argc,char* argv[]){
          if(!argv[i])
             return -1;
 
-         if(!src){
+         if(!src) {
             src= argv[i];
             continue;
          }
 
-         if(!dst){
+         if(!dst) {
             dst= argv[i];
             break;
          }
-         
+
       }
    }
 
    //
-   if(!src|| !dst){
+   if(!src|| !dst) {
       fprintf(stderr,"error:invalid argument\r\n");
       return -1;
    }
 
    //source file
-   if((fd_src=open(src,O_RDONLY,0))<0){
+   if((fd_src=open(src,O_RDONLY,0))<0) {
       fprintf(stderr,"error:cannot open source file\r\n");
       return -1;
    }
-   if(fstat(fd_src,&_stat)<0){
-         fprintf(stderr,"error:fstat source file\r\n");
-         return -1;
+   if(fstat(fd_src,&_stat)<0) {
+      fprintf(stderr,"error:fstat source file\r\n");
+      return -1;
    }
-   if(!(S_ISREG(_stat.st_mode)) && !(S_ISBLK(_stat.st_mode))){
+   if(!(S_ISREG(_stat.st_mode)) && !(S_ISBLK(_stat.st_mode))) {
       fprintf(stderr,"error:source file is not valid file type\r\n");
       return -1;
    }
 
    //destination file
-   if(!stat(dst,&_stat)){
-      if((S_ISDIR(_stat.st_mode))){
-         //build dest  
+   if(!stat(dst,&_stat)) {
+      if((S_ISDIR(_stat.st_mode))) {
+         //build dest
          buildname(dest_path,dst,src);
-      }else if(!(S_ISREG(_stat.st_mode)) && !(S_ISBLK(_stat.st_mode))){
+      }else if(!(S_ISREG(_stat.st_mode)) && !(S_ISBLK(_stat.st_mode))) {
          fprintf(stderr,"error:source file is not valid file type\r\n");
          return -1;
-      }else{//regular file
+      }else{ //regular file
          strcpy(dest_path,dst);
       }
 
       //copy file
-      if((fd_dst=open(dest_path,O_WRONLY,0))>=0){
+      if((fd_dst=open(dest_path,O_WRONLY,0))>=0) {
          close(fd_dst);
          //file already exist
-         if(!(opt&OPT_MSK_I) && !(opt&OPT_MSK_F)){
+         if(!(opt&OPT_MSK_I) && !(opt&OPT_MSK_F)) {
             fprintf(stderr,"error:destination file already exist\r\n");
-            return-1;
+            return -1;
          }
-      
+
          //
-         if((opt&OPT_MSK_I)){
+         if((opt&OPT_MSK_I)) {
             //to do ask question
          }
       }
@@ -205,15 +205,15 @@ int cp_main(int argc,char* argv[]){
    }else{
       strcpy(dest_path,dst);
    }
-   
+
    //copy file
-   if((fd_dst=open(dest_path,O_CREAT|O_TRUNC|O_WRONLY,0))<0){
-        fprintf(stderr,"error:cannot create destination file\r\n",dest_path);
-        return -1;
+   if((fd_dst=open(dest_path,O_CREAT|O_TRUNC|O_WRONLY,0))<0) {
+      fprintf(stderr,"error:cannot create destination file\r\n",dest_path);
+      return -1;
    }
 
-   while((cb=read(fd_src,buf,sizeof(buf)))>0){
-      if(write(fd_dst,buf,cb)<cb){
+   while((cb=read(fd_src,buf,sizeof(buf)))>0) {
+      if(write(fd_dst,buf,cb)<cb) {
          fprintf(stderr,"error:cannot write destination file %s\r\n",dest_path);
          return -1;
       }

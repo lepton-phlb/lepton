@@ -1,10 +1,10 @@
 /*
-The contents of this file are subject to the Mozilla Public License Version 1.1 
+The contents of this file are subject to the Mozilla Public License Version 1.1
 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.mozilla.org/MPL/
 
-Software distributed under the License is distributed on an "AS IS" basis, 
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
@@ -15,13 +15,13 @@ All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
 instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under 
-the MPL, indicate your decision by deleting  the provisions above and replace 
-them with the notice and other provisions required by the [eCos GPL] License. 
-If you do not delete the provisions above, a recipient may use your version of this file under 
+terms of the [eCos GPL] License and not to allow others to use your version of this file under
+the MPL, indicate your decision by deleting  the provisions above and replace
+them with the notice and other provisions required by the [eCos GPL] License.
+If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
 
@@ -38,7 +38,7 @@ Includes
 Global Declaration
 =============================================*/
 #if defined(USE_ECOS)
-	#include <cyg/hal/hal_io.h>
+   #include <cyg/hal/hal_io.h>
 #endif
 
 #if defined(GNU_GCC)
@@ -49,73 +49,73 @@ extern void _system_exit(int status);
 Implementation
 =============================================*/
 struct sigaction const sigaction_dfl_lst[NSIGMAX+1]={
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // 0 no used 0
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGABRT   1  //ii  Process abort signal.
-      {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},   // SIGALRM   2  //i  Alarm clock.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGFPE    3  //ii  Erroneous arithmetic operation.  NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGHUP    4  //i  Hangup.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGILL    5  //ii  Illegal instruction.             NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGINT    6  //i  Terminal interrupt signal.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGQUIT   7  //ii  Terminal quit signal.
-      {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},   // SIGPIPE   8  //i  Write on a pipe with no one to read it.
-      {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},   // SIGKILL   9  //i  Kill (cannot be caught or ignored).
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGSEGV   10 //ii  Invalid memory reference.
-      {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},   // SIGTERM   11 //i  Termination signal.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGUSR1   12 //i  User-defined signal 1.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGUSR2   13 //i  User-defined signal 2.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0}    // SIGCHLD   14 //iii  Child process terminated or stopped.
-   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-     ,{(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGCONT   15 //v  Continue executing, if stopped.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGSTOP   16 //iv  Stop executing (cannot be caught or ignored).
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGTSTP   17 //iv  Terminal stop signal.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGTTIN   18 //iv  Background process attempting read.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGTTOU   19 //iv  Background process attempting write.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGBUS    20   //ii  Access to an undefined portion of a memory object.  NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGPOLL   21 //i  Pollable event.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGPROF   22   //i   Profiling timer expired.  NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGSYS    23 //ii  Bad system call.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGTRAP   24 //ii  Trace/breakpoint trap.  NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGURG    25 //iii  High bandwidth data is available at a socket.  NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGVTALRM 26 //i  Virtual timer expired.  NOT IMPLEMENTED IN THIS VERSION
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGXCPU   27 //ii  CPU time limit exceeded.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGXFSZ   28 //ii  File size limit exceeded.
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           29 //not used
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           30 //not used
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           31 //not used
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // 0 no used 0
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGABRT   1  //ii  Process abort signal.
+   {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},      // SIGALRM   2  //i  Alarm clock.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGFPE    3  //ii  Erroneous arithmetic operation.  NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGHUP    4  //i  Hangup.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGILL    5  //ii  Illegal instruction.             NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGINT    6  //i  Terminal interrupt signal.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGQUIT   7  //ii  Terminal quit signal.
+   {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},      // SIGPIPE   8  //i  Write on a pipe with no one to read it.
+   {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},      // SIGKILL   9  //i  Kill (cannot be caught or ignored).
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGSEGV   10 //ii  Invalid memory reference.
+   {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},      // SIGTERM   11 //i  Termination signal.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGUSR1   12 //i  User-defined signal 1.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGUSR2   13 //i  User-defined signal 2.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0}       // SIGCHLD   14 //iii  Child process terminated or stopped.
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
+   ,{(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},     // SIGCONT   15 //v  Continue executing, if stopped.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGSTOP   16 //iv  Stop executing (cannot be caught or ignored).
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGTSTP   17 //iv  Terminal stop signal.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGTTIN   18 //iv  Background process attempting read.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGTTOU   19 //iv  Background process attempting write.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGBUS    20   //ii  Access to an undefined portion of a memory object.  NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGPOLL   21 //i  Pollable event.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGPROF   22   //i   Profiling timer expired.  NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGSYS    23 //ii  Bad system call.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGTRAP   24 //ii  Trace/breakpoint trap.  NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGURG    25 //iii  High bandwidth data is available at a socket.  NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGVTALRM 26 //i  Virtual timer expired.  NOT IMPLEMENTED IN THIS VERSION
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGXCPU   27 //ii  CPU time limit exceeded.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      // SIGXFSZ   28 //ii  File size limit exceeded.
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           29 //not used
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           30 //not used
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           31 //not used
 
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           32 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           33 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           34 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           35 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           36 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           37 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           38 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           39 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           40 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           41 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           42 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           43 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           44 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           45 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           46 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           47 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           48 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           49 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           50 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           51 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           52 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           53 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           54 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           55 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           56 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           57 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           58 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           59 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           60 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           61 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           62 //realtime signal
-      {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           63 //realtime signal
-   #endif
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           32 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           33 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           34 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           35 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           36 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           37 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           38 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           39 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           40 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           41 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           42 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           43 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           44 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           45 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           46 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           47 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           48 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           49 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           50 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           51 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           52 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           53 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           54 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           55 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           56 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           57 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           58 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           59 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           60 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           61 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           62 //realtime signal
+   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},      //           63 //realtime signal
+#endif
 };
 
 /*-------------------------------------------
@@ -132,18 +132,18 @@ void sighandler(void){
 
    sig=pthread_ptr->siginfo.si_signo;
 
-   if((unsigned int)(pthread_ptr->sigaction_lst[sig].sa_handler)!=(unsigned int)SIG_DFL){
+   if((unsigned int)(pthread_ptr->sigaction_lst[sig].sa_handler)!=(unsigned int)SIG_DFL) {
       pthread_ptr->sigaction_lst[sig].sa_handler(sig);
-      __mk_syscall2(_SYSCALL_SIGEXIT);//return to main 
+      __mk_syscall2(_SYSCALL_SIGEXIT); //return to main
    }else{ //to do: call default handler
-      switch(sig){
-         case SIGTERM:
-         case SIGALRM:
-         case SIGKILL:
-         case SIGPIPE:{
-            _system_exit(0);//exit process
-         }
-         break;
+      switch(sig) {
+      case SIGTERM:
+      case SIGALRM:
+      case SIGKILL:
+      case SIGPIPE: {
+         _system_exit(0);   //exit process
+      }
+      break;
          //to do: support for SIGSTOP(suspend process) and SIGCONT(resume process)
          //       see _sys_kill in process.c
       }
@@ -161,7 +161,7 @@ void sighandler(void){
 int sigemptyset(sigset_t* set){
    set->std=0;
    set->rt=0;
-  return 0;
+   return 0;
 }
 
 /*-------------------------------------------
@@ -234,7 +234,7 @@ int sigismember(sigset_t* set,int sig){
 | Comments: only for compatibility (deprecated api use sigaction instead of).
 | See:
 ----------------------------------------------*/
-void (*signal(int sig, void (*func)(int)))(int){
+void (*signal(int sig, void (*func)(int))) (int){
    struct sigaction act;
    struct sigaction oact;
    act.sa_handler = func;
@@ -320,7 +320,7 @@ int kill(pid_t pid, int sig){
    kill_dt.sig = sig;
    kill_dt.atomic = 1;
 
-   if(pid==_sys_getpid()){
+   if(pid==_sys_getpid()) {
       __mk_syscall0(_SYSCALL_KILL,kill_dt);
    }else{
       __mk_syscall(_SYSCALL_KILL,kill_dt);
@@ -368,7 +368,7 @@ int pthread_kill(pthread_t pthread, int sig){
    pthread_kill_dt.atomic = 1;
 
 #if defined(USE_SEGGER)
-   if(((kernel_pthread_t*)pthread)==kernel_pthread_self()){
+   if(((kernel_pthread_t*)pthread)==kernel_pthread_self()) {
       __mk_syscall0(_SYSCALL_PTHREAD_KILL,pthread_kill_dt);
    }else{
       __mk_syscall(_SYSCALL_PTHREAD_KILL,pthread_kill_dt);
@@ -381,7 +381,7 @@ int pthread_kill(pthread_t pthread, int sig){
 
 /*--------------------------------------------
 | Name:        sigwaitinfo
-| Description: 
+| Description:
 | Parameters:  none
 | Return Type: none
 | Comments:
@@ -397,7 +397,7 @@ int sigwaitinfo(sigset_t* set,struct siginfo* info){
    //2)set filter on sigset
    kernel_sigevent.set=set;
    //3) wait on thread sigqueue
-   while(pthread_ptr->kernel_sigqueue.wait(&kernel_sigevent)<0);
+   while(pthread_ptr->kernel_sigqueue.wait(&kernel_sigevent)<0) ;
    //4) fill singinfo structure with kernel sigevent
    info->si_code  =   kernel_sigevent.si_code;
    info->si_signo =   kernel_sigevent._sigevent.sigev_signo;
@@ -417,7 +417,7 @@ int sigwaitinfo(sigset_t* set,struct siginfo* info){
 | See:
 ----------------------------------------------*/
 int sigtimedwait(sigset_t *set, siginfo_t *info,const struct timespec *timeout){
-   
+
    kernel_sigevent_t kernel_sigevent;
    kernel_pthread_t* pthread_ptr = kernel_pthread_self();
 
@@ -427,7 +427,7 @@ int sigtimedwait(sigset_t *set, siginfo_t *info,const struct timespec *timeout){
    kernel_sigevent.set=set;
    //3) wait on thread sigqueue until signal was raised or timeout reach.
    if(pthread_ptr->kernel_sigqueue.timedwait(&kernel_sigevent,0,timeout)<0)
-      return -1;//timeout
+      return -1;  //timeout
    //4) fill singinfo structure with kernel sigevent
    info->si_code  =   kernel_sigevent.si_code;
    info->si_signo =   kernel_sigevent._sigevent.sigev_signo;
