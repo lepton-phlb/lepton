@@ -118,19 +118,32 @@ const char dflt_dev_conf_filepath[] = "dev_mkconf.c";
 char * dev_conf_filepath = (char*)dflt_dev_conf_filepath; //see xml_elmt_mklepton()
 #define MK_DEVCONF_FILEPATH   dev_conf_filepath
 const char devconf_top_header[]=
-   "/*-------------------------------------------\n\
-| Copyright(C) 2008 CHAUVIN-ARNOUX\n\
----------------------------------------------\n\
-| Project:\n\
-| Project Manager:\n\
-| Source: dev_mkconf.c\n\
-| Path: config\n\
-| Authors:\n\
-| Plateform:GNU/Linux\n\
-| Created:\n\
-| Revision/Date:	$Revision: 1.3 $ $Date: 2009-08-28 09:56:38 $\n\
-| Description:\n\
----------------------------------------------*/\n\n\n\
+   "/*\n\
+The contents of this file are subject to the Mozilla Public License Version 1.1\n\
+(the \"License\"); you may not use this file except in compliance with the License.\n\
+You may obtain a copy of the License at http://www.mozilla.org/MPL/\n\
+\n\
+Software distributed under the License is distributed on an \"AS IS\" basis,\n\
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the\n\
+specific language governing rights and limitations under the License.\n\
+\n\
+The Original Code is Lepton.\n\
+\n\
+The Initial Developer of the Original Code is Philippe Le Boulanger.\n\
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.\n\
+All Rights Reserved.\n\
+\n\
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.\n\
+\n\
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license\n\
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable\n\
+instead of those above. If you wish to allow use of your version of this file only under the\n\
+terms of the [eCos GPL] License and not to allow others to use your version of this file under\n\
+the MPL, indicate your decision by deleting  the provisions above and replace\n\
+them with the notice and other provisions required by the [eCos GPL] License.\n\
+If you do not delete the provisions above, a recipient may use your version of this file under\n\
+either the MPL or the [eCos GPL] License.\"\n\
+*/\n\n\n\
 /*===========================================\n\
 Includes\n\
 =============================================*/\n\
@@ -154,11 +167,6 @@ Implementation\n\
 =============================================*/\n\n\n\
 /*===========================================\n\
 | End of Source : dev_mkconf.c\n\
-|--------------------------------------------\n\
-| Historic:\n\
-|--------------------------------------------\n\
-| Authors	| Date	| Comments\n\
-|--------------------------------------------\n\
 =============================================*/\n";
 
 struct mkdev_t* pdev_lst_end=0;
@@ -172,19 +180,32 @@ char * bin_conf_filepath = (char*)dflt_bin_conf_filepath; //see xml_elmt_mklepto
 #define MK_BINCONF_FILEPATH   bin_conf_filepath
 
 const char binconf_top_header[]=
-   "/*-------------------------------------------\n\
-| Copyright(C) 2008 CHAUVIN-ARNOUX\n\
----------------------------------------------\n\
-| Project:\n\
-| Project Manager:\n\
-| Source: mklepton.c\n\
-| Path:mkleptux\n\
-| Authors:\n\
-| Plateform:GNU/Linux\n\
-| Created:\n\
-| Revision/Date:	$Revision: 1.3 $ $Date: 2009-08-28 09:56:38 $\n\
-| Description:\n\
----------------------------------------------*/\n\n\n";
+   "/*\n\
+The contents of this file are subject to the Mozilla Public License Version 1.1\n\
+(the \"License\"); you may not use this file except in compliance with the License.\n\
+You may obtain a copy of the License at http://www.mozilla.org/MPL/\n\
+\n\
+Software distributed under the License is distributed on an \"AS IS\" basis,\n\
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the\n\
+specific language governing rights and limitations under the License.\n\
+\n\
+The Original Code is Lepton.\n\
+\n\
+The Initial Developer of the Original Code is Philippe Le Boulanger.\n\
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.\n\
+All Rights Reserved.\n\
+\n\
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.\n\
+\n\
+Alternatively, the contents of this file may be used under the terms of the eCos GPL license\n\
+(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable\n\
+instead of those above. If you wish to allow use of your version of this file only under the\n\
+terms of the [eCos GPL] License and not to allow others to use your version of this file under\n\
+the MPL, indicate your decision by deleting  the provisions above and replace\n\
+them with the notice and other provisions required by the [eCos GPL] License.\n\
+If you do not delete the provisions above, a recipient may use your version of this file under\n\
+either the MPL or the [eCos GPL] License.\"\n\
+*/\n\n\n";
 
 const char binconf_include_header[]=
    "/*===========================================\n\
@@ -204,11 +225,6 @@ Implementation\n\
 const char binconf_bottom_header[]=
    "\n/*===========================================\n\
 | End of Source : bin_mkconf.c\n\
-|--------------------------------------------\n\
-| Historic:\n\
-|--------------------------------------------\n\
-| Authors	| Date	| Comments\n\
-|--------------------------------------------\n\
 =============================================*/\n";
 
 const char binconf_decl_bin_lst[]=
