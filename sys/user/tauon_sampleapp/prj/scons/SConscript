@@ -57,7 +57,9 @@ if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('k60n512')>=0:
    TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_twrk60n512_i2c_0_m24xx.c'),
    TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_k60n512_i2c_x_mma7660.c'),
    TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_twrk60n512_i2c_0_mma7660.c'),
-   TauonSource(tauon_sampleapp_src_dir+'tsti2c.c')
+   TauonSource(tauon_sampleapp_src_dir+'tsti2c.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_gpio_leds/dev_k60n512_gpio_leds.c'),
+   TauonSource(tauon_sampleapp_src_dir+'tstleds.c'),
    ])
 
 ####name generated map file

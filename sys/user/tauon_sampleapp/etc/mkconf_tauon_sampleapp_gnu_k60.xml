@@ -119,6 +119,8 @@
       <!-- /dev/i2c1 on i2c0 use dev_twrk60n512_i2c_0_mma7660_map or
       dev_twrk60n512_i2c_0_m24xx_map + dev_eeprom_24xxx_0_map-->
       <dev name="dev_twrk60n512_i2c_0_mma7660_map" use="on"/>
+      <!-- /dev/gleds -->
+      <dev name="dev_twrk60n512_gpio_leds_map"     use="on"/>
    </devices>
 </target>
 
@@ -203,6 +205,7 @@
         <bin name="test"        stack="2048"    priority="10" timeslice="1" />
         <bin name="test2"       stack="2048"    priority="10" timeslice="1" />
         <bin name="tsti2c"      stack="4096"    priority="10" timeslice="1" />
+        <bin name="tstleds"     stack="1024"    priority="10" timeslice="1" />
    </target>
 </binaries>
 
