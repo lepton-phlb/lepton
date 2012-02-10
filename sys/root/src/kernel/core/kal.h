@@ -1723,6 +1723,7 @@ typedef CONTEXT context_t;
 
 #endif
 
+#if 0
 #ifdef USE_DEBUG_KAL
 
 void _debug_bckup_thread_start_context(CONTEXT* __context__,
@@ -1769,6 +1770,7 @@ void _debug_inline_exit_signal_handler(struct kernel_pthread_st *__pthread_ptr__
    #define __exit_signal_handler(__pthread_ptr__)                    __inline_exit_signal_handler( \
       __pthread_ptr__)
 
+#endif
 #endif
 
 /** @} */
