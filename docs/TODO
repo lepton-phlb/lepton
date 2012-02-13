@@ -4,7 +4,7 @@ TODO - list of things to do for Lepton/Tauon:
       PHY negociation problem on DM9000a
    
    * Kinetis :
-      UART DMA RX
+      UART DMA RX/TX
       SPI DMA RX/TX, RX
       kill system call
       "USB device" driver
