@@ -59,6 +59,7 @@ To see what is Lepton/Tauon, installation are tested on:
    -. Debian Squeeze and Wheezy
    -. Ubuntu 11.10
 To create your application, see docs/START.
+To see all available function, see docs AVAILABLE_POSIX
 
 Changes made in version 4.0.0.0 are documented in the ChangeLog file.
 
