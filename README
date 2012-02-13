@@ -46,7 +46,7 @@ In addition Lepton/Tauon offers:
    -. UNIX stream to improve "reuse"
    -. support lwip stack (1.3.2)
    -. support uip stack (1.0) (Lepton only)
-   -. support rootfs, ufs, fat16 filesystem
+   -. support rootfs, ufs, fat16 (msdos and vfat) filesystem
    -. VFS layer to brings new and custom file systems 
    -. USB devices stack and profils CDC-ACM, MSD and Ethernet-ECM (tested
    only on AT91SAM9261-EK)
@@ -63,7 +63,7 @@ To create your application, see docs/START.
 Changes made in version 4.0.0.0 are documented in the ChangeLog file.
 
 Directories and/or files in this distribution:
-   -. sys/tools : tools to build a Lepton/Tauon application
+   -. tools : tools to build a Lepton/Tauon application
    
    -. sys/user : part for user application sources, libraries and
    binaries
@@ -88,10 +88,10 @@ Directories and/or files in this distribution:
    -. sys/root/src/kernel/fs : source files for supported filesystems.
    -. sys/root/src/kernel/net : source files for supported net stack.
    Currently, Tauon only supports lwip.
-   -. sys/root/src/kernel/fs : source files for device drivers.
+   -. sys/root/src/kernel/dev : source files for device drivers.
    
 
-Send comments/corrections to lepton.phlb@gmail.com.
+Send comments/corrections/improvements to lepton-discuss@googlegroups.com.
 
 The Lepton/Tauon home page is http://code.google.com/p/lepton/.
 
