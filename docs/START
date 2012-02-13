@@ -192,7 +192,7 @@ etc/scripts
 Copy kernel and firmware configuration file from tauon_sampleapp
 $ cp ~/tauon/sys/user/tauon_sampleapp/etc//mkconf_tauon_sampleapp_gnu_k60.xml etc
 
-Copy specific only configuration files for AT91SAM9261-EK target 
+Copy specific only configuration files for TWR-K60N512 target
 from tauon_sampleapp (SConscript is already here)
 $ cp ~/tauon/sys/user/tauon_sampleapp/prj/scons/k60n512_opts.py \
 prj/scons
