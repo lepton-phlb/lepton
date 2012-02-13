@@ -1,0 +1,123 @@
+AVAILABLE POSIX FUNCTIONS
+* 1003.1a
+   * execv, execve, execl
+      -. Limitations :
+         -. no environment variables
+   
+   * vfork
+   
+   * pause
+   
+   * waitpid
+   
+   * sigemptyset, sigfillset, sigaddset, sigdelset, sigismember
+      -. in multithreaded context, this is applied to calling thread.
+   
+   * sigpending
+      -. in multithreaded context, it gets pending mask of calling thread
+   
+   * sigaction
+      -. in multithreaded context, it is applied to calling thread
+      -. available standard signals : SIGABRT, SIGALRM, SIGFPE, SIGHUP
+      SIGILL, SIGINT, SIGQUIT, SIGPIPE, SIGKILL, SIGSEGV, SIGTERM, SIGUSR1, SIGUSR2,
+      SIGCHLD
+      -. Limitations :
+         -. SA_SIGINFO flag not available
+
+   * kill, raise
+      -. Limitations :
+         -. not available now for Cortex-M4
+         -. pid < -1 not handle
+         -. in multithreaded context, the signal is only caught by the first thread which
+         doesn't mask it and doesn't ignore it.
+   
+   * open, create
+      -. available flags : O_RDONLY, O_WRONLY, O_RDWR, O_APPEND, O_CREAT, O_EXCL,
+      O_NONBLOCK and O_NDELAY
+      -. Limitations :
+         -. no mode available (set it to 0)
+   
+   * close, lseek
+   
+   * read, write
+      -. Limitations :
+         -. signal handling doesn't set EINTR in errno and doesn't stop read process as expect by
+         POSIX.
+         -. after a write call, offset pointer need to be reset to read previous written data.
+
+   * fcntl
+      -. Limitations :
+         -. F_GETFD flag not available
+         -. cooperate locking (lock all file content)
+   
+   * ioctl
+   
+   * dup, dup2
+   
+   * select, FD_CLR, FD_SET, FD_ZERO, FD_ISSET
+      -. Limitations :
+         -. only work for character devices (like serial, ...)
+         -. exceptfds not supported
+         -. maximum of 64 descriptors
+   
+   * ftruncate, truncate
+      -. Limitations :
+         -. extend file size with msdos and vfat fs only
+         -. offset pointer is egal to file size (not expected by POSIX)
+
+   * fstat, stat
+      -. available macros type : S_ISREG(mode), S_ISDIR(mode), S_ISCHR(mode), S_ISBLK(mode), S_ISFIFO(mode)
+      -. Limitations :
+         -. symlink not available
+
+   * pipe, mkfifo
+      -. Limitations :
+         -. no mode available (set it to 0)
+   
+   * rename
+      -. Limitations :
+         -. only last part of pathname can be change. can't move file across directories
+
+   * remove
+   
+   * mkdir
+      -. Limitations
+         -. no mode available (set it to 0)
+
+   * chdir, rmdir
+
+   * getcwd
+   
+   * opendir, closedir
+   
+   * readdir, readdir_r, readdir2
+      -. need to replace readdir by readdir2
+      -. d_name is not the last field of structure dirent_t
+
+   * telldir, rewinddir, seekdir
+   
+   * exit
+      -. Limitations
+         -. _exit is not available
+         -. flushing not available on stdio descriptors
+
+   * system
+      -. not really useful now
+
+   * stime, time, asctime, asctime_r, ctime, ctime_r, gmtime, gmtime_r, localtime, localtime_r,
+   mktime
+      -. Limitations
+         -. time zones are not supported (tm_isdst is useless)
+
+   * difftime, settimeofday, gettimeofday
+      -. Limitations
+         -. tzp is useless
+
+   * strftime
+      -. Limitations
+         -. %F, %G, %g, %h, %O, %V, %Z, %z and %+ are not supported
+
+   * setpgid, getpgrp, getpgrp2
+      -. getpgrp2() is equivalent to getpgid()
+
+* 1003.1b, 1003.1c
