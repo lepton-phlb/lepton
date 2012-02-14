@@ -4282,9 +4282,8 @@ cdl_option CYGIMP_HAL_COMMON_INTERRUPTS_USE_INTERRUPT_STACK {
 #
 cdl_option CYGNUM_HAL_COMMON_INTERRUPTS_STACK_SIZE {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 4096
-    # value_source default
+    user_value 2048
+    # value_source user
     # Default value:  CYGPKG_KERNEL ? 4096 : 32768 
     #     CYGPKG_KERNEL == current
     #   --> 4096
@@ -4337,9 +4336,8 @@ cdl_option CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT {
 #
 cdl_option CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: 0
 
     # The following properties are affected by this value
@@ -7860,9 +7858,8 @@ cdl_component CYGNUM_HAL_RTC_CONSTANTS {
 #
 cdl_option CYGNUM_HAL_RTC_NUMERATOR {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 1000000000
-    # value_source default
+    user_value 1000000000
+    # value_source user
     # Default value: 1000000000
 };
 
@@ -7870,9 +7867,8 @@ cdl_option CYGNUM_HAL_RTC_NUMERATOR {
 #
 cdl_option CYGNUM_HAL_RTC_DENOMINATOR {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 100
-    # value_source default
+    user_value 100
+    # value_source user
     # Default value: 100
 
     # The following properties are affected by this value
@@ -8396,9 +8392,8 @@ cdl_option CYGOPT_HAL_KINETIS_MISC_FLASH_SECTION {
     #   --> 0
 
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 0
+    # value_source user
     # Default value:  CYG_HAL_STARTUP == "ROM" 
     #     CYG_HAL_STARTUP == MRAM
     #   --> 0
@@ -10420,9 +10415,8 @@ cdl_interface CYGINT_KERNEL_INTERRUPTS_DSRS {
 #
 cdl_component CYGIMP_KERNEL_INTERRUPTS_DSRS_LIST {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: 1
 };
 
@@ -10459,9 +10453,8 @@ cdl_option CYGSEM_KERNEL_INTERRUPTS_DSRS_LIST_FIFO {
 #
 cdl_component CYGIMP_KERNEL_INTERRUPTS_DSRS_TABLE {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 0
+    # value_source user
     # Default value: 0
 };
 
@@ -10495,13 +10488,12 @@ cdl_option CYGNUM_KERNEL_INTERRUPTS_DSRS_TABLE_SIZE {
 #
 cdl_option CYGIMP_KERNEL_INTERRUPTS_CHAIN {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: 0
     # Requires: CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN
-    #     CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN == 0
-    #   --> 0
+    #     CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN == 1
+    #   --> 1
 };
 
 # <
@@ -10799,9 +10791,8 @@ cdl_component CYGSEM_KERNEL_SCHED_TIMESLICE {
 #
 cdl_option CYGNUM_KERNEL_SCHED_TIMESLICE_TICKS {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 5
-    # value_source default
+    user_value 1
+    # value_source user
     # Default value: 5
     # Legal values: 1 to 65535
 };
@@ -11519,9 +11510,8 @@ cdl_option CYGSEM_KERNEL_THREADS_DESTRUCTORS_PER_THREAD {
 #
 cdl_option CYGNUM_KERNEL_THREADS_IDLE_STACK_SIZE {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 2048
-    # value_source default
+    user_value 1024
+    # value_source user
     # Default value: 2048
     # Legal values: 512 to 65536
 };
@@ -11554,9 +11544,8 @@ cdl_option CYGNUM_KERNEL_MAX_SUSPEND_COUNT_ASSERT {
 #
 cdl_option CYGNUM_KERNEL_MAX_COUNTED_WAKE_COUNT_ASSERT {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 500
-    # value_source default
+    user_value 500
+    # value_source user
     # Default value: 500
 };
 
@@ -11814,9 +11803,8 @@ cdl_option CYGMFN_KERNEL_SYNCH_MBOXT_PUT_CAN_WAIT {
 #
 cdl_option CYGNUM_KERNEL_SYNCH_MBOX_QUEUE_SIZE {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 10
-    # value_source default
+    user_value 64
+    # value_source user
     # Default value: 10
     # Legal values: 1 to 65535
 };
