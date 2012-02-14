@@ -120,4 +120,80 @@ AVAILABLE POSIX FUNCTIONS
    * setpgid, getpgrp, getpgrp2
       -. getpgrp2() is equivalent to getpgid()
 
+   * mknod
+      -. Limitations
+         -. no mode available (set it to 0)
+
+   * fattach, fdetach
+      -. need to implement isastream
+
+   * accept, bind, shutdown, connect, getsockname, getpeername, setsockopt, getsockopt,
+   listen, recv, recvfrom, send, sendto, socket, gethostbyname
+   
 * 1003.1b, 1003.1c
+   * pthread_create
+      -. thread is created with attributes PTHREAD_CANCEL_ENABLE, PTHREAD_CANCEL_ASYNCHRONOUS
+   
+   * pthread_cancel, pthread_exit
+      -. threads are directly destroyed
+      -. Limitations
+         -. pthread_join not available
+   
+   * pthread_self
+   
+   * sigwaitinfo, sigtimedwait
+      -. Limitations
+         -. only real time signals can use these functions (for now).
+
+   * pthread_mutex_init, pthread_mutex_destroy
+      -. default_pthread_mutex = PTHREAD_MUTEX_INITIALIZER
+      -. no recursive mutex for eCos version
+      -. mutex must be unlock before destruction
+
+   * pthread_mutex_lock, pthread_mutex_unlock, pthread_mutex_trylock
+      -. Limitations
+         -. pthread_mutex_unlock should not be call on an unlock mutex
+
+   * pthread_cond_init, pthread_cond_destroy
+      -. default_pthread_cond = PTHREAD_COND_INITIALIZER
+      -. before pthread_cond_destroy no thread have to be wait on this condition
+   
+   * pthread_cond_wait, pthread_cond_signal, pthread_cond_broadcast
+   
+   * timer_create, timer_delete
+      -. Limitations
+         -. only CLOCK_REALTIME is available for clockid
+
+   * timer_settime, timer_gettime
+      -. Limitations
+         -. TIMER_ABSTIME not available
+         -. timer_getoverrun not available
+
+   * clock_gettime
+      -. CLOCK_MONOTONIC returns number of ticks since system startup
+      -. Limitations
+         -. CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID not available
+
+   * sem_init, sem_destroy
+      -. before sem_destroy no thread have to be wait on this semaphore
+      -. Limitations
+         -. no pshared available (set it to 0)
+         -. can't re-init semaphore before destroy it
+
+   * sem_wait, sem_timedwait, sem_trywait, sem_getvalue
+   
+   * mq_open, mq_unlink, mq_close
+      -. Limitations
+         -. no mode available (set it to 0)
+
+   * mq_getattr, mq_setattr
+      -. Limitations
+         -. mq_flags can be 0 or O_NONBLOCK
+
+   * mq_receive, mq_timedreceive, mq_send, mq_timedsend
+   
+* CUSTOM
+   * mount, umount
+
+* NOT SUPPORTED BUT PRESENT FOR COMPATIBILITY
+   * chmod, access
