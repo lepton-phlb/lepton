@@ -19,10 +19,11 @@ $ cd ~/dev/ecos-v3.0
 $ mkdir archives ecos-tools ecos-build
 
 Get eCos archive from http://hg-pub.ecoscentric.com/. 
-Tested with the following version from the eCos upstream:http://hg-pub.ecoscentric.com/ecos/archive/e1cec8d66444.tar.bz2
+Tested with the following version from the eCos upstream: 
+$ wget http://hg-pub.ecoscentric.com/ecos/archive/e1cec8d66444.tar.bz2 -P ./archives
 Store it in archives and unpack it.
-$ tar jxf archive/e1cec8d66444.tar.bz2
-$ mv ecos-v3_0-branch-7d8c61e6225c/ ecos
+$ tar jxf archives/e1cec8d66444.tar.bz2
+$ ln -s /home/kvm/dev/ecos-v3.0/ecos-e1cec8d66444 /home/kvm/dev/ecos-v3.0/ecos
 
 Compile ecosconfig.
 $ cd ecos-build
