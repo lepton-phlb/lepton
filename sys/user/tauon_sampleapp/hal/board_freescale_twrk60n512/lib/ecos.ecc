@@ -31,12 +31,12 @@ cdl_configuration eCos {
     template    kernel ;
     package -hardware CYGPKG_HAL_CORTEXM current ;
     package -hardware CYGPKG_HAL_CORTEXM_KINETIS current ;
-    package -hardware CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM current ;
     package -hardware CYGPKG_IO_SERIAL_FREESCALE_UART_HDR current ;
     package -hardware CYGPKG_IO_SERIAL_FREESCALE_UART current ;
     package -hardware CYGPKG_DEVICES_WALLCLOCK_KINETIS_RTC current ;
     package -hardware CYGPKG_DEVS_ETH_PHY current ;
     package -hardware CYGPKG_DEVS_ETH_FREESCALE_ENET current ;
+    package -hardware CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM current ;
     package -template CYGPKG_HAL current ;
     package -template CYGPKG_IO_SERIAL current ;
     package -template CYGPKG_INFRA current ;
@@ -45,9 +45,9 @@ cdl_configuration eCos {
     package -template CYGPKG_MEMALLOC current ;
     package -template CYGPKG_LIBC_STRING current ;
     package -template CYGPKG_ISOINFRA current ;
-    package CYGPKG_CPULOAD current ;
     package CYGPKG_LIBC_I18N current ;
     package CYGPKG_LIBC_STDLIB current ;
+    package CYGPKG_CPULOAD current ;
     package CYGPKG_LIBM current ;
 };
 
@@ -57,114 +57,245 @@ cdl_configuration eCos {
 # ---- contents --------------------------------------------------------
 # >
 # >
-# Global build options
-# Global build options including control over
-# compiler flags, linker flags and choice of toolchain.
+# Variant IRQ priority defaults
+# Interrupt priorities defined by Kinetis variant
 #
-cdl_component CYGBLD_GLOBAL_OPTIONS {
+cdl_component CYGHWR_HAL_DEVS_IRQ_PRIO_SCHEME_VAR {
     # There is no associated value.
-
-    # The following properties are affected by this value
 };
 
 # >
-# Global command prefix
-# This option specifies the command prefix used when
-# invoking the build tools.
+# Clock IRQ priority
+# Set clock ISR priority. Default setting is lowest priority.
 #
-cdl_option CYGBLD_GLOBAL_COMMAND_PREFIX {
+cdl_option CYGNUM_HAL_KERNEL_COUNTERS_CLOCK_ISR_DEFAULT_PRIORITY_SP {
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value arm-eabi
+    # user_value 0x000000E0
     # value_source default
-    # Default value: arm-eabi
-};
-
-# Global compiler flags
-# This option controls the global compiler flags which are used to
-# compile all packages by default. Individual packages may define
-# options which override these global flags.
-#
-cdl_option CYGBLD_GLOBAL_CFLAGS {
-    # Flavor: data
-    user_value "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings -mcpu=cortex-m3 -mthumb -g -O0 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
-    # value_source user
-    # Default value:  CYGBLD_GLOBAL_WARNFLAGS . "-mcpu=cortex-m3 -mthumb -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions" 
-    #     CYGBLD_GLOBAL_WARNFLAGS == "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings "
-    #   --> "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings -mcpu=cortex-m3 -mthumb -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
+    # Default value: 0x000000E0
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                     0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
 
     # The following properties are affected by this value
-    # package CYGPKG_HAL_CORTEXM
-    #     Requires:  CYGHWR_HAL_CORTEXM_BIGENDIAN implies
-    #             is_substr(CYGBLD_GLOBAL_CFLAGS,   " -mbig-endian ") &&
-    #             is_substr(CYGBLD_GLOBAL_LDFLAGS,  " -mbig-endian ") 
-    # package CYGPKG_HAL_CORTEXM
-    #     Requires:  !CYGHWR_HAL_CORTEXM_BIGENDIAN implies
-    #             !is_substr(CYGBLD_GLOBAL_CFLAGS,  " -mbig-endian ") &&
-    #             !is_substr(CYGBLD_GLOBAL_LDFLAGS, " -mbig-endian ") 
-    # option CYGBLD_INFRA_CFLAGS_WARNINGS_AS_ERRORS
-    #     Requires:  is_substr(CYGBLD_GLOBAL_CFLAGS, " -Werror") 
-    # option CYGBLD_INFRA_CFLAGS_PIPE
-    #     Requires:  is_substr(CYGBLD_GLOBAL_CFLAGS, " -pipe") 
+    # option CYGNUM_HAL_KERNEL_COUNTERS_CLOCK_ISR_DEFAULT_PRIORITY
+    #     Calculated: CYGNUM_HAL_KERNEL_COUNTERS_CLOCK_ISR_DEFAULT_PRIORITY_SP
 };
 
-# Global linker flags
-# This option controls the global linker flags. Individual
-# packages may define options which override these global flags.
+# Ethernet IRQ priority
 #
-cdl_option CYGBLD_GLOBAL_LDFLAGS {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value "-mcpu=cortex-m3 -mthumb -Wl,--gc-sections -Wl,-static -Wl,-n -g -nostdlib"
-    # value_source default
-    # Default value: "-mcpu=cortex-m3 -mthumb -Wl,--gc-sections -Wl,-static -Wl,-n -g -nostdlib"
-
-    # The following properties are affected by this value
-    # package CYGPKG_HAL_CORTEXM
-    #     Requires:  CYGHWR_HAL_CORTEXM_BIGENDIAN implies
-    #             is_substr(CYGBLD_GLOBAL_CFLAGS,   " -mbig-endian ") &&
-    #             is_substr(CYGBLD_GLOBAL_LDFLAGS,  " -mbig-endian ") 
-    # package CYGPKG_HAL_CORTEXM
-    #     Requires:  !CYGHWR_HAL_CORTEXM_BIGENDIAN implies
-    #             !is_substr(CYGBLD_GLOBAL_CFLAGS,  " -mbig-endian ") &&
-    #             !is_substr(CYGBLD_GLOBAL_LDFLAGS, " -mbig-endian ") 
-};
-
-# Standard compiler warning flags
-# This option specifies the default warning-related compiler flags used
-# on all eCos platforms.
-#
-cdl_option CYGBLD_GLOBAL_WARNFLAGS {
-    # Calculated value:  "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings " 
-    # Flavor: data
-    # Current_value: -Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings 
-
-    # The following properties are affected by this value
-    # option CYGBLD_GLOBAL_CFLAGS
-    #     DefaultValue:  CYGBLD_GLOBAL_WARNFLAGS . "-mcpu=cortex-m3 -mthumb -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions" 
-};
-
-# Build common GDB stub ROM image
-# Unless a target board has specific requirements to the
-# stub implementation, it can use a simple common stub.
-# This option, which gets enabled by platform HALs as
-# appropriate, controls the building of the common stub.
-#
-cdl_option CYGBLD_BUILD_COMMON_GDB_STUBS {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Requires: CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
-    #     CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS == 0
+cdl_option CYGNUM_DEVS_ETH_FREESCALE_ENET0_INTPRIO_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_DEVS_ETH_FREESCALE_ENET
+    #     CYGPKG_DEVS_ETH_FREESCALE_ENET == 0
     #   --> 0
 
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x000000E0
+    # value_source default
+    # Default value: 0x000000E0
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                     0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
     # The following properties are affected by this value
-    # component CYGBLD_HAL_CORTEXM_TWR_MK60N512_GDB_STUBS
-    #     ActiveIf: CYGBLD_BUILD_COMMON_GDB_STUBS
+    # option CYGPKG_DEVS_ETH_FREESCALE_ENET0_INTPRIO
+    #     DefaultValue: CYGNUM_DEVS_ETH_FREESCALE_ENET0_INTPRIO_SP
 };
 
+# UART IRQ priorities
+#
+cdl_component CYGHWR_HAL_DEVS_IRQ_PRIO_SCHEME_UART {
+    # There is no associated value.
+};
+
+# >
+# UART0 interrupt priority
+#
+cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_IO_SERIAL_FREESCALE_UART0
+    #     CYGPKG_IO_SERIAL_FREESCALE_UART0 == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x00000080
+    # value_source default
+    # Default value: 0x00000080
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY
+    #     DefaultValue: CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY_SP
+};
+
+# UART1 interrupt priority
+#
+cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_IO_SERIAL_FREESCALE_UART1
+    #     CYGPKG_IO_SERIAL_FREESCALE_UART1 == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x00000080
+    # value_source default
+    # Default value: 0x00000080
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY
+    #     DefaultValue: CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY_SP
+};
+
+# UART2 interrupt priority
+#
+cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_IO_SERIAL_FREESCALE_UART2
+    #     CYGPKG_IO_SERIAL_FREESCALE_UART2 == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x00000080
+    # value_source default
+    # Default value: 0x00000080
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY
+    #     DefaultValue: CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY_SP
+};
+
+# UART3 interrupt priority
+#
+cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_IO_SERIAL_FREESCALE_UART3
+    #     CYGPKG_IO_SERIAL_FREESCALE_UART3 == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x00000080
+    # value_source default
+    # Default value: 0x00000080
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY
+    #     DefaultValue: CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY_SP
+};
+
+# UART4 interrupt priority
+#
+cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_IO_SERIAL_FREESCALE_UART4
+    #     CYGPKG_IO_SERIAL_FREESCALE_UART4 == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x00000080
+    # value_source default
+    # Default value: 0x00000080
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY
+    #     DefaultValue: CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY_SP
+};
+
+# UART5 interrupt priority
+#
+cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGPKG_IO_SERIAL_FREESCALE_UART5
+    #     CYGPKG_IO_SERIAL_FREESCALE_UART5 == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x00000080
+    # value_source default
+    # Default value: 0x00000080
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY
+    #     DefaultValue: CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY_SP
+};
+
+# <
+# DSPI IRQ priorities
+#
+cdl_component CYGHWR_HAL_DEVS_IRQ_PRIO_SCHEME_DSPI {
+    # There is no associated value.
+};
+
+# >
+# DSPI bus 0 interrupt priority
+#
+cdl_option CYGNUM_DEVS_SPI_FREESCALE_DSPI0_ISR_PRI_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGHWR_DEVS_SPI_FREESCALE_DSPI0
+    #     CYGHWR_DEVS_SPI_FREESCALE_DSPI0 (unknown) == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x000000D0
+    # value_source default
+    # Default value: 0x000000D0
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+};
+
+# DSPI bus 1 interrupt priority
+#
+cdl_option CYGNUM_DEVS_SPI_FREESCALE_DSPI1_ISR_PRI_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGHWR_DEVS_SPI_FREESCALE_DSPI1
+    #     CYGHWR_DEVS_SPI_FREESCALE_DSPI1 (unknown) == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x000000D0
+    # value_source default
+    # Default value: 0x000000D0
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+};
+
+# DSPI bus 2 interrupt priority
+#
+cdl_option CYGNUM_DEVS_SPI_FREESCALE_DSPI2_ISR_PRI_SP {
+    # This option is not active
+    # ActiveIf constraint: CYGHWR_DEVS_SPI_FREESCALE_DSPI2
+    #     CYGHWR_DEVS_SPI_FREESCALE_DSPI2 (unknown) == 0
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0x000000D0
+    # value_source default
+    # Default value: 0x000000D0
+    # Legal values:  0 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80
+    #                         0x90 0xA0 0xB0 0xC0 0xD0 0xE0 
+};
+
+# <
 # <
 # Real-time clock
 # Driver for the Kinetis RTC
@@ -470,6 +601,8 @@ cdl_package CYGPKG_DEVS_ETH_FREESCALE_ENET {
     #   --> 0
 
     # The following properties are affected by this value
+    # option CYGNUM_DEVS_ETH_FREESCALE_ENET0_INTPRIO_SP
+    #     ActiveIf: CYGPKG_DEVS_ETH_FREESCALE_ENET
     # package CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM
     #     Requires:  is_active(CYGPKG_DEVS_ETH_FREESCALE_ENET)
     #                       implies CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "OSC" 
@@ -517,9 +650,11 @@ cdl_option CYGPKG_DEVS_ETH_FREESCALE_ENET0_INTPRIO {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x000000E0
+    # user_value 0
     # value_source default
-    # Default value: 0x000000E0
+    # Default value: CYGNUM_DEVS_ETH_FREESCALE_ENET0_INTPRIO_SP
+    #     CYGNUM_DEVS_ETH_FREESCALE_ENET0_INTPRIO_SP == 0
+    #   --> 0
 };
 
 # Congestion control
@@ -929,13 +1064,7 @@ cdl_component CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL {
     #     CYGPKG_NET_LWIP (unknown) == 0
     #   --> 0
 
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value:  is_active (CYGPKG_LWIP_CHECKSUMS) ? 1 : 0 
-    #     CYGPKG_LWIP_CHECKSUMS (unknown) == 0
-    #   --> 0
+    # There is no associated value.
     # Requires: CYGSEM_DEVS_ETH_FREESCALE_ENET_BD_ENHANCED
     #     CYGSEM_DEVS_ETH_FREESCALE_ENET_BD_ENHANCED == 0
     #   --> 0
@@ -950,7 +1079,6 @@ cdl_component CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL {
 cdl_component CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL_TX_IP {
     # This option is not active
     # The parent CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL is not active
-    # The parent CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL is disabled
 
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
@@ -1007,7 +1135,6 @@ cdl_option CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL_TX_PROT {
 cdl_component CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL_RX_IP {
     # This option is not active
     # The parent CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL is not active
-    # The parent CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL is disabled
 
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
@@ -1066,7 +1193,6 @@ cdl_option CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL_RX_PROT {
 cdl_option CYGSEM_ENET_LWIP_CHECKSUMS {
     # This option is not active
     # The parent CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL is not active
-    # The parent CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL is disabled
 
     # There is no associated value.
     # Requires:  !CYGSEM_DEVS_ETH_FREESCALE_ENET_ACCEL_TX_IP implies
@@ -1231,6 +1357,70 @@ cdl_option CYGOPT_DEVS_ETH_FREESCALE_ENET_IRQ_FASTMASK {
     # Default value: 1
 };
 
+# RedBoot manages ESA initialization data
+# Enabling this option will allow the ethernet station
+# address to be acquired from RedBoot's configuration data,
+# stored in flash memory.  It can be overridden individually
+# by the 'Set the ethernet station address' option for each
+# interface.
+#
+cdl_component CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA {
+    # This option is not active
+    # The parent CYGPKG_DEVS_ETH_FREESCALE_ENET is not active
+    # ActiveIf constraint: CYGSEM_HAL_VIRTUAL_VECTOR_SUPPORT
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_SUPPORT == 1
+    #   --> 1
+    # ActiveIf constraint: (CYGPKG_REDBOOT || CYGSEM_HAL_USE_ROM_MONITOR)
+    #     CYGPKG_REDBOOT (unknown) == 0
+    #     CYGSEM_HAL_USE_ROM_MONITOR == GDB_stubs
+    #   --> 1
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# >
+# Export RedBoot command to set ESA in FLASH config
+# This component contains options which, when enabled, allow
+# RedBoot to support the setting of the ESA in the FLASH
+# configuration. This can then subsequently be accessed by
+# applications using virtual vector calls if those applications
+# are also built with
+# CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA enabled.
+#
+cdl_component CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA_VARS {
+    # This option is not active
+    # The parent CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA is not active
+    # The parent CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA is disabled
+
+    # There is no associated value.
+};
+
+# >
+# RedBoot manages ESA for eth0
+#
+cdl_option CYGSEM_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA_ETH0 {
+    # This option is not active
+    # The parent CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA_VARS is not active
+    # ActiveIf constraint: CYGSEM_REDBOOT_FLASH_CONFIG
+    #     CYGSEM_REDBOOT_FLASH_CONFIG (unknown) == 0
+    #   --> 0
+    # ActiveIf constraint: CYGPKG_REDBOOT_NETWORKING
+    #     CYGPKG_REDBOOT_NETWORKING (unknown) == 0
+    #   --> 0
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
+# <
+# <
 # Driver debug output level
 # This option specifies the level of debug data output by
 # the Freescale ENET ethernet device driver. A value of 0 signifies
@@ -1286,6 +1476,114 @@ cdl_option CYGHWR_FREESCALE_ENET_MII_MDC_HAL_CLOCK {
     # The following properties are affected by this value
     # package CYGPKG_DEVS_ETH_FREESCALE_ENET
     #     Requires: CYGHWR_FREESCALE_ENET_MII_MDC_HAL_CLOCK
+};
+
+# <
+# Global build options
+# Global build options including control over
+# compiler flags, linker flags and choice of toolchain.
+#
+cdl_component CYGBLD_GLOBAL_OPTIONS {
+    # There is no associated value.
+
+    # The following properties are affected by this value
+};
+
+# >
+# Global command prefix
+# This option specifies the command prefix used when
+# invoking the build tools.
+#
+cdl_option CYGBLD_GLOBAL_COMMAND_PREFIX {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value arm-eabi
+    # value_source default
+    # Default value: arm-eabi
+};
+
+# Global compiler flags
+# This option controls the global compiler flags which are used to
+# compile all packages by default. Individual packages may define
+# options which override these global flags.
+#
+cdl_option CYGBLD_GLOBAL_CFLAGS {
+    # Flavor: data
+    user_value "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings -mcpu=cortex-m3 -mthumb -g -O0 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
+    # value_source user
+    # Default value:  CYGBLD_GLOBAL_WARNFLAGS . "-mcpu=cortex-m3 -mthumb -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions" 
+    #     CYGBLD_GLOBAL_WARNFLAGS == "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings "
+    #   --> "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings -mcpu=cortex-m3 -mthumb -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
+
+    # The following properties are affected by this value
+    # package CYGPKG_HAL_CORTEXM
+    #     Requires:  CYGHWR_HAL_CORTEXM_BIGENDIAN implies
+    #             is_substr(CYGBLD_GLOBAL_CFLAGS,   " -mbig-endian ") &&
+    #             is_substr(CYGBLD_GLOBAL_LDFLAGS,  " -mbig-endian ") 
+    # package CYGPKG_HAL_CORTEXM
+    #     Requires:  !CYGHWR_HAL_CORTEXM_BIGENDIAN implies
+    #             !is_substr(CYGBLD_GLOBAL_CFLAGS,  " -mbig-endian ") &&
+    #             !is_substr(CYGBLD_GLOBAL_LDFLAGS, " -mbig-endian ") 
+    # option CYGBLD_INFRA_CFLAGS_WARNINGS_AS_ERRORS
+    #     Requires:  is_substr(CYGBLD_GLOBAL_CFLAGS, " -Werror") 
+    # option CYGBLD_INFRA_CFLAGS_PIPE
+    #     Requires:  is_substr(CYGBLD_GLOBAL_CFLAGS, " -pipe") 
+};
+
+# Global linker flags
+# This option controls the global linker flags. Individual
+# packages may define options which override these global flags.
+#
+cdl_option CYGBLD_GLOBAL_LDFLAGS {
+    # Flavor: data
+    user_value "-mcpu=cortex-m3 -mthumb -Wl,--gc-sections -Wl,-static -Wl,-n -g -nostdlib"
+    # value_source user
+    # Default value: "-mcpu=cortex-m3 -mthumb -Wl,--gc-sections -Wl,-static -Wl,-n -g -nostdlib"
+
+    # The following properties are affected by this value
+    # package CYGPKG_HAL_CORTEXM
+    #     Requires:  CYGHWR_HAL_CORTEXM_BIGENDIAN implies
+    #             is_substr(CYGBLD_GLOBAL_CFLAGS,   " -mbig-endian ") &&
+    #             is_substr(CYGBLD_GLOBAL_LDFLAGS,  " -mbig-endian ") 
+    # package CYGPKG_HAL_CORTEXM
+    #     Requires:  !CYGHWR_HAL_CORTEXM_BIGENDIAN implies
+    #             !is_substr(CYGBLD_GLOBAL_CFLAGS,  " -mbig-endian ") &&
+    #             !is_substr(CYGBLD_GLOBAL_LDFLAGS, " -mbig-endian ") 
+};
+
+# Standard compiler warning flags
+# This option specifies the default warning-related compiler flags used
+# on all eCos platforms.
+#
+cdl_option CYGBLD_GLOBAL_WARNFLAGS {
+    # Calculated value:  "-Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings " 
+    # Flavor: data
+    # Current_value: -Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings 
+
+    # The following properties are affected by this value
+    # option CYGBLD_GLOBAL_CFLAGS
+    #     DefaultValue:  CYGBLD_GLOBAL_WARNFLAGS . "-mcpu=cortex-m3 -mthumb -g -O2 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions" 
+};
+
+# Build common GDB stub ROM image
+# Unless a target board has specific requirements to the
+# stub implementation, it can use a simple common stub.
+# This option, which gets enabled by platform HALs as
+# appropriate, controls the building of the common stub.
+#
+cdl_option CYGBLD_BUILD_COMMON_GDB_STUBS {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Requires: CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
+    #     CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS == 0
+    #   --> 0
+
+    # The following properties are affected by this value
+    # component CYGBLD_HAL_CORTEXM_TWR_MK60N512_GDB_STUBS
+    #     ActiveIf: CYGBLD_BUILD_COMMON_GDB_STUBS
 };
 
 # <
@@ -2274,6 +2572,10 @@ cdl_component CYGPKG_IO_SERIAL_FREESCALE_UART0 {
     # Default value: CYGINT_IO_SERIAL_FREESCALE_UART0
     #     CYGINT_IO_SERIAL_FREESCALE_UART0 == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY_SP
+    #     ActiveIf: CYGPKG_IO_SERIAL_FREESCALE_UART0
 };
 
 # >
@@ -2339,9 +2641,11 @@ cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x00000080
+    # user_value 0
     # value_source default
-    # Default value: 0x00000080
+    # Default value: CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY_SP
+    #     CYGNUM_IO_SERIAL_FREESCALE_UART0_INT_PRIORITY_SP == 0
+    #   --> 0
 };
 
 # <
@@ -2384,6 +2688,10 @@ cdl_component CYGPKG_IO_SERIAL_FREESCALE_UART1 {
     # Default value: CYGINT_IO_SERIAL_FREESCALE_UART1
     #     CYGINT_IO_SERIAL_FREESCALE_UART1 == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY_SP
+    #     ActiveIf: CYGPKG_IO_SERIAL_FREESCALE_UART1
 };
 
 # >
@@ -2449,9 +2757,11 @@ cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x00000080
+    # user_value 0
     # value_source default
-    # Default value: 0x00000080
+    # Default value: CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY_SP
+    #     CYGNUM_IO_SERIAL_FREESCALE_UART1_INT_PRIORITY_SP == 0
+    #   --> 0
 };
 
 # <
@@ -2494,6 +2804,10 @@ cdl_component CYGPKG_IO_SERIAL_FREESCALE_UART2 {
     # Default value: CYGINT_IO_SERIAL_FREESCALE_UART2
     #     CYGINT_IO_SERIAL_FREESCALE_UART2 == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY_SP
+    #     ActiveIf: CYGPKG_IO_SERIAL_FREESCALE_UART2
 };
 
 # >
@@ -2559,9 +2873,11 @@ cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x00000080
+    # user_value 0
     # value_source default
-    # Default value: 0x00000080
+    # Default value: CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY_SP
+    #     CYGNUM_IO_SERIAL_FREESCALE_UART2_INT_PRIORITY_SP == 0
+    #   --> 0
 };
 
 # <
@@ -2604,6 +2920,10 @@ cdl_component CYGPKG_IO_SERIAL_FREESCALE_UART3 {
     # Default value: CYGINT_IO_SERIAL_FREESCALE_UART3
     #     CYGINT_IO_SERIAL_FREESCALE_UART3 == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY_SP
+    #     ActiveIf: CYGPKG_IO_SERIAL_FREESCALE_UART3
 };
 
 # >
@@ -2669,9 +2989,11 @@ cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x00000080
+    # user_value 0
     # value_source default
-    # Default value: 0x00000080
+    # Default value: CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY_SP
+    #     CYGNUM_IO_SERIAL_FREESCALE_UART3_INT_PRIORITY_SP == 0
+    #   --> 0
 };
 
 # <
@@ -2714,6 +3036,10 @@ cdl_component CYGPKG_IO_SERIAL_FREESCALE_UART4 {
     # Default value: CYGINT_IO_SERIAL_FREESCALE_UART4
     #     CYGINT_IO_SERIAL_FREESCALE_UART4 == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY_SP
+    #     ActiveIf: CYGPKG_IO_SERIAL_FREESCALE_UART4
 };
 
 # >
@@ -2779,9 +3105,11 @@ cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x00000080
+    # user_value 0
     # value_source default
-    # Default value: 0x00000080
+    # Default value: CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY_SP
+    #     CYGNUM_IO_SERIAL_FREESCALE_UART4_INT_PRIORITY_SP == 0
+    #   --> 0
 };
 
 # <
@@ -2824,6 +3152,10 @@ cdl_component CYGPKG_IO_SERIAL_FREESCALE_UART5 {
     # Default value: CYGINT_IO_SERIAL_FREESCALE_UART5
     #     CYGINT_IO_SERIAL_FREESCALE_UART5 == 0
     #   --> 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY_SP
+    #     ActiveIf: CYGPKG_IO_SERIAL_FREESCALE_UART5
 };
 
 # >
@@ -2889,9 +3221,11 @@ cdl_option CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY {
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
-    # user_value 0x00000080
+    # user_value 0
     # value_source default
-    # Default value: 0x00000080
+    # Default value: CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY_SP
+    #     CYGNUM_IO_SERIAL_FREESCALE_UART5_INT_PRIORITY_SP == 0
+    #   --> 0
 };
 
 # <
@@ -3841,7 +4175,7 @@ cdl_option CYGIMP_LIBC_RAND_KNUTH1 {
 #
 cdl_option CYGFUN_LIBC_strtod {
     # Flavor: bool
-    user_value 1
+    user_value 0
     # value_source user
     # Default value:  0 != CYGPKG_LIBM 
     #     CYGPKG_LIBM == current
@@ -4282,8 +4616,9 @@ cdl_option CYGIMP_HAL_COMMON_INTERRUPTS_USE_INTERRUPT_STACK {
 #
 cdl_option CYGNUM_HAL_COMMON_INTERRUPTS_STACK_SIZE {
     # Flavor: data
-    user_value 2048
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 4096
+    # value_source default
     # Default value:  CYGPKG_KERNEL ? 4096 : 32768 
     #     CYGPKG_KERNEL == current
     #   --> 4096
@@ -4336,8 +4671,9 @@ cdl_option CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT {
 #
 cdl_option CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN {
     # Flavor: bool
-    user_value 1
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
     # Default value: 0
 
     # The following properties are affected by this value
@@ -4493,8 +4829,8 @@ cdl_option CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS {
     # value_source default
     # Default value: 0
     # Requires: ! CYGSEM_HAL_USE_ROM_MONITOR
-    #     CYGSEM_HAL_USE_ROM_MONITOR == 0
-    #   --> 1
+    #     CYGSEM_HAL_USE_ROM_MONITOR == GDB_stubs
+    #   --> 0
     # Requires: ! CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT
     #     CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT == 0
     #   --> 1
@@ -4503,8 +4839,8 @@ cdl_option CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS {
     #   --> 1
     # Requires:  !CYGSEM_HAL_VIRTUAL_VECTOR_DIAG  || CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS 
     #     CYGSEM_HAL_VIRTUAL_VECTOR_DIAG == 1
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 0
-    #   --> 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 1
+    #   --> 1
 
     # The following properties are affected by this value
     # component CYGDBG_HAL_DIAG_TO_DEBUG_CHAN
@@ -4591,11 +4927,10 @@ cdl_interface CYGINT_HAL_DEBUG_GDB_CTRLC_UNSUPPORTED {
 # stubs are NOT present.
 #
 cdl_option CYGDBG_HAL_DEBUG_GDB_CTRLC_SUPPORT {
-    # This option is not active
     # ActiveIf constraint:  CYGSEM_HAL_USE_ROM_MONITOR || CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS 
-    #     CYGSEM_HAL_USE_ROM_MONITOR == 0
+    #     CYGSEM_HAL_USE_ROM_MONITOR == GDB_stubs
     #     CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS == 0
-    #   --> 0
+    #   --> 1
     # ActiveIf constraint:  CYGINT_HAL_DEBUG_GDB_CTRLC_UNSUPPORTED == 0 
     #     CYGINT_HAL_DEBUG_GDB_CTRLC_UNSUPPORTED == 0
     #   --> 1
@@ -4740,6 +5075,8 @@ cdl_component CYGSEM_HAL_VIRTUAL_VECTOR_SUPPORT {
     # The following properties are affected by this value
     # package CYGPKG_DEVS_ETH_PHY
     #     Requires: CYGSEM_HAL_VIRTUAL_VECTOR_SUPPORT
+    # component CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA
+    #     ActiveIf: CYGSEM_HAL_VIRTUAL_VECTOR_SUPPORT
 };
 
 # >
@@ -4751,18 +5088,17 @@ cdl_component CYGSEM_HAL_VIRTUAL_VECTOR_SUPPORT {
 # the application was launched.
 #
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_INHERIT_CONSOLE {
-    # This option is not active
     # ActiveIf constraint: CYGSEM_HAL_USE_ROM_MONITOR
-    #     CYGSEM_HAL_USE_ROM_MONITOR == 0
-    #   --> 0
+    #     CYGSEM_HAL_USE_ROM_MONITOR == GDB_stubs
+    #   --> 1
 
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 1
+    # user_value 0
     # value_source default
     # Default value:  !CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 0
-    #   --> 1
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 1
+    #   --> 0
 
     # The following properties are affected by this value
     # component CYGDBG_HAL_DIAG_TO_DEBUG_CHAN
@@ -4778,9 +5114,9 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_INHERIT_CONSOLE {
 #
 cdl_option CYGPRI_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_CONFIGURABLE {
     # Calculated value:  CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 1
     # Flavor: bool
-    # Current value: 0
+    # Current value: 1
 
     # The following properties are affected by this value
     # option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL
@@ -4819,24 +5155,25 @@ cdl_option CYGPRI_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_CONFIGURABLE {
 #
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE {
     # Flavor: bool
-    user_value 0
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
     # Default value:  CYG_HAL_STARTUP != "RAM" || !CYGSEM_HAL_USE_ROM_MONITOR 
     #     CYG_HAL_STARTUP == MRAM
-    #     CYGSEM_HAL_USE_ROM_MONITOR == 0
+    #     CYGSEM_HAL_USE_ROM_MONITOR == GDB_stubs
     #   --> 1
     # Requires: CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_RESET
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_RESET == 0
-    #   --> 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_RESET == 1
+    #   --> 1
     # Requires: CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DELAY_US
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DELAY_US == 0
-    #   --> 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DELAY_US == 1
+    #   --> 1
     # Requires: CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DATA
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DATA == 0
-    #   --> 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DATA == 1
+    #   --> 1
     # Requires: CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 0
-    #   --> 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS == 1
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT
@@ -4877,13 +5214,15 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE {
 # will be used).
 #
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT {
+    # This option is not active
     # ActiveIf constraint: !CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 0
-    #   --> 1
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 1
+    #   --> 0
 
     # Flavor: bool
-    user_value 0
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
     # Default value: 1
 
     # The following properties are affected by this value
@@ -4902,12 +5241,12 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT {
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_RESET {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE  || CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 1
     #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT == 0
-    #   --> 0
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE
@@ -4921,11 +5260,11 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_RESET {
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_VERSION {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 0
-    #   --> 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 1
+    #   --> 1
 };
 
 # Claim delay_us virtual vector
@@ -4935,12 +5274,12 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_VERSION {
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DELAY_US {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE  || CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 1
     #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT == 0
-    #   --> 0
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE
@@ -4955,12 +5294,12 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DELAY_US {
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DATA {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE  || CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 1
     #     CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DEFAULT == 0
-    #   --> 0
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE
@@ -4979,12 +5318,12 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_DATA {
 cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
     # Default value:  CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE  || CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS 
-    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 0
+    #     CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE == 1
     #     CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS == 0
-    #   --> 0
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
@@ -5019,7 +5358,7 @@ cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_DIAG {
 # <
 # Behave as a ROM monitor
 # Enable this option if this program is to be used as a ROM monitor,
-# i.e. applications will be loaded into RAM on the board, and this
+# i.e. applications will be loaded into MRAM on the board, and this
 # ROM monitor may process exceptions or interrupts generated from the
 # application. This enables features such as utilizing a separate
 # interrupt stack when exceptions are generated.
@@ -5030,8 +5369,7 @@ cdl_option CYGSEM_HAL_ROM_MONITOR {
     # user_value 0
     # value_source default
     # Default value: 0
-    # Requires:  CYG_HAL_STARTUP == "ROM" || CYG_HAL_STARTUP == "JTAG" 
-    #     CYG_HAL_STARTUP == MRAM
+    # Requires:  CYG_HAL_STARTUP == "ROM" 
     #     CYG_HAL_STARTUP == MRAM
     #   --> 0
     # Requires:  CYGDBG_HAL_CRCTABLE_LOCATION == "ROM" 
@@ -5059,17 +5397,19 @@ cdl_option CYGSEM_HAL_ROM_MONITOR {
 cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
     # Flavor: booldata
     # No user value, uncomment the following line to provide one.
-    # user_value 0 0
+    # user_value 1 GDB_stubs
     # value_source default
-    # Default value:  CYG_HAL_STARTUP == "RAM" ? "GDB_stubs" : 0 
+    # Default value:  CYG_HAL_STARTUP == "MRAM" ? "GDB_stubs" : 0 
     #     CYG_HAL_STARTUP == MRAM
-    #   --> 0 0
+    #   --> 1 GDB_stubs
     # Legal values:  "Generic" "GDB_stubs" 
-    # Requires:  CYG_HAL_STARTUP == "RAM" 
+    # Requires:  CYG_HAL_STARTUP == "MRAM" 
     #     CYG_HAL_STARTUP == MRAM
-    #   --> 0
+    #   --> 1
 
     # The following properties are affected by this value
+    # component CYGPKG_DEVS_ETH_FREESCALE_ENET_REDBOOT_HOLDS_ESA
+    #     ActiveIf: (CYGPKG_REDBOOT || CYGSEM_HAL_USE_ROM_MONITOR)
     # option CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
     #     Requires: ! CYGSEM_HAL_USE_ROM_MONITOR
     # option CYGDBG_HAL_DEBUG_GDB_CTRLC_SUPPORT
@@ -5112,10 +5452,10 @@ cdl_interface CYGINT_HAL_PLF_IF_IDE {
 #
 cdl_interface CYGINT_HAL_COMMON_SAVED_INTERRUPT_STATE_REQUIRED {
     # Implemented by CYGDBG_HAL_DEBUG_GDB_BREAK_SUPPORT, active, disabled
-    # Implemented by CYGDBG_HAL_DEBUG_GDB_CTRLC_SUPPORT, inactive, enabled
+    # Implemented by CYGDBG_HAL_DEBUG_GDB_CTRLC_SUPPORT, active, enabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 0
+    # Current_value: 1
 
     # The following properties are affected by this value
 };
@@ -5962,12 +6302,6 @@ cdl_option CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS {
     # package CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM
     #     Requires:  is_active(CYGPKG_DEVS_ETH_FREESCALE_ENET)
     #                       implies CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "OSC" 
-    # option CYGHWR_HAL_CORTEXM_KINETIS_PLF_XTAL_OR_OSC_FREQ
-    #     ActiveIf:  CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "OSC" ||
-    #                        CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "XTAL" 
-    # option CYGHWR_HAL_CORTEXM_KINETIS_PLF_XTAL_OR_OSC_FREQ
-    #     ActiveIf:  CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "OSC" ||
-    #                        CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "XTAL" 
     # option CYGHWR_HAL_CORTEXM_KINETIS_PLF_OSC_CAP
     #     DefaultValue:  CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "XTAL" 
     # option CYGHWR_HAL_CORTEXM_KINETIS_PLF_OSC_CAP
@@ -6069,12 +6403,6 @@ cdl_option CYGHWR_HAL_CORTEXM_KINETIS_OSC_CAP {
 # Platform Clock Frequency
 #
 cdl_option CYGHWR_HAL_CORTEXM_KINETIS_PLF_XTAL_OR_OSC_FREQ {
-    # ActiveIf constraint:  CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "OSC" ||
-    #                        CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "XTAL" 
-    #     CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == OSC
-    #     CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == OSC
-    #   --> 1
-
     # Flavor: data
     # No user value, uncomment the following line to provide one.
     # user_value 50000000
@@ -7801,9 +8129,8 @@ cdl_component CYGHWR_HAL_CORTEXM_KINETIS_RTC {
 #
 cdl_option CYGHWR_HAL_CORTEXM_KINETIS_RTC_OSC_CAP {
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
+    user_value 20
+    # value_source user
     # Default value: 0
     # Legal values:  0 2 4 6 8 10 12 14 16 18 20 22 24 26 28
     #                     30 32 
@@ -7818,12 +8145,12 @@ cdl_option CYGHWR_HAL_CORTEXM_KINETIS_RTC_OSC_CAP {
 cdl_option CYGHWR_HAL_CORTEXM_KINETIS_PLF_RTC {
     # Flavor: bool
     # No user value, uncomment the following line to provide one.
-    # user_value 0
+    # user_value 1
     # value_source default
-    # Default value: 0
+    # Default value: 1
     # Requires:  CYGHWR_HAL_CORTEXM_KINETIS_RTC_OSC_CAP == 20 
-    #     CYGHWR_HAL_CORTEXM_KINETIS_RTC_OSC_CAP == 0
-    #   --> 0
+    #     CYGHWR_HAL_CORTEXM_KINETIS_RTC_OSC_CAP == 20
+    #   --> 1
 };
 
 # <
@@ -7832,11 +8159,10 @@ cdl_option CYGHWR_HAL_CORTEXM_KINETIS_PLF_RTC {
 # Set clock ISR priority. Default setting is lowest priority.
 #
 cdl_option CYGNUM_HAL_KERNEL_COUNTERS_CLOCK_ISR_DEFAULT_PRIORITY {
+    # Calculated value: CYGNUM_HAL_KERNEL_COUNTERS_CLOCK_ISR_DEFAULT_PRIORITY_SP
+    #     CYGNUM_HAL_KERNEL_COUNTERS_CLOCK_ISR_DEFAULT_PRIORITY_SP == 0x000000E0
     # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 0x000000E0
-    # value_source default
-    # Default value: 0x000000E0
+    # Current_value: 0x000000E0
 
     # The following properties are affected by this value
     # option CYGNUM_KERNEL_COUNTERS_CLOCK_ISR_PRIORITY
@@ -7858,8 +8184,9 @@ cdl_component CYGNUM_HAL_RTC_CONSTANTS {
 #
 cdl_option CYGNUM_HAL_RTC_NUMERATOR {
     # Flavor: data
-    user_value 1000000000
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 1000000000
+    # value_source default
     # Default value: 1000000000
 };
 
@@ -7867,8 +8194,9 @@ cdl_option CYGNUM_HAL_RTC_NUMERATOR {
 #
 cdl_option CYGNUM_HAL_RTC_DENOMINATOR {
     # Flavor: data
-    user_value 100
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 100
+    # value_source default
     # Default value: 100
 
     # The following properties are affected by this value
@@ -7890,158 +8218,6 @@ cdl_option CYGNUM_HAL_RTC_PERIOD {
     # Default value: 1000000 / CYGNUM_HAL_RTC_DENOMINATOR
     #     CYGNUM_HAL_RTC_DENOMINATOR == 100
     #   --> 10000
-};
-
-# <
-# Startup type
-# Startup type defines what type of application shall be built.
-# Startup type  can be defined by variant (CYG_HAL_STARTUP_VAR)
-# or platform (CYG_HAL_STARTUP_PLF). If CYG_HAL_STARTUP_PLF
-# is defined and not equal to 'ByVariant' then it shall
-# override CYG_HAL_STARTUP_VAR.
-#
-cdl_component CYG_HAL_STARTUP {
-    # Calculated value: 
-    #                 (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
-    #                 CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
-    #             
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #     CYG_HAL_STARTUP_VAR == 0
-    # Flavor: data
-    # Current_value: MRAM
-
-    # The following properties are affected by this value
-    # component CYGHWR_MEMORY_LAYOUT
-    #     Calculated: 
-    #                 (CYGHWR_MEMORY_LAYOUT_PLF) ? CYGHWR_MEMORY_LAYOUT_PLF :
-    #                 (CYG_HAL_STARTUP == "ROM" ) ? "kinetis_"
-    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
-    #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
-    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
-    #                 "undefined" 
-    # component CYGHWR_MEMORY_LAYOUT
-    #     Calculated: 
-    #                 (CYGHWR_MEMORY_LAYOUT_PLF) ? CYGHWR_MEMORY_LAYOUT_PLF :
-    #                 (CYG_HAL_STARTUP == "ROM" ) ? "kinetis_"
-    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
-    #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
-    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
-    #                 "undefined" 
-    # option CYGOPT_HAL_KINETIS_MISC_FLASH_SECTION
-    #     DefaultValue:  CYG_HAL_STARTUP == "ROM" 
-    # option CYGOPT_HAL_KINETIS_MISC_FLASH_SECTION
-    #     ActiveIf:  CYG_HAL_STARTUP == "ROM" 
-    # component CYGHWR_HAL_KINETIS_FLASH_CONF
-    #     ActiveIf:  CYG_HAL_STARTUP == "ROM" 
-    # option CYGSEM_HAL_ROM_MONITOR
-    #     Requires:  CYG_HAL_STARTUP == "ROM" || CYG_HAL_STARTUP == "JTAG" 
-    # option CYGSEM_HAL_ROM_MONITOR
-    #     Requires:  CYG_HAL_STARTUP == "ROM" || CYG_HAL_STARTUP == "JTAG" 
-    # option CYGSEM_HAL_USE_ROM_MONITOR
-    #     DefaultValue:  CYG_HAL_STARTUP == "RAM" ? "GDB_stubs" : 0 
-    # option CYGSEM_HAL_USE_ROM_MONITOR
-    #     Requires:  CYG_HAL_STARTUP == "RAM" 
-    # component CYGBLD_HAL_CORTEXM_TWR_MK60N512_GDB_STUBS
-    #     Requires:  CYG_HAL_STARTUP == "ROM" 
-    # option CYGSEM_HAL_INSTALL_MMU_TABLES
-    #     DefaultValue:  CYG_HAL_STARTUP != "RAM" 
-    # component CYGDBG_HAL_DIAG_TO_DEBUG_CHAN
-    #     DefaultValue:  (CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS  || CYG_HAL_STARTUP == "RAM") ? 1 : 0
-    # option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE
-    #     DefaultValue:  CYG_HAL_STARTUP != "RAM" || !CYGSEM_HAL_USE_ROM_MONITOR 
-};
-
-# >
-# By variant
-# 'ROM' startup builds a stand-alone application which will
-# be placed into flash. SRAM startup builds application
-# intended for loading in on-chip SRAM by means of JTAG/SWD.
-# Note: Variant Startup Type can be overriden/overloaded by
-# Platform Startup Type.
-#
-cdl_option CYG_HAL_STARTUP_VAR {
-    # This option is not active
-    # ActiveIf constraint: ((!CYG_HAL_STARTUP_PLF) || (CYG_HAL_STARTUP_PLF=="ByVariant"))
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #   --> 0
-
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ByPlatform
-    # value_source default
-    # Default value: 
-    #                     (CYG_HAL_STARTUP_PLF) && (CYG_HAL_STARTUP_PLF!="ByVariant") ?
-    #                     "ByPlatform" : "ROM" 
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #   --> ByPlatform
-    # Legal values:  "ROM" "SRAM" 
-
-    # The following properties are affected by this value
-    # component CYG_HAL_STARTUP
-    #     Calculated: 
-    #                 (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
-    #                 CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
-    #             
-};
-
-# By platform
-# Startup tupes provided by the platform, in addition to variant
-# startup types.
-# If 'ByVariant' is selected, then
-# startup type shall be selected from the variant
-# (CYG_HAL_STARTUP_VAR).
-# 'MRAM' startup builds application for MRAM debug.
-# 'RAM' not used.
-#
-cdl_option CYG_HAL_STARTUP_PLF {
-    # Flavor: data
-    user_value MRAM
-    # value_source user
-    # Default value: MRAM
-    # Legal values: "ByVariant" "ROM" "MRAM"
-
-    # The following properties are affected by this value
-    # component CYGHWR_MEMORY_LAYOUT_PLF
-    #     Calculated: 
-    #                 (CYG_HAL_STARTUP_PLF == "MRAM" ) ? "kinetis_unisram_mram" :
-    #                 (CYG_HAL_STARTUP_PLF == "ROM" ) ? "kinetis_unisram_rom" :
-    #                 "undefined" 
-    # component CYGHWR_MEMORY_LAYOUT_PLF
-    #     Calculated: 
-    #                 (CYG_HAL_STARTUP_PLF == "MRAM" ) ? "kinetis_unisram_mram" :
-    #                 (CYG_HAL_STARTUP_PLF == "ROM" ) ? "kinetis_unisram_rom" :
-    #                 "undefined" 
-    # component CYG_HAL_STARTUP
-    #     Calculated: 
-    #                 (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
-    #                 CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
-    #             
-    # component CYG_HAL_STARTUP
-    #     Calculated: 
-    #                 (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
-    #                 CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
-    #             
-    # component CYG_HAL_STARTUP
-    #     Calculated: 
-    #                 (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
-    #                 CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
-    #             
-    # option CYG_HAL_STARTUP_VAR
-    #     DefaultValue: 
-    #                     (CYG_HAL_STARTUP_PLF) && (CYG_HAL_STARTUP_PLF!="ByVariant") ?
-    #                     "ByPlatform" : "ROM" 
-    # option CYG_HAL_STARTUP_VAR
-    #     DefaultValue: 
-    #                     (CYG_HAL_STARTUP_PLF) && (CYG_HAL_STARTUP_PLF!="ByVariant") ?
-    #                     "ByPlatform" : "ROM" 
-    # option CYG_HAL_STARTUP_VAR
-    #     ActiveIf: ((!CYG_HAL_STARTUP_PLF) || (CYG_HAL_STARTUP_PLF=="ByVariant"))
-    # option CYG_HAL_STARTUP_VAR
-    #     ActiveIf: ((!CYG_HAL_STARTUP_PLF) || (CYG_HAL_STARTUP_PLF=="ByVariant"))
 };
 
 # <
@@ -8305,54 +8481,6 @@ cdl_option CYGHWR_HAL_CORTEXM_KINETIS_FLEXNVM_KIB {
 };
 
 # <
-# Memory layout
-# Combination of 'Startup type' and 'Kinetis part'
-# produces the memory layout.
-#
-cdl_component CYGHWR_MEMORY_LAYOUT {
-    # Calculated value: 
-    #                 (CYGHWR_MEMORY_LAYOUT_PLF) ? CYGHWR_MEMORY_LAYOUT_PLF :
-    #                 (CYG_HAL_STARTUP == "ROM" ) ? "kinetis_"
-    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
-    #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
-    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
-    #                 "undefined" 
-    #     CYGHWR_MEMORY_LAYOUT_PLF == kinetis_unisram_mram
-    #     CYGHWR_MEMORY_LAYOUT_PLF == kinetis_unisram_mram
-    #     CYG_HAL_STARTUP == MRAM
-    #     CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT == flash_unisram
-    #     CYG_HAL_STARTUP == MRAM
-    #     CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT == flash_unisram
-    # Flavor: data
-    # Current_value: kinetis_unisram_mram
-
-    # The following properties are affected by this value
-    # option CYGHWR_MEMORY_LAYOUT_LDI
-    #     Calculated:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".ldi>" 
-    # option CYGHWR_MEMORY_LAYOUT_H
-    #     Calculated:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".h>" 
-};
-
-# >
-# Memory layout linker script fragment
-#
-cdl_option CYGHWR_MEMORY_LAYOUT_LDI {
-    # Calculated value:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".ldi>" 
-    #     CYGHWR_MEMORY_LAYOUT == kinetis_unisram_mram
-    # Flavor: data
-    # Current_value: <pkgconf/mlt_kinetis_unisram_mram.ldi>
-};
-
-# Memory layout header file
-#
-cdl_option CYGHWR_MEMORY_LAYOUT_H {
-    # Calculated value:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".h>" 
-    #     CYGHWR_MEMORY_LAYOUT == kinetis_unisram_mram
-    # Flavor: data
-    # Current_value: <pkgconf/mlt_kinetis_unisram_mram.h>
-};
-
-# <
 # Unified on chip SRAM region
 # Kinetis have two equal SRAM banks SRAM_L and SRAM_U that
 # occupy consecutive memory blocks with (possibility for
@@ -8392,8 +8520,9 @@ cdl_option CYGOPT_HAL_KINETIS_MISC_FLASH_SECTION {
     #   --> 0
 
     # Flavor: bool
-    user_value 0
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
     # Default value:  CYG_HAL_STARTUP == "ROM" 
     #     CYG_HAL_STARTUP == MRAM
     #   --> 0
@@ -8605,6 +8734,22 @@ cdl_option CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT {
     #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
     #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
     #                 "undefined" 
+    # option CYGHWR_MEMORY_LAYOUT_PLF
+    #     Calculated: 
+    #                 (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+    #                 (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+    #                 (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 "undefined_by_PLF" 
+    # option CYGHWR_MEMORY_LAYOUT_PLF
+    #     Calculated: 
+    #                 (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+    #                 (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+    #                 (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 "undefined_by_PLF" 
 };
 
 # Kinetis on chip FLASH size
@@ -9311,6 +9456,18 @@ cdl_interface CYGINT_HAL_FREESCALE_UART5_RTSCTS {
     # Current value: 0
 };
 
+# Platform uses DMA
+# This interface will be implemented if the specific
+# controller being used provides DMA and if DMA is
+# used on target hardware
+#
+cdl_interface CYGINT_HAL_DMA {
+    # No options implement this inferface
+    # This value cannot be modified here.
+    # Flavor: bool
+    # Current value: 0
+};
+
 # Build options
 # Package specific build options including control over
 # compiler flags used only in building this package.
@@ -9347,7 +9504,7 @@ cdl_option CYGPKG_HAL_CORTEXM_KINETIS_CFLAGS_REMOVE {
 };
 
 # <
-# Freescale Kinetis TWR-K60N512 Platform MRAM Test!!!!
+# Freescale Kinetis TWR-K60N512 Platform MRAM
 # The Freescale TWR K60N512 Platform HAL package provides the support
 # needed to run eCos on the TWR K60N512 development system. This package
 # can also be used for other boards that employ a controller from Kinetis
@@ -9377,19 +9534,295 @@ cdl_package CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM {
 };
 
 # >
+# Startup type
+# Startup type configuration defines the system memory layout.
+# Startup type  can be defined by the variant (CYG_HAL_STARTUP_VAR)
+# or a platform (CYG_HAL_STARTUP_PLF). If CYG_HAL_STARTUP_PLF
+# is defined and not equal to 'ByVariant' then it shall
+# override CYG_HAL_STARTUP_VAR.
+#
+cdl_component CYG_HAL_STARTUP_ENV {
+    # Calculated value: 
+    #                 !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+    #                 ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+    #                 (CYG_HAL_STARTUP . "(Variant)") :
+    #                 (CYG_HAL_STARTUP . "(Platform)"))
+    #             
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP == MRAM
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP == MRAM
+    #     CYG_HAL_STARTUP == MRAM
+    # Flavor: data
+    # Current_value: MRAM(Platform)
+
+    # The following properties are affected by this value
+};
+
+# >
+# By platform
+# Startup tupes provided by the platform, in addition to variant startup
+# types.
+# If 'ByVariant' is selected, then startup type shall be selected from
+# the variant (CYG_HAL_STARTUP_VAR). Platform's 'ROM' startup builds
+# application similar to Variant's 'ROM' but using external MRAM (FlexBus).
+# 'MRAM' startup builds application intended for loading by OpenOCD into
+# external MRAM.
+#
+cdl_option CYG_HAL_STARTUP_PLF {
+    # Flavor: data
+    user_value MRAM
+    # value_source user
+    # Default value: ROM
+    # Legal values:  "ByVariant" "ROM" "MRAM" 
+
+    # The following properties are affected by this value
+    # component CYG_HAL_STARTUP_ENV
+    #     Calculated: 
+    #                 !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+    #                 ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+    #                 (CYG_HAL_STARTUP . "(Variant)") :
+    #                 (CYG_HAL_STARTUP . "(Platform)"))
+    #             
+    # component CYG_HAL_STARTUP_ENV
+    #     Calculated: 
+    #                 !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+    #                 ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+    #                 (CYG_HAL_STARTUP . "(Variant)") :
+    #                 (CYG_HAL_STARTUP . "(Platform)"))
+    #             
+    # option CYGHWR_MEMORY_LAYOUT_PLF
+    #     Calculated: 
+    #                 (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+    #                 (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+    #                 (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 "undefined_by_PLF" 
+    # option CYG_HAL_STARTUP_VAR
+    #     DefaultValue: 
+    #                 (CYG_HAL_STARTUP_PLF) && (CYG_HAL_STARTUP_PLF!="ByVariant") ?
+    #                 "ByPlatform" : "ROM" 
+    # option CYG_HAL_STARTUP_VAR
+    #     DefaultValue: 
+    #                 (CYG_HAL_STARTUP_PLF) && (CYG_HAL_STARTUP_PLF!="ByVariant") ?
+    #                 "ByPlatform" : "ROM" 
+    # option CYG_HAL_STARTUP_VAR
+    #     ActiveIf: ((!CYG_HAL_STARTUP_PLF) || (CYG_HAL_STARTUP_PLF=="ByVariant"))
+    # option CYG_HAL_STARTUP_VAR
+    #     ActiveIf: ((!CYG_HAL_STARTUP_PLF) || (CYG_HAL_STARTUP_PLF=="ByVariant"))
+    # component CYG_HAL_STARTUP
+    #     Calculated: 
+    #                     (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
+    #                     CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
+    #                 
+    # component CYG_HAL_STARTUP
+    #     Calculated: 
+    #                     (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
+    #                     CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
+    #                 
+    # component CYG_HAL_STARTUP
+    #     Calculated: 
+    #                     (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
+    #                     CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
+    #                 
+};
+
+# By variant
+# 'ROM' startup builds a stand-alone application which will
+# be placed into flash. SRAM startup builds application
+# intended for loading in on-chip SRAM by means of JTAG/SWD.
+# Note: Variant Startup Type can be overriden/overloaded by
+# Platform Startup Type.
+#
+cdl_option CYG_HAL_STARTUP_VAR {
+    # This option is not active
+    # ActiveIf constraint: ((!CYG_HAL_STARTUP_PLF) || (CYG_HAL_STARTUP_PLF=="ByVariant"))
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #   --> 0
+
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ByPlatform
+    # value_source default
+    # Default value: 
+    #                 (CYG_HAL_STARTUP_PLF) && (CYG_HAL_STARTUP_PLF!="ByVariant") ?
+    #                 "ByPlatform" : "ROM" 
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #   --> ByPlatform
+    # Legal values:  "ROM" "SRAM" 
+
+    # The following properties are affected by this value
+    # component CYG_HAL_STARTUP
+    #     Calculated: 
+    #                     (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
+    #                     CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
+    #                 
+};
+
+# Startup type calculator
+# Startup type defines what type of application shall be built.
+# Startup type  can be defined by variant (CYG_HAL_STARTUP_VAR)
+# or platform (CYG_HAL_STARTUP_PLF). If CYG_HAL_STARTUP_PLF
+# is defined and not equal to 'ByVariant' then it shall
+# override CYG_HAL_STARTUP_VAR.
+#
+cdl_component CYG_HAL_STARTUP {
+    # Calculated value: 
+    #                     (CYG_HAL_STARTUP_PLF && (CYG_HAL_STARTUP_PLF!="ByVariant")) ?
+    #                     CYG_HAL_STARTUP_PLF : CYG_HAL_STARTUP_VAR
+    #                 
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP_VAR == 0
+    # Flavor: data
+    # Current_value: MRAM
+
+    # The following properties are affected by this value
+    # component CYGHWR_MEMORY_LAYOUT
+    #     Calculated: 
+    #                 (CYGHWR_MEMORY_LAYOUT_PLF) ? CYGHWR_MEMORY_LAYOUT_PLF :
+    #                 (CYG_HAL_STARTUP == "ROM" ) ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
+    #                 "undefined" 
+    # component CYGHWR_MEMORY_LAYOUT
+    #     Calculated: 
+    #                 (CYGHWR_MEMORY_LAYOUT_PLF) ? CYGHWR_MEMORY_LAYOUT_PLF :
+    #                 (CYG_HAL_STARTUP == "ROM" ) ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
+    #                 "undefined" 
+    # option CYGOPT_HAL_KINETIS_MISC_FLASH_SECTION
+    #     DefaultValue:  CYG_HAL_STARTUP == "ROM" 
+    # option CYGOPT_HAL_KINETIS_MISC_FLASH_SECTION
+    #     ActiveIf:  CYG_HAL_STARTUP == "ROM" 
+    # component CYGHWR_HAL_KINETIS_FLASH_CONF
+    #     ActiveIf:  CYG_HAL_STARTUP == "ROM" 
+    # component CYG_HAL_STARTUP_ENV
+    #     Calculated: 
+    #                 !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+    #                 ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+    #                 (CYG_HAL_STARTUP . "(Variant)") :
+    #                 (CYG_HAL_STARTUP . "(Platform)"))
+    #             
+    # component CYG_HAL_STARTUP_ENV
+    #     Calculated: 
+    #                 !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+    #                 ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+    #                 (CYG_HAL_STARTUP . "(Variant)") :
+    #                 (CYG_HAL_STARTUP . "(Platform)"))
+    #             
+    # component CYG_HAL_STARTUP_ENV
+    #     Calculated: 
+    #                 !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+    #                 ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+    #                 (CYG_HAL_STARTUP . "(Variant)") :
+    #                 (CYG_HAL_STARTUP . "(Platform)"))
+    #             
+    # option CYGHWR_MEMORY_LAYOUT_PLF
+    #     Calculated: 
+    #                 (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+    #                 (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+    #                 (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 "undefined_by_PLF" 
+    # option CYGHWR_MEMORY_LAYOUT_PLF
+    #     Calculated: 
+    #                 (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+    #                 (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+    #                 (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 "undefined_by_PLF" 
+    # option CYGSEM_HAL_ROM_MONITOR
+    #     Requires:  CYG_HAL_STARTUP == "ROM" 
+    # option CYGSEM_HAL_USE_ROM_MONITOR
+    #     DefaultValue:  CYG_HAL_STARTUP == "MRAM" ? "GDB_stubs" : 0 
+    # option CYGSEM_HAL_USE_ROM_MONITOR
+    #     Requires:  CYG_HAL_STARTUP == "MRAM" 
+    # component CYGBLD_HAL_CORTEXM_TWR_MK60N512_GDB_STUBS
+    #     Requires:  CYG_HAL_STARTUP == "ROM" 
+    # option CYGSEM_HAL_INSTALL_MMU_TABLES
+    #     DefaultValue:  CYG_HAL_STARTUP != "RAM" 
+    # component CYGDBG_HAL_DIAG_TO_DEBUG_CHAN
+    #     DefaultValue:  (CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS  || CYG_HAL_STARTUP == "RAM") ? 1 : 0
+    # option CYGSEM_HAL_VIRTUAL_VECTOR_INIT_WHOLE_TABLE
+    #     DefaultValue:  CYG_HAL_STARTUP != "RAM" || !CYGSEM_HAL_USE_ROM_MONITOR 
+};
+
 # Memory layout
 # Combination of 'Startup type' and 'Kinetis part'
 # produces the memory layout.
 #
-cdl_component CYGHWR_MEMORY_LAYOUT_PLF {
+cdl_component CYGHWR_MEMORY_LAYOUT {
     # Calculated value: 
-    #                 (CYG_HAL_STARTUP_PLF == "MRAM" ) ? "kinetis_unisram_mram" :
-    #                 (CYG_HAL_STARTUP_PLF == "ROM" ) ? "kinetis_unisram_rom" :
+    #                 (CYGHWR_MEMORY_LAYOUT_PLF) ? CYGHWR_MEMORY_LAYOUT_PLF :
+    #                 (CYG_HAL_STARTUP == "ROM" ) ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 (CYG_HAL_STARTUP == "SRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_sram" :
     #                 "undefined" 
-    #     CYG_HAL_STARTUP_PLF == MRAM
-    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYGHWR_MEMORY_LAYOUT_PLF == kinetis_flash_unisram_mram
+    #     CYGHWR_MEMORY_LAYOUT_PLF == kinetis_flash_unisram_mram
+    #     CYG_HAL_STARTUP == MRAM
+    #     CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT == flash_unisram
+    #     CYG_HAL_STARTUP == MRAM
+    #     CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT == flash_unisram
     # Flavor: data
-    # Current_value: kinetis_unisram_mram
+    # Current_value: kinetis_flash_unisram_mram
+
+    # The following properties are affected by this value
+    # option CYGHWR_MEMORY_LAYOUT_LDI
+    #     Calculated:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".ldi>" 
+    # option CYGHWR_MEMORY_LAYOUT_H
+    #     Calculated:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".h>" 
+};
+
+# >
+# Memory layout linker script fragment
+#
+cdl_option CYGHWR_MEMORY_LAYOUT_LDI {
+    # Calculated value:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".ldi>" 
+    #     CYGHWR_MEMORY_LAYOUT == kinetis_flash_unisram_mram
+    # Flavor: data
+    # Current_value: <pkgconf/mlt_kinetis_flash_unisram_mram.ldi>
+};
+
+# Memory layout header file
+#
+cdl_option CYGHWR_MEMORY_LAYOUT_H {
+    # Calculated value:  "<pkgconf/mlt_" . CYGHWR_MEMORY_LAYOUT . ".h>" 
+    #     CYGHWR_MEMORY_LAYOUT == kinetis_flash_unisram_mram
+    # Flavor: data
+    # Current_value: <pkgconf/mlt_kinetis_flash_unisram_mram.h>
+};
+
+# Memory layout by platform
+# Combination of 'Startup type' and 'Kinetis member in use'
+# produces the memory layout.
+#
+cdl_option CYGHWR_MEMORY_LAYOUT_PLF {
+    # Calculated value: 
+    #                 (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+    #                 (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+    #                 (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+    #                 . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+    #                 "undefined_by_PLF" 
+    #     CYG_HAL_STARTUP_PLF == MRAM
+    #     CYG_HAL_STARTUP == MRAM
+    #     CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT == flash_unisram
+    #     CYG_HAL_STARTUP == MRAM
+    #     CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT == flash_unisram
+    # Flavor: data
+    # Current_value: kinetis_flash_unisram_mram
 
     # The following properties are affected by this value
     # component CYGHWR_MEMORY_LAYOUT
@@ -9410,6 +9843,8 @@ cdl_component CYGHWR_MEMORY_LAYOUT_PLF {
     #                 "undefined" 
 };
 
+# <
+# <
 # Number of communication channels on the board
 #
 cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS {
@@ -9428,15 +9863,14 @@ cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS {
 };
 
 # Debug serial port
-# The TWR board has one serial port fitted to RS232 connector.
-# This option chooses which port will be used to connect to a host
+# The TWR board has one serial port fitted to RS232 connector. This option
+# chooses which port will be used to connect to a host
 # running GDB.
 #
 cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL {
-    # This option is not active
     # ActiveIf constraint: CYGPRI_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_CONFIGURABLE
-    #     CYGPRI_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_CONFIGURABLE == 0
-    #   --> 0
+    #     CYGPRI_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_CONFIGURABLE == 1
+    #   --> 1
 
     # Flavor: data
     # No user value, uncomment the following line to provide one.
@@ -9448,8 +9882,8 @@ cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL {
 };
 
 # Diagnostic serial port
-# The TWR has one serial port fitted to RS232 connector.
-# This option chooses which port will be used for diagnostic output.
+# The TWR has one serial port fitted to RS232 connector. This option
+# chooses which port will be used for diagnostic output.
 #
 cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL {
     # ActiveIf constraint: CYGPRI_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_CONFIGURABLE
@@ -9483,8 +9917,8 @@ cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD {
 # GDB serial port baud rate
 # This option controls the default baud rate used for the
 # GDB connection.
-# Note: this should match the value chosen for the console port
-# if the console and GDB port are the same.
+# Note: this should match the value chosen for the console port if the
+# console and GDB port are the same.
 #
 cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_BAUD {
     # Flavor: data
@@ -10341,10 +10775,10 @@ cdl_package CYGPKG_KERNEL {
     #     ActiveIf: CYGPKG_KERNEL
     # option CYGSEM_LIBC_STRING_PER_THREAD_STRTOK
     #     ActiveIf: CYGPKG_KERNEL
-    # package CYGPKG_CPULOAD
-    #     Requires: CYGPKG_KERNEL
     # option CYGSEM_LIBC_I18N_PER_THREAD_MB
     #     ActiveIf: CYGPKG_KERNEL
+    # package CYGPKG_CPULOAD
+    #     Requires: CYGPKG_KERNEL
 };
 
 # >
@@ -10415,8 +10849,9 @@ cdl_interface CYGINT_KERNEL_INTERRUPTS_DSRS {
 #
 cdl_component CYGIMP_KERNEL_INTERRUPTS_DSRS_LIST {
     # Flavor: bool
-    user_value 1
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
     # Default value: 1
 };
 
@@ -10453,8 +10888,9 @@ cdl_option CYGSEM_KERNEL_INTERRUPTS_DSRS_LIST_FIFO {
 #
 cdl_component CYGIMP_KERNEL_INTERRUPTS_DSRS_TABLE {
     # Flavor: bool
-    user_value 0
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
     # Default value: 0
 };
 
@@ -10488,12 +10924,13 @@ cdl_option CYGNUM_KERNEL_INTERRUPTS_DSRS_TABLE_SIZE {
 #
 cdl_option CYGIMP_KERNEL_INTERRUPTS_CHAIN {
     # Flavor: bool
-    user_value 1
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
     # Default value: 0
     # Requires: CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN
-    #     CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN == 1
-    #   --> 1
+    #     CYGIMP_HAL_COMMON_INTERRUPTS_CHAIN == 0
+    #   --> 0
 };
 
 # <
@@ -10791,8 +11228,9 @@ cdl_component CYGSEM_KERNEL_SCHED_TIMESLICE {
 #
 cdl_option CYGNUM_KERNEL_SCHED_TIMESLICE_TICKS {
     # Flavor: data
-    user_value 1
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 5
+    # value_source default
     # Default value: 5
     # Legal values: 1 to 65535
 };
@@ -11803,8 +12241,9 @@ cdl_option CYGMFN_KERNEL_SYNCH_MBOXT_PUT_CAN_WAIT {
 #
 cdl_option CYGNUM_KERNEL_SYNCH_MBOX_QUEUE_SIZE {
     # Flavor: data
-    user_value 64
-    # value_source user
+    # No user value, uncomment the following line to provide one.
+    # user_value 10
+    # value_source default
     # Default value: 10
     # Legal values: 1 to 65535
 };
@@ -13684,12 +14123,12 @@ cdl_option CYGBLD_ISO_STDLIB_STRCONV_HEADER {
 # String to FP conversion function implementations
 #
 cdl_interface CYGINT_ISO_STDLIB_STRCONV_FLOAT {
-    # Implemented by CYGFUN_LIBC_strtod, active, enabled
+    # Implemented by CYGFUN_LIBC_strtod, active, disabled
     # This value cannot be modified here.
     # Flavor: data
-    # Current_value: 1
+    # Current_value: 0
     # Requires:  1 >= CYGINT_ISO_STDLIB_STRCONV_FLOAT 
-    #     CYGINT_ISO_STDLIB_STRCONV_FLOAT == 1
+    #     CYGINT_ISO_STDLIB_STRCONV_FLOAT == 0
     #   --> 1
 
     # The following properties are affected by this value
