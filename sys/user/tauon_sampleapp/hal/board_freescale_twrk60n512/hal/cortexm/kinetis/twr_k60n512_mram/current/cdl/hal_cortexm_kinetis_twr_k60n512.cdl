@@ -47,7 +47,7 @@
 ##==========================================================================
 
 cdl_package CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM {
-    display       "Freescale Kinetis TWR-K60N512 Platform MRAM Test!!!!"
+    display       "Freescale Kinetis TWR-K60N512 Platform MRAM"
     parent        CYGPKG_HAL_CORTEXM_KINETIS
     define_header hal_cortexm_kinetis_twr_k60n512.h
     include_dir   cyg/hal
@@ -78,43 +78,60 @@ cdl_package CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM {
         puts $::cdl_header "#define HAL_PLATFORM_EXTRA  \"\""
     }
 
-    #
-    cdl_option CYG_HAL_STARTUP_PLF {
-        display       "By platform"
-        flavor        data
-        parent        CYG_HAL_STARTUP
-        default_value {"MRAM"}
-        legal_values  {"ByVariant" "ROM" "MRAM"}
-        no_define       
-        description   "
-        Startup tupes provided by the platform, in addition to variant
-startup types.
-        If 'ByVariant' is selected, then
-        startup type shall be selected from the variant
-(CYG_HAL_STARTUP_VAR).
-        'MRAM' startup builds application for MRAM debug.
-        'RAM' not used."
-    }
-    
-    cdl_component CYGHWR_MEMORY_LAYOUT_PLF {
-        display "Memory layout"
+    cdl_component CYG_HAL_STARTUP_ENV {
+        display "Startup type"
         flavor data
         no_define
         calculated {
-            (CYG_HAL_STARTUP_PLF == "MRAM" ) ? "kinetis_unisram_mram" :
-            (CYG_HAL_STARTUP_PLF == "ROM" ) ? "kinetis_unisram_rom" :
-            "undefined" }
+            !CYG_HAL_STARTUP_PLF ? CYG_HAL_STARTUP :
+            ((CYG_HAL_STARTUP_PLF == "ByVariant") ?
+            (CYG_HAL_STARTUP . "(Variant)") :
+            (CYG_HAL_STARTUP . "(Platform)"))
+        }
         description "
-            Combination of 'Startup type' and 'Kinetis part'
-            produces the memory layout."
+            Startup type configuration defines the system memory layout.
+            Startup type  can be defined by the variant (CYG_HAL_STARTUP_VAR)
+            or a platform (CYG_HAL_STARTUP_PLF). If CYG_HAL_STARTUP_PLF
+            is defined and not equal to 'ByVariant' then it shall
+            override CYG_HAL_STARTUP_VAR."
     }
-    
+
+    cdl_option CYG_HAL_STARTUP_PLF {
+        display       "By platform"
+        flavor        data
+        parent        CYG_HAL_STARTUP_ENV
+        default_value { "ROM" }
+        legal_values  { "ByVariant" "ROM" "MRAM" }
+        description   "
+        Startup tupes provided by the platform, in addition to variant startup
+        types.
+        If 'ByVariant' is selected, then startup type shall be selected from
+        the variant (CYG_HAL_STARTUP_VAR). Platform's 'ROM' startup builds
+        application similar to Variant's 'ROM' but using external MRAM (FlexBus).
+        'MRAM' startup builds application intended for loading by OpenOCD into
+        external MRAM."
+    }
+
+    cdl_option CYGHWR_MEMORY_LAYOUT_PLF {
+        display "Memory layout by platform"
+        flavor data
+        no_define
+        parent  CYGHWR_MEMORY_LAYOUT
+        calculated {
+            (CYG_HAL_STARTUP_PLF == "ByVariant" ) ? 0 :
+            (CYG_HAL_STARTUP == "MRAM") ? "kinetis_"
+            . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_mram" :
+            (CYG_HAL_STARTUP == "ROM") ? "kinetis_"
+            . CYGHWR_HAL_CORTEXM_KINETIS_OC_MEM_LAYOUT  . "_rom" :
+            "undefined_by_PLF" }
+        description "Combination of 'Startup type' and 'Kinetis member in use'
+        produces the memory layout."
+    }
+
     cdl_option CYGHWR_HAL_CORTEXM_KINETIS_PLF_XTAL_OR_OSC_FREQ {
         display "Platform Clock Frequency"
         flavor data
         parent CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT
-        active_if { CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "OSC" ||
-                   CYGOPT_HAL_CORTEXM_KINETIS_MCG_REF_EXT_IS == "XTAL" }
         default_value 50000000
         legal_values { 25000000 50000000 }
     }
@@ -131,7 +148,7 @@ startup types.
     cdl_option CYGHWR_HAL_CORTEXM_KINETIS_PLF_RTC {
         display "Platform requred RTC XTAL || C \[pF\]"
         flavor bool
-        default_value 0
+        default_value 1
         parent CYGHWR_HAL_CORTEXM_KINETIS_RTC
         requires { CYGHWR_HAL_CORTEXM_KINETIS_RTC_OSC_CAP == 20 }
     }
@@ -150,9 +167,9 @@ startup types.
         legal_values     0 to CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS-1
         default_value    0
         description      "
-            The TWR board has one serial port fitted to RS232 connector.
-            This option chooses which port will be used to connect to a host
-            running GDB."
+        The TWR board has one serial port fitted to RS232 connector. This option
+        chooses which port will be used to connect to a host
+        running GDB."
     }
 
     cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL {
@@ -162,8 +179,8 @@ startup types.
         legal_values     0 to CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS-1
         default_value    0
         description      "
-            The TWR has one serial port fitted to RS232 connector.
-            This option chooses which port will be used for diagnostic output."
+        The TWR has one serial port fitted to RS232 connector. This option
+        chooses which port will be used for diagnostic output."
     }
 
     cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD {
@@ -184,10 +201,10 @@ startup types.
         legal_values  9600 19200 38400 57600 115200
         default_value 38400
         description   "
-            This option controls the default baud rate used for the
-            GDB connection.
-            Note: this should match the value chosen for the console port
-            if the console and GDB port are the same."
+        This option controls the default baud rate used for the
+        GDB connection.
+        Note: this should match the value chosen for the console port if the
+        console and GDB port are the same."
     }
 
     cdl_option CYGHWR_FREESCALE_ENET_MII_MDC_HAL_CLOCK {
@@ -214,6 +231,8 @@ startup types.
             Digital I/O provided by HAL for ENET IEEE 1588 timers."
     }
 
+
+
     cdl_component CYGBLD_GLOBAL_OPTIONS {
         display "Global build options"
         flavor  none
@@ -222,15 +241,14 @@ startup types.
         Global build options including control over
         compiler flags, linker flags and choice of toolchain."
 
-
         cdl_option CYGBLD_GLOBAL_COMMAND_PREFIX {
             display "Global command prefix"
             flavor  data
             no_define
             default_value { "arm-eabi" }
             description "
-                This option specifies the command prefix used when
-                invoking the build tools."
+            This option specifies the command prefix used when
+            invoking the build tools."
         }
 
         cdl_option CYGBLD_GLOBAL_CFLAGS {
@@ -260,37 +278,36 @@ startup types.
         flavor        bool
         default_value 0
         parent        CYGPKG_HAL_ROM_MONITOR
-        requires      { CYG_HAL_STARTUP == "ROM" || CYG_HAL_STARTUP == "JTAG" }
+        requires      { CYG_HAL_STARTUP == "ROM" }
         requires      { CYGDBG_HAL_CRCTABLE_LOCATION == "ROM" }
         description   "
-            Enable this option if this program is to be used as a ROM monitor,
-            i.e. applications will be loaded into RAM on the board, and this
-            ROM monitor may process exceptions or interrupts generated from the
-            application. This enables features such as utilizing a separate
-            interrupt stack when exceptions are generated."
+        Enable this option if this program is to be used as a ROM monitor,
+        i.e. applications will be loaded into MRAM on the board, and this
+        ROM monitor may process exceptions or interrupts generated from the
+        application. This enables features such as utilizing a separate
+        interrupt stack when exceptions are generated."
     }
 
     cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
         display       "Work with a ROM monitor"
         flavor        booldata
         legal_values  { "Generic" "GDB_stubs" }
-        default_value { CYG_HAL_STARTUP == "RAM" ? "GDB_stubs" : 0 }
+        default_value { CYG_HAL_STARTUP == "MRAM" ? "GDB_stubs" : 0 }
         parent        CYGPKG_HAL_ROM_MONITOR
-        requires      { CYG_HAL_STARTUP == "RAM" }
+        requires      { CYG_HAL_STARTUP == "MRAM" }
         description   "
-            Support can be enabled for different varieties of ROM monitor.
-            This support changes various eCos semantics such as the encoding
-            of diagnostic output, or the overriding of hardware interrupt
-            vectors.
-            Firstly there is \"Generic\" support which prevents the HAL
-            from overriding the hardware vectors that it does not use, to
-            instead allow an installed ROM monitor to handle them. This is
-            the most basic support which is likely to be common to most
-            implementations of ROM monitor.
-            \"GDB_stubs\" provides support when GDB stubs are included in
-            the ROM monitor or boot ROM."
+        Support can be enabled for different varieties of ROM monitor.
+        This support changes various eCos semantics such as the encoding
+        of diagnostic output, or the overriding of hardware interrupt
+        vectors.
+        Firstly there is \"Generic\" support which prevents the HAL
+        from overriding the hardware vectors that it does not use, to
+        instead allow an installed ROM monitor to handle them. This is
+        the most basic support which is likely to be common to most
+        implementations of ROM monitor.
+        \"GDB_stubs\" provides support when GDB stubs are included in
+        the ROM monitor or boot ROM."
     }
-
 
     cdl_component CYGBLD_HAL_CORTEXM_TWR_MK60N512_GDB_STUBS {
         display "Create StubROM SREC and binary files"
@@ -308,9 +325,8 @@ startup types.
             $(OBJCOPY) -O binary $< $@
         }
 
-        description "
-            This component causes the ELF image generated by the
-            build process to be converted to S-Record and binary
-            files."
+        description "This component causes the ELF image generated by the
+        build process to be converted to S-Record and binary
+        files."
     }
 }
