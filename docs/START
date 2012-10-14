@@ -202,6 +202,11 @@ add all ARM or CORTEX architecture supported by eCos with some
 modifications and good configuration file (ecos.ecc)
 $ cp -Rf ~/tauon/sys/user/tauon_sampleapp/hal/board_freescale_twrk60n512 hal
 
+Copy driver and binary files
+$ mkdir src/dev
+$ cp -rf ~/tauon/sys/user/tauon_sampleapp/src/dev/board_freescale_twrk60n512/ src/dev/
+$ cp ~/tauon/sys/user/tauon_sampleapp/src/tsti2c.c src/
+$ cp ~/tauon/sys/user/tauon_sampleapp/src/tstleds.c src
 
 Application building (TWR-K60N512 target with MRAM)
 '''''''''''''''''''''''''''''''''''''''''''''''''''
