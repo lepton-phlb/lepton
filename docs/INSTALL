@@ -85,11 +85,6 @@ $ cd lepton
 $ sh tauon_ln.sh (create a symlink in ~)
 $ cd ~/tauon
 
-Replace user name in virtual_cpu configuration file
-$ cd ~/tauon/tools/virtual_cpu/prj/scons/
-$ vi virtual_cpu_opts.py (replace /home/user by your current user
-in this case /home/kvm)
-
 Compile tauon_sample application for target and simulation
 $ cd ~/tauon/tools/config
 $ scons BUILD_MKLEPTON=True BUILD_VIRTUALCPU=True BUILD_SAMPLEAPP=True
