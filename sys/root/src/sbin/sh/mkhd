@@ -1,0 +1,10 @@
+#! lsh 
+#format $3
+#Exemple: mkhd 120 1000 /dev/hd/hde format hde device (eeprom)
+cd /
+pwd
+umount /etc
+#warning!!! format $3 (eeprom) 
+mkfs -t ufs -n $1 -b $2 -d $3
+mount -t ufs $3 /etc
+exit

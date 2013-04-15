@@ -1,0 +1,5 @@
+#
+mount /dev/sd /dev/mci /dev/hd/sd0
+net/ifconfig addif 14.2.212.238 14.2.10.1
+bin/net/telnetd&
+bin/net/mongoosed -cgi_interp lsh &

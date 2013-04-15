@@ -1,0 +1,9 @@
+#! lsh 
+#format hdb
+cd /
+pwd
+umount /etc
+#warning!!! format hdb (eeprom bank1) 
+mkfs -t ufs -n $1 -b $2 -d /dev/hd/hdb
+mount -t ufs /dev/hd/hdb /etc
+exit

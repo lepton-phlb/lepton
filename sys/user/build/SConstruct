@@ -1,0 +1,300 @@
+#
+#The contents of this file are subject to the Mozilla Public License Version 1.1 
+#(the "License"); you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at http://www.mozilla.org/MPL/
+#
+#Software distributed under the License is distributed on an "AS IS" basis, 
+#WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+#specific language governing rights and limitations under the License.
+#
+#The Original Code is Lepton.
+#
+#The Initial Developer of the Original Code is Philippe Le Boulanger.
+#Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+#All Rights Reserved.
+#
+#Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+#
+#Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+#(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+#instead of those above. If you wish to allow use of your version of this file only under the
+#terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+#the MPL, indicate your decision by deleting  the provisions above and replace 
+#them with the notice and other provisions required by the [eCos GPL] License. 
+#If you do not delete the provisions above, a recipient may use your version of this file under 
+#either the MPL or the [eCos GPL] License."
+#
+#python module
+import os
+from tauon import *
+
+#Help for scons file
+Help("""
+build application for tauon synthetic target
+clean, compile then install virtual_cpu
+scons -c [--targetfile=target_file]; scons -Q [--targetfile=target_file] bin
+""")
+
+#directories
+base_dir = os.getenv('HOME') + '/tauon/sys/'
+base_dir_root = base_dir + 'root/'
+base_dir_prj_scons = base_dir_root + 'prj/scons/'
+
+config_dir = base_dir_root + '/prj/config'
+base_dir_user = base_dir + 'user/'
+
+### VARIABLES AND OPTIONS ###
+#file argument to get various parameter
+AddOption('--targetfile',
+	dest='targetfile',
+	type='string',
+	nargs=1,
+	action='store',
+	metavar='DIR',
+	help='file to get architecture variables',
+	default='synthetic_opts.py')
+
+#define variable to choose arch
+tauon_build_vars = Variables(GetOption('targetfile'))
+
+tauon_build_vars.Add(EnumVariable('COMPILER_CC', 'C compiler to use.', 'gcc',
+			allowed_values=('gcc', 'i386-lenny-gcc', 'arm-eabi-gcc', 'gcc-4.3', 'i386-elf-gcc')))
+
+tauon_build_vars.Add(EnumVariable('COMPILER_CXX', 'C++ compiler to use.', 'g++',
+			allowed_values=('g++', 'i386-lenny-g++', 'arm-eabi-g++', 'g++-4.3', 'i386-elf-g++')))
+
+tauon_build_vars.Add(EnumVariable('ARCHIVER', 'Archiver to use.', 'ar',
+			allowed_values=('ar', 'i386-lenny-ar', 'arm-eabi-ar', 'i386-elf-ar')))
+
+tauon_build_vars.Add(EnumVariable('ARCHIVE_INDEXER', 'Index generat for archive to use.', 'ranlib',
+			allowed_values=('ranlib', 'i386-lenny-ranlib', 'arm-eabi-ranlib', 'i386-elf-ranlib')))
+
+#
+tauon_build_vars.Add(EnumVariable('ARCH', 'Set architure to use.', 'CPU_GNU32',
+			allowed_values=('CPU_GNU32', 'CPU_ARM7', 'CPU_ARM9', 'CPU_CORTEXM')))
+
+#
+tauon_build_vars.Add(EnumVariable('PLATEFORME', 'Set plateform directory to use.', 'synthetic/x86/',
+			allowed_values=('synthetic/x86/', 'arm7/at91m55800a/', 'arm9/at91sam9261/', 'arm9/at91sam9260/', 'cortexm/k60n512/')))
+
+tauon_build_vars.Add(EnumVariable('TARGET_SUFFIX', 'Suffix to tauon generated binary.\nExample TARGET_SUFFIX=\'at91sam9261\' give binary tauon_at91sam9261.elf', 'synthetic',
+			allowed_values=('synthetic', 'at91m55800a', 'at91sam9261', 'at91sam9260', 'k60n512')))
+
+#
+tauon_build_vars.Add(EnumVariable('DEBUG_LEVEL', 'One support debug level now.\nMaybe add something else.', '-gdwarf-2 -g3',
+			allowed_values=('-gdwarf-2 -g3', ' ')))
+
+#
+tauon_build_vars.Add(EnumVariable('OPTS_APP', 'Set default application optimisation flags.', '-O0',
+			allowed_values=('-O0', '-O1', '-O2', '-O3', '-Os')))
+#
+tauon_build_vars.Add(EnumVariable('OPTS_KERNEL', 'Set default kernel optimisation flags.', '-O0',
+			allowed_values=('-O0', '-O1', '-O2', '-O3', '-Os')))
+#
+tauon_build_vars.Add(BoolVariable('NANOX', 'Use NANOX and/or FLNX libraries.', 0))
+tauon_build_vars.Add(EnumVariable('OPTS_NANOX', 'Set default NANOX library optimisation flags.', '-O0',
+			allowed_values=('-O0', '-O1', '-O2', '-O3', '-Os')))
+tauon_build_vars.Add(ListVariable('FONTS_NANOX', 'Set NANOX fonts', '',
+			['FONT_MEDIUM','FONT_MEDIUM_JA','FONT_METRIX_SYMBOLS','FONT_VERA','FONT_VERA_BD','FONT_ARIAL_UNICODE']))
+#
+tauon_build_vars.Add(BoolVariable('LWIP', 'Use lwip library.', 0))
+tauon_build_vars.Add(EnumVariable('OPTS_LWIP', 'Set default LWIP library optimisation flags.', '-O0',
+			allowed_values=('-O0', '-O1', '-O2', '-O3', '-Os')))
+
+#
+tauon_build_vars.Add(BoolVariable('TINYGL', 'Use TinyGL library', 0))
+tauon_build_vars.Add(EnumVariable('OPTS_TINYGL', 'Set default TINYGL library optimisation flags.', '-O0',
+			allowed_values=('-O0', '-O1', '-O2', '-O3', '-Os')))
+
+#
+tauon_build_vars.Add(BoolVariable('VERBOSE', 'For verbose output building process.', 0))
+tauon_build_vars.Add(BoolVariable('STRIP', 'Remove all debugging symbols.', 0))
+#
+tauon_build_vars.Add(BoolVariable('FULL_STDIO', 'Use full stdio library. Can print float variables', 1))
+#
+### END VARIABLES AND OPTIONS ###
+
+### GENERAL BUILD ENVIRONMENT ###
+tauon_build_envs = TauonEnvironment(Environment(ENV = os.environ, 
+variables = tauon_build_vars,
+CC='${COMPILER_CC}',
+CXX='${COMPILER_CXX}',
+AR='${ARCHIVER}',
+RANLIB='${ARCHIVE_INDEXER}'
+))
+
+#Help for variable
+Help(tauon_build_vars.GenerateHelpText(tauon_build_envs.envs_map['DEFAULT']))
+
+#add special CFLAGS for target
+#tauon_build_env.Append(CCFLAGS ='-D' + '${ARCH}')
+tauon_build_envs.envs_map['DEFAULT'].Append(CPPDEFINES='${ARCH}')
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS ='${DEBUG_LEVEL}')
+
+#set environment variable PKG_CONFIG_PATH and get general CFLAGS/CXXFLAGS/LDFLAGS
+os.environ['PKG_CONFIG_PATH'] = config_dir
+
+pkgconf_cflags_raw = os.popen('pkg-config --cflags tauon').read()
+tauon_build_pkgconf = pkgconf_cflags_raw.replace('$HOME', os.getenv('HOME'))
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = tauon_build_pkgconf)
+
+pkgconf_libs_raw = os.popen('pkg-config --libs tauon').read()
+tauon_build_pkgconf = pkgconf_libs_raw.replace('$HOME', os.getenv('HOME'))
+tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS = tauon_build_pkgconf)
+
+tauon_build_envs.envs_map['DEFAULT']['ASFLAGS'] = tauon_build_envs.envs_map['DEFAULT']['CCFLAGS']
+tauon_build_envs.envs_map['DEFAULT'].Append(CFLAGS = '-std=c99')
+
+#format output
+if tauon_build_envs.envs_map['DEFAULT']['VERBOSE'] == 0:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCCOMSTR = '[CC] ($OPTS) $SOURCE')
+	tauon_build_envs.envs_map['DEFAULT'].Append(CXXCOMSTR = '[CXX] ($OPTS) $SOURCE')
+	tauon_build_envs.envs_map['DEFAULT'].Append(ASPPCOMSTR = '[AS] ($OPTS) $SOURCE')
+	tauon_build_envs.envs_map['DEFAULT'].Append(INSTALLSTR = '[DONE] $SOURCE')
+	tauon_build_envs.envs_map['DEFAULT'].Append(ARCOMSTR = '[AR] $TARGET')
+	tauon_build_envs.envs_map['DEFAULT'].Append(RANLIBCOMSTR = '[INDEX] $TARGET')
+	tauon_build_envs.envs_map['DEFAULT'].Append(LINKCOMSTR = '[LINK] $TARGET')
+
+#striping
+if tauon_build_envs.envs_map['DEFAULT']['STRIP']:
+	tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS = '-s')
+
+#special CFLAGS and LDFLAGS depends of arch and target
+if tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('arm') >= 0:
+	if tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('arm7') >= 0:
+		tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mcpu=arm7tdmi')
+		tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=arm7tdmi')
+	elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('arm9') >= 0:
+		tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mcpu=arm926ej-s')
+		tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=arm926ej-s')
+	tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS = '-mhard-float -Wl,--no-enum-size-warning')
+	tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mthumb-interwork -mabi=aapcs-linux')
+elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('cortexm') >= 0:
+    tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mcpu=cortex-m3')
+    tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=cortex-m3')
+    tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS = '-mhard-float -Wl,--no-enum-size-warning -mthumb')
+    tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mthumb -mabi=aapcs-linux')
+
+if tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('at91m55800a') >= 0:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_arm7_at91m55800a__')
+elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('at91sam9261') >= 0:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_arm9_at91sam9261__')
+elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('at91sam9260') >= 0:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_arm9_at91sam9260__')
+elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('k60n512') >= 0:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_cortexm_k60n512__')
+else:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_gnu_synthetic__')
+
+#for stdio
+if tauon_build_envs.envs_map['DEFAULT']['FULL_STDIO']:
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DUSE_FULL_STDIO_PRINTF=1')
+
+#for nanox
+if tauon_build_envs.envs_map['DEFAULT']['NANOX']:
+	#add -D before each name and add it to CCFLAGS
+	for i in range(len(tauon_build_envs.envs_map['DEFAULT']['FONTS_NANOX'])):
+		tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D'+tauon_build_envs.envs_map['DEFAULT']['FONTS_NANOX'][i])
+
+#base_dir_lib DEPENDS ARCHITECTURE
+base_scons_prj_arch_dir = base_dir_prj_scons + 'arch/' + tauon_build_envs.envs_map['DEFAULT']['PLATEFORME']
+
+#we need it to complete default environment
+#get ecos architecture path
+SConscript([base_scons_prj_arch_dir + 'SConscript'])
+Import('tauon_ecos_install_dir')
+
+#add include of eCos headers before anything
+tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS='-I'+ tauon_ecos_install_dir +'include')
+
+#now we can clone DEFAULT environment to get different environments optimisation
+tauon_build_envs.configure_envs(['-O0', '-O1', '-O2', '-O3', '-Os'])
+
+#opts_list= ['-O0', '-O1', '-O2', '-O3', '-Os']
+#for i in range(len(opts_list)):
+	#tmp_env = tauon_build_envs.envs_map['DEFAULT'].Clone()
+	#tmp_env.Replace(OPTS = opts_list[i])
+	#tmp_env.Append(CCFLAGS = opts_list[i])
+	#tauon_build_envs.add_env(opts_list[i], tmp_env)	
+
+### END GENERAL BUILD ENVIRONMENT ###
+
+###KERNEL LIB###
+# scons kernel files and path to store library
+#Import object from base_scons_prj_arch_dir + 'SConscript'
+Import('tauon_kernel_src_list')
+Import('tauon_kernel_lib_dir')
+Import('tauon_kernel_obj_dir')
+
+#declare a library object, set optimisation environment and add sources
+lib_kernel = TauonLibrary(tauon_kernel_lib_dir + 'libkernel',tauon_build_envs.envs_map['DEFAULT']['OPTS_KERNEL'])
+lib_kernel.set_env(tauon_build_envs.envs_map[lib_kernel.opts])
+lib_kernel.add_sources(tauon_kernel_src_list)
+#make library and add it to library list
+lib_list = [lib_kernel.compile(tauon_kernel_obj_dir)]
+###END KERNEL LIB###
+
+###LWIP LIB###
+if tauon_build_envs.envs_map['DEFAULT']['LWIP']:
+	base_scons_prj_lwip_dir = base_dir_root + 'src/kernel/net/lwip/prj/scons/'
+	SConscript([base_scons_prj_lwip_dir + 'SConscript'])
+	Import('lwip_src_list')
+	#declare and init library
+	lib_lwip = TauonLibrary(tauon_kernel_lib_dir + 'liblwip',tauon_build_envs.envs_map['DEFAULT']['OPTS_LWIP'])
+	lib_lwip.set_env(tauon_build_envs.envs_map[lib_lwip.opts])
+	lib_lwip.add_sources(lwip_src_list)
+	#make library and add it to library list
+	lib_list.extend([lib_lwip.compile(tauon_kernel_obj_dir)])	
+###END LWIP LIB###
+
+###TINYGL LIB###
+if tauon_build_envs.envs_map['DEFAULT']['TINYGL']:
+	base_scons_prj_tinygl_dir = base_dir_root + 'src/lib/TinyGL/prj/scons/'
+	SConscript([base_scons_prj_tinygl_dir + 'SConscript'])
+	Import('tinygl_src_list')
+	Import('tinygl_c_flags')
+	#declare and init library
+	lib_tinygl = TauonLibrary(tauon_kernel_lib_dir + 'libGL',tauon_build_envs.envs_map['DEFAULT']['OPTS_TINYGL'], tinygl_c_flags)
+	lib_tinygl.set_env(tauon_build_envs.envs_map[lib_tinygl.opts])
+	lib_tinygl.add_sources(tinygl_src_list)
+	#make library and add it to library list
+	lib_list.extend([lib_tinygl.compile(tauon_kernel_obj_dir)])
+###END TINYGL LIB###
+
+###NANOX/FLNX LIB###
+if tauon_build_envs.envs_map['DEFAULT']['NANOX']:
+	###FLNX LIB###
+	base_scons_prj_flnx_dir = base_dir_root + 'src/lib/flnx-1.1.8/prj/scons/'
+	SConscript([base_scons_prj_flnx_dir + 'SConscript'])
+	Import('flnx_src_list')
+	Import('flnx_cxx_flags')
+	#
+	lib_flnx = TauonLibrary(tauon_kernel_lib_dir + 'libflnx',tauon_build_envs.envs_map['DEFAULT']['OPTS_NANOX'], '', flnx_cxx_flags)
+	lib_flnx.set_env(tauon_build_envs.envs_map[lib_flnx.opts])
+	lib_flnx.add_sources(flnx_src_list)
+	#make library and add it to library list
+	lib_list.extend([lib_flnx.compile(tauon_kernel_obj_dir)])
+	
+	###NANOX LIB###
+	base_scons_prj_nanox_dir = base_dir_root + 'src/lib/nanox/prj/scons/'
+	SConscript([base_scons_prj_nanox_dir + 'SConscript'])
+	Import('nanox_src_list')
+	#
+	lib_nanox = TauonLibrary(tauon_kernel_lib_dir + 'libnanox',tauon_build_envs.envs_map['DEFAULT']['OPTS_NANOX'])
+	lib_nanox.set_env(tauon_build_envs.envs_map[lib_nanox.opts])
+	lib_nanox.add_sources(nanox_src_list)
+	#make library and add it to library list
+	lib_list.extend([lib_nanox.compile(tauon_kernel_obj_dir)])
+	###END NANOX LIB###
+###END NANOX/FLNX LIB###
+
+#create default application
+app_tauon = TauonApplication()
+app_tauon.set_env(tauon_build_envs.envs_map[app_tauon.opts])
+#add path for eCos lib and other libraries path
+app_tauon.add_lib([tauon_ecos_install_dir+'lib/libtarget.a'])
+app_tauon.add_lib(lib_list)
+
+###Call User Sconscript with tauon environnement, tauon library list, tauon and eCos lib directories and function
+SConscript('SConscript', 
+exports='app_tauon tauon_build_envs base_dir_user tauon_kernel_lib_dir')

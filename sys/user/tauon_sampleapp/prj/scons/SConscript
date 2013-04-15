@@ -1,0 +1,79 @@
+#USER FILE
+import os
+from tauon import *
+
+#MANDATORY : Import Variables from SConstruct
+Import('app_tauon')
+Import('tauon_build_envs')
+Import('base_dir_user')
+Import('tauon_kernel_lib_dir')
+
+####directories
+tauon_binary_prefix = 'tauon_'
+tauon_sampleapp_prj_dir = base_dir_user + 'tauon_sampleapp/'
+tauon_sampleapp_src_dir = tauon_sampleapp_prj_dir + 'src/'
+tauon_sampleapp_obj_dir = tauon_sampleapp_prj_dir + 'obj/'
+tauon_sampleapp_bin_dir = tauon_sampleapp_prj_dir + 'bin/'
+
+tauon_sampleapp_src_nanox_dir = tauon_sampleapp_src_dir + 'lib/nanox/'
+tauon_sampleapp_src_app_dir = tauon_sampleapp_src_dir + 'appx/'
+tauon_sampleapp_src_dev_dir = tauon_sampleapp_src_dir + 'dev/'
+
+tauon_sampleapp_src_kernel_bin_dir = os.getenv('HOME') + '/tauon/sys/root/src/bin/'
+tauon_sampleapp_src_kernel_dev_dir = os.getenv('HOME') + '/tauon/sys/root/src/kernel/dev/'
+tauon_sampleapp_src_kernel_dev_at91sam9261_dir = tauon_sampleapp_src_kernel_dev_dir + 'arch/arm9/at91sam9261/'
+
+####source files
+#simple test
+tauon_sampleapp_src_list = [TauonSource(tauon_sampleapp_src_dir+'test.c')]
+tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dir+'tstsd.c')])
+
+#network utilities
+tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/telnetd.c'),
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoose.c'),
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoosed.c'),
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ftpd.c'),
+TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ls.c')
+])
+
+#nanox/flnx utilities and demo programm
+if tauon_build_envs.envs_map['DEFAULT']['NANOX']:
+   tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_nanox_dir+'tauon_kbd_tty.c'),
+   TauonSource(tauon_sampleapp_src_nanox_dir+'tauon_screen_fb.c'),
+   TauonSource(tauon_sampleapp_src_nanox_dir+'tauon_mouse.c'),
+   TauonSource(tauon_sampleapp_src_app_dir+'fltk.c'),
+   TauonSource(tauon_sampleapp_src_app_dir+'tst_fltk.cxx')
+   ])
+
+#build file per target
+if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('at91sam9261')>=0:
+   tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dev_dir+'board_atmel_at91sam9261-ek/dev_at91sam9261-ek_lcd.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_atmel_at91sam9261-ek/dev_at91sam9261-ek_dm9000.c')
+   ])
+   tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS ='-DEVAL_BOARD')
+
+if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('k60n512')>=0:
+   tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_k60n512_i2c_x_m24xx.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_twrk60n512_i2c_0_m24xx.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_k60n512_i2c_x_mma7660.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_i2c_x/dev_twrk60n512_i2c_0_mma7660.c'),
+   TauonSource(tauon_sampleapp_src_dir+'tsti2c.c'),
+   TauonSource(tauon_sampleapp_src_dev_dir+'board_freescale_twrk60n512/dev_k60n512_gpio_leds/dev_k60n512_gpio_leds.c'),
+   TauonSource(tauon_sampleapp_src_dir+'tstleds.c'),
+   ])
+
+####name generated map file
+tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS = '-Wl,--Map -Wl,'+ tauon_sampleapp_bin_dir +tauon_binary_prefix+ tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'] +'.map')
+
+####we can affect environment by optimisation for all user src
+tauon_build_envs.configure_envs(['-O0', '-O1', '-O2', '-O3', '-Os'])
+for i in range(len(tauon_sampleapp_src_list)):
+	tauon_sampleapp_src_list[i].set_env(tauon_build_envs.envs_map[tauon_sampleapp_src_list[i].opts])
+
+#####################
+#build application
+app_tauon.set_name(tauon_sampleapp_bin_dir+tauon_binary_prefix+tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'])
+app_tauon.set_env(tauon_build_envs.envs_map[app_tauon.opts])
+app_tauon.add_sources(tauon_sampleapp_src_list)
+app_tauon.compile(tauon_sampleapp_obj_dir)
+app_tauon.build()

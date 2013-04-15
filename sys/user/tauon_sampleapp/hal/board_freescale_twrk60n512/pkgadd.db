@@ -1,0 +1,26 @@
+package CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM {
+	alias		{ "Freescale TWR-K60N512 HAL for MRAM" hal_cortexm_twr_k60n512_mram }
+	directory	hal/cortexm/kinetis/twr_k60n512_mram
+	script		hal_cortexm_kinetis_twr_k60n512.cdl
+	hardware
+        description "
+        The TWR-K60N512 HAL package provides the support needed to run
+        eCos on the Freescale Tower development system.
+        It is specially adapted for MRAM debug."
+}
+
+target freescale_twr_k60n512_mram {
+        alias { "Freescale Kinetis TWR-K60N512 MRAM" twr_k60n512_mram }
+        packages { CYGPKG_HAL_CORTEXM
+                   CYGPKG_HAL_CORTEXM_KINETIS
+                   CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM
+                   CYGPKG_IO_SERIAL_FREESCALE_UART_HDR
+                   CYGPKG_IO_SERIAL_FREESCALE_UART
+                   CYGPKG_DEVICES_WALLCLOCK_KINETIS_RTC
+                   CYGPKG_DEVS_ETH_PHY
+                   CYGPKG_DEVS_ETH_FREESCALE_ENET
+                 }
+        description "The freescale_twr_k60n512_mram target provides 
+        the packages needed to run eCos on the Freescale TWR-K60N512 
+        development system. It is specially adapted for MRAM debug."
+}
