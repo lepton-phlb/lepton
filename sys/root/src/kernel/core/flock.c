@@ -129,8 +129,7 @@ int _is_locked(inodenb_t inodenb){
 | Comments:
 | See:
 ----------------------------------------------*/
-int _sys_lock(kernel_pthread_t* pthread_ptr, unsigned int fd, unsigned int cmd,
-              struct flock* p_flock){
+int _sys_lock(kernel_pthread_t* pthread_ptr, unsigned int fd, unsigned int cmd, struct flock* p_flock){
    desc_t desc;
    inodenb_t inodenb;
    int i;

@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2310A14A-3A8F-49D5-AE51-4E569C10FCB5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>kernel</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include;C:/tauon/sys/root/src/kernel/net/uip2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include;C:/tauon/sys/root/src/kernel/net/uip2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\src\kernel\core\net\net.txt" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\kernel\core\bin.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\core_rttimer.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\fork.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\heap.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_clock.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_elfloader.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_object.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_pthread.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_pthread_mutex.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_sem.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_sigqueue.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_timer.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\process.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\signal.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\syscall.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\cpu.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\devio.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\dirent.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\env.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\fcntl.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\flock.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\heap.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\kal.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\lib.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\malloc.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\pipe.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\posix_mqueue.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\select.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\stat.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\statvfs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\sysctl.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\system.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\systime.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\time.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\timer.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\truncate.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\main.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggercsemaphore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerevent.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerinterrupt.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggermailbox.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggersemaphore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggersofttimer.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggertask.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerwin32.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\segger_intr.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\wait.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\kernel\core\arch\win32\dev_dskimg.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\arch\win32\kernel_mkconf.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\assert.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\bin.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\board.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\core_event.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\core_rttimer.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\cpu.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\devconf.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\devio.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\dirent.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\env.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\errno.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\etypes.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\fcntl.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\flock.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\fork.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\interrupt.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\io.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_board.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_cpu.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_eth.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_fb.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_hd.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_if.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_keyb.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_lcd.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_proc.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_pwr.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_usb.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kal.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernelconf.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_clock.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_elfloader.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_object.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_pthread.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_pthread_mutex.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_sem.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_sigqueue.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_timer.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\lib.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\libstd.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\malloc.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\socket.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\socks.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\pipe.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\posix_mqueue.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\process.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\rttimer.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\select.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\signal.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\stat.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\statvfs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\stropts.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\syscall.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sysctl.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\system.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\systime.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\mqueue.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\pthread.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\semaphore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\siginfo.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\sysctl.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\utsname.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\time.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\timer.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\types.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerwin32.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\segger_intr.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ver.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\wait.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Debug\dev.lib" />
+    <Library Include="..\Debug\fs.lib" />
+    <Library Include="..\Debug\lib.lib" />
+    <Library Include="..\Debug\net-lwip.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="..\Debug\net-uip.lib" />
+    <Library Include="..\Debug\sbin.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

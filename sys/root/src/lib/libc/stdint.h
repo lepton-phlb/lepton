@@ -95,7 +95,7 @@ typedef unsigned int uint_fast16_t;
 typedef unsigned long int uint_fast32_t;
 
 
-#if (__KERNEL_CPU_ARCH_SUPPORT_FORMAT>32)
+#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
 typedef long long int int_least64_t;
 typedef long long int int64_t;
 typedef unsigned long long int uint64_t;

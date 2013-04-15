@@ -28,8 +28,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Compiler Directive
 =============================================*/
-#ifndef _KERNELCONF_H
-#define _KERNELCONF_H
+#ifndef __KERNELCONF_H__
+#define __KERNELCONF_H__
 
 
 /*===========================================
@@ -55,6 +55,34 @@ Includes
 #define __tauon_cpu_device_arm9_at91sam9260__   (0x0205)
 #define __tauon_cpu_device_arm9_at91sam9261__   (0x0206)
 #define __tauon_cpu_device_cortexm_k60n512__    (0x0306)
+#define __tauon_cpu_device_cortexM3_trifecta__  (0x0301)
+#define __tauon_cpu_device_cortexM3_LM3S__      (0x0302)
+#define __tauon_cpu_device_cortexM4_stm32f4__   (0x0304)
+
+//#define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__ 
+#define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
+
+#if __tauon_cpu_device__==__tauon_cpu_device_win32_simulation__
+   #define __KERNEL_CPU_DEVICE_NAME "x86-win32-sim"
+#elif __tauon_cpu_device__==__tauon_cpu_device_gnu_synthetic__
+   #define __KERNEL_CPU_DEVICE_NAME "x86-gnu-synth"
+#elif __tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__
+   #define __KERNEL_CPU_DEVICE_NAME "arm7-at91m55800a"
+#elif __tauon_cpu_device__==__tauon_cpu_device_arm7_at91sam7se__
+   #define __KERNEL_CPU_DEVICE_NAME "arm7-at91sam7se"
+#elif __tauon_cpu_device__==__tauon_cpu_device_arm7_at91sam7x__
+   #define __KERNEL_CPU_DEVICE_NAME "arm7-at91sam7x"
+#elif __tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9260__
+   #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9260"
+#elif __tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9261__
+   #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9261"
+#elif __tauon_cpu_device__==__tauon_cpu_device_cortexM3_trifecta__
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM3-trifecta"
+#elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM3_LM3S__
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM3-TI-LM3S"
+#elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM4-stm32-f4"
+#endif
 
 
 #if defined(WIN32)
@@ -74,11 +102,10 @@ Includes
 #if (__tauon_compiler_cpu_target__==__compiler_cpu_target_win32__)
 //for win32
    #include "kernel/core/arch/win32/kernel_mkconf.h"
-#elif (__tauon_compiler_cpu_target__==__compiler_cpu_target_arm__) || defined(CPU_CORTEXM)
+#elif ((__tauon_compiler_cpu_target__==__compiler_cpu_target_arm__) && (__tauon_cpu_device__ == __tauon_cpu_device_cortexm_k60n512__)) || defined(CPU_CORTEXM) //GD trick to allow non-cortex ARM CPUs below..
 //for cortexm
    #include "kernel/core/arch/cortexm/kernel_mkconf.h"
-#elif (__tauon_compiler_cpu_target__==__compiler_cpu_target_arm__) || (defined(CPU_ARM7) || \
-   defined(CPU_ARM9))
+#elif (__tauon_compiler_cpu_target__==__compiler_cpu_target_arm__) || (defined(CPU_ARM7) || defined(CPU_ARM9))
 //for arm7 and arm9
    #include "kernel/core/arch/arm/kernel_mkconf.h"
 #elif (__tauon_compiler_cpu_target__==__compiler_cpu_target_gnuc__) && !defined(USE_KERNEL_STATIC)
@@ -106,6 +133,17 @@ Declaration
    #define USE_SEGGER
 #endif
 
+#define __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 32
+#define __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE 64
+#if (__tauon_compiler__==__compiler_gnuc__)
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+#elif (__tauon_compiler__==__compiler_win32__)
+    #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+#elif (__tauon_compiler__==__compiler_iar_m16c__)
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+#elif (__tauon_compiler__==__compiler_iar_arm__)
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+#endif
 #define CPU_ARCH_32  (32)
 #define CPU_ARCH_16  (16)
 
@@ -132,7 +170,6 @@ Declaration
    #define __KERNEL_CPU_NAME "unknow"
 #endif
 
-#define __KERNEL_CPU_ARCH_SUPPORT_FORMAT 32 //(see libc/stdint.h)
 
 #if defined(CPU_GNU32)
    #define __KERNEL_OBJECT_POOL_MAX 10
@@ -288,6 +325,8 @@ Declaration
    #define __BOOT_DEVICE "/dev/hd/hda" //must be hda cpufs
 #endif
 
+//full sdtio printf options (float %f%e%g).
+#define USE_FULL_STDIO_PRINTF 1
 //realtime posix extension
 #if defined(USE_SEGGER)
    #define ATEXIT_MAX    4
@@ -318,15 +357,18 @@ Declaration
    #define __KERNEL_IO_EVENT
 #endif
 
+#define USE_UIP_VER 2500 
 //ip stack definition
 #if defined (__KERNEL_NET_IPSTACK)
-   #define USE_IF_ETHERNET
-   #define USE_LWIP
+   //#define USE_IF_ETHERNET
+   #define USE_IF_PPP //GD
+   //#define USE_LWIP
+   #define USE_UIP_CORE
    #define USE_UIP
 #endif
 
 #if defined (__KERNEL_NET_IPSTACK)
-   #if !defined(USE_IF_ETHERNET) && !defined(USE_IF_SLIP)
+   #if !defined(USE_IF_ETHERNET) && !defined(USE_IF_SLIP) && !defined(USE_IF_PPP)
       #define USE_IF_SLIP
    #endif
 #endif
@@ -337,4 +379,22 @@ Declaration
 #endif
 
 
+
+#if defined(CPU_CORTEXM)
+   #define __KERNEL_VFS_SUPPORT_ROOTFS 1
+   #define __KERNEL_VFS_SUPPORT_UFS    1
+   #define __KERNEL_VFS_SUPPORT_UFSX   0
+   #define __KERNEL_VFS_SUPPORT_KOFS   1
+   #define __KERNEL_VFS_SUPPORT_MSDOS  0
+   #define __KERNEL_VFS_SUPPORT_VFAT   0
+   #define __KERNEL_VFS_SUPPORT_YAFFS  0
+#else
+   #define __KERNEL_VFS_SUPPORT_ROOTFS 1
+   #define __KERNEL_VFS_SUPPORT_UFS    1
+   #define __KERNEL_VFS_SUPPORT_UFSX   1
+   #define __KERNEL_VFS_SUPPORT_KOFS   1
+   #define __KERNEL_VFS_SUPPORT_MSDOS  0
+   #define __KERNEL_VFS_SUPPORT_VFAT   0
+   #define __KERNEL_VFS_SUPPORT_YAFFS  0
+#endif 
 #endif

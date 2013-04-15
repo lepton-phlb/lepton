@@ -48,8 +48,7 @@ either the MPL or the [eCos GPL] License."
 #define POSIX_MQUEUE_POOL_ALIGN 4 //alignement on 4 bytes
 
 #define __mq_msg_align_sz(__size__) \
-   ((__size__/POSIX_MQUEUE_POOL_ALIGN+ \
-     ((__size__%POSIX_MQUEUE_POOL_ALIGN) ? 1 : 0))*POSIX_MQUEUE_POOL_ALIGN)
+   ((__size__/POSIX_MQUEUE_POOL_ALIGN+((__size__%POSIX_MQUEUE_POOL_ALIGN)?1:0))*POSIX_MQUEUE_POOL_ALIGN)
 
 int dev_posix_mqueue_load(void);
 int dev_posix_mqueue_open(desc_t desc,int o_flag);
@@ -233,8 +232,7 @@ int _posix_mqueue_msg_read(desc_t desc,void* buf,int size,unsigned int* priority
 | Comments:
 | See:
 ----------------------------------------------*/
-int _posix_mqueue_msg_write(desc_t desc,const void* buf,int size,unsigned int priority,
-                            const struct timespec * abs_timeout){
+int _posix_mqueue_msg_write(desc_t desc,const void* buf,int size,unsigned int priority, const struct timespec * abs_timeout){
 
    dev_mq_attr_t*  p_dev_mq_attr;
    unsigned long mq_msgsize = 0;
@@ -506,8 +504,7 @@ int dev_posix_mqueue_ioctl(desc_t desc,int request,va_list ap){
       //alignement
       p_dev_mq_attr->msg_align_sz = __mq_msg_align_sz(p_mq_attr->mq_msgsize);
       //
-      p_dev_mq_attr->msg_pool_sz=p_mq_attr->mq_maxmsg*
-                                  (p_dev_mq_attr->msg_align_sz+sizeof(dev_mq_msg_t));
+         p_dev_mq_attr->msg_pool_sz=p_mq_attr->mq_maxmsg*(p_dev_mq_attr->msg_align_sz+sizeof(dev_mq_msg_t));
       //
       if(!(p_dev_mq_attr->p_msg_pool=_sys_malloc(p_dev_mq_attr->msg_pool_sz))) {
          _sys_free(p_dev_mq_attr);

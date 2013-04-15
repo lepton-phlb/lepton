@@ -168,8 +168,7 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
       return -1;
 
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) add this thread in cond
    pthread_condlist.pthread_ptr = kernel_pthread_self();
    pthread_condlist_insert(cond,&pthread_condlist);
@@ -178,8 +177,7 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
       cond->mutex=mutex;
    pthread_mutex_unlock(cond->mutex);
    //4) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //5) init sigevent filter
    kernel_sigevent.si_code=SI_SYSTEM;
    kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
@@ -187,13 +185,11 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
    //6) wait on thread sigqueue
    pthread_condlist.pthread_ptr->kernel_sigqueue.wait(&kernel_sigevent);
    //7) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //8) lock cond mutex
    pthread_mutex_lock(cond->mutex);
    //9) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
 
    return 0;
 }
@@ -224,18 +220,15 @@ int pthread_cond_signal(pthread_cond_t* cond){
    cond->kernel_sigevent.si_code = SI_SYSTEM;
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) loop walk cond thread until first pthread in the fifo list
    while(condlist->next) condlist = condlist->next;
    //3) signal queue cond thread
-   cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,
-                                                 &cond->kernel_sigevent);
+   cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,&cond->kernel_sigevent);
    //4) remove cond thread
    pthread_condlist_remove(cond,cond->list);
    //5) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return 0;
 }
@@ -260,19 +253,16 @@ int pthread_cond_broadcast(pthread_cond_t* cond){
    cond->kernel_sigevent.si_code = SI_SYSTEM;
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) loop walk cond thread{
    while(cond->list) {
       //3)     signal queue cond thread
-      cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,
-                                                    &cond->kernel_sigevent);
+      cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,&cond->kernel_sigevent);
       //4)     remove cond thread
       pthread_condlist_remove(cond,cond->list);
    }
    //5) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return 0;
 }

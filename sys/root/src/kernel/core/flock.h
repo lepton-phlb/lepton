@@ -55,8 +55,7 @@ void _flocks(void);
 int _get_flock(inodenb_t inodenb);
 int _put_flock(inodenb_t inodenb);
 int _is_locked(inodenb_t inodenb);
-int _sys_lock(kernel_pthread_t* pthread_ptr, unsigned int fd, unsigned int cmd,
-              struct flock* p_flock);
+int _sys_lock(kernel_pthread_t* pthread_ptr, unsigned int fd, unsigned int cmd, struct flock* p_flock);
 int _sys_unlockw(void);
 
 

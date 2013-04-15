@@ -73,12 +73,24 @@ mntdev_t mntdev_lst[MAX_MOUNT_DEVICE];
 
 //file system supported
 pfsop_t const fsop_lst[MAX_FILESYSTEM]={
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1 
    &rootfs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1 
    &ufs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1 
    &ufsx_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
    &kofs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
    &fat_msdos_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
    &fat_vfat_op,
+#endif
    0
 };
 

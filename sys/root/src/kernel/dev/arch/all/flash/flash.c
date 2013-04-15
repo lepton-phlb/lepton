@@ -56,12 +56,9 @@ const flash_sector_t s29gl256p_sector_map []={
 
 
 const flash_type_t flash_type_lst[]={
-   {(const flash_sector_t*)&am29dl640d_sector_map,    0x00800000/sizeof(FLASHDATA),
-    sizeof(FLASHDATA)},
-   {(const flash_sector_t*)&am29lv320dt_sector_map,   0x00400000/sizeof(FLASHDATA),
-    sizeof(FLASHDATA)},
-   {(const flash_sector_t*)&s29gl256p_sector_map,     0x02000000/sizeof(FLASHDATA),
-    sizeof(FLASHDATA)}
+   {(const flash_sector_t*)&am29dl640d_sector_map,    0x00800000/sizeof(FLASHDATA), sizeof(FLASHDATA)},
+   {(const flash_sector_t*)&am29lv320dt_sector_map,   0x00400000/sizeof(FLASHDATA), sizeof(FLASHDATA)},
+   {(const flash_sector_t*)&s29gl256p_sector_map,     0x02000000/sizeof(FLASHDATA), sizeof(FLASHDATA)}
 };
 
 

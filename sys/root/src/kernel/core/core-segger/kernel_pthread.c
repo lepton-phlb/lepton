@@ -263,9 +263,7 @@ __end_pthread()
 | Comments:
 | See:
 ---------------------------------------------*/
-int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,
-                            start_routine_t start_routine,
-                            void *arg){
+int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,start_routine_t start_routine, void *arg){
 
    if(!thread)
       return -EINVAL;

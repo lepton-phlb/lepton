@@ -308,11 +308,9 @@ struct ssl_func {
 #define SSLv23_server_method()  (*(SSL_METHOD * (*)(void))FUNC(9))()
 #define SSL_library_init() (*(int (*)(void))FUNC(10))()
 #define SSL_CTX_use_PrivateKey_file(x,y,z)      (*(int (*)(SSL_CTX *, \
-                                                           const char *, \
-                                                           int))FUNC(11))((x), (y), (z))
+		const char *, int)) FUNC(11))((x), (y), (z))
 #define SSL_CTX_use_certificate_file(x,y,z)     (*(int (*)(SSL_CTX *, \
-                                                           const char *, \
-                                                           int))FUNC(12))((x), (y), (z))
+		const char *, int)) FUNC(12))((x), (y), (z))
 #define SSL_CTX_set_default_passwd_cb(x,y) \
    (*(void (*)(SSL_CTX *, mg_spcb_t))FUNC(13))((x),(y))
 #define SSL_CTX_free(x) (*(void (*)(SSL_CTX *))FUNC(14))(x)
@@ -709,8 +707,7 @@ find_callback(const struct mg_context *ctx, bool_t is_auth,
       if ((uri != NULL && cb->uri_regex != NULL &&
            ((is_auth && cb->is_auth) || (!is_auth && !cb->is_auth)) &&
            match_regex(uri, cb->uri_regex)) || (uri == NULL &&
-                                                (cb->status_code == 0 || cb->status_code ==
-                                                 status_code)))
+		     (cb->status_code == 0 || cb->status_code == status_code)))
          return (cb);
    }
 

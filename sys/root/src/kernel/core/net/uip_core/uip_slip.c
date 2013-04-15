@@ -36,8 +36,17 @@ Includes
 //#include "kernel/net/uip1.0/net/uip.h"
 //#include "net/uip.h"
 
+#if USE_UIP_VER == 1000 
 #pragma message ("uip 1.0")
 #include "kernel/net/uip1.0/net/uip.h"
+#include "kernel/net/uip1.0/net/uip_arch.h"
+#endif
+#if USE_UIP_VER == 2500 
+#pragma message ("uip 2.5")
+#include "kernel/net/uip2.5/contiki-conf.h"
+#include "kernel/net/uip2.5/net/uip.h"
+#include "kernel/net/uip2.5/net/uip_arch.h"
+#endif
 
 /*===========================================
 Global Declaration

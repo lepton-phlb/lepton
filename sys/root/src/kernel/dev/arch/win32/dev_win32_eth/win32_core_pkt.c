@@ -186,9 +186,7 @@ int init_adapter(int adapter_num)
 
    memcpy(&lwip_ethaddr,ppacket_oid_data->Data,6);
    free(ppacket_oid_data);
-   printf("MAC: %2X%2X%2X%2X%2X%2X\n", lwip_ethaddr[0], lwip_ethaddr[1], lwip_ethaddr[2],
-          lwip_ethaddr[3], lwip_ethaddr[4],
-          lwip_ethaddr[5]);
+   printf("MAC: %2X%2X%2X%2X%2X%2X\n", lwip_ethaddr[0], lwip_ethaddr[1], lwip_ethaddr[2], lwip_ethaddr[3], lwip_ethaddr[4], lwip_ethaddr[5]);
    PacketSetBuff(lpAdapter,512000);
    PacketSetReadTimeout(lpAdapter,1);
    PacketSetHwFilter(lpAdapter,NDIS_PACKET_TYPE_ALL_LOCAL|NDIS_PACKET_TYPE_PROMISCUOUS);
@@ -202,8 +200,7 @@ int init_adapter(int adapter_num)
    //
    PacketInitPacket(lpPacket,(char*)buffer,256000);
 
-   hPacketTask = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)update_adapter_thread, NULL, 0,
-                              &PacketTaskId );
+   hPacketTask = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)update_adapter_thread, NULL, 0, &PacketTaskId ); 
 
    return 0;
 }

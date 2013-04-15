@@ -131,8 +131,7 @@ int ps_main(int argc,char* argv[]){
              ctime_r(&process_info.start_time,cbuf)+ 11,
              process_info.argv[0]);
 #else
-      printf("%c %4d %4d %4d  %.8s   %.32s\r\n",
-             ((process_info.pthread_ptr->stat & PTHREAD_STATUS_ZOMBI) ? 'Z' : ' '),
+      printf("%c %4d %4d %4d  %.8s   %.32s\r\n", ((process_info.pthread_ptr->stat & PTHREAD_STATUS_ZOMBI)? 'Z' : ' '),
              process_info.pid,
              process_info.ppid,
              process_info.pgid,
@@ -154,18 +153,15 @@ int ps_main(int argc,char* argv[]){
 
    #if defined(EVAL_BOARD)
       printf("%-12s %-5s\r\n","syscall name","time (s)");
-      while( nb_syscall-- &&
-             (cb=read(fd,&kernel_profiler_result,sizeof(kernel_profiler_result_t)))>=0) {
+      while( nb_syscall-- &&(cb=read(fd,&kernel_profiler_result,sizeof(kernel_profiler_result_t)))>=0){
          unsigned int counter =kernel_profiler_result.counter;
-         printf("%-12s %10f\r\n",kernel_profiler_result.pname,
-                (float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
+      	printf("%-12s %10f\r\n",kernel_profiler_result.pname,(float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
       }
    #else
       printf("%-24s %-10s\r\n","syscall name","time (s)");
       while( (cb=read(fd,&kernel_profiler_result,sizeof(kernel_profiler_result_t)))>=0) {
          unsigned int counter =kernel_profiler_result.counter;
-         printf("%-24s %10f\r\n",kernel_profiler_result.pname,
-                (float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
+            printf("%-24s %10f\r\n",kernel_profiler_result.pname,(float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
       }
    #endif
    }
@@ -177,9 +173,7 @@ int ps_main(int argc,char* argv[]){
 
       printf("\r\nio statistics\r\n");
 
-      printf("%-8s io %10s %-6s %-10s %-10s %-10s %-10s\r\n","dev","nb","size","time (s)",
-             "rate avg","rate max ",
-             "rate min");
+      printf("%-8s io %10s %-6s %-10s %-10s %-10s %-10s\r\n","dev","nb","size","time (s)","rate avg","rate max ","rate min");
       while( (cb=read(fd,&io_profiler_result,sizeof(io_profiler_result_t)))>=0) {
          int l = (sizeof(int)==sizeof(long));
 

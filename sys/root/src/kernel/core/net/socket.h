@@ -40,9 +40,9 @@ either the MPL or the [eCos GPL] License."
 #if defined (__KERNEL_NET_IPSTACK) && defined(USE_LWIP)
    #include "kernel/core/net/lwip_core/lwip_socket.h"
 #elif defined (__KERNEL_NET_IPSTACK) && defined(USE_UIP)
-   #include "kernel/net/uip_core/socket.h"
+#include "kernel/core/net/uip_core/uip_socket.h"
 #else
-   #include "kernel/net/uip_core/socket.h"
+#include "kernel/core/net/uip_core/uip_socket.h"
 #endif
 
 /*============================================

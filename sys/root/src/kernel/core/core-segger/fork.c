@@ -185,16 +185,13 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
    //to do: reinit sigqueue struct
    //thread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
-          sizeof(kernel_sigqueue_t));
-   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(
-      &process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
+   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
+   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
 #endif
 
    //profiler
    __kernel_profiler_stop(backup_parent_pthread_ptr);
-   __profiler_add_result(backup_parent_pthread_ptr,_SYSCALL_VFORK,
-                         __kernel_profiler_get_counter(backup_parent_pthread_ptr));
+   __profiler_add_result(backup_parent_pthread_ptr,_SYSCALL_VFORK,__kernel_profiler_get_counter(backup_parent_pthread_ptr));
    //
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();

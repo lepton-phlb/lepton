@@ -33,12 +33,13 @@ Includes
 
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
-#include "lib/libc/ctype/ctype.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/devio.h"
 #include "kernel/core/process.h"
 #include "kernel/core/systime.h"
 #include "kernel/fs/vfs/vfs.h"
+
+#include "lib/libc/ctype/ctype.h"
 
 #include <stdlib.h>
 #include <string.h>

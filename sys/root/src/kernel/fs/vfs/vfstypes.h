@@ -58,12 +58,24 @@ Declaration
 
 //File system type
 typedef enum {
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1
    fs_rootfs,   //0
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1
    fs_ufs,
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1
    fs_ufsx,
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
    fs_kofs,
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
    fs_msdos,
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
    fs_vfat
+#endif
 }fstype;
 
 #define UFS_ALIGNEMENT  4
@@ -127,7 +139,11 @@ typedef struct {
  * nombre maximum de de superblock (voir MAX_MOUNT_DEVICE).
  *
  */
+#if !defined(CPU_CORTEXM)
 #define MAX_SUPER_BLOCK 8 //6//4 //4
+#else
+#define MAX_SUPER_BLOCK 4
+#endif
 
 extern superblk_t superblk_lst[MAX_SUPER_BLOCK];
 
@@ -305,7 +321,11 @@ typedef union {
    uint16_t rwxrwxrwx;
 }ino_mod_t;
 
+#if !defined(CPU_CORTEXM)
 #define MAX_FILESYSTEM  7 //rootfs, ufs, ufsx, kofs, msdos, vfat, (null)
+#else
+#define MAX_FILESYSTEM  7 //rootfs, ufs, ufsx, kofs, msdos, vfat, (null)
+#endif
 extern pfsop_t const fsop_lst[MAX_FILESYSTEM];
 
 //

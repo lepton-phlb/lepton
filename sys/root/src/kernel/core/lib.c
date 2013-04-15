@@ -75,8 +75,7 @@ int load_lib(kernel_pthread_t* pthread_ptr){
       //only of first library loaded
       if((*lib_lst[i].p_lib_data_offset)==LIB_INVALID_OFFSET) {
          //calc data offset
-         lib_data_offset = (unsigned long)(pthread_ptr->heap_top) -
-                           (unsigned long)(pthread_ptr->attr.stackaddr);
+         lib_data_offset = (unsigned long)(pthread_ptr->heap_top) - (unsigned long)(pthread_ptr->attr.stackaddr);
          *lib_lst[i].p_lib_data_offset=lib_data_offset;
       }
       lib_lst[i].lib_entry_point(pthread_ptr);

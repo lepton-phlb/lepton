@@ -38,20 +38,34 @@ Includes
 //#include "kernel/net/uip1.0/net/uip.h"
 //#include "net/uip.h"
 
+#if USE_UIP_VER == 1000 
 #pragma message ("uip 1.0")
 #include "kernel/net/uip1.0/net/uip.h"
+#include "kernel/net/uip1.0/net/uip_arch.h"
+#endif
 
+#if USE_UIP_VER == 2500 
+#pragma message ("uip 2.5")
+#include "kernel/net/uip2.5/contiki-conf.h"
+#include "kernel/net/uip2.5/net/uip.h"
+#include "kernel/net/uip2.5/net/uip_arch.h"
+#endif
 #include "kernel/core/net/uip_core/uip_socket.h"
 #include "kernel/fs/vfs/vfs.h"
 
 /*===========================================
 Declaration
 =============================================*/
-
+#if defined (__KERNEL_NET_IPSTACK) && defined(USE_UIP)
 #define SOCKET_BUFFER_SIZE           UIP_TCP_MSS+4
 
 #define RCV_SOCKET_BUFFER_SIZE       UIP_TCP_MSS
 #define SND_SOCKET_BUFFER_SIZE       UIP_TCP_MSS
+#else
+   #define SOCKET_BUFFER_SIZE           0
+   #define RCV_SOCKET_BUFFER_SIZE       0
+   #define SND_SOCKET_BUFFER_SIZE       0
+#endif
 
 #define MAX_SOCKET_MSGQSIZE      2
 
@@ -63,9 +77,11 @@ Declaration
 #define STATE_SOCKET_SEND        5
 #define STATE_SOCKET_WAIT        6
 #define STATE_SOCKET_CLOSE       7
-#define STATE_SOCKET_CLOSED      -1
-#define STATE_SOCKET_ABORTED     -2
-#define STATE_SOCKET_TIMEDOUT    -3
+#define STATE_SOCKET_OPENED      -1
+#define STATE_SOCKET_CLOSED      -2
+#define STATE_SOCKET_ABORTED     -3
+#define STATE_SOCKET_TIMEDOUT    -4
+#define STATE_SOCKET_NETDOWN     -5 
 
 #define MSG_SOCKET_EVENT         1
 
@@ -87,17 +103,40 @@ typedef struct {
    desc_t desc;
    //specific only for listen socket
    hsock_t hsocks;
+   desc_t accept_desc;//accept socket file descriptor
    int fd; //accept socket process file descriptor
 
+   int protocol;//IPPROTO_TCP IPPROTO_UDP
+   unsigned long flags;
    int state; //STATE_SOCKET_LISTEN //STATE_SOCKET_CONNECTED //STATE_SOCKET_CLOSE
+   #if UIP_CONF_IPV6
+   struct _sockaddr_in6 addr_in;
+   #else
    struct _sockaddr_in addr_in;
+   #endif
    int r;
    int w;
 
    struct socksconn_state* socksconn;
+   #if UIP_CONF_IPV6
+   struct _sockaddr_in6 addr_in_from;
+   struct _sockaddr_in6 addr_in_to;
+   #else
+   struct _sockaddr_in addr_in_from;
+   struct _sockaddr_in addr_in_to;
+   #endif
+   struct uip_udp_conn * uip_udp_conn;
 }socket_t;
 
-#define MAX_SOCKET 10
+typedef struct socket_recvfrom_header_st{
+   #if UIP_CONF_IPV6
+   struct _sockaddr_in6 addr_in_from;
+   #else
+   struct _sockaddr_in addr_in_from;
+   #endif
+   int len;
+}socket_recvfrom_header_t;
+#define MAX_SOCKET 2
 
 extern socket_t*     socketList;
 extern struct socksconn_state*   socksconn_state_list;
@@ -132,7 +171,6 @@ void     uip_sock(void);
 /* UIP_APPCALL: the name of the application function. This function
    must return void and take no arguments (i.e., C type "void
    appfunc(void)"). */
-#define UIP_APPCALL     uip_sock
 
 //
 //to remove: debugging

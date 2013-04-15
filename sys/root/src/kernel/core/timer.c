@@ -110,8 +110,7 @@ int timer_getoverrun(timer_t* timerid){
 | Comments:
 | See:
 ----------------------------------------------*/
-int timer_settime(timer_t* timerid, int flags, const struct itimerspec * value,
-                  struct itimerspec *ovalue){
+int timer_settime(timer_t* timerid, int flags, const struct itimerspec * value,struct itimerspec *ovalue){
    kernel_object_t* kernel_object=(kernel_object_t*)(*timerid);
    if(!kernel_object)
       return -1;
@@ -119,8 +118,7 @@ int timer_settime(timer_t* timerid, int flags, const struct itimerspec * value,
       return -1;
    //
    kernel_object->object.kernel_object_timer.kernel_timer.kernel_pthread=kernel_pthread_self();
-   return kernel_timer_settime(&kernel_object->object.kernel_object_timer.kernel_timer,flags,value,
-                               ovalue);
+   return kernel_timer_settime(&kernel_object->object.kernel_object_timer.kernel_timer,flags,value,ovalue);
 }
 
 

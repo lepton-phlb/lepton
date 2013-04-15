@@ -1,0 +1,5 @@
+
+D:\Documents\SVN\hg\lepton\tools\bin>mklepton.exe -t arm7_lepton D:\Documents\SVN\hg\lepton\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s.xml
+
+D:\Documents\SVN\hg\lepton\tools\bin>mklepton.exe -t cortexm_lepton D:\Documents\SVN\hg\lepton\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s.xml
+

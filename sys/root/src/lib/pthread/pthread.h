@@ -46,9 +46,7 @@ either the MPL or the [eCos GPL] License."
 extern "C" {
 #endif
 
-int         pthread_create (pthread_t *thread, const pthread_attr_t *attr,
-                            void *(*start_routine)(void*),
-                            void *arg);
+int         pthread_create (pthread_t *thread, const pthread_attr_t *attr,void *(*start_routine)(void*), void *arg);
 int         pthread_cancel (pthread_t thread);
 void        pthread_exit   (void *value_ptr);
 pthread_t   pthread_self   (void);

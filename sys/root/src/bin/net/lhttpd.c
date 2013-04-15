@@ -69,8 +69,7 @@ Global Declaration
 
 
 //#define _INDEX_HTML "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\r\n<html><head><title>HELLO</title></head><body bgcolor=white><center><h3><font face=\"Helvetica\"><P>WEB SERVER ON M16C</P></h3><a href=\"copyr.html\">Copyright</a>&copy; 2002<a href=\"about.html\">about A0380 project</a></center></body></html>"
-#define _INDEX_HTML \
-   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>welco</title></head><body bgcolor=white><center><h3><font face=\"Helvetica\"><P>lepton httpd server</P></h3><a href=\"copyr.html\">Copyright</a>&copy; 2003<a href=\"about.html\">about A0383 project</a></center></body></html>"
+#define _INDEX_HTML "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>welco</title></head><body bgcolor=white><center><h3><font face=\"Helvetica\"><P>lepton httpd server</P></h3><a href=\"copyr.html\">Copyright</a>&copy; 2003<a href=\"about.html\">about A0383 project</a></center></body></html>"
 
 char index_html[]=_INDEX_HTML;
 

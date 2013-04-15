@@ -176,7 +176,7 @@ char *__ltostr(char *buf, long val, int base, int uppercase)
 }
 
 //only for 64 bits format support (compiler).
-#if (__KERNEL_CPU_ARCH_SUPPORT_FORMAT>32)
+#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
 /*
  * Copyright (C) 2000 Manuel Novoa III
  *

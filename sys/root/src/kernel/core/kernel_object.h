@@ -94,11 +94,8 @@ typedef struct kernel_object_st {
 
 //
 int kernel_object_manager_pool(int kernel_object_no);
-kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head,
-                                           kernel_object_type_t type, kernel_object_src_t src,
-                                           ...);
-kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,
-                                           kernel_object_t* p);
+kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head, kernel_object_type_t type, kernel_object_src_t src,...);
+kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,kernel_object_t* p);
 kernel_object_t* kernel_object_manager_put_all(kernel_object_t** pp_kernel_object_head);
 
 #endif

@@ -117,8 +117,7 @@ int pthread_mutex_lock(pthread_mutex_t *mutex){
    }
    //
    if(mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_lock(
-                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_lock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
@@ -141,8 +140,7 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex){
    }
    //
    if(mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_trylock(
-                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_trylock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
@@ -156,8 +154,7 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex){
 ----------------------------------------------*/
 int pthread_mutex_unlock(pthread_mutex_t *mutex){
    if(mutex && mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_unlock(
-                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_unlock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
