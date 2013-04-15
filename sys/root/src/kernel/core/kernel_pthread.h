@@ -234,9 +234,7 @@ extern int g_pthread_id;
 int kernel_get_pthread_id(kernel_pthread_t *p);
 int kernel_put_pthread_id(kernel_pthread_t *p);
 //
-int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,
-                            start_routine_t start_routine,
-                            void *arg);
+int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,start_routine_t start_routine, void *arg);
 int   kernel_pthread_cancel(kernel_pthread_t* thread);
 //
 #ifndef __cplusplus

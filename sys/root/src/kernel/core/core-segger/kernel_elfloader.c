@@ -57,8 +57,7 @@ either the MPL or the [eCos GPL] License."
 
 #define ELF_MEMORY_ADDRESS (0x10100000) //firmware address (with samba address at 0x00100000)
 
-static const char _lepton_bootstrap_banner[] =
-   "\
+static const char _lepton_bootstrap_banner[] = "\
 lepton bootstrap v 0.0.6\r\n\
 $Revision: 1.2 $ $Date: 2010-02-26 12:57:03 $\r\n\
 ";
@@ -181,9 +180,7 @@ int _elf_printf(const char * fmt, ...){
 
    while(cb<rv) {
       int r=-1;
-      if((r=
-             ofile_lst[_ELF_STDOUT_DESCNO].pfsop->fdev.fdev_write(_ELF_STDOUT_DESCNO,buf+cb,rv-
-                                                                  cb))<0)
+     if((r=ofile_lst[_ELF_STDOUT_DESCNO].pfsop->fdev.fdev_write(_ELF_STDOUT_DESCNO,buf+cb,rv-cb))<0)
          return r;
       cb+=r;
    }
@@ -435,8 +432,7 @@ unsigned long _kernel_elfloader(unsigned long flash_base, unsigned long base)
    offset += sizeof(ehdr);
    //
 #ifdef DEBUG
-   _elf_printf(
-      "type: %d, machine: %d, version: %d\r\nentry: %p, PHoff: %p/%d/%d, SHoff: %p/%d/%d\r\n\r\n",
+    _elf_printf("type: %d, machine: %d, version: %d\r\nentry: %p, PHoff: %p/%d/%d, SHoff: %p/%d/%d\r\n\r\n",
       ehdr.e_type, ehdr.e_machine, ehdr.e_version, ehdr.e_entry,
       ehdr.e_phoff, ehdr.e_phentsize, ehdr.e_phnum,
       ehdr.e_shoff, ehdr.e_shentsize, ehdr.e_shnum);
@@ -649,9 +645,7 @@ unsigned long _kernel_elfloader(unsigned long flash_base, unsigned long base)
    _elf_printf("\r\ncopy firmware in ram done\r\n");
    if (addr_offset)
       _elf_printf("address offset = %p\n", (void *)addr_offset);
-   _elf_printf("firmware entry point: %p, address range: %p-%p\r\n",(void*)entry_address,
-               (void *)load_address,
-               (void *)load_address_end);
+      _elf_printf("firmware entry point: %p, address range: %p-%p\r\n",(void*)entry_address, (void *)load_address, (void *)load_address_end);
    _elf_printf("ready to rumble? ;)\r\nboot on firmware\r\n");
 #endif
 

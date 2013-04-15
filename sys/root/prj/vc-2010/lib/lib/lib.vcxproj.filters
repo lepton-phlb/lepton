@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="libc">
+      <UniqueIdentifier>{ef44f822-72ca-4511-a355-9949d661bf09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\ctype">
+      <UniqueIdentifier>{6557aef2-6688-407b-81a9-2c7c65e3601f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\unistd">
+      <UniqueIdentifier>{2bbfe23e-b0f0-4bb2-891f-a2cf8ccf2af2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\stdio">
+      <UniqueIdentifier>{2141a5c8-2a71-4a8f-b09a-f3e6c1d05cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\termios">
+      <UniqueIdentifier>{ea79fd15-6dca-497c-af97-6517f14bfee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\misc">
+      <UniqueIdentifier>{1a61d807-3379-4d1e-a719-532e501e7fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\string">
+      <UniqueIdentifier>{d32dd58d-9cf2-4d79-a020-30b35e5c98a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pthread">
+      <UniqueIdentifier>{1459ec10-d011-4889-b985-5e04af5f1f6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="librt">
+      <UniqueIdentifier>{d6aa10b9-b658-4860-9aea-49556b275ea6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\lib\libc\stdint.h">
+      <Filter>libc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\libc.h">
+      <Filter>libc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\ctype\ctype.h">
+      <Filter>libc\ctype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\crc.h">
+      <Filter>libc\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\ftoa.h">
+      <Filter>libc\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\ltostr.h">
+      <Filter>libc\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\prsopt.h">
+      <Filter>libc\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\string\string.h">
+      <Filter>libc\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\termios\termios.h">
+      <Filter>libc\termios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\stdio\stdio.h">
+      <Filter>libc\stdio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\unistd\getopt.h">
+      <Filter>libc\unistd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\librt\semaphore.h">
+      <Filter>librt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\librt\mqueue.h">
+      <Filter>librt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\pthread\pthread.h">
+      <Filter>pthread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\lib\libc\libc.c">
+      <Filter>libc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\ctype\ctype.c">
+      <Filter>libc\ctype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\strto_ll.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\crc.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\dtostr.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\ftoa.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\itoa.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\ltostr.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\prsopt.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\strto_l.c">
+      <Filter>libc\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\string\string.c">
+      <Filter>libc\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\termios\tcgetattr.c">
+      <Filter>libc\termios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\termios\tcsetattr.c">
+      <Filter>libc\termios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\termios\termios.c">
+      <Filter>libc\termios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\stdio\printf.c">
+      <Filter>libc\stdio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\stdio\scanf.c">
+      <Filter>libc\stdio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\stdio\stdio.c">
+      <Filter>libc\stdio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\unistd\unistd.c">
+      <Filter>libc\unistd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\libc\unistd\getopt.c">
+      <Filter>libc\unistd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\librt\mq.c">
+      <Filter>librt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\librt\sem.c">
+      <Filter>librt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\pthread\pthread_mutex.c">
+      <Filter>pthread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\pthread\pthread.c">
+      <Filter>pthread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\lib\pthread\pthread_cond.c">
+      <Filter>pthread</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

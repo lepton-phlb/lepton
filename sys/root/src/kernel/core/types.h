@@ -24,8 +24,8 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _TYPE_H
-#define _TYPE_H
+#ifndef __TYPE_H__
+#define __TYPE_H__
 
 /*===========================================
 Includes
@@ -74,7 +74,7 @@ typedef uint32_t fsfilcnt_t;
 //ugly patch for compatiblity IAR ARM7 Compiler :-(
 #if __IAR_SYSTEMS_ICC__> 1
    #if !defined(__SIZE_T_TYPE__) || !defined(_SIZE_T) || !defined(_SIZET)
-typedef int size_t;
+   typedef unsigned int size_t;
 //#define __SIZE_T_TYPE__
       #define _SIZE_T
       #define _SIZET

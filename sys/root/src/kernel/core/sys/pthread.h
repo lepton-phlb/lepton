@@ -49,8 +49,7 @@ typedef struct {
 }pthread_mutex_t;
 
 #define PTHREAD_MUTEX_UNINITIALIZED  ((unsigned long)0x00000000)
-#define PTHREAD_MUTEX_INITIALIZER {(kernel_object_t*)PTHREAD_MUTEX_UNINITIALIZED, \
-                                   (pthread_mutexattr_t)0}
+#define PTHREAD_MUTEX_INITIALIZER {(kernel_object_t*)PTHREAD_MUTEX_UNINITIALIZED,(pthread_mutexattr_t)0}
 
 
 //pthread cond
@@ -74,8 +73,7 @@ typedef struct {
 }pthread_cond_t;
 
 #define PTHREAD_COND_UNINITIALIZED  ((unsigned long)0x00000000)
-#define PTHREAD_COND_INITIALIZER {(kernel_object_t*)PTHREAD_COND_UNINITIALIZED, \
-                                  (pthread_condattr_t)0,(pthread_condlist_t*)0,(pthread_mutex_t*)0}
+#define PTHREAD_COND_INITIALIZER {(kernel_object_t*)PTHREAD_COND_UNINITIALIZED,(pthread_condattr_t)0,(pthread_condlist_t*)0,(pthread_mutex_t*)0}
 
 
 

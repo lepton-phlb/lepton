@@ -115,9 +115,7 @@ int dev_win32_sdcard_open(desc_t desc, int o_flag){
 
    if(fh==-1) {
 
-      if( (fh =
-              _open( ".\\sdcard0.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,
-                     _S_IREAD|_S_IWRITE)) == -1 ) {
+      if( (fh = _open( ".\\sdcard0.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
          DWORD dwError=GetLastError();
 
          if(dwError!=ERROR_FILE_EXISTS)
@@ -132,9 +130,7 @@ int dev_win32_sdcard_open(desc_t desc, int o_flag){
          int w=0;
 
          close(fh);
-         if( (fh =
-                 _open( ".\\sdcard0.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,
-                        _S_IREAD|_S_IWRITE)) == -1 )
+         if( (fh = _open( ".\\sdcard0.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 )
             return -1;
 
          _lseek(fh,0,SEEK_SET );

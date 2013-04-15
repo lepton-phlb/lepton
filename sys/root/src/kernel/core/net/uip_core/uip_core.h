@@ -41,6 +41,15 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
+#define IF_LIST_MAX 1
+typedef struct uip_core_statistics_st
+{
+    unsigned int sock_drop_packet;
+    unsigned int sock_rcv_buffer_free_size;
+    unsigned int uart_tx_free_size;
+    unsigned int uart_rx_used_size;
+}uip_core_statistics_t;
+extern uip_core_statistics_t _uip_core_statistics;
 
 extern kernel_pthread_t uip_core_thread;
 
@@ -74,6 +83,7 @@ unsigned char _uip_core_recv_char(desc_t desc);
 void _uip_core_send_char(desc_t desc,unsigned char c);
 
 int uip_core_run(void);
+extern unsigned int uip_core_if_nametoindex(const char *ifname);
 
 
 #endif

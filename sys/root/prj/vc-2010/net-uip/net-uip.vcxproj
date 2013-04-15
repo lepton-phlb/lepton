@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9A390740-B0EA-41A2-948B-97241B75B9B8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>netuip</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;C:/tauon/sys/root/src/kernel/net/uip2.5</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-conf.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-lib.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-net.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-version.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\list.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\memb.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\mmem.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\random.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\dhcpc.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\hc.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-info.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\netstack.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\packetbuf.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\packetqueue.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\psock.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\queuebuf.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\rawpacket.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\resolv.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\rime.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\sicslowpan.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\simple-udp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\slipdev.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\tcpdump.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\tcpip.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uaodv-def.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uaodv.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-debug.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-ds6.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-nd6.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-split.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uiplib.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uipopt.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip_arch.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip_arp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\rtimer-arch.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\cc.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\clock.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\ctimer.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\etimer.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\lc-addrlabels.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\lc-switch.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\lc.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\process.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\pt.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\rtimer.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\stimer.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\list.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\memb.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\mmem.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\random.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\dhcpc.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\hc.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-info.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\netstack.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\packetbuf.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\packetqueue.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\psock.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\queuebuf.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\resolv.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\sicslowpan.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\simple-udp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\slipdev.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\tcpdump.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\tcpip.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uaodv.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-debug.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-ds6.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-nd6.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-split.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip6.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uiplib.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip_arp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\clock.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\ctimer.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\etimer.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\rtimer.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\stimer.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\timer.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\timer_ip.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

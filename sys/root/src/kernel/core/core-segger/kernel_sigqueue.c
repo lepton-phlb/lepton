@@ -36,15 +36,12 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Global Declaration
 ==============================================*/
-int kernel_sigqueue_constructor(struct kernel_object_st** kernel_object_head,
-                                struct kernel_sigqueue_st* p);
+int kernel_sigqueue_constructor(struct kernel_object_st** kernel_object_head, struct kernel_sigqueue_st* p);
 int kernel_sigqueue_destructor(struct kernel_sigqueue_st* p);
 
-int kernel_sigqueue_send(struct kernel_pthread_st* kernel_pthread,
-                         struct kernel_sigevent_st* kernel_sigevent);
+int kernel_sigqueue_send(struct kernel_pthread_st* kernel_pthread, struct kernel_sigevent_st* kernel_sigevent);
 int kernel_sigqueue_wait(struct kernel_sigevent_st* kernel_sigevent);
-int kernel_sigqueue_timedwait(struct kernel_sigevent_st* kernel_sigevent,int flag,
-                              const struct timespec * timeout);
+int kernel_sigqueue_timedwait(struct kernel_sigevent_st* kernel_sigevent,int flag,const struct timespec * timeout);
 
 
 
@@ -61,22 +58,16 @@ const kernel_sigqueue_t _kernel_sigqueue_initializer=KERNEL_SIGQUEUE_INITIALIZER
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_sigqueue_constructor(struct kernel_object_st** pp_kernel_object_head,
-                                struct kernel_sigqueue_st* p){
+int kernel_sigqueue_constructor(struct kernel_object_st** pp_kernel_object_head, struct kernel_sigqueue_st* p){
    int i=0;
    if(!p)
       return -1;
    memcpy(p,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
    p->self=p;
    p->kernel_object_head = pp_kernel_object_head;
-   if((p->kernel_sem =
-          kernel_object_manager_get(pp_kernel_object_head, KERNEL_OBJECT_SEM,
-                                    KERNEL_OBJECT_SRC_POOL,
-                                    0))==(kernel_object_t*)0)
+   if((p->kernel_sem = kernel_object_manager_get(pp_kernel_object_head, KERNEL_OBJECT_SEM, KERNEL_OBJECT_SRC_POOL, 0))==(kernel_object_t*)0)
       return -1;
-   if((p->kernel_mutex =
-          kernel_object_manager_get(pp_kernel_object_head, KERNEL_OBJECT_PTRHEAD_MUTEX,
-                                    KERNEL_OBJECT_SRC_POOL))==(kernel_object_t*)0)
+   if((p->kernel_mutex = kernel_object_manager_get(pp_kernel_object_head, KERNEL_OBJECT_PTRHEAD_MUTEX, KERNEL_OBJECT_SRC_POOL))==(kernel_object_t*)0)
       return -1;
 
    for(i=0; i<KERNEL_SIGQUEUE_MAX; i++) {
@@ -121,8 +112,7 @@ int kernel_sigqueue_insert(struct kernel_sigqueue_st* p,kernel_sigevent_t* kerne
    if(!kernel_sigevent)
       return -1;
    //
-   kernel_pthread_mutex_lock(
-      &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    for(i=0; i<KERNEL_SIGQUEUE_MAX; i++) {
       if(p->sigqueue[i].si_code==SI_NONE) { //new sigevent
@@ -130,8 +120,7 @@ int kernel_sigqueue_insert(struct kernel_sigqueue_st* p,kernel_sigevent_t* kerne
          //to do: check overrun
          p->sigqueue[i].counter++;
          //
-         kernel_pthread_mutex_unlock(
-            &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+         kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
          return 0;
       }else if(p->sigqueue[i].si_code==kernel_sigevent->si_code
                && p->sigqueue[i].from == kernel_sigevent->from
@@ -139,14 +128,12 @@ int kernel_sigqueue_insert(struct kernel_sigqueue_st* p,kernel_sigevent_t* kerne
          //to do: check overrun
          p->sigqueue[i].counter++;
          //
-         kernel_pthread_mutex_unlock(
-            &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+         kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
          return 0;
       }
    }
    //
-   kernel_pthread_mutex_unlock(
-      &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return -1; //errno = [EAGAIN]
 }
@@ -169,12 +156,10 @@ int kernel_sigqueue_extract(struct kernel_sigqueue_st* p, kernel_sigevent_t* ker
    if(!kernel_sigevent)
       return -1;
    //
-   kernel_pthread_mutex_lock(
-      &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    for(i=0; i<KERNEL_SIGQUEUE_MAX; i++) {
-      if((p->sigqueue[i].si_code!=SI_NONE) && (p->sigqueue[i].si_code!=SI_SYSTEM) &&
-         (p->sigqueue[i]._sigevent.sigev_signo<sigev_signo)) {
+      if((p->sigqueue[i].si_code!=SI_NONE) && (p->sigqueue[i].si_code!=SI_SYSTEM) && (p->sigqueue[i]._sigevent.sigev_signo<sigev_signo)){
          int signo= p->sigqueue[i]._sigevent.sigev_signo;
          //filter
          if( kernel_sigevent->set
@@ -187,8 +172,7 @@ int kernel_sigqueue_extract(struct kernel_sigqueue_st* p, kernel_sigevent_t* ker
    }
    //
    if(sigev_pos<0) {
-      kernel_pthread_mutex_unlock(
-         &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
       return -1;
    }
    //
@@ -197,8 +181,7 @@ int kernel_sigqueue_extract(struct kernel_sigqueue_st* p, kernel_sigevent_t* ker
    if( !(--(p->sigqueue[sigev_pos].counter)) )
       p->sigqueue[sigev_pos].si_code = SI_NONE;
    //
-   kernel_pthread_mutex_unlock(
-      &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return 0;
 }
 
@@ -222,8 +205,7 @@ int kernel_sigqueue_sysextract(struct kernel_sigqueue_st* p,kernel_sigevent_t* k
    //filter on sigev_signo
    sigev_signo = kernel_sigevent->_sigevent.sigev_signo;
    //
-   kernel_pthread_mutex_lock(
-      &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    for(i=0; i<KERNEL_SIGQUEUE_MAX; i++) {
       if(p->sigqueue[i].si_code==SI_SYSTEM && p->sigqueue[i]._sigevent.sigev_signo==sigev_signo) {
@@ -233,8 +215,7 @@ int kernel_sigqueue_sysextract(struct kernel_sigqueue_st* p,kernel_sigevent_t* k
    }
    //
    if(sigev_pos<0) {
-      kernel_pthread_mutex_unlock(
-         &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
       return -1;
    }
    //
@@ -243,8 +224,7 @@ int kernel_sigqueue_sysextract(struct kernel_sigqueue_st* p,kernel_sigevent_t* k
    if( !(--(p->sigqueue[sigev_pos].counter)) )
       p->sigqueue[sigev_pos].si_code = SI_NONE;
    //
-   kernel_pthread_mutex_unlock(
-      &p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&p->kernel_mutex->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return 0;
 }
 
@@ -256,8 +236,7 @@ int kernel_sigqueue_sysextract(struct kernel_sigqueue_st* p,kernel_sigevent_t* k
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_sigqueue_send(struct kernel_pthread_st* kernel_pthread,
-                         struct kernel_sigevent_st* kernel_sigevent){
+int kernel_sigqueue_send(struct kernel_pthread_st* kernel_pthread, struct kernel_sigevent_st* kernel_sigevent){
    kernel_sigqueue_t* p;
    if(!kernel_pthread)
       return -1;
@@ -306,8 +285,7 @@ int kernel_sigqueue_wait(struct kernel_sigevent_st* kernel_sigevent){
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_sigqueue_timedwait(struct kernel_sigevent_st* kernel_sigevent,int flag,
-                              const struct timespec * abs_timeout){
+int kernel_sigqueue_timedwait(struct kernel_sigevent_st* kernel_sigevent,int flag,const struct timespec * abs_timeout){
    struct kernel_sigqueue_st* p= &kernel_pthread_self()->kernel_sigqueue;
    if(!p)
       return -1;

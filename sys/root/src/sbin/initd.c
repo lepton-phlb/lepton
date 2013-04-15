@@ -71,8 +71,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-static const char banner[] =
-   "\
+static const char banner[] = "\
 lepton (tauon) posix os\r\n\
 $Revision: 1.3 $ $Date: 2009-06-18 13:43:22 $\r\n\
 ";
@@ -276,8 +275,7 @@ int initd_main(int argc,char* argv[]){
 
    //print kernel information
    printf(banner);
-   printf("\r\n\nversion %s kernel compilation date: %s - %s\r\n",__LEPTON_VERSION,__KERNEL_DATE,
-          __KERNEL_TIME);
+   printf("\r\n\nversion %s kernel compilation date: %s - %s\r\n",__LEPTON_VERSION,__KERNEL_DATE,__KERNEL_TIME);
    cur_time = time(&cur_time);
    printf("\r\n%s\r\n\r\n",ctime(&cur_time));
 

@@ -234,29 +234,17 @@ typedef unsigned char kernel_intr_t;
  * \hideinitializer
  */
    #if defined(__KERNEL_IO_SEM)
-      #define __wait_io_int2(__pthread_ptr__,__timeout__)  kernel_sem_timedwait( \
-      &__pthread_ptr__->io_sem,0,__timeout__)
-      #define __wait_io_int3(__pthread_ptr__,__timeout__)  kernel_sem_timedwait( \
-      &__pthread_ptr__->io_sem,0,__timeout__)
+      #define __wait_io_int2(__pthread_ptr__,__timeout__)  kernel_sem_timedwait(&__pthread_ptr__->io_sem,0,__timeout__)
+      #define __wait_io_int3(__pthread_ptr__,__timeout__)  kernel_sem_timedwait(&__pthread_ptr__->io_sem,0,__timeout__)
    #elif defined(__KERNEL_IO_EVENT)
-      #define __wait_io_int2(__pthread_ptr__, \
-                             __timeout__) (OS_WaitEventTimed(SYSTEM_IO_INTERRUPT| \
-                                                             KERNEL_RET_INTERRUPT, \
-                                                             __time_s_to_ms((__timeout__)->tv_sec)+ \
-                                                             __time_ns_to_ms((__timeout__)->tv_nsec)) \
-                                           ? 0 : -1)
-      #define __wait_io_int3(__pthread_ptr__,__timeout__)  OS_WaitEventTimed( \
-      SYSTEM_IO_INTERRUPT|KERNEL_RET_INTERRUPT,__time_s_to_ms((__timeout__)->tv_sec)+ \
-      __time_ns_to_ms((__timeout__)->tv_nsec)))
+      #define __wait_io_int2(__pthread_ptr__,__timeout__) (OS_WaitEventTimed(SYSTEM_IO_INTERRUPT|KERNEL_RET_INTERRUPT,__time_s_to_ms((__timeout__)->tv_sec)+__time_ns_to_ms((__timeout__)->tv_nsec))? 0:-1)
+      #define __wait_io_int3(__pthread_ptr__,__timeout__)  OS_WaitEventTimed(SYSTEM_IO_INTERRUPT|KERNEL_RET_INTERRUPT,__time_s_to_ms((__timeout__)->tv_sec)+__time_ns_to_ms((__timeout__)->tv_nsec)))
    #endif
 
    #if defined(__KERNEL_IO_SEM)
-      #define __wait_io_int_abstime(__pthread_ptr__,__abs_timeout__) kernel_sem_timedwait( \
-      &__pthread_ptr__->io_sem,TIMER_ABSTIME,__abs_timeout__)
+      #define __wait_io_int_abstime(__pthread_ptr__,__abs_timeout__) kernel_sem_timedwait(&__pthread_ptr__->io_sem,TIMER_ABSTIME,__abs_timeout__)
    #elif defined(__KERNEL_IO_EVENT)
-      #define __wait_io_int_abstime(__pthread_ptr__,__abs_timeout__) OS_WaitEventTimed( \
-      SYSTEM_IO_INTERRUPT|KERNEL_RET_INTERRUPT,__time_s_to_ms( \
-         (__abs_timeout__)->tv_sec)+__time_ns_to_ms((__abs_timeout__)->tv_nsec)) ? 0 : -1)
+      #define __wait_io_int_abstime(__pthread_ptr__,__abs_timeout__) (OS_WaitEventTimed(SYSTEM_IO_INTERRUPT|KERNEL_RET_INTERRUPT,__time_s_to_ms((__abs_timeout__)->tv_sec)+__time_ns_to_ms((__abs_timeout__)->tv_nsec))? 0:-1)
    #endif
 
 
@@ -286,6 +274,11 @@ typedef unsigned char kernel_intr_t;
  */
    #define __hw_leave_interrupt() \
    OS_LeaveInterrupt();
+
+   //for suspend and resume thread  //GD untested
+   #define __kernel_pthread_suspend(__pthread_ptr__)  OS_Suspend(__pthread_ptr__->tcb)
+   #define __kernel_pthread_resume(__pthread_ptr__)   OS_Resume(__pthread_ptr__->tcb)
+   #define __kernel_pthread_release(__pthread_ptr__)  OS_Terminate(__pthread_ptr__->tcb)
 
 #elif defined(USE_ECOS) && defined(CPU_GNU32)
 //   extern kernel_sem_t kernel_io_sem;

@@ -284,8 +284,7 @@ int config_lwip_if(lwip_if_t* p_lwip_if){
    p_lwip_if->if_config.if_no = g_if_no;
 
    //add interface
-   netif_add(&p_lwip_if->netif, &if_ipaddr, &if_netmask, &if_gw, p_lwip_if, ethif_core_init,
-             tcpip_input);
+   netif_add(&p_lwip_if->netif, &if_ipaddr, &if_netmask, &if_gw, p_lwip_if, ethif_core_init, tcpip_input);
 
    if(g_if_no==1)
       netif_set_default(&p_lwip_if->netif);

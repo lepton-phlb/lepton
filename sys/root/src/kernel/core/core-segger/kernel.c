@@ -56,6 +56,12 @@ Includes
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 
+#if defined (__KERNEL_NET_IPSTACK)
+   #if defined(USE_UIP)
+      #include "kernel/core/net/uip_core/uip_core.h"
+   #endif
+#endif
+
 /*===========================================
 Global Declaration
 =============================================*/
@@ -82,6 +88,8 @@ tmr_t kernel_tmr;
    #define KERNEL_STACK_SIZE  1024 //1024//512 M16C
 #elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && defined(CPU_ARM7))
    #define KERNEL_STACK_SIZE  2048 //2048//ARM7
+#elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && defined(CPU_CORTEXM))
+#define KERNEL_STACK_SIZE  2048 //CORTEXM
 #elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && defined(CPU_ARM9))
    #define KERNEL_STACK_SIZE  2048 //2048//ARM9
 #elif WIN32
@@ -259,7 +267,7 @@ int _kernel_syscall(void){
 ---------------------------------------------*/
 int _kernel_mount(const char* argv[]){
    static const char* fstype_list[]={"rootfs","ufs","ufsx"};
-   static const fstype_list_size=sizeof(fstype_list)/sizeof(char*);
+   static const int fstype_list_size=sizeof(fstype_list)/sizeof(char*);
    fstype_t i;
    fstype_t fstype = -1;
 
@@ -1079,6 +1087,12 @@ void _start_kernel(char* arg){
    _kernel_warmup_boot();
    //only in bootstrap configuration
    //_kernel_warmup_elfloader();
+   //
+   #if defined (__KERNEL_NET_IPSTACK)
+      #if defined(USE_UIP)
+         uip_core_run();
+      #endif
+   #endif
    //
    __kernel_static_mode_out();
 }

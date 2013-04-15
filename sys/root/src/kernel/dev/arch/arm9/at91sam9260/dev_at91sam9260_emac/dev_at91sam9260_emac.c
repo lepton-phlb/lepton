@@ -178,13 +178,9 @@ static volatile TxTd txTd __attribute__ ((aligned (4), section (".no_cache")));
 /// Send Buffer
 // Section 3.6 of AMBA 2.0 spec states that burst should not cross 1K Boundaries.
 // Receive buffer manager writes are burst of 2 words => 3 lsb bits of the address shall be set to 0
-static volatile unsigned char pTxBuffer[TX_BUFFERS *
-                                        EMAC_TX_UNITSIZE] __attribute__ ((aligned (4),
-                                                                          section (".no_cache")));                           //__attribute__((aligned(8)));
+static volatile unsigned char pTxBuffer[TX_BUFFERS * EMAC_TX_UNITSIZE] __attribute__ ((aligned (4), section (".no_cache"))); //__attribute__((aligned(8)));
 /// Receive Buffer
-static volatile unsigned char pRxBuffer[RX_BUFFERS *
-                                        EMAC_RX_UNITSIZE] __attribute__ ((aligned (4),
-                                                                          section (".no_cache")));                           //__attribute__((aligned(8)));
+static volatile unsigned char pRxBuffer[RX_BUFFERS * EMAC_RX_UNITSIZE] __attribute__ ((aligned (4), section (".no_cache"))); //__attribute__((aligned(8)));
 /// Statistics
 static volatile EmacStats EmacStatistics __attribute__ ((aligned (4), section (".no_cache")));
 

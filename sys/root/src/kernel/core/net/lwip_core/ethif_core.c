@@ -226,10 +226,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
          variable. */
       /* send data from(q->payload, q->len); */
 #ifdef NETIF_DEBUG
-      LWIP_DEBUGF(NETIF_DEBUG,
-                  ("netif: send ptr %p q->payload %p q->len %i q->next %p\n", ptr, q->payload,
-                   (int)q->len,
-                   q->next));
+		   LWIP_DEBUGF(NETIF_DEBUG, ("netif: send ptr %p q->payload %p q->len %i q->next %p\n", ptr, q->payload, (int)q->len, q->next));
 #endif
 
       //profiler
@@ -337,10 +334,7 @@ static struct pbuf *low_level_input(struct netif *netif){
             variable. */
          /* read data into(q->payload, q->len); */
 #ifdef NETIF_DEBUG
-         LWIP_DEBUGF(NETIF_DEBUG,
-                     ("netif: recv start %i length %i q->payload %p q->len %i q->next %p\n", start,
-                      length,
-                      q->payload, (int)q->len, q->next));
+	         LWIP_DEBUGF(NETIF_DEBUG, ("netif: recv start %i length %i q->payload %p q->len %i q->next %p\n", start, length, q->payload, (int)q->len, q->next));
 #endif
          memcpy(q->payload,&buffer[start],q->len);
          start+=q->len;

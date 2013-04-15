@@ -48,12 +48,8 @@ either the MPL or the [eCos GPL] License."
 
 int _system_sysctl(int *name, int namelen, void *oldp, int *oldlenp, void *newp,int newlen);
 
-#define sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__, \
-               __sysctl_newp__, \
-               __sysctl_newlen__) \
-   _system_sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__, \
-                  __sysctl_newp__, \
-                  __sysctl_newlen__)
+#define sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__,__sysctl_newp__,__sysctl_newlen__)\
+         _system_sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__,__sysctl_newp__,__sysctl_newlen__)
 
 
 

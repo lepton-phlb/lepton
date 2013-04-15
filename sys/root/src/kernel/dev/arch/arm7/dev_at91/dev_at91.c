@@ -38,8 +38,8 @@ either the MPL or the [eCos GPL] License."
 
 #include "lib/libc/stdio/stdio.h"
 
-#include <ioat91m55800.h>
-#include <intrinsic.h>
+//#include <ioat91m55800.h> //GD
+//#include <intrinsic.h> //GD
 
 #include <string.h>     // memcpy
 
@@ -112,7 +112,7 @@ void _kernel_print( char * p){
 ----------------------------------------------*/
 void _kernel_dump_kernel(void){
    unsigned int sz;
-   char* p;
+   unsigned char* p;
 #if OS_CHECKSTACK
    _kernel_print("\r\n--------------------\r\n");
    _kernel_print("lepton kernel");
@@ -122,7 +122,7 @@ void _kernel_dump_kernel(void){
    sprintf(dump_buffer,"kernel stack end addr= 0x%x\r\n",kernel_thread.tcb->pStackBot);
    _kernel_print(dump_buffer);
 
-   for(p=kernel_thread.tcb->pStack;
+   for(p=(unsigned char*)kernel_thread.tcb->pStack;
        p!=kernel_thread.tcb->pStackBot; p--) {
       if(!((sz++)%16)) {
          sprintf(dump_buffer,"\r\n0x%x   ",p);
@@ -155,7 +155,7 @@ void _kernel_dump_process(pid_t _pid){
    sprintf(dump_buffer,"stack end addr= 0x%x\r\n",process_lst[_pid]->pthread_ptr->tcb->pStackBot);
    _kernel_print(dump_buffer);
 
-   for(p=process_lst[_pid]->pthread_ptr->tcb->pStack;
+   for(p=(unsigned char*)process_lst[_pid]->pthread_ptr->tcb->pStack;
        p!=process_lst[_pid]->pthread_ptr->tcb->pStackBot; p--) {
       if(!((sz++)%16)) {
          sprintf(dump_buffer,"\r\n0x%x   ",p);

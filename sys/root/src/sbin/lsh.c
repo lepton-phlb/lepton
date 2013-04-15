@@ -198,8 +198,7 @@ int check_script(char* ref, int* argc, char* argv[], const char* arge[]){
 | Comments:
 | See:
 ---------------------------------------------*/
-static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],unsigned int* p_opt,
-                     char verbose){
+static int parse_cmd(char* last_cmd, char* string,int p_argc, char* p_argv[],unsigned int* p_opt,char verbose){
    int argc=0;
    char* argv[ARG_MAX]={0};
 

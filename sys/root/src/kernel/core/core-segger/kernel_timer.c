@@ -83,17 +83,13 @@ void kernel_timer_generic_callback(void){
    if(p_kernel_timer->interval && p_kernel_timer->itimerspec.it_interval.tv_nsec) {
       //rcv KERNEL_TIMER_VALUE_PERIOD  and set KERNEL_TIMER_INTERVAL_PERIOD
 #ifdef USE_SEGGER
-      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,
-                        (__timer_s_to_ms(p_kernel_timer->itimerspec.it_interval.tv_sec)+
-                         __timer_ns_to_ms(p_kernel_timer->itimerspec.it_interval.tv_nsec)));
+      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(p_kernel_timer->itimerspec.it_interval.tv_sec)+__timer_ns_to_ms(p_kernel_timer->itimerspec.it_interval.tv_nsec)));
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);
 #endif
    }else if(!p_kernel_timer->interval && p_kernel_timer->itimerspec.it_interval.tv_nsec) {
       //rcv KERNEL_TIMER_INTERVAL_PERIOD  and set KERNEL_TIMER_VALUE_PERIOD
 #ifdef USE_SEGGER
-      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,
-                        (__timer_s_to_ms(p_kernel_timer->itimerspec.it_value.tv_sec)+
-                         __timer_ns_to_ms(p_kernel_timer->itimerspec.it_value.tv_nsec)));
+      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(p_kernel_timer->itimerspec.it_value.tv_sec)+__timer_ns_to_ms(p_kernel_timer->itimerspec.it_value.tv_nsec)));
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);
 #endif
       //don't send signal
@@ -131,8 +127,7 @@ void kernel_timer_generic_callback(void){
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_timer_create(clockid_t clockid, struct sigevent * p_sigevent,
-                        kernel_timer_t* p_kernel_timer){
+int kernel_timer_create(clockid_t clockid, struct sigevent * p_sigevent,kernel_timer_t* p_kernel_timer){
    if(!p_kernel_timer)
       return -1;
    switch(clockid) {
@@ -226,8 +221,7 @@ int kernel_timer_getoverrun(kernel_timer_t* p_kernel_timer){
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct itimerspec* value,
-                         struct itimerspec* ovalue){
+int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct itimerspec* value,struct itimerspec* ovalue){
 
    switch(flags) {
    case 0:   //relative time
@@ -257,19 +251,14 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
    //
    if(!p_kernel_timer->created) {
       p_kernel_timer->created=KERNEL_TIMER_CREATED;
-      OS_CreateTimer((OS_TIMER*)p_kernel_timer,kernel_timer_generic_callback,
-                     (__timer_s_to_ms(value->it_value.tv_sec)+
-                      __timer_ns_to_ms(value->it_value.tv_nsec)));
+      OS_CreateTimer((OS_TIMER*)p_kernel_timer,kernel_timer_generic_callback,(__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec)));
    }else{
       OS_StopTimer((OS_TIMER*)p_kernel_timer); //disarm timer
    }
    //
-   OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,
-                     (__timer_s_to_ms(value->it_value.tv_sec)+
-                      __timer_ns_to_ms(value->it_value.tv_nsec)));
+   OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec)));
    //
-   if(p_kernel_timer->itimerspec.it_value.tv_nsec!=0 ||
-      p_kernel_timer->itimerspec.it_value.tv_sec!=0)
+   if(p_kernel_timer->itimerspec.it_value.tv_nsec!=0 || p_kernel_timer->itimerspec.it_value.tv_sec!=0)
 //      OS_StartTimer((OS_TIMER*)p_kernel_timer);//arm timer
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);  //RETRIGGER timer // PATCH $BM
 

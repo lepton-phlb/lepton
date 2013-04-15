@@ -141,8 +141,7 @@ static int _flash_make_sector_map(void){
    sector_no_t sector_no =0;
    sector_sz_t sector_sz =0;
 
-   flash_sector_t* p_sector_map =
-      (flash_sector_t*)((flash_type_t*)dev_flash_am29dlxxxx_win32.p_flash_type)->p_sector_map;
+   flash_sector_t* p_sector_map = (flash_sector_t*)((flash_type_t*)dev_flash_am29dlxxxx_win32.p_flash_type)->p_sector_map;
 
    win32_flash_sector_map_t* p_win32_flash_sector_map = &win32_flash_sector_map;
 
@@ -163,8 +162,7 @@ static int _flash_make_sector_map(void){
 
          p_win32_flash_sector_map_next = p_win32_flash_sector_map;
 
-         p_win32_flash_sector_map =
-            (win32_flash_sector_map_t*)malloc(sizeof(win32_flash_sector_map_t));
+         p_win32_flash_sector_map = (win32_flash_sector_map_t*)malloc(sizeof(win32_flash_sector_map_t));
          p_win32_flash_sector_map->next = p_win32_flash_sector_map_next;
          p_win32_flash_sector_map->next->prev = p_win32_flash_sector_map;
          p_win32_flash_sector_map->prev = (win32_flash_sector_map_t*)0;
@@ -233,9 +231,7 @@ static int _flash_erase_sector(sector_addr_t addr){
 
    _lseek( fh, sector_addr, SEEK_SET);
 
-   while( (w+=
-              _write( fh,&_erase_pattern,
-                      sizeof(_erase_pattern)))<p_win32_flash_sector_map->sector_sz) ;
+   while( (w+= _write( fh,&_erase_pattern,sizeof(_erase_pattern)))<p_win32_flash_sector_map->sector_sz);
 
    _commit(fh);
 
@@ -269,9 +265,7 @@ static int _flash_erase_all(void){
       //printf("@=0x%08x [%08d]\r\n",sector_addr,p_win32_flash_sector_map->sector_sz);
       w=0;
 
-      while( (w+=
-                 _write( fh,&_erase_pattern,
-                         sizeof(_erase_pattern)))<p_win32_flash_sector_map->sector_sz) ;
+      while( (w+= _write( fh,&_erase_pattern,sizeof(_erase_pattern)))<p_win32_flash_sector_map->sector_sz);
 
       _commit(fh);
 
@@ -293,9 +287,7 @@ static int _flash_erase_all(void){
 static int dev_win32_flash_load(void){
    if(fh==-1) {
 
-      if( (fh =
-              _open( ".\\dev_win32_flash.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,
-                     _S_IREAD|_S_IWRITE)) == -1 ) {
+      if( (fh = _open( ".\\dev_win32_flash.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
          DWORD dwError=GetLastError();
 
          if(dwError!=ERROR_FILE_EXISTS)
@@ -310,9 +302,7 @@ static int dev_win32_flash_load(void){
          int w=0;
 
          close(fh);
-         if( (fh =
-                 _open( ".\\dev_win32_flash.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|
-                        _S_IWRITE)) == -1 )
+         if( (fh = _open( ".\\dev_win32_flash.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 )
             return -1;
 
 

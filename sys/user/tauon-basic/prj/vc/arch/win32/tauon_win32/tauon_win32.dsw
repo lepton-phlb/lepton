@@ -1,0 +1,133 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "dev"="..\..\..\..\..\..\..\root\prj\vc\dev\dev.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    dev
+    ..\..\..\..\..\..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fs"="..\..\..\..\..\..\..\root\prj\vc\fs\fs.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    lepton
+    ..\..\..\..\..\..\..\root\prj\vc\fs
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "kernel"="..\..\..\..\..\..\..\root\prj\vc\kernel\kernel.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    lepton
+    ..\..\..\..\..\..\..\root\prj\vc\kernel
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "lib"="..\..\..\..\..\..\..\root\prj\vc\lib\lib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    lib
+    ..\..\..\..\..\..\..\root
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "net"="..\..\..\..\..\..\..\root\prj\vc\net\net.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    net
+    ..\..\..\..\..\..\..\root
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "sbin"="..\..\..\..\..\..\..\root\prj\vc\sbin\sbin.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    sbin
+    ..\..\..\..\..\..\..\root
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "tauon_win32"=".\tauon_win32.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    tauon_win32
+    ..\..\..\..\..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    lepton/sys/user/tauon-basic/prj/vc/arch/win32/tauon_win32
+    .
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

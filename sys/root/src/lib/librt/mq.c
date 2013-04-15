@@ -40,6 +40,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/stat.h"
 #include "kernel/core/devio.h"
 #include "kernel/core/stropts.h"
+#include "kernel/core/timer.h"
 
 #include "kernel/core/sys/mqueue.h"
 #include "kernel/core/posix_mqueue.h"

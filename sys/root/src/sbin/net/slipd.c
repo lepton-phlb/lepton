@@ -75,9 +75,7 @@ int slipd_windows_synchro(int fdin,int fdout, int verbose){
       int i;
 
       for(i=0; i<cb; i++) {
-         if( (j=
-                 (rcv_buf[i]==
-                  str_synchro_from_pc[j] ? (j+1) : 0))==(sizeof(str_synchro_from_pc)-1) ) {
+         if( (j=(rcv_buf[i]==str_synchro_from_pc[j]?(j+1):0))==(sizeof(str_synchro_from_pc)-1) ){
             return ((write(fdout,str_synchro_to_pc,(sizeof(str_synchro_to_pc)-1))>0 ? 0 : -1));
          }
       }

@@ -111,8 +111,7 @@ int   kernel_pthread_mutex_destroy(kernel_pthread_mutex_t *mutex){
 | Comments:
 | See:
 ----------------------------------------------*/
-int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,
-                                         kernel_pthread_mutex_t *mutex){
+int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,kernel_pthread_mutex_t *mutex){
    int count;
    //
    __atomic_in();

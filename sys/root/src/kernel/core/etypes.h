@@ -24,8 +24,8 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _ETYPES_H
-#define _ETYPES_H
+#ifndef __ETYPES_H__
+#define __ETYPES_H__
 
 
 /*===========================================
@@ -47,11 +47,21 @@ typedef unsigned char uint8_t;
 
 
 typedef short int int16_t;
-typedef long int int32_t;
 
 typedef unsigned short int uint16_t;
+#if (__KERNEL_CPU_ARCH == CPU_ARCH_16)
+typedef long  int          int32_t;
 typedef unsigned long int uint32_t;
+#elif (__KERNEL_CPU_ARCH == CPU_ARCH_32)
+typedef int                int32_t;
+typedef unsigned int       uint32_t;
+#endif
 
+#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
 typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
+#else 
+typedef signed long int64_t;
+typedef unsigned long uint64_t;
+#endif
 #endif

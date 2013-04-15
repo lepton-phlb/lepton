@@ -531,8 +531,8 @@ nextarg: continue;
             if (nomagic == 0)
             {
                unsigned magic1, magic2;
-               if (((magic1 = getc(stdin)) != (magic_header[0] & 0xFF))
-                   || ((magic2 = getc(stdin)) != (magic_header[1] & 0xFF)))
+                                    if (((magic1 = getc(stdin)) != (unsigned)(magic_header[0] & 0xFF))
+                                     || ((magic2 = getc(stdin)) != (unsigned)(magic_header[1] & 0xFF))) 
                {
                   fprintf(stderr,
                           "%s: not in compressed format %x %x\n",
@@ -1194,7 +1194,7 @@ getcode()
 
    if ( clear_flg > 0 || offset >= size || free_ent > maxcode )
    {
-      int i;
+        int i=0;
       /*
        * If the next entry will be too big for the current code
        * size, then we must increase the size.  This implies reading
@@ -1398,8 +1398,7 @@ REGISTER int c, stack_top;
    return stack_top;
 }
       #else
-dump_tab() {
-}
+ dump_tab() {}
       #endif /* DEBUG2 */
    #endif /* DEBUG */
 #endif  /* METAWARE */

@@ -50,8 +50,7 @@ either the MPL or the [eCos GPL] License."
 | See:
 ----------------------------------------------*/
 #ifdef CPU_WIN32
-void _debug_bckup_thread_start_context(CONTEXT* __context__,
-                                       struct kernel_pthread_st *__pthread_ptr__){
+void _debug_bckup_thread_start_context(CONTEXT* __context__,struct kernel_pthread_st *__pthread_ptr__){
    CONTEXT __local_context__;
    __local_context__.ContextFlags=PTHREAD_CONTEXT_DUMP;
    GetThreadContext(__pthread_ptr__->tcb->hTask,&__local_context__);
@@ -103,16 +102,13 @@ void _debug_rstr_context(CONTEXT* __context__,kernel_pthread_t *__pthread_ptr__)
 int _debug_bckup_stack(kernel_pthread_t *__pthread_ptr__){
    int offsetEsp;
    void* src_stack_ptr;
-   _dbg_printf("backup.Esp=0x%08x  start_context.Esp=0x%08x\r\n",__pthread_ptr__->bckup_context.Esp,
-               __pthread_ptr__->start_context.Esp);
+   _dbg_printf("backup.Esp=0x%08x  start_context.Esp=0x%08x\r\n",__pthread_ptr__->bckup_context.Esp,__pthread_ptr__->start_context.Esp);
    offsetEsp = __pthread_ptr__->bckup_context.Esp - __pthread_ptr__->start_context.Esp;
    src_stack_ptr = (PDWORD)(__pthread_ptr__->start_context.Esp+offsetEsp);
    __pthread_ptr__->bckup_stack = (char*)malloc( abs(offsetEsp) );
    if(!__pthread_ptr__->bckup_stack)
       return -1;
-   _dbg_printf("bckup_stack:0x%08x src_stack_ptr:0x%08x , offsetEsp=%d \r\n",
-               __pthread_ptr__->bckup_stack,src_stack_ptr,
-               offsetEsp);
+   _dbg_printf("bckup_stack:0x%08x src_stack_ptr:0x%08x , offsetEsp=%d \r\n",__pthread_ptr__->bckup_stack,src_stack_ptr,offsetEsp);
    memcpy(__pthread_ptr__->bckup_stack,src_stack_ptr,abs(offsetEsp));
    return 0;
 }

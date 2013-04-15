@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _STRING_H
-#define _STRING_H
+#ifndef __STRING_H__
+#define __STRING_H__
 
 
 /*============================================
@@ -46,8 +46,12 @@ either the MPL or the [eCos GPL] License."
 int __l_strcasecmp(const char *s1, const char *s2);
 int __l_strncasecmp(const char *s1, const char *s2, size_t n);
 
-#define strcasecmp   __l_strcasecmp
-#define strncasecmp  __l_strncasecmp
+char * __l_strtok_r(char *s, const char *delim, char **last);
+char * __l_strtok(char *s, const char *delim);
+
+#define strcasecmp(__s1__,__s2__) __l_strcasecmp(__s1__,__s2__)
+#define strncasecmp(__s1__,__s2__,__n__)  __l_strncasecmp(__s1__,__s2__,__n__)
+#define strtok_r(__s__,__delim__,__last__) __l_strtok_r(__s__,__delim__,__last__)
 
 
 #endif

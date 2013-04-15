@@ -426,8 +426,7 @@ struct tm *__localtime_r(const time_t *timep, struct tm *tmb){
 ---------------------------------------------*/
 time_t __mktime(struct tm *timeptr)
 {
-   static const unsigned char vals[] =
-   {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, /* non-leap */ 29,};
+static const unsigned char vals[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, /* non-leap */29,};
    long days, secs;
    time_t t;
    struct tm x;

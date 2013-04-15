@@ -49,8 +49,7 @@ either the MPL or the [eCos GPL] License."
 | Comments:
 | See:
 ----------------------------------------------*/
-int pthread_create(pthread_t *thread, const pthread_attr_t *attr,void *(*start_routine)(void*),
-                   void *arg){
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr,void *(*start_routine)(void*), void *arg){
    pthread_create_t pthread_create_dt;
 
    pthread_create_dt.arg             = arg;

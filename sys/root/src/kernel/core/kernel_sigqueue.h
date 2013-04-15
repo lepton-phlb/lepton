@@ -64,14 +64,11 @@ typedef struct kernel_pthread_st kernel_pthread_st;
 typedef struct kernel_object_st kernel_object_st;
    #endif
 
-typedef int (*pfn_kernel_sigqueue_constructor_t)(struct kernel_object_st** pp_kernel_object_head,
-                                                 struct kernel_sigqueue_st* p);
+typedef int (*pfn_kernel_sigqueue_constructor_t)(struct kernel_object_st** pp_kernel_object_head, struct kernel_sigqueue_st* p);
 typedef int (*pfn_kernel_sigqueue_destructor_t)(struct kernel_sigqueue_st* p);
-typedef int (*pfn_kernel_sigqueue_send_t)(struct kernel_pthread_st* kernel_pthread,
-                                          struct kernel_sigevent_st* kernel_sigevent);
+typedef int (*pfn_kernel_sigqueue_send_t)(struct kernel_pthread_st* kernel_pthread, struct kernel_sigevent_st* kernel_sigevent);
 typedef int (*pfn_kernel_sigqueue_wait_t)(struct kernel_sigevent_st* kernel_sigevent);
-typedef int (*pfn_kernel_sigqueue_timedwait_t)(struct kernel_sigevent_st* kernel_sigevent, int flag,
-                                               const struct timespec * timeout);
+typedef int (*pfn_kernel_sigqueue_timedwait_t)(struct kernel_sigevent_st* kernel_sigevent, int flag, const struct timespec * timeout);
 
 
 typedef struct kernel_sigqueue_st {
@@ -94,10 +91,8 @@ typedef struct kernel_sigqueue_st {
 extern const kernel_sigqueue_t _kernel_sigqueue_initializer;
 
    #define KERNEL_SIGQUEUE_INITIALIZER {(kernel_sigqueue_t*)&_kernel_sigqueue_initializer, \
-                                        (pfn_kernel_sigqueue_constructor_t) \
-                                        kernel_sigqueue_constructor, \
-                                        (pfn_kernel_sigqueue_destructor_t) \
-                                        kernel_sigqueue_destructor, \
+                                     (pfn_kernel_sigqueue_constructor_t)kernel_sigqueue_constructor,\
+                                     (pfn_kernel_sigqueue_destructor_t)kernel_sigqueue_destructor,\
                                         (pfn_kernel_sigqueue_send_t)kernel_sigqueue_send, \
                                         (pfn_kernel_sigqueue_wait_t)kernel_sigqueue_wait, \
                                         (pfn_kernel_sigqueue_timedwait_t)kernel_sigqueue_timedwait, \

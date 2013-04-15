@@ -49,13 +49,9 @@ either the MPL or the [eCos GPL] License."
 #define __unix_inb(__unix_port__)   *((unsigned char*)__unix_port__)
 #define __unix_inw(__unix_port__)   *((unsigned short*)__unix_port__)
 #define __unix_inl(__unix_port__)   *((unsigned long*)__unix_port__)
-#define __unix_outb(__unix_port__, \
-                    __unix_value__) *((unsigned char*)__unix_port__)=((unsigned char)__unix_value__)
-#define __unix_outw(__unix_port__, \
-                    __unix_value__) *((unsigned short*)__unix_port__)= \
-   ((unsigned short)__unix_value__)
-#define __unix_outl(__unix_port__, \
-                    __unix_value__) *((unsigned long*)__unix_port__)=((unsigned long)__unix_value__)
+#define __unix_outb(__unix_port__,__unix_value__) *((unsigned char*)__unix_port__)=((unsigned char)__unix_value__)
+#define __unix_outw(__unix_port__,__unix_value__) *((unsigned short*)__unix_port__)=((unsigned short)__unix_value__)
+#define __unix_outl(__unix_port__,__unix_value__) *((unsigned long*)__unix_port__)=((unsigned long)__unix_value__)
 
 #define inb(__port__) __unix_inb(__port__)
 #define inw(__port__) __unix_inw(__port__)

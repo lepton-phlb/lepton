@@ -199,10 +199,9 @@ int      __ungetc(int c,FILE *fp);
 #define vsprintf     __vsprintf
 #define vsnprintf    __vsnprintf
 
-#if USE_FULL_STDIO_PRINTF
+#ifdef USE_FULL_STDIO_PRINTF
    #define vfprintf(__op__,__fmt__,__ap__) __vfnprintf(__op__,(-1),__fmt__,__ap__)
-   #define vfnprintf(__op__,__max_size__,__fmt__,__ap__) __vfnprintf(__op__,__max_size__,__fmt__, \
-                                                                     __ap__)
+   #define vfnprintf(__op__,__max_size__,__fmt__,__ap__) __vfnprintf(__op__,__max_size__,__fmt__,__ap__)
 #else
    #define vfprintf(__op__,__fmt__,__ap__) __vfprintf(__op__,__fmt__,__ap__)
    #define vfnprintf(__op__,__max_size__,__fmt__,__ap__) (-1)

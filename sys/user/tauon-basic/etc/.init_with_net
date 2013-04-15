@@ -1,0 +1,13 @@
+#warning!!!:enable mode xon/xoff.
+#stty ixon
+#stty 57600
+#net/slipd -w /dev/ttys1&
+mount /dev/sdcard /dev/spi0 /dev/hd/sdhd0
+#net/ifconfig addif 14.2.212.244 14.2.10.1
+net/ifconfig addif 192.168.83.32 192.168.83.2
+bin/net/telnetd&
+#bin/net/shttpd -cgi_interp lsh &
+bin/net/mongoosed -cgi_interp lsh &
+#bin/net/ftpd&
+
+

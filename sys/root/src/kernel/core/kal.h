@@ -59,8 +59,7 @@ either the MPL or the [eCos GPL] License."
    #include <cyg/hal/hal_io.h>
    #include <cyg/hal/var_arch.h>
 
-   #define __va_list_copy(__dest_va_list__,__src_va_list__) va_copy(__dest_va_list__, \
-                                                                    __src_va_list__)
+   #define __va_list_copy(__dest_va_list__,__src_va_list__) va_copy(__dest_va_list__,__src_va_list__)
 
 typedef cyg_thread tcb_t;
 typedef cyg_handle_t thr_id_t;
@@ -156,8 +155,7 @@ enum enum_synth_regs {
    #define __inline_bckup_stack(__pthread_ptr__){ \
       int offsetEsp; \
       void* src_stack_ptr; \
-      offsetEsp =  __pthread_ptr__->bckup_context[S_REG_ESP] - \
-                  __pthread_ptr__->start_context[S_REG_ESP]; \
+	   offsetEsp =  __pthread_ptr__->bckup_context[S_REG_ESP] - __pthread_ptr__->start_context[S_REG_ESP];\
       src_stack_ptr = (char *)(__pthread_ptr__->start_context[S_REG_ESP]+offsetEsp); \
       __pthread_ptr__->bckup_stack = (char*)malloc( abs(offsetEsp) ); \
       if(!__pthread_ptr__->bckup_stack) \
@@ -168,8 +166,7 @@ enum enum_synth_regs {
    #define __inline_rstr_stack(__pthread_ptr__){ \
       int offsetEsp; \
       void* src_stack_ptr; \
-      offsetEsp = __pthread_ptr__->bckup_context[S_REG_ESP] - \
-                  __pthread_ptr__->start_context[S_REG_ESP]; \
+	   offsetEsp = __pthread_ptr__->bckup_context[S_REG_ESP] - __pthread_ptr__->start_context[S_REG_ESP];\
       src_stack_ptr = (char *)(__pthread_ptr__->start_context[S_REG_ESP]+offsetEsp); \
       memcpy(src_stack_ptr,__pthread_ptr__->bckup_stack,abs(offsetEsp)); \
       free(__pthread_ptr__->bckup_stack); \
@@ -215,13 +212,9 @@ enum enum_synth_regs {
 //gruik pour le moment on met explicitement la valeur du thread cible ds les données locales du thread
    #define __inline_swap_signal_handler(__pthread_ptr__, __sig_handler__){ \
       if((__pthread_ptr__->stat&PTHREAD_STATUS_KERNEL) == PTHREAD_STATUS_KERNEL) { \
-         __pthread_ptr__->bckup_stack = \
-            (char *)malloc(__pthread_ptr__->attr.stacksize+sizeof(context_t)); \
-         memcpy((void *)__pthread_ptr__->bckup_stack, (void *)__pthread_ptr__->bckup_context, \
-                sizeof(context_t)); \
-         memcpy((void *)(__pthread_ptr__->bckup_stack+sizeof(context_t)), \
-                (void *)__pthread_ptr__->tcb->stack_base, \
-                __pthread_ptr__->attr.stacksize); \
+         __pthread_ptr__->bckup_stack = (char *)malloc(__pthread_ptr__->attr.stacksize+sizeof(context_t));\
+         memcpy((void *)__pthread_ptr__->bckup_stack, (void *)__pthread_ptr__->bckup_context, sizeof(context_t));\
+         memcpy((void *)(__pthread_ptr__->bckup_stack+sizeof(context_t)), (void *)__pthread_ptr__->tcb->stack_base, __pthread_ptr__->attr.stacksize);\
          __pthread_ptr__->bckup_context[S_REG_EIP] = (int)__sig_handler__; \
          __pthread_ptr__->tcb->thread_data[LOCAL_THREAD_SAVE_STATUS] = PTHREAD_STATUS_KERNEL; \
       } \
@@ -232,14 +225,11 @@ enum enum_synth_regs {
          cyg_thread_info info; \
          cyg_thread_get_info(__pthread_ptr__->thr_id, __pthread_ptr__->tcb->unique_id, &info); \
          memcpy((void *)&ctx, (void *) __pthread_ptr__->tcb->stack_ptr, sizeof(HAL_SavedRegisters)); \
-         if(!(__pthread_ptr__->bckup_stack = \
-                 (char *)malloc(__pthread_ptr__->attr.stacksize+sizeof(HAL_SavedRegisters)))) { \
+         if(!(__pthread_ptr__->bckup_stack = (char *)malloc(__pthread_ptr__->attr.stacksize+sizeof(HAL_SavedRegisters)))) {\
                  return; \
               } \
               memcpy((void *)__pthread_ptr__->bckup_stack, (void *)&ctx, sizeof(HAL_SavedRegisters)); \
-              memcpy((void *)(__pthread_ptr__->bckup_stack+sizeof(HAL_SavedRegisters)), \
-                     (void *)__pthread_ptr__->tcb->stack_base, \
-                     __pthread_ptr__->attr.stacksize); \
+         memcpy((void *)(__pthread_ptr__->bckup_stack+sizeof(HAL_SavedRegisters)), (void *)__pthread_ptr__->tcb->stack_base, __pthread_ptr__->attr.stacksize);\
               eip_addr = (ctx.ebp+4); \
               *eip_addr = __sig_handler__; \
               if(info.state & CYG_REASON_WAIT) \
@@ -251,18 +241,14 @@ enum enum_synth_regs {
    #define __inline_exit_signal_handler(__pthread_ptr__){ \
    HAL_SavedRegisters ctx; \
    if(__pthread_ptr__->tcb->thread_data[LOCAL_THREAD_SAVE_STATUS] & PTHREAD_STATUS_KERNEL) { \
-      memcpy((void *)__pthread_ptr__->bckup_context, (void *)__pthread_ptr__->bckup_stack, \
-             sizeof(context_t)); \
-      memcpy((void *)__pthread_ptr__->tcb->stack_base, (void *)__pthread_ptr__->bckup_stack+ \
-             sizeof(context_t),__pthread_ptr__->attr.stacksize); \
+            memcpy((void *)__pthread_ptr__->bckup_context, (void *)__pthread_ptr__->bckup_stack, sizeof(context_t));\
+            memcpy((void *)__pthread_ptr__->tcb->stack_base, (void *)__pthread_ptr__->bckup_stack+sizeof(context_t),__pthread_ptr__->attr.stacksize);\
       __pthread_ptr__->tcb->thread_data[LOCAL_THREAD_SAVE_STATUS] = 0; \
    } \
    else { \
       char ** eip_addr=NULL; \
       memcpy((void *)&ctx,(void *)__pthread_ptr__->bckup_stack, sizeof(HAL_SavedRegisters)); \
-      memcpy((void *)__pthread_ptr__->tcb->stack_base, \
-             (void *)(__pthread_ptr__->bckup_stack+sizeof(HAL_SavedRegisters)), \
-             __pthread_ptr__->attr.stacksize); \
+            memcpy((void *)__pthread_ptr__->tcb->stack_base,(void *)(__pthread_ptr__->bckup_stack+sizeof(HAL_SavedRegisters)), __pthread_ptr__->attr.stacksize);\
       eip_addr = (ctx.ebp+4); \
       __pthread_ptr__->bckup_context[S_REG_EIP] = *eip_addr; \
       __pthread_ptr__->bckup_context[S_REG_EBP] = ctx.ebp; \
@@ -396,17 +382,12 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       char ** fp_ptr; \
       int offset; \
       if((__pthread_ptr__->stat&PTHREAD_STATUS_KERNEL) == PTHREAD_STATUS_KERNEL) { \
-         offset = \
-            (__pthread_ptr__->tcb->stack_base + \
-             __pthread_ptr__->tcb->stack_size) - __pthread_ptr__->bckup_context.sp; \
+         offset = (__pthread_ptr__->tcb->stack_base + __pthread_ptr__->tcb->stack_size) - __pthread_ptr__->bckup_context.sp;\
          __pthread_ptr__->tcb->thread_data[0] = offset; \
          __pthread_ptr__->bckup_stack = malloc(abs(offset) + sizeof(context_t)); \
          if(!__pthread_ptr__->bckup_stack) return -ENOMEM; \
-         memcpy((void *)__pthread_ptr__->bckup_stack, (void *)&(__pthread_ptr__->bckup_context), \
-                sizeof(context_t)); \
-         memcpy((void *)__pthread_ptr__->bckup_stack+sizeof(context_t), \
-                (void *)__pthread_ptr__->bckup_context.sp, \
-                offset); \
+         memcpy((void *)__pthread_ptr__->bckup_stack, (void *)&(__pthread_ptr__->bckup_context), sizeof(context_t));\
+         memcpy((void *)__pthread_ptr__->bckup_stack+sizeof(context_t), (void *)__pthread_ptr__->bckup_context.sp, offset);\
          fp_ptr = (char **)(__pthread_ptr__->bckup_context.fp - 4); \
          *fp_ptr = (char *)__sig_handler__; \
       } \
@@ -431,8 +412,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
    #define __inline_exit_signal_handler(__pthread_ptr__){ \
       context_t *ctx = (context_t *)__pthread_ptr__->bckup_stack; \
       int offset = __pthread_ptr__->tcb->thread_data[0]; \
-      char * p_sp = __pthread_ptr__->tcb->stack_base+ \
-                    (char *)(__pthread_ptr__->tcb->stack_size - offset); \
+      char * p_sp = __pthread_ptr__->tcb->stack_base+ (char *)(__pthread_ptr__->tcb->stack_size - offset);\
       memcpy((void *)&__pthread_ptr__->bckup_context, (void *)ctx, sizeof(context_t)); \
       memcpy((void *)p_sp, (void *)(__pthread_ptr__->bckup_stack+sizeof(context_t)), offset); \
       free(__pthread_ptr__->bckup_stack); \
@@ -515,8 +495,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
          __pthread_ptr__->_profile_counter=*AT91C_TC2_CV; \
 }
 //
-      #define __kernel_profiler_get_counter(__pthread_ptr__) (__pthread_ptr__ ? __pthread_ptr__-> \
-                                                              _profile_counter : 0)
+      #define __kernel_profiler_get_counter(__pthread_ptr__) (__pthread_ptr__?__pthread_ptr__->_profile_counter:0)
 
 //
       #define __io_profiler_init(){ \
@@ -538,8 +517,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       if(__counter__ > ofile_lst[__desc__]._profile_counter ) \
          ofile_lst[__desc__]._profile_counter=(__counter__)-ofile_lst[__desc__]._profile_counter; \
       else \
-         ofile_lst[__desc__]._profile_counter= \
-            (PROFILER_START_COUNTER_VALUE-ofile_lst[__desc__]._profile_counter)+__counter__; \
+            ofile_lst[__desc__]._profile_counter=(PROFILER_START_COUNTER_VALUE-ofile_lst[__desc__]._profile_counter)+__counter__;\
 }
 //
       #define __io_profiler_get_counter(__desc__) ofile_lst[__desc__]._profile_counter
@@ -751,8 +729,7 @@ typedef CONTEXT context_t;
    #define _macro_stack_addr OS_STACKPTR
 
 
-   #define PTHREAD_CONTEXT_DUMP CONTEXT_FULL|CONTEXT_DEBUG_REGISTERS|CONTEXT_FLOATING_POINT| \
-   CONTEXT_EXTENDED_REGISTERS
+   #define PTHREAD_CONTEXT_DUMP CONTEXT_FULL|CONTEXT_DEBUG_REGISTERS|CONTEXT_FLOATING_POINT|CONTEXT_EXTENDED_REGISTERS
 
 /**
 * permet de sauvegarder le contexte de dpart du thread __pthread_ptr dans context.
@@ -810,17 +787,13 @@ typedef CONTEXT context_t;
    #define __inline_bckup_stack(__pthread_ptr__){ \
       int offsetEsp; \
       void* src_stack_ptr; \
-      _dbg_printf("backup.Esp=0x%08x  start_context.Esp=0x%08x\r\n", \
-                  __pthread_ptr__->bckup_context.Esp, \
-                  __pthread_ptr__->start_context.Esp); \
+      _dbg_printf("backup.Esp=0x%08x  start_context.Esp=0x%08x\r\n",__pthread_ptr__->bckup_context.Esp,__pthread_ptr__->start_context.Esp);\
       offsetEsp = __pthread_ptr__->bckup_context.Esp - __pthread_ptr__->start_context.Esp; \
       src_stack_ptr = (PDWORD)(__pthread_ptr__->start_context.Esp+offsetEsp); \
       __pthread_ptr__->bckup_stack = (char*)malloc( abs(offsetEsp) ); \
       if(!__pthread_ptr__->bckup_stack) \
          return -ENOMEM; \
-      _dbg_printf("bckup_stack:0x%08x src_stack_ptr:0x%08x , offsetEsp=%d \r\n", \
-                  __pthread_ptr__->bckup_stack,src_stack_ptr, \
-                  offsetEsp); \
+      _dbg_printf("bckup_stack:0x%08x src_stack_ptr:0x%08x , offsetEsp=%d \r\n",__pthread_ptr__->bckup_stack,src_stack_ptr,offsetEsp);\
       memcpy(__pthread_ptr__->bckup_stack,src_stack_ptr,abs(offsetEsp)); \
 }
 
@@ -954,9 +927,7 @@ typedef CONTEXT context_t;
    #include <stdarg.h>
 
 //#define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy(&__dest_va_list__,&__src_va_list__,sizeof(__dest_va_list__))
-   #define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy((__dest_va_list__), \
-                                                                   (__src_va_list__), \
-                                                                   sizeof((__dest_va_list__)))
+   #define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy((__dest_va_list__),(__src_va_list__),sizeof((__dest_va_list__)))
 
 
 typedef OS_TASK tcb_t;
@@ -982,14 +953,12 @@ typedef struct {
 
    #define __bckup_thread_start_context(__context__,__pthread_ptr__){ \
       memcpy(&__context__.os_task,__pthread_ptr__->tcb,sizeof(OS_TASK)); \
-      memcpy(&__context__.os_regs,((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack), \
-             sizeof(OS_REGS)); \
+      memcpy(&__context__.os_regs,((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack),sizeof(OS_REGS));\
 }
 
    #define __bckup_context(__context__,__pthread_ptr__){ \
       memcpy(&__context__.os_task,__pthread_ptr__->tcb,sizeof(OS_TASK)); \
-      memcpy(&__context__.os_regs,((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack), \
-             sizeof(OS_REGS)); \
+      memcpy(&__context__.os_regs,((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack),sizeof(OS_REGS));\
 }
 
    #define __rstr_context(__context__,__pthread_ptr__){ \
@@ -998,8 +967,7 @@ typedef struct {
       pPrev= __pthread_ptr__->tcb->pPrev; \
       pNext= __pthread_ptr__->tcb->pNext; \
       memcpy(__pthread_ptr__->tcb,&__context__.os_task,sizeof(OS_TASK)); \
-      memcpy(((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack),&__context__.os_regs, \
-             sizeof(OS_REGS)); \
+      memcpy(((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack),&__context__.os_regs,sizeof(OS_REGS));\
       __pthread_ptr__->tcb->pNext = pNext; \
       __pthread_ptr__->tcb->pPrev = pPrev; \
 }
@@ -1009,8 +977,7 @@ typedef struct {
       int stack_size; \
       pid_t _pid_=__pthread_ptr__->pid; \
       void* src_stack_ptr; \
-      stack_size = process_lst[_pid_]->bckup_context.os_task.pStack - \
-                   __pthread_ptr__->start_context.os_task.pStack; \
+      stack_size = process_lst[_pid_]->bckup_context.os_task.pStack - __pthread_ptr__->start_context.os_task.pStack;\
       src_stack_ptr = (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+stack_size); \
       process_lst[_pid_]->bckup_stack = (char*)malloc( abs(stack_size) ); \
       if(!process_lst[_pid_]->bckup_stack) \
@@ -1022,8 +989,7 @@ typedef struct {
       int stack_size; \
       pid_t _pid_=__pthread_ptr->pid; \
       void* src_stack_ptr; \
-      stack_size = process_lst[_pid_]->bckup_context.os_task.pStack- \
-                   __pthread_ptr->start_context.os_task.pStack; \
+      stack_size = process_lst[_pid_]->bckup_context.os_task.pStack- __pthread_ptr->start_context.os_task.pStack;\
       src_stack_ptr = (void*)(((uchar8_t*)__pthread_ptr->start_context.os_task.pStack)+stack_size); \
       memcpy(src_stack_ptr,process_lst[_pid_]->bckup_stack,abs(stack_size)); \
       free(process_lst[_pid_]->bckup_stack); \
@@ -1033,8 +999,7 @@ typedef struct {
       /*modif for 3.06h version*/ \
       /*((OS_REGS OS_STACKPTR *)process_lst[pid]->pthread_ptr->tcb->pStack)->RetAdr4    = OS_MakeIntAdr(sig_handler);*/ \
       /* First return adr (see OS_Private.h)*/ \
-      ((OS_REGS OS_STACKPTR *)process_lst[__pid__]->pthread_ptr->tcb->pStack)->PC0= \
-         (OS_U32)sig_handler; \
+      ((OS_REGS OS_STACKPTR *)process_lst[__pid__]->pthread_ptr->tcb->pStack)->PC0= (OS_U32)sig_handler;\
       ((OS_REGS OS_STACKPTR *)process_lst[__pid__]->pthread_ptr->tcb->pStack)->Counters= 0; \
       process_lst[pid]->pthread_ptr->tcb->TASK_Timeout=0; \
       process_lst[pid]->pthread_ptr->tcb->Stat=0; \
@@ -1080,8 +1045,7 @@ typedef struct {
       process_lst[__pid__]->pthread_ptr->_profile_counter=(PROFILER_START_COUNTER_VALUE-TA1); \
 }
 
-      #define __kernel_profiler_get_counter(__pid__) process_lst[__pid__]->pthread_ptr-> \
-   _profile_counter;
+      #define __kernel_profiler_get_counter(__pid__) process_lst[__pid__]->pthread_ptr->_profile_counter;
 
 //io
       #define __io_profiler_init(){ \
@@ -1099,8 +1063,7 @@ typedef struct {
       #define __io_profiler_stop(__desc__){ \
       unsigned short __counter__ = TA3; \
       if(__counter__ > ofile_lst[__desc__]._profile_counter ) \
-         ofile_lst[__desc__]._profile_counter= \
-            (PROFILER_START_COUNTER_VALUE-__counter__)+ofile_lst[__desc__]._profile_counter; \
+               ofile_lst[__desc__]._profile_counter=(PROFILER_START_COUNTER_VALUE-__counter__)+ofile_lst[__desc__]._profile_counter;\
       else \
          ofile_lst[__desc__]._profile_counter=ofile_lst[__desc__]._profile_counter-__counter__; \
 }
@@ -1118,14 +1081,18 @@ typedef struct {
    #endif
 
 
-#elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && ( defined(CPU_ARM7) || \
-   defined(CPU_ARM9) ) )
+#elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && ( defined(CPU_ARM7) ||  defined(CPU_ARM9) || defined(CPU_CORTEXM) ) )
 
 
    #include "RTOS.H"
 /*modif for segger version 3.28h */
 //#include "OSKern.H"
+   //GD-TODO lm3S: improve? 
+   #if  (__tauon_cpu_device__ != __tauon_cpu_device_cortexM3_trifecta__)\
+      &&(__tauon_cpu_device__ != __tauon_cpu_device_cortexM3_LM3S__)\
+      &&(__tauon_cpu_device__ != __tauon_cpu_device_cortexM4_stm32f4__)
    #include "OS_Priv.h"
+   #endif
 /*modif for segger version 3.52e */
 //#include "OSint.h"
 
@@ -1148,9 +1115,7 @@ typedef struct {
       #include <ioat91sam9261.h>
    #endif
 
-   #define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy(&__dest_va_list__, \
-                                                                   &__src_va_list__, \
-                                                                   sizeof(__dest_va_list__))
+   #define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy(&__dest_va_list__,&__src_va_list__,sizeof(__dest_va_list__))
 //for compatibility with m16c 3.06h
 //
 
@@ -1170,21 +1135,28 @@ typedef int thr_id_t;
 
    #define _macro_stack_addr OS_STACKPTR
 
+   #if(OS_VERSION_GENERIC > (38000))
+      #define OS_REGS_GENERIC    OS_REGS_BASE
+   #else
+      #define OS_REGS_GENERIC    OS_REGS
+   #endif
+    #if(OS_VERSION_GENERIC >= 38400)
+    #else
+        #define OS_REG_PC   PC
+    #endif
 typedef struct {
    OS_TASK os_task;
-   OS_REGS os_regs;
+      OS_REGS_GENERIC  os_regs;
 }context_t;
 
    #define __inline_bckup_thread_start_context(__context__,__pthread_ptr__){ \
       memcpy(&__context__.os_task,__pthread_ptr__->tcb,sizeof(OS_TASK)); \
-      memcpy(&__context__.os_regs,((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack), \
-             sizeof(OS_REGS)); \
+      memcpy(&__context__.os_regs,((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack),sizeof(OS_REGS_GENERIC));\
 }
 
    #define __inline_bckup_context(__context__,__pthread_ptr__){ \
       memcpy(&__context__.os_task,__pthread_ptr__->tcb,sizeof(OS_TASK)); \
-      memcpy(&__context__.os_regs,((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack), \
-             sizeof(OS_REGS)); \
+      memcpy(&__context__.os_regs,((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack),sizeof(OS_REGS_GENERIC));\
 }
 
    #define __inline_rstr_context(__context__,__pthread_ptr__){ \
@@ -1193,8 +1165,7 @@ typedef struct {
       pPrev= __pthread_ptr__->tcb->pPrev; \
       pNext= __pthread_ptr__->tcb->pNext; \
       memcpy(__pthread_ptr__->tcb,&__context__.os_task,sizeof(OS_TASK)); \
-      memcpy(((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack),&__context__.os_regs, \
-             sizeof(OS_REGS)); \
+      memcpy(((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack),&__context__.os_regs,sizeof(OS_REGS_GENERIC));\
       __pthread_ptr__->tcb->pNext = pNext; \
       __pthread_ptr__->tcb->pPrev = pPrev; \
 }
@@ -1203,11 +1174,8 @@ typedef struct {
    #define __inline_bckup_stack(__pthread_ptr__){ \
       int __stack_size__; \
       void* __src_stack_ptr__; \
-      __stack_size__ = \
-         ((int)(__pthread_ptr__->bckup_context.os_task.pStack) - \
-          (int)(__pthread_ptr__->start_context.os_task.pStack)); \
-      __src_stack_ptr__ = \
-         (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__); \
+      __stack_size__ = ((int)(__pthread_ptr__->bckup_context.os_task.pStack) - (int)(__pthread_ptr__->start_context.os_task.pStack));\
+      __src_stack_ptr__ = (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__);\
       __pthread_ptr__->bckup_stack = (char*)_sys_malloc( abs(__stack_size__) ); \
       if(!__pthread_ptr__->bckup_stack) \
          return -ENOMEM; \
@@ -1217,11 +1185,8 @@ typedef struct {
    #define __inline_rstr_stack(__pthread_ptr__){ \
       int __stack_size__; \
       void* __src_stack_ptr__; \
-      __stack_size__ = \
-         ((int)(__pthread_ptr__->bckup_context.os_task.pStack)- \
-          (int)(__pthread_ptr__->start_context.os_task.pStack)); \
-      __src_stack_ptr__ = \
-         (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__); \
+      __stack_size__ = ((int)(__pthread_ptr__->bckup_context.os_task.pStack)- (int)(__pthread_ptr__->start_context.os_task.pStack));\
+      __src_stack_ptr__ = (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__);\
       memcpy(__src_stack_ptr__,__pthread_ptr__->bckup_stack,abs(__stack_size__)); \
       _sys_free(__pthread_ptr__->bckup_stack); \
 }
@@ -1233,8 +1198,10 @@ typedef struct {
       /*modif for 3.32 replace RetAdr4 by PC0 */ \
       /*((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->PC0= (OS_U32)(__sig_handler__);*/ \
       /*modif for 3.52e and 3.60 replace PC0 by PC */ \
-      ((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->PC= (OS_U32)(__sig_handler__); \
-      ((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->Counters= 0; \
+      /*((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->PC= (OS_U32)(__sig_handler__);\*/\
+      /* GD - modif for 3.84, "PC" from OS_REGS_BASE struct changed to "OS_REG_PC" since embOS 3.84. */\
+      ((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->OS_REG_PC= (OS_U32)(__sig_handler__);\
+      ((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->Counters= 0;\
       __pthread_ptr__->tcb->Timeout=0; \
       __pthread_ptr__->tcb->Stat=0; \
       OS_MakeTaskReady(__pthread_ptr__->tcb); \
@@ -1269,6 +1236,16 @@ typedef struct {
       #define __stop_sched() __LEPTON_KAL_PIT_MR &= ~(1<<25);
 //restart timer (PIT periodic interval timer) tick for scheduler.PITIEN=1;
       #define __restart_sched() __LEPTON_KAL_PIT_MR |= (1<<25);
+   #endif
+
+   //GD all Cortex-M3 MCUs have the same systick registers
+   #if   (__tauon_cpu_device__ == __tauon_cpu_device_cortexM3_trifecta__)\
+       ||(__tauon_cpu_device__ == __tauon_cpu_device_cortexM3_LM3S__)\
+       ||(__tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__)
+      #define __LEPTON_KAL_PIT_BASE    (0xE000E010)
+      #define __LEPTON_KAL_PIT_MR      (*(volatile OS_U32*)(__LEPTON_KAL_PIT_BASE + 0x00))
+      #define __stop_sched() __LEPTON_KAL_PIT_MR &= ~(1uL << (1));
+      #define __restart_sched() __LEPTON_KAL_PIT_MR |= (1uL << (1));
    #endif
 
    #if (__tauon_cpu_device__ == __tauon_cpu_device_arm9_at91sam9261__)
@@ -1309,8 +1286,7 @@ typedef struct {
          __pthread_ptr__->_profile_counter=__TC_CV1C0; \
 }
 //
-      #define __kernel_profiler_get_counter(__pthread_ptr__) (__pthread_ptr__ ? __pthread_ptr__-> \
-                                                              _profile_counter : 0)
+      #define __kernel_profiler_get_counter(__pthread_ptr__) (__pthread_ptr__?__pthread_ptr__->_profile_counter:0)
 
 //io
       #define __io_profiler_init(){ \
@@ -1332,8 +1308,7 @@ typedef struct {
       if(__counter__ > ofile_lst[__desc__]._profile_counter ) \
          ofile_lst[__desc__]._profile_counter=(__counter__)-ofile_lst[__desc__]._profile_counter; \
       else \
-         ofile_lst[__desc__]._profile_counter= \
-            (PROFILER_START_COUNTER_VALUE-ofile_lst[__desc__]._profile_counter)+__counter__; \
+            ofile_lst[__desc__]._profile_counter=(PROFILER_START_COUNTER_VALUE-ofile_lst[__desc__]._profile_counter)+__counter__;\
 }
 //
       #define __io_profiler_get_counter(__desc__) ofile_lst[__desc__]._profile_counter
@@ -1369,8 +1344,7 @@ typedef struct {
          __pthread_ptr__->_profile_counter=*AT91C_TC2_CV; \
 }
 //
-      #define __kernel_profiler_get_counter(__pthread_ptr__) (__pthread_ptr__ ? __pthread_ptr__-> \
-                                                              _profile_counter : 0)
+      #define __kernel_profiler_get_counter(__pthread_ptr__) (__pthread_ptr__?__pthread_ptr__->_profile_counter:0)
 
 //
       #define __io_profiler_init(){ \
@@ -1392,8 +1366,7 @@ typedef struct {
       if(__counter__ > ofile_lst[__desc__]._profile_counter ) \
          ofile_lst[__desc__]._profile_counter=(__counter__)-ofile_lst[__desc__]._profile_counter; \
       else \
-         ofile_lst[__desc__]._profile_counter= \
-            (PROFILER_START_COUNTER_VALUE-ofile_lst[__desc__]._profile_counter)+__counter__; \
+            ofile_lst[__desc__]._profile_counter=(PROFILER_START_COUNTER_VALUE-ofile_lst[__desc__]._profile_counter)+__counter__;\
 }
 //
       #define __io_profiler_get_counter(__desc__) ofile_lst[__desc__]._profile_counter
@@ -1402,7 +1375,7 @@ typedef struct {
    #endif //END KERNEL_PROFILER CPU_ARM9
 
 //profiling option not enabled (see in sys/root/src/kernel/core/kernelconf.h)
-   #if !defined(KERNEL_PROFILER)
+   #if (!defined(KERNEL_PROFILER) || !defined(__kernel_profiler_start)) //GD trick for default/unkown CPU
       #define __kernel_profiler_start()
       #define __kernel_profiler_stop(__pid__)
       #define __kernel_profiler_get_counter(__pid__)
@@ -1494,16 +1467,14 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
 
 //get the main registers at the beginning of the thread
    #define __inline_bckup_thread_start_context(__context__,__pthread_ptr__){ \
-      __context__.user_stack_addr = __pthread_ptr__->tcb->stack_base+ \
-                                    __pthread_ptr__->tcb->stack_size; \
+	   __context__.user_stack_addr = __pthread_ptr__->tcb->stack_base+__pthread_ptr__->tcb->stack_size;\
 }
 
 //save the stack of current thread
    #define __inline_bckup_stack(__pthread_ptr__){ \
       int offsetEsp; \
       void* src_stack_ptr; \
-      offsetEsp =  __pthread_ptr__->bckup_context.user_stack_addr - \
-                  __pthread_ptr__->start_context.user_stack_addr; \
+	   offsetEsp =  __pthread_ptr__->bckup_context.user_stack_addr - __pthread_ptr__->start_context.user_stack_addr;\
       src_stack_ptr = (char *)(__pthread_ptr__->start_context.user_stack_addr+offsetEsp); \
       __pthread_ptr__->bckup_stack = (char*)malloc( abs(offsetEsp) ); \
       if(!__pthread_ptr__->bckup_stack) \
@@ -1515,8 +1486,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
    #define __inline_rstr_stack(__pthread_ptr__){ \
       int offsetEsp; \
       void* src_stack_ptr; \
-      offsetEsp = __pthread_ptr__->bckup_context.user_stack_addr - \
-                  __pthread_ptr__->start_context.user_stack_addr; \
+	   offsetEsp = __pthread_ptr__->bckup_context.user_stack_addr - __pthread_ptr__->start_context.user_stack_addr;\
       src_stack_ptr = (char *)(__pthread_ptr__->start_context.user_stack_addr+offsetEsp); \
       memcpy(src_stack_ptr,__pthread_ptr__->bckup_stack,abs(offsetEsp)); \
       free(__pthread_ptr__->bckup_stack); \
@@ -1724,11 +1694,9 @@ typedef CONTEXT context_t;
 
 #endif
 
-#if 0
 #ifdef USE_DEBUG_KAL
 
-void _debug_bckup_thread_start_context(CONTEXT* __context__,
-                                       struct kernel_pthread_st *__pthread_ptr__);
+void _debug_bckup_thread_start_context(CONTEXT* __context__,struct kernel_pthread_st *__pthread_ptr__);
 void _debug_bckup_context(CONTEXT* __context__,struct kernel_pthread_st *__pthread_ptr__);
 void _debug_rstr_context(CONTEXT* __context__,struct kernel_pthread_st *__pthread_ptr__);
 int _debug_bckup_stack(struct kernel_pthread_st *__pthread_ptr__);
@@ -1737,41 +1705,24 @@ void _debug_swap_signal_handler(struct kernel_pthread_st *__pthread_ptr__,void* 
 void _debug_inline_exit_signal_handler(struct kernel_pthread_st *__pthread_ptr__);
 
 
-   #define __bckup_thread_start_context(__context__, \
-                                        __pthread_ptr__) _debug_bckup_thread_start_context( \
-      &__context__,__pthread_ptr__)
-   #define __bckup_context(__context__,__pthread_ptr__)              _debug_bckup_context( \
-      &__context__,__pthread_ptr__)
-   #define __rstr_context(__context__,__pthread_ptr__)               _debug_rstr_context( \
-      &__context__,__pthread_ptr__)
-   #define __bckup_stack(__pthread_ptr__)                            _debug_bckup_stack( \
-      __pthread_ptr__)
-   #define __rstr_stack(__pthread_ptr__)                             _debug_rstr_stack( \
-      __pthread_ptr__)
-   #define __swap_signal_handler(__pthread_ptr__,sig_handler)        _debug_swap_signal_handler( \
-      __pthread_ptr__,sig_handler)
-   #define __exit_signal_handler(__pthread_ptr__)                    _debug_exit_signal_handler( \
-      __pthread_ptr__)
+#define __bckup_thread_start_context(__context__,__pthread_ptr__) _debug_bckup_thread_start_context(&__context__,__pthread_ptr__)
+#define __bckup_context(__context__,__pthread_ptr__)              _debug_bckup_context(&__context__,__pthread_ptr__)
+#define __rstr_context(__context__,__pthread_ptr__)               _debug_rstr_context(&__context__,__pthread_ptr__)
+#define __bckup_stack(__pthread_ptr__)                            _debug_bckup_stack(__pthread_ptr__)
+#define __rstr_stack(__pthread_ptr__)                             _debug_rstr_stack(__pthread_ptr__)
+#define __swap_signal_handler(__pthread_ptr__,sig_handler)        _debug_swap_signal_handler(__pthread_ptr__,sig_handler)
+#define __exit_signal_handler(__pthread_ptr__)                    _debug_exit_signal_handler(__pthread_ptr__)
 
 #else
 
-   #define __bckup_thread_start_context(__context__, \
-                                        __pthread_ptr__) __inline_bckup_thread_start_context( \
-      __context__,__pthread_ptr__)
-   #define __bckup_context(__context__,__pthread_ptr__)              __inline_bckup_context( \
-      __context__,__pthread_ptr__)
-   #define __rstr_context(__context__,__pthread_ptr__)               __inline_rstr_context( \
-      __context__,__pthread_ptr__)
-   #define __bckup_stack(__pthread_ptr__)                            __inline_bckup_stack( \
-      __pthread_ptr__)
-   #define __rstr_stack(__pthread_ptr__)                             __inline_rstr_stack( \
-      __pthread_ptr__)
-   #define __swap_signal_handler(__pthread_ptr__,sig_handler)        __inline_swap_signal_handler( \
-      __pthread_ptr__,sig_handler)
-   #define __exit_signal_handler(__pthread_ptr__)                    __inline_exit_signal_handler( \
-      __pthread_ptr__)
+#define __bckup_thread_start_context(__context__,__pthread_ptr__) __inline_bckup_thread_start_context(__context__,__pthread_ptr__)
+#define __bckup_context(__context__,__pthread_ptr__)              __inline_bckup_context(__context__,__pthread_ptr__)
+#define __rstr_context(__context__,__pthread_ptr__)               __inline_rstr_context(__context__,__pthread_ptr__)
+#define __bckup_stack(__pthread_ptr__)                            __inline_bckup_stack(__pthread_ptr__)
+#define __rstr_stack(__pthread_ptr__)                             __inline_rstr_stack(__pthread_ptr__)
+#define __swap_signal_handler(__pthread_ptr__,sig_handler)        __inline_swap_signal_handler(__pthread_ptr__,sig_handler)
+#define __exit_signal_handler(__pthread_ptr__)                    __inline_exit_signal_handler(__pthread_ptr__)
 
-#endif
 #endif
 
 /** @} */
