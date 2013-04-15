@@ -263,6 +263,8 @@ int _sys_sock_connect(int sock, struct _sockaddr *address,int len){
    //OS_WakeTask(_OS_TASK_TCB(os_ipStack));
 
    //Wait uip_connected();
+    uip_core_queue_put(UIP_POLL_REQUEST,desc,(void*)address,len);
+    //
    __WAIT_SOCKET_EVENT(pthread_ptr,hsock);
    if(((socket_t*)hsock)->state != STATE_SOCKET_WAIT)
       return -1;

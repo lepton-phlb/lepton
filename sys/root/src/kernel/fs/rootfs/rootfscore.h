@@ -91,7 +91,7 @@ extern rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
 
 extern volatile int _rtfs_offset;
 
-#define __rtfsinode_lst(inode) rtfsinode_lst[inode-_rtfs_offset]
+#define __rtfsinode_lst(__inode__) rtfsinode_lst[(__inode__-_rtfs_offset)]
 
 
 //

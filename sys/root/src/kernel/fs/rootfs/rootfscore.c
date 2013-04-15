@@ -30,10 +30,17 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include "kernel/core/errno.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/dirent.h"
 #include "kernel/core/system.h"
-#include "kernel/core/statvfs.h"
+#include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
+
 #include "kernel/fs/vfs/vfstypes.h"
+#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/core/statvfs.h"
+
 #include "kernel/fs/rootfs/rootfscore.h"
 
 #if defined(GNU_GCC)
@@ -165,9 +172,11 @@ void _rtfs_freeblk(rtfs_blocknb_t block){
 inodenb_t _rtfs_allocnode(void)
 {
    int inode;
+   rtfs_attr_t attr;
    for(inode=_rtfs_offset; inode<(RTFS_NODETBL_SIZE+_rtfs_offset); inode++)
    {
-      if(__rtfsinode_lst(inode).attr==S_IFNULL) {
+      attr=rtfsinode_lst[inode].attr;
+      if(attr==0x0000) {
          return inode; //nodeoffset
       }
    }

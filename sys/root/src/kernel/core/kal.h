@@ -692,7 +692,8 @@ enum enum_synth_regs {
 #elif defined(CPU_WIN32)
 //
    #pragma pack(push, 8)
-   #include "kernel/core/windows.h"
+   //#include "kernel/core/windows.h"
+   #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
    #include <malloc.h>
 
    #ifdef USE_SEGGER

@@ -98,7 +98,9 @@ either the MPL or the [eCos GPL] License."
 #define REGISTER register
 #define DOTZ ".Z"
 
-#define INT_MAX 32767
+#ifndef INT_MAX	
+   #define INT_MAX 32767
+#endif
 
 /* The default for Minix is -b13, but we can do -b16 if the machine can. */
 #define DEFAULTBITS 13

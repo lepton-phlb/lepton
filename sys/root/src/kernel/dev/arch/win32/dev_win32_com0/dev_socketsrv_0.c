@@ -29,7 +29,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include "kernel/core/windows.h"
+#include <windows.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>

@@ -1,29 +1,20 @@
-/*
-The contents of this file are subject to the Mozilla Public License Version 1.1
-(the "License"); you may not use this file except in compliance with the License.
-You may obtain a copy of the License at http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS" basis,
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
-specific language governing rights and limitations under the License.
-
-The Original Code is ______________________________________.
-
-The Initial Developer of the Original Code is ________________________.
-Portions created by ______________________ are Copyright (C) ______ _______________________.
-All Rights Reserved.
-
-Contributor(s): ______________________________________.
-
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
-instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting  the provisions above and replace
-them with the notice and other provisions required by the [eCos GPL] License.
-If you do not delete the provisions above, a recipient may use your version of this file under
-either the MPL or the [eCos GPL] License."
-*/
+/*-------------------------------------------
+| Copyright(C) 2007 CHAUVIN-ARNOUX
+---------------------------------------------
+| Project:
+| Project Manager:
+| Source: mklepton.c
+| Path: X:\TOOLS\mklepton
+| Authors:
+| Plateform:
+| Created:
+| Revision/Date:
+| Description:
+---------------------------------------------
+| Historic:
+---------------------------------------------
+| Authors	| Date	| Comments
+---------------------------------------------*/
 
 
 /*===========================================
@@ -87,14 +78,20 @@ int od_main(int argc, char* argv[]);
 //see "sbin/date.c"
 int date_main(int argc, char* argv[]);
 
+//see "sbin/echo.c"
+int echo_main(int argc, char* argv[]);
+
 //see "sbin/net/ifconfig.c"
 int ifconfig_main(int argc, char* argv[]);
 
-//see "bin/test2.c"
-int test2_main(int argc, char* argv[]);
+//see "bin/udpsrvd.c"
+int udpsrvd_main(int argc, char* argv[]);
 
-//see "bin/net/telnetd.c"
-int telnetd_main(int argc, char* argv[]);
+//see "bin/net/cgi-bin/tstpost.c"
+int tstpost_main(int argc, char* argv[]);
+
+//see "bin/net/cgi-bin/tstcgi2.c"
+int tstcgi2_main(int argc, char* argv[]);
 
 
 
@@ -102,50 +99,30 @@ int telnetd_main(int argc, char* argv[]);
 Global Declaration
 =============================================*/
 static const bin_t _bin_lst[]={
-   {         "initd",                                       initd_main,                    10,
-             2048,                   5},
-   {           "lsh",                                         lsh_main,                    10,
-               2048,                   5},
-   {         "mount",                                       mount_main,                    10,
-             2048,                   5},
-   {        "umount",                                      umount_main,                    10,
-            2048,                   5},
-   {            "ls",                                          ls_main,                    10,
-                2048,                   5},
-   {            "ps",                                          ps_main,                    10,
-                2048,                   5},
-   {          "kill",                                        kill_main,                    10,
-              2048,                   5},
-   {         "touch",                                       touch_main,                    10,
-             2048,                   5},
-   {           "cat",                                         cat_main,                    10,
-               2048,                   5},
-   {          "more",                                        more_main,                    10,
-              2048,                   5},
-   {          "mkfs",                                        mkfs_main,                    10,
-              2048,                   5},
-   {            "df",                                          df_main,                    10,
-                2048,                   5},
-   {         "uname",                                       uname_main,                    10,
-             2048,                   5},
-   {           "pwd",                                         pwd_main,                    10,
-               2048,                   5},
-   {         "rmdir",                                       rmdir_main,                    10,
-             2048,                   5},
-   {         "mkdir",                                       mkdir_main,                    10,
-             2048,                   5},
-   {            "rm",                                          rm_main,                    10,
-                2048,                   5},
-   {            "od",                                          od_main,                    10,
-                2048,                   5},
-   {          "date",                                        date_main,                    10,
-              2048,                   5},
-   {      "ifconfig",                                    ifconfig_main,                    100,
-          4096,                   1},
-   {         "test2",                                       test2_main,                    10,
-             1024,                   5},
-   {       "telnetd",                                     telnetd_main,                    10,
-           1024,                   5}
+{         "initd",			                 initd_main,			10,			2048,			5},
+{           "lsh",			                   lsh_main,			10,			2048,			5},
+{         "mount",			                 mount_main,			10,			2048,			5},
+{        "umount",			                umount_main,			10,			2048,			5},
+{            "ls",			                    ls_main,			10,			2048,			5},
+{            "ps",			                    ps_main,			10,			2048,			5},
+{          "kill",			                  kill_main,			10,			2048,			5},
+{         "touch",			                 touch_main,			10,			2048,			5},
+{           "cat",			                   cat_main,			10,			2048,			5},
+{          "more",			                  more_main,			10,			2048,			5},
+{          "mkfs",			                  mkfs_main,			10,			2048,			5},
+{            "df",			                    df_main,			10,			2048,			5},
+{         "uname",			                 uname_main,			10,			2048,			5},
+{           "pwd",			                   pwd_main,			10,			2048,			5},
+{         "rmdir",			                 rmdir_main,			10,			2048,			5},
+{         "mkdir",			                 mkdir_main,			10,			2048,			5},
+{            "rm",			                    rm_main,			10,			2048,			5},
+{            "od",			                    od_main,			10,			2048,			5},
+{          "date",			                  date_main,			10,			2048,			5},
+{          "echo",			                  echo_main,			10,			2048,			5},
+{      "ifconfig",			              ifconfig_main,			100,			4096,			1},
+{       "udpsrvd",			               udpsrvd_main,			100,			2048,			1},
+{       "tstpost",			               tstpost_main,			100,			2048,			1},
+{       "tstcgi2",			               tstcgi2_main,			100,			2048,			1}
 };
 
 const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);

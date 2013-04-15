@@ -323,8 +323,11 @@ void _kernel_warmup_rootfs(void){
 
    //kernel
    _vfs_mkdir("/kernel",0);
-   _vfs_mount(fs_kofs,(char*)0,"/kernel");
-
+   
+   //kernel objects file system
+   #if __KERNEL_VFS_SUPPORT_KOFS==1
+      _vfs_mount(fs_kofs,(char*)0,"/kernel");
+   #endif
    //
 
    //binary

@@ -36,7 +36,8 @@ Includes
 #include "kernel/core/kernelconf.h"
 
 #if defined (CPU_WIN32)
-   #include "kernel/core/windows.h"
+   //#include "kernel/core/windows.h"
+   #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
 #elif ( defined(__IAR_SYSTEMS_ICC) && defined (USE_SEGGER) && defined(CPU_M16C62))
    #include <icclbutl.h>
    #include <intrm16c.h>

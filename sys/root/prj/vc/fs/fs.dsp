@@ -309,10 +309,28 @@ SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.h
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -356,140 +374,494 @@ SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramem2k.c
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\devextras.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_getblockinfo.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_nandemul2k.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffs_trace.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yaffsinterface.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\core\yportenv.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffs.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffs.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffscore.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffscore.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.c
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\fs\yaffs\yaffsinfo.h
+
+!IF  "$(CFG)" == "fs - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fs - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "fat"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fat16.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fat16.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fat16_msdos.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fat16_vfat.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatcore.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatcore.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatcore_msdos.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatcore_msdos.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatcore_vfat.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatcore_vfat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\fs\fat\fatinfo.h
 # End Source File
 # End Group
 # End Group

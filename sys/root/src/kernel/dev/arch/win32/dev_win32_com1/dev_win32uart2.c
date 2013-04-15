@@ -28,7 +28,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include "kernel/core/windows.h"
+#include <windows.h>
 #include <commdlg.h>
 #include <string.h>
 #include <stdio.h>
@@ -44,7 +44,7 @@ Global Declaration
 =============================================*/
 #define MAX_BUFFER      4*1024
 #define DFLT_USE_COM    "COM1"
-#define DFLT_SPEED      200000 //115200//38400//115200//9600
+#define DFLT_SPEED      115200 //200000 //115200//38400//115200//9600
 #define DFLT_PARITY     'N'
 #define DFLT_DATA       8
 #define DFLT_STOPBIT    1
@@ -393,8 +393,8 @@ int setRs2322(uart2_config* config){
    {
       dcb.fOutxCtsFlow = FALSE;
       dcb.fOutxDsrFlow = FALSE;
-      dcb.fDtrControl = DTR_CONTROL_DISABLE;            // DTR ON when device open (+12V) in order to power Optical link with DTR
-      dcb.fRtsControl = RTS_CONTROL_DISABLE;            // RTS OFF when device open (-12V) in order to power Optical link with RTS
+      dcb.fDtrControl = DTR_CONTROL_ENABLE;//DTR_CONTROL_DISABLE;            // DTR ON when device open (+12V) in order to power Optical link with DTR
+      dcb.fRtsControl = RTS_CONTROL_ENABLE;//RTS_CONTROL_DISABLE;            // RTS OFF when device open (-12V) in order to power Optical link with RTS
       dcb.fDsrSensitivity = FALSE;
 //	    dcb.fTXContinueOnXoff = false;
       dcb.fTXContinueOnXoff = TRUE;
@@ -455,6 +455,8 @@ int startAsyncRs2322(void)
 
    uart2_config config={DFLT_SPEED,DFLT_PARITY,DFLT_DATA,DFLT_STOPBIT};
 
+   int com_no=0;
+
    //const static char strConfig[]="COM1: baud=9600 parity=N data=8 stop=1";
 
    if( (stream  = fopen( "lepton_com.conf", "r" )) == NULL ) {
@@ -463,6 +465,11 @@ int startAsyncRs2322(void)
       printf( "lepton_com.conf was opened\n" );
       if(fscanf(stream,"com : %s",USE_COM)<0)
          printf( "cannot find com parameter\n" );
+      //if com no >9 workaround with specific string format
+      sscanf(USE_COM,"COM%d",&com_no);
+      if(com_no>9){
+         sprintf(USE_COM,"\\\\.\\COM%d",(com_no)); 
+      }
    }
 
 

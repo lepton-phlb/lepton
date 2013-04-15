@@ -423,6 +423,10 @@ int dev_win32_com1_isset_read(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_win32_com1_isset_write(desc_t desc){
+   if(_output_w==0){
+      //ready to sent data
+      return 0;
+   } 
    if(_output_w==_output_r) {
       _output_r=-1;
       return 0;

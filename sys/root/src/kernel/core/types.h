@@ -99,9 +99,21 @@ typedef int __off_t;
 #endif
 
 #ifndef _TIME_T_DEFINED
-typedef uint32_t __time_t;
+   #pragma message ("note: use lepton time_t definition")
+   #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
+      typedef uint64_t __time_t;
+   #else
+      typedef uint32_t __time_t;
+   #endif
+
    #define time_t __time_t
    #define _TIME_T_DEFINED
+#else 
+   #ifdef _USE_32BIT_TIME_T
+      #pragma message ("note: use windows time_t definition")
+   #else 
+      #pragma message ("warning! use windows time_t definition with 64 bits format")
+   #endif
 #endif
 
 typedef uint32_t jiff_t;

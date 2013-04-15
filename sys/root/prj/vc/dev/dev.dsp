@@ -290,6 +290,175 @@ SOURCE=..\..\..\src\kernel\dev\arch\all\eth\dev_eth_dm9000a\dev_eth_dm9000a.c
 # End Source File
 # End Group
 # End Group
+# Begin Group "ppp"
+
+# PROP Default_Filter ""
+# Begin Group "dev_ppp_uip"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ahdlc.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ahdlc.h
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\dev_ppp_uip.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\dev_ppp_uip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipcp.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipcp.h
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipv6cp.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipv6cp.h
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\lcp.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\lcp.h
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\pap.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\pap.h
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ppp.c
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+# ADD CPP /I "C:/tauon/sys/root/src/kernel/net/uip2.5"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ppp.h
+
+!IF  "$(CFG)" == "dev - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dev - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
+# End Group
 # End Group
 # Begin Group "win32"
 

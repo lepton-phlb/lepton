@@ -68,6 +68,8 @@ extern kernel_pthread_t uip_core_thread;
       __wait_ret_int(); \
 }
 
+int uip_core_queue_put(uint8_t uip_flag, desc_t desc, void* buf, int size);
+
 unsigned char _uip_core_recv_char(desc_t desc);
 void _uip_core_send_char(desc_t desc,unsigned char c);
 

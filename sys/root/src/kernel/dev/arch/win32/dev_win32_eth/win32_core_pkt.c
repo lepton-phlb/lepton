@@ -31,13 +31,13 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 #define WIN32_LEAN_AND_MEAN
 /* get the windows definitions of the following 4 functions out of the way */
-#include <stdlib.h>
-#include <stdio.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 #include <windows.h>
+//#include "kernel\core\ucore\embOSW32_100\win32\windows.h"
 
-
-#include <commdlg.h>
-#include <string.h>
+//#include <commdlg.h>
+//#include <string.h>
 #include <stdio.h>
 #include <conio.h>
 #include <io.h>
@@ -48,6 +48,8 @@ either the MPL or the [eCos GPL] License."
 
 #include "WpdPack_3_1/WpdPack/Include/packet32.h"
 #include "WpdPack_3_1/WpdPack/Include/ntddndis.h"
+//#include "WpdPack_4_1_2/WpdPack/Include/packet32.h"
+//#include "WpdPack_4_1_2/WpdPack/Include/ntddndis.h"
 
 /*============================================
 | Global Declaration
