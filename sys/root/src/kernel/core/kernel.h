@@ -391,7 +391,7 @@ extern int __g_kernel_static_errno;
    __atomic_out(); \
    __wait_ret_int(); \
    __kernel_profiler_stop(__pthread_ptr__); \
-__profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
+   __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
 }
 
 //no blocking call

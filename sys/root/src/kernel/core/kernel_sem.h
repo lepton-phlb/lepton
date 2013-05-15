@@ -51,7 +51,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/kal.h"
 
-#if defined(GNU_GCC)
+#if (__tauon_compiler__==__compiler_keil_arm__) || (__tauon_compiler__==__compiler_gnuc__)
    #include "kernel/core/timer.h"
 #endif
 

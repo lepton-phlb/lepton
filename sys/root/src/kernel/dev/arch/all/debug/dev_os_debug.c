@@ -189,13 +189,19 @@ int dev_os_debug_read(desc_t desc, char* buf,int size){
 //    *buf = ITM_ReceiveChar();//(p_os_inf_debug->base_address);
     
 #if defined(USE_SEGGER)
+    uint16_t head;
+    uint16_t tail;
+    int len = 0;
+    int cb = 0;
+   
     if(!p_os_inf_debug)
         return -1;
     //Snapshot head that may be moved at any time from the interrupt
-    uint16_t head = p_os_inf_debug->read_head;
-    uint16_t tail = p_os_inf_debug->read_tail;
-    int len = 0;
-    int cb = 0;
+    head = p_os_inf_debug->read_head;
+    tail = p_os_inf_debug->read_tail;
+    len = 0;
+    cb = 0;
+    //
     if(!p_os_inf_debug->data_to_read)
         return 0;
     
@@ -258,11 +264,15 @@ int dev_os_debug_read(desc_t desc, char* buf,int size){
 | See:         
 ----------------------------------------------*/
 int dev_os_debug_write(desc_t desc, const char* buf,int size){
+    int count;
+    int cb;
     #if defined(USE_SEGGER)
     if(!p_os_inf_debug)
         return -1;
-    int count = size;
-    int cb = size;
+    //
+    count = size;
+    cb = size;
+    //
     while(size)
     {
         if(size > (OS_DEBUG_OUT_BUFF_SZ - 1))//max size -1
@@ -320,14 +330,16 @@ int dev_os_debug_ioctl(desc_t desc, int request, va_list ap){
 | See        : -        
 ----------------------------------------------*/
 void dev_os_debug_isr(char c){
+   uint16_t tail; 
+   uint16_t head;
 #if defined(USE_SEGGER)
     if(!p_os_inf_debug)
         return;
     if (p_os_inf_debug->desc_r < 0) 
         return;//Invalid descriptor (device not openned)
     //Snapshot at least tail which is subject to be moved by next read
-    uint16_t tail = p_os_inf_debug->read_tail; 
-    uint16_t head = p_os_inf_debug->read_head;
+    tail = p_os_inf_debug->read_tail; 
+    head = p_os_inf_debug->read_head;
     
     if(head <= tail){
         if( (OS_DEBUG_IN_BUFF_SZ + head - tail) <= 1){ //"1" is the size of incomming data size

@@ -100,7 +100,7 @@ typedef struct pthread_attr_st {
 
 //
 typedef unsigned char syscall_t;
-typedef unsigned char irq_prior_t;
+typedef signed char irq_prior_t;
 
 //
 typedef struct {

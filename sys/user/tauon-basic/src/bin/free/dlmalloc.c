@@ -1,5 +1,6 @@
-#include <yvals.h>
+
 #if defined(__IAR_SYSTEMS_ICC__) && _DLIB_INCLUDE_DLMALLOC_ALTERNATIVE
+#include <yvals.h>
 #ifdef __IAR_SYSTEMS_ICC__
   /* To use this heap implementation in an application redirect malloc, calloc,
      realloc, and free (and, if having multiple memories, the default heap

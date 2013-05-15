@@ -164,7 +164,7 @@ pap_task(u8_t *buffer)
       /* Configure-Request only here, write id */
       pkt->code = CONF_REQ;
       pkt->id = ppp_id;
-      bptr = pkt->data;
+      bptr = (u8_t*)&pkt->data;
       
       /* Write options */
       t = strlen((char const*)pap_username);

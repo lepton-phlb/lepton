@@ -123,7 +123,6 @@ int _sys_settimeofday(struct __timeval *tv, register struct timezone *tz)
 
    if(desc>=0) {
       char buf[8]={0};
-      time_t t=0;
       struct tm _tm={ 0, 0, 12, 28, 0, 103 }; //init for test
 
       /* tmb.tm_isdst = ? */

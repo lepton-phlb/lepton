@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lib/libc/stdio/stdio.h"
-#include "intrinsics.h"
+//#include "intrinsics.h"
 
           
 /*

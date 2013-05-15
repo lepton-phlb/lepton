@@ -82,9 +82,10 @@ typedef uint32_t fsfilcnt_t;
    #endif
 
 #else
-   #if !defined(_SIZE_T_DEFINED_)
-typedef int size_t;
+   #if !defined(_SIZE_T_DEFINED_) && !defined(__size_t)
+      typedef unsigned int size_t;
       #define _SIZE_T_DEFINED_
+      #define __size_t 1
    #endif
 #endif
 
@@ -99,7 +100,9 @@ typedef int __off_t;
 #endif
 
 #ifndef _TIME_T_DEFINED
+#ifdef USE_COMPILER_TRACE_DEBUG
    #pragma message ("note: use lepton time_t definition")
+#endif
    #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
       typedef uint64_t __time_t;
    #else
@@ -110,9 +113,13 @@ typedef int __off_t;
    #define _TIME_T_DEFINED
 #else 
    #ifdef _USE_32BIT_TIME_T
+	 #ifdef USE_COMPILER_TRACE_DEBUG
       #pragma message ("note: use windows time_t definition")
+	 #endif
    #else 
+	    #ifdef USE_COMPILER_TRACE_DEBUG
       #pragma message ("warning! use windows time_t definition with 64 bits format")
+			#endif
    #endif
 #endif
 

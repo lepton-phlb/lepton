@@ -65,7 +65,7 @@ typedef struct _pappkt {
   u8_t code;
   u8_t id;
   u16_t len;
-  u8_t data[0];	
+  u8_t data;//[0];	
 } PAPPKT;
 
 /* Export pap_state */

@@ -165,9 +165,9 @@ int __vsscanf(char * sp,const char *fmt, va_list ap);
 //int __vfscanf(register FILE *fp,register char *fmt,va_list ap);
 int __vfscanf(FILE *fp,const char *fmt,va_list ap);
 
-void     __stdio_init();
+void     __stdio_init(void);
 void     __stdio_close_all(pid_t pid);
-void     __io_init_vars();
+void     __io_init_vars(void);
 
 int      __fputc(int ch, FILE *fp);
 int      __fgetc(FILE *fp);
