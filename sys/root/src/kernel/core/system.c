@@ -60,7 +60,6 @@ Implementation
 pid_t execl(const char* path, const char* arg,...){
    char* argv[ARG_MAX]={0};
    int argc=0;
-   int i=1;
    execve_t execve_dt;
    va_list ptr;
 

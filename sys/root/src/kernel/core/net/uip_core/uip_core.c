@@ -134,10 +134,10 @@ _macro_stack_addr char uip_core_stack[UIP_CORE_STACK_SIZE];
 
 kernel_pthread_t uip_core_thread;
 
-typedef int (*_pf_uip_core_send_ip_packet)(desc_t desc, const unsigned char* buf, int size);
+typedef int (*_pf_uip_core_send_ip_packet)(desc_t desc, const char* buf, int size);
 typedef _pf_uip_core_send_ip_packet _pf_uip_core_send_ip_packet_t;
 
-typedef int (*_pf_uip_core_recv_ip_packet)(desc_t desc, unsigned char* buf, int size);
+typedef int (*_pf_uip_core_recv_ip_packet)(desc_t desc, char* buf, int size);
 typedef _pf_uip_core_recv_ip_packet _pf_uip_core_recv_ip_packet_t;
 
 typedef struct {
@@ -146,8 +146,8 @@ typedef struct {
 }_uip_core_ip_packet_op_t;
 
 
-int _uip_core_send_frame(desc_t desc, const unsigned char* buf, int size);
-int _uip_core_recv_frame(desc_t desc,unsigned char* buf, int size);
+int _uip_core_send_frame(desc_t desc, const char* buf, int size);
+int _uip_core_recv_frame(desc_t desc,char* buf, int size);
 
 enum _uip_core_ip_packet_op_type_t{
 #if defined(USE_IF_SLIP)
@@ -309,7 +309,7 @@ void _uip_core_send_char(desc_t desc,unsigned char c){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _uip_core_recv_frame(desc_t desc, unsigned char* buf, int size){
+int _uip_core_recv_frame(desc_t desc, char* buf, int size){
    uchar8_t _kernel_int;
    #if defined(USE_IF_ETHERNET)  
    while(ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
@@ -329,7 +329,7 @@ int _uip_core_recv_frame(desc_t desc, unsigned char* buf, int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _uip_core_send_frame(desc_t desc, const unsigned char* buf, int size){
+int _uip_core_send_frame(desc_t desc, const char* buf, int size){
    uchar8_t _kernel_int;
    int cb;
    cb=ofile_lst[desc].pfsop->fdev.fdev_write(desc,buf,size);
@@ -998,7 +998,7 @@ void* uip_core_routine(void* arg){
          abs_timeout.tv_nsec  = (timeout%1000)*1000000;//ms->ns
          _uip_ppp_counter=0;
          _uip_lcp_echo_counter=0;
-         while((_uip_poll_event=__wait_io_int2(pthread_ptr,&abs_timeout/*200*/))<0){//5//10ms
+         while((_uip_poll_event=__wait_io_int2(pthread_ptr,(const struct timespec*)&abs_timeout/*200*/))<0){//5//10ms
             if( !(_uip_poll_counter=(_uip_poll_counter+1)%5/*%20*/) ){
                _uip_poll_counter=0;
             }

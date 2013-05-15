@@ -1081,7 +1081,7 @@ typedef struct {
    #endif
 
 
-#elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && ( defined(CPU_ARM7) ||  defined(CPU_ARM9) || defined(CPU_CORTEXM) ) )
+#elif ( (defined(__IAR_SYSTEMS_ICC__) || defined(__ARMCC_VERSION)) && defined (USE_SEGGER) && ( defined(CPU_ARM7) ||  defined(CPU_ARM9) || defined(CPU_CORTEXM) ) )
 
 
    #include "RTOS.H"
@@ -1091,7 +1091,9 @@ typedef struct {
    #if  (__tauon_cpu_device__ != __tauon_cpu_device_cortexM3_trifecta__)\
       &&(__tauon_cpu_device__ != __tauon_cpu_device_cortexM3_LM3S__)\
       &&(__tauon_cpu_device__ != __tauon_cpu_device_cortexM4_stm32f4__)
-   #include "OS_Priv.h"
+      #if OS_VERSION_GENERIC != (38607) 
+         #include "OS_Priv.h"
+      #endif
    #endif
 /*modif for segger version 3.52e */
 //#include "OSint.h"

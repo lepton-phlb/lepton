@@ -59,7 +59,7 @@ pid_t pid_counter;
 //patch: optimization for code memory occupation.
 #if defined (CPU_WIN32)
 process_t* __process_lst[PROCESS_MAX]={0};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
+#else
 process_t* __process_lst[PROCESS_MAX];
 #endif
 

@@ -424,7 +424,7 @@ ipv6cp_task(u8_t *buffer)
       pkt->code = CONF_REQ;
       pkt->id = ppp_id;
 			
-      bptr = pkt->data;       
+      bptr = (u8_t*)&pkt->data;       
 
       /*
        * Write options, we want IP address, and DNS addresses if set.

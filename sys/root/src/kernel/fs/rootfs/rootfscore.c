@@ -54,21 +54,17 @@ Global Declaration
 //
 //patch: optimization for code memory occupation.
 #if defined (WIN32) || defined(CPU_GNU32)
-rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE]={S_IFNULL};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
-rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
-#elif defined(GNU_GCC)
-rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
+   rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE]={S_IFNULL};
+#else
+   rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
 #endif
 
 //
 //patch: optimization for code memory occupation.
 #if defined (WIN32) || defined(CPU_GNU32)
-rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE]={0};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
-rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
-#elif defined(GNU_GCC)
-rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
+   rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE]={0};
+#else
+   rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
 #endif
 
 //
@@ -78,9 +74,7 @@ const int rtfs_superblk_size      = RTFS_BLOCK_ALLOC_SIZE;
 //patch: optimization for code memory occupation.
 #if defined (WIN32) || defined(CPU_GNU32)
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE]={0};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
-char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
-#elif defined(GNU_GCC)
+#else
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
 #endif
 

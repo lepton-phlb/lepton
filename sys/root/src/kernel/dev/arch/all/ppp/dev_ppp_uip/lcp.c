@@ -421,7 +421,7 @@ lcp_task(u8_t *buffer)
          pkt->code = CONF_REQ;
          pkt->id = ppp_id;
          
-         bptr = pkt->data;
+         bptr = (u8_t*)&pkt->data;
          
          /* Write options */
          /* ACCM */ //modify phlb uncomment
@@ -533,7 +533,7 @@ void lcp_echo(u8_t *buffer)
    pkt->code = ECHO_REQ;
    pkt->id = ppp_id;
    
-   bptr = pkt->data;
+   bptr = (u8_t*)&pkt->data;
    /* Write magic number */
    ANNOTATE("LCP_MAGICNUMBER -");
    /*

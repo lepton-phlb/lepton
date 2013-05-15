@@ -86,7 +86,7 @@ int shutdown_main(int argc,char* argv[]){
          printf("error: force shutdown option not supported\r\n");
          return -1;
       }
-      for(;; )
+      //for(;; )
          usleep(1000);
 
       printf("error: force shutdown option not supported\r\n");

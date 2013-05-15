@@ -41,6 +41,7 @@ Includes
 #define __compiler_gnuc__        (0x02)
 #define __compiler_iar_m16c__    (0x03)
 #define __compiler_iar_arm__     (0x04)
+#define __compiler_keil_arm__    (0x05)
 
 #define __compiler_cpu_target_win32__  (0x0100)
 #define __compiler_cpu_target_gnuc__   (0x0200)
@@ -59,8 +60,8 @@ Includes
 #define __tauon_cpu_device_cortexM3_LM3S__      (0x0302)
 #define __tauon_cpu_device_cortexM4_stm32f4__   (0x0304)
 
-//#define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__ 
-#define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
+#define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__ 
+//#define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
 
 #if __tauon_cpu_device__==__tauon_cpu_device_win32_simulation__
    #define __KERNEL_CPU_DEVICE_NAME "x86-win32-sim"
@@ -95,6 +96,9 @@ Includes
    #define __tauon_compiler_cpu_target__  __compiler_cpu_target_m16c__
 #elif defined(__IAR_SYSTEMS_ICC__)
    #define __tauon_compiler__ __compiler_iar_arm__
+   #define __tauon_compiler_cpu_target__ __compiler_cpu_target_arm__
+#elif defined (__ARMCC_VERSION)
+   #define __tauon_compiler__ __compiler_keil_arm__
    #define __tauon_compiler_cpu_target__ __compiler_cpu_target_arm__
 #endif
 
@@ -131,6 +135,8 @@ Declaration
    #define USE_SEGGER
 #elif (__tauon_compiler__==__compiler_iar_arm__)
    #define USE_SEGGER
+#elif (__tauon_compiler__==__compiler_keil_arm__)
+   #define USE_SEGGER
 #endif
 
 #define __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 32
@@ -142,7 +148,9 @@ Declaration
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
    #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
 #elif (__tauon_compiler__==__compiler_iar_arm__)
-   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE
+#elif (__tauon_compiler__==__compiler_keil_arm__)
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE   
 #endif
 #define CPU_ARCH_32  (32)
 #define CPU_ARCH_16  (16)
@@ -251,7 +259,11 @@ Declaration
 #endif
 #ifndef __KERNEL_HEAP_SIZE
    #pragma message("warning!!! __KERNEL_HEAP_SIZE not defined")
-   #define __KERNEL_HEAP_SIZE  8000 //12000//10000//8000//5000//2000
+   #if (__tauon_compiler__==__compiler_keil_arm__) 
+      #define __KERNEL_HEAP_SIZE  0x8000  //32KBytes
+   #else
+      #define __KERNEL_HEAP_SIZE  8000 //12000//10000//8000//5000//2000
+   #endif
 #endif
 
 #ifndef __KERNEL_PTHREAD_MAX
@@ -397,4 +409,7 @@ Declaration
    #define __KERNEL_VFS_SUPPORT_VFAT   0
    #define __KERNEL_VFS_SUPPORT_YAFFS  0
 #endif 
+
+
+
 #endif
