@@ -9,7 +9,7 @@
 #include "kernel/core/system.h"
 
 #include "dev_os_debug.h"
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 #include "RTOS.h"
 //void   OS_SendString(OS_ROM_DATA const char* s);  /* OSSend.c        */
 //OS_RX_CALLBACK* OS_SetRxCallback(OS_RX_CALLBACK* cb);
@@ -64,7 +64,7 @@ int dev_os_debug_load(void){//os_inf_debug_t *p_os_inf_debug){
     p_os_inf_debug->data_to_read_max = 0;
     //
     //test
-    #if defined(USE_SEGGER)
+    #if defined(__KERNEL_UCORE_EMBOS)
     OS_SendString("Hello world!\r\n\0");
     #endif
     
@@ -150,7 +150,7 @@ int dev_os_debug_close(desc_t desc){
 int dev_os_debug_isset_read(desc_t desc){    
 //return 0; //Data to read
 //    return -1; //No data to read
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
     if(!p_os_inf_debug)
         return -1;
     if(p_os_inf_debug->data_to_read)
@@ -188,7 +188,7 @@ int dev_os_debug_read(desc_t desc, char* buf,int size){
 //    os_inf_debug_t *p_os_inf_debug = (os_inf_debug_t *)ofile_lst[desc].p;
 //    *buf = ITM_ReceiveChar();//(p_os_inf_debug->base_address);
     
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
     uint16_t head;
     uint16_t tail;
     int len = 0;
@@ -266,7 +266,7 @@ int dev_os_debug_read(desc_t desc, char* buf,int size){
 int dev_os_debug_write(desc_t desc, const char* buf,int size){
     int count;
     int cb;
-    #if defined(USE_SEGGER)
+    #if defined(__KERNEL_UCORE_EMBOS)
     if(!p_os_inf_debug)
         return -1;
     //
@@ -332,7 +332,7 @@ int dev_os_debug_ioctl(desc_t desc, int request, va_list ap){
 void dev_os_debug_isr(char c){
    uint16_t tail; 
    uint16_t head;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
     if(!p_os_inf_debug)
         return;
     if (p_os_inf_debug->desc_r < 0) 

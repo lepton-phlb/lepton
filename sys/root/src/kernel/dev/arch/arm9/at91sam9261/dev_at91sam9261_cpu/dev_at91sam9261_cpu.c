@@ -39,11 +39,11 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/fs/vfs/vfsdev.h"
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #include "kernel/core/ucore/embOSARM7_332/arch/cpu_at91sam9261/at91sam9261_init.h"
 //#include <ioat91sam9261.h>
    #include <intrinsic.h>
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    #include "dev_at91sam9261_cpu.h"
    #include "cyg/hal/at91sam9261.h"
 #endif
@@ -53,7 +53,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 AT91PS_SYS AT91_SYS = (AT91PS_SYS)AT91C_BASE_SYS;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 extern void (*g_p_fct_dbg_interrupt)(void);
 #endif
 
@@ -93,7 +93,7 @@ dev_map_t dev_at91sam9261_cpu_map={
 /*===========================================
 Implementation
 =============================================*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 /*--------------------------------------------
 | Name:        AT91F_UndefHandler
 | Description:
@@ -132,10 +132,10 @@ int dev_at91sam9261_cpu_load(void){
    //unprotected mode (very important for irq management)
    AT91C_BASE_AIC->AIC_DCR = 0;
    //
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    // Pointer initialization
    g_p_fct_dbg_interrupt =  NULL;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 #endif
 
    return 0;

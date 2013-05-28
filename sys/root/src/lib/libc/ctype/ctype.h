@@ -42,7 +42,7 @@ Declaration
 #endif
 
 //
-#ifndef USE_ECOS
+#ifndef __KERNEL_UCORE_ECOS
    //
    #ifdef toascii
       #undef toascii
@@ -135,7 +135,7 @@ Declaration
    #endif
    #define toupper   __l_toupper
 
-#endif //ifndef USE_ECOS
+#endif //ifndef __KERNEL_UCORE_ECOS
 
 
 //

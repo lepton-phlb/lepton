@@ -53,7 +53,7 @@ either the MPL or the [eCos GPL] License."
 | Declaration
 ==============================================*/
 //for eCos
-#if defined(USE_ECOS) && defined(CPU_GNU32)
+#if defined(__KERNEL_UCORE_ECOS) && defined(CPU_GNU32)
 //synthetic target for simulation under linux host
    #include <cyg/kernel/kapi.h>
    #include <cyg/hal/hal_io.h>
@@ -674,7 +674,7 @@ enum enum_synth_regs {
    #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
    #include <malloc.h>
 
-   #ifdef USE_SEGGER
+   #ifdef __KERNEL_UCORE_EMBOS
       #include "kernel/core/ucore/embOSW32_100/seggerwin32.h"
    #endif
 
@@ -911,7 +911,7 @@ typedef CONTEXT context_t;
    #pragma pack (pop)
 
 
-#elif ( defined(__IAR_SYSTEMS_ICC) && defined (USE_SEGGER) && defined(CPU_M16C62))
+#elif ( defined(__IAR_SYSTEMS_ICC) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_M16C62))
 
 
    #include "RTOS.H"
@@ -1081,8 +1081,13 @@ typedef struct {
    #endif
 
 
-#elif ( (defined(__IAR_SYSTEMS_ICC__) || defined(__ARMCC_VERSION)) && defined (USE_SEGGER) && ( defined(CPU_ARM7) ||  defined(CPU_ARM9) || defined(CPU_CORTEXM) ) )
-
+//#elif ( (defined(__IAR_SYSTEMS_ICC__) || defined(__ARMCC_VERSION)) && defined (__KERNEL_UCORE_EMBOS) && ( defined(CPU_ARM7) ||  defined(CPU_ARM9) || defined(CPU_CORTEXM) ) )
+#elif ( (__tauon_compiler__ == __compiler_iar_arm__) || (__tauon_compiler__ == __compiler_keil_arm__) )\
+ && defined (__KERNEL_UCORE_EMBOS)\
+ &&((__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__)\
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)\
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))
 
    #include "RTOS.H"
 /*modif for segger version 3.28h */
@@ -1386,6 +1391,7 @@ typedef struct {
       #define __io_profiler_stop(__desc__)
       #define __io_profiler_get_counter(__desc__)
    #endif
+
 #elif (defined(GNU_GCC)) && defined(CPU_CORTEXM)
    #include <cyg/kernel/kapi.h>
    #include <cyg/hal/hal_arch.h>

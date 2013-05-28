@@ -6,7 +6,7 @@
  */
 #include <string.h>
 
-#if (UNIX | DOS_DJGPP | USE_ECOS)
+#if (UNIX | DOS_DJGPP | __KERNEL_UCORE_ECOS)
 #define strcmpi	strcasecmp
 #elif (VXWORKS)
 int strcmpi(const char *s1, const char *s2);

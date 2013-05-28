@@ -129,7 +129,7 @@ int dev_lm3s_uart_x_load(int uart_id){
 //    ROM_UARTCharPut(UARTStaticConf[uart_id].UARTBase, 'K');
 //    ROM_UARTCharPut(UARTStaticConf[uart_id].UARTBase, '\n');
 #endif
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
     //
     //Fast interrupts with Cortex M3 / M4 and M4F
     //Instead of disabling interrupts when embOS does atomic operations, the interrupt

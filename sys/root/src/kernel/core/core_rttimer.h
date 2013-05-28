@@ -40,12 +40,12 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef OS_TIMER tmr_t;
 
-#elif USE_ECOS
+#elif __KERNEL_UCORE_ECOS
 typedef cyg_handle_t alrm_hdl_t;    //handle sur l'objet alarme
 typedef cyg_alarm alrm_t;    //objet alarme
 typedef void (*_tmr_func_t)(alrm_hdl_t alarm_handle, cyg_addrword_t data );
@@ -64,7 +64,7 @@ typedef int tmr_t;
 typedef struct rttmr_attr_st {
    time_t tm_msec; //delay
    tmr_func_t func;
-#if defined USE_ECOS
+#if defined __KERNEL_UCORE_ECOS
    cyg_addrword_t data;
 #endif
 }rttmr_attr_t;

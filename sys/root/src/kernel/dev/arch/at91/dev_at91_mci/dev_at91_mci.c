@@ -58,7 +58,7 @@ int dev_at91_mci_write(desc_t desc, const char* buf,int cb);
 int dev_at91_mci_seek(desc_t desc,int offset,int origin);
 int dev_at91_mci_ioctl(desc_t desc,int request,va_list ap);
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 static cyg_uint32 dev_at91_mci_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void dev_at91_mci_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 static void dev_at91_mci_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);

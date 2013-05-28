@@ -75,7 +75,7 @@ kernel_pthread_t* _syscall_owner_pthread_ptr;
 volatile int _kernel_in_static_mode=1;
 
 kernel_pthread_mutex_t kernel_mutex;
-#if !defined(USE_ECOS)
+#if !defined(__KERNEL_UCORE_ECOS)
 kernel_pthread_t kernel_thread;
 #endif
 
@@ -109,7 +109,7 @@ kernel_syscall_t const kernel_syscall_lst[] = {
    __add_syscall(_syscall_sigprocmask), //5
    __add_syscall(_syscall_sigpending),
    __add_syscall(_syscall_sigaction),
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __add_syscall(_syscall_alarm),
 #endif
    __add_syscall(_syscall_pause),
@@ -143,7 +143,7 @@ kernel_syscall_t const kernel_syscall_lst[] = {
    __add_syscall(_syscall_statvfs),
    __add_syscall(_syscall_remove),
    __add_syscall(_syscall_gettimeofday),
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __add_syscall(_syscall_atexit),
 #endif
    __add_syscall(_syscall_malloc),
@@ -166,7 +166,7 @@ kernel_syscall_t const kernel_syscall_lst[] = {
    __add_syscall(_syscall_pthread_create),
    __add_syscall(_syscall_pthread_cancel),
    __add_syscall(_syscall_pthread_exit),
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __add_syscall(_syscall_pthread_kill),
 #endif
    __add_syscall(_syscall_pthread_mutex_init),

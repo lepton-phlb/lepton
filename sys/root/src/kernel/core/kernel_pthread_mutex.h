@@ -40,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/kal.h"
 //#include "kernel/core/kernel_pthread.h"
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    #include <cyg/kernel/kapi.h>
 #endif
 /*============================================
@@ -52,10 +52,10 @@ either the MPL or the [eCos GPL] License."
 
 //
 typedef struct {
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_RSEMA mutex;
 #endif
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_mutex_t mutex;
 #endif
 }kernel_pthread_mutex_t;

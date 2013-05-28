@@ -74,6 +74,42 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\dev.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\drv\flashset.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\drv\f_atmel.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\drv\f_st.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_dir.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_ext.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_file.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_volume.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\port.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\tiny.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\tinyuser.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\_tiny.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fat16.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore_msdos.h" />
@@ -95,8 +131,75 @@
     <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfsdev.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfskernel.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfstypes.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\devextras.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_malloc.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramdisk.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffsinterface.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_getblockinfo.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nandemul2k.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_trace.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yportenv.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffscore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsinfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\dev.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\drv\flashset.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\drv\f_atmel.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\drv\f_st.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_dir.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_ext.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_file.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_rtos.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_volume.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\port.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_msdos.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_vfat.c" />
@@ -117,6 +220,34 @@
     <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfscore.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfsdev.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfskernel.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramdisk.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramem2k.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffscore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

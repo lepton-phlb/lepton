@@ -44,6 +44,7 @@ Includes
 #include "kernel/core/kernel_pthread.h"
 
 #include "kernel/fs/ufs/ufsinfo.h"
+#include "kernel/fs/yaffs/yaffsinfo.h"
 #include "kernel/fs/fat/fatinfo.h"
 
 /*===========================================
@@ -154,6 +155,7 @@ extern superblk_t superblk_lst[MAX_SUPER_BLOCK];
  */
 typedef union {
    ufs_info_t ufs_info;
+   yaffs_info_t   yaffs_info;
    fat_info_t fat_info;
 }fsinfo_t;
 

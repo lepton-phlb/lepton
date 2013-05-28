@@ -932,13 +932,15 @@ void* uip_core_routine(void* arg){
    #elif defined(USE_IF_PPP)
       desc_t desc_r = _vfs_open(uip_core_if_list[0].name,O_RDONLY,0);
       desc_t desc_w = _vfs_open(uip_core_if_list[0].name,O_WRONLY,0);
-      #if __tauon_compiler_cpu_target__ == __compiler_cpu_target_win32__
-      desc_t desc_ttys_r = _vfs_open("/dev/ttys1",O_RDONLY,0);
-      desc_t desc_ttys_w = _vfs_open("/dev/ttys1",O_WRONLY,0);
+      //
+      #if __tauon_cpu_core__ == __tauon_cpu_core_win32_simulation__
+         desc_t desc_ttys_r = _vfs_open("/dev/ttys1",O_RDONLY,0);
+         desc_t desc_ttys_w = _vfs_open("/dev/ttys1",O_WRONLY,0);
       #else
-      desc_t desc_ttys_r = _vfs_open("/dev/ttys0",O_RDONLY,0);
-      desc_t desc_ttys_w = _vfs_open("/dev/ttys0",O_WRONLY,0);
+         desc_t desc_ttys_r = _vfs_open("/dev/ttys0",O_RDONLY,0);
+         desc_t desc_ttys_w = _vfs_open("/dev/ttys0",O_WRONLY,0);
       #endif
+      //
       if(   desc_r<0 || desc_w<0 
          || desc_ttys_r<0 || desc_ttys_w<0)
          return (void*)0;//uip core panic!!!

@@ -33,7 +33,7 @@
 #include "flstring.h"
 
 void Fl::display(const char *d) {
-#if defined(__APPLE__) || defined(WIN32) || defined(USE_ECOS)
+#if defined(__APPLE__) || defined(WIN32) || defined(__KERNEL_UCORE_ECOS)
   (void)d;
 #else
   static char e[1024];

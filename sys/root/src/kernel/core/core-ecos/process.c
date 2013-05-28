@@ -89,7 +89,7 @@ char env_path[PATH_MAX]={0};
 void invoke_app_ctr(void);
 static char invoke_app_ctr_ok=0;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
 typedef void (*pfunc)(void);
 //EABI or ELF
    #ifdef CYGBLD_HAL_ARM_EABI
@@ -875,7 +875,7 @@ void* process_routine(void* arg){
 | See:
 ---------------------------------------------*/
 void invoke_app_ctr(void) {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    pfunc *p;
    char ok=0;
 
@@ -1095,7 +1095,7 @@ pid_t _sys_krnl_exec(const char* path,
 #endif
 
    //load static library
-#if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
+#if defined(__KERNEL_LOAD_LIB) && defined(__KERNEL_UCORE_ECOS)
    load_lib(process_lst[_pid]->pthread_ptr);
 #endif
 
@@ -1296,7 +1296,7 @@ pid_t _sys_exec(const char* path,
 #endif
 
    //load static library
-#if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
+#if defined(__KERNEL_LOAD_LIB) && defined(__KERNEL_UCORE_ECOS)
    load_lib(process_lst[pid]->pthread_ptr);
 #endif
 

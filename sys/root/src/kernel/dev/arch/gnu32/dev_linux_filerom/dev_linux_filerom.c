@@ -102,7 +102,7 @@ int dev_linux_filerom_load(void){
 
 int dev_linux_filerom_open(desc_t desc, int o_flag){
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    if(fh==-1) {
 
       if( (fh =
@@ -184,7 +184,7 @@ int dev_linux_filerom_close(desc_t desc){
 
    if(instance_counter<0) {
       instance_counter=0;
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
       cyg_hal_sys_close(fh);
 #else
       _sys_close(fh);
@@ -233,7 +233,7 @@ int dev_linux_filerom_read(desc_t desc, char* buf,int size){
    if(ofile_lst[desc].offset>FILEROM_MEMORYSIZE)
       return -1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_hal_sys_lseek( fh, ofile_lst[desc].offset, SEEK_SET);
    r= cyg_hal_sys_read( fh,buf,size);
    ofile_lst[desc].offset = cyg_hal_sys_lseek( fh, 0, SEEK_CUR);
@@ -259,7 +259,7 @@ int dev_linux_filerom_write(desc_t desc, const char* buf,int size){
    if(ofile_lst[desc].offset>FILEROM_MEMORYSIZE)
       return -1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_hal_sys_lseek( fh, ofile_lst[desc].offset, SEEK_SET);
    w = cyg_hal_sys_write( fh,buf,size);
    cyg_hal_sys_fsync(fh);
@@ -286,7 +286,7 @@ int dev_linux_filerom_seek(desc_t desc,int offset,int origin){
    if(ofile_lst[desc].offset>FILEROM_MEMORYSIZE)
       return -1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    ofile_lst[desc].offset = cyg_hal_sys_lseek( fh, offset, origin);
 #else
    ofile_lst[desc].offset = _sys_lseek( fh, offset, origin);

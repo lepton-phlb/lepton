@@ -37,7 +37,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include <cyg/hal/hal_io.h>
 #endif
 
@@ -367,7 +367,7 @@ int pthread_kill(pthread_t pthread, int sig){
    pthread_kill_dt.sig = sig;
    pthread_kill_dt.atomic = 1;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    if(((kernel_pthread_t*)pthread)==kernel_pthread_self()) {
       __mk_syscall0(_SYSCALL_PTHREAD_KILL,pthread_kill_dt);
    }else{

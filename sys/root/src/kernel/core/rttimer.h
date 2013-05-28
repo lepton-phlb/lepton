@@ -37,7 +37,7 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef OS_TIMER tmr_t;

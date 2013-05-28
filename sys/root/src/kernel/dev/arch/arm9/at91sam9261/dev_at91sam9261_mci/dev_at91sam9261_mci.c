@@ -33,7 +33,7 @@
 
 #include "kernel/dev/arch/at91/dev_at91_mci/dev_at91_mci.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
 #endif
 

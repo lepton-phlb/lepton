@@ -43,7 +43,7 @@ either the MPL or the [eCos GPL] License."
 #include "at91sam9261_lcd_lut.h"
 #include "at91sam9261_lcd.h"
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #include <ioat91sam9261.h>
    #include "kernel/core/ucore/embOSARM7_332/arch/cpu_at91sam9261/at91sam9261_init.h"
 #endif

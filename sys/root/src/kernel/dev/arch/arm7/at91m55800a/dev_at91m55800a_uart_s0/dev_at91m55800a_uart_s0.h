@@ -42,7 +42,7 @@ either the MPL or the [eCos GPL] License."
 | Declaration
 ==============================================*/
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 /*UART 0*/
    #define __US_CR         *((unsigned int *)      0xFFFC0000)
    #define __US_MR         *((unsigned int *)      0xFFFC0004)

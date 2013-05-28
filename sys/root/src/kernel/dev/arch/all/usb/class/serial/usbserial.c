@@ -269,7 +269,7 @@ pusb_serial_t pusb_serial = &usbs_enumeration_serial;
 static rttmr_attr_t usbserial_timer_attr={
    100,
    dev_usbserial_timer_callback
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    ,(unsigned int)0
 #endif
 };

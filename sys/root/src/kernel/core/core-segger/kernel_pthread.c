@@ -301,7 +301,7 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
    if( kernel_get_pthread_id(thread)==-EAGAIN)
       return -EAGAIN;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    {
       char* name = (char*)thread->attr.name;
       pid_t pid = thread->pid;
@@ -397,7 +397,7 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
          ofile_lst[desc].owner_pthread_ptr_write   =(kernel_pthread_t*)0;
    }
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    {
       OS_TASK* whois_lock_kernel_mutex = OS_GetResourceOwner(&kernel_mutex.mutex);
       OS_TASK* this_task = thread->tcb;

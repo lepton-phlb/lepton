@@ -76,7 +76,7 @@ int ps_main(int argc,char* argv[]){
    int cb;
    int i;
    unsigned int opt=0;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    int pid, ppid, pgid;
 #endif
    //get option
@@ -120,7 +120,7 @@ int ps_main(int argc,char* argv[]){
       char cbuf[26];
       if(!cb) continue;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
       pid = (int)process_info.pid;
       ppid = (int)process_info.ppid;
       pgid = (int)process_info.pgid;

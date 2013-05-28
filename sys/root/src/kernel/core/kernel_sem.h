@@ -60,10 +60,10 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 typedef struct kernel_sem_st {
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_CSEMA sem;
 #endif
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_sem_t sem;
 #endif
 }kernel_sem_t;

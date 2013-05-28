@@ -36,14 +36,14 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes 
 ==============================================*/
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 	#include "pkgconf/hal_arm_****.h"//GD-TODO
 #endif
 
 /*============================================
 | Declaration  
 ==============================================*/
-//#if defined(USE_SEGGER)
+//#if defined(__KERNEL_UCORE_EMBOS)
 //	#define DEV_LM3S_QUARTZ_FREQ  (18432000UL)   //* In Hz  //GD-TODO ?
 //	#define MUL_PLLA     					 (109)      // Multiplier //for 200 MHz   //GD-TODO
 //	#define DIV_PLLA     				    (10)       // Divider	
@@ -52,7 +52,7 @@ either the MPL or the [eCos GPL] License."
 //	//	 Master Clock <= 119 MHz
 //	#define DEV_LM3S_MASTER_CLOCK       (DEV_LM3S_PLLA_FREQ/2)
 //	
-//#elif defined(USE_ECOS)
+//#elif defined(__KERNEL_UCORE_ECOS)
 //	#define DEV_LM3S_MASTER_CLOCK       (CYGNUM_HAL_ARM_LM3S_CLOCK_SPEED)		
 //#endif
 
