@@ -15,11 +15,7 @@
         <configuration>lib-debug</configuration>
       </member>
       <member>
-        <project>dev_lm3s_6.21</project>
-        <configuration>Debug</configuration>
-      </member>
-      <member>
-        <project>tauon-basic_lm3s_6.21</project>
+        <project>tauon-basic_stm32f4_6.21</project>
         <configuration>Debug</configuration>
       </member>
     </batchDefinition>

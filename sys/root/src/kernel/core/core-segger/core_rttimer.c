@@ -52,7 +52,7 @@ Implementation
 int rttmr_create(tmr_t* tmr,rttmr_attr_t* rttmr_attr){
    if(!tmr || !rttmr_attr)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_CreateTimer(tmr,rttmr_attr->func,rttmr_attr->tm_msec);
 #endif
    return 0;
@@ -69,7 +69,7 @@ int rttmr_create(tmr_t* tmr,rttmr_attr_t* rttmr_attr){
 int rttmr_start(tmr_t* tmr){
    if(!tmr)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_StartTimer(tmr);
 #endif
    return 0;
@@ -86,7 +86,7 @@ int rttmr_start(tmr_t* tmr){
 int rttmr_stop(tmr_t* tmr){
    if(!tmr)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_StopTimer(tmr);
 #endif
    return 0;
@@ -103,7 +103,7 @@ int rttmr_stop(tmr_t* tmr){
 int rttmr_restart(tmr_t* tmr){
    if(!tmr)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_RetriggerTimer(tmr);
 #endif
    return 0;
@@ -120,7 +120,7 @@ int rttmr_restart(tmr_t* tmr){
 int rttmr_delete(tmr_t* tmr){
    if(!tmr)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_DeleteTimer(tmr);
 #endif
    return 0;

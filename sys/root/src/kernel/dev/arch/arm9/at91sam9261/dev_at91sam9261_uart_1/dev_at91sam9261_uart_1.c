@@ -99,14 +99,14 @@ extern int dev_at91sam9261_uart_x_ioctl       (desc_t, int, va_list);
 extern int dev_at91sam9261_uart_x_interrupt   (desc_t);
 extern int termios2ttys                       (struct termios *);
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 
 extern void dev_at91sam9261_uart_x_interrupt   (/*desc_t*/ board_inf_uart_t *);
 extern void dev_at91sam9261_uart_x_timer_callback(board_inf_uart_t *);
 
 static void dev_at91sam9261_uart_1_interrupt  (void);
 
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 extern cyg_uint32 dev_at91sam9261_uart_isr(cyg_vector_t vector, cyg_addrword_t data);
 extern void dev_at91sam9261_uart_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 extern void dev_at91sam9261_uart_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
@@ -146,7 +146,7 @@ dev_map_t dev_at91sam9261_uart_1_map={
 /*===========================================
 Implementation
 =============================================*/
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
 /*-------------------------------------------
 | Name       : dev_at91sam9261_uart_1_interrupt
 | Description: Call generic interrupt function
@@ -202,7 +202,7 @@ int dev_at91sam9261_uart_1_load_ex(board_inf_uart_t* p_board_inf_uart){
    else
       p_board_inf_uart_1  = p_board_inf_uart;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    p_board_inf_uart_1->f_timer_call_back = dev_at91sam9261_uart_1_timer_callback;
 #else
    p_board_inf_uart_1->f_timer_call_back = (void*)0;
@@ -227,7 +227,7 @@ int dev_at91sam9261_uart_1_load_ex(board_inf_uart_t* p_board_inf_uart){
 ---------------------------------------------*/
 int dev_at91sam9261_uart_1_open (desc_t desc, int o_flag)
 {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_vector_t serial_vector = CYGNUM_HAL_INTERRUPT_USART1;
    cyg_priority_t serial_prior = CYGNUM_HAL_H_PRIOR;
 #endif
@@ -264,10 +264,10 @@ int dev_at91sam9261_uart_1_open (desc_t desc, int o_flag)
    //create interrupt a first time
    if((ofile_lst[desc].nb_reader==0)&&(ofile_lst[desc].nb_writer==0))
    {
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
       // Usart 1 interrupt vector.
       AT91C_AIC_SVR[AT91C_ID_US1] = (unsigned long)&dev_at91sam9261_uart_1_interrupt;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       //Primitive de creation de l'IT au chargement du driver
       cyg_interrupt_create(serial_vector, serial_prior, (cyg_addrword_t)ofile_lst[desc].p,
                            &dev_at91sam9261_uart_isr, &dev_at91sam9261_uart_dsr,

@@ -294,7 +294,7 @@ typedef struct usb_endpoint_descriptor {
 #define USB_STRING_DESC_LENGTH(length)                                          ((length) * 2 + 2)
 #define USB_STRING_DESC_UNICODE(ascii)                                          (ascii), 0
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 //for true and false
    #include <cyg/hal/hal_io.h>
 #endif

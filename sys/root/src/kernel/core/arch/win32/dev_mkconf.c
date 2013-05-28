@@ -45,7 +45,6 @@ extern dev_map_t  dev_win32_com0_map;
 extern dev_map_t  dev_win32_com1_map;
 extern dev_map_t  dev_win32_rtc_map;
 extern dev_map_t  dev_ppp_uip_map;
-//extern dev_map_t  dev_win32_eth_map;
 
 
 pdev_map_t const dev_lst[]={

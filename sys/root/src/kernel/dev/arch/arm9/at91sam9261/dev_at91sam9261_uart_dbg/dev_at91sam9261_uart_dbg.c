@@ -105,7 +105,7 @@ extern int dev_at91sam9261_uart_dbg_x_ioctl       (desc_t desc,int request,va_li
 extern int dev_at91sam9261_uart_dbg_x_interrupt   (desc_t desc);
 extern int termios2ttys                      (struct termios* termios_p);
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 extern void dev_at91sam9261_uart_dbg_x_timer_callback (board_inf_uart_t * p_board_inf_uart);
 #else
 extern void dev_at91sam9261_uart_dbg_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
@@ -120,11 +120,11 @@ static void dev_at91sam9261_uart_dbg_interrupt  (void);
 
 desc_t desc_uart_dbg=-1;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 // fct pointer for debug interrupt
 extern void (*g_p_fct_dbg_interrupt)(void);
 
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 static cyg_handle_t _at91sam9261_uart_dbg_handle;
 static cyg_interrupt _at91sam9261_uart_dbg_it;
 int rcv_flag=0;
@@ -147,7 +147,7 @@ dev_map_t dev_at91sam9261_uart_dbg_map={
    dev_at91sam9261_uart_dbg_x_ioctl
 };
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 void dev_at91sam9261_uart_dbg_interrupt(void)
 {
    // interrupt for dbg Uart ?
@@ -165,7 +165,7 @@ void dev_at91sam9261_uart_dbg_timer_callback(void)
 {
    dev_at91sam9261_uart_dbg_x_timer_callback(p_board_inf_uart_dbg);
 }
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 cyg_uint32 dev_at91sam9261_uart_dbg_isr(cyg_vector_t vector, cyg_addrword_t data) {
    cyg_interrupt_mask(vector);
    unsigned int usart_csr;
@@ -254,7 +254,7 @@ int dev_at91sam9261_uart_dbg_load (void)
 {
    p_board_inf_uart_dbg                    = (board_inf_uart_t *)malloc(sizeof(board_inf_uart_t));
    memset(p_board_inf_uart_dbg,0,sizeof(board_inf_uart_t));
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    p_board_inf_uart_dbg->f_timer_call_back = dev_at91sam9261_uart_dbg_timer_callback;
 #endif
    p_board_inf_uart_dbg->loaded = 0;
@@ -272,7 +272,7 @@ int dev_at91sam9261_uart_dbg_load (void)
 ---------------------------------------------*/
 int dev_at91sam9261_uart_dbg_open(desc_t desc, int o_flag)
 {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_vector_t serial_vector = CYGNUM_HAL_INT_SERIAL;
    cyg_priority_t serial_prior = CYGNUM_HAL_H_PRIOR;
 #endif
@@ -304,10 +304,10 @@ int dev_at91sam9261_uart_dbg_open(desc_t desc, int o_flag)
    // call uart common Api open
    ret = dev_at91sam9261_uart_dbg_x_open(desc, o_flag);
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    // Usart debug interrupt function initialization
    g_p_fct_dbg_interrupt = dev_at91sam9261_uart_dbg_interrupt;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    //Primitive de creation de l'IT au chargement du driver
    cyg_interrupt_create(serial_vector, serial_prior, 0,
                         &dev_at91sam9261_uart_dbg_isr, &dev_at91sam9261_uart_dbg_dsr,

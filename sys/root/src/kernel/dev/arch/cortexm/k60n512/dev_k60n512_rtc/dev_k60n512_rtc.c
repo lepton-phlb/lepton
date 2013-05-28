@@ -74,7 +74,7 @@ dev_map_t dev_k60n512_rtc_map={
 #define KINETIS_RTC_VECTOR_PRIORITY             3
 #define KINETIS_RTC_IRQ            67 //66
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 static cyg_uint32 _kinetis_rtc_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void _kinetis_rtc_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 #endif

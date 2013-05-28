@@ -41,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Declarations
 =============================================*/
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
 extern cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t data);
 #endif
 

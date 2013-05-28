@@ -299,9 +299,9 @@ static int media_mode = DM9KS_10MHD;
 #define DMFE_DBUG(dbug_now, msg, vaule)
 
 static board_info_t g_board_info;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #define mdelay(__mdelay__) OS_Delay(__mdelay__)
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    #define mdelay(__mdelay__) cyg_thread_delay(__mdelay__)
 #endif
 
@@ -319,7 +319,7 @@ static board_info_t g_board_info;
       (__eth_status__)|=((__value__)&ETH_STAT_LINK_MASK); \
 }
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 
 static int flag_i_int=0;
 static int flag_o_int=0;
@@ -953,9 +953,9 @@ static void dmfe_tx_done(board_info_t *db,unsigned long unused){
    }
 
    if(db->tx_pkt_cnt <= 0 && _eth_dm9000a_desc_wr>=0) {
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __fire_io_int(ofile_lst[_eth_dm9000a_desc_wr].owner_pthread_ptr_write);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       __set_flag_fire_o_int();
 #endif
    }
@@ -1117,9 +1117,9 @@ static void dmfe_packet_receive(board_info_t *db){
 
          //
          if(_eth_dm9000a_desc_rd>=0) {
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
             __fire_io_int(ofile_lst[_eth_dm9000a_desc_rd].owner_pthread_ptr_read);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
             __set_flag_fire_i_int();
 #endif
          }
@@ -1204,9 +1204,9 @@ static void dmfe_packet_receive(board_info_t *db){
 | Comments:
 | See:
 ----------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 static void dmfe_interrupt(void) {
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t data) {
    cyg_interrupt_mask(vector);
 #endif
@@ -1216,7 +1216,7 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
 
    //OS_EnterNestableInterrupt();see RTOSINIT_ATXXX.c
    //arm7
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    *AT91C_AIC_IVR = 0; // Debug variant of vector read, protected mode is used.
    *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1; // Clears INT1 interrupt.
 #endif
@@ -1279,9 +1279,9 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
 
    /* Restore previous register address */
    outb(reg_save, db->io_addr);
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    *AT91C_AIC_EOICR = 0; // Signal end of interrupt to AIC.
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    //spin_unlock(&db->lock);
    //OS_LeaveNestableInterrupt();see RTOSINIT_ATXXX.c
    cyg_interrupt_acknowledge(vector);
@@ -1290,7 +1290,7 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
 #endif
 }
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 void dev_eth_dm9000a_interrupt_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data) {
    board_info_t * db= &g_board_info;    /* Point a board information structure */
    //
@@ -1356,7 +1356,7 @@ int dev_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
    g_board_info._output_w=0;
    g_board_info._output_r=0;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    // IRQ1  interrupt vector.
    AT91C_AIC_SVR[AT91C_ID_IRQ1] = (unsigned long)&dmfe_interrupt;
    // SRCTYPE=3, PRIOR=3. INT1 interrupt positive edge-triggered at prio 3.
@@ -1365,7 +1365,7 @@ int dev_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
    //phlb modif 02/12/2008: now in device open driver interface
    //*AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1; // Clears INT1 interrupt.
    //*AT91C_AIC_IECR = 1 << AT91C_ID_IRQ1; // Enable INT1 interrupt.
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    {
       cyg_interrupt_create(
          (cyg_vector_t)g_board_info.irq_no, (cyg_priority_t)g_board_info.irq_prio, 0,
@@ -1395,10 +1395,10 @@ int dev_eth_dm9000a_open(desc_t desc, int o_flag){
 
    if(_eth_dm9000a_desc_rd<0 && _eth_dm9000a_desc_wr<0) {
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1;    // Clears INT1 interrupt.
       *AT91C_AIC_IECR = 1 << AT91C_ID_IRQ1;    // Enable INT1 interrupt.
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       cyg_vector_t _ecos_vector = g_board_info.irq_no;
       cyg_interrupt_acknowledge(_ecos_vector);
       cyg_interrupt_unmask(_ecos_vector);

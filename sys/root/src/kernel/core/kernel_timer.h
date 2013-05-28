@@ -40,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/timer.h"
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    #include <cyg/kernel/kapi.h>
    #include "kernel/core/core_rttimer.h"
 
@@ -58,11 +58,11 @@ typedef long tmr_obj_t;
 ==============================================*/
 
 typedef struct kernel_timer_st {
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_TIMER timer;
 #endif
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    tmr_obj_t timer;
 #endif
    //

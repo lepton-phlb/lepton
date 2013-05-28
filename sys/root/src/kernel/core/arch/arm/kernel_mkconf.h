@@ -15,8 +15,7 @@ Includes
 Declaration
 =============================================*/
 
-//#define CPU_ARM7 
-#define CPU_CORTEXM
+#define CPU_ARM7 
 
 #define __KERNEL_CPU_FREQ 80000000L
 

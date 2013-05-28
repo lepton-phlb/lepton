@@ -42,7 +42,7 @@ Includes
 #include "dev_k60n512_enet.h"
 #include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include <cyg/hal/cortexm_regs.h>
 
    #define __REV        CYGARC_REV

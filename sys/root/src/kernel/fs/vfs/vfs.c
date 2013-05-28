@@ -1583,7 +1583,7 @@ int _vfs(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #include <stdio.h>
 #endif
 
@@ -1591,9 +1591,9 @@ int _vfs_ls(char* ref){
    desc_t desc;
    struct dirent dirent;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    printf("ls %s\n",ref);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    int i=0;
 #endif
 
@@ -1601,9 +1601,9 @@ int _vfs_ls(char* ref){
       return -1;
 
    while(_vfs_readdir(desc,&dirent)) {
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       printf("[%d] %s\n",dirent.inodenb,dirent.d_name);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       i++;
 #endif
    }

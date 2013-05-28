@@ -40,7 +40,7 @@ Global Declaration
 Implementation
 =============================================*/
 
-#ifndef USE_ECOS
+#ifndef __KERNEL_UCORE_ECOS
 
 int __l_isdigit ( int ch ) {
    return (unsigned int)(ch - '0') < 10u;

@@ -207,7 +207,7 @@ static s2s_t const s2s[] = {
 };
 
 //inter character timer
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
 //VTIME timer in units of 0.1 seconds (posix specification).
 static OS_TIMER dev_at91m55800a_uart_s2_timer;
 static volatile char inter_char_timer=0;
@@ -431,7 +431,7 @@ int dev_at91m55800a_uart_s2_load(void){
    ttys_termios.c_cc[VTIME]=0; // no timeout, blocking call
    inter_char_timer = 0;
 
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
    //VTIME timer in units of 0.1 seconds (posix specification).
    OS_CreateTimer(&dev_at91m55800a_uart_s2_timer,dev_at91m55800a_uart_s2_timer_callback,100);  // 100ms
 #endif

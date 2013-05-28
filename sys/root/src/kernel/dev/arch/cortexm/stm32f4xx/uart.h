@@ -1,9 +1,9 @@
 /******************** (C) COPYRIGHT 2013 IJINUS ********************************
 * File Name          : uart.h
 * Author             : Yoann TREGUIER
-* Version            : 1.1.0
-* Date               : 2013/01/23
-* Description        : Headers of UART driver functions
+* Version            : 0.1.0
+* Date               : 2013/05/24
+* Description        : Headers of UART driver functions for STM32F4xx devices
 *******************************************************************************/
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __UART_H
@@ -37,35 +37,31 @@ typedef __packed struct
 typedef __packed struct
 {
   USART_TypeDef *UARTx;
+  void (*RCC_APBxPeriphClockCmd)(uint32_t, FunctionalState);
+  u32 RCC_APBxPeriph;
   IRQn_Type IRQn;
-  DMA_Channel_TypeDef *DMAx;
+  DMA_Stream_TypeDef *DMAy_Streamx;
+  u32 DMA_Channel;
   IRQn_Type DMAx_IRQn;
-  _Uart_Ctrl *Ctrl;
+  const _Gpio_Descriptor *TxGpio;
+  const _Gpio_Descriptor *RxGpio;
+  u8 GPIO_AF;
+  _Uart_Ctrl **Ctrl;
 } _Uart_Descriptor;
 
 /* Exported define -----------------------------------------------------------*/
-#define UART_HW_FLOW_CTRL_RX  0x01
-#define UART_HW_FLOW_CTRL_TX  0x02
-#define UART_HALF_DUPLEX      0x04
-#define UART_TX_IN_PROGRESS   0x80
-
-#define UART_1 (&Uart1_Descriptor)
-#define UART_2 (&Uart2_Descriptor)
-#define UART_3 (&Uart3_Descriptor)
-#define UART_4 (&Uart4_Descriptor)
-#define UART_5 (&Uart5_Descriptor)
+#define UART_HW_FLOW_CTRL_NONE  0x00
+#define UART_HW_FLOW_CTRL_RX    0x01
+#define UART_HW_FLOW_CTRL_TX    0x02
+#define UART_HALF_DUPLEX        0x04
 
 /* Exported macro ------------------------------------------------------------*/
-#define uart_tx_in_progress(Uart)   (Uart->Ctrl->HwCtrl & UART_TX_IN_PROGRESS)
-
 /* Exported constants --------------------------------------------------------*/
-extern const _Uart_Descriptor Uart1_Descriptor;
-extern const _Uart_Descriptor Uart2_Descriptor;
-extern const _Uart_Descriptor Uart3_Descriptor;
-extern const _Uart_Descriptor Uart4_Descriptor;
-extern const _Uart_Descriptor Uart5_Descriptor;
+extern const _Uart_Descriptor Uart_Descriptor[];
 
 /* Exported variables --------------------------------------------------------*/
+extern _Uart_Ctrl *Uart_Ctrl[UART_NB];
+
 /* Exported functions --------------------------------------------------------*/
 int uart_open(const _Uart_Descriptor *Uart, u32 BaudRate, u8 DmaBufSize, u16 RxBufSize, u16 TxBufSize, u8 HwCtrl, const _Gpio_Descriptor *Gpio);
 int uart_close(const _Uart_Descriptor *Uart);

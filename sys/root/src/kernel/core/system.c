@@ -156,7 +156,7 @@ int pause(void){
 unsigned int alarm(unsigned int seconds){
    alarm_t alarm_dt;
    alarm_dt.seconds = seconds;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __mk_syscall(_SYSCALL_ALARM,alarm_dt)
 #endif
    return alarm_dt.seconds = seconds;
@@ -297,7 +297,7 @@ int _system_atexit(void (*func)(void)){
    //process_lst[pid].atexit_func = func;
    atexit_t atexit_dt;
    atexit_dt.func=func;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __mk_syscall(_SYSCALL_ATEXIT,atexit_dt);
 #endif
    return 0;

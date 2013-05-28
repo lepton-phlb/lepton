@@ -46,7 +46,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/dev/arch/all/eth/dev_eth_dm9000a/dev_eth_dm9000a.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
 #endif
 
@@ -60,7 +60,7 @@ extern AT91PS_SYS AT91_SYS;
 Implementation
 =============================================*/
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 static cyg_uint32 dev_at91sam9261_eth_dm9000a_interrupt_isr(cyg_vector_t vector,
                                                             cyg_addrword_t data) {
    cyg_interrupt_mask(vector);

@@ -72,7 +72,7 @@ int dev_at91_usbdp_read(desc_t desc, char* buf,int cb);
 int dev_at91_usbdp_write(desc_t desc, const char* buf,int cb);
 int dev_at91_usbdp_ioctl(desc_t desc,int request,va_list ap);
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 static cyg_uint32 dev_at91_usbdp_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void dev_at91_usbdp_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 static cyg_interrupt dev_at91_intr_it;

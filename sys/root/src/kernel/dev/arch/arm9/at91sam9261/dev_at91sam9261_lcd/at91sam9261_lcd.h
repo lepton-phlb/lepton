@@ -40,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 #include "kernel/core/etypes.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
 #endif
 /*============================================
@@ -65,7 +65,7 @@ either the MPL or the [eCos GPL] License."
 #define MEMO_ECRAN            0x22100000L    // Adresse de la recopie d'cran ds la SDRAM
 
 /*   Frame buffer memory information    */
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 extern char *lcd_base;               // Start of framebuffer memory
 extern char *lcd_console_address;       // Start of console buffer
 extern short console_col;

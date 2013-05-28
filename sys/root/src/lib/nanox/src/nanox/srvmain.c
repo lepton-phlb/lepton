@@ -313,7 +313,7 @@ GsDropClient(int fd)
 }
 #endif
 
-#if UNIX | DOS_DJGPP | USE_ECOS
+#if UNIX | DOS_DJGPP | __KERNEL_UCORE_ECOS
 #if NONETWORK && defined(HAVESELECT)
 /*
  * Register the specified file descriptor to return an event
@@ -503,7 +503,7 @@ GsSelect(GR_TIMEOUT timeout)
 
 }
 
-#elif (UNIX|USE_ECOS) && defined(HAVESELECT)
+#elif (UNIX|__KERNEL_UCORE_ECOS) && defined(HAVESELECT)
 
 void
 GsSelect(GR_TIMEOUT timeout)

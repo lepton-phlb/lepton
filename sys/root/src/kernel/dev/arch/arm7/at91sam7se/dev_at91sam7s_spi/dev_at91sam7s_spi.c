@@ -126,7 +126,7 @@ dev_map_t dev_at91sam7s_spi_map={
 //#define  USE_DMA_TRANSMISSION
 //#define  USE_DMA_INTERUPT_TRANSMISSION
 
-//#if defined (USE_SEGGER)
+//#if defined (__KERNEL_UCORE_EMBOS)
 OS_TIMER dev_at91sam7s_spi_timer;
 //#endif
 

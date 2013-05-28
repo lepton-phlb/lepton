@@ -44,7 +44,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include <cyg/hal/hal_io.h>
 #endif
 
@@ -264,7 +264,7 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
 
    thread->pid=(pid_t)-1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    thread->thr_id = 0;
    if( !(thread->tcb=malloc(sizeof(tcb_t))) )
       return -EAGAIN;
@@ -281,7 +281,7 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
       return -EAGAIN;
 
    //création d'une tache eCos
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    {
       char * thr_name = (char *)thread->attr.name;
       pid_t pid = thread->pid;
@@ -339,7 +339,7 @@ int   kernel_pthread_kill(kernel_pthread_t* thread, int sig){
 | See:
 ---------------------------------------------*/
 int   kernel_pthread_cancel(kernel_pthread_t* thread){
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    thr_id_t current_id;
 #endif
    desc_t desc;
@@ -349,7 +349,7 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
 
    desc=0;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    current_id = thread->thr_id;
    if(thread->thr_id==0)
       return 0;
@@ -386,7 +386,7 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
       __atomic_out();
    }
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    kernel_sem_destroy(&thread->sem_wait);
 
    #if defined(__KERNEL_IO_EVENT)
@@ -406,7 +406,7 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
    free(thread->tcb);
    free(thread);
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_thread_delete(current_id);
 #endif
    //__disable_interrupt_section_out();

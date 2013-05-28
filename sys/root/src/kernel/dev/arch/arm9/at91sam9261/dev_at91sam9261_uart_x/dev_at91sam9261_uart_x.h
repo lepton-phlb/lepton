@@ -104,9 +104,9 @@ typedef struct {
    desc_t desc_wr;
 
    //VTIME timer in units of 0.1 seconds (posix specification).
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    OS_TIMER timer;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    tmr_t timer;
    rttmr_attr_t timer_attr;
 #endif

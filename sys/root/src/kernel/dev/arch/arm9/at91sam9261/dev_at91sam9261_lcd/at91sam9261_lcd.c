@@ -34,10 +34,10 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/core/kernelconf.h"
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #include <ioat91sam9261.h>
    #include "at91sam9261_init.h"
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
 #endif
 

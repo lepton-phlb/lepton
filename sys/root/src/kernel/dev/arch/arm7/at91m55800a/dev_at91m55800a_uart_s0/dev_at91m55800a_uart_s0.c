@@ -70,7 +70,7 @@ Includes
 
 #include "lib/libc/termios/termios.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "dev_at91m55800a_uart_s0.h"
 #else
    #include <ioat91m55800.h>
@@ -92,11 +92,11 @@ int dev_at91m55800a_uart_s0_write(desc_t desc, const char* buf,int size);
 int dev_at91m55800a_uart_s0_seek(desc_t desc,int offset,int origin);
 int dev_at91m55800a_uart_s0_ioctl(desc_t desc,int request,va_list ap);
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 cyg_uint32 dev_at91m55800a_uart_s0_isr(cyg_vector_t vector, cyg_addrword_t data);
 void dev_at91m55800a_uart_s0_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 static void dev_at91m55800a_uart_s0_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data );
-#elif defined(USE_SEGGER)
+#elif defined(__KERNEL_UCORE_EMBOS)
 static void  dev_at91m55800a_uart_s0_timer_callback(void);
 #endif
 static int termios2ttys(struct termios* termios_p);
@@ -179,7 +179,7 @@ static volatile unsigned char _rcv_xonoff_status = STATUS_IDLE;
 
 static unsigned char XMIT=0;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #define __pause_snd()
    #define __resume_snd()
 
@@ -245,16 +245,16 @@ static tmr_t dev_at91m55800a_uart_s0_tmr;
 static rttmr_attr_t dev_at91m55800a_uart_s0_tmr_attr={
    100,
    dev_at91m55800a_uart_s0_timer_callback
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    ,0
 #endif
 };
 
 //inter character timer
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
 //VTIME timer in units of 0.1 seconds (posix specification).
 static OS_TIMER dev_at91m55800a_uart_s0_timer;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 static int rcv_flag = 0;
 /*variables pour la gestion de l'IT*/
 static cyg_interrupt dev_at91m55800a_uart_s0_it;
@@ -357,9 +357,9 @@ void dev_at91m55800a_uart_s0_fifo_pool_rcv(void){
       //profiler
       __io_profiler_start(_at91m55800a_uart_s0_desc_rd);
       //
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __fire_io_int(ofile_lst[_at91m55800a_uart_s0_desc_rd].owner_pthread_ptr_read);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       rcv_flag = 1;
 #endif
    }
@@ -380,7 +380,7 @@ void dev_at91m55800a_uart_s0_fifo_pool_rcv(void){
 void dev_at91m55800a_uart_s0_snd(void){
 
    unsigned char snd_data;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    uint32_t data;
 #endif
 
@@ -394,9 +394,9 @@ void dev_at91m55800a_uart_s0_snd(void){
    if(_at91m55800a_uart_s0_output_r<_at91m55800a_uart_s0_output_w) {
       snd_data = _at91m55800a_uart_s0_output_buffer[_at91m55800a_uart_s0_output_r];
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __US_THR = snd_data;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       data = (uint32_t)snd_data;
       __US_THR = data;
 #endif
@@ -404,7 +404,7 @@ void dev_at91m55800a_uart_s0_snd(void){
    }else if(_at91m55800a_uart_s0_desc_wr>=0 && _at91m55800a_uart_s0_output_r==
             _at91m55800a_uart_s0_output_w) {
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __fire_io_int(ofile_lst[_at91m55800a_uart_s0_desc_wr].owner_pthread_ptr_write);
 #endif
       __US_IDR=2;
@@ -421,9 +421,9 @@ void dev_at91m55800a_uart_s0_snd(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 static void  dev_at91m55800a_uart_s0_timer_callback(void){
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 static void dev_at91m55800a_uart_s0_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data){
 #endif
    if( (_at91m55800a_uart_s0_desc_rd>=0)
@@ -448,7 +448,7 @@ static void dev_at91m55800a_uart_s0_timer_callback(alrm_hdl_t alarm_handle, cyg_
 | Comments:
 | See:
 ----------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 void dev_at91m55800a_uart_s0_interrupt(void)
 {
    __AIC_IVR = 0; // Debug variant of vector read, protected mode is used.
@@ -479,7 +479,7 @@ void dev_at91m55800a_uart_s0_interrupt(void)
    __AIC_EOICR = 0; // Signal end of interrupt to AIC.
 }
 
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 /*Handler d'IT*/
 cyg_uint32 dev_at91m55800a_uart_s0_isr(cyg_vector_t vector, cyg_addrword_t data)
 {
@@ -538,7 +538,7 @@ void dev_at91m55800a_uart_s0_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_ad
 | See:
 ---------------------------------------------*/
 int dev_at91m55800a_uart_s0_load(void){
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_vector_t serial_vector = CYGNUM_HAL_INT_SERIAL;
    cyg_priority_t serial_prior = CYGNUM_HAL_H_PRIOR;
 #endif
@@ -564,10 +564,10 @@ int dev_at91m55800a_uart_s0_load(void){
    ttys_termios.c_cc[VTIME]=0; // no timeout, blocking call
    inter_char_timer = 0;
 
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
    //VTIME timer in units of 0.1 seconds (posix specification).
    OS_CreateTimer(&dev_at91m55800a_uart_s0_timer,dev_at91m55800a_uart_s0_timer_callback,100);  // 100ms
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    //Primitive de creation de l'IT au chargement du driver
    cyg_interrupt_create(serial_vector, serial_prior, 0,
                         &dev_at91m55800a_uart_s0_isr, &dev_at91m55800a_uart_s0_dsr,
@@ -607,7 +607,7 @@ int dev_at91m55800a_uart_s0_open(desc_t desc, int o_flag){
       __US_TTGR = 5; // Transmit time guard in number of bit periods.
       __US_BRGR = __KERNEL_CPU_FREQ / OS_RS232_BAUDRATE / 16; // Set baud rate.
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __AIC_ICCR_bit.us0irq = 1; // Clears timer/counter 0 interrupt.
       __AIC_IECR_bit.us0irq = 1; // Enable timer/counter 0 interrupt.
 #endif
@@ -616,7 +616,7 @@ int dev_at91m55800a_uart_s0_open(desc_t desc, int o_flag){
       __US_CR = 0x0000010c; // Reset status bits, reset rx/tx.
       __US_CR = 0x00000050; // Enable receiver, enable transmitter.
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __AIC_ICCR = 1 << US0IRQ; // Clears usart 0 interrupt.
       // Usart 0 interrupt vector.
       __AIC_SVR2 = (unsigned long)&dev_at91m55800a_uart_s0_interrupt;
@@ -650,7 +650,7 @@ int dev_at91m55800a_uart_s0_open(desc_t desc, int o_flag){
       _at91m55800a_uart_s0_output_w = 0;
       _at91m55800a_uart_s0_desc_wr = desc;
       // Interrupt on TXRDY
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __US_IER = IER_MASK_SND;
 #endif
    }
@@ -697,14 +697,14 @@ int dev_at91m55800a_uart_s0_close(desc_t desc){
    if(_at91m55800a_uart_s0_desc_wr<0 && _at91m55800a_uart_s0_desc_rd<0) {
       __US_IDR = 0xffffffff; // Disable all USART interrupts.
       //
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       __AIC_ICCR_bit.us0irq = 1; // Clears timer/counter 1 interrupt.
       __AIC_IECR_bit.us0irq = 1; // Enable timer/counter 1 interrupt.
 #endif
 
       __US_CR = 0x000000a0; // Disable receiver, disable transmitter.
       __US_CR = 0x0000010c; // Reset status bits, reset rx/tx.
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       // disable peripheral clock for selected USART
       __APMC_PCDR = 1 << US0IRQ;
 #endif
@@ -764,17 +764,17 @@ int dev_at91m55800a_uart_s0_read(desc_t desc, char* buf,int size){
    int cb=0;
 
    //
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    OS_DI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    __clr_irq();
 #endif
 
    _buf_in_dma_no=buf_in_dma_no;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    OS_EI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    __set_irq();
 #endif
    //
@@ -800,18 +800,18 @@ int dev_at91m55800a_uart_s0_read(desc_t desc, char* buf,int size){
    } while( _buf_in_rcv_no!=_buf_in_dma_no);
 
    //
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    OS_DI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    __clr_irq();
 #endif
 
    _at91m55800a_uart_s0_input_r=((_at91m55800a_uart_s0_input_r+cb)&(~UART_FIFO_INPUT_BUFFER_SZ));
    buf_in_rcv_no=_buf_in_rcv_no;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    OS_EI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    __set_irq();
 #endif
    return cb;
@@ -838,7 +838,7 @@ int dev_at91m55800a_uart_s0_write(desc_t desc, const char* buf,int size){
 
    while (!(__US_CSR & (0x00000002))) ;   // Wait until TB empty
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    //protection xon/xoff
    //OS_DI();
    _at91m55800a_uart_s0_output_r = 0;
@@ -849,7 +849,7 @@ int dev_at91m55800a_uart_s0_write(desc_t desc, const char* buf,int size){
    __US_THR = snd_data;
    __US_IER = 2;
    OS_EI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    //Disable all IT
    __clr_irq();
 

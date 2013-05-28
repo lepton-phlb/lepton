@@ -131,7 +131,7 @@ typedef struct _sdhc_stat_st {
 
 _sdhc_stat_t g_kinetis_sdhc_stat;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 
    #define SDHC_CLK CYGHWR_HAL_KINETIS_PIN(E, 2, 4, (PORT_PCR_DSE_MASK))
    #define SDHC_CMD CYGHWR_HAL_KINETIS_PIN(E, 3, 4, \

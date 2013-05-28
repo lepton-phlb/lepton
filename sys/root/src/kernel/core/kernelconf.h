@@ -43,10 +43,14 @@ Includes
 #define __compiler_iar_arm__     (0x04)
 #define __compiler_keil_arm__    (0x05)
 
-#define __compiler_cpu_target_win32__  (0x0100)
-#define __compiler_cpu_target_gnuc__   (0x0200)
-#define __compiler_cpu_target_m16c__   (0x0300)
-#define __compiler_cpu_target_arm__    (0x0400)
+
+#define __tauon_cpu_core_win32_simulation__  (0x0001)
+#define __tauon_cpu_core_gnu_syntetic__      (0x0002)
+#define __tauon_cpu_core_m16c__              (0x0003)
+#define __tauon_cpu_core_arm_arm7tdmi__      (0x0004)
+#define __tauon_cpu_core_arm_arm926ejs__     (0x0005)
+#define __tauon_cpu_core_arm_cortexM3__      (0x0006)
+#define __tauon_cpu_core_arm_cortexM4__      (0x0007)
 
 #define __tauon_cpu_device_win32_simulation__   (0x0001)
 #define __tauon_cpu_device_gnu_synthetic__      (0x0002)
@@ -60,63 +64,77 @@ Includes
 #define __tauon_cpu_device_cortexM3_LM3S__      (0x0302)
 #define __tauon_cpu_device_cortexM4_stm32f4__   (0x0304)
 
-#define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__ 
-//#define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
+#if defined(WIN32)
+   #define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
+#else
+   #if !defined(__tauon_cpu_device__)
+      #define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
+      //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_trifecta__ 
+   #endif
+#endif
 
 #if __tauon_cpu_device__==__tauon_cpu_device_win32_simulation__
    #define __KERNEL_CPU_DEVICE_NAME "x86-win32-sim"
+   #define __tauon_cpu_core__ __tauon_cpu_core_win32_simulation__
 #elif __tauon_cpu_device__==__tauon_cpu_device_gnu_synthetic__
    #define __KERNEL_CPU_DEVICE_NAME "x86-gnu-synth"
+   #define __tauon_cpu_core__ __tauon_cpu_core_gnu_syntetic__
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__
    #define __KERNEL_CPU_DEVICE_NAME "arm7-at91m55800a"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm7_at91sam7se__
    #define __KERNEL_CPU_DEVICE_NAME "arm7-at91sam7se"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm7_at91sam7x__
    #define __KERNEL_CPU_DEVICE_NAME "arm7-at91sam7x"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9260__
    #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9260"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9261__
    #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9261"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
 #elif __tauon_cpu_device__==__tauon_cpu_device_cortexM3_trifecta__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM3-trifecta"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM3__
 #elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM3_LM3S__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM3-TI-LM3S"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM3__
+#elif __tauon_cpu_device__ == __tauon_cpu_device_cortexm_k60n512__
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM4-kinetis-k60n512"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
 #elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM4-stm32-f4"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
 #endif
-
 
 #if defined(WIN32)
    #define __tauon_compiler__ __compiler_win32__
-   #define __tauon_compiler_cpu_target__  __compiler_cpu_target_win32__
 #elif defined(__GNUC__)
-   #define __tauon_compiler__    __compiler_gnuc__
+   #define __tauon_compiler__ __compiler_gnuc__
 #elif defined(__IAR_SYSTEMS_ICC)
    #define __tauon_compiler__  __compiler_iar_m16c__
-   #define __tauon_compiler_cpu_target__  __compiler_cpu_target_m16c__
 #elif defined(__IAR_SYSTEMS_ICC__)
    #define __tauon_compiler__ __compiler_iar_arm__
-   #define __tauon_compiler_cpu_target__ __compiler_cpu_target_arm__
 #elif defined (__ARMCC_VERSION)
    #define __tauon_compiler__ __compiler_keil_arm__
-   #define __tauon_compiler_cpu_target__ __compiler_cpu_target_arm__
 #endif
 
-
-#if (__tauon_compiler_cpu_target__==__compiler_cpu_target_win32__)
-//for win32
+#if (__tauon_cpu_core__==__tauon_cpu_core_win32_simulation__)
+   //for win32 simulation
    #include "kernel/core/arch/win32/kernel_mkconf.h"
-#elif ((__tauon_compiler_cpu_target__==__compiler_cpu_target_arm__) && (__tauon_cpu_device__ == __tauon_cpu_device_cortexm_k60n512__)) || defined(CPU_CORTEXM) //GD trick to allow non-cortex ARM CPUs below..
-//for cortexm
-   #include "kernel/core/arch/cortexm/kernel_mkconf.h"
-#elif (__tauon_compiler_cpu_target__==__compiler_cpu_target_arm__) || (defined(CPU_ARM7) || defined(CPU_ARM9))
-//for arm7 and arm9
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)
    #include "kernel/core/arch/arm/kernel_mkconf.h"
-#elif (__tauon_compiler_cpu_target__==__compiler_cpu_target_gnuc__) && !defined(USE_KERNEL_STATIC)
-//for unix
-   #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
-#else
-   #include "kernel/core/arch/synthetic/x86_static/kernel_mkconf.h"
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+   //#include "kernel/core/arch/cortexm/kernel_mkconf.h"
+   #include "kernel/core/arch/arm/kernel_mkconf.h"
+#elif (__tauon_cpu_core__==__tauon_cpu_core_gnu_syntetic__)
+   #if defined(USE_KERNEL_STATIC)
+      //for lepton as bootloader (no scheduler, static)
+       #include "kernel/core/arch/synthetic/x86_static/kernel_mkconf.h"
+   #else
+      #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
+   #endif
 #endif
 
 /*===========================================
@@ -126,21 +144,27 @@ Declaration
 #define __TAUON_POSIX__
 #define __tauon_posix__
 
+//
+#if (__tauon_compiler__!=__compiler_gnuc__)
+   #define __attribute__(__attr__)
+#endif
+
 //what micro kernel
 #if (__tauon_compiler__==__compiler_gnuc__)
-//#define USE_ECOS
+//#define __KERNEL_UCORE_ECOS
 #elif (__tauon_compiler__==__compiler_win32__)
-   #define USE_SEGGER
+   #define __KERNEL_UCORE_EMBOS
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
-   #define USE_SEGGER
+   #define __KERNEL_UCORE_EMBOS
 #elif (__tauon_compiler__==__compiler_iar_arm__)
-   #define USE_SEGGER
+   #define __KERNEL_UCORE_EMBOS
 #elif (__tauon_compiler__==__compiler_keil_arm__)
-   #define USE_SEGGER
+   #define __KERNEL_UCORE_EMBOS
 #endif
 
 #define __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 32
 #define __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE 64
+
 #if (__tauon_compiler__==__compiler_gnuc__)
    #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
 #elif (__tauon_compiler__==__compiler_win32__)
@@ -152,57 +176,59 @@ Declaration
 #elif (__tauon_compiler__==__compiler_keil_arm__)
    #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE   
 #endif
+
 #define CPU_ARCH_32  (32)
 #define CPU_ARCH_16  (16)
 
-#if defined(CPU_WIN32)
+#if (__tauon_cpu_core__==__tauon_cpu_core_win32_simulation__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
    #define __KERNEL_CPU_NAME "win32"
-#elif defined(CPU_ARM7)
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
-   #define __KERNEL_CPU_NAME "arm7"
-#elif defined(CPU_ARM9)
+   #define __KERNEL_CPU_NAME "arm7tdmi"
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
-   #define __KERNEL_CPU_NAME "arm9"
-#elif defined(CPU_GNU32)
+   #define __KERNEL_CPU_NAME "arm926ejs"
+#elif (__tauon_cpu_core__==__tauon_cpu_core_gnu_syntetic__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
    #define __KERNEL_CPU_NAME "gnu32"
-#elif defined(CPU_M16C62)
+#elif (__tauon_cpu_core__==__tauon_cpu_core_m16c__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_16
    #define __KERNEL_CPU_NAME "m16c62"
-#elif defined(CPU_CORTEXM)
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
-   #define __KERNEL_CPU_NAME "cortexm"
+   #define __KERNEL_CPU_NAME "cortexm3"
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+   #define __KERNEL_CPU_ARCH CPU_ARCH_32
+   #define __KERNEL_CPU_NAME "cortexm4"
 #else
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
    #define __KERNEL_CPU_NAME "unknow"
 #endif
 
-
-#if defined(CPU_GNU32)
-   #define __KERNEL_OBJECT_POOL_MAX 10
-
-   #ifndef __KERNEL_MAX_PIPE
-      #define __KERNEL_MAX_PIPE 10
-   #endif
-
-//   #ifndef __KERNEL_PIPE_SIZE
-//      #define __KERNEL_PIPE_SIZE  16
-//   #endif
-
-   #ifndef __KERNEL_PIPE_SIZE
-      #define __KERNEL_PIPE_SIZE  1024 //256
-   #endif
-
-// to do: put this definition in kernel_mkconf.h with mklepton.
-   #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
-
-#elif defined(CPU_WIN32)
 //
-   #ifdef _DEBUG
-      #define __KERNEL_DEBUG
-   #endif
+#define __tauon_kernel_profile_minimal__         0x0001
+#define __tauon_kernel_profile_classic__         0x0002
+#define __tauon_kernel_profile_full__            0x000F
+#define __tauon_kernel_profile_user_defined__    0x8000
 
+#if (__tauon_cpu_core__==__tauon_cpu_core_gnu_syntetic__) || (__tauon_cpu_core__==__tauon_cpu_core_win32_simulation__)
+   #define __tauon_kernel_profile__ __tauon_kernel_profile_full__
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__)
+   #define __tauon_kernel_profile__ __tauon_kernel_profile_classic__
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)
+   #define __tauon_kernel_profile__ __tauon_kernel_profile_classic__
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+   #define __tauon_kernel_profile__ __tauon_kernel_profile_minimal__
+#endif
+
+#if !defined(__tauon_kernel_profile__)
+   #define __tauon_kernel_profile__ __tauon_kernel_profile_minimal__
+#endif 
+
+
+#if (__tauon_kernel_profile__==__tauon_kernel_profile_full__)
+   //
    #define __KERNEL_OBJECT_POOL_MAX 10
 
    #ifndef __KERNEL_MAX_PIPE
@@ -217,7 +243,7 @@ Declaration
 // to do: put this definition in kernel_mkconf.h with mklepton.
    #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
 
-#elif defined(CPU_ARM7) || defined(CPU_ARM9)
+#elif (__tauon_kernel_profile__==__tauon_kernel_profile_classic__)
    #define __KERNEL_OBJECT_POOL_MAX 10
 
    #ifndef __KERNEL_MAX_PIPE
@@ -233,7 +259,7 @@ Declaration
 // to do: put this definition in kernel_mkconf.h with mklepton.
    #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
 
-#elif defined(CPU_CORTEXM)
+#elif (__tauon_kernel_profile__==__tauon_kernel_profile_minimal__)
    #define __KERNEL_OBJECT_POOL_MAX 8
 
    #ifndef __KERNEL_MAX_PIPE
@@ -250,6 +276,12 @@ Declaration
    #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
 #endif
 
+//
+#if (__tauon_cpu_core__==__tauon_cpu_core_win32_simulation__)
+   #ifdef _DEBUG
+      #define __KERNEL_DEBUG
+   #endif
+#endif
 
 //for 20KB RAM default setting
 //distrib: must be set
@@ -281,50 +313,34 @@ Declaration
 
 #endif
 
-#if !defined(GNU_GCC)
-   #define __KERNEL_SUPPORT_UFS_DRIVER_1_3 13 //only 16 bits file size support
-#endif
-#define __KERNEL_SUPPORT_UFS_DRIVER_1_4 14  //16/32 bits file size support
-#define __KERNEL_SUPPORT_UFS_DRIVER_1_5 15  //full 32 bits file size support
-
-#define __KERNEL_SUPPORT_UFS_DRIVER __KERNEL_SUPPORT_UFS_DRIVER_1_5
-
-//ufs file system max block size
-#ifndef __KERNEL_UFS_BLOCK_SIZE_MAX
-   #define __KERNEL_UFS_BLOCK_SIZE_MAX   64 //default size
-#endif
-
-
 #ifndef __KERNEL_ENV_PATH
    #pragma message("warning!!! __KERNEL_ENV_PATH not defined")
    #define __KERNEL_ENV_PATH {"/bin","/usr/sbin","/usr/bin"}
 #endif
 
-
-#if !defined(WIN32)  && !defined(USE_KERNEL_STATIC) && !defined(CPU_CORTEXM)
+//profiler
+#if (__tauon_cpu_device__ == __tauon_cpu_device_arm7_at91m55800a__)\
+    ||(__tauon_cpu_device__ == __tauon_cpu_device_arm9_at91sam9260__)\
+    ||(__tauon_cpu_device__== __tauon_cpu_device_arm9_at91sam9261__)
    #define KERNEL_PROFILER
 #endif
 
 #define KERNEL_PROCESS_VFORK_CLRSET_IRQ
 
 //
-#if defined(CPU_ARM7)
+#if (_tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__)
    #ifdef __KERNEL_DEBUG
       #define __KERNEL_ARCH_DELAY_1US 1 //around 30ns per cycle 38:ARM7 at 32 MHz
    #else
       #define __KERNEL_ARCH_DELAY_1US 38
    #endif
-#endif
-//
-#if defined(CPU_ARM9)
+#elif (__tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9261__)
    #ifdef __KERNEL_DEBUG
       #define __KERNEL_ARCH_DELAY_1US 1 //around 30ns per cycle 38:ARM7 at 32 MHz
    #else
       #define __KERNEL_ARCH_DELAY_1US 38
    #endif
-#endif
-//
-#if defined(CPU_CORTEXM)
+#else //default
    #ifdef __KERNEL_DEBUG
       #define __KERNEL_ARCH_DELAY_1US 1 //around 30ns per cycle 38:ARM7 at 32 MHz
    #else
@@ -337,10 +353,17 @@ Declaration
    #define __BOOT_DEVICE "/dev/hd/hda" //must be hda cpufs
 #endif
 
-//full sdtio printf options (float %f%e%g).
-#define USE_FULL_STDIO_PRINTF 1
+#define __tauon_stdio_profile_minimal__         0x0001
+#define __tauon_stdio_profile_classic__         0x0002
+#define __tauon_stdio_profile_full__            0x000F
+
+#if __tauon_stdio_profile__ > __tauon_stdio_profile_minimal__
+   //support full sdtio printf options (float %f%e%g).
+   #define #define USE_FULL_STDIO_PRINTF 1
+#endif
+
 //realtime posix extension
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #define ATEXIT_MAX    4
    #define __KERNEL_POSIX_REALTIME_SIGNALS
    #define __KERNEL_LOAD_LIB
@@ -351,10 +374,10 @@ Declaration
 #if defined(GNU_GCC)
    #define __KERNEL_LOAD_LIB
    #define __KERNEL_POSIX_REALTIME_SIGNALS
-   #if !defined(CPU_CORTEXM)
+   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
       #define __KERNEL_USE_FILE_LOCK
    #endif
-//#define __KERNEL_IO_EVENT
+   //#define __KERNEL_IO_EVENT
    #define __KERNEL_IO_SEM
 //test for assert
    #define __KERNEL_USE_ASSERT   1
@@ -386,13 +409,22 @@ Declaration
 #endif
 
 
-#if (__tauon_compiler__!=__compiler_gnuc__)
-   #define __attribute__(__attr__)
+// file system profile
+#define __file_system_profile_minimal__         0x0001
+#define __file_system_profile_classic__         0x0002
+#define __file_system_profile_classic_yaffs__   0x0003
+#define __file_system_profile_full__            0x000F
+#define __file_system_profile_user_defined__    0x8000
+
+#if __tauon_cpu_core__ == __tauon_cpu_core_win32_simulation__
+   #define __file_system_profile__  __file_system_profile_classic_yaffs__
 #endif
 
+#if !defined(__file_system_profile__)
+   #define __file_system_profile__  __file_system_profile_classic__
+#endif
 
-
-#if defined(CPU_CORTEXM)
+#if (__file_system_profile__ == __file_system_profile_minimal__)
    #define __KERNEL_VFS_SUPPORT_ROOTFS 1
    #define __KERNEL_VFS_SUPPORT_UFS    1
    #define __KERNEL_VFS_SUPPORT_UFSX   0
@@ -400,7 +432,7 @@ Declaration
    #define __KERNEL_VFS_SUPPORT_MSDOS  0
    #define __KERNEL_VFS_SUPPORT_VFAT   0
    #define __KERNEL_VFS_SUPPORT_YAFFS  0
-#else
+#elif (__file_system_profile__ == __file_system_profile_classic__) 
    #define __KERNEL_VFS_SUPPORT_ROOTFS 1
    #define __KERNEL_VFS_SUPPORT_UFS    1
    #define __KERNEL_VFS_SUPPORT_UFSX   1
@@ -408,8 +440,47 @@ Declaration
    #define __KERNEL_VFS_SUPPORT_MSDOS  0
    #define __KERNEL_VFS_SUPPORT_VFAT   0
    #define __KERNEL_VFS_SUPPORT_YAFFS  0
+#elif (__file_system_profile__ == __file_system_profile_classic_yaffs__)
+   #define __KERNEL_VFS_SUPPORT_ROOTFS 1
+   #define __KERNEL_VFS_SUPPORT_UFS    1
+   #define __KERNEL_VFS_SUPPORT_UFSX   1
+   #define __KERNEL_VFS_SUPPORT_KOFS   1
+   #define __KERNEL_VFS_SUPPORT_MSDOS  0
+   #define __KERNEL_VFS_SUPPORT_VFAT   0
+   #define __KERNEL_VFS_SUPPORT_YAFFS  1
+#elif (__file_system_profile__ == __file_system_profile_full__)
+   #define __KERNEL_VFS_SUPPORT_ROOTFS 1
+   #define __KERNEL_VFS_SUPPORT_UFS    1
+   #define __KERNEL_VFS_SUPPORT_UFSX   1
+   #define __KERNEL_VFS_SUPPORT_KOFS   1
+   #define __KERNEL_VFS_SUPPORT_MSDOS  1
+   #define __KERNEL_VFS_SUPPORT_VFAT   1
+   #define __KERNEL_VFS_SUPPORT_YAFFS  1
 #endif 
 
+//file system ufs
+#if !defined(GNU_GCC)
+   #define __KERNEL_SUPPORT_UFS_DRIVER_1_3 13 //only 16 bits file size support
+#endif
+#define __KERNEL_SUPPORT_UFS_DRIVER_1_4 14  //16/32 bits file size support
+#define __KERNEL_SUPPORT_UFS_DRIVER_1_5 15  //full 32 bits file size support
+
+#define __KERNEL_SUPPORT_UFS_DRIVER __KERNEL_SUPPORT_UFS_DRIVER_1_5
+
+//ufs file system max block size
+#ifndef __KERNEL_UFS_BLOCK_SIZE_MAX
+   #define __KERNEL_UFS_BLOCK_SIZE_MAX   64 //default size
+#endif
+
+//file system yaffs
+//yaffs definition
+//vc++ 6 definition:CONFIG_YAFFS_DIRECT,CONFIG_YAFFS_SHORT_NAMES_IN_RAM,CONFIG_YAFFS_YAFFS2,CONFIG_YAFFS_PROVIDE_DEFS,CONFIG_YAFFSFS_PROVIDE_VALUES,NO_Y_INLINE
+#define CONFIG_YAFFS_DIRECT
+#define CONFIG_YAFFS_SHORT_NAMES_IN_RAM
+#define CONFIG_YAFFS_YAFFS2
+#define CONFIG_YAFFS_PROVIDE_DEFS
+#define CONFIG_YAFFSFS_PROVIDE_VALUES
+#define NO_Y_INLINE
 
 
 #endif

@@ -165,7 +165,7 @@ static s2s_t const s2s[] = {
 };
 
 //inter character timer
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
 //VTIME timer in units of 0.1 seconds (posix specification).
 OS_TIMER dev_win32_com1_timer;
 static volatile char inter_char_timer=0;
@@ -321,7 +321,7 @@ int dev_win32_com1_load(void){
    ttys_termios.c_cc[VTIME]=0; // no timeout, blocking call
    inter_char_timer = 0;
 
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
    //VTIME timer in units of 0.1 seconds (posix specification).
    OS_CreateTimer(&dev_win32_com1_timer,dev_win32_com1_timer_callback,100);  // 100ms
 #endif

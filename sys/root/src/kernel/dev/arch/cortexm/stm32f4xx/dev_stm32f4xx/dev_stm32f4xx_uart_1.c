@@ -38,7 +38,7 @@ Includes
 #include "kernel/core/core_rttimer.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
-#include "dev_k60n512_uart_x.h"
+#include "dev_stm32f4xx_uart_x.h"
 #include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"
 /*===========================================
 Global Declaration

@@ -1092,7 +1092,7 @@ fini:
 | Comments:
 | See:
 ---------------------------------------------*/
-int __vfprintf(FILE *op,register const char *fmt,register va_list ap){
+int __vfprintf(FILE *op,register const char *fmt,/*register*/ va_list ap){
    register int i, cnt = 0, ljustf, lval;
    int preci, dpoint, width;
    char pad, sign, radix, hash;

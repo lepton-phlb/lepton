@@ -58,7 +58,7 @@ typedef unsigned char kernel_intr_t;
 #endif
 //see  pthread.h #define PTHREAD_EVENT                  0x04//0x10
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 //
 
 /**
@@ -280,7 +280,7 @@ typedef unsigned char kernel_intr_t;
    #define __kernel_pthread_resume(__pthread_ptr__)   OS_Resume(__pthread_ptr__->tcb)
    #define __kernel_pthread_release(__pthread_ptr__)  OS_Terminate(__pthread_ptr__->tcb)
 
-#elif defined(USE_ECOS) && defined(CPU_GNU32)
+#elif defined(__KERNEL_UCORE_ECOS) && defined(CPU_GNU32)
 //   extern kernel_sem_t kernel_io_sem;
 
    #include <cyg/hal/hal_io.h>
@@ -415,7 +415,7 @@ extern int cyg_hal_sys_getpid(void);
    #define __kernel_pthread_resume(__pthread_ptr__)   cyg_thread_resume(__pthread_ptr__->thr_id)
    #define __kernel_pthread_release(__pthread_ptr__)  cyg_thread_release(__pthread_ptr__->thr_id)
 
-#elif defined(USE_ECOS) && (defined(CPU_ARM7) || defined(CPU_ARM9))
+#elif defined(__KERNEL_UCORE_ECOS) && (defined(CPU_ARM7) || defined(CPU_ARM9))
 
 //   extern kernel_sem_t kernel_io_sem;
    #include <cyg/hal/hal_io.h>
@@ -548,7 +548,7 @@ extern int cyg_hal_sys_getpid(void);
    #define __kernel_pthread_resume(__pthread_ptr__)   cyg_thread_resume(__pthread_ptr__->thr_id)
    #define __kernel_pthread_release(__pthread_ptr__)  cyg_thread_release(__pthread_ptr__->thr_id)
 
-#elif defined(USE_ECOS) && defined(CPU_CORTEXM)
+#elif defined(__KERNEL_UCORE_ECOS) && defined(CPU_CORTEXM)
 
 //   extern kernel_sem_t kernel_io_sem;
    #include <cyg/hal/hal_io.h>

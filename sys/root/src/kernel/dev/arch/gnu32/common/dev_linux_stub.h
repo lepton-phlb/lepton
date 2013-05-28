@@ -45,7 +45,7 @@ either the MPL or the [eCos GPL] License."
 #define _S_IWRITE 0200 //S_IWUSR
 #define _O_TRUNC  01000
 
-#ifndef USE_ECOS
+#ifndef __KERNEL_UCORE_ECOS
 typedef int k_off_t;
 typedef short k_ssize_t;
 typedef int k_size_t;

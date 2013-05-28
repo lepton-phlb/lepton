@@ -165,7 +165,7 @@ typedef struct kernel_pthread_st {
    unsigned short _profile_counter;
 #endif
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_TASK*  tcb;
 #endif
 
@@ -177,7 +177,7 @@ typedef struct kernel_pthread_st {
 
    kernel_sem_t sem_wait; //sem for waitpid
 
-   #ifdef USE_ECOS
+   #ifdef __KERNEL_UCORE_ECOS
    cyg_flag_t io_flag; //flag pour les I/O
    #endif
 #endif

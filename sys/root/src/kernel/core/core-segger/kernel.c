@@ -84,15 +84,15 @@ kernel_pthread_t kernel_thread;
 tmr_t kernel_tmr;
 
 //
-#if ( (__tauon_compiler__==__compiler_iar_m16c__) && defined (USE_SEGGER) && defined(CPU_M16C62))
+#if ( (__tauon_compiler__==__compiler_iar_m16c__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_M16C62))
    #define KERNEL_STACK_SIZE  1024 //1024//512 M16C
-#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (USE_SEGGER) && defined(CPU_ARM7))
+#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_ARM7))
    #define KERNEL_STACK_SIZE  2048 //2048//ARM7
-#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (USE_SEGGER) && defined(CPU_CORTEXM))
+#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_CORTEXM))
    #define KERNEL_STACK_SIZE  2048 //CORTEXM
-#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (USE_SEGGER) && defined(CPU_ARM9))
+#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_ARM9))
    #define KERNEL_STACK_SIZE  2048 //2048//ARM9
-#elif ( (__tauon_compiler__==__compiler_keil_arm__) && defined (USE_SEGGER) && defined(CPU_CORTEXM))
+#elif ( (__tauon_compiler__==__compiler_keil_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_CORTEXM))
    #define KERNEL_STACK_SIZE  2048 //CORTEXM
 #elif WIN32
    #define KERNEL_STACK_SIZE  1024

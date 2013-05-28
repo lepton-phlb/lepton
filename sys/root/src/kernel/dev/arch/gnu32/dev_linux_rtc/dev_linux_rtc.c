@@ -182,7 +182,7 @@ int dev_linux_rtc_read(desc_t desc, char* buf,int size){
    long ltime;
    int cb;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    struct cyg_hal_sys_timeval cyg_tv;
    cyg_hal_sys_gettimeofday(&cyg_tv, NULL);
    //sous-cast (voir cyg/hal/hal_io.h)

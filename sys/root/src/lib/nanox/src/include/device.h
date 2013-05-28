@@ -22,13 +22,13 @@
 #define USE_ALLOCA	0
 #define FASTJPEG	1			/* =1 for temp quick jpeg 8bpp*/
 
-#if defined(__rtems__) || defined(USE_ECOS)
+#if defined(__rtems__) || defined(__KERNEL_UCORE_ECOS)
 #define HAVE_MMAP       0
 #else
 #define HAVE_MMAP       1       		/* =1 to use mmap if available*/
 #endif
 
-#if USE_ECOS
+#if __KERNEL_UCORE_ECOS
 #undef diag_printf
 #define diag_printf	printf
 #endif

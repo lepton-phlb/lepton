@@ -44,7 +44,7 @@ Includes
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    #include <ctype.h>
 #endif
 

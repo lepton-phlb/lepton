@@ -53,7 +53,7 @@ either the MPL or the [eCos GPL] License."
 int   kernel_pthread_mutex_init(kernel_pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){
    //attr not used. preserved POSIX compatibility
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_CreateRSema(&mutex->mutex);
 #endif
 
@@ -73,7 +73,7 @@ int   kernel_pthread_mutex_destroy(kernel_pthread_mutex_t *mutex){
    //
    __atomic_in();
    //
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    count = OS_GetSemaValue(&mutex->mutex);
    if(!count) {
    #ifndef CPU_M16C62       //not supported on m16c embos architecture (embos version is too old for m16c)
@@ -116,7 +116,7 @@ int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,kernel_pth
    //
    __atomic_in();
    //
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    {
       OS_TASK *p = thread_ptr->tcb;
       count = OS_GetSemaValue(&mutex->mutex);
@@ -157,7 +157,7 @@ int   kernel_pthread_mutex_lock(kernel_pthread_mutex_t *mutex){
    if(__kernel_is_in_static_mode())
       return 0;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_Use(&mutex->mutex);
 #endif
 
@@ -177,7 +177,7 @@ int   kernel_pthread_mutex_trylock(kernel_pthread_mutex_t *mutex){
    if(__kernel_is_in_static_mode())
       return 0;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    if(!OS_Request(&mutex->mutex))
       return -EBUSY;
 #endif
@@ -198,7 +198,7 @@ int   kernel_pthread_mutex_unlock(kernel_pthread_mutex_t *mutex){
    if(__kernel_is_in_static_mode())
       return 0;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_Unuse(&mutex->mutex);
 #endif
 

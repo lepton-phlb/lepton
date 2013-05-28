@@ -35,7 +35,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    #include "cyg/hal/drv_api.h"
 #endif
 /*============================================
@@ -49,7 +49,7 @@ typedef struct dev_io_info_st {
    unsigned int irq_no;
    unsigned int irq_prio;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_uint32 (*p_fct_isr)(cyg_vector_t vector, cyg_addrword_t data);
 #endif
 

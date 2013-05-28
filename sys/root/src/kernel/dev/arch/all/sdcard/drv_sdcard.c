@@ -32,7 +32,7 @@ either the MPL or the [eCos GPL] License."
    #include "cyg/hal/at91sam9261.h"
 #endif
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "pkgconf/hal_arm_at91sam9261.h"
 #endif
 
