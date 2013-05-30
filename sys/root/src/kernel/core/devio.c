@@ -324,6 +324,7 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 | Comments:
 | See:
 ---------------------------------------------*/
+int dev_ioflag;
 #if defined(GNU_GCC)
 ssize_t __attribute__ ((visibility("hidden")))
 write(int fildes, const void *buf, size_t nbyte){
@@ -401,6 +402,7 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
       //profiler
       __io_profiler_start(desc);
       //
+      dev_ioflag=1;
       if((nbyte = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte))<0) {
          //profiler
          __io_profiler_stop(desc);
@@ -409,12 +411,14 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
          __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
          return -1;
       }
-
       do {
+        dev_ioflag=2;
          __wait_io_int(pthread_ptr); //wait all data are transmitted
+         dev_ioflag=3;
       } while(ofile_lst[desc].pfsop->fdev.fdev_isset_write
               && ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc));
       //profiler
+      dev_ioflag=4;
       __io_profiler_stop(desc);
       __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
       //

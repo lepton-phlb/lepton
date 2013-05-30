@@ -1,0 +1,62 @@
+/*********************************************************************
+*               SEGGER MICROCONTROLLER SYSTEME GmbH                  *
+*       Solutions for real time microcontroller applications         *
+**********************************************************************
+*                                                                    *
+*       (C) 2004   SEGGER Microcontroller Systeme GmbH               *
+*                                                                    *
+*       www.segger.com     Support: support@segger.com               *
+*                                                                    *
+**********************************************************************
+
+----------------------------------------------------------------------
+File    : JTAG_AT91M55_RAM.mac
+Purpose : Setup CPU for JTAG from IAR CSpy (Sample for PhyCore board)
+--------  END-OF-HEADER  ---------------------------------------------
+*/
+
+/*********************************************************************
+*
+*       Init()
+*
+* Function description
+*   Initializes PLL and external bus interface
+*/
+Init() {
+  __message "Init Macro: Setup AT91 "; 
+  __writeMemory32(0x002F0002,0xffff4020,"Memory"); // MOSCEN = 1, OSCOUNT = 47
+  __writeMemory32(0x002F4002,0xffff4020,"Memory"); // MOSCEN = 1, OSCOUNT = 47         // Commuting from Slow Clock to Main Oscillator (16Mhz)
+  __writeMemory32(0x032F4102,0xffff4020,"Memory"); // MUL = 1, PLLCOUNT = 3, CSS = 1   // Setup the PLL to 32 MHz clock
+  __writeMemory32(0x032F8102,0xffff4020,"Memory"); // CSS = 2, MUL = 1                 // Commuting from 16Mhz to PLL @ 32MHz
+  __writeMemory32(0x01002529,0xffe00000,"Memory"); // Set CS0 (Flash) 
+//  __writeMemory32(0x040034A5,0xffe00004,"Memory"); // Set CS1 (ext. RAM) 2 wait states, 2 TDF cycles
+  __writeMemory32(0x040030A1,0xffe00004,"Memory"); // Set CS1 (ext. RAM) 1 wait state, 0 TDF cycle
+  __writeMemory32(0x20003431,0xffe00008,"Memory"); // Set CS2 (Ethernet)
+  __writeMemory32(0x06002429,0xffe00014,"Memory"); // Set CS5 (LCD-Controller) 
+  __writeMemory32(0x00000001,0xffe00020,"Memory"); // Remap internal RAM
+
+}
+
+/*********************************************************************
+*
+*       execUserPreload()
+*
+* Function description
+*   Called once after the target application is downloaded.
+*/
+execUserPreload() {
+  Init();
+}
+
+/*********************************************************************
+*
+*       execUserReset()
+*
+* Function description
+*   Called each time the reset command is issued. 
+*/
+execUserReset() {
+  Init();
+}
+
+/******	EOF *********************************************************/

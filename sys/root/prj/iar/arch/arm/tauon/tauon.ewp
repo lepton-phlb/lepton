@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 
 <project>
-  <fileVersion>2</fileVersion>
+  <fileVersion>1</fileVersion>
   <configuration>
     <name>lib-debug</name>
     <toolchain>
@@ -10,11 +10,15 @@
     <debug>1</debug>
     <settings>
       <name>General</name>
-      <archiveVersion>3</archiveVersion>
+      <archiveVersion>2</archiveVersion>
       <data>
-        <version>21</version>
+        <version>9</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
+        <option>
+          <name>GProcessorMode</name>
+          <state>0</state>
+        </option>
         <option>
           <name>ExePath</name>
           <state>lib-debug\lib</state>
@@ -29,17 +33,25 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>19</version>
-          <state>37</state>
+          <version>5</version>
+          <state>11</state>
         </option>
         <option>
           <name>GEndianMode</name>
           <state>0</state>
         </option>
         <option>
-          <name>Input variant</name>
-          <version>3</version>
+          <name>GInterwork</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>GStackAlign</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>Input variant</name>
+          <version>1</version>
+          <state>0</state>
         </option>
         <option>
           <name>Input description</name>
@@ -47,8 +59,8 @@
         </option>
         <option>
           <name>Output variant</name>
-          <version>2</version>
-          <state>1</state>
+          <version>0</version>
+          <state>0</state>
         </option>
         <option>
           <name>Output description</name>
@@ -60,26 +72,34 @@
         </option>
         <option>
           <name>FPU</name>
-          <version>2</version>
+          <version>0</version>
           <state>0</state>
         </option>
         <option>
           <name>OGCoreOrChip</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GRuntimeLibSelect</name>
           <version>0</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GRuntimeLibSelectSlave</name>
           <version>0</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>RTDescription</name>
-          <state>Do not link with a runtime library.</state>
+          <state>To be used with the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+        </option>
+        <option>
+          <name>RTConfigPath</name>
+          <state>$TOOLKIT_DIR$\LIB\dl5tpainl8n.h</state>
+        </option>
+        <option>
+          <name>RTLibraryPath</name>
+          <state>$TOOLKIT_DIR$\LIB\dl5tpainl8n.r79</state>
         </option>
         <option>
           <name>OGProductVersion</name>
@@ -87,7 +107,12 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>4.42A</state>
+        </option>
+        <option>
+          <name>GeneralMisraRules</name>
+          <version>0</version>
+          <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -99,59 +124,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
-        </option>
-        <option>
-          <name>GenLowLevelInterface</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>GEndianModeBE</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>OGBufferedTerminalOutput</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>GenStdoutInterface</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>GeneralMisraRules98</name>
-          <version>0</version>
-          <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
-        </option>
-        <option>
-          <name>GeneralMisraVer</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>GeneralMisraRules04</name>
-          <version>0</version>
-          <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
-        </option>
-        <option>
-          <name>RTConfigPath2</name>
-          <state></state>
-        </option>
-        <option>
-          <name>GFPUCoreSlave</name>
-          <version>19</version>
-          <state>37</state>
-        </option>
-        <option>
-          <name>GBECoreSlave</name>
-          <version>19</version>
-          <state>37</state>
-        </option>
-        <option>
-          <name>OGUseCmsis</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OGUseCmsisDspLib</name>
-          <state>0</state>
+          <state>AT91SAM9261EK	Atmel AT91SAM9261EK</state>
         </option>
       </data>
     </settings>
@@ -159,14 +132,13 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>28</version>
+        <version>14</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
           <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
           <state>OS_LIBMODE_SP</state>
-          <state>NDEBUG</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -225,12 +197,33 @@
           <state>1</state>
         </option>
         <option>
+          <name>CCOptSizeSpeed</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptimization</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
           <name>CCAllowList</name>
           <version>1</version>
           <state>0000000</state>
         </option>
         <option>
+          <name>CCObjUseModuleName</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCObjModuleName</name>
+          <state></state>
+        </option>
+        <option>
           <name>CCDebugInfo</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IProcessorMode</name>
           <state>1</state>
         </option>
         <option>
@@ -239,6 +232,14 @@
         </option>
         <option>
           <name>IProcessor</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IStackAlign</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IInterwork</name>
           <state>1</state>
         </option>
         <option>
@@ -279,23 +280,60 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>$FILE_BNAME$.o</state>
+          <state>$FILE_BNAME$.r79</state>
+        </option>
+        <option>
+          <name>CCLangSelect</name>
+          <state>0</state>
         </option>
         <option>
           <name>CCLibConfigHeader</name>
           <state>1</state>
         </option>
         <option>
+          <name>CCOptSizeSpeedSlave</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptimizationSlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCCodeFunctions</name>
+          <state>CODE</state>
+        </option>
+        <option>
+          <name>CCData</name>
+          <state>DATA</state>
+        </option>
+        <option>
           <name>PreInclude</name>
           <state></state>
+        </option>
+        <option>
+          <name>CompilerMisraRules</name>
+          <version>0</version>
+          <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
         </option>
         <option>
           <name>CompilerMisraOverride</name>
           <state>0</state>
         </option>
         <option>
+          <name>CCModuleTypeOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCModuleType</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CCModuleTypeCmdlineProducer</name>
+          <state>0</state>
+        </option>
+        <option>
           <name>CCIncludePath2</name>
-          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/generic</state>
@@ -305,100 +343,19 @@
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
-          <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
-          <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
-          <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
           <state>0</state>
         </option>
         <option>
-          <name>CCCodeSection</name>
-          <state>.text</state>
+          <name>CCStdIncludePath</name>
+          <state>$TOOLKIT_DIR$\INC\</state>
         </option>
         <option>
-          <name>IInterwork2</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IProcessorMode2</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>CCOptLevel</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CCOptStrategy</name>
+          <name>CCInlineThreshold</name>
           <version>0</version>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CCOptLevelSlave</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CompilerMisraRules98</name>
-          <version>0</version>
-          <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
-        </option>
-        <option>
-          <name>CompilerMisraRules04</name>
-          <version>0</version>
-          <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
-        </option>
-        <option>
-          <name>CCPosIndRopi</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CCPosIndRwpi</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CCPosIndNoDynInit</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IccLang</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IccCDialect</name>
           <state>1</state>
-        </option>
-        <option>
-          <name>IccAllowVLA</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IccCppDialect</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IccExceptions</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IccRTTI</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IccStaticDestr</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IccCppInlineSemantics</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IccCmsis</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IccFloatSemantics</name>
-          <state>0</state>
         </option>
       </data>
     </settings>
@@ -406,7 +363,7 @@
       <name>AARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>8</version>
+        <version>7</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -532,7 +489,7 @@
         </option>
         <option>
           <name>AOutputFile</name>
-          <state>$FILE_BNAME$.o</state>
+          <state>$FILE_BNAME$.r79</state>
         </option>
         <option>
           <name>AMultibyteSupport</name>
@@ -551,6 +508,10 @@
           <state>0</state>
         </option>
         <option>
+          <name>AStdIncludes</name>
+          <state>$TOOLKIT_DIR$\INC\</state>
+        </option>
+        <option>
           <name>AUserIncludes</name>
           <state></state>
         </option>
@@ -561,36 +522,6 @@
         <option>
           <name>AExtraOptionsV2</name>
           <state></state>
-        </option>
-      </data>
-    </settings>
-    <settings>
-      <name>OBJCOPY</name>
-      <archiveVersion>0</archiveVersion>
-      <data>
-        <version>1</version>
-        <wantNonLocal>1</wantNonLocal>
-        <debug>1</debug>
-        <option>
-          <name>OOCOutputFormat</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OCOutputOverride</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OOCOutputFile</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OOCCommandLineProducer</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>OOCObjCopyEnable</name>
-          <state>0</state>
         </option>
       </data>
     </settings>
@@ -616,150 +547,88 @@
       </data>
     </settings>
     <settings>
-      <name>ILINK</name>
-      <archiveVersion>0</archiveVersion>
+      <name>XLINK</name>
+      <archiveVersion>2</archiveVersion>
       <data>
-        <version>13</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
-          <name>IlinkLibIOConfig</name>
+          <name>XOutOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OutputFile</name>
+          <state>tauon.d79</state>
+        </option>
+        <option>
+          <name>OutputFormat</name>
+          <version>11</version>
+          <state>16</state>
+        </option>
+        <option>
+          <name>FormatVariant</name>
+          <version>8</version>
+          <state>17</state>
+        </option>
+        <option>
+          <name>SecondaryOutputFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>XDefines</name>
+          <state></state>
+        </option>
+        <option>
+          <name>AlwaysOutput</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OverlapWarnings</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NoGlobalCheck</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>XList</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>SegmentMap</name>
           <state>1</state>
         </option>
         <option>
-          <name>XLinkMisraHandler</name>
+          <name>ListSymbols</name>
+          <state>2</state>
+        </option>
+        <option>
+          <name>PageLengthCheck</name>
           <state>0</state>
         </option>
         <option>
-          <name>IlinkInputFileSlave</name>
+          <name>PageLength</name>
+          <state>80</state>
+        </option>
+        <option>
+          <name>XIncludes</name>
+          <state>###Uninitialized###</state>
+        </option>
+        <option>
+          <name>ModuleStatus</name>
           <state>0</state>
         </option>
         <option>
-          <name>IlinkOutputFile</name>
-          <state>tauon.out</state>
-        </option>
-        <option>
-          <name>IlinkDebugInfoEnable</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkKeepSymbols</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkRawBinaryFile</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkRawBinarySymbol</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkRawBinarySegment</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkRawBinaryAlign</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkDefines</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkConfigDefines</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkMapFile</name>
+          <name>XclOverride</name>
           <state>0</state>
         </option>
         <option>
-          <name>IlinkLogFile</name>
-          <state>0</state>
+          <name>XclFile</name>
+          <state>lnk0t.xcl</state>
         </option>
         <option>
-          <name>IlinkLogInitialization</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkLogModule</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkLogSection</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkLogVeneer</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkIcfOverride</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkIcfFile</name>
-          <state>lnk0t.icf</state>
-        </option>
-        <option>
-          <name>IlinkIcfFileSlave</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkEnableRemarks</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkSuppressDiags</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkTreatAsRem</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkTreatAsWarn</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkTreatAsErr</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkWarningsAreErrors</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkUseExtraOptions</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkExtraOptions</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkLowLevelInterfaceSlave</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkAutoLibEnable</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkAdditionalLibs</name>
-          <state></state>
-        </option>
-        <option>
-          <name>IlinkOverrideProgramEntryLabel</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkProgramEntryLabelSelect</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkProgramEntryLabel</name>
+          <name>XclFileSlave</name>
           <state></state>
         </option>
         <option>
@@ -771,20 +640,12 @@
           <state>0xFF</state>
         </option>
         <option>
-          <name>FillerStart</name>
-          <state>0x0</state>
-        </option>
-        <option>
-          <name>FillerEnd</name>
-          <state>0x0</state>
+          <name>DoCrc</name>
+          <state>0</state>
         </option>
         <option>
           <name>CrcSize</name>
           <version>0</version>
-          <state>1</state>
-        </option>
-        <option>
-          <name>CrcAlign</name>
           <state>1</state>
         </option>
         <option>
@@ -801,106 +662,169 @@
           <state>0</state>
         </option>
         <option>
+          <name>RangeCheckAlternatives</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>SuppressAllWarn</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>SuppressDiags</name>
+          <state></state>
+        </option>
+        <option>
+          <name>TreatAsWarn</name>
+          <state></state>
+        </option>
+        <option>
+          <name>TreatAsErr</name>
+          <state></state>
+        </option>
+        <option>
+          <name>ModuleLocalSym</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
           <name>CrcBitOrder</name>
           <version>0</version>
           <state>0</state>
         </option>
         <option>
+          <name>XExtraOptionsCheck</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>XExtraOptions</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IncludeSuppressed</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OXLibIOConfig</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>ModuleSummary</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>xcProgramEntryLabel</name>
+          <state></state>
+        </option>
+        <option>
+          <name>DebugInformation</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>RuntimeControl</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IoEmulation</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>XcRTLibraryFile</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>AllowExtraOutput</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenerateExtraOutput</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>XExtraOutOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>ExtraOutputFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>ExtraOutputFormat</name>
+          <version>11</version>
+          <state>60</state>
+        </option>
+        <option>
+          <name>ExtraFormatVariant</name>
+          <version>8</version>
+          <state>2</state>
+        </option>
+        <option>
+          <name>xcOverrideProgramEntryLabel</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>xcProgramEntryLabelSelect</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>ListOutputFormat</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>BufferedTermOutput</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OverlaySystemMap</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>RawBinaryFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>RawBinarySymbol</name>
+          <state></state>
+        </option>
+        <option>
+          <name>RawBinarySegment</name>
+          <state></state>
+        </option>
+        <option>
+          <name>RawBinaryAlign</name>
+          <state></state>
+        </option>
+        <option>
+          <name>XLinkMisraHandler</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CrcAlign</name>
+          <state>1</state>
+        </option>
+        <option>
           <name>CrcInitialValue</name>
           <state>0x0</state>
-        </option>
-        <option>
-          <name>DoCrc</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkBE8Slave</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkBufferedTerminalOutput</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkStdoutInterfaceSlave</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>CrcFullSize</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkIElfToolPostProcess</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkLogAutoLibSelect</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkLogRedirSymbols</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkLogUnusedFragments</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkCrcReverseByteOrder</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkCrcUseAsInput</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkOptInline</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkOptExceptionsAllow</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkOptExceptionsForce</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkCmsis</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkOptMergeDuplSections</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>IlinkOptUseVfe</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>IlinkOptForceVfe</name>
-          <state>0</state>
         </option>
       </data>
     </settings>
     <settings>
-      <name>IARCHIVE</name>
-      <archiveVersion>0</archiveVersion>
+      <name>XAR</name>
+      <archiveVersion>2</archiveVersion>
       <data>
         <version>0</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
-          <name>IarchiveInputs</name>
+          <name>XARInputs</name>
           <state></state>
         </option>
         <option>
-          <name>IarchiveOverride</name>
-          <state>1</state>
+          <name>XAROverride</name>
+          <state>0</state>
         </option>
         <option>
-          <name>IarchiveOutput</name>
-          <state>$PROJ_DIR$\lib-debug\lib\tauon.a</state>
+          <name>XAROutput</name>
+          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\lib-debug\lib\tauon.r79</state>
         </option>
       </data>
     </settings>
@@ -923,15 +847,6 @@
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\arch\arm\kernel_mkconf.h</name>
-          </file>
-        </group>
-        <group>
-          <name>cortexm</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\arch\cortexm\dev_dskimg.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\arch\cortexm\kernel_mkconf.h</name>
           </file>
         </group>
       </group>
@@ -1013,12 +928,6 @@
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_core.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c</name>
@@ -1422,9 +1331,6 @@
         </group>
         <group>
           <name>embOSARM7_360</name>
-          <excluded>
-            <configuration>lib-debug</configuration>
-          </excluded>
           <group>
             <name>src</name>
             <group>
@@ -1810,33 +1716,6 @@
             </file>
           </group>
         </group>
-        <group>
-          <name>embOSCXM3_380</name>
-          <excluded>
-            <configuration>lib-debug</configuration>
-          </excluded>
-          <group>
-            <name>lib</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\embOSCXM3_380\lib\os7m_tl__dp.a</name>
-              <excluded>
-                <configuration>lib-debug</configuration>
-              </excluded>
-            </file>
-          </group>
-          <group>
-            <name>src</name>
-          </group>
-        </group>
-        <group>
-          <name>embOSCXM3_382</name>
-          <group>
-            <name>lib</name>
-          </group>
-          <group>
-            <name>src</name>
-          </group>
-        </group>
       </group>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\bin.c</name>
@@ -2050,270 +1929,11 @@
         <group>
           <name>all</name>
           <group>
-            <name>debug</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\debug\dev_os_debug.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\debug\dev_os_debug.h</name>
-            </file>
-          </group>
-          <group>
             <name>eth</name>
             <group>
               <name>dev_eth_dm9000a</name>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\eth\dev_eth_dm9000a\dev_eth_dm9000a.c</name>
-                <excluded>
-                  <configuration>lib-debug</configuration>
-                </excluded>
-                <configuration>
-                  <name>lib-debug</name>
-                  <settings>
-                    <name>ICCARM</name>
-                    <data>
-                      <version>28</version>
-                      <wantNonLocal>0</wantNonLocal>
-                      <debug>1</debug>
-                      <option>
-                        <name>CCDefines</name>
-                        <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
-                        <state>OS_LIBMODE_SP</state>
-                      </option>
-                      <option>
-                        <name>CCPreprocFile</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCPreprocComments</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCPreprocLine</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCListCFile</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCListCMnemonics</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCListCMessages</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCListAssFile</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCListAssSource</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCEnableRemarks</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCDiagSuppress</name>
-                        <state>pe001,pa050,pe375,pe231,pe177,pe550,pe167</state>
-                      </option>
-                      <option>
-                        <name>CCDiagRemark</name>
-                        <state></state>
-                      </option>
-                      <option>
-                        <name>CCDiagWarning</name>
-                        <state></state>
-                      </option>
-                      <option>
-                        <name>CCDiagError</name>
-                        <state></state>
-                      </option>
-                      <option>
-                        <name>CCObjPrefix</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>CCAllowList</name>
-                        <version>1</version>
-                        <state>0000000</state>
-                      </option>
-                      <option>
-                        <name>CCDebugInfo</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IEndianMode</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IProcessor</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IExtraOptionsCheck</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>IExtraOptions</name>
-                        <state></state>
-                      </option>
-                      <option>
-                        <name>CCLangConformance</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCSignedPlainChar</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>CCRequirePrototypes</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCMultibyteSupport</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCDiagWarnAreErr</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCCompilerRuntimeInfo</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>IFpuProcessor</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>OutputFile</name>
-                        <state>$FILE_BNAME$.o</state>
-                      </option>
-                      <option>
-                        <name>CCLibConfigHeader</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>PreInclude</name>
-                        <state></state>
-                      </option>
-                      <option>
-                        <name>CompilerMisraOverride</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCIncludePath2</name>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSCXM3_380/inc</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSARM7_360</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSARM7_360/src/generic</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/include</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/ports/arm</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/ports/arm/include</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/include/ipv4</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/fs/yaffs/core</state>
-                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/fs/yaffs/core/direct</state>
-                      </option>
-                      <option>
-                        <name>CCStdIncCheck</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCCodeSection</name>
-                        <state>.text</state>
-                      </option>
-                      <option>
-                        <name>IInterwork2</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>IProcessorMode2</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>CCOptLevel</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCOptStrategy</name>
-                        <version>0</version>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCOptLevelSlave</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CompilerMisraRules98</name>
-                        <version>0</version>
-                        <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
-                      </option>
-                      <option>
-                        <name>CompilerMisraRules04</name>
-                        <version>0</version>
-                        <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
-                      </option>
-                      <option>
-                        <name>CCPosIndRopi</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCPosIndRwpi</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>CCPosIndNoDynInit</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>IccLang</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>IccCDialect</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccAllowVLA</name>
-                        <state>0</state>
-                      </option>
-                      <option>
-                        <name>IccCppDialect</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccExceptions</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccRTTI</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccStaticDestr</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccCppInlineSemantics</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccCmsis</name>
-                        <state>1</state>
-                      </option>
-                      <option>
-                        <name>IccFloatSemantics</name>
-                        <state>0</state>
-                      </option>
-                    </data>
-                  </settings>
-                </configuration>
               </file>
             </group>
           </group>
@@ -2381,58 +2001,7 @@
             </file>
           </group>
           <group>
-            <name>ppp</name>
-            <group>
-              <name>dev_ppp_uip</name>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ahdlc.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ahdlc.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\dev_ppp_uip.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\dev_ppp_uip.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipcp.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipcp.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipv6cp.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipv6cp.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\lcp.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\lcp.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\pap.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\pap.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ppp.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ppp.h</name>
-              </file>
-            </group>
-          </group>
-          <group>
             <name>sdcard</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\sdcard\dev_sdcard.c</name>
             </file>
@@ -2465,42 +2034,6 @@
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\arm7\dev_at91\dev_at91.h</name>
-            </file>
-          </group>
-        </group>
-        <group>
-          <name>cmsis</name>
-          <group>
-            <name>dev_cmsis_cpu</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cmsis\dev_cmsis_cpu\dev_cmsis_cpu.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cmsis\dev_cmsis_cpu\dev_cmsis_cpu.h</name>
-            </file>
-          </group>
-          <group>
-            <name>dev_cmsis_itm</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cmsis\dev_cmsis_itm\dev_cmsis_itm.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cmsis\dev_cmsis_itm\dev_cmsis_itm.h</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cmsis\dev_cmsis_itm\dev_cmsis_itm_0.c</name>
-            </file>
-          </group>
-        </group>
-        <group>
-          <name>cortexm</name>
-          <group>
-            <name>lm3s</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\drivers\dev_lm3s_cpu\dev_lm3s_cpu.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\drivers\dev_lm3s_cpu\dev_lm3s_cpu.h</name>
             </file>
           </group>
         </group>
@@ -2559,48 +2092,6 @@
     </group>
     <group>
       <name>fs</name>
-      <group>
-        <name>fat</name>
-        <group>
-          <name>inc</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fat16.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore_msdos.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore_vfat.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatinfo.h</name>
-          </file>
-        </group>
-        <group>
-          <name>src</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fat16.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fat16_msdos.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fat16_vfat.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore_msdos.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore_vfat.c</name>
-          </file>
-        </group>
-      </group>
       <group>
         <name>kofs</name>
         <file>
@@ -2721,131 +2212,11 @@
           </file>
         </group>
       </group>
-      <group>
-        <name>yaffs</name>
-        <excluded>
-          <configuration>lib-debug</configuration>
-        </excluded>
-        <group>
-          <name>core</name>
-          <group>
-            <name>direct</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_malloc.h</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.h</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h</name>
-            </file>
-          </group>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\devextras.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_getblockinfo.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nandemul2k.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffs_trace.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yaffsinterface.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\core\yportenv.h</name>
-          </file>
-        </group>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffs.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffs.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffscore.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffscore.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\yaffs\yaffsinfo.h</name>
-        </file>
-      </group>
     </group>
     <group>
       <name>net</name>
       <group>
         <name>lwip</name>
-        <excluded>
-          <configuration>lib-debug</configuration>
-        </excluded>
         <group>
           <name>api</name>
           <file>
@@ -2991,369 +2362,6 @@
           </group>
         </group>
       </group>
-      <group>
-        <name>uip2.5</name>
-        <group>
-          <name>lib</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\list.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\list.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\memb.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\memb.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\random.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\random.h</name>
-          </file>
-        </group>
-        <group>
-          <name>net</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\dhcpc.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\dhcpc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\hc.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\hc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-info.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-info.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\netstack.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\netstack.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetbuf.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetbuf.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetqueue.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetqueue.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\psock.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\psock.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\queuebuf.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\queuebuf.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rawpacket.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\resolv.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\resolv.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rime.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\sicslowpan.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\sicslowpan.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\simple-udp.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\simple-udp.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\slipdev.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\slipdev.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpdump.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpdump.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpip.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpip.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv-def.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-debug.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-debug.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-ds6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-ds6.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-nd6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-nd6.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-split.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-split.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip_arch.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip_arp.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip_arp.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uiplib.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uiplib.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uipopt.h</name>
-          </file>
-        </group>
-        <group>
-          <name>sys</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\cc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\clock.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\clock.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\ctimer.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\ctimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\etimer.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\etimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\lc-addrlabels.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\lc-switch.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\lc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\process.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\pt.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\rtimer.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\rtimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\stimer.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\stimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\timer.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\timer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\timer_ip.c</name>
-          </file>
-        </group>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-conf.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-lib.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-net.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-version.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\rtimer-arch.h</name>
-        </file>
-      </group>
     </group>
   </group>
   <group>
@@ -3407,18 +2415,6 @@
       </group>
       <group>
         <name>stdio</name>
-        <group>
-          <name>unistd</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\unistd.c</name>
-          </file>
-        </group>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\stdio\printf.c</name>
         </file>
@@ -3445,6 +2441,18 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\termios\termios.h</name>
+        </file>
+      </group>
+      <group>
+        <name>unistd</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\unistd.c</name>
         </file>
       </group>
       <file>

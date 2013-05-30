@@ -936,6 +936,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_uart_x.c</FilePath>
             </File>
+            <File>
+              <FileName>dev_stm32f4xx_olimex_board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_olimex_board.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -975,6 +980,11 @@
               <FileName>types.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\types.h</FilePath>
+            </File>
+            <File>
+              <FileName>target.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\target.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,0 +1,231 @@
+//-----------------------------------------------------------------------------
+//          ATMEL Microcontroller Software Support  -  ROUSSET  -
+//-----------------------------------------------------------------------------
+// DISCLAIMER:  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+// DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+// EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//-----------------------------------------------------------------------------
+//  File Name           : SAM7_RAM.mac
+//  Object              : Generic Macro File for IAR
+//                        Hardware Reset
+//                        Init PLL at 48 MHz
+//                        Init EFC with 2 Wait State
+//                        Remap RAM to address 0
+//                        Enable User Reset 
+//                        Stop watch dog
+//  1.0 11/May/00 JPP   : Creation
+//-----------------------------------------------------------------------------
+__var __mac_i;
+__var __mac_mem;
+__var __mac_next;
+
+/*********************************************************************
+*
+*       _CheckRemap()
+*
+* Function description
+*   Check the Remap.
+*/
+_CheckRemap()
+{
+//* Read the value at 0x0
+    __mac_mem =__readMemory32(0x00000000,"Memory");
+    __mac_i =__mac_mem+1;
+    __writeMemory32(__mac_i,0x00,"Memory");
+    __mac_next =__readMemory32(0x00000000,"Memory");
+    if (__mac_i == __mac_next) {
+        __writeMemory32( __mac_mem,0x00000000,"Memory");
+        __message "RAM at0x0000 0000";  
+    } else {  
+        __message "Flash or Rom at 0x0000 0000";  
+    }
+}
+
+/*********************************************************************
+*
+*       _MapRAMAt0()
+*
+* Function description
+*   Maps RAM at 0.
+*/
+_MapRAMAt0(){
+    __message "Changing mapping: RAM mapped to 0";
+    __writeMemory32(0x00000001,0xFFFFFF00,"Memory");
+    _CheckRemap();
+}
+
+/*********************************************************************
+*
+*       _InitRSTC()
+*
+* Function description
+*   Initializes the RSTC (Reset controller).
+*   This makes sense since the default is to not allow user resets, 
+*   which makes it impossible to apply a second RESET via J-Link
+*/
+_InitRSTC() {
+   // Allow user reset
+    __writeMemory32(0xA5000001, 0xFFFFFD08,"Memory"); 
+}
+
+/*********************************************************************
+*
+*       _Watchdog()
+*
+* Function description
+*   Clear Watchdog
+*/
+_Watchdog()
+{
+//* Watchdog Disable
+//      AT91C_BASE_WDTC->WDTC_WDMR= AT91C_WDTC_WDDIS;
+   __writeMemory32(0x00008000,0xFFFFFD44,"Memory");
+   __message " Watchdog Disable ";  
+}
+/*********************************************************************
+*
+*       _EFC()
+*
+* Function description
+*   Set EFC Wait state
+*/
+_EFC()
+{
+    __message " Flash Initialization (EFC0) 2 WS 48 Mhz";  
+    __writeMemory32(0x00480200,0xFFFFFF60,"Memory");
+    __mac_i=__readMemory32(0xFFFFF240,"Memory");
+     if ( __mac_i == 0x272A0A40)  {
+          __mac_i=__readMemory32(0xFFFFFF7C,"Memory");
+          __message " Flash (EFC1) Version 0x",__mac_i:%X;  
+          __message " Flash Initialization (EFC1) 2 WS 48 Mhz";  
+          __writeMemory32(0x00480200,0xFFFFFF70,"Memory");
+     }
+}
+
+/*********************************************************************
+*
+*       _InitPLL()
+* Function description
+*   Initializes the PMC.
+*   1. Enable the Main Oscillator
+*   2. Configure PLL to 96MHz
+*   3. Switch Master Clock (MCK) on PLL/2 = 48MHz
+*/
+    _InitPLL() {
+
+    __message "Set Main Oscillator";
+    __writeMemory32(0x00004001,0xFFFFFc20,"Memory");    // MOSC
+    while( !(__readMemory32(0xFFFFFc68,"Memory") & 0x1)  );
+
+    __message "Set PLL to 96MHz";
+    __writeMemory32(0x1048100e,0xFFFFFc2c,"Memory");    // LOCK
+    while( !(__readMemory32(0xFFFFFc68,"Memory") & 0x4)  );
+
+    __message "Set Master Clock to 48MHz";
+    __writeMemory32(0x00000004,0xFFFFFc30,"Memory");    // MCKRDY
+    while( !(__readMemory32(0xFFFFFc68,"Memory") & 0x8)  );
+    __writeMemory32(0x00000007,0xFFFFFc30,"Memory");    // MCKRDY
+    while( !(__readMemory32(0xFFFFFc68,"Memory") & 0x8)  );
+}
+
+/*********************************************************************
+*
+*       execUserReset() : JTAG set initially to Full Speed
+*/
+execUserReset() {
+    __message "execUserReset()";
+    __emulatorSpeed(30000);  // Set JTAG speed to 30kHz to make a hardware reset
+    __hwReset(0);            // Hardware Reset: CPU is automatically halted after the reset
+    _InitPLL();              // Allow to debug at JTAG Full Speed
+    _EFC();                  // Allow EFC read speed
+    _MapRAMAt0();            // Remap RAM to address 0
+    _Watchdog();             // Stop watch dog
+    __emulatorSpeed(0);      // Set JTAG speed to full speed
+}
+
+/*********************************************************************
+*
+*       execUserPreload() : JTAG set initially to 32kHz
+*/
+execUserPreload() {
+    __message "execUserPreload()";
+//*  Get the Chip ID (AT91C_DBGU_C1R & AT91C_DBGU_C2R
+    __mac_i=__readMemory32(0xFFFFF240,"Memory");
+    __message " -------------------------------- Chip ID   0x",__mac_i:%X;
+     if ( __mac_i == 0x27280340)  {__message " Chip ID for AT91SAM7SE32";}
+     if ( __mac_i == 0x272A0940)  {__message " Chip ID for AT91SAM7SE256";}
+     if ( __mac_i == 0x272A0A40)  {__message " Chip ID for AT91SAM7SE512";}
+
+    __mac_i=__readMemory32(0xFFFFF244,"Memory");
+    __message " Extention 0x",__mac_i:%X;  
+    __mac_i=__readMemory32(0xFFFFFF6C,"Memory");
+    __message " Flash Version 0x",__mac_i:%X;  
+    __mac_i=__readMemory32(0xFFFFF240,"Memory");
+
+    __hwReset(0);            // Hardware Reset: CPU is automatically halted after the reset
+    _InitPLL();              // Allow to load Code at JTAG Full Speed
+    _EFC();                  // Allow EFC read speed
+    _MapRAMAt0();            // Remap RAM to address 0
+    _InitRSTC();             // Enable User Reset to allow execUserReset() execution
+    _Watchdog();             // Stop watch dog
+    __emulatorSpeed(0);      // Set JTAG speed to full speed
+}
+
+/*********************************************************************
+*
+*       __Core_Register() :
+* Function description
+* Read all ARM7 core regsiter
+*/
+__Core_Register()
+{
+
+__mac_i =__readMemory32(0x00,"Register");   __message "R00 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x04,"Register");   __message "R01 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x08,"Register");   __message "R02 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x0C,"Register");   __message "R03 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x10,"Register");   __message "R04 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x14,"Register");   __message "R05 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x18,"Register");   __message "R06 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x1C,"Register");   __message "R07 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x20,"Register");   __message "R08 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x24,"Register");   __message "R09 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x28,"Register");   __message "R10 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x2C,"Register");   __message "R11 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x30,"Register");   __message "R12 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x34,"Register");   __message "R13 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x38,"Register");   __message "R14 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x3C,"Register");   __message "R13 SVC 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x40,"Register");   __message "R14 SVC 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x44,"Register");   __message "R13 ABT 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x48,"Register");   __message "R14 ABT 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x4C,"Register");   __message "R13 UND 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x50,"Register");   __message "R14 UND 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x54,"Register");   __message "R13 IRQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x58,"Register");   __message "R14 IRQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x5C,"Register");   __message "R08 FIQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x60,"Register");   __message "R09 FIQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x64,"Register");   __message "R10 FIQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x68,"Register");   __message "R11 FIQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x6C,"Register");   __message "R12 FIQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x70,"Register");   __message "R13 FIQ 0x",__mac_i:%X;  
+__mac_i =__readMemory32(0x74,"Register");   __message "R14 FIQ0x",__mac_i:%X; 
+__mac_i =__readMemory32(0x98,"Register");   __message "CPSR     ",__mac_i:%X; 
+__mac_i =__readMemory32(0x94,"Register");   __message "SPSR     ",__mac_i:%X; 
+__mac_i =__readMemory32(0x9C,"Register");   __message "SPSR ABT ",__mac_i:%X; 
+__mac_i =__readMemory32(0xA0,"Register");   __message "SPSR ABT ",__mac_i:%X; 
+__mac_i =__readMemory32(0xA4,"Register");   __message "SPSR UND ",__mac_i:%X; 
+__mac_i =__readMemory32(0xA8,"Register");   __message "SPSR IRQ ",__mac_i:%X; 
+__mac_i =__readMemory32(0xAC,"Register");   __message "SPSR FIQ ",__mac_i:%X; 
+
+__mac_i =__readMemory32(0xB4,"Register");   __message "PC 0x",__mac_i:%X;  
+
+}
+

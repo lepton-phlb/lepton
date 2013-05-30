@@ -29,16 +29,14 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef __DEV_STM32F4XX_UART_H__
-#define __DEV_STM32F4XX_UART_H__
+#ifndef __DEV_STM32F4XX_UART_X_H__
+#define __DEV_STM32F4XX_UART_X_H__
 
 
 /*============================================
 | Includes
 ==============================================*/
-#include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
-#include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
-#include "kernel/dev/arch/cortexm/stm32f4xx/uart.h"
+
 
 /*============================================
 | Declaration
@@ -56,5 +54,6 @@ typedef struct board_stm32f4xx_uart_info_st {
    //
    kernel_pthread_mutex_t mutex;
 } board_stm32f4xx_uart_info_t;
+
 
 #endif //__DEV_STM32F4XX_UART_H__

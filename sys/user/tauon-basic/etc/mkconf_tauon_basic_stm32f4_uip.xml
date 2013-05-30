@@ -91,13 +91,16 @@
    <devices>
       <!-- /dev/cpu0 arm7 cpu device -->
       <dev name="dev_at91_map"                   use="off"/>
-	  <dev name="dev_lm3s_cpu_map"                use="on"/>
+      <!-- /dev/cpu0 -->
+	   <dev name="dev_lm3s_cpu_map"               use="on"/>
+	   <!-- /dev/board -->
+	   <dev name="dev_stm32f4xx_olimex_board_map" use="on"/>
       <!-- /dev/ttys0 -->
-      <dev name="dev_lm3s_uart0_map"             use="off"/>
+      <dev name="dev_stm32f4xx_uart_s3_map"      use="on"/>
 	  <!-- /dev/itm0 -->
       <dev name="dev_cmsis_itm0_map"             use="on"/>
 	  <!-- /dev/debug -->
-      <dev name="dev_os_debug_map"             use="on"/>
+      <dev name="dev_os_debug_map"               use="on"/>
       <!-- /dev/eth0 -->
       <dev name="dev_at91sam7x_eth0_map"         use="off"/>
    </devices>
@@ -119,8 +122,8 @@
 
 <target name="cortexm_lepton">
         <boot dest_path="c:/tauon/sys/user/tauon-basic/etc">
-                <!--command arg="initd -i /dev/ttys0 -o /dev/ttys0" /-->
-				<command arg="initd -i /dev/debug -o /dev/debug" />
+                <command arg="initd -i /dev/ttys3 -o /dev/ttys3" />
+				<!--command arg="initd -i /dev/debug -o /dev/debug" /-->
         </boot>
 </target>
 

@@ -298,6 +298,8 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
+          <state>C:\tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/arch/cmsis/DeviceSupport</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
           <state>c:/tauon/sys/root/src</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
@@ -754,7 +756,7 @@
         </option>
         <option>
           <name>IlinkProgramEntryLabelSelect</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IlinkProgramEntryLabel</name>
@@ -2094,6 +2096,9 @@
     <group>
       <name>lib</name>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\stm32f4xx\Debug\Exe\dev_stm32f4xx_6.21.a</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\lib-debug\lib\tauon.a</name>
       </file>
     </group>
@@ -2223,6 +2228,9 @@
               </group>
               <group>
                 <name>embOSCXM3_382</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
                 <group>
                   <name>arch</name>
                   <group>
@@ -2376,6 +2384,48 @@
                 <file>
                   <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_384\inc\RTOS.h</name>
                 </file>
+              </group>
+              <group>
+                <name>embOSCXM4_386</name>
+                <group>
+                  <name>arch</name>
+                  <group>
+                    <name>cmsis</name>
+                    <group>
+                      <name>cpu</name>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\JLINKMEM_Process.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\OS_Error.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\RTOSInit_CMSIS.c</name>
+                        <excluded>
+                          <configuration>Debug</configuration>
+                        </excluded>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\RTOSInit_STM32F4x_CMSIS.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\xmtx.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\xmtx2.c</name>
+                      </file>
+                    </group>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\main.c</name>
+                    </file>
+                  </group>
+                </group>
+                <group>
+                  <name>lib</name>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\Lib\os7m_tl__sp.a</name>
+                  </file>
+                </group>
               </group>
             </group>
           </group>
