@@ -295,6 +295,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/cpu</state>

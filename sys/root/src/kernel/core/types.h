@@ -104,7 +104,9 @@ typedef int __off_t;
    #pragma message ("note: use lepton time_t definition")
 #endif
    #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
-      typedef uint64_t __time_t;
+       //to do time64 bits
+      //typedef uint64_t __time_t;
+      typedef uint32_t __time_t;
    #else
       typedef uint32_t __time_t;
    #endif

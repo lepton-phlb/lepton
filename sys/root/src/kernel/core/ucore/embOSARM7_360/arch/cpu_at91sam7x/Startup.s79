@@ -1,0 +1,58 @@
+;*********************************************************************
+;*                SEGGER MICROCONTROLLER SYSTEME GmbH                *
+;*        Solutions for real time microcontroller applications       *
+;*********************************************************************
+;*                                                                   *
+;*      (C) 2005- 2007 SEGGER Microcontroller Systeme GmbH           *
+;*                  www.segger.com                                   *
+;*                                                                   *
+;*********************************************************************
+;
+;---------------------------------------------------------------------
+;File   : Startup.s79
+;Purpose: Startup file for embOS and IAR embedded workbench V4
+;-------- END-OF-HEADER ----------------------------------------------
+;
+
+        MODULE  ?RESET
+
+        RSEG    CSTACK:DATA(2)
+        RSEG    IRQ_STACK:DATA(2)
+        COMMON  INTVEC:CODE:NOROOT(2)
+        PUBLIC  __program_start
+        EXTERN  IRQ_Handler
+        EXTERN  ?main
+        CODE32  ; Always ARM mode after reset
+
+        org 0x00
+__program_start:     b   ?cstartup            ; RESET handler
+undef_handler:       b   undef_handler        ; Handler for undefined instructions
+swi_handler:         b   swi_handler          ; Handler for Software interrupts.
+prefetch_handler:    b   prefetch_handler     ; Handle Errors(Aborts) on instruction fetch
+data_handler:        b   data_handler         ; Handle Errors(Aborts) on data read or write
+        org 0x18
+                     ldr pc,=IRQ_Handler      ; IRQ handler
+fiq_handler:         b   fiq_handler          ; FIQ handler
+
+        LTORG            ; Constant table entries (for ldr pc) will be placed at 0x20
+
+/**********************************************************************
+* ?CSTARTUP
+*
+* Execution starts here.
+* After a reset, the mode is ARM, Supervisor, interrupts disabled.
+*/
+?cstartup:
+        msr     cpsr_c,#0xd2                        ; Change mode to IRQ mode, FIQ and IRQ disabled
+        ldr     sp,=SFE(IRQ_STACK) & 0xFFFFFFF8     ; End of IRQ_STACK
+        msr     cpsr_c,#0xDF                        ; Change mode to SYS mode, FIQ and IRQ disabled
+        ldr     sp,=SFE(CSTACK) & 0xFFFFFFF8        ; End of CSTACK
+; Jump to startup code in library
+        ldr     r0,=?main
+        bx      r0
+
+        LTORG
+        ENDMOD
+        END
+
+; ***** EOF **********************************************************

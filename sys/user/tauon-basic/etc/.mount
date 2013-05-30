@@ -1,2 +1,1 @@
 ufs /dev/hd/hdb /etc
-ufs /dev/hd/hdc /usr

@@ -1,0 +1,42 @@
+/*********************************************************************
+*               SEGGER MICROCONTROLLER SYSTEME GmbH                  *
+*       Solutions for real time microcontroller applications         *
+**********************************************************************
+*                                                                    *
+*       (C) 2004   SEGGER Microcontroller Systeme GmbH               *
+*                                                                    *
+*       www.segger.com     Support: support@segger.com               *
+*                                                                    *
+**********************************************************************
+*                                                                    *
+*       embOS * Real time operating system for microcontrollers      *
+*                                                                    *
+**********************************************************************
+
+----------------------------------------------------------------------
+File    : SIM_AT91SAM7S.mac
+Purpose : Setup CPU for IAR CSpy Simulator (AT91SAM7S CPUs)
+--------  END-OF-HEADER  ---------------------------------------------
+*/
+
+SetVector()
+{
+  // default embOS timer interrupt vector is vector 1, PIT interrupt
+  __var vector;
+  __writeMemory32(0x1,0xFFFFFD34,"Memory");      // Set timer int pending flag
+  vector = __readMemory32(0xfffff084,"Memory");
+  __writeMemory32(vector,0xfffff100,"Memory");
+}
+
+execUserSetup()
+{
+  __message "SIM_AT91SAM7.mac: Simulating embOS timer interrupt";
+  __disableInterrupts();
+  __cancelAllInterrupts();
+  __orderInterrupt ("IRQ", 20000, 10000, 0, 0, 0, 100);
+  __message "embOS: Generating 0x18 every 10000 cycles";
+  __setSimBreak("0xfffff100","R","SetVector()");
+  __writeMemory32(0x0d,0xFFFFFC68,"Memory");  // Preset PLL status to enable execution of pll initialization in simulator
+  __enableInterrupts();
+}
+

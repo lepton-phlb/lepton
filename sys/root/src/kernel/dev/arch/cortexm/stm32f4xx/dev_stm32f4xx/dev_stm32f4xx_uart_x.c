@@ -29,9 +29,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
-#include "kernel/core/kernelconf.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
@@ -39,7 +39,10 @@ Includes
 #include "kernel/core/core_rttimer.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
-#include "lib/libc/termios/termios.h"
+//#include "lib/libc/termios/termios.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/uart.h"
 
 #include "dev_stm32f4xx_uart_x.h"
 
@@ -78,11 +81,6 @@ int dev_stm32f4xx_uart_x_load(board_stm32f4xx_uart_info_t * uart_info){
 
    kernel_pthread_mutex_init(&uart_info->mutex,&mutex_attr);
 
-   //configure baud rate
-   hal_freescale_uart_setbaud(uart_info->uart_base,
-                              uart_info->speed);
-
-
    return 0;
 }
 
@@ -96,7 +94,12 @@ int dev_stm32f4xx_uart_x_load(board_stm32f4xx_uart_info_t * uart_info){
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_open(desc_t desc, int o_flag,
                             board_stm32f4xx_uart_info_t * uart_info){
-
+                          
+   //
+   if(uart_info->desc_r<0 && uart_info->desc_w<0) {
+      uart_open(&uart_info->uart_descriptor, 115200, 32, 128, 128, UART_HW_FLOW_CTRL_NONE, 0);
+   }
+   //
    if(o_flag & O_RDONLY) {
       if(uart_info->desc_r<0) {
          uart_info->desc_r = desc;
@@ -108,7 +111,6 @@ int dev_stm32f4xx_uart_x_open(desc_t desc, int o_flag,
    if(o_flag & O_WRONLY) {
       if(uart_info->desc_w<0) {
          uart_info->desc_w = desc;
-         uart_info->output_r = -1;
       }
       else
          return -1;                //already open
@@ -133,8 +135,27 @@ int dev_stm32f4xx_uart_x_open(desc_t desc, int o_flag,
 | See:
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_close(desc_t desc){
-   //nothing to do
-   //save code space :)
+  board_stm32f4xx_uart_info_t * p_uart_info = (board_stm32f4xx_uart_info_t*)ofile_lst[desc].p;
+  //
+  if(!p_uart_info)
+   return -1;
+  // 
+  if(ofile_lst[desc].oflag & O_RDONLY) {
+      if(!ofile_lst[desc].nb_reader) {
+         p_uart_info->desc_r = -1;
+      }
+   }
+   //
+   if(ofile_lst[desc].oflag & O_WRONLY) {
+      if(!ofile_lst[desc].nb_writer) {
+         p_uart_info->desc_w = -1;
+      }
+   }
+   //
+   if(p_uart_info->desc_r<0 && p_uart_info->desc_w<0) {
+      uart_close(&p_uart_info->uart_descriptor);
+   }
+
    return 0;
 }
 
@@ -148,11 +169,15 @@ int dev_stm32f4xx_uart_x_close(desc_t desc){
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_isset_read(desc_t desc){
    board_stm32f4xx_uart_info_t * p_uart_info = (board_stm32f4xx_uart_info_t*)ofile_lst[desc].p;
+   _Uart_Descriptor *p_uart_descriptor;
+   //
    if(!p_uart_info)
       return -1;
-
-   if(p_uart_info->input_r != p_uart_info->input_w)
-      return 0;
+   
+   p_uart_descriptor=&p_uart_info->uart_descriptor;
+   
+   if((*p_uart_descriptor->Ctrl)->RxCnt)
+     return 0;
 
    return -1;
 }
@@ -167,13 +192,15 @@ int dev_stm32f4xx_uart_x_isset_read(desc_t desc){
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_isset_write(desc_t desc){
    board_stm32f4xx_uart_info_t * p_uart_info = (board_stm32f4xx_uart_info_t*)ofile_lst[desc].p;
+   _Uart_Descriptor *p_uart_descriptor;
+   //
    if(!p_uart_info)
       return -1;
-
-   if(p_uart_info->output_r==p_uart_info->output_w) {
-      p_uart_info->output_r = -1;
-      return 0;
-   }
+   
+   p_uart_descriptor=&p_uart_info->uart_descriptor;
+   
+   if(!(*p_uart_descriptor->Ctrl)->TxCnt)
+     return 0;
 
    return -1;
 }
@@ -187,8 +214,18 @@ int dev_stm32f4xx_uart_x_isset_write(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_read(desc_t desc, char* buf,int size){
+   int cb;
    board_stm32f4xx_uart_info_t * p_uart_info = (board_stm32f4xx_uart_info_t*)ofile_lst[desc].p;
-   return 0;
+   _Uart_Descriptor *p_uart_descriptor;
+   //
+   if(!p_uart_info)
+      return -1;
+   // 
+   p_uart_descriptor=&p_uart_info->uart_descriptor;
+   //
+   cb=uart_read(buf,size,p_uart_descriptor);
+   //
+   return cb;
 }
 
 /*-------------------------------------------
@@ -200,17 +237,18 @@ int dev_stm32f4xx_uart_x_read(desc_t desc, char* buf,int size){
 | See:
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_write(desc_t desc, const char* buf,int size){
+    int cb;
    board_stm32f4xx_uart_info_t * p_uart_info = (board_stm32f4xx_uart_info_t*)ofile_lst[desc].p;
-
-   if(!p_uart_info) {
+   _Uart_Descriptor *p_uart_descriptor;
+   //
+   if(!p_uart_info)
       return -1;
-   }
-
-   kernel_pthread_mutex_lock(&p_uart_info->mutex);
-
-   kernel_pthread_mutex_unlock(&p_uart_info->mutex);
-
-   return size;
+   // 
+   p_uart_descriptor=&p_uart_info->uart_descriptor;
+   //
+   cb=uart_write(buf,size,p_uart_descriptor);
+   //
+   return cb;
 }
 
 /*-------------------------------------------

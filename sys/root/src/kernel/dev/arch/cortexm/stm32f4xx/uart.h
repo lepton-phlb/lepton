@@ -32,6 +32,7 @@ typedef __packed struct
     u16 Event;
     OS_TID Task;
   #endif
+    
 } _Uart_Ctrl;
 
 typedef __packed struct
@@ -47,6 +48,9 @@ typedef __packed struct
   const _Gpio_Descriptor *RxGpio;
   u8 GPIO_AF;
   _Uart_Ctrl **Ctrl;
+  
+  //lepton uart_info
+   struct board_stm32f4xx_uart_info_st* board_uart_info; 
 } _Uart_Descriptor;
 
 /* Exported define -----------------------------------------------------------*/

@@ -68,6 +68,7 @@ Includes
    #define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
 #else
    #if !defined(__tauon_cpu_device__)
+      //#define __tauon_cpu_device__ __tauon_cpu_device_arm9_at91sam9261__
       #define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
       //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_trifecta__ 
    #endif
@@ -172,9 +173,9 @@ Declaration
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
    #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
 #elif (__tauon_compiler__==__compiler_iar_arm__)
-   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE
 #elif (__tauon_compiler__==__compiler_keil_arm__)
-   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE   
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE   
 #endif
 
 #define CPU_ARCH_32  (32)
@@ -397,6 +398,7 @@ Declaration
 #if defined (__KERNEL_NET_IPSTACK)
    //#define USE_IF_ETHERNET
    #define USE_IF_PPP //GD
+
    //#define USE_LWIP
    #define USE_UIP_CORE
    #define USE_UIP

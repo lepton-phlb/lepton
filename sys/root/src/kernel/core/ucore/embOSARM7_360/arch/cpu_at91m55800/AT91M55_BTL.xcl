@@ -1,0 +1,120 @@
+//**********************************************************************
+//*                SEGGER MICROCONTROLLER SYSTEME GmbH                 *
+//*        Solutions for real time microcontroller applications        *
+//**********************************************************************
+//*                                                                    *
+//*           (C) 2002    SEGGER Microcontroller Systeme GmbH          *
+//*                                                                    *
+//*        Internet: www.segger.com    Support:  support@segger.com    *
+//*                                                                    *
+//**********************************************************************
+//
+//----------------------------------------------------------------------
+//File   : AT91M55_BTL.xcl
+//Purpose: Link file for use with AT91 and Segger emLoad
+//-------- END-OF-HEADER -----------------------------------------------
+//
+
+-carm    // Define CPU
+
+// Address map
+
+-DROM_BASE_ADDR=1000000    // Used to initialize EBI and remap
+-DROM_SIZE=7FFFF
+-DRAM_BASE_ADDR=4000000    // Used to initialize EBI and remap
+-DRAM_SIZE=7FFFF
+
+-DROM_CODE_OFFSET=10000    // 1. ROM sector occupied by BTL
+-DRAM_CODE_SIZE=50000
+-DRAM_DATA_OFFSET=80000
+-DRAM_DATA_SIZE=60000
+
+// 8 kb of internal RAM
+-DIRAMSTART=40	  // Reserve space for exception vectors after remapping
+-DIRAMEND=2000
+
+-DROMSTART=(RAM_BASE_ADDR)    // Code is linked to run in RAM
+-DROMEND=(RAM_BASE_ADDR+RAM_CODE_SIZE-1)
+-DRAMSTART=(RAM_BASE_ADDR+RAM_DATA_OFFSET)
+-DRAMEND=(RAM_BASE_ADDR+RAM_DATA_OFFSET+RAM_DATA_SIZE-1)
+
+// Move from (RAM_BASE_ADDR-ROM_CODE_OFFSET)-(RAM_BASE_ADDR+RAM_CODE_SIZE-1)
+// to        0-(RAM_CODE_SIZE+ROM_CODE_OFFSET)
+-M3FF0000-404FFFF=0000-5FFFF
+
+//**********************************************************************
+// Read only segments that are mapped to ROM.
+//**********************************************************************
+
+//************************************************
+// Address range for reset and exception
+// vectors (INTVEC).
+// The vector area is 32 bytes, 
+// an additional 32 bytes is allocated for the
+// constant table used by ldr PC in cstartup.s79.
+//************************************************
+
+-Z(CODE)INTVEC=ROMSTART-(ROMSTART+3F)
+
+//************************************************
+// Startup code and exception routines (ICODE).
+//************************************************
+
+-Z(CODE)ICODE,DIFUNCT=ROMSTART-ROMEND
+-Z(CODE)SWITAB=ROMSTART-ROMEND
+
+//************************************************
+// Code segments may be placed anywhere.
+//************************************************
+
+-Z(CODE)CODE=ROMSTART-ROMEND
+
+//************************************************
+// Original ROM location for __ramfunc code copied
+// to and executed from RAM.
+//************************************************
+
+-Z(CONST)CODE_ID=ROMSTART-ROMEND
+
+//************************************************
+// Various constants and initializers.
+//************************************************
+
+-Z(CONST)INITTAB,DATA_ID,DATA_C=ROMSTART-ROMEND
+-Z(CONST)CHECKSUM=ROMSTART-ROMEND
+
+//************************************************
+// Data segments.
+//************************************************
+
+-Z(DATA)DATA_I,DATA_Z,DATA_N=RAMSTART-RAMEND
+
+//************************************************
+// __ramfunc code copied to and executed from RAM.
+//************************************************
+
+-Z(DATA)CODE_I=RAMSTART-RAMEND
+
+//************************************************
+// ICCARM produces code for __ramfunc functions in
+// CODE_I segments. The -Q XLINK command line
+// option redirects XLINK to emit the code in the
+// CODE_ID segment instead, but to keep symbol and
+// debug information associated with the CODE_I
+// segment, where the code will execute.
+//************************************************
+
+-QCODE_I=CODE_ID
+
+//*************************************************************************
+// Stack and heap segments.
+//*************************************************************************
+
+// For embOS, only CSTACK and IRQ_STACK are required
+// Define other stacks if needed by application
+-Z(DATA)CSTACK+200,IRQ_STACK+200,HEAP+0=IRAMSTART-IRAMEND
+
+//**********************************************************************
+// End of File
+//**********************************************************************
+

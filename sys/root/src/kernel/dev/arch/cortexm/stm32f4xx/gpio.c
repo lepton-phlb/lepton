@@ -11,6 +11,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
+#pragma anon_unions
 typedef __packed union
 {
   u32 Val;

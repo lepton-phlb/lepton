@@ -11,7 +11,7 @@ define symbol __ICFEDIT_region_RAM_end__   = 0x2001BFFF;
 /*-Sizes-*/
 define symbol __ICFEDIT_size_cstack__   = 0x400;
 define symbol __ICFEDIT_size_svcstack__ = 0x0;
-define symbol __ICFEDIT_size_irqstack__ = 0x30;
+define symbol __ICFEDIT_size_irqstack__ = 0x200;
 define symbol __ICFEDIT_size_fiqstack__ = 0x0;
 define symbol __ICFEDIT_size_undstack__ = 0x0;
 define symbol __ICFEDIT_size_abtstack__ = 0x0;
