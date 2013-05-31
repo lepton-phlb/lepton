@@ -81,8 +81,8 @@ void uip_debug_lladdr_print(const uip_lladdr_t *addr);
 #endif
 #else
 //modif phlb
-//#define ANNOTATE(...)
-#define ANNOTATE(...) printf(__VA_ARGS__)
+#define ANNOTATE(...)
+//#define ANNOTATE(...) printf(__VA_ARGS__)
 #endif /* (DEBUG) & DEBUG_ANNOTATE */
 
 #if (DEBUG) & DEBUG_PRINT
