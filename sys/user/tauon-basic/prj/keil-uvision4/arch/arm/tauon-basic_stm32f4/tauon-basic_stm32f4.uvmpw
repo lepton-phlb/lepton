@@ -43,7 +43,6 @@
 
   <project>
     <PathAndName>..\..\..\..\..\..\..\root\prj\keil-uvision4\sbin\sbin.uvproj</PathAndName>
-    <NodeIsExpanded>1</NodeIsExpanded>
     <NodeIsCheckedInBatchBuild>1</NodeIsCheckedInBatchBuild>
   </project>
 

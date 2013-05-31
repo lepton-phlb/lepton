@@ -392,9 +392,19 @@
           <GroupName>sys/root/kernel/core/arch/ucore/cmsis</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f4xx.s</FileName>
+              <FileName>system_ARMCM4.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\system_ARMCM4.h</FilePath>
+            </File>
+            <File>
+              <FileName>ARMCM4.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\ARMCM4.h</FilePath>
+            </File>
+            <File>
+              <FileName>startup_ARMCM4.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\startup_stm32f4xx.s</FilePath>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\startup_ARMCM4.s</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -432,29 +442,144 @@
               </FileOption>
             </File>
             <File>
-              <FileName>system_ARMCM4.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\system_ARMCM4.h</FilePath>
-            </File>
-            <File>
-              <FileName>ARMCM4.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\ARMCM4.h</FilePath>
-            </File>
-            <File>
-              <FileName>startup_ARMCM4.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\startup_ARMCM4.s</FilePath>
-            </File>
-            <File>
               <FileName>system_ARMCM4.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\DeviceSupport_CM4F\system_ARMCM4.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_386_keil\arch\cmsis\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\startup\keil\system_stm32f4xx.h</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\startup\keil\system_stm32f4xx.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>1</AlwaysBuild>
+                  <GenerateAssemblyFile>1</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>1</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>startup_stm32f4xx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\startup\keil\startup_stm32f4xx.s</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>1</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                </CommonProperty>
+                <FileArmAds>
+                  <Aads>
+                    <interw>2</interw>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <thumb>2</thumb>
+                    <SplitLS>2</SplitLS>
+                    <SwStkChk>2</SwStkChk>
+                    <NoWarn>2</NoWarn>
+                    <uSurpInc>2</uSurpInc>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Aads>
+                </FileArmAds>
+              </FileOption>
             </File>
           </Files>
         </Group>
