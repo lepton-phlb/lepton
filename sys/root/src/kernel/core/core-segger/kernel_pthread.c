@@ -210,14 +210,14 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
    //to do:must be check with current stack addr
    p_heap_1byte+=(unsigned long)size;
    {
-      uint32_t _stack_addr = (uint32_t)p_heap_1byte;
+      uint32_t _stack_addr = (uint32_t)p_heap_1byte;//GD?
       uchar8_t _align = (uchar8_t)(4-(_stack_addr%4));
       p_heap_1byte+=(_align*sizeof(uchar8_t));
       size+=(_align*sizeof(uchar8_t));
    }
    p->heap_top = p_heap_1byte;
    //clear heap mem allocated
-   memset(p_heap,0,size);
+   memset(p_heap,0,size);//Here we consume the stack
 
    return p_heap;
 }
@@ -269,7 +269,7 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
       return -EINVAL;
 
    //reset kernel_pthread_t structure
-   memset(thread,0,sizeof(kernel_pthread_t));
+   memset(thread,0,sizeof(kernel_pthread_t));//Done twice? (see _sys_exec()) //GD
 
    thread->attr.stacksize  = attr->stacksize;
    thread->attr.stackaddr  = attr->stackaddr;
@@ -316,8 +316,8 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
          name,
          thread->attr.priority,
          pthread_routine,
-         (void OS_STACKPTR*)thread->attr.stackaddr,
-         thread->attr.stacksize,
+         (void OS_STACKPTR*)((unsigned int)(thread->attr.stackaddr)+32+368), //((ATEXIT_MAX+1)*sizeof(atexit_func_t))+sizeof(libc_stdio_data_t)),//+32+364),
+         thread->attr.stacksize-32-368, //((ATEXIT_MAX+1)*sizeof(atexit_func_t))-sizeof(libc_stdio_data_t),//-32-364,
          thread->attr.timeslice
          );
    #if OS_CHECKSTACK
@@ -327,7 +327,7 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
          uint32_t _stack_addr = (uint32_t)thread->attr.stackaddr;
          uchar8_t _align = (4-(_stack_addr%4))+4; ///to remove: just debug test
 
-         thread->heap_floor = (uchar8_t*)(thread->attr.stackaddr)+_align*sizeof(uchar8_t); //data alignement 4 bytes
+         thread->heap_floor = (uchar8_t*)(thread->attr.stackaddr)+_align*sizeof(uchar8_t);//data alignement 4 bytes //Hum.. I don't get it ? //GD
          thread->heap_top   = thread->heap_floor;
 
       }
