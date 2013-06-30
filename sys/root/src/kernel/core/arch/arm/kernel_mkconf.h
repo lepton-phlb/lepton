@@ -1,4 +1,4 @@
-//generated from c:/tauon/sys/user/tauon-basic/etc/mkconf_tauon_basic_stm32f4_uip.xml by mklepton
+//generated from C:\tauon\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s_uip.xml by mklepton
 /*===========================================
 Compiler Directive
 =============================================*/
@@ -9,7 +9,7 @@ Compiler Directive
 Includes
 =============================================*/
 
-#include "c:/tauon/sys/root/src/kernel/core/arch/arm/dev_dskimg.h" 
+#include "kernel/core/arch/arm/dev_dskimg.h" 
 
 /*===========================================
 Declaration

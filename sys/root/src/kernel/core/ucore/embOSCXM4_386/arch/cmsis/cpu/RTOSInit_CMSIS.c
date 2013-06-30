@@ -36,7 +36,14 @@ Purpose : Initializes and handles the hardware for embOS as far
 */
 
 #include "RTOS.h"
-#include "Device.h"     // Device specific header file, contains CMSIS
+//#include "Device.h"     // Device specific header file, contains CMSIS
+#include "kernel/core/kernelconf.h"
+
+#if (__tauon_cpu_device__==__tauon_cpu_device_cortexM3_LM3S__)  //GD
+    #include "Device/lm3s/lm3s_cmsis.h"
+#else
+#error "Device specific CMSIS include missing. Wrong CPU device chosen?"
+#endif
 
 /*********************************************************************
 *
@@ -372,6 +379,11 @@ void OS_COM_Send1(OS_U8 c) {
   #error "OS_TICK_FREQ != 1000, ensure OS_GetTime_Cycles() and OS_ConvertCycles2us() work."
 #endif
 
+/***** Core dump *****************************************************/ //GD
+unsigned long g_stack_minidump[8];  
+char g_task_minidump_name[32];
+
+
 /*********************************************************************
 *
 *       HardFault_Handler()
@@ -401,6 +413,25 @@ void HardFault_Handler(void) {
     OS_HardFaultHandler();
     return;                      // Return to interrupted application
   }
+  // Minicore dump GD
+  static OS_TASK* pRunningTask;  
+  static unsigned long * stack_ptr;
+  stack_ptr = (unsigned long *) __get_PSP(); //__ASM("mrs r0, psp");
+  g_stack_minidump[0]= *stack_ptr++; /* R0 */
+  g_stack_minidump[1]= *stack_ptr++; /* R1 */
+  g_stack_minidump[2]= *stack_ptr++; /* R2 */
+  g_stack_minidump[3]= *stack_ptr++; /* R3 */
+  g_stack_minidump[4]= *stack_ptr++; /* R12 */
+  g_stack_minidump[5]= *stack_ptr++; /* LR */  
+  g_stack_minidump[6]= *stack_ptr++; /* PC */
+  g_stack_minidump[7]= *stack_ptr;   /* PSR */
+  // Display or printf 
+  // Get the running task name
+  pRunningTask = OS_GetpCurrentTask();/* get ptr */  
+//  printf("%s",pRunningTask->Name);  
+  //Store task name
+  strncpy(g_task_minidump_name, pRunningTask->Name, sizeof(g_task_minidump_name) );
+  //GD-TODO create a "panic()" like function and print crash dump to console
   //
   // Otherwise halt execution
   //

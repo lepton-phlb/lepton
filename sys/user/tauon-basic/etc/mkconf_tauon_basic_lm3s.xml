@@ -158,7 +158,7 @@
         <bin name="test2"        stack="1024"    priority="10" timeslice="5" />
 </binaries-->
 <binaries src_path="bin" dest_path="bin">
-        <bin name="dhrystone"        stack="1024"    priority="10" timeslice="5" />
+        <bin name="dhrystone"        stack="1344"    priority="10" timeslice="5" />
 		<bin name="free"        	 stack="1024"     priority="2"  timeslice="5" />
 		<bin name="sdramtest"        stack="1024"    priority="10" timeslice="5" />
 </binaries>
@@ -175,7 +175,7 @@
 <files>
    <!-- /usr/etc  (hda internal flash mount on /bin) -->
    <!--file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init_with_net"               dest_path="etc" /-->
-   <file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init"               dest_path="etc" />
+   <!--<file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init"               dest_path="etc" />-->
    <file name=".boot"      src_file="c:/tauon/sys/user/tauon-basic/etc/.boot"               dest_path="etc" />
    <file name=".mount"     src_file="c:/tauon/sys/user/tauon-basic/etc/.mount"              dest_path="etc" />
 </files>
