@@ -1155,7 +1155,7 @@ pid_t _sys_exec(const char* path,
       _sys_pthread_cancel_all_except(pid,(kernel_pthread_t*)0);
    }
 
-   attr.stackaddr = _sys_malloc(bin_lst[exec_file.index].stacksize);
+   attr.stackaddr = _sys_malloc(bin_lst[exec_file.index].stacksize); //GD:just allocate more instead of taking from the stacks for signals and libc?
    if(!attr.stackaddr) { //kernel panic!!!
       __restart_sched();
       __atomic_out();
@@ -1210,7 +1210,7 @@ pid_t _sys_exec(const char* path,
 
    //thread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
+   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));//Here is the copy at the end of user stack??//GD
    process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
 #endif
 
