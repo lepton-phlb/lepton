@@ -295,20 +295,20 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
-          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
-          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360</state>
-          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
-          <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/generic</state>
-          <state>c:/tauon/sys/root/src</state>
-          <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
-          <state>c:/tauon/sys/root/src/kernel/net/lwip/include</state>
-          <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
-          <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
-          <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
-          <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
-          <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
-          <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/core/ucore/embOSCXM4_386/inc</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/core/ucore/embOSCXM3_382/inc</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/core/ucore/embOSARM7_360</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/core/ucore/embOSARM7_360/src/generic</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/net/lwip</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/net/lwip/include</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/net/lwip/ports/arm</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/net/lwip/ports/arm/include</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/net/lwip/include/ipv4</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/fs/yaffs/core</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/fs/yaffs/core/direct</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\src/kernel/net/uip2.5</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
