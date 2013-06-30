@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<plugin>
+  <name>SEGGER embOS</name>
+  <dllFile>$EW_DIR$\arm\plugins\rtos\embOS\embOSPlugin.dll</dllFile>
+  <description>RTOS awareness for SEGGER embOS</description>
+  <defaultLoad>no</defaultLoad>
+  <originator>Segger Microcontroller</originator>
+  <version>6.0.6.4</version>
+</plugin>
