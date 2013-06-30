@@ -1,5 +1,9 @@
+cd tools
+cd bin
+mklepton.exe -t cortexm_lepton C:\tauon\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s.xml
+	or
+mklepton.exe -t cortexm_lepton C:\tauon\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s_uip.xml
 
-D:\Documents\SVN\hg\lepton\tools\bin>mklepton.exe -t arm7_lepton D:\Documents\SVN\hg\lepton\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s.xml
-
+	or
 D:\Documents\SVN\hg\lepton\tools\bin>mklepton.exe -t cortexm_lepton D:\Documents\SVN\hg\lepton\sys\user\tauon-basic\etc\mkconf_tauon_basic_lm3s.xml
 

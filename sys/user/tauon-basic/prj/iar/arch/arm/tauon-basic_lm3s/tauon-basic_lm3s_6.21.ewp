@@ -39,20 +39,20 @@
         <option>
           <name>Input variant</name>
           <version>3</version>
-          <state>1</state>
+          <state>6</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>Full formatting.</state>
+          <state>No specifier n, no float nor long long, no scan set, no assignment suppressing.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>2</version>
-          <state>1</state>
+          <state>7</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>Full formatting.</state>
+          <state>No specifier a, A, no specifier n, no float nor long long, no flags.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -298,7 +298,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\../root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\../root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\../root/src</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\../root/src/kernel/net/lwip</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\../root/src/kernel/net/lwip/include</state>
@@ -572,7 +572,7 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -580,7 +580,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>c.srec</state>
+          <state>tauon-basic_lm3s_6.21.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -588,7 +588,7 @@
         </option>
         <option>
           <name>OOCObjCopyEnable</name>
-          <state>0</state>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -2202,6 +2202,9 @@
               </group>
               <group>
                 <name>embOSCXM3_382</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
                 <group>
                   <name>arch</name>
                   <group>
@@ -2354,6 +2357,51 @@
                 </file>
                 <file>
                   <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM3_384\inc\RTOS.h</name>
+                </file>
+              </group>
+              <group>
+                <name>embOSCXM4_386</name>
+                <group>
+                  <name>cmsis</name>
+                  <group>
+                    <name>cpu</name>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\JLINKMEM_Process.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\OS_Error.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\RTOSInit_CMSIS.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\xmtx.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\cpu\xmtx2.c</name>
+                    </file>
+                  </group>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\arch\cmsis\main.c</name>
+                  </file>
+                </group>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\Lib\os7m_tl__dt.a</name>
+                  <excluded>
+                    <configuration>Debug</configuration>
+                  </excluded>
+                </file>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\Lib\os7m_tl__r.a</name>
+                  <excluded>
+                    <configuration>Debug</configuration>
+                  </excluded>
+                </file>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\Lib\os7m_tl__sp.a</name>
+                </file>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\Inc\RTOS.h</name>
                 </file>
               </group>
             </group>

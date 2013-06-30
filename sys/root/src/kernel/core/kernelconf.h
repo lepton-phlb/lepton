@@ -69,8 +69,9 @@ Includes
 #else
    #if !defined(__tauon_cpu_device__)
       //#define __tauon_cpu_device__ __tauon_cpu_device_arm9_at91sam9261__
-      #define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
+      //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
       //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_trifecta__ 
+        #define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_LM3S__
    #endif
 #endif
 
@@ -329,7 +330,7 @@ Declaration
 #define KERNEL_PROCESS_VFORK_CLRSET_IRQ
 
 //
-#if (_tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__)
+#if (__tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__)
    #ifdef __KERNEL_DEBUG
       #define __KERNEL_ARCH_DELAY_1US 1 //around 30ns per cycle 38:ARM7 at 32 MHz
    #else

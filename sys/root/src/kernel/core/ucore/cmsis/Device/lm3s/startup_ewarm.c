@@ -226,7 +226,7 @@ NMI_Handler(void)
 //*****************************************************************************
 #define NVIC_HFSR       *((volatile unsigned long *)(0xE000ED2C))
 void
-HardFault_Handler(void)
+__weak HardFault_Handler(void)
 {
     //
     // In case we received a hard fault because
@@ -301,3 +301,5 @@ DebugMon_Handler(void)
     }
 }
 
+// Work around for weird link issue with IAR dlib in need for "__write" in putchar()
+__weak int __write(int i, int *p, int j){return 0;}
