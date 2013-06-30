@@ -122,7 +122,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 #define UIP_CORE_POLLING_PERIOD         100//ms 200 10
-#define UIP_CORE_RETRY_LINK_PERIOD      50 //1 second
+#define UIP_CORE_RETRY_LINK_PERIOD      50 //5 second
 #define UIP_CORE_RETRY_LCP_ECHO_PERIOD  10 //1 second
 #define UIP_CORE_STACK_SIZE  2048 //1024//1024
 #define UIP_CORE_PRIORITY    10 //20//10 //140
@@ -688,17 +688,25 @@ int uip_core_queue_put(uint8_t uip_flag, desc_t desc, void* buf, int size){
    uip_core_queue_header.uip_flag=uip_flag;
    uip_core_queue_header.desc=desc;
    uip_core_queue_header.size=size;
+   //
+   //uip_core ready to send packet?
    kernel_sem_wait(&uip_core_queue_sem);
+   //lock queue
    kernel_pthread_mutex_lock(&uip_core_queue_mutex);
    if((uip_core_queue_header.size+sizeof(uip_core_queue_header_t))>=uip_core_queue_size){//is full ?
+      //unlock queue
       kernel_pthread_mutex_unlock(&uip_core_queue_mutex);
       return 0;
    }
+   //
+   //put header
    for(i=0;i<sizeof(uip_core_queue_header_t);i++){
       uip_core_queue[uip_core_queue_w++]=*p++;
       if(uip_core_queue_w>=UIPCORE_QUEUE_SZ)
          uip_core_queue_w=0;
    }
+     
+   //put buffer
    if( uip_core_queue_w+uip_core_queue_header.size<UIPCORE_QUEUE_SZ){
       if(buf)
          memcpy(&uip_core_queue[uip_core_queue_w],buf,uip_core_queue_header.size);
@@ -712,6 +720,7 @@ int uip_core_queue_put(uint8_t uip_flag, desc_t desc, void* buf, int size){
          memcpy(&uip_core_queue[0],(char*)buf+l,uip_core_queue_w);  
    }
    uip_core_queue_size-=(uip_core_queue_header.size+sizeof(uip_core_queue_header_t));
+   //unlock queue
    kernel_pthread_mutex_unlock(&uip_core_queue_mutex);
    __fire_io_int(((kernel_pthread_t*)&uip_core_thread));
    return uip_core_queue_header.size;
@@ -722,18 +731,24 @@ int uip_core_queue_get(uint8_t* uip_flag, desc_t* desc, void* buf, int size){
    unsigned char * p = (unsigned char*)&uip_core_queue_header;
    if(!desc)
       return -1;
+   //lock queue
    kernel_pthread_mutex_lock(&uip_core_queue_mutex);
    *desc=-1;
    if(uip_core_queue_size==UIPCORE_QUEUE_SZ){//is empty ?
+      //unlock queue
       kernel_pthread_mutex_unlock(&uip_core_queue_mutex);
       return 0;
    }
+   
+   //get header
    for(i=0;i<sizeof(uip_core_queue_header_t);i++){
       *p++=uip_core_queue[uip_core_queue_r++];
       if(uip_core_queue_r>=UIPCORE_QUEUE_SZ)
          uip_core_queue_r=0;
    }
    *desc = uip_core_queue_header.desc;
+     
+   //get buffer
    if( uip_core_queue_r+uip_core_queue_header.size<UIPCORE_QUEUE_SZ){
       if(buf)
          memcpy(buf,&uip_core_queue[uip_core_queue_r],uip_core_queue_header.size);
@@ -747,6 +762,7 @@ int uip_core_queue_get(uint8_t* uip_flag, desc_t* desc, void* buf, int size){
        memcpy((char*)buf+l,&uip_core_queue[0],uip_core_queue_r);  
    }
    uip_core_queue_size+=(uip_core_queue_header.size+sizeof(uip_core_queue_header_t));
+   //unlock queue
    kernel_pthread_mutex_unlock(&uip_core_queue_mutex);
    kernel_sem_post(&uip_core_queue_sem);
    return uip_core_queue_header.size;
@@ -762,9 +778,13 @@ int uip_core_queue_init(void){
    return 0;
 }
 int uip_core_queue_flush(void){
+  //lock queue
   kernel_pthread_mutex_lock(&uip_core_queue_mutex);
   uip_core_queue_r = 0;
   uip_core_queue_w = 0;
+  //to do
+  //KS_DefSemaCount(uip_core_queue_sem,1);
+  //unlock queue
   kernel_pthread_mutex_unlock(&uip_core_queue_mutex);
   return 0;
 }
@@ -944,6 +964,8 @@ void* uip_core_routine(void* arg){
       if(   desc_r<0 || desc_w<0 
          || desc_ttys_r<0 || desc_ttys_w<0)
          return (void*)0;//uip core panic!!!
+      
+      //construct a streams
       _vfs_ioctl(desc_r,I_LINK,desc_ttys_r);
       _vfs_ioctl(desc_w,I_LINK,desc_ttys_w);
    #endif
@@ -962,6 +984,8 @@ void* uip_core_routine(void* arg){
    #ifdef USE_PPP_MS_WINDOWS
    _uip_core_ms_windows_sync(desc_ttys_r,desc_ttys_w);
    #endif
+   
+   //main loop
    while(!_uip_core_stop){
      
       int _flg_recv_data=0;
@@ -973,7 +997,10 @@ void* uip_core_routine(void* arg){
       desc_sock=-1;
       msg_size=0;
       conn_no=-1;
+      
+      //do 
       if(!(_flg_recv_data=ofile_lst[desc_r].pfsop->fdev.fdev_isset_read(desc_r)) ){
+         //rcv data or send data
          if(!_flg_recv_data){//processin incomming data
             _uip_core_recv(desc_r,desc_w);
          }
@@ -981,6 +1008,7 @@ void* uip_core_routine(void* arg){
       if( !(ofile_lst[desc_w].pfsop->fdev.fdev_isset_write(desc_w)) && (msg_size=uip_core_queue_get(&uip_flag,&desc_sock,(void*)0,0)) ){
         if(!msg_size)
             continue;
+         //processing data to send
          if(desc_sock<0)
             continue;
          conn_no = socksconn_no(desc_sock);
@@ -1060,7 +1088,7 @@ int uip_core_run(void){
    thread_attr.stacksize = UIP_CORE_STACK_SIZE;
    thread_attr.stackaddr = (void*)&uip_core_stack;
    thread_attr.priority  = UIP_CORE_PRIORITY;
-   thread_attr.timeslice = 0;
+   thread_attr.timeslice = 0; //Timeslice should not be 0 (at least using embOS).
    thread_attr.name = "kernel_pthread_uip";
 
    uip_core_queue_init();

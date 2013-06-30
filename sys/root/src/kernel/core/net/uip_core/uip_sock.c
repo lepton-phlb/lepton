@@ -73,7 +73,11 @@ struct socksconn_state _socksconn_state_list[UIP_CONNS+UIP_UDP_CONNS];
 
 socket_t*   socketList=NULL;
 struct socksconn_state*    socksconn_state_list=NULL;
+
+//statistics
 uip_core_statistics_t _uip_core_statistics;
+
+// macros from uip.c
 #define BUF ((struct uip_tcpip_hdr *)&uip_buf[UIP_LLH_LEN])
 #define FBUF ((struct uip_tcpip_hdr *)&uip_reassbuf[0])
 #define ICMPBUF ((struct uip_icmpip_hdr *)&uip_buf[UIP_LLH_LEN])
@@ -130,11 +134,12 @@ int uip_sock_init(void) {
       socketList[i].socksconn=NULL;
       socketList[i].desc = -1;
    }
-
+   //tcp connection
    for(i=0; i<UIP_CONNS; i++) {
       socksconn_state_list[i].hsocks=NULL;
       uip_conns[i].appstate.state = &socksconn_state_list[i];
    }
+   //udp connection
    for(;i<(UIP_CONNS+UIP_UDP_CONNS);i++){
       socksconn_state_list[i].hsocks=NULL;
       uip_udp_conns[i-UIP_CONNS].appstate.state = &socksconn_state_list[i];
@@ -208,6 +213,7 @@ int socksconn_no(desc_t desc){
 #if defined (USE_UIP)
    int i;
 
+   //tcp
    for(i = 0; i < UIP_CONNS; ++i) {
       struct socksconn_state * socksconn = (struct socksconn_state *)(uip_conns[i].appstate.state);
       if( !(socket_t*)socksconn->hsocks
@@ -216,6 +222,8 @@ int socksconn_no(desc_t desc){
       if( (struct socksconn_state *)socksconn==(struct socksconn_state *)((socket_t*)(ofile_lst[desc].p))->socksconn)
          return i;
    }
+   
+   //udp
    for(i=0;i < UIP_UDP_CONNS; ++i) {
       struct socksconn_state * socksconn = (struct socksconn_state *)(uip_udp_conns[i].appstate.state);
 
@@ -245,6 +253,8 @@ void uip_sock_udp_callback(void){
                 ((socket_t*)(socksconn->hsocks))->desc, &cb, sizeof(cb),
                 "uip_sock_udp_callback() desc=%d len=%d\n",((socket_t*)(socksconn->hsocks))->desc,cb);
       #endif
+
+      //enough space
       if((free_size=(_r-_w))<=0)
         free_size=RCV_SOCKET_BUFFER_SIZE+free_size;
       _uip_core_statistics.sock_rcv_buffer_free_size = free_size;
@@ -252,6 +262,8 @@ void uip_sock_udp_callback(void){
         _uip_core_statistics.sock_drop_packet++;
         return;//drop packet
       }
+      
+      //put header
       #if UIP_CONF_IPV6
       ((socket_t*)hsock)->addr_in.sin6_port=0;
       socket_recvfrom_header.addr_in_from.sin6_port = UDPBUF->srcport; 
@@ -259,6 +271,7 @@ void uip_sock_udp_callback(void){
                        &BUF->srcipaddr);
       socket_recvfrom_header.len=cb-sizeof(socket_recvfrom_header_t);
       cb = sizeof(socket_recvfrom_header_t);
+      //copy data in user socket buffer
       if(cb<(RCV_SOCKET_BUFFER_SIZE-_w)){
          memcpy(&socksconn->rcv_buffer[_w],(char*)&socket_recvfrom_header,cb);
          _w=_w+cb;
@@ -274,6 +287,8 @@ void uip_sock_udp_callback(void){
       uip_ipaddr_copy( (uip_ipaddr_t*)&((socket_t*)(socksconn->hsocks))->addr_in_from.sin_addr.s_addr,
                        &BUF->srcipaddr);
       #endif
+      
+      //copy data in user socket buffer
       if(cb<(RCV_SOCKET_BUFFER_SIZE-_w)){
          memcpy(&socksconn->rcv_buffer[_w],(char*)uip_appdata,uip_datalen());
          _w=_w+uip_datalen();
@@ -289,6 +304,7 @@ void uip_sock_udp_callback(void){
          ANNOTATE("uip_appdata = %s\n",uip_appdata);
       }
       #endif
+      //see  uip_send() and uip_udp_packet_send()
       uip_send(uip_appdata, 0);
       __PUT_SOCKET_EVENT(socksconn->hsocks,O_RDONLY);
    }
@@ -426,6 +442,8 @@ int uip_sock_tcp_callback(void){
                   ofile_lst[desc].owner_pthread_ptr_write=ofile_lst[desc_listen].owner_pthread_ptr_write;
                }else{
                   socksconn->hsocks = 0;
+                  //sock core panic!!! no descriptor available.
+                  //to do:set errno.
                   continue;
                }
 

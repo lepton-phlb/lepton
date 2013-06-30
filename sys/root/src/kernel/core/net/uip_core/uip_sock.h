@@ -118,6 +118,7 @@ typedef struct {
    int w;
 
    struct socksconn_state* socksconn;
+   //for udp
    #if UIP_CONF_IPV6
    struct _sockaddr_in6 addr_in_from;
    struct _sockaddr_in6 addr_in_to;

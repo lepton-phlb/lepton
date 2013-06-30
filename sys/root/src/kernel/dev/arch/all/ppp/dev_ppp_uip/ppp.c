@@ -179,7 +179,7 @@ ppp_reject_protocol(u16_t protocol, u8_t *buffer, u16_t count)
   pkt->code = PROT_REJ;		/* Write Conf_rej */
   /*pkt->id = tid++;*/			/* write tid */
   pkt->len = uip_htons(count + 6);
-  *((u16_t *)(&pkt->data)) = uip_htons(protocol);
+  *((u16_t *)(&pkt->data)) = uip_htons(protocol);//GD-TODO  &pkt->data or pkt->data ??
 
   ahdlc_tx(LCP, buffer, 0, (u16_t)(count + 6), 0);
 }

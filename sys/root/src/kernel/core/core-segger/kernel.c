@@ -1059,7 +1059,7 @@ void _start_kernel(char* arg){
    thread_attr.stacksize = KERNEL_STACK_SIZE;
    thread_attr.stackaddr = (void*)&kernel_stack;
    thread_attr.priority  = KERNEL_PRIORITY;
-   thread_attr.timeslice = 0;
+   thread_attr.timeslice = 0; //Timeslice should not be 0 (at least using embOS).
    thread_attr.name ="kernel_thread";
 
    kernel_pthread_create(&kernel_thread,&thread_attr,kernel_routine,arg);
