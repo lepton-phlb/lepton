@@ -74,7 +74,7 @@ struct mallinfo {
 
 int free_main(int argc,char* argv[])
 {
-#if 0
+#if 1
     //__iar_dlmalloc_stats();
     struct mallinfo info;
     info = __iar_dlmallinfo();

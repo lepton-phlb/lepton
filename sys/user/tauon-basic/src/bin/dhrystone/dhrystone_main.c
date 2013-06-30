@@ -59,7 +59,13 @@
 **
 ** ===========================================================================
 */
-
+__weak int sdramtest_main(int i,char* c)
+{
+    (int)i;
+    (char*)c;
+    printf("Unsupported device\n");
+    return 0;
+}
 
 /** 
  * @fn      int main(void)
@@ -70,6 +76,7 @@
  *
  * @see
  */
+extern int sdramtest_main(int,char*);
 int dhrystone_main(void)
 {
   volatile int delay=0;
@@ -83,6 +90,7 @@ int dhrystone_main(void)
 //    printf("f. flash setup\n");
 //    printf("s. sys clock setup\n");
     printf("r: Run Dhrystone Test\n");
+    printf("r: Run SDRAM Test\n");
     printf("q: quit\n");
     printf("choice >");
     
@@ -105,6 +113,10 @@ int dhrystone_main(void)
 //      printf("hex %08x %08x, ", vr48.h, vr48.l);
 //      printf("dec (%u %u)\n", vr48.h, vr48.l);
 //      break;
+    case 's':
+        if(sdramtest_main)
+            sdramtest_main(0,0);
+        break;
     case 'q':
         return 0;
     }
