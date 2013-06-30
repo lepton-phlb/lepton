@@ -1,0 +1,428 @@
+<html>
+<head>
+<title>Release notes</title>
+</head>
+
+<style>
+  H2, H3, H4 { color: blue }
+  H1, H2, H3, H4, H5 { font-family: Arial, Helvetica, sans-serif;}
+  PRE {  color: black;  margin-left: 2%; }
+  BODY { color: black;  margin-left: 2%; font-family: Verdana, Arial, Helvetica, sans-serif; font-size=75%}
+  table{ color: black;  font-family: Verdana; font-size=100%}
+  .maintext {
+    font-size: 10px;
+    color: #000000;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  h1.newsbox {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 13px;
+    padding-left: 10px;
+    background: #526194 no-repeat right;
+    border: thin solid #000000;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+  .heading2 {
+    color: #336699;
+    font-weight: bold;
+    font-size: 12px;
+    padding-left: 25px;
+  }
+</style>
+
+<body bgcolor="#FFFFFF">
+<!--  ****** Modifiable information starts here ******** -->
+  <h3>Release notes for embOS IAR Plugin V6.0.6.5</h3>
+  <ol class="maintext">
+    <li><a href=#features>New features</a></li>
+    <li><a href=#improvements>Improvements</a></li>
+    <li><a href=#pcorr>Program corrections</a></li>
+    <li><a href=#problems>Known problems</a></li>
+    <li><a href=#history>Release history</a></li>
+    <li><a href=#misc>Miscellaneous</a></li>
+  </ol>
+  <!-- ****************************************************************** -->
+  <!-- NEW FEATURES                                                       -->
+  <!-- ****************************************************************** -->
+  <h1 class="newsbox"><a name="features">New features</a></h1>
+  <h2 class="heading2">Version 6.0.6.5</h2>
+  <ol class="maintext">
+    <li>
+      Complete task awareness for RENESAS RL78 cores.<br>
+      The new embOS plugin V6.0.6.5 for IAR C-Spy and RENESAS RL78 targets now shows the state and call stack of all tasks.<br>
+      Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.<br>
+      An embOS version 3.82t or later of embOS for RL78 is required for task sensitivity.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.6.4</h2>
+  <ol class="maintext">
+    <li>
+      Big endian support for ARM cores added<br>
+      Previous versions of the plugin did not support the task sensitive call stack in big endian targets for EWARM.<br>
+      Support is added with version V6.0.6.4.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.6.2</h2>
+  <ol class="maintext">
+    <li>
+      Update for new IAR EWRL78<br>
+      The embOS plugin V6.0.6.2 now supports the EW RL78 for the Renesas RL78 CPU.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.6</h2>
+  <ol class="maintext">
+    <li>
+      Update for new IAR EWARM V6<br>
+      The embOS plugin V6.0.6 is built to be used with the new IAR Embedded Workbench for ARM V6.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.4</h2>
+  <ol class="maintext">
+    <li>
+      Big endian support for Renesas RX added<br>
+      In previous versions of the embOS plugin the task sensitive call stack did not work with Renesas RX CPUs running in big endian mode.<br>
+      With the embOS plugin version V6.0.4 RX is supportd in little and big endian byte order.<br><br>
+    </li>
+    <li>
+      Manual updated, task sensitivity explained.<br>
+      The new manual revison 6 now explaines the task sensitive call stack, register window and source window which is available for several CPUs.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.3</h2>
+  <ol class="maintext">
+    <li>
+      Update for new IAR EW-RX V2.10<br>
+      The new IAR Embedded Workbench V2.10 for Renesas RX CPUs comes with a modified debug engine which required modification of the embOS plugin for RX.<br>
+      The older version 3.82.2 of the plugin which was initially built for the EW-RX can not be used.<br>
+      All plugin-versions V6.0.x can be used, but the task sensitive call stack does not work with these versions.<br>
+      The new embOS RX-Version 3.82g is required for the new IAR EW-RX 2.10 and task sensitive call stack.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.2</h2>
+  <ol class="maintext">
+    <li>
+      Complete task awareness for RENESAS SH2A cores.<br>
+      The new embOS plugin V6.0.2 for IAR C-Spy and RENESAS SH2A targets now shows the state and call stack of all tasks. Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.<br>
+      An embOS version 3.82f or later of embOS for SH2A is required for task sensitivity.<br>
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.1</h2>
+  <ol class="maintext">
+    <li>
+      Update for new IAR workbench V6<br>
+      The new IAR workbench V6 uses a modified SDK which requires an updated embOS plugin for IAR C-Spy.<br>
+      The new embOS plugin V6 can be used with the new IAR workbench V6. It is based on the previous plugin V3.82.2 and supports all features of the previous versions.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.82.2</h2>
+  <ol class="maintext">
+    <li>
+      Complete task awareness for RENESAS RX cores.<br>
+      The new embOS plugin V3.82.2 for IAR C-Spy and RENESAS RX targets now shows the state and call stack of all tasks. Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.<br>
+      An embOS version 3.80l or later of embOS for RX is required for task sensitivity.<br><br>
+    </li>
+    <li>
+      Complete task awareness for RENESAS R32C cores.<br>
+      The new embOS plugin V3.82.2 for IAR C-Spy and RENESAS R32C targets now shows the state and call stack of all tasks. Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.<br>
+      An embOS version 3.80l or later of embOS for R32C is required for task sensitivity.<br>
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.80.3</h2>
+  <ol class="maintext">
+    <li>
+      Complete task awareness for RENESAS M16C and R8C cores.<br>
+      The new embOS plugin V3.80.3 for IAR C-Spy and RENESAS M16C or R8C targets now shows the state and call stack of all tasks. Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.<br>
+      An embOS version 3.80l or later of embOS for M16C is required for task sensitivity.<br>
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.80.1</h2>
+  <ol class="maintext">
+    <li>
+      Complete task awareness for Cortex M3 cores.<br>
+      The new embOS plugin V3.80.1 for IAR C-Spy and Cortex M3 targets now shows the state and call stack of all tasks. Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.<br>
+      An embOS version 3.62c or later of embOS for Cortex M3 is required for task sensitivity.<br><br>
+    </li>
+    <li>
+      Support for new embOS versions 3.80 added.<br>
+      embOS Version 3.80 or later with optimized internal data structures could not be used with the older version of the plugin.<br>
+      The task list and system variables were not shown.<br>
+      The new plugin V3.80.1 can be used with all versions of embOS.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.60e</h2>
+  <ol class="maintext">
+    <li>
+      Complete task awareness for ARM cores.<br>
+      The new embOS plugin V3.60e for IAR C-Spy and ARM targets now shows the state and call stack of all tasks. Every task in the task list, even suspended or interrupted tasks, can be analyzed during a debug session.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 2.00e</h2>
+  <ol class="maintext">
+    <li>Initial version for new IAR Embedded Workbench V5, based on IAR plug-in version 1.00e
+    </li>
+  </ol>
+  <!-- ****************************************************************** -->
+  <!-- Improvements                                                       -->
+  <!-- ****************************************************************** -->
+  <h1 class="newsbox"><a name="improvements">Improvements</a></h1>
+  <h2 class="heading2">Version 6.0.5</h2>
+  <ol class="maintext">
+    <li>Debug and trace library mode shown.<br>
+      Previous versions of the plugin did not show the Debug and Trace library mode (DT) in the System Information window.<br>
+      This problem is fixed with version 6.0.5 of the plugin.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.82.1</h2>
+  <ol class="maintext">
+    <li>Plugin useable when target application was not downloaded to target.<br>
+      Previous versions of the plugin did not show the task list and system information, when embOS version 3.80 or later was used and the target application was not downloaded into the target.<br>
+      This might have happened, when the debugger option &quot;Attach to program&quot; was used.<br>
+      This problem is fixed with version 3.82.1 of the plugin.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 2.00e</h2>
+  <ol class="maintext">
+    <li>Initial version.</li>
+  </ol>
+  <!-- ****************************************************************** -->
+  <!-- PROGRAM CORRECTIONS                                                -->
+  <!-- ****************************************************************** -->
+  <h1 class="newsbox"><a name="pcorr">Program corrections</a></h1>
+  <h2 class="heading2">Version 6.0.6.3</h2>
+  <ol class="maintext">
+    <li>
+      Problem with task sensitive call stack under EWARM fixed.<br>
+      Using the IAR EWARM V6.10.2, the plugin did not show the task sensitive call stack of Cortex M CPUs correctly.<br>
+      The problem is fixed with version 6.0.6.3 of the plugin which can be used for all EWARM V6 versions.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.6.2</h2>
+  <ol class="maintext">
+    <li>
+      Problem with task sensitive call stack under EWARM fixed.<br>
+      Using the IAR EWARM V6.10.2, the plugin did not show the task sensitive call stack of ARM CPUs correctly.<br>
+      Since version 3.82 of embOS the call stack of preempted tasks was not shown correctly.<br>
+      Both problems are fixed with version 6.0.6.2 of the plugin which can be used for all EWARM V6 versions.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.6.1</h2>
+  <ol class="maintext">
+    <li>
+      Problem with plugin initialization under EWARM fixed.<br>
+      Using the IAR EWARM, sometimes the plugin could not be started and the following error message was shown:<br>
+      &quot;Could not start embOS-Plugin. The OS_TASK structure is not present.&quot;<br>
+      To start and initialize the plugin, it is required to get information about the current task structure in the project.<br>
+      It might have happened, that the debugger did not deliver the requested information which then resulted in the error message.<br>
+      The method to retrieve the required information from the debugger was modified to fix the problem.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 6.0.5</h2>
+  <ol class="maintext">
+    <li>
+      Display errors under Windows 7 corrected.<br>
+      The previous versions did not show the &quot;Settings&quot; dialog and the &quot;About&quot; box correctly when running under Windows 7.<br>
+      The Settings dialog was empty and could therefore not be used. The About box did not show all information.<br>
+      The problem is fixed with version 6.0.5 of the plugin.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.82.0</h2>
+  <ol class="maintext">
+    <li>
+      Memory read error with J-Link fixed.<br>
+      Previous versions of the plugin might have produced a memory read error when debugging a connected hardware with external data memory.<br>
+      The problem occurred when the external data memory was not accessible directly after downloading into the target memory.<br>
+      During initialization, the plugin tried to read some variables from the data memory which failed, as long as the access to the external memory was not initialized by the target application or debug macro function.<br>
+      The problem existed in all previous versions of the plugin and is corrected with version 3.82.0.<br>
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.80.2</h2>
+  <ol class="maintext">
+    <li>
+      Display of suspended tasks corrected.<br>
+      Previous versions of the plugin did not show the &quot;suspended&quot; state of a task in the task list.<br>
+      The problem existed in all previous versions of the plugin and is corrected with version 3.80.2.<br><br>
+    </li>
+    <li>
+      Display of task states of tasks waiting with timeout corrected.<br>
+      Previous versions of the plugin did not show the task state when a task was waiting on any object like an Event object, a mail box or a task object with timeout.<br>
+      The timeout value was shown, but the task state was not shown in the task list.<br>
+      The problem existed in all previous versions of the plugin and is corrected with version 3.80.2.<br><br>
+    </li>
+    <li>
+      Current task was not marked in the task list.<br>
+      The running task should be marked with a green arrow in the first column of the task list.<br>
+      When embOS version 3.80 or later was used, the arrow was positioned at idle always and did not mark the running task.<br>
+      The plugin version 3.80.2 positions the marker at the running task.<br><br>
+    </li>
+    <li>
+      Erroneous permanent update of debugger windows corrected.<br>
+      When used with EW-ARM 5.30 or later, the plugin might have forced a window update of all debugger windows after restarting the application.<br>
+      This problem occurred when the call stack and task state of a suspended task was examined and the application was started without having the current task selected in the task window.<br>
+      The workbench could have crashed or raised an exception.<br>
+      The problem occurred when using EW-ARM 5.30 or later and is fixed with the plugin version 3.80.2.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 3.80.1</h2>
+  <ol class="maintext">
+    <li>
+      Display of embOS library mode corrected.<br>
+      The older embOS plugin might have shown a debug and profiling library, even if only a debug library was used.<br>
+      The problem occurred, when an embOS version 3.32b or later was used.<br>
+      The new version 3.80.1 of the plugin shows the correct library mode.
+    </li>
+  </ol>
+  <h2 class="heading2">Version 2.00e</h2>
+  <ol class="maintext">
+    <li>Initial version.</li>
+  </ol>
+  <!-- ****************************************************************** -->
+  <!-- KNOWN PROBLEMS                                                     -->
+  <!-- ****************************************************************** -->
+  <h1 class="newsbox"><a name="problems">Known problems in current version</a></h1>
+  <ol class="maintext">
+    <li>The task list can not be shown when using embOS XR build.</li>
+  </ol>
+  <!-- ****************************************************************** -->
+  <!-- Release history                                                    -->
+  <!-- ****************************************************************** -->
+  <h1 class="newsbox"><a name="history">Release history</a></h1>
+
+  <table class="maintext">
+    <tr> 
+      <td width="64">Version</td>
+      <td width="100">Release date</td>
+      <td>Short explanation</td>
+    </tr>
+    <tr> 
+      <td>V6.0.6.5</td>
+      <td>10. Jun 2011</td>
+      <td>
+        Task sensitive call stack for RENESAS RL78 added.
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.6.4</td>
+      <td>6. Apr 2011</td>
+      <td>
+        Big endian support for ARM added.
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.6.3</td>
+      <td>3. Mar 2011</td>
+      <td>
+        Task sensitive call stack for Cortex M corrected.
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.6.2</td>
+      <td>18. Feb 2011</td>
+      <td>
+        Support for RL78 added.<br>
+        Task sensitive call stack for ARM corrected.
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.6.1</td>
+      <td>28. Dec 2010</td>
+      <td>
+        Plugin initialization corrected.
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.6</td>
+      <td>08. Oct 2010</td>
+      <td>
+        Update for EWARM V6
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.5</td>
+      <td>06. Jul 2010</td>
+      <td>
+        Dialog display errors under Windows 7 corrected.<br>
+        Debug trace library mode shown in System Information.
+      </td>
+    </tr>
+    <tr> 
+      <td>V6.0.4</td>
+      <td>28. May 2010</td>
+      <td>Big endian support for Renesas RX</td>
+    </tr>
+    <tr> 
+      <td>V6.0.3</td>
+      <td>27. May 2010</td>
+      <td>IAR EW-RX V2.10 supported</td>
+    </tr>
+    <tr> 
+      <td>V6.0.2</td>
+      <td>13. Apr 2010</td>
+      <td>RENESAS SH2A supported</td>
+    </tr>
+    <tr> 
+      <td>V6.0.1</td>
+      <td>08. Apr 2010</td>
+      <td>Update for IAR EW V6</td>
+    </tr>
+    <tr> 
+      <td>V3.82.2</td>
+      <td>30. Oct 2009</td>
+      <td>RENESAS R32C and RX supported</td>
+    </tr>
+    <tr> 
+      <td>V3.82.1</td>
+      <td>26. Oct 2009</td>
+      <td>Improvement</td>
+    </tr>
+    <tr> 
+      <td>V3.82.0</td>
+      <td>07. Oct 2009</td>
+      <td>Initialization corrected</td>
+    </tr>
+    <tr> 
+      <td>V3.80.3</td>
+      <td>11. Sep 2009</td>
+      <td>Complete Task awareness for RENESAS M16C targets</td>
+    </tr>
+    <tr> 
+      <td>V3.80.2</td>
+      <td>6. Jul 2009</td>
+      <td>Task state display corrected</td>
+    </tr>
+    <tr> 
+      <td>V3.80.1</td>
+      <td>5. May 2009</td>
+      <td>Complete Task awareness for Cortex M3 targets</td>
+    </tr>
+    <tr> 
+      <td>V3.60e</td>
+      <td>8. Sep 2008</td>
+      <td>Complete Task awareness for ARM targets</td>
+    </tr>
+    <tr> 
+      <td>V2.00e</td>
+      <td>7. Jul 2007</td>
+      <td>Initial version for IAR Embedded Workbench V5</td>
+    </tr>
+  </table>
+  <!-- ****************************************************************** -->
+  <!-- MISCELLANEOUS                                                      -->
+  <!-- ****************************************************************** -->
+  <h1 class="newsbox"><a name="misc">Miscellaneous</a></h1>
+      
+  <p class="maintext">
+    This document was first released with version 2.00e of the software.<br>
+    Software released earlier is documented internally.<br>
+    This information is available at request.
+  </p>
+<!-- ****** Modifiable information ends here ******** -->
+  <hr>
+  <p class="maintext">
+  Copyright 2005-2011 SEGGER Microcontroller GmbH &amp; Co KG. All rights reserved.<br>
+  For more information, please visit our website <a href ="http://www.segger.com/">www.segger.com</a> or contact us at <a href ="mailto:info@segger.com">info@segger.com</a><br>
+  </p>
+</body>
+</html>
