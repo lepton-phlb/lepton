@@ -2,23 +2,38 @@
 //
 // hw_i2c.h - Macros used when accessing the I2C master and slave hardware.
 //
-// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2013 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
-// Texas Instruments (TI) is supplying this software for use solely and
-// exclusively on TI's microcontroller products. The software is owned by
-// TI and/or its suppliers, and is protected under applicable copyright
-// laws. You may not combine this software with "viral" open-source
-// software in order to form a larger program.
+//   Redistribution and use in source and binary forms, with or without
+//   modification, are permitted provided that the following conditions
+//   are met:
 // 
-// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-// DAMAGES, FOR ANY REASON WHATSOEVER.
+//   Redistributions of source code must retain the above copyright
+//   notice, this list of conditions and the following disclaimer.
 // 
-// This is part of revision 8049 of the Stellaris Firmware Development Package.
+//   Redistributions in binary form must reproduce the above copyright
+//   notice, this list of conditions and the following disclaimer in the
+//   documentation and/or other materials provided with the  
+//   distribution.
+// 
+//   Neither the name of Texas Instruments Incorporated nor the names of
+//   its contributors may be used to endorse or promote products derived
+//   from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+// This is part of revision 10636 of the Stellaris Firmware Development Package.
 //
 //*****************************************************************************
 
@@ -49,11 +64,12 @@
 #define I2C_O_MICR              0x0000001C  // I2C Master Interrupt Clear
 #define I2C_O_SOAR2             0x0000001C  // I2C Slave Own Address 2
 #define I2C_O_MCR               0x00000020  // I2C Master Configuration
-#define I2C_O_SACKCTL           0x00000020  // I2C ACK Control
+#define I2C_O_SACKCTL           0x00000020  // I2C Slave ACK Control
 #define I2C_O_MCLKOCNT          0x00000024  // I2C Master Clock Low Timeout
                                             // Count
 #define I2C_O_MBMON             0x0000002C  // I2C Master Bus Monitor
 #define I2C_O_PP                0x00000FC0  // I2C Peripheral Properties
+#define I2C_O_PC                0x00000FC4  // I2C Peripheral Configuration
 
 //*****************************************************************************
 //
@@ -100,8 +116,8 @@
 #define I2C_MCS_DATACK          0x00000008  // Acknowledge Data
 #define I2C_MCS_ADRACK          0x00000004  // Acknowledge Address
 #define I2C_MCS_STOP            0x00000004  // Generate STOP
-#define I2C_MCS_START           0x00000002  // Generate START
 #define I2C_MCS_ERROR           0x00000002  // Error
+#define I2C_MCS_START           0x00000002  // Generate START
 #define I2C_MCS_RUN             0x00000001  // I2C Master Enable
 #define I2C_MCS_BUSY            0x00000001  // I2C Busy
 
@@ -126,6 +142,7 @@
 // The following are defines for the bit fields in the I2C_O_MTPR register.
 //
 //*****************************************************************************
+#define I2C_MTPR_HS             0x00000080  // High-Speed Enable
 #define I2C_MTPR_TPR_M          0x0000007F  // SCL Clock Period
 #define I2C_MTPR_TPR_S          0
 
@@ -155,7 +172,7 @@
 //
 //*****************************************************************************
 #define I2C_MIMR_CLKIM          0x00000002  // Clock Timeout Interrupt Mask
-#define I2C_MIMR_IM             0x00000001  // Interrupt Mask
+#define I2C_MIMR_IM             0x00000001  // Master Interrupt Mask
 
 //*****************************************************************************
 //
@@ -164,7 +181,7 @@
 //*****************************************************************************
 #define I2C_MRIS_CLKRIS         0x00000002  // Clock Timeout Raw Interrupt
                                             // Status
-#define I2C_MRIS_RIS            0x00000001  // Raw Interrupt Status
+#define I2C_MRIS_RIS            0x00000001  // Master Raw Interrupt Status
 
 //*****************************************************************************
 //
@@ -201,7 +218,7 @@
 //
 //*****************************************************************************
 #define I2C_MICR_CLKIC          0x00000002  // Clock Timeout Interrupt Clear
-#define I2C_MICR_IC             0x00000001  // Interrupt Clear
+#define I2C_MICR_IC             0x00000001  // Master Interrupt Clear
 
 //*****************************************************************************
 //
@@ -251,6 +268,13 @@
 //
 //*****************************************************************************
 #define I2C_PP_HS               0x00000001  // High-Speed Capable
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the I2C_O_PC register.
+//
+//*****************************************************************************
+#define I2C_PC_HS               0x00000001  // High-Speed Capable
 
 //*****************************************************************************
 //

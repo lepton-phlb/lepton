@@ -921,22 +921,13 @@
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\cpu.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\eeprom.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\epi.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\ethernet.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\fan.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\flash.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\fpu.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\gpio.c</name>
@@ -954,13 +945,7 @@
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\interrupt.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\lpc.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\mpu.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\peci.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\pwm.c</name>
@@ -973,9 +958,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\sysctl.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\sysexc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stellaris\driverlib\systick.c</name>

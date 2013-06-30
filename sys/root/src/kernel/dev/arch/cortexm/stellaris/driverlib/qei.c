@@ -2,23 +2,38 @@
 //
 // qei.c - Driver for the Quadrature Encoder with Index.
 //
-// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2013 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
-// Texas Instruments (TI) is supplying this software for use solely and
-// exclusively on TI's microcontroller products. The software is owned by
-// TI and/or its suppliers, and is protected under applicable copyright
-// laws. You may not combine this software with "viral" open-source
-// software in order to form a larger program.
+//   Redistribution and use in source and binary forms, with or without
+//   modification, are permitted provided that the following conditions
+//   are met:
 // 
-// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-// DAMAGES, FOR ANY REASON WHATSOEVER.
+//   Redistributions of source code must retain the above copyright
+//   notice, this list of conditions and the following disclaimer.
 // 
-// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
+//   Redistributions in binary form must reproduce the above copyright
+//   notice, this list of conditions and the following disclaimer in the
+//   documentation and/or other materials provided with the  
+//   distribution.
+// 
+//   Neither the name of Texas Instruments Incorporated nor the names of
+//   its contributors may be used to endorse or promote products derived
+//   from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+// This is part of revision 10636 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -43,8 +58,8 @@
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This will enable operation of the quadrature encoder module.  It must be
-//! configured before it is enabled.
+//! This function enables operation of the quadrature encoder module.  The
+//! module must be configured before it is enabled.
 //!
 //! \sa QEIConfigure()
 //!
@@ -71,7 +86,7 @@ QEIEnable(unsigned long ulBase)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This will disable operation of the quadrature encoder module.
+//! This function disables operation of the quadrature encoder module.
 //!
 //! \return None.
 //
@@ -99,22 +114,22 @@ QEIDisable(unsigned long ulBase)
 //! for a description of this parameter.
 //! \param ulMaxPosition specifies the maximum position value.
 //!
-//! This will configure the operation of the quadrature encoder.  The
+//! This function configures the operation of the quadrature encoder.  The
 //! \e ulConfig parameter provides the configuration of the encoder and is the
 //! logical OR of several values:
 //!
-//! - \b QEI_CONFIG_CAPTURE_A or \b QEI_CONFIG_CAPTURE_A_B to specify if edges
+//! - \b QEI_CONFIG_CAPTURE_A or \b QEI_CONFIG_CAPTURE_A_B specify if edges
 //!   on channel A or on both channels A and B should be counted by the
 //!   position integrator and velocity accumulator.
-//! - \b QEI_CONFIG_NO_RESET or \b QEI_CONFIG_RESET_IDX to specify if the
+//! - \b QEI_CONFIG_NO_RESET or \b QEI_CONFIG_RESET_IDX specify if the
 //!   position integrator should be reset when the index pulse is detected.
-//! - \b QEI_CONFIG_QUADRATURE or \b QEI_CONFIG_CLOCK_DIR to specify if
+//! - \b QEI_CONFIG_QUADRATURE or \b QEI_CONFIG_CLOCK_DIR specify if
 //!   quadrature signals are being provided on ChA and ChB, or if a direction
 //!   signal and a clock are being provided instead.
 //! - \b QEI_CONFIG_NO_SWAP or \b QEI_CONFIG_SWAP to specify if the signals
 //!   provided on ChA and ChB should be swapped before being processed.
 //!
-//! \e ulMaxPosition is the maximum value of the position integrator, and is
+//! \e ulMaxPosition is the maximum value of the position integrator and is
 //! the value used to reset the position capture when in index reset mode and
 //! moving in the reverse (negative) direction.
 //!
@@ -150,11 +165,11 @@ QEIConfigure(unsigned long ulBase, unsigned long ulConfig,
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This returns the current position of the encoder.  Depending upon the
-//! configuration of the encoder, and the incident of an index pulse, this
+//! This function returns the current position of the encoder.  Depending upon
+//! the configuration of the encoder, and the incident of an index pulse, this
 //! value may or may not contain the expected data (that is, if in reset on
 //! index mode, if an index pulse has not been encountered, the position
-//! counter will not be aligned with the index pulse yet).
+//! counter is not yet aligned with the index pulse).
 //!
 //! \return The current position of the encoder.
 //
@@ -180,8 +195,8 @@ QEIPositionGet(unsigned long ulBase)
 //! \param ulBase is the base address of the quadrature encoder module.
 //! \param ulPosition is the new position for the encoder.
 //!
-//! This sets the current position of the encoder; the encoder position will
-//! then be measured relative to this value.
+//! This function sets the current position of the encoder; the encoder
+//! position is then measured relative to this value.
 //!
 //! \return None.
 //
@@ -206,9 +221,10 @@ QEIPositionSet(unsigned long ulBase, unsigned long ulPosition)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This returns the current direction of rotation.  In this case, current
-//! means the most recently detected direction of the encoder; it may not be
-//! presently moving but this is the direction it last moved before it stopped.
+//! This function returns the current direction of rotation.  In this case,
+//! current means the most recently detected direction of the encoder; it may
+//! not be presently moving but this is the direction it last moved before it
+//! stopped.
 //!
 //! \return Returns 1 if moving in the forward direction or -1 if moving in the
 //! reverse direction.
@@ -234,9 +250,9 @@ QEIDirectionGet(unsigned long ulBase)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This returns the error indicator for the quadrature encoder.  It is an
-//! error for both of the signals of the quadrature input to change at the same
-//! time.
+//! This function returns the error indicator for the quadrature encoder.  It
+//! is an error for both of the signals of the quadrature input to change at
+//! the same time.
 //!
 //! \return Returns \b true if an error has occurred and \b false otherwise.
 //
@@ -261,9 +277,9 @@ QEIErrorGet(unsigned long ulBase)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This will enable operation of the velocity capture in the quadrature
-//! encoder module.  It must be configured before it is enabled.  Velocity
-//! capture will not occur if the quadrature encoder is not enabled.
+//! This function enables operation of the velocity capture in the quadrature
+//! encoder module.  The module must be configured before velocity capture is
+//! enabled.
 //!
 //! \sa QEIVelocityConfigure() and QEIEnable()
 //!
@@ -290,7 +306,7 @@ QEIVelocityEnable(unsigned long ulBase)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This will disable operation of the velocity capture in the quadrature
+//! This function disables operation of the velocity capture in the quadrature
 //! encoder module.
 //!
 //! \return None.
@@ -322,8 +338,8 @@ QEIVelocityDisable(unsigned long ulBase)
 //! \param ulPeriod specifies the number of clock ticks over which to measure
 //! the velocity; must be non-zero.
 //!
-//! This will configure the operation of the velocity capture portion of the
-//! quadrature encoder.  The position increment signal is predivided as
+//! This function configures the operation of the velocity capture portion of
+//! the quadrature encoder.  The position increment signal is predivided as
 //! specified by \e ulPreDiv before being accumulated by the velocity capture.
 //! The divided signal is accumulated over \e ulPeriod system clock before
 //! being saved and resetting the accumulator.
@@ -360,10 +376,10 @@ QEIVelocityConfigure(unsigned long ulBase, unsigned long ulPreDiv,
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This returns the current speed of the encoder.  The value returned is the
-//! number of pulses detected in the specified time period; this number can be
-//! multiplied by the number of time periods per second and divided by the
-//! number of pulses per revolution to obtain the number of revolutions per
+//! This function returns the current speed of the encoder.  The value returned
+//! is the number of pulses detected in the specified time period; this number
+//! can be multiplied by the number of time periods per second and divided by
+//! the number of pulses per revolution to obtain the number of revolutions per
 //! second.
 //!
 //! \return Returns the number of pulses captured in the given time period.
@@ -391,11 +407,11 @@ QEIVelocityGet(unsigned long ulBase)
 //! \param pfnHandler is a pointer to the function to be called when the
 //! quadrature encoder interrupt occurs.
 //!
-//! This sets the handler to be called when a quadrature encoder interrupt
-//! occurs.  This will enable the global interrupt in the interrupt controller;
-//! specific quadrature encoder interrupts must be enabled via QEIIntEnable().
-//! It is the interrupt handler's responsibility to clear the interrupt source
-//! via QEIIntClear().
+//! This function registers the handler to be called when a quadrature encoder
+//! interrupt occurs.  This function enables the global interrupt in the
+//! interrupt controller; specific quadrature encoder interrupts must be
+//! enabled via QEIIntEnable(). It is the interrupt handler's responsibility to
+//! clear the interrupt source via QEIIntClear().
 //!
 //! \sa IntRegister() for important information about registering interrupt
 //! handlers.
@@ -435,9 +451,9 @@ QEIIntRegister(unsigned long ulBase, void (*pfnHandler)(void))
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //!
-//! This function will clear the handler to be called when a quadrature encoder
-//! interrupt occurs.  This will also mask off the interrupt in the interrupt
-//! controller so that the interrupt handler no longer is called.
+//! This function unregisters the handler to be called when a quadrature
+//! encoder interrupt occurs.  This function also masks off the interrupt in
+//! the interrupt controller so that the interrupt handler no longer is called.
 //!
 //! \sa IntRegister() for important information about registering interrupt
 //! handlers.
@@ -480,9 +496,9 @@ QEIIntUnregister(unsigned long ulBase)
 //! Can be any of the \b QEI_INTERROR, \b QEI_INTDIR, \b QEI_INTTIMER, or
 //! \b QEI_INTINDEX values.
 //!
-//! Enables the indicated quadrature encoder interrupt sources.  Only the
-//! sources that are enabled can be reflected to the processor interrupt;
-//! disabled sources have no effect on the processor.
+//! This function enables the indicated quadrature encoder interrupt sources.
+//! Only the sources that are enabled can be reflected to the processor
+//! interrupt; disabled sources have no effect on the processor.
 //!
 //! \return None.
 //
@@ -507,12 +523,12 @@ QEIIntEnable(unsigned long ulBase, unsigned long ulIntFlags)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //! \param ulIntFlags is a bit mask of the interrupt sources to be disabled.
-//! Can be any of the \b QEI_INTERROR, \b QEI_INTDIR, \b QEI_INTTIMER, or
-//! \b QEI_INTINDEX values.
+//! This parameter can be any of the \b QEI_INTERROR, \b QEI_INTDIR,
+//! \b QEI_INTTIMER, or \b QEI_INTINDEX values.
 //!
-//! Disables the indicated quadrature encoder interrupt sources.  Only the
-//! sources that are enabled can be reflected to the processor interrupt;
-//! disabled sources have no effect on the processor.
+//! This function disables the indicated quadrature encoder interrupt sources.
+//! Only the sources that are enabled can be reflected to the processor
+//! interrupt; disabled sources have no effect on the processor.
 //!
 //! \return None.
 //
@@ -539,9 +555,9 @@ QEIIntDisable(unsigned long ulBase, unsigned long ulIntFlags)
 //! \param bMasked is false if the raw interrupt status is required and true if
 //! the masked interrupt status is required.
 //!
-//! This returns the interrupt status for the quadrature encoder module.
-//! Either the raw interrupt status or the status of interrupts that are
-//! allowed to reflect to the processor can be returned.
+//! This function returns the interrupt status for the quadrature encoder
+//! module. Either the raw interrupt status or the status of interrupts that
+//! are allowed to reflect to the processor can be returned.
 //!
 //! \return Returns the current interrupt status, enumerated as a bit field of
 //! \b QEI_INTERROR, \b QEI_INTDIR, \b QEI_INTTIMER, and \b QEI_INTINDEX.
@@ -575,14 +591,15 @@ QEIIntStatus(unsigned long ulBase, tBoolean bMasked)
 //!
 //! \param ulBase is the base address of the quadrature encoder module.
 //! \param ulIntFlags is a bit mask of the interrupt sources to be cleared.
-//! Can be any of the \b QEI_INTERROR, \b QEI_INTDIR, \b QEI_INTTIMER, or
-//! \b QEI_INTINDEX values.
+//! This parameter can be any of the \b QEI_INTERROR, \b QEI_INTDIR,
+//! \b QEI_INTTIMER, or \b QEI_INTINDEX values.
 //!
 //! The specified quadrature encoder interrupt sources are cleared, so that
-//! they no longer assert.  This must be done in the interrupt handler to keep
-//! it from being called again immediately upon exit.
+//! they no longer assert.  This function must be called in the interrupt
+//! handler to keep the interrupt from being triggered again immediately upon
+//! exit.
 //!
-//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! \note Because there is a write buffer in the Cortex-M processor, it may
 //! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid

@@ -3,7 +3,8 @@
 #include "inc\hw_sysctl.h"
 #include "inc\hw_nvic.h"
 #include "inc\hw_flash.h"
-extern unsigned char IntMasterDisable(void);
+#include "driverlib\interrupt.h"
+
 void forceLM3Sreset(void);
 void forceLM3Sreset(void)
 {

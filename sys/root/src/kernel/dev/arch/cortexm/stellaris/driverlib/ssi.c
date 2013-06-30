@@ -2,23 +2,38 @@
 //
 // ssi.c - Driver for Synchronous Serial Interface.
 //
-// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2013 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
-// Texas Instruments (TI) is supplying this software for use solely and
-// exclusively on TI's microcontroller products. The software is owned by
-// TI and/or its suppliers, and is protected under applicable copyright
-// laws. You may not combine this software with "viral" open-source
-// software in order to form a larger program.
+//   Redistribution and use in source and binary forms, with or without
+//   modification, are permitted provided that the following conditions
+//   are met:
 // 
-// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-// DAMAGES, FOR ANY REASON WHATSOEVER.
+//   Redistributions of source code must retain the above copyright
+//   notice, this list of conditions and the following disclaimer.
 // 
-// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
+//   Redistributions in binary form must reproduce the above copyright
+//   notice, this list of conditions and the following disclaimer in the
+//   documentation and/or other materials provided with the  
+//   distribution.
+// 
+//   Neither the name of Texas Instruments Incorporated nor the names of
+//   its contributors may be used to endorse or promote products derived
+//   from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+// This is part of revision 10636 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -53,7 +68,7 @@ static const unsigned long g_ppulSSIIntMap[][2] =
 //*****************************************************************************
 //
 //! \internal
-//! Checks a SSI base address.
+//! Checks an SSI base address.
 //!
 //! \param ulBase specifies the SSI module base address.
 //!
@@ -81,7 +96,7 @@ SSIBaseValid(unsigned long ulBase)
 //!
 //! Given a SSI base address, returns the corresponding interrupt number.
 //!
-//! \return Returns a SSI interrupt number, or -1 if \e ulBase is invalid.
+//! \return Returns an SSI interrupt number, or -1 if \e ulBase is invalid.
 //
 //*****************************************************************************
 static long
@@ -132,7 +147,7 @@ SSIIntNumberGet(unsigned long ulBase)
 //! \e ulProtocol parameter can be one of the following values:
 //! \b SSI_FRF_MOTO_MODE_0, \b SSI_FRF_MOTO_MODE_1, \b SSI_FRF_MOTO_MODE_2,
 //! \b SSI_FRF_MOTO_MODE_3, \b SSI_FRF_TI, or \b SSI_FRF_NMW.  The Motorola
-//! frame formats imply the following polarity and phase configurations:
+//! frame formats encode the following polarity and phase configurations:
 //!
 //! <pre>
 //! Polarity Phase       Mode
@@ -143,23 +158,24 @@ SSIIntNumberGet(unsigned long ulBase)
 //! </pre>
 //!
 //! The \e ulMode parameter defines the operating mode of the SSI module.  The
-//! SSI module can operate as a master or slave; if a slave, the SSI can be
-//! configured to disable output on its serial output line.  The \e ulMode
+//! SSI module can operate as a master or slave; if it is a slave, the SSI can
+//! be configured to disable output on its serial output line.  The \e ulMode
 //! parameter can be one of the following values: \b SSI_MODE_MASTER,
 //! \b SSI_MODE_SLAVE, or \b SSI_MODE_SLAVE_OD.
 //!
 //! The \e ulBitRate parameter defines the bit rate for the SSI.  This bit rate
 //! must satisfy the following clock ratio criteria:
 //!
-//! - FSSI >= 2 * bit rate (master mode)
-//! - FSSI >= 12 * bit rate (slave modes)
+//! - FSSI >= 2 * bit rate (master mode); this speed cannot exceed 25 MHz.
+//! - FSSI >= 12 * bit rate or 6 * bit rate (slave modes), depending on the
+//! capability of the specific microcontroller
 //!
 //! where FSSI is the frequency of the clock supplied to the SSI module.
 //!
-//! The \e ulDataWidth parameter defines the width of the data transfers, and
+//! The \e ulDataWidth parameter defines the width of the data transfers and
 //! can be a value between 4 and 16, inclusive.
 //!
-//! The peripheral clock is the same as the processor clock.  This is the value
+//! The peripheral clock is the same as the processor clock.  This value is
 //! returned by SysCtlClockGet(), or it can be explicitly hard coded if it is
 //! constant and known (to save the code/execution overhead of a call to
 //! SysCtlClockGet()).
@@ -288,11 +304,11 @@ SSIDisable(unsigned long ulBase)
 //! \param pfnHandler is a pointer to the function to be called when the
 //! synchronous serial interface interrupt occurs.
 //!
-//! This sets the handler to be called when an SSI interrupt
-//! occurs.  This will enable the global interrupt in the interrupt controller;
-//! specific SSI interrupts must be enabled via SSIIntEnable().  If necessary,
-//! it is the interrupt handler's responsibility to clear the interrupt source
-//! via SSIIntClear().
+//! This function registers the handler to be called when an SSI interrupt
+//! occurs.  This function enables the global interrupt in the interrupt
+//! controller; specific SSI interrupts must be enabled via SSIIntEnable().  If
+//! necessary, it is the interrupt handler's responsibility to clear the
+//! interrupt source via SSIIntClear().
 //!
 //! \sa IntRegister() for important information about registering interrupt
 //! handlers.
@@ -332,8 +348,8 @@ SSIIntRegister(unsigned long ulBase, void (*pfnHandler)(void))
 //!
 //! \param ulBase specifies the SSI module base address.
 //!
-//! This function will clear the handler to be called when a SSI
-//! interrupt occurs.  This will also mask off the interrupt in the interrupt
+//! This function clears the handler to be called when an SSI interrupt
+//! occurs.  This function also masks off the interrupt in the interrupt
 //! controller so that the interrupt handler no longer is called.
 //!
 //! \sa IntRegister() for important information about registering interrupt
@@ -375,10 +391,11 @@ SSIIntUnregister(unsigned long ulBase)
 //! \param ulBase specifies the SSI module base address.
 //! \param ulIntFlags is a bit mask of the interrupt sources to be enabled.
 //!
-//! Enables the indicated SSI interrupt sources.  Only the sources that are
-//! enabled can be reflected to the processor interrupt; disabled sources have
-//! no effect on the processor.  The \e ulIntFlags parameter can be any of the
-//! \b SSI_TXFF, \b SSI_RXFF, \b SSI_RXTO, or \b SSI_RXOR values.
+//! This function enables the indicated SSI interrupt sources.  Only the
+//! sources that are enabled can be reflected to the processor interrupt;
+//! disabled sources have no effect on the processor.  The \e ulIntFlags
+//! parameter can be any of the \b SSI_TXFF, \b SSI_RXFF, \b SSI_RXTO, or
+//! \b SSI_RXOR values.
 //!
 //! \return None.
 //
@@ -404,9 +421,9 @@ SSIIntEnable(unsigned long ulBase, unsigned long ulIntFlags)
 //! \param ulBase specifies the SSI module base address.
 //! \param ulIntFlags is a bit mask of the interrupt sources to be disabled.
 //!
-//! Disables the indicated SSI interrupt sources.  The \e ulIntFlags parameter
-//! can be any of the \b SSI_TXFF, \b SSI_RXFF, \b SSI_RXTO, or \b SSI_RXOR
-//! values.
+//! This function disables the indicated SSI interrupt sources.  The
+//! \e ulIntFlags parameter can be any of the \b SSI_TXFF, \b SSI_RXFF,
+//!  \b SSI_RXTO, or \b SSI_RXOR values.
 //!
 //! \return None.
 //
@@ -470,13 +487,13 @@ SSIIntStatus(unsigned long ulBase, tBoolean bMasked)
 //! \param ulBase specifies the SSI module base address.
 //! \param ulIntFlags is a bit mask of the interrupt sources to be cleared.
 //!
-//! The specified SSI interrupt sources are cleared so that they no longer
-//! assert.  This function must be called in the interrupt handler to keep the
-//! interrupts from being recognized again immediately upon exit.  The
+//! This function clears the specified SSI interrupt sources so that they no
+//! longer assert.  This function must be called in the interrupt handler to
+//! keep the interrupts from being triggered again immediately upon exit.  The
 //! \e ulIntFlags parameter can consist of either or both the \b SSI_RXTO and
 //! \b SSI_RXOR values.
 //!
-//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! \note Because there is a write buffer in the Cortex-M processor, it may
 //! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
@@ -510,9 +527,10 @@ SSIIntClear(unsigned long ulBase, unsigned long ulIntFlags)
 //! \param ulData is the data to be transmitted over the SSI interface.
 //!
 //! This function places the supplied data into the transmit FIFO of the
-//! specified SSI module.
+//! specified SSI module.  If there is no space available in the transmit FIFO,
+//! this function waits until there is space available before returning.
 //!
-//! \note The upper 32 - N bits of the \e ulData are discarded by the hardware,
+//! \note The upper 32 - N bits of \e ulData are discarded by the hardware,
 //! where N is the data width as configured by SSIConfigSetExpClk().  For
 //! example, if the interface is configured for 8-bit data width, the upper 24
 //! bits of \e ulData are discarded.
@@ -558,7 +576,7 @@ SSIDataPut(unsigned long ulBase, unsigned long ulData)
 //! performs the same actions.  A macro is provided in <tt>ssi.h</tt> to map
 //! the original API to this API.
 //!
-//! \note The upper 32 - N bits of the \e ulData are discarded by the hardware,
+//! \note The upper 32 - N bits of \e ulData are discarded by the hardware,
 //! where N is the data width as configured by SSIConfigSetExpClk().  For
 //! example, if the interface is configured for 8-bit data width, the upper 24
 //! bits of \e ulData are discarded.
@@ -600,7 +618,8 @@ SSIDataPutNonBlocking(unsigned long ulBase, unsigned long ulData)
 //!
 //! This function gets received data from the receive FIFO of the specified
 //! SSI module and places that data into the location specified by the
-//! \e pulData parameter.
+//! \e pulData parameter.  If there is no data available, this function waits
+//! until data is received before returning.
 //!
 //! \note Only the lower N bits of the value written to \e pulData contain
 //! valid data, where N is the data width as configured by
@@ -682,12 +701,12 @@ SSIDataGetNonBlocking(unsigned long ulBase, unsigned long *pulData)
 
 //*****************************************************************************
 //
-//! Enable SSI DMA operation.
+//! Enables SSI DMA operation.
 //!
 //! \param ulBase is the base address of the SSI port.
 //! \param ulDMAFlags is a bit mask of the DMA features to enable.
 //!
-//! The specified SSI DMA features are enabled.  The SSI can be
+//! This function enables the specified SSI DMA features.  The SSI can be
 //! configured to use DMA for transmit and/or receive data transfers.
 //! The \e ulDMAFlags parameter is the logical OR of any of the following
 //! values:
@@ -717,7 +736,7 @@ SSIDMAEnable(unsigned long ulBase, unsigned long ulDMAFlags)
 
 //*****************************************************************************
 //
-//! Disable SSI DMA operation.
+//! Disables SSI DMA operation.
 //!
 //! \param ulBase is the base address of the SSI port.
 //! \param ulDMAFlags is a bit mask of the DMA features to disable.
@@ -752,10 +771,10 @@ SSIDMADisable(unsigned long ulBase, unsigned long ulDMAFlags)
 //!
 //! \param ulBase is the base address of the SSI port.
 //!
-//! Allows the caller to determine whether all transmitted bytes have cleared
-//! the transmitter hardware.  If \b false is returned, then the transmit FIFO
-//! is empty and all bits of the last transmitted word have left the hardware
-//! shift register.
+//! This function allows the caller to determine whether all transmitted bytes
+//! have cleared the transmitter hardware.  If \b false is returned, then the
+//! transmit FIFO is empty and all bits of the last transmitted word have left
+//! the hardware shift register.
 //!
 //! \return Returns \b true if the SSI is transmitting or \b false if all
 //! transmissions are complete.
@@ -786,13 +805,13 @@ SSIBusy(unsigned long ulBase)
 //! The possible clock source are the system clock (\b SSI_CLOCK_SYSTEM) or
 //! the precision internal oscillator (\b SSI_CLOCK_PIOSC).
 //!
-//! Changing the baud clock source will change the data rate generated by the
+//! Changing the baud clock source changes the data rate generated by the
 //! SSI.  Therefore, the data rate should be reconfigured after any change to
 //! the SSI clock source.
 //!
 //! \note The ability to specify the SSI baud clock source varies with the
 //! Stellaris part and SSI in use.  Please consult the data sheet for the part
-//! you are using to determine whether this support is available.
+//! in use to determine whether this support is available.
 //!
 //! \return None.
 //
@@ -824,7 +843,7 @@ SSIClockSourceSet(unsigned long ulBase, unsigned long ulSource)
 //!
 //! \note The ability to specify the SSI data clock source varies with the
 //! Stellaris part and SSI in use.  Please consult the data sheet for the part
-//! you are using to determine whether this support is available.
+//! in use to determine whether this support is available.
 //!
 //! \return None.
 //
