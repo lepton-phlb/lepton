@@ -27,3 +27,27 @@ mklepton_gnu
 #ignore generated files by eCos compilation library
 sys/root/lib/arch/arm9/at91sam9261/install
 sys/root/lib/arch/synthetic/x86/install
+
+#IAR local settings and output files
+*.pbi
+*.Opt
+*.Uv2
+*.sgxx
+*.uvopt
+*.uvproj
+*.tmp
+*.out
+*.sim
+*.map
+*.pbd
+*.dbgdt
+*.wsdt
+*.cspy.bat
+*.dni
+*.dep
+*.lst
+
+*.orig
+*.obj
+*.sbr
+*.jlink
