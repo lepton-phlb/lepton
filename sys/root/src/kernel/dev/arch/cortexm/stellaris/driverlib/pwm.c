@@ -2,23 +2,38 @@
 //
 // pwm.c - API for the PWM modules
 //
-// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2013 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
-// Texas Instruments (TI) is supplying this software for use solely and
-// exclusively on TI's microcontroller products. The software is owned by
-// TI and/or its suppliers, and is protected under applicable copyright
-// laws. You may not combine this software with "viral" open-source
-// software in order to form a larger program.
+//   Redistribution and use in source and binary forms, with or without
+//   modification, are permitted provided that the following conditions
+//   are met:
 // 
-// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-// DAMAGES, FOR ANY REASON WHATSOEVER.
+//   Redistributions of source code must retain the above copyright
+//   notice, this list of conditions and the following disclaimer.
 // 
-// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
+//   Redistributions in binary form must reproduce the above copyright
+//   notice, this list of conditions and the following disclaimer in the
+//   documentation and/or other materials provided with the  
+//   distribution.
+// 
+//   Neither the name of Texas Instruments Incorporated nor the names of
+//   its contributors may be used to endorse or promote products derived
+//   from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+// This is part of revision 10636 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -105,8 +120,8 @@ PWMOutValid(unsigned long ulPWMOut)
 //! Configures a PWM generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to configure.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to configure.  This parameter must be one
+//! of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param ulConfig is the configuration for the PWM generator.
 //!
 //! This function is used to set the mode of operation for a PWM generator.
@@ -115,31 +130,31 @@ PWMOutValid(unsigned long ulPWMOut)
 //! state.
 //!
 //! A PWM generator can count in two different modes:  count down mode or count
-//! up/down mode.  In count down mode, it will count from a value down to zero,
-//! and then reset to the preset value.  This will produce left-aligned PWM
-//! signals (that is the rising edge of the two PWM signals produced by the
-//! generator will occur at the same time).  In count up/down mode, it will
-//! count up from zero to the preset value, count back down to zero, and then
-//! repeat the process.  This will produce center-aligned PWM signals (that is,
+//! up/down mode.  In count down mode, it counts from a value down to zero,
+//! and then resets to the preset value, producing left-aligned PWM
+//! signals (that is, the rising edge of the two PWM signals produced by the
+//! generator occur at the same time).  In count up/down mode, it counts up
+//! from zero to the preset value, counts back down to zero, and then repeats
+//! the process, producing center-aligned PWM signals (that is,
 //! the middle of the high/low period of the PWM signals produced by the
-//! generator will occur at the same time).
+//! generator occurs at the same time).
 //!
 //! When the PWM generator parameters (period and pulse width) are modified,
-//! their affect on the output PWM signals can be delayed.  In synchronous
+//! their effect on the output PWM signals can be delayed.  In synchronous
 //! mode, the parameter updates are not applied until a synchronization event
-//! occurs.  This allows multiple parameters to be modified and take affect
-//! simultaneously, instead of one at a time.  Additionally, parameters to
-//! multiple PWM generators in synchronous mode can be updated simultaneously,
-//! allowing them to be treated as if they were a unified generator.  In
-//! non-synchronous mode, the parameter updates are not delayed until a
-//! synchronization event.  In either mode, the parameter updates only occur
-//! when the counter is at zero to help prevent oddly formed PWM signals during
-//! the update (that is, a PWM pulse that is too short or too long).
+//! occurs.  This mode allows multiple parameters to be modified and take
+//! effect simultaneously, instead of one at a time.  Additionally, parameters
+//! to multiple PWM generators in synchronous mode can be updated
+//! simultaneously, allowing them to be treated as if they were a unified
+//! generator.  In non-synchronous mode, the parameter updates are not delayed
+//! until a synchronization event.  In either mode, the parameter updates only
+//! occur when the counter is at zero to help prevent oddly formed PWM signals
+//! during the update (that is, a PWM pulse that is too short or too long).
 //!
 //! The PWM generator can either pause or continue running when the processor
-//! is stopped via the debugger.  If configured to pause, it will continue to
-//! count until it reaches zero, at which point it will pause until the
-//! processor is restarted.  If configured to continue running, it will keep
+//! is stopped via the debugger.  If configured to pause, it continues to
+//! count until it reaches zero, at which point it pauses until the
+//! processor is restarted.  If configured to continue running, it keeps
 //! counting as if nothing had happened.
 //!
 //! The \e ulConfig parameter contains the desired configuration.  It is the
@@ -165,14 +180,14 @@ PWMOutValid(unsigned long ulPWMOut)
 //!   whether extended fault source selection support is enabled or not
 //!
 //! Setting \b PWM_GEN_MODE_FAULT_MINPER allows an application to set the
-//! minimum duration of a PWM fault signal.  Faults will be signaled for at
+//! minimum duration of a PWM fault signal.  Faults are signaled for at
 //! least this time even if the external fault pin deasserts earlier.  Care
-//! should be taken when using this mode since during the fault signal period,
-//! the fault interrupt from the PWM generator will remain asserted.  The fault
-//! interrupt handler may, therefore, reenter immediately if it exits prior to
-//! expiration of the fault timer.
+//! should be taken when using this mode because during the fault signal
+//! period, the fault interrupt from the PWM generator remains asserted.  The
+//! fault interrupt handler may, therefore, reenter immediately if it exits
+//! prior to expiration of the fault timer.
 //!
-//! \note Changes to the counter mode will affect the period of the PWM signals
+//! \note Changes to the counter mode affect the period of the PWM signals
 //! produced.  PWMGenPeriodSet() and PWMPulseWidthSet() should be called after
 //! any changes to the counter mode of a generator.
 //!
@@ -238,11 +253,11 @@ PWMGenConfigure(unsigned long ulBase, unsigned long ulGen,
 
 //*****************************************************************************
 //
-//! Set the period of a PWM generator.
+//! Sets the period of a PWM generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to be modified.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to be modified.  This parameter must be
+//! one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param ulPeriod specifies the period of PWM generator output, measured
 //! in clock ticks.
 //!
@@ -251,7 +266,7 @@ PWMGenConfigure(unsigned long ulBase, unsigned long ulGen,
 //! ticks between pulses on the generator block zero signal.
 //!
 //! \note Any subsequent calls made to this function before an update occurs
-//! will cause the previous values to be overwritten.
+//! cause the previous values to be overwritten.
 //!
 //! \return None.
 //
@@ -299,7 +314,7 @@ PWMGenPeriodSet(unsigned long ulBase, unsigned long ulGen,
 //! Gets the period of a PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to query.  Must be one of
+//! \param ulGen is the PWM generator to query.  This parameter must be one of
 //! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //!
 //! This function gets the period of the specified PWM generator block.  The
@@ -352,8 +367,8 @@ PWMGenPeriodGet(unsigned long ulBase, unsigned long ulGen)
 //! Enables the timer/counter for a PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to be enabled.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to be enabled.  This parameter must be
+//! one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //!
 //! This function allows the PWM clock to drive the timer/counter for the
 //! specified generator block.
@@ -381,8 +396,8 @@ PWMGenEnable(unsigned long ulBase, unsigned long ulGen)
 //! Disables the timer/counter for a PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to be disabled.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to be disabled.  This parameter must be
+//! one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //!
 //! This function blocks the PWM clock from driving the timer/counter for the
 //! specified generator block.
@@ -410,16 +425,16 @@ PWMGenDisable(unsigned long ulBase, unsigned long ulGen)
 //! Sets the pulse width for the specified PWM output.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulPWMOut is the PWM output to modify.  Must be one of \b PWM_OUT_0,
-//! \b PWM_OUT_1, \b PWM_OUT_2, \b PWM_OUT_3, \b PWM_OUT_4, \b PWM_OUT_5,
-//! \b PWM_OUT_6, or \b PWM_OUT_7.
+//! \param ulPWMOut is the PWM output to modify.  This parameter must be one
+//! of \b PWM_OUT_0, \b PWM_OUT_1, \b PWM_OUT_2, \b PWM_OUT_3, \b PWM_OUT_4,
+//! \b PWM_OUT_5, \b PWM_OUT_6, or \b PWM_OUT_7.
 //! \param ulWidth specifies the width of the positive portion of the pulse.
 //!
 //! This function sets the pulse width for the specified PWM output, where the
 //! pulse width is defined as the number of PWM clock ticks.
 //!
 //! \note Any subsequent calls made to this function before an update occurs
-//! will cause the previous values to be overwritten.
+//! cause the previous values to be overwritten.
 //!
 //! \return None.
 //
@@ -482,9 +497,9 @@ PWMPulseWidthSet(unsigned long ulBase, unsigned long ulPWMOut,
 //! Gets the pulse width of a PWM output.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulPWMOut is the PWM output to query.  Must be one of \b PWM_OUT_0,
-//! \b PWM_OUT_1, \b PWM_OUT_2, \b PWM_OUT_3, \b PWM_OUT_4, \b PWM_OUT_5,
-//! \b PWM_OUT_6, or \b PWM_OUT_7.
+//! \param ulPWMOut is the PWM output to query.  This parameter must be one of
+//! \b PWM_OUT_0, \b PWM_OUT_1, \b PWM_OUT_2, \b PWM_OUT_3, \b PWM_OUT_4,
+//! \b PWM_OUT_5, \b PWM_OUT_6, or \b PWM_OUT_7.
 //!
 //! This function gets the currently programmed pulse width for the specified
 //! PWM output.  If the update of the comparator for the specified output has
@@ -542,11 +557,11 @@ PWMPulseWidthGet(unsigned long ulBase, unsigned long ulPWMOut)
 
 //*****************************************************************************
 //
-//! Enables the PWM dead band output, and sets the dead band delays.
+//! Enables the PWM dead band output and sets the dead band delays.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to modify.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to modify.  This parameter must be one
+//! of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param usRise specifies the width of delay from the rising edge.
 //! \param usFall specifies the width of delay from the falling edge.
 //!
@@ -557,7 +572,7 @@ PWMPulseWidthGet(unsigned long ulBase, unsigned long ulPWMOut)
 //!
 //! \return None.
 //
-//*****************************************************************************
+//****************************************************************************
 void
 PWMDeadBandEnable(unsigned long ulBase, unsigned long ulGen,
                   unsigned short usRise, unsigned short usFall)
@@ -592,7 +607,7 @@ PWMDeadBandEnable(unsigned long ulBase, unsigned long ulGen,
 //! Disables the PWM dead band output.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to modify.  Must be one of
+//! \param ulGen is the PWM generator to modify. This parameter must be one of
 //! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //!
 //! This function disables the dead band mode for the specified PWM generator.
@@ -622,9 +637,9 @@ PWMDeadBandDisable(unsigned long ulBase, unsigned long ulGen)
 //! Synchronizes all pending updates.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGenBits are the PWM generator blocks to be updated.  Must be the
-//! logical OR of any of \b PWM_GEN_0_BIT, \b PWM_GEN_1_BIT,
-//! \b PWM_GEN_2_BIT, or \b PWM_GEN_3_BIT.
+//! \param ulGenBits are the PWM generator blocks to be updated.  This
+//! parameter must be the logical OR of any of \b PWM_GEN_0_BIT,
+//! \b PWM_GEN_1_BIT, \b PWM_GEN_2_BIT, or \b PWM_GEN_3_BIT.
 //!
 //! For the selected PWM generators, this function causes all queued updates to
 //! the period or pulse width to be applied the next time the corresponding
@@ -654,9 +669,9 @@ PWMSyncUpdate(unsigned long ulBase, unsigned long ulGenBits)
 //! Synchronizes the counters in one or multiple PWM generator blocks.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGenBits are the PWM generator blocks to be synchronized.  Must be
-//! the logical OR of any of \b PWM_GEN_0_BIT, \b PWM_GEN_1_BIT,
-//! \b PWM_GEN_2_BIT, or \b PWM_GEN_3_BIT.
+//! \param ulGenBits are the PWM generator blocks to be synchronized.  This
+//! parameter must be the logical OR of any of \b PWM_GEN_0_BIT,
+//! \b PWM_GEN_1_BIT, \b PWM_GEN_2_BIT, or \b PWM_GEN_3_BIT.
 //!
 //! For the selected PWM module, this function synchronizes the time base
 //! of the generator blocks by causing the specified generator counters to be
@@ -687,17 +702,17 @@ PWMSyncTimeBase(unsigned long ulBase, unsigned long ulGenBits)
 //! Enables or disables PWM outputs.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulPWMOutBits are the PWM outputs to be modified.  Must be the
-//! logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT, \b PWM_OUT_2_BIT,
-//! \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT, \b PWM_OUT_6_BIT,
-//! or \b PWM_OUT_7_BIT.
+//! \param ulPWMOutBits are the PWM outputs to be modified.  This parameter
+//! must be the logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT,
+//! \b PWM_OUT_2_BIT, \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT,
+//! \b PWM_OUT_6_BIT, or \b PWM_OUT_7_BIT.
 //! \param bEnable determines if the signal is enabled or disabled.
 //!
-//! This function is used to enable or disable the selected PWM outputs.  The
+//! This function enables or disables the selected PWM outputs.  The
 //! outputs are selected using the parameter \e ulPWMOutBits.  The parameter
 //! \e bEnable determines the state of the selected outputs.  If \e bEnable is
 //! \b true, then the selected PWM outputs are enabled, or placed in the active
-//! state.  If \e bEnable is \b false, then the selected outputs are disabled,
+//! state.  If \e bEnable is \b false, then the selected outputs are disabled
 //! or placed in the inactive state.
 //!
 //! \return None.
@@ -716,7 +731,7 @@ PWMOutputState(unsigned long ulBase, unsigned long ulPWMOutBits,
                               PWM_OUT_6_BIT | PWM_OUT_7_BIT)));
 
     //
-    // Read the module's ENABLE output control register, and set or clear the
+    // Read the module's ENABLE output control register and set or clear the
     // requested bits.
     //
     if(bEnable == true)
@@ -734,18 +749,18 @@ PWMOutputState(unsigned long ulBase, unsigned long ulPWMOutBits,
 //! Selects the inversion mode for PWM outputs.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulPWMOutBits are the PWM outputs to be modified.  Must be the
-//! logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT, \b PWM_OUT_2_BIT,
-//! \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT, \b PWM_OUT_6_BIT, or
-//! \b PWM_OUT_7_BIT.
+//! \param ulPWMOutBits are the PWM outputs to be modified.  This parameter
+//! must be the logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT,
+//! \b PWM_OUT_2_BIT, \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT,
+//! \b PWM_OUT_6_BIT, or \b PWM_OUT_7_BIT.
 //! \param bInvert determines if the signal is inverted or passed through.
 //!
 //! This function is used to select the inversion mode for the selected PWM
 //! outputs.  The outputs are selected using the parameter \e ulPWMOutBits.
 //! The parameter \e bInvert determines the inversion mode for the selected
-//! outputs.  If \e bInvert is \b true, this function will cause the specified
-//! PWM output signals to be inverted, or made active low.  If \e bInvert is
-//! \b false, the specified outputs are passed through as is, or be made active
+//! outputs.  If \e bInvert is \b true, this function causes the specified
+//! PWM output signals to be inverted or made active low.  If \e bInvert is
+//! \b false, the specified outputs are passed through as is or made active
 //! high.
 //!
 //! \return None.
@@ -764,7 +779,7 @@ PWMOutputInvert(unsigned long ulBase, unsigned long ulPWMOutBits,
                               PWM_OUT_6_BIT | PWM_OUT_7_BIT)));
 
     //
-    // Read the module's INVERT output control register, and set or clear the
+    // Read the module's INVERT output control register and set or clear the
     // requested bits.
     //
     if(bInvert == true)
@@ -783,10 +798,10 @@ PWMOutputInvert(unsigned long ulBase, unsigned long ulPWMOutBits,
 //! condition.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulPWMOutBits are the PWM outputs to be modified.  Must be the
-//! logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT, \b PWM_OUT_2_BIT,
-//! \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT, \b PWM_OUT_6_BIT, or
-//! \b PWM_OUT_7_BIT.
+//! \param ulPWMOutBits are the PWM outputs to be modified.  This parameter
+//! must be the logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT,
+//! \b PWM_OUT_2_BIT, \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT,
+//! \b PWM_OUT_6_BIT, or \b PWM_OUT_7_BIT.
 //! \param bDriveHigh determines if the signal is driven high or low during an
 //! active fault condition.
 //!
@@ -820,7 +835,7 @@ PWMOutputFaultLevel(unsigned long ulBase, unsigned long ulPWMOutBits,
                               PWM_OUT_6_BIT | PWM_OUT_7_BIT)));
 
     //
-    // Read the module's FAULT output control register, and set or clear the
+    // Read the module's FAULT output control register and set or clear the
     // requested bits.
     //
     if(bDriveHigh == true)
@@ -838,10 +853,10 @@ PWMOutputFaultLevel(unsigned long ulBase, unsigned long ulPWMOutBits,
 //! Specifies the state of PWM outputs in response to a fault condition.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulPWMOutBits are the PWM outputs to be modified.  Must be the
-//! logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT, \b PWM_OUT_2_BIT,
-//! \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT, \b PWM_OUT_6_BIT, or
-//! \b PWM_OUT_7_BIT.
+//! \param ulPWMOutBits are the PWM outputs to be modified.  This parameter
+//! must be the  logical OR of any of \b PWM_OUT_0_BIT, \b PWM_OUT_1_BIT,
+//! \b PWM_OUT_2_BIT, \b PWM_OUT_3_BIT, \b PWM_OUT_4_BIT, \b PWM_OUT_5_BIT,
+//! \b PWM_OUT_6_BIT, or \b PWM_OUT_7_BIT.
 //! \param bFaultSuppress determines if the signal is suppressed or passed
 //! through during an active fault condition.
 //!
@@ -873,7 +888,7 @@ PWMOutputFault(unsigned long ulBase, unsigned long ulPWMOutBits,
                               PWM_OUT_6_BIT | PWM_OUT_7_BIT)));
 
     //
-    // Read the module's FAULT output control register, and set or clear the
+    // Read the module's FAULT output control register and set or clear the
     // requested bits.
     //
     if(bFaultSuppress == true)
@@ -891,10 +906,10 @@ PWMOutputFault(unsigned long ulBase, unsigned long ulPWMOutBits,
 //! Gets the PWM generator interrupt number.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator in question.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator in question.  This parameter must be one
+//! of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //!
-//! This function will return the interrupt number of the corresponding PWM
+//! This function returns the interrupt number of the corresponding PWM
 //! generator.
 //!
 //! \return Returns the interrupt number.
@@ -987,14 +1002,14 @@ PWMGenIntGet(unsigned long ulBase, unsigned long ulGen)
 //! Registers an interrupt handler for the specified PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator in question.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator in question.  This parameter must be one
+//! of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param pfnIntHandler is a pointer to the function to be called when the PWM
 //! generator interrupt occurs.
 //!
-//! This function will ensure that the interrupt handler specified by
+//! This function ensures that the interrupt handler specified by
 //! \e pfnIntHandler is called when an interrupt is detected for the specified
-//! PWM generator block.  This function will also enable the corresponding
+//! PWM generator block.  This function also enables the corresponding
 //! PWM generator interrupt in the interrupt controller; individual generator
 //! interrupts and interrupt sources must be enabled with PWMIntEnable() and
 //! PWMGenIntTrigEnable().
@@ -1038,11 +1053,11 @@ PWMGenIntRegister(unsigned long ulBase, unsigned long ulGen,
 //! Removes an interrupt handler for the specified PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator in question.  Must be one of
-//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator in question.  This parameter must be one
+//! of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //!
-//! This function will unregister the interrupt handler for the specified
-//! PWM generator block.  This function will also disable the corresponding
+//! This function unregisters the interrupt handler for the specified
+//! PWM generator block.  This function also disables the corresponding
 //! PWM generator interrupt in the interrupt controller; individual generator
 //! interrupts and interrupt sources must be disabled with PWMIntDisable() and
 //! PWMGenIntTrigDisable().
@@ -1086,7 +1101,7 @@ PWMGenIntUnregister(unsigned long ulBase, unsigned long ulGen)
 //!
 //! \param ulBase is the base address of the PWM module.
 //!
-//! This function will return the fault interrupt number of the corresponding
+//! This function returns the fault interrupt number of the corresponding
 //! PWM module.
 //!
 //! \return Returns the interrupt number.
@@ -1110,9 +1125,9 @@ PWMFaultIntGet(unsigned long ulBase)
 //! \param pfnIntHandler is a pointer to the function to be called when the PWM
 //! fault interrupt occurs.
 //!
-//! This function will ensure that the interrupt handler specified by
+//! This function ensures that the interrupt handler specified by
 //! \e pfnIntHandler is called when a fault interrupt is detected for the
-//! selected PWM module.  This function will also enable the PWM fault
+//! selected PWM module.  This function also enables the PWM fault
 //! interrupt in the NVIC; the PWM fault interrupt must also be enabled at the
 //! module level using PWMIntEnable().
 //!
@@ -1154,8 +1169,8 @@ PWMFaultIntRegister(unsigned long ulBase, void (*pfnIntHandler)(void))
 //!
 //! \param ulBase is the base address of the PWM module.
 //!
-//! This function will remove the interrupt handler for a PWM fault interrupt
-//! from the selected PWM module.  This function will also disable the PWM
+//! This function removes the interrupt handler for a PWM fault interrupt
+//! from the selected PWM module.  This function also disables the PWM
 //! fault interrupt in the NVIC; the PWM fault interrupt must also be disabled
 //! at the module level using PWMIntDisable().
 //!
@@ -1197,12 +1212,13 @@ PWMFaultIntUnregister(unsigned long ulBase)
 //!
 //! \param ulBase is the base address of the PWM module.
 //! \param ulGen is the PWM generator to have interrupts and triggers enabled.
-//! Must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! This parameter must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or
+//! \b PWM_GEN_3.
 //! \param ulIntTrig specifies the interrupts and triggers to be enabled.
 //!
-//! Unmasks the specified interrupt(s) and trigger(s) by setting the
-//! specified bits of the interrupt/trigger enable register for the specified
-//! PWM generator.  The \e ulIntTrig parameter is the logical OR of
+//! This function unmasks the specified interrupt(s) and trigger(s) by setting
+//! the specified bits of the interrupt/trigger enable register for the
+//! specified PWM generator.  The \e ulIntTrig parameter is the logical OR of
 //! \b PWM_INT_CNT_ZERO, \b PWM_INT_CNT_LOAD, \b PWM_INT_CNT_AU,
 //! \b PWM_INT_CNT_AD, \b PWM_INT_CNT_BU, \b PWM_INT_CNT_BD,
 //! \b PWM_TR_CNT_ZERO, \b PWM_TR_CNT_LOAD, \b PWM_TR_CNT_AU, \b PWM_TR_CNT_AD,
@@ -1238,12 +1254,13 @@ PWMGenIntTrigEnable(unsigned long ulBase, unsigned long ulGen,
 //!
 //! \param ulBase is the base address of the PWM module.
 //! \param ulGen is the PWM generator to have interrupts and triggers disabled.
-//! Must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! This parameter must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or
+//! \b PWM_GEN_3.
 //! \param ulIntTrig specifies the interrupts and triggers to be disabled.
 //!
-//! Masks the specified interrupt(s) and trigger(s) by clearing the
-//! specified bits of the interrupt/trigger enable register for the specified
-//! PWM generator.  The \e ulIntTrig parameter is the logical OR of
+//! This function masks the specified interrupt(s) and trigger(s) by clearing
+//! the specified bits of the interrupt/trigger enable register for the
+//! specified PWM generator.  The \e ulIntTrig parameter is the logical OR of
 //! \b PWM_INT_CNT_ZERO, \b PWM_INT_CNT_LOAD, \b PWM_INT_CNT_AU,
 //! \b PWM_INT_CNT_AD, \b PWM_INT_CNT_BU, \b PWM_INT_CNT_BD,
 //! \b PWM_TR_CNT_ZERO, \b PWM_TR_CNT_LOAD, \b PWM_TR_CNT_AU, \b PWM_TR_CNT_AD,
@@ -1278,16 +1295,16 @@ PWMGenIntTrigDisable(unsigned long ulBase, unsigned long ulGen,
 //! Gets interrupt status for the specified PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to query.  Must be one of \b PWM_GEN_0,
-//! \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to query.  This parameter must be one of
+//! \b PWM_GEN_0,  \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param bMasked specifies whether masked or raw interrupt status is
 //! returned.
 //!
 //! If \e bMasked is set as \b true, then the masked interrupt status is
 //! returned; otherwise, the raw interrupt status is returned.
 //!
-//! \return Returns the contents of the interrupt status register, or the
-//! contents of the raw interrupt status register, for the specified
+//! \return Returns the contents of the interrupt status register or the
+//! contents of the raw interrupt status register for the specified
 //! PWM generator.
 //
 //*****************************************************************************
@@ -1324,17 +1341,17 @@ PWMGenIntStatus(unsigned long ulBase, unsigned long ulGen, tBoolean bMasked)
 //! Clears the specified interrupt(s) for the specified PWM generator block.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator to query.  Must be one of \b PWM_GEN_0,
-//! \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator to query.  This parameter must be one of
+//! \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param ulInts specifies the interrupts to be cleared.
 //!
-//! Clears the specified interrupt(s) by writing a 1 to the specified bits
-//! of the interrupt status register for the specified PWM generator.  The
-//! \e ulInts parameter is the logical OR of \b PWM_INT_CNT_ZERO,
-//! \b PWM_INT_CNT_LOAD, \b PWM_INT_CNT_AU, \b PWM_INT_CNT_AD,
-//! \b PWM_INT_CNT_BU, or \b PWM_INT_CNT_BD.
+//! This funciton clears the specified interrupt(s) by writing a 1 to the
+//! specified bits of the interrupt status register for the specified PWM
+//! generator.  The \e ulInts parameter is the logical OR of
+//! \b PWM_INT_CNT_ZERO, \b PWM_INT_CNT_LOAD, \b PWM_INT_CNT_AU,
+//! \b PWM_INT_CNT_AD, \b PWM_INT_CNT_BU, or \b PWM_INT_CNT_BD.
 //!
-//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! \note Because there is a write buffer in the Cortex-M processor, it may
 //! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
@@ -1370,13 +1387,13 @@ PWMGenIntClear(unsigned long ulBase, unsigned long ulGen, unsigned long ulInts)
 //! Enables generator and fault interrupts for a PWM module.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGenFault contains the interrupts to be enabled.  Must be a logical
-//! OR of any of \b PWM_INT_GEN_0, \b PWM_INT_GEN_1, \b PWM_INT_GEN_2,
-//! \b PWM_INT_GEN_3, \b PWM_INT_FAULT0, \b PWM_INT_FAULT1, \b PWM_INT_FAULT2,
-//! or \b PWM_INT_FAULT3.
+//! \param ulGenFault contains the interrupts to be enabled.  This parameter
+//! must be a logical OR of any of \b PWM_INT_GEN_0, \b PWM_INT_GEN_1,
+//! \b PWM_INT_GEN_2, \b PWM_INT_GEN_3, \b PWM_INT_FAULT0, \b PWM_INT_FAULT1,
+//! \b PWM_INT_FAULT2, or \b PWM_INT_FAULT3.
 //!
-//! Unmasks the specified interrupt(s) by setting the specified bits of
-//! the interrupt enable register for the selected PWM module.
+//! This function unmasks the specified interrupt(s) by setting the specified
+//! bits of the interrupt enable register for the selected PWM module.
 //!
 //! \return None.
 //
@@ -1393,7 +1410,7 @@ PWMIntEnable(unsigned long ulBase, unsigned long ulGenFault)
                            PWM_INT_FAULT2 | PWM_INT_FAULT3)) == 0);
 
     //
-    // Read the module's interrupt enable register, and enable interrupts
+    // Read the module's interrupt enable register and enable interrupts
     // for the specified PWM generators.
     //
     HWREG(ulBase + PWM_O_INTEN) |= ulGenFault;
@@ -1404,13 +1421,13 @@ PWMIntEnable(unsigned long ulBase, unsigned long ulGenFault)
 //! Disables generator and fault interrupts for a PWM module.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGenFault contains the interrupts to be disabled.  Must be a
-//! logical OR of any of \b PWM_INT_GEN_0, \b PWM_INT_GEN_1, \b PWM_INT_GEN_2,
-//! \b PWM_INT_GEN_3, \b PWM_INT_FAULT0, \b PWM_INT_FAULT1, \b PWM_INT_FAULT2,
-//! or \b PWM_INT_FAULT3.
+//! \param ulGenFault contains the interrupts to be disabled.  This parameter
+//! must be a logical OR of any of \b PWM_INT_GEN_0, \b PWM_INT_GEN_1,
+//! \b PWM_INT_GEN_2, \b PWM_INT_GEN_3, \b PWM_INT_FAULT0, \b PWM_INT_FAULT1,
+//! \b PWM_INT_FAULT2, or \b PWM_INT_FAULT3.
 //!
-//! Masks the specified interrupt(s) by clearing the specified bits of
-//! the interrupt enable register for the selected PWM module.
+//! This function masks the specified interrupt(s) by clearing the specified
+//! bits of the interrupt enable register for the selected PWM module.
 //!
 //! \return None.
 //
@@ -1427,7 +1444,7 @@ PWMIntDisable(unsigned long ulBase, unsigned long ulGenFault)
                            PWM_INT_FAULT2 | PWM_INT_FAULT3)) == 0);
 
     //
-    // Read the module's interrupt enable register, and disable interrupts
+    // Read the module's interrupt enable register and disable interrupts
     // for the specified PWM generators.
     //
     HWREG(ulBase + PWM_O_INTEN) &= ~(ulGenFault);
@@ -1439,15 +1456,15 @@ PWMIntDisable(unsigned long ulBase, unsigned long ulGenFault)
 //!
 //! \param ulBase is the base address of the PWM module.
 //!
-//! Clears the fault interrupt by writing to the appropriate bit of the
-//! interrupt status register for the selected PWM module.
+//! This function clears the fault interrupt by writing to the appropriate bit
+//! of the interrupt status register for the selected PWM module.
 //!
 //! This function clears only the FAULT0 interrupt and is retained for
 //! backwards compatibility.  It is recommended that PWMFaultIntClearExt() be
-//! used instead since it supports all fault interrupts supported on devices
+//! used instead because it supports all fault interrupts supported on devices
 //! with and without extended PWM fault handling support.
 //!
-//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! \note Because there is a write buffer in the Cortex-M processor, it may
 //! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
@@ -1518,10 +1535,10 @@ PWMIntStatus(unsigned long ulBase, tBoolean bMasked)
 //! \param ulBase is the base address of the PWM module.
 //! \param ulFaultInts specifies the fault interrupts to clear.
 //!
-//! Clears one or more fault interrupts by writing to the appropriate bit of
-//! the PWM interrupt status register.  The parameter \e ulFaultInts must be
-//! the logical OR of any of \b PWM_INT_FAULT0, \b PWM_INT_FAULT1,
-//! \b PWM_INT_FAULT2, or \b PWM_INT_FAULT3.
+//! This function clears one or more fault interrupts by writing to the
+//!  appropriate bit of the PWM interrupt status register.  The parameter
+//! \e ulFaultInts must be the logical OR of any of \b PWM_INT_FAULT0,
+//! \b PWM_INT_FAULT1, \b PWM_INT_FAULT2, or \b PWM_INT_FAULT3.
 //!
 //! When running on a device supporting extended PWM fault handling, the fault
 //! interrupts are derived by performing a logical OR of each of the configured
@@ -1531,7 +1548,7 @@ PWMIntStatus(unsigned long ulBase, tBoolean bMasked)
 //! generators.  On a device without extended PWM fault handling, the interrupt
 //! is directly related to the state of the single FAULT pin.
 //!
-//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! \note Because there is a write buffer in the Cortex-M processor, it may
 //! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
@@ -1565,17 +1582,18 @@ PWMFaultIntClearExt(unsigned long ulBase, unsigned long ulFaultInts)
 //! PWM generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator whose fault configuration is being set.
-//! Must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator for which fault configuration is being
+//! set. This function must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2,
+//! or \b PWM_GEN_3.
 //! \param ulMinFaultPeriod is the minimum fault active period expressed in
 //! PWM clock cycles.
 //! \param ulFaultSenses indicates which sense of each FAULT input should be
 //! considered the ``asserted'' state.  Valid values are logical OR
 //! combinations of \b PWM_FAULTn_SENSE_HIGH and \b PWM_FAULTn_SENSE_LOW.
 //!
-//! This function sets the minimum fault period for a given generator along
-//! with the sense of each of the 4 possible fault inputs.  The minimum fault
-//! period is expressed in PWM clock cycles and takes effect only if
+//! This function configures the minimum fault period for a given generator
+//! along with the sense of each of the 4 possible fault inputs.  The minimum
+//! fault period is expressed in PWM clock cycles and takes effect only if
 //! PWMGenConfigure() is called with flag \b PWM_GEN_MODE_FAULT_PER set in the
 //! \e ulConfig parameter.  When a fault input is asserted, the minimum fault
 //! period timer ensures that it remains asserted for at least the number of
@@ -1620,10 +1638,12 @@ PWMGenFaultConfigure(unsigned long ulBase, unsigned long ulGen,
 //! Configures the set of fault triggers for a given PWM generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator whose fault triggers are being set.  Must
-//! be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator for which fault triggers are being set.
+//! This parameter must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or
+//! \b PWM_GEN_3.
 //! \param ulGroup indicates the subset of possible faults that are to be
-//! configured.  This must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
+//! configured.  This parameter must be \b PWM_FAULT_GROUP_0 or
+//! \b PWM_FAULT_GROUP_1.
 //! \param ulFaultTriggers defines the set of inputs that are to contribute
 //! towards generation of the fault signal to the given PWM generator.  For
 //! \b PWM_FAULT_GROUP_0, this is the logical OR of \b PWM_FAULT_FAULT0,
@@ -1641,9 +1661,9 @@ PWMGenFaultConfigure(unsigned long ulBase, unsigned long ulGen,
 //! must be called to configure the fault triggers.
 //!
 //! The fault signal to the PWM generator is generated by ORing together each
-//! of the signals whose inputs are specified in the \e ulFaultTriggers
-//! parameter after having adjusted the sense of each FAULTn input based on the
-//! configuration previously set using a call to PWMGenFaultConfigure().
+//! of the signals specified in the \e ulFaultTriggers parameter after having
+//! adjusted the sense of each FAULTn input based on the configuration
+//! previously set using a call to PWMGenFaultConfigure().
 //!
 //! \note This function is only available on devices supporting extended PWM
 //! fault handling.
@@ -1691,14 +1711,14 @@ PWMGenFaultTriggerSet(unsigned long ulBase, unsigned long ulGen,
 //! generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator whose fault triggers are being queried.
-//! Must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGen is the PWM generator for which fault triggers are being
+//! queried. This parameter must be one of \b PWM_GEN_0, \b PWM_GEN_1,
+//! \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param ulGroup indicates the subset of faults that are being queried.  This
-//! must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
+//! parameter must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
 //!
 //! This function allows an application to query the current set of inputs that
-//! contribute towards the generation of a fault condition to a given PWM
-//! generator.
+//! contribute to the generation of a fault condition to a given PWM generator.
 //!
 //! \note This function is only available on devices supporting extended PWM
 //! fault handling.
@@ -1741,17 +1761,17 @@ PWMGenFaultTriggerGet(unsigned long ulBase, unsigned long ulGen,
 //! Returns the current state of the fault triggers for a given PWM generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator whose fault trigger states are being
-//! queried.  Must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or
-//! \b PWM_GEN_3.
+//! \param ulGen is the PWM generator for which fault trigger states are being
+//! queried.  This parameter must be one of \b PWM_GEN_0, \b PWM_GEN_1,
+//! \b PWM_GEN_2, or \b PWM_GEN_3.
 //! \param ulGroup indicates the subset of faults that are being queried.  This
-//! must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
+//! parameter must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
 //!
 //! This function allows an application to query the current state of each of
 //! the fault trigger inputs to a given PWM generator.  The current state of
 //! each fault trigger input is returned unless PWMGenConfigure() has
-//! previously been called with flag \b PWM_GEN_MODE_LATCH_FAULT in the
-//! \e ulConfig parameter in which case the returned status is the latched
+//! previously been called with flag \b PWM_GEN_MODE_FAULT_LATCHED in the
+//! \e ulConfig parameter, in which case the returned status is the latched
 //! fault trigger status.
 //!
 //! If latched faults are configured, the application must call
@@ -1761,8 +1781,8 @@ PWMGenFaultTriggerGet(unsigned long ulBase, unsigned long ulGen,
 //! fault handling.
 //!
 //! \return Returns the current state of the fault triggers for the given PWM
-//! generator.  A set bit indicates that the associated trigger is active.  For
-//! \b PWM_FAULT_GROUP_0, the returned value is a logical OR of
+//! generator.  A set bit indicates that the associated trigger is active.
+//! For \b PWM_FAULT_GROUP_0, the returned value is a logical OR of
 //! \b PWM_FAULT_FAULT0, \b PWM_FAULT_FAULT1, \b PWM_FAULT_FAULT2, or
 //! \b PWM_FAULT_FAULT3.  For \b PWM_FAULT_GROUP_1, the return value is the
 //! logical OR of \b PWM_FAULT_DCMP0, \b PWM_FAULT_DCMP1,
@@ -1799,17 +1819,18 @@ PWMGenFaultStatus(unsigned long ulBase, unsigned long ulGen,
 //! Clears one or more latched fault triggers for a given PWM generator.
 //!
 //! \param ulBase is the base address of the PWM module.
-//! \param ulGen is the PWM generator whose fault trigger states are being
-//! queried.  Must be one of \b PWM_GEN_0, \b PWM_GEN_1, \b PWM_GEN_2, or
-//! \b PWM_GEN_3.
-//! \param ulGroup indicates the subset of faults that are being queried.  This
-//! must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
+//! \param ulGen is the PWM generator for which fault trigger states are being
+//! queried.  This parameter must be one of \b PWM_GEN_0, \b PWM_GEN_1,
+//! \b PWM_GEN_2, or \b PWM_GEN_3.
+//! \param ulGroup indicates the subset of faults that are being queried.
+//! This parameter must be \b PWM_FAULT_GROUP_0 or \b PWM_FAULT_GROUP_1.
 //! \param ulFaultTriggers is the set of fault triggers which are to be
 //! cleared.
 //!
-//! This function allows an application to clear the fault triggers for a given
-//! PWM generator.  This is only required if PWMGenConfigure() has previously
-//! been called with flag \b PWM_GEN_MODE_LATCH_FAULT in parameter \e ulConfig.
+//! This function allows an application to clear the fault triggers for a
+//! given PWM generator.  This function is only required if PWMGenConfigure()
+//! has previously been called with flag \b PWM_GEN_MODE_FAULT_LATCHED in
+//! parameter \e ulConfig.
 //!
 //! \note This function is only available on devices supporting extended PWM
 //! fault handling.

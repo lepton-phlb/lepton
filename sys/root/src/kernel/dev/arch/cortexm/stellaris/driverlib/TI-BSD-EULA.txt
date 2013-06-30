@@ -1,18 +1,13 @@
-This project will build the Stellaris Peripheral Driver Library.
-
--------------------------------------------------------------------------------
-
-Copyright (c) 2006-2013 Texas Instruments Incorporated.  All rights reserved.
 Software License Agreement
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
   are met:
 
-  Redistributions of source code must retain the above copyright
+  Redistributions of source code must retain the original copyright
   notice, this list of conditions and the following disclaimer.
 
-  Redistributions in binary form must reproduce the above copyright
+  Redistributions in binary form must reproduce the original copyright
   notice, this list of conditions and the following disclaimer in the
   documentation and/or other materials provided with the  
   distribution.
@@ -32,5 +27,3 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-This is part of revision 10636 of the Stellaris Peripheral Driver Library.

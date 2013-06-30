@@ -2,23 +2,38 @@
 //
 // mpu.c - Driver for the Cortex-M3 memory protection unit (MPU).
 //
-// Copyright (c) 2007-2011 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2007-2013 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
-// Texas Instruments (TI) is supplying this software for use solely and
-// exclusively on TI's microcontroller products. The software is owned by
-// TI and/or its suppliers, and is protected under applicable copyright
-// laws. You may not combine this software with "viral" open-source
-// software in order to form a larger program.
+//   Redistribution and use in source and binary forms, with or without
+//   modification, are permitted provided that the following conditions
+//   are met:
 // 
-// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-// DAMAGES, FOR ANY REASON WHATSOEVER.
+//   Redistributions of source code must retain the above copyright
+//   notice, this list of conditions and the following disclaimer.
 // 
-// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
+//   Redistributions in binary form must reproduce the above copyright
+//   notice, this list of conditions and the following disclaimer in the
+//   documentation and/or other materials provided with the  
+//   distribution.
+// 
+//   Neither the name of Texas Instruments Incorporated nor the names of
+//   its contributors may be used to endorse or promote products derived
+//   from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+// This is part of revision 10636 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -42,13 +57,13 @@
 //!
 //! \param ulMPUConfig is the logical OR of the possible configurations.
 //!
-//! This function enables the Cortex-M3 memory protection unit.  It also
+//! This function enables the Cortex-M memory protection unit.  It also
 //! configures the default behavior when in privileged mode and while handling
 //! a hard fault or NMI.  Prior to enabling the MPU, at least one region must
 //! be set by calling MPURegionSet() or else by enabling the default region for
 //! privileged mode by passing the \b MPU_CONFIG_PRIV_DEFAULT flag to
-//! MPUEnable().  Once the MPU is enabled, a memory management fault are
-//! generated for any memory access violations.
+//! MPUEnable().  Once the MPU is enabled, a memory management fault is
+//! generated for memory access violations.
 //!
 //! The \e ulMPUConfig parameter should be the logical OR of any of the
 //! following:
@@ -62,8 +77,8 @@
 //! disabled while in one of these exception handlers and the default
 //! memory map is applied.
 //! - \b MPU_CONFIG_NONE chooses none of the above options.  In this case,
-//! no default memory map is provided in privileged mode, and the MPU will
-//! not be enabled in the fault handlers.
+//! no default memory map is provided in privileged mode, and the MPU isl
+//! not enabled in the fault handlers.
 //!
 //! \return None.
 //
@@ -88,7 +103,7 @@ MPUEnable(unsigned long ulMPUConfig)
 //
 //! Disables the MPU for use.
 //!
-//! This function disables the Cortex-M3 memory protection unit.  When the
+//! This function disables the Cortex-M memory protection unit.  When the
 //! MPU is disabled, the default memory map is used and memory management
 //! faults are not generated.
 //!
@@ -108,9 +123,8 @@ MPUDisable(void)
 //
 //! Gets the count of regions supported by the MPU.
 //!
-//! This function is used to get the number of regions that are supported by
-//! the MPU.  This is the total number that are supported, including regions
-//! that are already programmed.
+//! This function is used to get the total number of regions that are supported
+//! by the MPU, including regions that are already programmed.
 //!
 //! \return The number of memory protection regions that are available
 //! for programming using MPURegionSet().
@@ -120,7 +134,7 @@ unsigned long
 MPURegionCountGet(void)
 {
     //
-    // Read the DREGION field of the MPU type register, and mask off
+    // Read the DREGION field of the MPU type register and mask off
     // the bits of interest to get the count of regions.
     //
     return((HWREG(NVIC_MPU_TYPE) & NVIC_MPU_TYPE_DREGION_M)
@@ -134,9 +148,9 @@ MPURegionCountGet(void)
 //! \param ulRegion is the region number to enable.
 //!
 //! This function is used to enable a memory protection region.  The region
-//! should already be set up with the MPURegionSet() function.  Once enabled,
-//! the memory protection rules of the region are applied and access violations
-//! will cause a memory management fault.
+//! should already be configured with the MPURegionSet() function.  Once
+//! enabled, the memory protection rules of the region are applied and access
+//! violations cause a memory management fault.
 //!
 //! \return None.
 //
@@ -167,7 +181,7 @@ MPURegionEnable(unsigned long ulRegion)
 //! \param ulRegion is the region number to disable.
 //!
 //! This function is used to disable a previously enabled memory protection
-//! region.  The region will remain configured if it is not overwritten with
+//! region.  The region remains configured if it is not overwritten with
 //! another call to MPURegionSet(), and can be enabled again by calling
 //! MPURegionEnable().
 //!
@@ -203,16 +217,16 @@ MPURegionDisable(unsigned long ulRegion)
 //! \param ulFlags is a set of flags to define the attributes of the region.
 //!
 //! This function sets up the protection rules for a region.  The region has
-//! a base address and a set of attributes including the size, which must
-//! be a power of 2.  The base address parameter, \e ulAddr, must be aligned
-//! according to the size.
+//! a base address and a set of attributes including the size. The base
+//! address parameter, \e ulAddr, must be aligned according to the size, and
+//! the size must be a power of 2.
 //!
 //! The \e ulFlags parameter is the logical OR of all of the attributes
 //! of the region.  It is a combination of choices for region size,
 //! execute permission, read/write permissions, disabled sub-regions,
 //! and a flag to determine if the region is enabled.
 //!
-//! The size flag determines the size of a region, and must be one of the
+//! The size flag determines the size of a region and must be one of the
 //! following:
 //!
 //! - \b MPU_RGN_SIZE_32B
@@ -262,8 +276,8 @@ MPURegionDisable(unsigned long ulRegion)
 //!
 //! The region is automatically divided into 8 equally-sized sub-regions by
 //! the MPU.  Sub-regions can only be used in regions of size 256 bytes
-//! or larger.  Any of these 8 sub-regions can be disabled.  This allows
-//! for creation of ``holes'' in a region which can be left open, or overlaid
+//! or larger.  Any of these 8 sub-regions can be disabled, allowing for
+//! creation of ``holes'' in a region which can be left open, or overlaid
 //! by another region with different attributes.  Any of the 8 sub-regions
 //! can be disabled with a logical OR of any of the following flags:
 //!
@@ -288,11 +302,11 @@ MPURegionDisable(unsigned long ulRegion)
 //! have the following value:
 //!
 //! <code>
-//! (MPU_RG_SIZE_32K | MPU_RGN_PERM_EXEC | MPU_RGN_PERM_PRV_RO_USR_RO |
+//! (MPU_RGN_SIZE_32K | MPU_RGN_PERM_EXEC | MPU_RGN_PERM_PRV_RO_USR_RO |
 //!  MPU_SUB_RGN_DISABLE_2 | MPU_RGN_ENABLE)
 //! </code>
 //!
-//! \note This function will write to multiple registers and is not protected
+//! \note This function writes to multiple registers and is not protected
 //! from interrupts.  It is possible that an interrupt which accesses a
 //! region may occur while that region is in the process of being changed.
 //! The safest way to handle this is to disable a region before changing it.
@@ -382,8 +396,9 @@ MPURegionGet(unsigned long ulRegion, unsigned long *pulAddr,
 //! \param pfnHandler is a pointer to the function to be called when the
 //! memory management fault occurs.
 //!
-//! This sets and enables the handler to be called when the MPU generates
-//! a memory management fault due to a protection region access violation.
+//! This function sets and enables the handler to be called when the MPU
+//! generates a memory management fault due to a protection region access
+//! violation.
 //!
 //! \sa IntRegister() for important information about registering interrupt
 //! handlers.
@@ -414,7 +429,7 @@ MPUIntRegister(void (*pfnHandler)(void))
 //
 //! Unregisters an interrupt handler for the memory management fault.
 //!
-//! This function will disable and clear the handler to be called when a
+//! This function disables and clears the handler to be called when a
 //! memory management fault occurs.
 //!
 //! \sa IntRegister() for important information about registering interrupt
