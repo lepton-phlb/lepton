@@ -2097,6 +2097,9 @@
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\lm3s\Debug\Exe\dev_lm3s.a</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\dev\arch\cortexm\stellaris\grlib\ewarm\Exe\grlib.a</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\lib-debug\lib\tauon.a</name>
       </file>
     </group>
