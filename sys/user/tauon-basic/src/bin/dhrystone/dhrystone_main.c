@@ -90,7 +90,7 @@ int dhrystone_main(void)
 //    printf("f. flash setup\n");
 //    printf("s. sys clock setup\n");
     printf("r: Run Dhrystone Test\n");
-    printf("r: Run SDRAM Test\n");
+    printf("s: Run SDRAM Test\n");
     printf("q: quit\n");
     printf("choice >");
     
