@@ -5,6 +5,9 @@
     <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\lm3s\dev_lm3s_6.21.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\src\kernel\dev\arch\cortexm\stellaris\grlib\grlib.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon_6.21.ewp</path>
   </project>
   <project>

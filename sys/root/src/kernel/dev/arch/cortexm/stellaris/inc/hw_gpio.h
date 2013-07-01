@@ -113,7 +113,7 @@
                                             // and may be modified
 #define GPIO_LOCK_LOCKED        0x00000001  // The GPIOCR register is locked
                                             // and may not be modified
-#define GPIO_LOCK_KEY           0x1ACCE551  // Unlocks the GPIO_CR register
+//#define GPIO_LOCK_KEY           0x1ACCE551  // Unlocks the GPIO_CR register
 #define GPIO_LOCK_KEY_DD        0x4C4F434B  // Unlocks the GPIO_CR register on
                                             // DustDevil-class devices and
                                             // later

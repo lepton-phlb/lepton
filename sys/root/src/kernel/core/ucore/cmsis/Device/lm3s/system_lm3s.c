@@ -33,6 +33,7 @@
 
 extern void forceLM3Sreset(void);
 extern void sdram_init(void);
+extern void lcd_init(void);
 extern void SysCtlClockSet(unsigned long ulConfig);
 extern unsigned long SysCtlClockGet(void);
 
@@ -100,6 +101,8 @@ void SystemInit (void) //Must be called at MCU init, ideally the first call from
     }
 #endif
     sdram_init();
+    
+    lcd_init();
 #ifdef __ICCARM__
     return 1; // Always initialize segments !
 #endif
