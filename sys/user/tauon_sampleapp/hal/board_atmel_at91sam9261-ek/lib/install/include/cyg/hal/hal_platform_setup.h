@@ -46,7 +46,7 @@
 // Contributors:gthomas, asl
 // Date:        2006-03-09
 // Purpose:     AT91SAM7S platform specific support routines
-// Description: 
+// Description:
 // Usage:       #include <cyg/hal/hal_platform_setup.h>
 //
 //####DESCRIPTIONEND####
@@ -55,49 +55,49 @@
 
 #include <cyg/hal/var_io.h>
 #include <cyg/hal/plf_io.h>
-        
+
 
 //#if defined(CYG_HAL_STARTUP_ROM) || defined(CYG_HAL_STARTUP_ROMRAM)
 #if 1
 
-#define PLATFORM_SETUP1 _platform_setup1
+   #define PLATFORM_SETUP1 _platform_setup1
 //#define CYGHWR_HAL_ARM_HAS_MMU
-#define CYGSEM_HAL_ROM_RESET_USES_JUMP
-#define UNMAPPED(name)    name
+   #define CYGSEM_HAL_ROM_RESET_USES_JUMP
+   #define UNMAPPED(name)    name
 
-// This macro represents the initial startup code for the platform        
-   .macro  _platform_setup1
-   ldr     sp,=0x328000				// set temporary a small stack in internal SRAM
-        
-   movs    r3,pc,lsr #20           // If ROM startup, PC < 0x100000
-   cmp		r3, #0
-	bne		10f
-   		     
-	ldr		r0,=hardware_init
-	ldr		r1,=0x10000000
-	orr		r0, r0, r1         
-	ldr		lr, =label_1
-	orr		lr, lr, r1
-        bx		r0
+// This macro represents the initial startup code for the platform
+.macro _platform_setup1
+ldr sp,=0x328000                                // set temporary a small stack in internal SRAM
 
-10:
-	//copy .vectors from sdram to sram before remap
-	ldr r0,=0x20000200 //adresse source
-	ldr r1,=0x00300000 //adresse destination
-	ldr r2,=0x20000240 //adress fin copie
-	
-loop :
-	ldmia r0!, {r3-r11} //chargement de 32 bytes
-	stmia r1!, {r3-r11} // stockage des 32 bytes
-	cmp r0, r2 // adresse de fin atteinte ?
-	blo loop   		
+         movs r3,pc,lsr # 20       // If ROM startup, PC < 0x100000
+cmp r3, # 0
+bne             10f
 
-	bl 		hardware_init
+ldr r0,=hardware_init
+         ldr r1,=0x10000000
+                  orr r0, r0, r1
+ldr lr, =label_1
+          orr lr, lr, r1
+bx r0
+
+10 :
+//copy .vectors from sdram to sram before remap
+ldr r0,=0x20000200         //adresse source
+         ldr r1,=0x00300000 //adresse destination
+                  ldr r2,=0x20000240 //adress fin copie
+
+loop:
+                           ldmia r0 !, {r3-r11} //chargement de 32 bytes
+stmia r1 !, {r3-r11}        // stockage des 32 bytes
+cmp r0, r2         // adresse de fin atteinte ?
+blo loop
+
+bl hardware_init
 label_1:
-        .endm
-        
+.endm
+
 #else // defined(CYG_HAL_STARTUP_ROM) || defined(CYG_HAL_STARTUP_ROMRAM)
-#define PLATFORM_SETUP1
+   #define PLATFORM_SETUP1
 
 #endif
 

@@ -70,7 +70,7 @@ OBJ = obj
 #-------------------------------------------------------------------------------
 
 # Tool suffix when cross-compiling
-CROSS_COMPILE = arm-eabi-
+CROSS_COMPILE = arm-none-eabi-
 
 # Compilation tools
 CC = $(CROSS_COMPILE)gcc

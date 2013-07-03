@@ -46,58 +46,58 @@
 // Purpose:      Define Interrupt support
 // Description:  The interrupt specifics for the AT91SAM7Splatform are
 //               defined here.
-//              
+//
 // Usage:        #include <cyg/hal/hal_platform_ints.h>
 //               ...
-//              
+//
 //
 //####DESCRIPTIONEND####
 //
 //==========================================================================
 
-#define CYGNUM_HAL_INTERRUPT_FIQ		0
-#define CYGNUM_HAL_INTERRUPT_SYS		1
-#define CYGNUM_HAL_INTERRUPT_PIOA		2
-#define CYGNUM_HAL_INTERRUPT_PIOB		3
-#define CYGNUM_HAL_INTERRUPT_PIOC		4
-#define CYGNUM_HAL_INTERRUPT_USART0		6
-#define CYGNUM_HAL_INTERRUPT_USART1		7
-#define CYGNUM_HAL_INTERRUPT_USART2		8
-#define CYGNUM_HAL_INTERRUPT_MCI		9
-#define CYGNUM_HAL_INTERRUPT_UDP		10
-#define CYGNUM_HAL_INTERRUPT_TWI		11
-#define CYGNUM_HAL_INTERRUPT_SPI0		12
-#define CYGNUM_HAL_INTERRUPT_SPI1		13
-#define CYGNUM_HAL_INTERRUPT_SSC0		14
-#define CYGNUM_HAL_INTERRUPT_SSC1		15
-#define CYGNUM_HAL_INTERRUPT_SSC2		16
-#define CYGNUM_HAL_INTERRUPT_TC0		17
-#define CYGNUM_HAL_INTERRUPT_TC1		18
-#define CYGNUM_HAL_INTERRUPT_TC2		19
-#define CYGNUM_HAL_INTERRUPT_UHP		20
-#define CYGNUM_HAL_INTERRUPT_LCD		21
-#define CYGNUM_HAL_INTERRUPT_IRQ0		29
-#define CYGNUM_HAL_INTERRUPT_IRQ1		30
-#define CYGNUM_HAL_INTERRUPT_IRQ2		31
+#define CYGNUM_HAL_INTERRUPT_FIQ                0
+#define CYGNUM_HAL_INTERRUPT_SYS                1
+#define CYGNUM_HAL_INTERRUPT_PIOA               2
+#define CYGNUM_HAL_INTERRUPT_PIOB               3
+#define CYGNUM_HAL_INTERRUPT_PIOC               4
+#define CYGNUM_HAL_INTERRUPT_USART0             6
+#define CYGNUM_HAL_INTERRUPT_USART1             7
+#define CYGNUM_HAL_INTERRUPT_USART2             8
+#define CYGNUM_HAL_INTERRUPT_MCI                9
+#define CYGNUM_HAL_INTERRUPT_UDP                10
+#define CYGNUM_HAL_INTERRUPT_TWI                11
+#define CYGNUM_HAL_INTERRUPT_SPI0               12
+#define CYGNUM_HAL_INTERRUPT_SPI1               13
+#define CYGNUM_HAL_INTERRUPT_SSC0               14
+#define CYGNUM_HAL_INTERRUPT_SSC1               15
+#define CYGNUM_HAL_INTERRUPT_SSC2               16
+#define CYGNUM_HAL_INTERRUPT_TC0                17
+#define CYGNUM_HAL_INTERRUPT_TC1                18
+#define CYGNUM_HAL_INTERRUPT_TC2                19
+#define CYGNUM_HAL_INTERRUPT_UHP                20
+#define CYGNUM_HAL_INTERRUPT_LCD                21
+#define CYGNUM_HAL_INTERRUPT_IRQ0               29
+#define CYGNUM_HAL_INTERRUPT_IRQ1               30
+#define CYGNUM_HAL_INTERRUPT_IRQ2               31
 
-#define CYGNUM_HAL_INTERRUPT_ALL		((unsigned int) 0xE03FFFDF) // ALL VALID INTERRUPTS
+#define CYGNUM_HAL_INTERRUPT_ALL                ((unsigned int) 0xE03FFFDF) // ALL VALID INTERRUPTS
 
 
 
 // Interrupts which are multiplexed on to the System Interrupt
 //============================================================
-#define CYGNUM_HAL_INTERRUPT_PITC     	32
-#define CYGNUM_HAL_INTERRUPT_RTTC     	33
-#define CYGNUM_HAL_INTERRUPT_PMC      	34
-#define CYGNUM_HAL_INTERRUPT_SDRAMC    	35
-#define CYGNUM_HAL_INTERRUPT_WDTC     	36
+#define CYGNUM_HAL_INTERRUPT_PITC       32
+#define CYGNUM_HAL_INTERRUPT_RTTC       33
+#define CYGNUM_HAL_INTERRUPT_PMC        34
+#define CYGNUM_HAL_INTERRUPT_SDRAMC     35
+#define CYGNUM_HAL_INTERRUPT_WDTC       36
 #define CYGNUM_HAL_INTERRUPT_RSTC       37
 #define CYGNUM_HAL_INTERRUPT_DBG        38
 
-#define CYGNUM_HAL_ISR_MIN			 	0
-#define CYGNUM_HAL_ISR_MAX				38
+#define CYGNUM_HAL_ISR_MIN                              0
+#define CYGNUM_HAL_ISR_MAX                              38
 
-#define CYGNUM_HAL_ISR_COUNT			(CYGNUM_HAL_ISR_MAX + 1)
+#define CYGNUM_HAL_ISR_COUNT                    (CYGNUM_HAL_ISR_MAX + 1)
 
 // The vector used by the Real time clock
 //=======================================
@@ -106,10 +106,10 @@
 //#endif
 
 //#ifdef CYGBLD_HAL_ARM_AT91_TIMER_PIT
-#define CYGNUM_HAL_INTERRUPT_RTC	CYGNUM_HAL_INTERRUPT_PITC
+#define CYGNUM_HAL_INTERRUPT_RTC        CYGNUM_HAL_INTERRUPT_PITC
 //#endif
 
-#define CYGNUM_HAL_INTERRUPT_SPI		CYGNUM_HAL_INTERRUPT_SPI0	
+#define CYGNUM_HAL_INTERRUPT_SPI                CYGNUM_HAL_INTERRUPT_SPI0
 
 
 //----------------------------------------------------------------------------

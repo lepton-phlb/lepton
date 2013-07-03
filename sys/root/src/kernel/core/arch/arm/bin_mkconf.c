@@ -7,13 +7,13 @@ Software distributed under the License is distributed on an "AS IS" basis,
 WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
-The Original Code is ______________________________________.
+The Original Code is Lepton.
 
-The Initial Developer of the Original Code is ________________________.
-Portions created by ______________________ are Copyright (C) ______ _______________________.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
 All Rights Reserved.
 
-Contributor(s): ______________________________________.
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -87,8 +87,26 @@ int od_main(int argc, char* argv[]);
 //see "sbin/date.c"
 int date_main(int argc, char* argv[]);
 
+//see "sbin/echo.c"
+int echo_main(int argc, char* argv[]);
+
+//see "bin/tstfltk.c"
+int tstfltk_main(int argc, char* argv[]);
+
+//see "bin/test2.c"
+int test2_main(int argc, char* argv[]);
+
 //see "bin/test.c"
 int test_main(int argc, char* argv[]);
+
+//see "bin/net/ifconfig.c"
+int ifconfig_main(int argc, char* argv[]);
+
+//see "bin/net/telnetd.c"
+int telnetd_main(int argc, char* argv[]);
+
+//see "bin/net/mongoosed.c"
+int mongoosed_main(int argc, char* argv[]);
 
 
 
@@ -96,46 +114,32 @@ int test_main(int argc, char* argv[]);
 Global Declaration
 =============================================*/
 static const bin_t _bin_lst[]={
-   {         "initd",                                       initd_main,                    10,
-             2048,                   5},
-   {           "lsh",                                         lsh_main,                    10,
-               2048,                   5},
-   {         "mount",                                       mount_main,                    10,
-             2048,                   5},
-   {        "umount",                                      umount_main,                    10,
-            2048,                   5},
-   {            "ls",                                          ls_main,                    10,
-                2048,                   5},
-   {            "ps",                                          ps_main,                    10,
-                2048,                   5},
-   {          "kill",                                        kill_main,                    10,
-              2048,                   5},
-   {         "touch",                                       touch_main,                    10,
-             2048,                   5},
-   {           "cat",                                         cat_main,                    10,
-               2048,                   5},
-   {          "more",                                        more_main,                    10,
-              2048,                   5},
-   {          "mkfs",                                        mkfs_main,                    10,
-              2048,                   5},
-   {            "df",                                          df_main,                    10,
-                2048,                   5},
-   {         "uname",                                       uname_main,                    10,
-             2048,                   5},
-   {           "pwd",                                         pwd_main,                    10,
-               2048,                   5},
-   {         "rmdir",                                       rmdir_main,                    10,
-             2048,                   5},
-   {         "mkdir",                                       mkdir_main,                    10,
-             2048,                   5},
-   {            "rm",                                          rm_main,                    10,
-                2048,                   5},
-   {            "od",                                          od_main,                    10,
-                2048,                   5},
-   {          "date",                                        date_main,                    10,
-              2048,                   5},
-   {          "test",                                        test_main,                    10,
-              1024,                   5}
+{         "initd",			                 initd_main,			10,			4096,			5},
+{           "lsh",			                   lsh_main,			10,			4096,			5},
+{         "mount",			                 mount_main,			10,			2048,			5},
+{        "umount",			                umount_main,			10,			2048,			5},
+{            "ls",			                    ls_main,			10,			4096,			5},
+{            "ps",			                    ps_main,			10,			4096,			5},
+{          "kill",			                  kill_main,			10,			2048,			5},
+{         "touch",			                 touch_main,			10,			2048,			5},
+{           "cat",			                   cat_main,			10,			2048,			5},
+{          "more",			                  more_main,			10,			2048,			5},
+{          "mkfs",			                  mkfs_main,			10,			2048,			5},
+{            "df",			                    df_main,			10,			2048,			5},
+{         "uname",			                 uname_main,			10,			2048,			5},
+{           "pwd",			                   pwd_main,			10,			2048,			5},
+{         "rmdir",			                 rmdir_main,			10,			2048,			5},
+{         "mkdir",			                 mkdir_main,			10,			2048,			5},
+{            "rm",			                    rm_main,			10,			2048,			5},
+{            "od",			                    od_main,			10,			2048,			5},
+{          "date",			                  date_main,			10,			2048,			5},
+{          "echo",			                  echo_main,			10,			2048,			5},
+{       "tstfltk",			               tstfltk_main,			10,			16384,			5},
+{         "test2",			                 test2_main,			10,			1024,			5},
+{          "test",			                  test_main,			10,			8192,			5},
+{      "ifconfig",			              ifconfig_main,			10,			8192,			5},
+{       "telnetd",			               telnetd_main,			10,			8192,			5},
+{     "mongoosed",			             mongoosed_main,			10,			31744,			1}
 };
 
 const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);
@@ -148,9 +152,4 @@ Implementation
 
 /*===========================================
 | End of Source : bin_mkconf.c
-|--------------------------------------------
-| Historic:
-|--------------------------------------------
-| Authors	| Date	| Comments
-|--------------------------------------------
 =============================================*/
