@@ -2,14 +2,14 @@
 
 # This is a generated file - do not edit
 
-export PREFIX := /home/sqzwork/dev/hg_lepton_os/hg_lepton_k60/lepton/sys/user/tauon_sampleapp/hal/board_freescale_twrk60n512/lib/install
+export PREFIX := /home/shiby/dev/tauon/lepton/sys/user/tauon_sampleapp/hal/board_freescale_twrk60n512/lib/install
 export COMMAND_PREFIX := arm-eabi-
 export CC := $(COMMAND_PREFIX)gcc
 export OBJCOPY := $(COMMAND_PREFIX)objcopy
 export HOST := UNIX
 export AR := $(COMMAND_PREFIX)ar
 
-export REPOSITORY := /home/sqzwork/dev/ecos-v3.0/ecos/packages
+export REPOSITORY := /home/shiby/dev/ecos-v3.0/ecos/packages
 PACKAGE := devs/serial/freescale/uart/hdr/current
 OBJECT_PREFIX := devs_serial_freescale_uart_hdr
 CFLAGS := -Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Woverloaded-virtual -Wno-write-strings -mcpu=cortex-m3 -mthumb -g -O0 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions

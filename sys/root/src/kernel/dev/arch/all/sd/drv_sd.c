@@ -50,6 +50,7 @@ either the MPL or the [eCos GPL] License."
 | Global Declaration
 ==============================================*/
 static int _sd_low_level_init(board_inf_sd_t * p_inf_sd, desc_t desc_next);
+static int _sd_low_level_ioctl(desc_t desc, int request, ... );
 static int _sd_send_command(board_inf_sd_t * p_inf_sd, desc_t desc_next);
 static int _sd_pon(board_inf_sd_t * p_inf_sd, desc_t desc_next);
 static int _sd_cmd0(board_inf_sd_t * p_inf_sd, desc_t desc_next);
@@ -392,7 +393,7 @@ int _sd_init(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    }
 
    //set new speed
-   ofile_lst[desc_next].pfsop->fdev.fdev_ioctl(desc_next, HDSD_SETSPEED, p_inf_sd->command);
+	 _sd_low_level_ioctl(desc_next, HDSD_SETSPEED, p_inf_sd->command);
 
    //
    g_csd_info.nsac = SD_CSD_NSAC(p_inf_sd);
@@ -538,6 +539,23 @@ int _sd_low_level_init(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    return 0;
 }
 
+/*--------------------------------------------
+| Name:        _sd_low_level_ioctl
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int _sd_low_level_ioctl(desc_t desc, int request, ... ) {
+   va_list ap;
+   int ret;
+   va_start(ap, request);
+   ret = ofile_lst[desc].pfsop->fdev.fdev_ioctl(desc,request,ap);
+   va_end(ap);
+   return ret;
+}
+
 /*-------------------------------------------
 | Name:_sd_send_command
 | Description:
@@ -551,8 +569,8 @@ int _sd_send_command(board_inf_sd_t * p_inf_sd, desc_t desc_next) {
    unsigned int i;
 
    // Send command
-   error = ofile_lst[desc_next].pfsop->fdev.fdev_ioctl(desc_next, HDSD_SENDCOMMAND,
-                                                       p_inf_sd->command);
+	 _sd_low_level_ioctl(desc_next, HDSD_SENDCOMMAND, p_inf_sd->command);
+
    if (error) {
       return SD_ERROR_DRIVER;
    }

@@ -14,8 +14,8 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-extern const unsigned char filecpu_memory[];
-extern const unsigned long filecpu_memory_size;
+extern  const unsigned char filecpu_memory[];
+extern  const unsigned long filecpu_memory_size;
 
 
 #endif

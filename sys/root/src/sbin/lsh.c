@@ -751,10 +751,10 @@ int lsh_main(int argc, char* argv[])
    FILE* fout = stdout;
 
    //only for SIGCHLD bug test under win32
-   //struct sigaction sa;
+   struct sigaction sa;
    //SIGCHLD interception
-   //sa.sa_handler=sigchild_handler;
-   //sigaction(SIGCHLD,&sa,NULL);
+   sa.sa_handler=sigchild_handler;
+   sigaction(SIGCHLD,&sa,NULL);
 
 
    //silent mode for script shell

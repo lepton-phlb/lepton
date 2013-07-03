@@ -196,15 +196,16 @@ typedef cyg_halbool bool;
 CYG_MACRO_END
 
 
-// -------------------------------------------------------------------------
-// Reference a symbol without explicitly making use of it. Ensures that
-// the object containing the symbol will be included when linking.
+//----------------------------------------------------------------------------
+// The unused attribute stops the compiler warning about the variable
+// not being used.
+// The used attribute prevents the compiler from optimizing it away.
 
-#define CYG_REFERENCE_OBJECT(__object__)                                 \
-     CYG_MACRO_START                                                     \
-     static void *__cygvar_discard_me__ __attribute__ ((unused)) =       \
-                                                          &(__object__); \
-     CYG_MACRO_END
+#define CYG_REFERENCE_OBJECT(__object__)                            \
+    CYG_MACRO_START                                                 \
+    static const void*  __cygvar_discard_me__                       \
+    __attribute__ ((unused, used)) = (const void*)&(__object__);    \
+    CYG_MACRO_END
 
 // -------------------------------------------------------------------------
 // Define basic types for using integers in memory and structures;
@@ -451,6 +452,11 @@ typedef cyg_haladdrword CYG_ADDRWORD;
 # define CYGBLD_ATTRIB_STRFTIME_FORMAT(__format__, __args__) \
         __attribute__((format (strftime, __format__, __args__)))
 
+// Tell compiler not to warn us about an unused variable -- generally
+// because it will be used when sources are build under certain
+// circumstances (e.g. with debugging or asserts enabled.
+# define CYGBLD_ATTRIB_UNUSED  __attribute__((unused))
+
 // Tell the compiler not to throw away a variable or function. Only known
 // available on 3.3.2 or above. Old version's didn't throw them away,
 // but using the unused attribute should stop warnings.
@@ -462,6 +468,8 @@ typedef cyg_haladdrword CYG_ADDRWORD;
 #  endif
 # endif 
 #else // non-GNU
+
+# define CYGBLD_ATTRIB_UNUSED  /* nothing */
 
 # define CYGBLD_ATTRIB_CONSTRUCTOR
 

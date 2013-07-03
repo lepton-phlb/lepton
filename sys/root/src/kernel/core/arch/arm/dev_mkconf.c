@@ -7,13 +7,13 @@ Software distributed under the License is distributed on an "AS IS" basis,
 WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
-The Original Code is ______________________________________.
+The Original Code is Lepton.
 
-The Initial Developer of the Original Code is ________________________.
-Portions created by ______________________ are Copyright (C) ______ _______________________.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
 All Rights Reserved.
 
-Contributor(s): ______________________________________.
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -38,27 +38,47 @@ Global Declaration
 =============================================*/
 
 
-extern dev_map_t dev_null_map;
-extern dev_map_t dev_proc_map;
-extern dev_map_t dev_cpufs_map;
-extern dev_map_t dev_pipe_map;
-extern dev_map_t dev_tty_map;
-extern dev_map_t dev_at91sam9261_cpu_map;
-extern dev_map_t dev_at91sam9261_uart_dbg_map;
-extern dev_map_t dev_at91sam9261_lcd_map;
-extern dev_map_t dev_at91sam9261_rtt_map;
+extern dev_map_t  dev_null_map;
+extern dev_map_t  dev_proc_map;
+extern dev_map_t  dev_cpufs_map;
+extern dev_map_t  dev_pipe_map;
+extern dev_map_t  dev_tty_map;
+extern dev_map_t  dev_lwip_sock_map;
+extern dev_map_t  dev_lwip_stack_map;
+extern dev_map_t  dev_fb_map;
+extern dev_map_t  dev_head_map;
+extern dev_map_t  dev_posix_mqueue_map;
+extern dev_map_t  dev_at91sam9261_cpu_map;
+extern dev_map_t  dev_at91sam9261_rtt_map;
+extern dev_map_t  dev_at91sam9261_ek_lcd_map;
+extern dev_map_t  dev_at91sam9261_uart_0_map;
+extern dev_map_t  dev_at91sam9261_uart_dbg_map;
+extern dev_map_t  dev_at91sam9261_ek_eth_dm9000_map;
+extern dev_map_t  dev_am29dlxxxx_1_map;
+extern dev_map_t  dev_sd_map;
+extern dev_map_t  dev_at91sam9261_mci_map;
 
 
 pdev_map_t const dev_lst[]={
-   &dev_null_map,
-   &dev_proc_map,
-   &dev_cpufs_map,
-   &dev_pipe_map,
-   &dev_tty_map,
-   &dev_at91sam9261_cpu_map,
-   &dev_at91sam9261_uart_dbg_map,
-   &dev_at91sam9261_lcd_map,
-   &dev_at91sam9261_rtt_map
+&dev_null_map,
+&dev_proc_map,
+&dev_cpufs_map,
+&dev_pipe_map,
+&dev_tty_map,
+&dev_lwip_sock_map,
+&dev_lwip_stack_map,
+&dev_fb_map,
+&dev_head_map,
+&dev_posix_mqueue_map,
+&dev_at91sam9261_cpu_map,
+&dev_at91sam9261_rtt_map,
+&dev_at91sam9261_ek_lcd_map,
+&dev_at91sam9261_uart_0_map,
+&dev_at91sam9261_uart_dbg_map,
+&dev_at91sam9261_ek_eth_dm9000_map,
+&dev_am29dlxxxx_1_map,
+&dev_sd_map,
+&dev_at91sam9261_mci_map
 };
 
 pdev_map_t const * pdev_lst=&dev_lst[0];
@@ -70,9 +90,4 @@ Implementation
 
 /*===========================================
 | End of Source : dev_mkconf.c
-|--------------------------------------------
-| Historic:
-|--------------------------------------------
-| Authors	| Date	| Comments
-|--------------------------------------------
 =============================================*/

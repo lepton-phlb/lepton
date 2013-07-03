@@ -12,21 +12,21 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#include "dev_dskimg.h"
+#include "dev_dskimg.h" 
 
 /*===========================================
 Declaration
 =============================================*/
 
-//#define (null)
+//#define (null) 
 
 #define __KERNEL_CPU_FREQ 100000000L
 
 #define __KERNEL_HEAP_SIZE 10000
 
-#define __KERNEL_PTHREAD_MAX 7
+#define __KERNEL_PTHREAD_MAX 10
 
-#define __KERNEL_PROCESS_MAX 5
+#define __KERNEL_PROCESS_MAX 8
 
 #define MAX_OPEN_FILE 16
 
