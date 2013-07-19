@@ -42,7 +42,7 @@ either the MPL or the [eCos GPL] License."
 | Declaration
 ==============================================*/
 
-
+//NOR FLASH
 #define FLASH_AM29DL640D   0
 #define FLASH_AM29LV320DT  1
 #define FLASH_S29Gl256P    2
@@ -63,8 +63,32 @@ typedef struct {
    flash_type_t* p_flash_type;
 }dev_flash_t;
 
-
 extern const flash_type_t flash_type_lst[];
 
+//NAND SPI FLASH
+//#if __tauon_cpu_device__!=__tauon_cpu_device_win32_simulation__
+   typedef __compiler_directive__packed union
+   {
+     char tab[3];
+     __compiler_directive__packed struct
+     {
+       uchar8_t manufacturer_id;
+       uchar8_t device_Id[2];
+     };
+   } flash_jedec_did_u;
+   
+   //
+   typedef __compiler_directive__packed struct
+   {
+     flash_jedec_did_u did;
+     uint32_t flash_size;
+     uint16_t page_size;
+     uchar8_t sector_count;
+     uchar8_t firmware_from_sector;
+     uchar8_t firmware_sector_count;
+     uint32_t firmware_address;
+     const char *device_name;
+   } dev_flash_nand_spi_t;
+//#endif
 
 #endif

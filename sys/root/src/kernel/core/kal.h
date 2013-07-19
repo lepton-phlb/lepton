@@ -1093,9 +1093,8 @@ typedef struct {
 /*modif for segger version 3.28h */
 //#include "OSKern.H"
    //GD-TODO lm3S: improve? 
-   #if  (__tauon_cpu_device__ != __tauon_cpu_device_cortexM3_trifecta__)\
-      &&(__tauon_cpu_device__ != __tauon_cpu_device_cortexM3_LM3S__)\
-      &&(__tauon_cpu_device__ != __tauon_cpu_device_cortexM4_stm32f4__)
+   #if   (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__)\
+       &&(__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
       #if OS_VERSION_GENERIC != (38607) 
          #include "OS_Priv.h"
       #endif
@@ -1245,10 +1244,9 @@ typedef struct {
       #define __restart_sched() __LEPTON_KAL_PIT_MR |= (1<<25);
    #endif
 
-   //GD all Cortex-M3 MCUs have the same systick registers
-   #if   (__tauon_cpu_device__ == __tauon_cpu_device_cortexM3_trifecta__)\
-       ||(__tauon_cpu_device__ == __tauon_cpu_device_cortexM3_LM3S__)\
-       ||(__tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__)
+   //GD all Cortex-M3 and cortex M4 MCUs have the same systick registers
+   #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
+       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
       #define __LEPTON_KAL_PIT_BASE    (0xE000E010)
       #define __LEPTON_KAL_PIT_MR      (*(volatile OS_U32*)(__LEPTON_KAL_PIT_BASE + 0x00))
       #define __stop_sched() __LEPTON_KAL_PIT_MR &= ~(1uL << (1));

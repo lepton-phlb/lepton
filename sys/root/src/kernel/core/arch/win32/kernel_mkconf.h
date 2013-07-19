@@ -1,4 +1,4 @@
-//generated from c:/tauon/sys/user/tauon-basic/etc/mkconf_tauon_uip_basic.xml by mklepton
+//generated from c:/tauon/sys/user/tauon-ijinus/etc/mkconf_tauon_uip_basic.xml by mklepton
 /*===========================================
 Compiler Directive
 =============================================*/

@@ -87,12 +87,6 @@ int stty_main(int argc, char* argv[]);
 //see "sbin/net/ifconfig.c"
 int ifconfig_main(int argc, char* argv[]);
 
-//see "bin/dhrystone.c"
-int dhrystone_main(int argc, char* argv[]);
-
-//see "bin/free.c"
-int free_main(int argc, char* argv[]);
-
 //see "bin/udpsrvd.c"
 int udpsrvd_main(int argc, char* argv[]);
 
@@ -124,8 +118,6 @@ static const bin_t _bin_lst[]={
 {          "echo",			                  echo_main,			10,			2048,			5},
 {          "stty",			                  stty_main,			10,			2048,			5},
 {      "ifconfig",			              ifconfig_main,			100,			4096,			1},
-{     "dhrystone",			             dhrystone_main,			10,			1024,			5},
-{          "free",			                  free_main,			2,			1024,			5},
 {       "udpsrvd",			               udpsrvd_main,			100,			2048,			5}
 };
 

@@ -459,6 +459,9 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\ver.h">
       <Filter>kernel\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_spi.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Debug\sbin.lib" />

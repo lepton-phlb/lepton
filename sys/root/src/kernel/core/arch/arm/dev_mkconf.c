@@ -37,10 +37,15 @@ extern dev_map_t  dev_pipe_map;
 extern dev_map_t  dev_ppp_uip_map;
 extern dev_map_t  dev_sock_map;
 extern dev_map_t  dev_lm3s_cpu_map;
-extern dev_map_t  dev_stm32f4xx_olimex_board_map;
-extern dev_map_t  dev_stm32f4xx_uart_s3_map;
+extern dev_map_t  dev_stm32f1xx_ijinus_073_board_map;
+extern dev_map_t  dev_stm32f1xx_uart_s1_map;
+extern dev_map_t  dev_stm32f1xx_uart_s2_map;
+extern dev_map_t  dev_stm32f1xx_uart_s3_map;
 extern dev_map_t  dev_cmsis_itm0_map;
 extern dev_map_t  dev_os_debug_map;
+extern dev_map_t  dev_stm32f1xx_spi_1_map;
+extern dev_map_t  dev_spi_chip_select_map;
+extern dev_map_t  dev_flash_nand_at45db_map;
 
 
 pdev_map_t const dev_lst[]={
@@ -51,10 +56,15 @@ pdev_map_t const dev_lst[]={
 &dev_ppp_uip_map,
 &dev_sock_map,
 &dev_lm3s_cpu_map,
-&dev_stm32f4xx_olimex_board_map,
-&dev_stm32f4xx_uart_s3_map,
+&dev_stm32f1xx_ijinus_073_board_map,
+&dev_stm32f1xx_uart_s1_map,
+&dev_stm32f1xx_uart_s2_map,
+&dev_stm32f1xx_uart_s3_map,
 &dev_cmsis_itm0_map,
-&dev_os_debug_map
+&dev_os_debug_map,
+&dev_stm32f1xx_spi_1_map,
+&dev_spi_chip_select_map,
+&dev_flash_nand_at45db_map
 };
 
 pdev_map_t const * pdev_lst=&dev_lst[0];

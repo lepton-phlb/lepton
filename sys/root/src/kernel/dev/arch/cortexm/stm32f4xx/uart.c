@@ -240,7 +240,8 @@ void uart_irq_handler(const _Uart_Descriptor *Uart)
 
   if (USART_GetITStatus(Uart->UARTx, USART_IT_TC) != RESET)                              // Transmission complete
   {
-    if (*Uart->Ctrl && ((*Uart->Ctrl)->HwCtrl & UART_HALF_DUPLEX)) uart_tx_disable(Uart);
+    if (*Uart->Ctrl && ((*Uart->Ctrl)->HwCtrl & UART_HALF_DUPLEX)) 
+      uart_tx_disable(Uart);
     USART_ClearITPendingBit(Uart->UARTx, USART_IT_TC);
   }
   //

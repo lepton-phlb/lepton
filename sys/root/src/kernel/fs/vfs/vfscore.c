@@ -40,6 +40,7 @@ Includes
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"
+
 #include "kernel/fs/rootfs/rootfs.h"
 #include "kernel/fs/kofs/kofs.h"
 #include "kernel/fs/ufs/ufs.h"
@@ -71,6 +72,10 @@ ofile_t ofile_lst[MAX_OPEN_FILE]={-1};
 //mounted device list
 mntdev_t mntdev_lst[MAX_MOUNT_DEVICE];
 
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   extern fsop_t effs_op;
+#endif
+
 //file system supported
 pfsop_t const fsop_lst[MAX_FILESYSTEM]={
 #if __KERNEL_VFS_SUPPORT_ROOTFS==1 
@@ -90,6 +95,9 @@ pfsop_t const fsop_lst[MAX_FILESYSTEM]={
 #endif
 #if __KERNEL_VFS_SUPPORT_VFAT==1
    &fat_vfat_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   &effs_op,
 #endif
    0
 };
@@ -403,6 +411,7 @@ desc_t _vfs_getdesc(inodenb_t inodenb,desc_t ancestor_desc){
          ofile_lst[desc].offset       = 0;
          ofile_lst[desc].pmntdev      = _vfs_getmnt(ancestor_desc,desc);
          ofile_lst[desc].pfsop        = _vfs_mntdev2fsop(ofile_lst[desc].pmntdev);
+         ofile_lst[desc].oflag        = 0;
 
          //printf("get desc[%d]\n",_desc);
          return desc;

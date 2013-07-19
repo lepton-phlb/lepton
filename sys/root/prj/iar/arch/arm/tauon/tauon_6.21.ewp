@@ -1924,6 +1924,9 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_pwr.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_spi.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kal.h</name>
       </file>
       <file>
