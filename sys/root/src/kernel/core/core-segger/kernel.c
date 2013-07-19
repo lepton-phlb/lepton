@@ -483,14 +483,14 @@ void _kernel_warmup_spi(void){
          strcpy(ref,"/dev/");
          strcat(ref,pdev_lst[dev]->dev_name);
          _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
-         __set_if_spi_master((fdev_map_t*)pdev_lst[dev]);
+         //__set_if_spi_master((fdev_map_t*)pdev_lst[dev]);
       }
    }
    //spi master interface
-   if( (desc = _vfs_open("/dev/spi0",O_RDWR,0))<0)
-      return;  //spi interface not available
+   //if( (desc = _vfs_open("/dev/spi0",O_RDWR,0))<0)
+   //return;  //spi interface not available
 
-   __set_if_spi_master_desc(desc);
+   //__set_if_spi_master_desc(desc);
 }
 
 /*--------------------------------------------
@@ -546,12 +546,12 @@ void _kernel_warmup_dev(void){
                && pdev_lst[dev]->dev_name[2]=='c'
                && pdev_lst[dev]->dev_name[3]=='0') {
          //already mount see _kernel_warmup_i2c
-      }/*else if(pdev_lst[dev]->dev_name[0]=='s'
+      }else if(pdev_lst[dev]->dev_name[0]=='s'
          && pdev_lst[dev]->dev_name[1]=='p'
          && pdev_lst[dev]->dev_name[2]=='i'
          && pdev_lst[dev]->dev_name[3]=='0'){
          //already mount see _kernel_warmup_spi
-      }*/else if(pdev_lst[dev]->dev_name[0]=='c'
+      }else if(pdev_lst[dev]->dev_name[0]=='c'
               && pdev_lst[dev]->dev_name[1]=='p'
               && pdev_lst[dev]->dev_name[2]=='u'
               && pdev_lst[dev]->dev_name[3]=='0') {
@@ -1073,7 +1073,7 @@ void _start_kernel(char* arg){
    //
    _kernel_warmup_i2c();
    //
-   //_kernel_warmup_spi();
+   _kernel_warmup_spi();
    //
    _kernel_warmup_dev();
    //

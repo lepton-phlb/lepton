@@ -22,9 +22,6 @@
     <Filter Include="kernel\fs\yaffs">
       <UniqueIdentifier>{923a2eda-f3f8-4be1-a68d-63e06390e627}</UniqueIdentifier>
     </Filter>
-    <Filter Include="kernel\fs\effs">
-      <UniqueIdentifier>{8da18b8e-5519-4b46-9899-9a5963ece9c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="kernel\fs\yaffs\core">
       <UniqueIdentifier>{4d8521a3-53f3-4570-b558-fe985f7b2ca4}</UniqueIdentifier>
     </Filter>
@@ -33,9 +30,6 @@
     </Filter>
     <Filter Include="kernel\fs\fat">
       <UniqueIdentifier>{c6ab913e-366a-4212-8961-d7396be4f0d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="kernel\fs\effs\drv">
-      <UniqueIdentifier>{f2a3e00e-dd80-4cf0-8ec3-976ed83afe76}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -186,42 +180,6 @@
     <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h">
       <Filter>kernel\fs\yaffs\core\direct</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\tinyuser.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\tiny.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\_tiny.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\dev.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_dir.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_ext.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_file.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\f_volume.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\port.h">
-      <Filter>kernel\fs\effs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\drv\flashset.h">
-      <Filter>kernel\fs\effs\drv</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\drv\f_atmel.h">
-      <Filter>kernel\fs\effs\drv</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\fs\effs\drv\f_st.h">
-      <Filter>kernel\fs\effs\drv</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfs.c">
@@ -337,36 +295,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.c">
       <Filter>kernel\fs\yaffs\core\direct</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\dev.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_dir.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_ext.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_file.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_rtos.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\f_volume.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\port.c">
-      <Filter>kernel\fs\effs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\drv\f_atmel.c">
-      <Filter>kernel\fs\effs\drv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\drv\f_st.c">
-      <Filter>kernel\fs\effs\drv</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\fs\effs\drv\flashset.c">
-      <Filter>kernel\fs\effs\drv</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

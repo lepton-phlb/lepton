@@ -45,7 +45,31 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-static const char* fstype_list[]={"rootfs","ufs","ufsx","","msdos","vfat"};
+
+static const char* fstype_list[]={
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1 
+   "rootfs",
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1 
+   "ufs",
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1 
+   "ufsx",
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
+   "kofs",
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
+   "msdos",
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
+   "vfat",
+#endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   "effs"
+#endif
+};
+
 static const int fstype_list_size=sizeof(fstype_list)/sizeof(char*);
 
 /*===========================================
@@ -108,7 +132,7 @@ int mount_main(int argc,char* argv[]){
          return -1;
       }
       //
-      if(ioctl(fd[0],I_LINK,fd[1])<0) {
+      if(ioctl(fd[0],I_LINK,fd[1],argc,argv)<0) {
          printf("error: cannot link %s with %s\r\n",argv[1],argv[2]);
          return -1;
       }

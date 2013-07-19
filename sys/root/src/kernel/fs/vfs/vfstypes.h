@@ -75,10 +75,15 @@ typedef enum {
    fs_msdos,
 #endif
 #if __KERNEL_VFS_SUPPORT_VFAT==1
-   fs_vfat
+   fs_vfat,
 #endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   fs_effs,
+#endif
+   fs_null
 }fstype;
 
+//
 #define UFS_ALIGNEMENT  4
 
 struct statvfs {

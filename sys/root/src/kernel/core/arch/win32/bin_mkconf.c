@@ -87,12 +87,6 @@ int ifconfig_main(int argc, char* argv[]);
 //see "bin/udpsrvd.c"
 int udpsrvd_main(int argc, char* argv[]);
 
-//see "bin/net/cgi-bin/tstpost.c"
-int tstpost_main(int argc, char* argv[]);
-
-//see "bin/net/cgi-bin/tstcgi2.c"
-int tstcgi2_main(int argc, char* argv[]);
-
 
 
 /*===========================================
@@ -120,9 +114,7 @@ static const bin_t _bin_lst[]={
 {          "date",			                  date_main,			10,			2048,			5},
 {          "echo",			                  echo_main,			10,			2048,			5},
 {      "ifconfig",			              ifconfig_main,			100,			4096,			1},
-{       "udpsrvd",			               udpsrvd_main,			100,			2048,			1},
-{       "tstpost",			               tstpost_main,			100,			2048,			1},
-{       "tstcgi2",			               tstcgi2_main,			100,			2048,			1}
+{       "udpsrvd",			               udpsrvd_main,			100,			2048,			1}
 };
 
 const int bin_lst_size   = sizeof(_bin_lst)/sizeof(bin_t);

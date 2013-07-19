@@ -2,7 +2,9 @@
 #stty ixon
 #stty 57600
 #net/slipd -w /dev/ttys1&
-mount /dev/sdcard /dev/spi0 /dev/hd/sdhd0
+#mount /dev/sdcard /dev/spi0 /dev/hd/sdhd0
+mkfs -t effs -d /dev/null
+mount -t effs /dev/null /mnt
 #net/ifconfig addif 14.2.212.244 14.2.10.1
 net/ifconfig addif 192.168.83.32 192.168.83.2
 bin/net/telnetd&

@@ -188,6 +188,7 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_lcd.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_proc.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_pwr.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_spi.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_usb.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kal.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel.h" />

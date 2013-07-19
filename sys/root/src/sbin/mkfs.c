@@ -44,7 +44,30 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-static const char* fstype_list[]={"rootfs","ufs","","","msdos","vfat"};
+static const char* fstype_list[]={
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1 
+   "rootfs",
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1 
+   "ufs",
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1 
+   "ufsx",
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
+   "kofs",
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
+   "msdos",
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
+   "vfat",
+#endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   "effs"
+#endif
+};
+
 static const int fstype_list_size=sizeof(fstype_list)/sizeof(char*);
 
 #define OPT_MSK_T 0x01   //-t fs type
@@ -78,8 +101,8 @@ int mkfs_main(int argc,char* argv[]){
    char* dev_path;
    struct vfs_formatopt_t vfs_formatopt;
 
-   if(argc<5) //not enough parameter
-      return -1;
+   //if(argc<5) //not enough parameter
+   //return -1;
 
    //ugly code to preserve compatibility with previous version of lepton
    vfs_formatopt.dev_sz=DFLT_DEV_SZ;
@@ -104,8 +127,12 @@ int mkfs_main(int argc,char* argv[]){
                    fstype<fstype_list_size;
                    fstype++) {
 
-                  if(!strcmp(argv[i],fstype_list[fstype]))
+                  if(!strcmp(argv[i],fstype_list[fstype])){
+                     if(!strcmp(argv[i],"effs")){
+                        opt |= (OPT_MSK_B|OPT_MSK_N|OPT_MSK_S|OPT_MSK_D);
+                     }
                      break;
+                  }
                }
 
                if(fstype==fstype_list_size)
