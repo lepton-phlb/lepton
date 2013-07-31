@@ -233,25 +233,19 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
 __begin_pthread(pthread_routine){
 
    kernel_pthread_t* pthread;
+   pthread_exit_t pthread_exit_dt;
 
+   //
    pthread=kernel_pthread_self();
    pthread->exit=pthread->start_routine(pthread->arg);
 
-   //to do: call kernel. signal thread termination
-
-   //if
-   if(pthread->pid<1) {
-      kernel_pthread_cancel(pthread); //native kernel pthread: no process container
-   }else{
-      //pthread in process container
-      //use syscall
-      pthread_exit_t pthread_exit_dt;
-      pthread_exit_dt.kernel_pthread = pthread;
-      pthread_exit_dt.value_ptr = (void*)0;
-      //to do check if it's the main thread call exit
-      __mk_syscall(_SYSCALL_PTHREAD_EXIT,pthread_exit_dt);
-   }
-
+   //call kernel. signal thread termination
+   //pthread in process container
+   //use syscall
+   pthread_exit_dt.kernel_pthread = pthread;
+   pthread_exit_dt.value_ptr = (void*)0;
+   //to do check if it's the main thread call exit
+   __mk_syscall(_SYSCALL_PTHREAD_EXIT,pthread_exit_dt);
 }
 __end_pthread()
 
@@ -401,7 +395,6 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
    {
       OS_TASK* whois_lock_kernel_mutex = OS_GetResourceOwner(&kernel_mutex.mutex);
       OS_TASK* this_task = thread->tcb;
-
 
       //warning!!!: preprocessor OS_SUPPORT_CLEANUP_ON_TERMINATE only supported for embos ver<=3.32 for all target arm7 and m16c.
    #ifndef OS_SUPPORT_CLEANUP_ON_TERMINATE
