@@ -733,28 +733,31 @@ int _sys_pthread_cancel(kernel_pthread_t* kernel_pthread,pid_t pid){
 
    //disable context switch
    __atomic_in();
-
-   _dbg_printf("process(%d) cancel thread id=%d\n",kernel_pthread->pid,kernel_pthread->id);
-
-   //unlock io desc if needed
-   if(kernel_pthread->io_desc!=-1) {
-      //kernel_pthread_mutex_owner_destroy(kernel_pthread,&ofile_lst[kernel_pthread->io_desc].mutex);
-      //to do: check if another procress took the sem and take the value to reinit the sem with this value
-      kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_read);
-      kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_write);
-      kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_read,0,1);
-      kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_write,0,1);
+   if(pid>0){
+      _dbg_printf("process(%d) cancel thread id=%d\n",kernel_pthread->pid,kernel_pthread->id);
+      //unlock io desc if needed
+      if(kernel_pthread->io_desc!=-1) {
+         //kernel_pthread_mutex_owner_destroy(kernel_pthread,&ofile_lst[kernel_pthread->io_desc].mutex);
+         //to do: check if another procress took the sem and take the value to reinit the sem with this value
+         kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_read);
+         kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_write);
+         kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_read,0,1);
+         kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_write,0,1);
+      }
+      //cancel
+      kernel_pthread_cancel(kernel_pthread);
+      //remove from process container
+      _sys_process_remove_pthread(process_lst[pid],kernel_pthread);
+      //free stack
+      _sys_free(kernel_pthread->attr.stackaddr);
+      //detach pthread
+      kernel_pthread->pid=(pid_t)-1;
+      //free kernel_pthread_t
+      _sys_free(kernel_pthread);
+   }else{
+      //native kernel:stack and pthread tcb not allocated by the kernel.
+      kernel_pthread_cancel(kernel_pthread);
    }
-   //cancel
-   kernel_pthread_cancel(kernel_pthread);
-   //remove from process container
-   _sys_process_remove_pthread(process_lst[pid],kernel_pthread);
-   //free stack
-   _sys_free(kernel_pthread->attr.stackaddr);
-   //detach pthread
-   kernel_pthread->pid=(pid_t)-1;
-   //free kernel_pthread_t
-   _sys_free(kernel_pthread);
    //enable context switch
    __atomic_out();
    return 0;
