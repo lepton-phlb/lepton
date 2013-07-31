@@ -118,15 +118,9 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\net.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c" />
@@ -207,12 +201,8 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\net.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\socket.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\socks.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.h" />
@@ -251,10 +241,10 @@
     <Library Include="..\Debug\dev.lib" />
     <Library Include="..\Debug\fs.lib" />
     <Library Include="..\Debug\lib.lib" />
-    <Library Include="..\Debug\net-lwip.lib">
+    <Library Include="..\Debug\net-lwip.lib" />
+    <Library Include="..\Debug\net-uip.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </Library>
-    <Library Include="..\Debug\net-uip.lib" />
     <Library Include="..\Debug\sbin.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
