@@ -66,13 +66,41 @@ Includes
 #define __tauon_cpu_device_cortexM4_stm32f4__   (0x0401)
 
 #if defined(WIN32)
+   #define __tauon_compiler__ __compiler_win32__
+#elif defined(__GNUC__)
+   #define __tauon_compiler__ __compiler_gnuc__
+#elif defined(__IAR_SYSTEMS_ICC)
+   #define __tauon_compiler__  __compiler_iar_m16c__
+#elif defined(__IAR_SYSTEMS_ICC__)
+   #define __tauon_compiler__ __compiler_iar_arm__
+#elif defined (__ARMCC_VERSION)
+   #define __tauon_compiler__ __compiler_keil_arm__
+#endif
+
+#if (__tauon_compiler__==__compiler_win32__)
+   //for win32 simulation
+   #include "kernel/core/arch/win32/kernel_mkconf.h"
+#elif (__tauon_compiler__ == __compiler_iar_arm__)
+   #include "kernel/core/arch/arm/kernel_mkconf.h"
+#elif (__tauon_compiler__ == __compiler_keil_arm__)
+   #include "kernel/core/arch/arm/kernel_mkconf.h"
+#elif (__tauon_compiler__==__compiler_gnuc__)
+   #if defined(USE_KERNEL_STATIC)
+      //for lepton as bootloader (no scheduler, static)
+       #include "kernel/core/arch/synthetic/x86_static/kernel_mkconf.h"
+   #else
+      #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
+   #endif
+#endif
+
+#if defined(WIN32)
    #define __tauon_cpu_device__ __tauon_cpu_device_win32_simulation__
 #else
    #if !defined(__tauon_cpu_device__)
       //#define __tauon_cpu_device__ __tauon_cpu_device_arm9_at91sam9261__
       //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
       //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_trifecta__ 
-      #define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_stm32f1__
+     //#define __tauon_cpu_device__ __tauon_cpu_device_cortexM3_stm32f4__
    #endif
 #endif
 
@@ -125,34 +153,7 @@ Includes
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
 #endif
 
-#if defined(WIN32)
-   #define __tauon_compiler__ __compiler_win32__
-#elif defined(__GNUC__)
-   #define __tauon_compiler__ __compiler_gnuc__
-#elif defined(__IAR_SYSTEMS_ICC)
-   #define __tauon_compiler__  __compiler_iar_m16c__
-#elif defined(__IAR_SYSTEMS_ICC__)
-   #define __tauon_compiler__ __compiler_iar_arm__
-#elif defined (__ARMCC_VERSION)
-   #define __tauon_compiler__ __compiler_keil_arm__
-#endif
 
-#if (__tauon_cpu_core__==__tauon_cpu_core_win32_simulation__)
-   //for win32 simulation
-   #include "kernel/core/arch/win32/kernel_mkconf.h"
-#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)
-   #include "kernel/core/arch/arm/kernel_mkconf.h"
-#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
-   //#include "kernel/core/arch/cortexm/kernel_mkconf.h"
-   #include "kernel/core/arch/arm/kernel_mkconf.h"
-#elif (__tauon_cpu_core__==__tauon_cpu_core_gnu_syntetic__)
-   #if defined(USE_KERNEL_STATIC)
-      //for lepton as bootloader (no scheduler, static)
-       #include "kernel/core/arch/synthetic/x86_static/kernel_mkconf.h"
-   #else
-      #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
-   #endif
-#endif
 
 /*===========================================
 Declaration
@@ -426,15 +427,27 @@ Declaration
    #define __KERNEL_IO_EVENT
 #endif
 
-#define USE_UIP_VER 2500 
 //ip stack definition
-#if defined (__KERNEL_NET_IPSTACK)
-   //#define USE_IF_ETHERNET
-   #define USE_IF_PPP //GD
+#if !defined(USE_UIP_VER)
+   #define USE_UIP_VER 2500 
+#endif
 
-   //#define USE_LWIP
-   #define USE_UIP_CORE
-   #define USE_UIP
+#if defined (__KERNEL_NET_IPSTACK)
+
+   #if !defined(USE_LWIP) && !defined(USE_UIP)
+      //error no stack defined
+   #endif
+
+   #if defined(USE_LWIP) && defined(USE_UIP)
+      //error multiple stack defined
+   #endif
+
+   #if defined(USE_UIP)
+      #define USE_UIP_CORE
+      //#define USE_IF_ETHERNET
+      #define USE_IF_PPP //GD
+   #endif
+   
 #endif
 
 #if defined (__KERNEL_NET_IPSTACK)
@@ -453,12 +466,10 @@ Declaration
 
 #if __tauon_cpu_core__ == __tauon_cpu_core_win32_simulation__
    #define __file_system_profile__  __file_system_profile_classic_yaffs__
-   #define __KERNEL_VFS_SUPPORT_EFFS   1
 #endif
 
 #if !defined(__file_system_profile__)
    #define __file_system_profile__  __file_system_profile_classic__
-   #define __KERNEL_VFS_SUPPORT_EFFS   1
 #endif
 
 #if (__file_system_profile__ == __file_system_profile_minimal__)
