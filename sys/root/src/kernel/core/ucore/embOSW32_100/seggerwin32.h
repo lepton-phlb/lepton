@@ -230,6 +230,7 @@ void OS_WakeTask (OS_TASK*);
 void OS_Resume (OS_TASK* pt);
 void OS_GetState (OS_TASK*);
 void OS_SetPriority (OS_TASK*, U8);
+OS_TASK* OS_GetpCurrentTask (void);
 
 
 //Counting Semaphores

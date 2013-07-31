@@ -41,7 +41,27 @@ OS_TASK* osTaskList[MAX_TASKLIST]={NULL};
 Implementation
 =============================================*/
 
-
+/*-------------------------------------------
+| Name: OS_GetpCurrentTask
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+OS_TASK* OS_GetpCurrentTask (void){
+   int i;
+   //
+   for(i=0;i < MAX_TASKLIST; i++){
+      if(osTaskList[i]){
+         if(osTaskList[i]->Id!=GetCurrentThreadId())
+            continue;
+         return &osTaskList[i];
+      }
+   }
+   //
+   return (OS_TASK*)0;
+}
 
 /*-------------------------------------------
 | Name:OS_Start
@@ -159,15 +179,22 @@ void OS_DelayUntil(int t0) {
 | See:
 ---------------------------------------------*/
 void OS_Terminate (OS_TASK* pt) {
-   if(!pt)return ;
-
+   
+   DWORD ThreadId = GetCurrentThreadId();
+   //
+   if(!pt)
+      return ;
+   //
    PROTECT_INTERNAL_SEGGER_BEGIN();
    osTaskList[pt->index]=NULL;
    PROTECT_INTERNAL_SEGGER_END();
-
-   TerminateThread(pt->hTask,0);
-   CloseHandle(pt->hTask);
-  
+   //Thread kill himself?
+   if(pt->Id==ThreadId){
+      ExitThread(0);
+   }else{
+      TerminateThread(pt->hTask,0);
+      CloseHandle(pt->hTask);
+   }
 }
 
 /*-------------------------------------------
