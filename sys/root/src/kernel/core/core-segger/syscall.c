@@ -1036,7 +1036,7 @@ int _syscall_pthread_kill(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 int _syscall_pthread_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    pthread_exit_t* pthread_exit_dt = (pthread_exit_t*)data;
 
-   if(process_lst[pid]->pthread_ptr!=pthread_exit_dt->kernel_pthread) {
+   if(pid>0 && process_lst[pid]->pthread_ptr!=pthread_exit_dt->kernel_pthread) {
       //pthread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
       //remove sigqueue objects explicitly only for annexe thread in other case "put all object" is used in process exit scenario.
@@ -1046,13 +1046,16 @@ int _syscall_pthread_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
       _sys_pthread_cancel(pthread_exit_dt->kernel_pthread,pid);
       //__flush_syscall(pthread_ptr);
       return 0;
-   }else{
+   }else if(pid>0){
       //it's the main thread
       //all thread must be terminated
       exit_t exit_dt;
       exit_dt.pid = pid;
       exit_dt.status = 0;
       return _syscall_exit(pthread_ptr,pid,&exit_dt);
+   }else{
+      //native kernel pthread. no process container
+      _sys_pthread_cancel(pthread_exit_dt->kernel_pthread,pid);
    }
 
    return 0;
