@@ -222,7 +222,7 @@ int _kernel_syscall(void){
    kernel_pthread_t* pthread_ptr = g_pthread_lst;
 
    while(pthread_ptr) {
-      if( (pthread_ptr->pid<=0) || (pthread_ptr->irq_nb!=KERNEL_INTERRUPT_NB) ) {
+      if( /*(pthread_ptr->pid<=0) ||*/ (pthread_ptr->irq_nb!=KERNEL_INTERRUPT_NB) ) {
          pthread_ptr=pthread_ptr->gnext;
          continue;
       }
