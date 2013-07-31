@@ -55,9 +55,8 @@ either the MPL or the [eCos GPL] License."
 
 
 
-#if defined (__KERNEL_NET_IPSTACK)
-   #include "kernel/core/net/uip_core/uip_slip.h"
-   #include "kernel/core/net/uip_core/uip_sock.h"
+#include "kernel/core/net/uip_core/uip_slip.h"
+#include "kernel/core/net/uip_core/uip_sock.h"
 #include "kernel/dev/arch/all/ppp/dev_ppp_uip/dev_ppp_uip.h"
 
 #if USE_UIP_VER == 1000 
@@ -93,7 +92,7 @@ either the MPL or the [eCos GPL] License."
       uip_udp_conn->rport =0;\
    } while (0)
 #endif
-#endif
+
 //
 //
 
@@ -194,6 +193,11 @@ typedef struct uip_core_if_info_st{
   desc_t desc_r;
   desc_t desc_w;
 }uip_core_if_info_t;
+
+#ifndef IF_LIST_MAX
+   #define IF_LIST_MAX 1
+#endif
+
 uip_core_if_info_t uip_core_if_list[IF_LIST_MAX]={
 #if defined(USE_IF_ETHERNET)
   {
