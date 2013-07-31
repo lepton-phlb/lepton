@@ -919,6 +919,15 @@
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_olimex_board.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_3.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_uart_1.c</name>
     </file>
     <file>
@@ -1119,6 +1128,12 @@
   </file>
   <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\gpio.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\spi.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\spi.h</name>
   </file>
   <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\target.c</name>
