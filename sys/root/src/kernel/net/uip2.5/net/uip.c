@@ -110,9 +110,25 @@ const uip_ipaddr_t uip_draddr =
 const uip_ipaddr_t uip_netmask =
   { UIP_NETMASK0, UIP_NETMASK1, UIP_NETMASK2, UIP_NETMASK3 };
 #else
-   uip_ipaddr_t uip_hostaddr={ UIP_IPADDR0, UIP_IPADDR1, UIP_IPADDR2, UIP_IPADDR3 }; 
-   uip_ipaddr_t uip_draddr={ UIP_DRIPADDR0, UIP_DRIPADDR1, UIP_DRIPADDR2, UIP_DRIPADDR3 };
-   uip_ipaddr_t uip_netmask={ UIP_NETMASK0, UIP_NETMASK1, UIP_NETMASK2, UIP_NETMASK3 };
+   //ip address
+   #if(defined(UIP_IPADDR0) && defined(UIP_IPADDR1) && defined(UIP_IPADDR2) && defined(UIP_IPADDR3) )
+      uip_ipaddr_t uip_hostaddr={ UIP_IPADDR0, UIP_IPADDR1, UIP_IPADDR2, UIP_IPADDR3 }; 
+   #else
+      uip_ipaddr_t uip_hostaddr={0,0,0,0};
+   #endif
+   //
+   #if(defined(UIP_DRIPADDR0) && defined(UIP_DRIPADDR1) && defined(UIP_DRIPADDR2) && defined(UIP_DRIPADDR3) )
+      uip_ipaddr_t uip_draddr={ UIP_DRIPADDR0, UIP_DRIPADDR1, UIP_DRIPADDR2, UIP_DRIPADDR3 }; 
+   #else
+      uip_ipaddr_t uip_draddr={0,0,0,0};
+   #endif
+   //
+   #if(defined(UIP_NETMASK0) && defined(UIP_NETMASK1) && defined(UIP_NETMASK2) && defined(UIP_NETMASK3) )
+       uip_ipaddr_t uip_netmask={ UIP_NETMASK0, UIP_NETMASK1, UIP_NETMASK2, UIP_NETMASK3 }; 
+   #else
+      uip_ipaddr_t uip_netmask={0,0,0,0};
+   #endif
+
 #endif /* UIP_FIXEDADDR */
 
 const uip_ipaddr_t uip_all_zeroes_addr = { { 0x0, /* rest is 0 */ } };
