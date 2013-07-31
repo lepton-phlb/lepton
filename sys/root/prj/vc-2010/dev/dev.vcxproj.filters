@@ -257,9 +257,6 @@
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com2\dev_win32uart.c">
       <Filter>kernel\dev\arch\win32\dev_win32_com2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\dev_win32_eth.c">
-      <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.c">
       <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
     </ClCompile>
@@ -287,8 +284,12 @@
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_sdcard\dev_win32_sdcard.c">
       <Filter>kernel\dev\arch\win32\dev_win32_sdcard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\dev_win32_eth.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_3_1\WpdPack\Lib\Packet.lib" />
+    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_4_1_2\WpdPack\Lib\Packet.lib" />
   </ItemGroup>
 </Project>
