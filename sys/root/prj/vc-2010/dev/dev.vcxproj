@@ -92,9 +92,7 @@
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com0\dev_socketsrv_0.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com1\dev_win32uart2.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com2\dev_win32uart.h" />
-    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\dev_cpufs\dev_cpufs.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\dev_proc\dev_proc.h" />
   </ItemGroup>
@@ -128,12 +126,8 @@
       </UndefinePreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com2\dev_win32_com2.c" />
-    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\dev_win32_eth.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\dev_win32_eth.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\dev_win32_fileflash.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\dev_win32_filerom.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_flash\dev_win32_flash.c" />
@@ -150,7 +144,10 @@
     <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\tty_font-8x16.c" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_3_1\WpdPack\Lib\Packet.lib" />
+    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_3_1\WpdPack\Lib\Packet.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_4_1_2\WpdPack\Lib\Packet.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
