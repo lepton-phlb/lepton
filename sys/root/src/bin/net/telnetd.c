@@ -83,8 +83,7 @@ int telnetd_main(int argc, char* argv[]){
    //SIGCHLD interception
    sa.sa_handler=sigchild_handler;
    sigaction(SIGCHLD,&sa,NULL);
-
-
+   //
    sock = socket(AF_INET,SOCK_STREAM,0);
    addr.sin_family = AF_INET;
    addr.sin_port = htons(2000);
