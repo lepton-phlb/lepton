@@ -6,6 +6,7 @@
 * Description        : EEPROM driver functions
 *******************************************************************************/
 /* Includes ------------------------------------------------------------------*/
+#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
 #include "target.h"
 #include "i2c.h"
 #include "i2cio.h"

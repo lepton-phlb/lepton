@@ -6,6 +6,7 @@
 * Description        : GPIO driver functions for STM32F1xx devices
 *******************************************************************************/
 /* Includes ------------------------------------------------------------------*/
+#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
 #include "target.h"
 #include "gpio.h"
 
