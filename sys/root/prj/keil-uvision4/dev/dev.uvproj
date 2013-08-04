@@ -941,6 +941,21 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_olimex_board.c</FilePath>
             </File>
+            <File>
+              <FileName>dev_stm32f4xx_spi_x.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.h</FilePath>
+            </File>
+            <File>
+              <FileName>dev_stm32f4xx_spi_3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_3.c</FilePath>
+            </File>
+            <File>
+              <FileName>dev_stm32f4xx_spi_x.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -985,6 +1000,16 @@
               <FileName>target.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\target.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\..\root\src\kernel\dev\arch\cortexm\stm32f4xx\spi.h</FilePath>
             </File>
           </Files>
         </Group>
