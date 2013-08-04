@@ -40,6 +40,8 @@ Includes
 #include "kernel/fs/vfs/vfsdev.h"
 
 //#include "lib/libc/termios/termios.h"
+
+#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
 #include "kernel/dev/arch/cortexm/stm32f1xx/target.h"
 #include "kernel/dev/arch/cortexm/stm32f1xx/gpio.h"
 #include "kernel/dev/arch/cortexm/stm32f1xx/uart.h"
