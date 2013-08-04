@@ -1,11 +1,13 @@
 /******************** (C) COPYRIGHT 2013 IJINUS ********************************
 * File Name          : gpio.c
 * Author             : Yoann TREGUIER
-* Version            : 0.1.0
-* Date               : 2013/05/24
+* Version            : 0.1.1
+* Date               : 2013/06/14
 * Description        : GPIO driver functions for STM32F4xx devices
 *******************************************************************************/
 /* Includes ------------------------------------------------------------------*/
+#include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/types.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
 
@@ -19,15 +21,17 @@ typedef __packed union
   {
     u32 Function  :8;
     u32 Type      :8;
+    u32 PuPd      :8;
     u32 Speed     :7;
     u32 SetSpeed  :1;
-    u32 PuPd      :8;
   };
 } _Gpio_Mode;
 
 /* Private macro -------------------------------------------------------------*/
 #define gpio_is_std(Gpio)   (Gpio->Type == GPIO_TYPE_STD)
 #define gpio_is_i2c(Gpio)   (Gpio->Type == GPIO_TYPE_I2C)
+
+#define gpio_is_output(Mode)  ((Mode)->Function == GPIO_FCT_OUT)
 
 /* Private constants ---------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -71,19 +75,19 @@ void gpio_set_mode(const _Gpio_Descriptor *Gpio, u32 Mode, u8 Val)
   #ifdef _GPIO_I2CIO_SUPPORT
     if (gpio_is_i2c(Gpio))
     {
-      if (mode.Function == GPIO_FCT_OUT) i2cio_set_mode(Gpio->Port, Gpio->GPIO_Pin, I2CIO_MODE_OUTPUT, Val);
+      if (gpio_is_output(&mode)) i2cio_set_mode(Gpio->Port, Gpio->GPIO_Pin, I2CIO_MODE_OUTPUT, Val);
       else i2cio_set_mode(Gpio->Port, Gpio->GPIO_Pin, I2CIO_MODE_INPUT, 0);
       return;
     }
   #endif
   gpio_init_structure.GPIO_Pin  = Gpio->GPIO_Pin;
-  gpio_init_structure.GPIO_Mode = (GPIOMode_TypeDef)mode.Function;
   if (mode.SetSpeed) gpio_init_structure.GPIO_Speed = (GPIOSpeed_TypeDef)mode.Speed;
   else gpio_init_structure.GPIO_Speed = _GPIO_DEFAULT_SPEED;
+  gpio_init_structure.GPIO_Mode = (GPIOMode_TypeDef)mode.Function;
   gpio_init_structure.GPIO_OType = (GPIOOType_TypeDef)mode.Type;
   gpio_init_structure.GPIO_PuPd = (GPIOPuPd_TypeDef)mode.PuPd;
   GPIO_Init((GPIO_TypeDef *)Gpio->Port, &gpio_init_structure);
-  if (mode.Function == GPIO_FCT_OUT) GPIO_WriteBit((GPIO_TypeDef *)Gpio->Port, Gpio->GPIO_Pin, (BitAction)Val);
+  if (gpio_is_output(&mode)) GPIO_WriteBit((GPIO_TypeDef *)Gpio->Port, Gpio->GPIO_Pin, (BitAction)Val);
 }
 
 /*******************************************************************************
