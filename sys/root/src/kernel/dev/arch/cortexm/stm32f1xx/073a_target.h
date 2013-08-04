@@ -15,7 +15,7 @@
 #
 ##############################################################################*/
 /* Includes ------------------------------------------------------------------*/
-#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
+//#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
 
 /* Exported define -----------------------------------------------------------*/
 #define FLASH_BASE_ADDR   0x08000000

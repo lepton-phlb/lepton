@@ -6,6 +6,7 @@
 * Description        : I2C driver functions
 *******************************************************************************/
 /* Includes ------------------------------------------------------------------*/
+#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
 #include "target.h"
 //#include "misc.h"
 #include "gpio.h"

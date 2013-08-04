@@ -6,6 +6,9 @@
 * Description        : Target dependant definitions
 *******************************************************************************/
 /* Includes ------------------------------------------------------------------*/
+
+#include "kernel/core/ucore/cmsis/Device/st/stm32f1xx/stm32f10x.h"
+#include "sys_types.h"
 #include "target.h"
 #include "gpio.h"
 #include "uart.h"
