@@ -40,6 +40,8 @@ Includes
 #include "kernel/fs/vfs/vfsdev.h"
 
 //#include "lib/libc/termios/termios.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/types.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/uart.h"
