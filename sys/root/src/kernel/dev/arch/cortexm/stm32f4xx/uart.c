@@ -16,6 +16,8 @@
 #include "kernel/fs/vfs/vfsdev.h"
 #include "kernel/core/malloc.h"
 
+#include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
+#include "kernel/dev/arch/cortexm/stm32f4xx/types.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/dma.h"
@@ -83,8 +85,8 @@ int uart_open (const _Uart_Descriptor *Uart, u32 BaudRate, u8 DmaBufSize, u16 Rx
   /* Init GPIO */
   gpio_set_function(Uart->TxGpio, Uart->GPIO_AF);
   gpio_set_function(Uart->RxGpio, Uart->GPIO_AF);
-  gpio_set_mode(Uart->TxGpio, GPIO_FCT_AF, 0);
-  gpio_set_mode(Uart->RxGpio, GPIO_FCT_AF, 0);
+  gpio_set_mode(Uart->TxGpio, GPIO_MODE_AF, 0);
+  gpio_set_mode(Uart->RxGpio, GPIO_MODE_AF, 0);
   if ((*Uart->Ctrl)->HwCtrl & (UART_HW_FLOW_CTRL_RX | UART_HALF_DUPLEX)) gpio_set_mode((*Uart->Ctrl)->Gpio, GPIO_FCT_OUT, 0);
 
   /* Init UART peripheral */
