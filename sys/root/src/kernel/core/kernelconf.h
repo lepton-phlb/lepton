@@ -126,11 +126,11 @@ Includes
 
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9260__
    #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9260"
-   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm926ejs__
 
 #elif __tauon_cpu_device__==__tauon_cpu_device_arm9_at91sam9261__
    #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9261"
-   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm7tdmi__
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm926ejs__
 
 #elif __tauon_cpu_device__==__tauon_cpu_device_cortexM3_trifecta__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM3-trifecta"
@@ -363,7 +363,7 @@ Declaration
 #define KERNEL_PROCESS_VFORK_CLRSET_IRQ
 
 //
-#if (_tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__)
+#if (__tauon_cpu_device__==__tauon_cpu_device_arm7_at91m55800a__)
    #ifdef __KERNEL_DEBUG
       #define __KERNEL_ARCH_DELAY_1US 1 //around 30ns per cycle 38:ARM7 at 32 MHz
    #else
@@ -391,6 +391,10 @@ Declaration
 #define __tauon_stdio_profile_minimal__         0x0001
 #define __tauon_stdio_profile_classic__         0x0002
 #define __tauon_stdio_profile_full__            0x000F
+
+#ifndef __tauon_stdio_profile__
+   #define __tauon_stdio_profile__  __tauon_stdio_profile_classic__
+#endif
 
 #if __tauon_stdio_profile__ > __tauon_stdio_profile_minimal__
    //support full sdtio printf options (float %f%e%g).
