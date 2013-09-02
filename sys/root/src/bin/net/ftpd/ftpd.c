@@ -1668,7 +1668,7 @@ static int ftpd_server( ftp_server_t *server ) {
 
          attr.stacksize = (CYGNUM_NET_FTPSERVER_STACK_SIZE);
          attr.stackaddr = NULL;
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
          attr.priority  = 100;
 #else
          attr.priority  = 10;

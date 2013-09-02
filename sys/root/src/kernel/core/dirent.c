@@ -55,7 +55,7 @@ Implementation
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 __attribute__ ((visibility("hidden")))
 DIR* opendir(char * dirname) {
 #else
@@ -78,7 +78,7 @@ DIR* opendir(char * dirname){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 int __attribute__ ((visibility("hidden")))
 closedir(DIR* dir){
 #else
@@ -101,7 +101,7 @@ int closedir(DIR* dir){
 | Comments: now conform with posix 1003.1
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 __attribute__ ((visibility("hidden")))
 struct dirent * readdir(DIR *dir){
 #else

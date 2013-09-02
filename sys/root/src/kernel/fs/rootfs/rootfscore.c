@@ -36,7 +36,7 @@ Includes
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/rootfs/rootfscore.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <string.h>
 #endif
 
@@ -50,7 +50,7 @@ Global Declaration
 rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE]={S_IFNULL};
 #elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
 rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
-#elif defined(GNU_GCC)
+#elif defined(__GNUC__)
 rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
 #endif
 
@@ -60,7 +60,7 @@ rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
 rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE]={0};
 #elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
 rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
-#elif defined(GNU_GCC)
+#elif defined(__GNUC__)
 rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
 #endif
 
@@ -73,7 +73,7 @@ const int rtfs_superblk_size      = RTFS_BLOCK_ALLOC_SIZE;
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE]={0};
 #elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
-#elif defined(GNU_GCC)
+#elif defined(__GNUC__)
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
 #endif
 

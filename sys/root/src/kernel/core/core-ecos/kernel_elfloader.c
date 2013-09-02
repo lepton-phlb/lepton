@@ -461,7 +461,7 @@ unsigned long _kernel_elfloader(unsigned long flash_base, unsigned long base)
    //jump to offset
 #ifdef USE_OPTIMIZED_READELF
    //optimized code
-   #if !defined(GNU_GCC)
+   #if !defined(__GNUC__)
    _elf_lseek(flash_base,ehdr.e_phoff,0);
    offset+=ehdr.e_phoff;
    #endif
@@ -520,7 +520,7 @@ unsigned long _kernel_elfloader(unsigned long flash_base, unsigned long base)
       addr_offset = 0;
    }
    //phlb modif
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    _elf_lseek(flash_base,sizeof(ehdr),0);
 #endif
    //_elf_printf("3)fl_off:%d-offset:%d\r\n",elf_flash_offset,offset);
@@ -605,7 +605,7 @@ unsigned long _kernel_elfloader(unsigned long flash_base, unsigned long base)
 
 #ifdef USE_OPTIMIZED_READELF
          //
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
          _elf_lseek(flash_base,phdr[phx].p_offset,0);
          _elf_printf("offset:%d addr:0x%x fl_offset:%d\r\n", offset, addr, elf_flash_offset);
    #endif

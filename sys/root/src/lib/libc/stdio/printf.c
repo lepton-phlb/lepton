@@ -1178,7 +1178,7 @@ fmtnxt:
 
          case 'd':              /* Signed decimal */
          case 'i':
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
             ptmp = ltostr(buf,32,(long) ((lval)
                                          ? va_arg(ap, long)
                                          : va_arg(ap, int)),
@@ -1213,7 +1213,7 @@ fmtnxt:
 
          case 'u':              /* Unsigned decimal */
 usproc:
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
             ptmp = ultostr(buf,32,(unsigned long) ((lval)
                                                    ? va_arg(ap, unsigned long)
                                                    : va_arg(ap, unsigned int)),

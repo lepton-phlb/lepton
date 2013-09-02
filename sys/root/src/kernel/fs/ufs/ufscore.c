@@ -40,7 +40,7 @@ Includes
 #include "ufscore.h"
 #include "ufsdriver.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <stdlib.h>
    #include <string.h>
 #endif

@@ -307,7 +307,7 @@ enum enum_synth_regs {
    #define __io_profiler_stop(__desc__)
    #define __io_profiler_get_counter(__desc__)     0
 
-#elif (defined(GNU_GCC)) && (defined(CPU_ARM7) || defined(CPU_ARM9))
+#elif (defined(__GNUC__)) && (defined(CPU_ARM7) || defined(CPU_ARM9))
    #include <cyg/kernel/kapi.h>
    #include <cyg/hal/hal_arch.h>
    #include <string.h>
@@ -1410,7 +1410,7 @@ typedef struct {
       #define __io_profiler_stop(__desc__)
       #define __io_profiler_get_counter(__desc__)
    #endif
-#elif (defined(GNU_GCC)) && defined(CPU_CORTEXM)
+#elif (defined(__GNUC__)) && defined(CPU_CORTEXM)
    #include <cyg/kernel/kapi.h>
    #include <cyg/hal/hal_arch.h>
    #include <string.h>

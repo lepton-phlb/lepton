@@ -36,7 +36,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include "kernel/dev/arch/arm9/at91sam9261/common/dev_at91sam9261_common.h"
 #else
    #include "kernel\dev\arch\arm9\at91sam9261\common\dev_at91sam9261_common.h"

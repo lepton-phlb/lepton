@@ -86,7 +86,7 @@ mqd_t _mq_open(const char* name,int oflag,...){
 
       va_start(ap, oflag);
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
       mode     = va_arg(ap, mode_t);
 #else
       mode     = va_arg(ap, int);

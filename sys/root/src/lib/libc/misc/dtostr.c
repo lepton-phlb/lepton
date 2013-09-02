@@ -73,7 +73,7 @@ either the MPL or the [eCos GPL] License."
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
 //#include <string.h>
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    #include <assert.h>
 #else
    #define  assert(__cond__)

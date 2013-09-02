@@ -57,7 +57,7 @@ Implementation
 void* _sys_malloc(size_t size){
    void* p;
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __atomic_in();
    __disable_interrupt_section_in();
 #endif
@@ -66,7 +66,7 @@ void* _sys_malloc(size_t size){
    if(!p)
       p=(void*)0;
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __disable_interrupt_section_out();
    __atomic_out();
 #endif
@@ -84,7 +84,7 @@ void* _sys_malloc(size_t size){
 void *_sys_calloc(size_t nelem, size_t elsize){
    void* p;
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __atomic_in();
    __disable_interrupt_section_in();
 #endif
@@ -93,7 +93,7 @@ void *_sys_calloc(size_t nelem, size_t elsize){
    if(!p)
       p=(void*)0;
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __disable_interrupt_section_out();
    __atomic_out();
 #endif
@@ -111,7 +111,7 @@ void *_sys_calloc(size_t nelem, size_t elsize){
 ---------------------------------------------*/
 void *_sys_realloc(void *p, size_t size){
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __atomic_in();
    __disable_interrupt_section_in();
 #endif
@@ -120,7 +120,7 @@ void *_sys_realloc(void *p, size_t size){
    if(!p)
       p=(void*)0;
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __disable_interrupt_section_out();
    __atomic_out();
 #endif
@@ -138,14 +138,14 @@ void *_sys_realloc(void *p, size_t size){
 ---------------------------------------------*/
 void _sys_free (void* p){
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __atomic_in();
    __disable_interrupt_section_in();
 #endif
 
    free(p);
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    __disable_interrupt_section_out();
    __atomic_out();
 #endif
