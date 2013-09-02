@@ -488,7 +488,7 @@ int dev_posix_mqueue_ioctl(desc_t desc,int request,va_list ap){
       if(ofile_lst[desc_head].p)   //attr already set.
          return 0;
       //third parameter //desc link
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
       va_arg(ap, desc_t);
 #else
       va_arg(ap, int);

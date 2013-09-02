@@ -30,7 +30,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    #include <assert.h>
 #else
    #define  assert(__cond__)

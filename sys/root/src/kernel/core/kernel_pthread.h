@@ -48,7 +48,7 @@ Includes
 #include "kernel/core/kernel_sigqueue.h"
 #include "kernel/core/signal.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include "kernel/core/kernel_sem.h"
 #endif
 /*===========================================
@@ -169,7 +169,7 @@ typedef struct kernel_pthread_st {
    OS_TASK*  tcb;
 #endif
 
-#ifdef GNU_GCC
+#ifdef __GNUC__
    tcb_t * tcb;
    tcb_t * bckup_tcb; //for signal handler
    thr_id_t thr_id;
@@ -262,7 +262,7 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size);
 #endif
 
 //size of kernel stack
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #if defined(CPU_ARM7) || defined(CPU_ARM9)
       #define KERNEL_STACK 4096   //2048
    #elif defined(CPU_CORTEXM)

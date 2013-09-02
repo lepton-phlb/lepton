@@ -51,7 +51,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/kal.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include "kernel/core/timer.h"
 #endif
 

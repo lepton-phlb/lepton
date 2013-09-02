@@ -54,7 +54,7 @@ libkernel_so_env.Append(CFLAGS = '-g -O0 -std=c99')
 libkernel_so_env.Append(CFLAGS = '-I'+ pkg_install_dir +'include -I'+ base_src_dir)
 libkernel_so_env.Append(CFLAGS = '-iquote '+ base_src_dir)
 libkernel_so_env.Append(CFLAGS = '-ffunction-sections -fdata-sections -fno-builtin')
-libkernel_so_env.Append(CFLAGS = '-DCPU_GNU32 -DUSE_KERNEL_STATIC -DGNU_GCC')
+libkernel_so_env.Append(CFLAGS = '-DCPU_GNU32 -DUSE_KERNEL_STATIC')
 
 #Options for LDFLAGS
 libkernel_so_env.Append(LDMODULEFLAGS = '-nostartfiles -nostdlib')

@@ -36,7 +36,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/malloc.h"
 
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <stdlib.h>
 #endif
 /*============================================
@@ -208,7 +208,7 @@ int kernel_object_constructor_timer(kernel_object_t* p,va_list ap){
    struct sigevent* psigevent;
    timer_t*    ptimerid;
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    clockid= va_arg(ap, unsigned int);
 #else
    clockid= va_arg(ap, clockid_t);

@@ -58,7 +58,7 @@ typedef struct kernel_sigevent_st {
 }kernel_sigevent_t;
 
 //try
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
 typedef struct kernel_sigqueue_st kernel_sigqueue_st;
 typedef struct kernel_pthread_st kernel_pthread_st;
 typedef struct kernel_object_st kernel_object_st;

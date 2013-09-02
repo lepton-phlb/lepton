@@ -34,7 +34,7 @@ Includes
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include "kernel/core/stat.h"
 #endif
 /*===========================================

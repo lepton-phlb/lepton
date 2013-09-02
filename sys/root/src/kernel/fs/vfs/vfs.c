@@ -42,7 +42,7 @@ Includes
 #include "kernel/fs/vfs/vfs.h"
 
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <string.h>
    #include <stdlib.h>
 #endif
@@ -748,7 +748,7 @@ int _vfs_ioctl2(desc_t desc, int request, va_list ap){
    switch(request) {
    case I_LINK: {
       desc_t desc_link;
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
       desc_link = va_arg(_ap, int);
 #else
       desc_link = va_arg(_ap, desc_t);

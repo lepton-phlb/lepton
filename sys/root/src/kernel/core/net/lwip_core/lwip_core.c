@@ -63,7 +63,7 @@ either the MPL or the [eCos GPL] License."
 //#define LWIP_CORE_STACK_SIZE 1000
 
 //
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    #define LWIP_CORE_PRIORITY   100
 
 #else

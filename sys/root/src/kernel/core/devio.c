@@ -128,7 +128,7 @@ int creat(const char *path, mode_t mode){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 int __attribute__ ((visibility("hidden")))
 open(const char *path, int oflag, mode_t mode){
 #else
@@ -174,7 +174,7 @@ int open(const char *path, int oflag, mode_t mode){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 int __attribute__ ((visibility("hidden")))
 close(int fildes) {
 #else
@@ -204,7 +204,7 @@ int close(int fildes){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 ssize_t __attribute__ ((visibility("hidden")))
 read(int fildes, void *buf, size_t nbyte){
 #else
@@ -324,7 +324,7 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 ssize_t __attribute__ ((visibility("hidden")))
 write(int fildes, const void *buf, size_t nbyte){
 #else
@@ -451,7 +451,7 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 off_t __attribute__ ((visibility("hidden")))
 lseek(int fildes, off_t offset, int whence){
 #else

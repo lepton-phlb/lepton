@@ -46,7 +46,7 @@ Includes
 
 #include "lib/libc/stdio/stdio.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <stdlib.h>
 #endif
 /*===========================================

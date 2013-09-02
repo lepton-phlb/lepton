@@ -81,7 +81,7 @@
 
    #define   SHUT_WR                 1
 
-   #if !defined(GNU_GCC)
+   #if !defined(__GNUC__)
 typedef uint32_t uint64_t;
    #endif
 
