@@ -84,18 +84,21 @@ kernel_pthread_t kernel_thread;
 tmr_t kernel_tmr;
 
 //
-#if ( (__tauon_compiler__==__compiler_iar_m16c__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_M16C62))
+#if ( (__tauon_compiler__==__compiler_iar_m16c__))
    #define KERNEL_STACK_SIZE  1024 //1024//512 M16C
-#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_ARM7))
-   #define KERNEL_STACK_SIZE  2048 //2048//ARM7
-#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_CORTEXM))
-   #define KERNEL_STACK_SIZE  2048 //CORTEXM
-#elif ( (__tauon_compiler__==__compiler_iar_arm__) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_ARM9))
-   #define KERNEL_STACK_SIZE  2048 //2048//ARM9
-#elif ( (__tauon_compiler__==__compiler_keil_arm__) && defined (__KERNEL_UCORE_EMBOS) )
-//&& defined(CPU_CORTEXM))
-   #define KERNEL_STACK_SIZE  2048 //CORTEXM
-#elif WIN32
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__))
+   #define KERNEL_STACK_SIZE  2048 //ARM7TDMI
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM3__))
+   #define KERNEL_STACK_SIZE  2048 //CORTEXM3
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM4__))
+   #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM4
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__))
+   #define KERNEL_STACK_SIZE  2048 //ARM926EJS
+#elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__))
+   #define KERNEL_STACK_SIZE  2048 //CORTEXM3
+#elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))
+   #define KERNEL_STACK_SIZE  2048 //CORTEXM4
+#elif ( (__tauon_compiler__==__compiler_win32__)      && (__tauon_cpu_core__ == __tauon_cpu_core_win32_simulation__))
    #define KERNEL_STACK_SIZE  1024
 #endif
 
