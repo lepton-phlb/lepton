@@ -916,6 +916,9 @@
   <group>
     <name>dev_stm32f4xx</name>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_eth.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_olimex_board.c</name>
     </file>
     <file>
@@ -944,6 +947,15 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\misc.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4x7_eth.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4x7_eth.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4x7_eth_conf_template.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx.h</name>
@@ -1007,6 +1019,15 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_dma.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_eth.c</name>
+      <excluded>
+        <configuration>Debug</configuration>
+      </excluded>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_eth.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_exti.c</name>
@@ -1124,6 +1145,12 @@
     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dma.h</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\eth.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\eth.h</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\gpio.c</name>
   </file>
   <file>
@@ -1134,6 +1161,9 @@
   </file>
   <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\spi.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\stm32f4x7_eth_conf.h</name>
   </file>
   <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\target.c</name>
