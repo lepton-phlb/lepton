@@ -1,0 +1,122 @@
+<?xml version='1.0'?>
+
+<mklepton dest_path="x:/sources/kernel/config">
+
+<!-- devices drivers. see x:/sources/kernel/config/devconf.h -->
+<devices>
+   <!-- /dev/null -->
+   <dev name="DEV_NULL" use="ON"/>
+   <!-- /dev/cpu -->
+   <dev name="DEV_CPU" use="ON"/>
+   <!-- /dev/hd/hda -->
+   <dev name="DEV_FILECPU" use="ON"/>
+   <!-- /dev/hd/hd(x) -->
+   <dev name="DEV_EEPROM_24XXX" use="ON"/>
+   <!-- /dev/ttys0 -->
+   <dev name="DEV_M16CUART_S0" use="OFF"/>
+   <!-- /dev/ttys1 -->
+   <dev name="DEV_M16CUART_S1" use="ON"/>
+   <!-- /dev/kb0 -->
+   <dev name="DEV_KBCPLD_A0383" use="ON"/>
+   <!-- /dev/lcd6125 -->
+   <dev name="DEV_LCDSED1540_6125" use="ON"/>
+   <!-- /dev/lcd64xx -->
+   <dev name="DEV_LCDSED1540_64XX" use="ON"/>
+   <!-- /dev/rtc0 -->
+   <dev name="DEV_RTCM41T81" use="ON"/>
+   <!-- /dev/rtc1 -->
+   <dev name="DEV_RTCX1203" use="ON"/>
+</devices>
+
+<!-- binaries. see x:/sources/kernel/config/binaries.c -->
+<!-- /usr/bin -->
+<binaries src_path="bin" dest_path="bin">
+   <bin name="start"    stack="512"    priority="100" timeslice="1" />
+   <bin name="init"     stack="512"    priority="100" timeslice="1" />
+   <bin name="lsh"      stack="512"    priority="100" timeslice="1" />
+   <bin name="mkdir"    stack="512"    priority="100" timeslice="1" />
+   <bin name="rmdir"    stack="512"    priority="100" timeslice="1" />
+   <bin name="rm"       stack="512"    priority="100" timeslice="1" />
+   <bin name="mount"    stack="512"    priority="100" timeslice="1" />
+   <bin name="umount"   stack="512"    priority="100" timeslice="1" />
+   <bin name="ls"       stack="512"    priority="100" timeslice="1" />
+   <bin name="pwd"      stack="512"    priority="100" timeslice="1" />
+   <bin name="ps"       stack="1024"   priority="100" timeslice="1" />
+   <bin name="kill"     stack="512"    priority="100" timeslice="1" />
+   <bin name="touch"    stack="512"    priority="100" timeslice="1" />
+   <bin name="test1"    stack="512"    priority="100" timeslice="1" />
+   <bin name="test2"    stack="512"    priority="100" timeslice="1" />
+   <bin name="cat"      stack="512"    priority="100" timeslice="1" />
+   <bin name="ecat"     stack="512"    priority="100" timeslice="1" />
+   <bin name="more"     stack="512"    priority="100" timeslice="1" />
+   <bin name="mdbd"     stack="2048"   priority="100" timeslice="1" />
+   <bin name="mkfs"     stack="512"    priority="100" timeslice="1" />
+   <bin name="wrapr"    stack="1024"   priority="100" timeslice="1" />
+   <bin name="xlcdd"    stack="512"    priority="100" timeslice="1" />
+   <bin name="df"       stack="512"    priority="100" timeslice="1" />
+   <bin name="date"     stack="1024"    priority="100" timeslice="1" />
+</binaries>
+
+<!-- /usr/bin/msr -->
+<binaries src_path="bin/msr" dest_path="bin/msr">
+   <bin name="madc"     stack="512"    priority="100" timeslice="1" />
+   <bin name="madj"     stack="512"    priority="100" timeslice="1" />
+   <bin name="mamp"     stack="1024"   priority="100" timeslice="1" />
+   <bin name="mcont"    stack="1024"   priority="100" timeslice="1" />
+   <bin name="mearth"   stack="1024"   priority="100" timeslice="1" />
+   <bin name="mloop"    stack="3072"   priority="100" timeslice="1" />
+   <bin name="mrcd"     stack="2048"   priority="100" timeslice="1" />
+   <bin name="mvolt"    stack="1024"   priority="100" timeslice="1" />
+   <bin name="mohm"     stack="1024"   priority="100" timeslice="1" />
+   <bin name="mmohm"    stack="1024"   priority="100" timeslice="1" />
+   <bin name="mphrot"   stack="2048"   priority="100" timeslice="1" />
+   <bin name="mcal"     stack="1024"   priority="100" timeslice="1" />
+</binaries>
+
+<!-- /usr/bin/tst -->
+<binaries src_path="bin/tst" dest_path="bin/tst">
+   <bin name="tstkb"    stack="512"    priority="100" timeslice="1" />
+   <bin name="tstlcd"   stack="512"    priority="100" timeslice="1" />
+   <bin name="tstport"  stack="512"    priority="100" timeslice="1" />
+</binaries>
+
+<!-- /usr/bin/lp -->
+<binaries src_path="bin/lp" dest_path="bin/lp">
+   <bin name="lpd"    stack="512"    priority="100" timeslice="1" />
+   <bin name="lpr"   stack="512"    priority="100" timeslice="1" />
+</binaries>
+
+<!-- /usr/bin/net -->
+<binaries src_path="bin/net" dest_path="bin/net">
+   <bin name="lhttpd"    stack="512"    priority="100" timeslice="1" />
+</binaries>
+
+<!-- /usr/bin/mgr -->
+<binaries src_path="bin/mgr" dest_path="bin/mgr">
+   <bin name="mgr"    stack="1024"   priority="100" timeslice="1" />
+</binaries>
+
+<files>
+   <!-- /usr/etc  (hda internal flash mount on /bin) -->
+   <file name=".init" src_file="x:/tools/etc/.init" dest_path="etc" />
+   <file name=".adjust" src_file="x:/sources/bin/msr/.adjust" dest_path="etc" />
+
+   <!-- /usr/bin/sh -->
+   <file name="mkhdb" src_file="x:/sources/bin/sh/mkhdb" dest_path="bin/sh" />
+
+   <!-- /usr/bin/net/html -->
+   <file name="index.html" src_file="x:/sources/bin/net/html/index.html" dest_path="bin/net/html" />
+   <file name="about.html" src_file="x:/sources/bin/net/html/about.html" dest_path="bin/net/html" />
+
+   <!-- /usr/share/locale -->
+   <file name="msr.m" src_file="x:/tools/share/locale/en/msr.m" dest_path="share/locale/en" />
+   <file name="msr.m" src_file="x:/tools/share/locale/fr/msr.m" dest_path="share/locale/fr" />
+
+   <!-- /usr/share/wrapr -->
+   <file name="volt" src_file="x:/tools/share/wrapr/volt" dest_path="share/wrapr" />
+   <file name="loop" src_file="x:/tools/share/wrapr/loop" dest_path="share/wrapr" />
+
+
+</files>
+
+</mklepton>

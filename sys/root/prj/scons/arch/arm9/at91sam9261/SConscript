@@ -1,0 +1,155 @@
+#
+#The contents of this file are subject to the Mozilla Public License Version 1.1 
+#(the "License"); you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at http://www.mozilla.org/MPL/
+#
+#Software distributed under the License is distributed on an "AS IS" basis, 
+#WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+#specific language governing rights and limitations under the License.
+#
+#The Original Code is Lepton.
+#
+#The Initial Developer of the Original Code is Philippe Le Boulanger.
+#Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+#All Rights Reserved.
+#
+#Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+#
+#Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+#(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+#instead of those above. If you wish to allow use of your version of this file only under the
+#terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+#the MPL, indicate your decision by deleting  the provisions above and replace 
+#them with the notice and other provisions required by the [eCos GPL] License. 
+#If you do not delete the provisions above, a recipient may use your version of this file under 
+#either the MPL or the [eCos GPL] License."
+#
+#python module
+import os
+from tauon import *
+
+#We need common file
+#directories
+at91sam9261_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
+at91sam9261_prj_dir = at91sam9261_base_dir + 'prj/scons/'
+
+#import common scons script
+SConscript([at91sam9261_prj_dir + 'common/SConscript'])
+
+#import common src list files
+Import('common_tauon_src_list')
+
+#directories of source file
+tauon_src_dir = at91sam9261_base_dir + 'src/'
+tauon_kernel_dir = tauon_src_dir + 'kernel/'
+tauon_kernel_arch_dir = tauon_kernel_dir + 'core/arch/arm/'
+tauon_kernel_dev_dir = tauon_kernel_dir + 'dev/'
+tauon_kernel_dev_flash_dir = tauon_kernel_dev_dir + 'arch/all/flash/'
+tauon_kernel_dev_usb_dir = tauon_kernel_dev_dir + 'arch/all/usb/'
+tauon_kernel_dev_sdcard_dir = tauon_kernel_dev_dir + 'arch/all/sdcard/'
+tauon_kernel_dev_at91sam9261_dir = tauon_kernel_dev_dir + 'arch/arm9/at91sam9261/'
+tauon_kernel_fat = tauon_kernel_dir + 'fs/fat/'
+tauon_sbin_dir = tauon_src_dir + 'sbin/'
+tauon_kernel_dev_at91_dir = tauon_kernel_dev_dir + 'arch/at91/'
+tauon_kernel_dev_eth_dir = tauon_kernel_dev_dir + 'arch/all/eth/'
+
+#get previous files
+tauon_kernel_src_list = common_tauon_src_list
+
+#sbin special case for init
+tauon_kernel_src_list.extend([TauonSource(tauon_sbin_dir+'initd.c', '-O0', '-DEVAL_BOARD -DUSE_NANOX')])
+
+#arch config files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_arch_dir+'dev_mkconf.c'),
+TauonSource(tauon_kernel_arch_dir+'bin_mkconf.c'),
+TauonSource(tauon_kernel_arch_dir+'dev_dskimg.c')
+])
+
+#arch specific function
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dir+'core/core-ecos/arch/arm/memcpy.S'),
+TauonSource(tauon_kernel_dir+'core/core-ecos/arch/arm/memmove.S'),
+TauonSource(tauon_kernel_dir+'core/core-ecos/arch/arm/memset.S')
+])
+
+#pseudo device files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_dir+'dev_fb/dev_fb.c'),
+TauonSource(tauon_kernel_dev_dir+'dev_tty/dev_tty.c'),
+TauonSource(tauon_kernel_dev_dir+'dev_tty/tty_font-8x16.c')
+])
+
+#flash files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_flash_dir+'flash.c'),
+TauonSource(tauon_kernel_dev_flash_dir+'amd/dev_flash_nor_amd.c'),
+TauonSource(tauon_kernel_dev_flash_dir+'amd/dev_flash_am29dlxxxx_1.c'),
+TauonSource(tauon_kernel_dev_flash_dir+'amd/lldapi/lld.c')
+])
+
+#sdcard files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_sdcard_dir+'dev_sdcard.c'),
+TauonSource(tauon_kernel_dev_sdcard_dir+'drv_sdcard.c')
+])
+
+
+#device files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_uart_x/dev_at91sam9261_uart_dbg_x.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_uart_x/dev_at91sam9261_uart_x.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_uart_dbg/dev_at91sam9261_uart_dbg.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_uart_0/dev_at91sam9261_uart_0.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_uart_1/dev_at91sam9261_uart_1.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_uart_2/dev_at91sam9261_uart_2.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_cpu/dev_at91sam9261_cpu.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_lcd/at91sam9261_lcd.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_lcd/dev_at91sam9261_lcd.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_rtt/dev_at91sam9261_rtt.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_eth_dm9000a/dev_at91sam9261_eth_dm9000a.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/eth/dev_eth_dm9000a/dev_eth_dm9000a.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_spi/dev_at91sam9261_spi.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_usbdp/dev_at91sam9261_usbdp.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_eth_ksz885x/dev_at91sam9261_eth_ksz885x.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/eth/dev_eth_ksz885x/dev_eth_ksz885x.c'),
+TauonSource(tauon_kernel_dev_at91sam9261_dir+'dev_at91sam9261_mci/dev_at91sam9261_mci.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/sd/dev_sd.c'),
+TauonSource(tauon_kernel_dev_dir+'arch/all/sd/drv_sd.c')
+])
+
+#usb stack files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_usb_dir+'usbslave.c'),
+TauonSource(tauon_kernel_dev_usb_dir+'usbstring.c'),
+TauonSource(tauon_kernel_dev_usb_dir+'class/std/usbstd.c'),
+TauonSource(tauon_kernel_dev_usb_dir+'class/serial/usbserial.c'),
+TauonSource(tauon_kernel_dev_usb_dir+'class/msd/usbmsd.c'),
+TauonSource(tauon_kernel_dev_usb_dir+'class/msd/sbc.c'),
+TauonSource(tauon_kernel_dev_usb_dir+'class/eth/usbeth.c'),
+])
+
+#at91 device files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_usbdp/dev_at91_usbdp.c'),
+TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_usbdp/dev_at91_usbdp_lowlevel.c'),
+TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_rtt/dev_at91_rtt.c'),
+TauonSource(tauon_kernel_dev_at91_dir+'dev_at91_mci/dev_at91_mci.c')
+])
+
+#eth devices
+#tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_eth_dir+'dev_eth_ksz8851/dev_eth_ks885x.c')])
+
+#fat files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_fat+'fat16.c'),
+TauonSource(tauon_kernel_fat+'fatcore.c'),
+TauonSource(tauon_kernel_fat+'fat16_msdos.c'),
+TauonSource(tauon_kernel_fat+'fatcore_msdos.c'),
+TauonSource(tauon_kernel_fat+'fat16_vfat.c'),
+TauonSource(tauon_kernel_fat+'fatcore_vfat.c')
+])
+
+#directory to store lib
+tauon_ecos_lib_dir = at91sam9261_base_dir + 'lib/arch/arm9/at91sam9261/'
+tauon_ecos_install_dir = tauon_ecos_lib_dir + 'install/'
+
+tauon_kernel_lib_dir = tauon_ecos_lib_dir + 'bin/'
+tauon_kernel_obj_dir = at91sam9261_prj_dir + 'arch/arm9/at91sam9261/obj/'
+
+#export source files
+Export('tauon_kernel_src_list')
+Export('tauon_kernel_lib_dir')
+Export('tauon_kernel_obj_dir')
+Export('tauon_ecos_install_dir')

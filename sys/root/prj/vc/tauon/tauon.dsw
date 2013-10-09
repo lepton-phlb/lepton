@@ -1,0 +1,151 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "dev"=..\dev\dev.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    dev
+    ..\..\..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fs"=..\fs\fs.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    lepton
+    ..\fs
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "kernel"=..\kernel\kernel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    lepton
+    ..\kernel
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name lib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name net
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dev
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sbin
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "lib"=..\lib\lib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    lib
+    ..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "net"=..\net\net.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    net
+    ..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "sbin"=..\sbin\sbin.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    sbin
+    ..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "tauon"=.\tauon.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    tauon
+    ..\..\..
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name kernel
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    lepton/sys/root/prj/vc/tauon
+    .
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

@@ -1,0 +1,41 @@
+net.txt
+
+   il est nécessaire de pouvoir dynamiquement configurer le stack ip sur lepton.
+
+   le stack ip sous lepton utilise pour l'instant la liaison série ttys1. or la liason série ttys1 est ouvert par 
+le procces init au démarrage afint d'obtenir les entrées/sorties standard pour le shell et les applications 
+lancées par ce dernier.
+
+   donc a partir de l'interpréteur de commande on lance un programme permettant de configurer la liasion série
+en mode SLIP. ensuite lors du redémmarage de l'appareil le mode slip est lancé sur la liaison série choisi (ex ttys1).
+
+   0) shell classique sur la liaison série
+   1) shell: lancer le programme de synchro slip.
+     1.1) slip synchro (non obligatoire).
+   3) shell: lancer le programme pour indiqué au kernel network d'utilisé la liaison série (ex:"dev/ttys1").
+   4) kernel: le kernel force la fermeture complete de la liaison série tout proccess confondu.
+   5) kernel: configuration de la laison série en protocole slip.
+
+
+   ou
+   0) lors du demarrage init lit le script
+   1) dans le lancement du programme slip server
+   2) slip server lit un ficher de config.
+      si :
+         ce fichier n'existe pas sortie immédiate
+      sinon :
+   3) dans ce fichier le nom du peripherique et le protocole utilisé SLIP.
+   4) attente synchro si appui sur une touche 'test' pas d'attente de synchro sortie immédiate
+         ou touche 'more' sortie immediate pas de TCP/IP retour mode normale.
+   5) configuration de la liaison série en mode slip.
+
+   ou 
+   0) le kernel lit un fichier de config
+   1.a) lance le pthread kernel network 
+   1.b) si il existe lance le process init avec des options qui evite d'ouvrir la liason série
+   1.c) lance le programe login avec l'otpion network.
+   sinon
+   2.a) lance le process init avec des options qui permettent d'ouvrir la liaison série.
+   
+
+ 

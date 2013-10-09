@@ -1,0 +1,4 @@
+#! lsh 
+#shutdown system
+kill -11 1
+exit

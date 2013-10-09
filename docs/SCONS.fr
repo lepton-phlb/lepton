@@ -1,0 +1,72 @@
+Ce document se propose de décrire la mise en oeuvre de scons dans le cas d'une application utilisant le noyau tauon.
+
+Installation
+------------
+# aptitude install scons
+
+Partie système
+--------------
+Les fichiers scons (SConsript) généraux fournis par lepton se situent:
+	-. sys/root/prj/scons/common : fournit l'ensemble des fichiers source à compiler pour toutes les cibles supportées.
+	-. sys/root/prj/scons/arch/[synthetic|arm7|arm9|cortexm]/[x86|at91m55800a|at91sam9260|at91sam9261|k60n512]/ : fournit les fichiers sources spécifiques à une cible.
+	-. sys/root/src/kernel/net/lwip/prj/scons/ : fournit les fichiers sources de lwip.
+	-. sys/root/src/lib/flnx-1.1.8/prj/scons/ : fournit les fichiers sources de flnx.
+	-. sys/root/src/lib/nanox/prj/scons/ : fournit les fichiers sources de nanox.
+
+Ces fichiers serviront respectivement :
+	-. à générer la librairie noyau pour une cible particulière (les deux premiers points) : libkernel.a
+	-. à générer la librairie lwip pour une cible particulière : liblwip.a
+	-. à générer la librairie flnx pour une cible particulière : libflnx.a
+	-. à générer la librairie nanox pour une cible particulière : libnanox.a
+
+Ils seront stockés dans sys/root/lib/arch/[synthetic|arm7|arm9|cortexm]/[x86|at91m55800a|at91sam9260|at91sam9261|k60n512]/bin
+Tous les fichiers objet générés pour obtenir les librairies ci-dessus se situent dans 
+sys/root/prj/scons/arch/[synthetic|arm7|arm9|cortexm]/[x86|at91m55800a|at91sam9260|at91sam9261|k60n512]/obj
+
+La commande 
+	pkg-config --[cflags|libs] tauon 
+permet de récupérer les options de compilation et d'édition de liens de base qu'un projet utilisateur doit positionner
+pour utilise le noyau tauon et ses librairies.
+Le fichier décrivant ces options se situe dans root/prj/config/tauon.pc
+
+Un module tauon.py situé dans sys/root/prj/scons/common/module permet de fixer des règles plus souples pour compiler un fichier avec des options
+particulières notamment les optimisations. Les classes définies sont :
+   -. TauonSource : un fichier source à compiler
+   -. TauonLibrary : une librairie composée de TauonSource
+   -. TauonApplication : une application est composée de librairies (TauonApplication) et de sources (TauonSource)
+   -. TauonEnvironment : il contient les différents environnements de compilation. Un pour chaque optimsation (-O[0,1,2,3,s])
+Pour disposer de ce module l'utilisateur (dans le futur, le système) doit exporter le chemin d'accès à ce module à l'aide de la commande suivante
+   $ export PYTHONPATH="$HOME/tauon/sys/root/prj/scons/common/module/"
+   
+Partie Utilisateur
+------------------
+La partie utilisateur est composée :
+   -. d'un répertoire build contenant le fichier SConstruct générique. Il n'est pas à éditer. L'utilisateur (et bientôt le système)
+   doit créer un lien symbolique vers ce fichiers. Dans le cas du projet tauon_flnxapp, l'utilisateur doit effectuer les commandes
+   suivantes :
+      $ cd tauon/sys/user/tauon_flnxapp/prj/scons
+      $ ln -s  ~/tauon/sys/user/build/SConstruct SConstruct
+		
+	-. d'un fichier SConscript UTILISATEUR librement modifiable par l'utilisateur. Il sera appelé par le SConstruct pour
+	compiler les fichiers utilisateurs avec les options générales souhaitées. L'utilisateur peut écraser ou substituer des
+	options générales à partir de ce fichier pour générer son application.
+	
+	-. d'un ou plusieurs fichiers .py qui contiennent des configurations de cibles particulières. On y retrouve notamment les
+	outils à utiliser pour la compilation, les options d'optimisation et de déboguage, le suffixe du programme généré...
+
+
+Utilisation
+-----------
+Rendez vous dans les projets utilisateur tauon-basic ou tauon_flnxapp. Puis dans prj/scons.
+Pour utiliser scons pour votre projet tauon copier le répertoire prj/scons dans votre répertoire prj.
+Adaptez le fichier SConscript.
+
+	$ scons -h
+	fournit une aide sur les options que vous pouvez ajouter dans votre fichier .py
+	
+	$ scons -c --targetfile=at91sam9261ek_opts.py; scons -Q --targetfile=at91sam9261ek_opts.py bin
+	efface, puis compile les fichiers et les librairies souhaitées pour la cible at91sam9261-ek. Le fichier binaire
+	tauon_at91sam9261.elf est copié dans le répertoire bin de votre projet utilisateur.
+	
+	$ scons -c; scons -Q bin
+	par défaut, efface, puis compile les fichiers et les librairies souhaitées pour la cible synthetic.

@@ -1,0 +1,112 @@
+LEPTON/TAUON OPERATING SYSTEM
+Lepton/Tauon is an open source POSIX "compliant" Operating System for 
+deeply embedded devices. It tries to bring PSE-53 POSIX capabilities 
+to embedded world (including multiprocess, filesystems, messages 
+queues, ... BUT currently no asynchronous I/O support). 
+The system implementation follows an UNIX approach.
+
+The aim of this project, it's not to develop another operating system 
+like GNU/Linux, but an human understandable operating system that provides 
+more services than a realtime kernel, while keeping a reasonable footprint 
+for deeply embedded system. 
+
+We hope Lepton/Tauon will be able to help anybody to develop their personal,
+school or professional projects easily and quickly.
+
+We are ready to accommodate contributions to improve Lepton/Tauon and support 
+new features.
+
+Supported platforms:
+   -. ARM7: AT91M55800A (Atmel)
+   -. ARM9: AT91SAM9261-EK (Atmel)
+   -. ARM9: AT91SAM9260-EK (Atmel)
+   -. ARM Cortex-M4: TWR-K60N512 (Freescale)
+   -. PC (32bits simulation for GNU/Linux and MS Windows)
+
+Initial version of Lepton/Tauon is 4.0.0.0.
+
+Lepton/Tauon provides more than 150 POSIX functions over a real-time
+operating system that can be:
+   -. Proprietary embOS from Segger (original Lepton)
+   -. Open source eCos community (Tauon)
+Lepton/Tauon offers the ability to use other real-time operating system (closed 
+or open source) like FreeRTOS by using a simple abstraction layer. 
+
+Lepton/Tauon uses some parts of underlying real-time operating system:
+   -. board startup (HAL)
+   -. basic synchronization functions (semaphore, mutex, ...)
+   -. task sheduler
+   -. ISR mechanisms
+   -. some libraries (math.h, stdlib.h, ...)
+
+In addition Lepton/Tauon offers:
+   -. more than 150 functions from POSIX standard (IEEE Std 1003.1a), 
+   realtime extension (1003.1b) and threads extension (1003.1c)
+   -. simple model for device drivers
+   -. UNIX stream to improve "reuse"
+   -. support lwip stack (1.3.2)
+   -. support uip stack (1.0) (Lepton only)
+   -. support rootfs, ufs, fat16 (msdos and vfat) filesystem
+   -. VFS layer to brings new and custom file systems 
+   -. USB devices stack and profils CDC-ACM, MSD and Ethernet-ECM (tested
+   only on AT91SAM9261-EK)
+   -. NanoX and FLTK support (FLNX exactly)
+   -. Mongoose WEB server, FTP server (from trollFTPD) and mini shell
+   -. simulation process under GNU/Linux (Tauon) and Windows (Lepton)
+
+To install Lepton/Tauon and launch a sample application see docs/INSTALL.
+To see what is Lepton/Tauon, installation are tested on:
+   -. Debian Squeeze and Wheezy
+   -. Ubuntu 11.10
+To create your application, see docs/START.
+To see all available function, see docs/AVAILABLE_POSIX
+
+Changes made in version 4.0.0.0 are documented in the ChangeLog file.
+
+Directories and/or files in this distribution:
+   -. tools : tools to build a Lepton/Tauon application
+   
+   -. sys/user : part for user application sources, libraries and
+   binaries
+   
+   -. sys/root/lib/arch : install path for all supported eCos HAL
+   -. sys/root/prj/scons : general compilations files for arch supported
+   by Lepton/Tauon.
+   
+   -. sys/root/prj/config : a pkg-config files use for compilation and a
+   minicom configuration file for simulation
+   
+   -. sys/root/src/sbin : source files for general utilities (mini
+   shell aka lsh, mkfs, ls, uname, ...)
+   -. sys/root/src/bin/net : source files for high level networking
+   utilities like web server or telnet server.
+   -. sys/root/src/lib : source files for all common libraries (libc, 
+   pthread, ..)
+   
+   -. sys/root/src/kernel/core : source files for all kernel functions
+   -. sys/root/src/kernel/core/core-ecos : source files for kernel
+   functions that use underlying real-time os functions
+   -. sys/root/src/kernel/fs : source files for supported filesystems.
+   -. sys/root/src/kernel/net : source files for supported net stack.
+   Currently, Tauon only supports lwip.
+   -. sys/root/src/kernel/dev : source files for device drivers.
+   
+
+Send comments/corrections/improvements to lepton-discuss@googlegroups.com.
+
+The Lepton/Tauon home page is http://code.google.com/p/lepton/.
+
+Thanks to:
+   * eCos: http://ecos.sourceware.org/
+   * lwip: http://savannah.nongnu.org/projects/lwip/
+   * nano-X: http://www.microwindows.org/
+   * fltk: http://www.fltk.org/
+   * openOCD: http://openocd.sourceforge.net/
+   * all BSD and GNU tools...
+   
+
+Philippe Le Boulanger (original author of Lepton and maintainer)
+<lepton.phlb@gmail.com>
+
+Jean-Jacques Pitrolle (maintainer)
+<lepton.jjp@gmail.com>

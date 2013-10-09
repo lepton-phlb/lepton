@@ -1,0 +1,41 @@
+TODO - list of things to do for Lepton/Tauon:
+   * AT91SAM9x :
+      Merge all AT91 drivers (uart, spi, ..)
+      PHY negociation problem on DM9000a
+   
+   * Kinetis :
+      UART DMA RX/TX
+      SPI DMA RX/TX, RX
+      kill system call
+      "USB device" driver
+      I2C slave
+   
+   * Kernel :
+      Finish errno framework
+      Merge header files
+      Make a library for kernel syscall
+      Elf Loader
+      MPU framework
+      Improve partition system
+      add pthread_cond
+      add pthread_join
+   
+   * Networking :
+      new lwip release
+      UIP 1.0 (for IPv6)
+   
+   * Graphics :
+      New version of microwindows/Nano-X
+      Improve FLNX
+      
+   * Simulation :
+      Multiple instance of virtual_cpu's
+   
+   * FS :
+      FAT32
+      FAT16 faster for Kinetis (maybe elm-chan.org)
+      consistent fstype_lst (one place for definition)
+      
+   
+   * Installation :
+      Simplify eCos and Lepton/Tauon installation
