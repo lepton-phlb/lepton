@@ -1,0 +1,128 @@
+/*********************************************************************
+*               SEGGER MICROCONTROLLER SYSTEME GmbH                  *
+*       Solutions for real time microcontroller applications         *
+**********************************************************************
+*                                                                    *
+*       (C) 2004 - 2006   SEGGER Microcontroller Systeme GmbH        *
+*                                                                    *
+*        www.segger.com   Support: support@segger.com                *
+*                                                                    *
+**********************************************************************
+
+----------------------------------------------------------------------
+File    : AT91SAM9261_iRAM.mac
+Purpose : Setup file for IAR
+          Feel free to modify this file acc. to your target system.
+--------  END-OF-HEADER  ---------------------------------------------
+*/
+
+__var i;
+__var k;
+
+
+/*********************************************************************
+*
+*       _DisableWatchdog()
+*/
+_DisableWatchdog() {
+  __message "AT91SAM9261_iRAM.mac: _DisableWatchdog()";
+  __writeMemory32(0x00008000,0xFFFFFD44,"Memory");  //      AT91C_BASE_WDTC->WDTC_WDMR= AT91C_SYSC_WDDIS;
+}
+
+
+/*********************************************************************
+*
+*       _MapRAMAt0()
+*
+* Function description
+*   Maps RAM at 0.
+*
+* Notes
+*   (1) Unfortunately, the mapping can not be assigned, but only toggled.
+*       Therefor we need to check if RAM is at 0 by trying to modify the
+*       data at addr. 0.
+*/
+_MapRAMAt0(){
+  __message "AT91SAM9261_iRAM.mac: _MapRAMAt0()";
+  i = __readMemory32(0x00000000,"Memory");
+  __writeMemory32(i + 1, 0x00,"Memory");
+  k =__readMemory32(0x00000000,"Memory");
+  __writeMemory32(i, 0x00,"Memory");                  // Restore
+  if (i == k) {
+    __message "Changing mapping: RAM mapped to 0";
+    __writeMemory32(0x00000003,0xFFFFEE00,"Memory");  // Remap code and data area
+  }
+}
+
+/*********************************************************************
+*
+*       _InitAIC()
+*/
+_InitAIC() {
+  __message "AT91SAM9261_iRAM.mac: _InitAIC()";
+  __writeMemory32(0xFFFFFFFF,0xFFFFF124,"Memory");    // Mask All interrupt pAic->AIC_IDCR = 0xFFFFFFFF;
+  for (i = 0; i < 8; i++) {
+    k =  __readMemory32(0xFFFFF130,"Memory");         // AT91C_BASE_AIC->AIC_EOICR
+  }
+}
+
+/*********************************************************************
+*
+*       _InitRSTC()
+*
+* Function description
+*   Initializes the RSTC (Reset controller).
+*   This makes sense since the default is to not allow user resets, which makes it impossible to
+*   apply a second RESET via J-Link
+*/
+_InitRSTC() {
+  __message "AT91SAM9261_iRAM.mac: _InitRSTC()";
+  __writeMemory32(0xA5000001, 0xFFFFFD08,"Memory");    // Allow user reset
+}
+
+/*********************************************************************
+*
+*       _InitPLL() 
+*/
+_InitPLL() {
+  __message "AT91SAM9261_iRAM.mac: _InitPLL()";
+  __writeMemory32(0x0000601, 0xFFFFFC20, "Memory");    // Enable Main oscillator
+  do {
+    i = __readMemory32(0xFFFFFC68,"Memory");
+    i &= 1;
+  } while (i == 0);                                    // Wait until Oscillator is stable
+  __writeMemory32(0x0000001, 0xFFFFFC30, "Memory");    // Switch master clock to CPU clock, write 1 to PMC_MCKR
+  __sleep(10);
+}
+
+/*********************************************************************
+*
+*       execUserReset()
+*/
+execUserReset() {
+  __message "AT91SAM9261_iRAM.mac: execUserReset()";
+  __emulatorSpeed(5000);     // Slow JTAG speed to be able to communicate with CPU running at 32kHz
+  _InitPLL();
+  __emulatorSpeed(2000000);  // Use maximum JTAG speed which works with 18MHz CPU clock
+  _MapRAMAt0();
+  _DisableWatchdog();
+  _InitAIC();
+  _InitRSTC();
+}
+
+/*********************************************************************
+*
+*       execUserPreload()
+*/
+execUserPreload() {
+  __message "AT91SAM9261_iRAM.mac: execUserPreload()";
+  __emulatorSpeed(5000);     // Slow JTAG speed to be able to communicate with CPU running at 32kHz
+  _InitPLL();                // Speedup download
+  __emulatorSpeed(2000000);  // Use maximum JTAG speed which works with 18MHz CPU clock
+  _MapRAMAt0();
+  _DisableWatchdog();
+  _InitAIC();
+  _InitRSTC();
+}
+
+/**************** End of file ***************************************/
