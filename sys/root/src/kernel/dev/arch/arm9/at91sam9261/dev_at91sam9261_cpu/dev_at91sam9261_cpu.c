@@ -39,10 +39,9 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/fs/vfs/vfsdev.h"
 
-#if defined(__KERNEL_UCORE_EMBOS)
-   #include "kernel/core/ucore/embOSARM7_332/arch/cpu_at91sam9261/at91sam9261_init.h"
-//#include <ioat91sam9261.h>
-   #include <intrinsic.h>
+#if defined(__KERNEL_UCORE_EMBOS)  
+   //#include "kernel/core/ucore/embOSARM7-9_388/arch/cpu_at91sam9261/at91sam9261_init.h"
+   //#include <intrinsic.h>
 #elif defined(__KERNEL_UCORE_ECOS)
    #include "dev_at91sam9261_cpu.h"
    #include "cyg/hal/at91sam9261.h"
@@ -54,7 +53,7 @@ either the MPL or the [eCos GPL] License."
 
 AT91PS_SYS AT91_SYS = (AT91PS_SYS)AT91C_BASE_SYS;
 #if defined(__KERNEL_UCORE_EMBOS)
-extern void (*g_p_fct_dbg_interrupt)(void);
+   void (*g_p_fct_dbg_interrupt)(void);
 #endif
 
 /*============================================

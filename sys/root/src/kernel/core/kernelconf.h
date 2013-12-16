@@ -81,7 +81,14 @@ Includes
    //for win32 simulation
    #include "kernel/core/arch/win32/kernel_mkconf.h"
 #elif (__tauon_compiler__ == __compiler_iar_arm__)
-   #include "kernel/core/arch/arm/kernel_mkconf.h"
+   #if ( (__CORE__==__ARM7M__) || (__CORE__==__ARM6M__) || (__CORE__==__ARM7EM__) )
+      //ARMv7E-M Cortex-M4
+      //ARMv7-M Cortex-M3
+      //ARMv6-M Cortex-M0, Cortex-M0+ and Cortex-M1
+      #include "kernel/core/arch/cortexm/kernel_mkconf.h"
+   #else
+      #include "kernel/core/arch/arm/kernel_mkconf.h"
+   #endif
 #elif (__tauon_compiler__ == __compiler_keil_arm__)
    #include "kernel/core/arch/arm/kernel_mkconf.h"
 #elif (__tauon_compiler__==__compiler_gnuc__)
@@ -469,7 +476,9 @@ Declaration
 #define __file_system_profile_user_defined__    0x8000
 
 #if __tauon_cpu_core__ == __tauon_cpu_core_win32_simulation__
-   #define __file_system_profile__  __file_system_profile_classic_yaffs__
+   #if !defined(__file_system_profile__)
+      #define __file_system_profile__  __file_system_profile_classic_yaffs__
+   #endif
 #endif
 
 #if !defined(__file_system_profile__)

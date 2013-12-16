@@ -50,8 +50,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_eth.h"
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
    #include <string.h>
@@ -996,6 +995,7 @@ static void dmfe_packet_receive(board_info_t *db){
    u8 rxbyte, val;
    u32 i, GoodPacket, tmplen = 0, MDRAH, MDRAL;
    u32 tmpdata;
+   u32 _data=0;
 
    rx_t rx;
 
@@ -1073,7 +1073,7 @@ static void dmfe_packet_receive(board_info_t *db){
           || ( (_eth_dm9000a_desc_rd>=0) && (ofile_lst[_eth_dm9000a_desc_rd].nb_reader<=0) ) ) {
          // drop this packet!!!
          switch (db->io_mode) {
-            u32 _data=0;
+          
          case DM9KS_BYTE_MODE:
             for (i=0; i<rx.desc.length; i++) {
                _data = inb(db->io_data);

@@ -71,8 +71,7 @@ Includes
 #include "kernel/dev/arch/arm9/at91sam9261/common/dev_at91sam9261_common_uart.h"
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
 #endif

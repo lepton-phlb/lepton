@@ -44,8 +44,6 @@ Global Declaration
 #define MAX_ARG_LINE 255
 static char arg[MAX_ARG_LINE]={0};
 
-
-
 /*===========================================
 Implementation
 =============================================*/

@@ -173,7 +173,7 @@ int init_adapter(int adapter_num)
       return -1;
 
    ppacket_oid_data=malloc(sizeof(PACKET_OID_DATA)+6);
-   lpAdapter=PacketOpenAdapter(AdapterList[/*adapter_num*//*1*/ 2]);
+   lpAdapter=PacketOpenAdapter(AdapterList[/*adapter_num*/ 1 /*2*/]);
 
    if (!lpAdapter || (lpAdapter->hFile == INVALID_HANDLE_VALUE))
       return -1;
