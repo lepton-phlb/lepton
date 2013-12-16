@@ -63,7 +63,7 @@ static char bufin[BUFSIZ];
 static char bufout[BUFSIZ];
 static char buferr[BUFSIZ];
 
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
 FILE stdin[1] __attribute__ ((visibility("hidden"))) =
    #else
 FILE stdin[1] =
@@ -73,7 +73,7 @@ FILE stdin[1] =
     0, _IOFBF | __MODE_READ | __MODE_IOTRAN}
 };
 
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
 FILE stdout[1] __attribute__ ((visibility("hidden"))) =
    #else
 FILE stdout[1] =
@@ -89,7 +89,7 @@ FILE stdout[1] =
     | __MODE_WRITE | __MODE_IOTRAN}        //_IONBF instead _IOFBF (force fflush buffer) in printf.
 };
 
-   #if defined(GNU_GCC)
+   #if defined(__GNUC__)
 FILE stderr[1] __attribute__ ((visibility("hidden"))) =
    #else
 FILE stderr[1] =

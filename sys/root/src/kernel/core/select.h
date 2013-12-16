@@ -36,7 +36,7 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 //typedef struct timeval timeval;
    #include "kernel/core/time.h"
 #endif

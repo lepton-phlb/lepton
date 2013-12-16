@@ -198,7 +198,7 @@ typedef struct DIR {
          #define NO_SOCKLEN_T
       #endif
 
-      #if defined(GNU_GCC)
+      #if defined(__GNUC__)
 char **environ;
          #define getenv(__name__)   NULL
       #endif
@@ -1129,7 +1129,7 @@ start_thread(void * (*func)(void *), void *param)
 
    attr.stacksize = (31*1024); //m16c 512
    attr.stackaddr = NULL;
-   #if !defined(GNU_GCC)
+   #if !defined(__GNUC__)
    attr.priority  = 100;
    #else
    attr.priority  = 10;

@@ -71,7 +71,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #define __RTC_MR        *((unsigned int *)      0xFFFB8000)
    #define __RTC_HMR       *((unsigned int *)      0xFFFB8004)
    #define __RTC_TIMR      *((unsigned int *)      0xFFFB8008)
@@ -143,7 +143,7 @@ Implementation
     \return -1 si erreur sinon 0.
 */
 int dev_at91m55800a_rtc_load(void){
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    __RTC_MR  = 0x0L;      //instead __RTC_MR
    __RTC_IER = 0x0L;
    __RTC_IER = 0xffffffff;
@@ -222,7 +222,7 @@ int dev_at91m55800a_rtc_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_at91m55800a_rtc_read(desc_t desc, char* buf,int cb){
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    unsigned char * ptr_timr = (unsigned char *)0xFFFB8008;     //__RTC_TIMR;
    unsigned char * ptr_calr = (unsigned char *)0xFFFB800C;     //__RTC_CALR;
    buf[0] = 0;
@@ -265,7 +265,7 @@ int dev_at91m55800a_rtc_read(desc_t desc, char* buf,int cb){
 | See:
 ---------------------------------------------*/
 int dev_at91m55800a_rtc_write(desc_t desc, const char* buf,int cb){
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    unsigned char * ptr_timr = (unsigned char *)0xFFFB8008;     //__RTC_TIMR;
    unsigned char * ptr_calr = (unsigned char *)0xFFFB800C;     //__RTC_CALR;
    //__RTC_CR = 3L;//stop RTC
@@ -389,7 +389,7 @@ int dev_at91m55800a_rtc_settime(desc_t desc,char* buf,int size){
 
 int dev_at91m55800a_rtc_gettime(desc_t desc,char* buf,int size){
    char bufr[8]={0};
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    unsigned char * ptr_calr = (unsigned char *)0xFFFB800C; //__RTC_CALR;
 #endif
    /*
@@ -416,7 +416,7 @@ int dev_at91m55800a_rtc_gettime(desc_t desc,char* buf,int size){
    buf[4]--;
    buf[5] = BCD_TO_BIN(bufr[7]);
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    if(*ptr_calr==0x20)
 #else
    if(__RTC_CALR_bit.cent==0x20)

@@ -114,7 +114,7 @@ int mkdir(const char * path, mode_t mode){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 int __attribute__ ((visibility("hidden")))
 stat(const char * ref, struct stat * stat){
 #else
