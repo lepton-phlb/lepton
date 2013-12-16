@@ -208,7 +208,6 @@ int initd_main(int argc,char* argv[]){
 
    //be aware like jcvd ;)!!!! test console system
 #if (defined(EVAL_BOARD) || defined(CPU_GNU32)) && !defined(USE_KERNEL_STATIC)
-
    #if defined(USE_NANOX)
    {
       int fd_fb=-1;

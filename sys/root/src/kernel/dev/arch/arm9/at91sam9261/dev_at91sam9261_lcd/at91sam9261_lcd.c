@@ -35,8 +35,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/kernelconf.h"
 
 #if defined(__KERNEL_UCORE_EMBOS)
-   #include <ioat91sam9261.h>
-   #include "at91sam9261_init.h"
+   #include <atmel/ioat91sam9261.h>
 #elif defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
 #endif
@@ -1200,7 +1199,7 @@ unsigned long at91sam9261_lcd_get_shadow_frame_buffer(void)
 static void at91sam9261_lcd_gpio (void)
 {
    AT91_SYS->PIOB_PDR =
-      (AT91C_PB0_LCDVSYNC | AT91C_PB1_LCDHSYNC | AT91C_PB2_LCDDOTCK | AT91C_PB3_LCDDEN  |
+      (AT91C_PB0_LCDVSYNC |AT91C_PB1_LCDHSYNC | AT91C_PB2_LCDDOTCK | AT91C_PB3_LCDDEN  |
        AT91C_PB4_LCDCC    | AT91C_PB7_LCDD2    | AT91C_PB8_LCDD3   |
        AT91C_PB9_LCDD4    | AT91C_PB10_LCDD5   | AT91C_PB11_LCDD6  |
        AT91C_PB12_LCDD7   | AT91C_PB15_LCDD10  | AT91C_PB16_LCDD11 |
@@ -1247,7 +1246,7 @@ unsigned long at91sam9261_lcd_calc_frame_buffer_size(void)
 | Comments:
 | See:
 ----------------------------------------------*/
-int at91sam9261_lcd_ctrl_init (dev_panel_info_t* p_panel_info)
+int at91sam9261_lcd_ctrl_init(dev_panel_info_t* p_panel_info)
 {
    unsigned long value;
    unsigned int i,j;

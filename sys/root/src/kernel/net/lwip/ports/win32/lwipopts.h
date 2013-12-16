@@ -55,6 +55,15 @@ either the MPL or the [eCos GPL] License."
 //#define MEMP_OVERFLOW_CHECK     2
 #define MEM_LIBC_MALLOC 1 //lepton modifs use libc malloc instead   // default 0
 
+#include "kernel/core/types.h"
+#include "kernel/core/malloc.h"
+
+//#define mem_free(__x__) _sys_free(__x__)
+#define mem_free   _sys_free
+#define mem_malloc(__x__) _sys_malloc((int)(__x__))
+#define mem_calloc(__x__,__y__) _sys_calloc((int)(__x__),(int)(__y__))
+#define mem_realloc(__x__,__size__) _sys_realloc(__x__,(int)(__size__))
+
 
 //#define LWIP_DEBUG
 #ifdef LWIP_DEBUG

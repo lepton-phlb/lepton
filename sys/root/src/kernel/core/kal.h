@@ -1096,7 +1096,7 @@ typedef struct {
    #if   (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__)\
        &&(__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
       #if OS_VERSION_GENERIC != (38607) 
-         #include "OS_Priv.h"
+        // #include "OS_Priv.h"
       #endif
    #endif
 /*modif for segger version 3.52e */
@@ -1118,7 +1118,7 @@ typedef struct {
    #endif
 
    #if (__tauon_cpu_device__ == __tauon_cpu_device_arm9_at91sam9261__)
-      #include <ioat91sam9261.h>
+      #include <atmel/ioat91sam9261.h>
    #endif
 
    #define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy(&__dest_va_list__,&__src_va_list__,sizeof(__dest_va_list__))
@@ -1197,6 +1197,8 @@ typedef struct {
       _sys_free(__pthread_ptr__->bckup_stack); \
 }
 
+#if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
+       || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
    #define __inline_swap_signal_handler(__pthread_ptr__,__sig_handler__){ \
       /*modif for 3.06h version*/ \
       /*((OS_REGS OS_STACKPTR *)process_lst[pid]->pthread_ptr->tcb->pStack)->RetAdr4    = OS_MakeIntAdr(sig_handler);*/ \
@@ -1205,13 +1207,23 @@ typedef struct {
       /*((OS_REGS OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->PC0= (OS_U32)(__sig_handler__);*/ \
       /*modif for 3.52e and 3.60 replace PC0 by PC */ \
       /*((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->PC= (OS_U32)(__sig_handler__);\*/\
-      /* GD - modif for 3.84, "PC" from OS_REGS_BASE struct changed to "OS_REG_PC" since embOS 3.84. */\
+      /* GD - modif for 3.84, "PC" from OS_REGS_BASE struct changed to "OS_REG_PC" since embOS 3.84. for cotrex M3/M4 core */\
       ((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->OS_REG_PC= (OS_U32)(__sig_handler__);\
       ((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->Counters= 0;\
       __pthread_ptr__->tcb->Timeout=0; \
       __pthread_ptr__->tcb->Stat=0; \
       OS_MakeTaskReady(__pthread_ptr__->tcb); \
 }
+#elif  (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)
+   #define __inline_swap_signal_handler(__pthread_ptr__,__sig_handler__){ \
+      /* phlb - modif for 3.88, "PC" from OS_REGS_BASE for arm7/arm9  core*/\
+      ((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->PC= (OS_U32)(__sig_handler__);\
+      ((OS_REGS_GENERIC OS_STACKPTR *)__pthread_ptr__->tcb->pStack)->Counters= 0;\
+      __pthread_ptr__->tcb->Timeout=0; \
+      __pthread_ptr__->tcb->Stat=0; \
+      OS_MakeTaskReady(__pthread_ptr__->tcb); \
+}
+#endif
 
 /*TS_WAIT_TIME*/
    #define __inline_exit_signal_handler(__pthread_ptr__){ \

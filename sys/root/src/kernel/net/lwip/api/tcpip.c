@@ -612,7 +612,7 @@ err_t
 mem_free_callback(void *m)
 {
   //phlb modif for itron sam7 footprint test: replace macro mem_free by the direct calling to _sys_free
-  return tcpip_callback_with_block(/*mem_free*/_sys_free, m, 0);
+  return tcpip_callback_with_block(mem_free, m, 0);
 }
 
 #endif /* !NO_SYS */

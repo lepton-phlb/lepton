@@ -39,8 +39,7 @@ either the MPL or the [eCos GPL] License."
 #include "at91sam9261_twi_io.h"
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
    #include <string.h>

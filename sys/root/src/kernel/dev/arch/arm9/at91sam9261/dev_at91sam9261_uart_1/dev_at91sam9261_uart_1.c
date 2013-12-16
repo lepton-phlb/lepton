@@ -73,8 +73,7 @@ Includes
 #include "dev_at91sam9261_uart_1.h"
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
    #include <string.h>
@@ -96,7 +95,7 @@ extern int dev_at91sam9261_uart_x_read        (desc_t, char *,int);
 extern int dev_at91sam9261_uart_x_write       (desc_t, const char *, int);
 extern int dev_at91sam9261_uart_x_seek        (desc_t, int, int);
 extern int dev_at91sam9261_uart_x_ioctl       (desc_t, int, va_list);
-extern int dev_at91sam9261_uart_x_interrupt   (desc_t);
+//extern int dev_at91sam9261_uart_x_interrupt   (desc_t);
 extern int termios2ttys                       (struct termios *);
 
 #if defined(__KERNEL_UCORE_EMBOS)
@@ -157,7 +156,7 @@ Implementation
 ---------------------------------------------*/
 void dev_at91sam9261_uart_1_interrupt(void)
 {
-   dev_at91sam9261_uart_x_interrupt(desc_uart_1);
+   dev_at91sam9261_uart_x_interrupt(p_board_inf_uart_1);
 }
 
 /*-------------------------------------------

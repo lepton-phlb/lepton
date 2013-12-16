@@ -34,12 +34,6 @@ Purpose : Sample program for OS running on EVAL-boards with LEDs
 
 #include "RTOS.h"
 #include "kernel/core/kernel.h"
-//#include "kernel/core/system.h"
-//
-//
-//#include "kernel/core/process.h"
-//#include "kernel/core/ioctl_board.h"
-//#include "kernel/fs/vfs/vfsdev.h"
 
 
 /*********************************************************************

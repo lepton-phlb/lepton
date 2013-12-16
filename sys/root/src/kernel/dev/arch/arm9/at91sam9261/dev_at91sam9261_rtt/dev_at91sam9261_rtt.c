@@ -75,10 +75,17 @@ dev_map_t dev_at91sam9261_rtt_map={
    __fdev_not_implemented, //ioctl
 };
 
-static board_inf_rtt_t g_inf_board_rtt __attribute__ ((section (".no_cache"))) = {
-   base_addr : (volatile unsigned int *)0xfffffd20,
-   bckup_reg_addr : (volatile unsigned int *)0xfffffd50
-};
+#if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
+    static board_inf_rtt_t g_inf_board_rtt __attribute__ ((section (".no_cache"))) = {
+      .base_addr = (volatile unsigned int *)0xfffffd20,
+      .bckup_reg_addr = (volatile unsigned int *)0xfffffd50
+   };
+#else
+   static board_inf_rtt_t g_inf_board_rtt __attribute__ ((section (".no_cache"))) = {
+      base_addr : (volatile unsigned int *)0xfffffd20,
+      bckup_reg_addr : (volatile unsigned int *)0xfffffd50
+   };
+#endif
 
 /*===========================================
 Implementation

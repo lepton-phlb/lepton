@@ -86,7 +86,8 @@ static cyg_uint32 dev_at91sam9261_eth_dm9000a_interrupt_isr(cyg_vector_t vector,
 | See:
 ----------------------------------------------*/
 int dev_at91sam9261_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
-
+  
+#if defined(__KERNEL_UCORE_ECOS)
    if(p_dev_io_info->irq_no==CYGNUM_HAL_INTERRUPT_PIOC) {
       //enable IRQ on PIO_PC11/FIQ pin
       AT91_SYS->PMC_PCER |= (1 << (4)); //PIOC ID = 4 // Switch on clock to portC
@@ -99,7 +100,8 @@ int dev_at91sam9261_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
    }else{
       p_dev_io_info->p_fct_isr=(void*)0;
    }
-
+#endif
+   
    return dev_eth_dm9000a_load(p_dev_io_info);
 }
 
