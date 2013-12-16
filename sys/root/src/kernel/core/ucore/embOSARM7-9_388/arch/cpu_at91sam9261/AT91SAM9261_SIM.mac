@@ -1,0 +1,46 @@
+/*********************************************************************
+*               SEGGER MICROCONTROLLER SYSTEME GmbH                  *
+*       Solutions for real time microcontroller applications         *
+**********************************************************************
+*                                                                    *
+*       (C) 2006   SEGGER Microcontroller Systeme GmbH               *
+*                                                                    *
+*       www.segger.com     Support: support@segger.com               *
+*                                                                    *
+**********************************************************************
+*                                                                    *
+*       embOS * Real time operating system for microcontrollers      *
+*                                                                    *
+**********************************************************************
+
+----------------------------------------------------------------------
+File    : AT91SAM9261_SIM.mac
+Purpose : Setup CPU for IAR CSpy Simulator (AT91SAM9261 CPUs)
+--------  END-OF-HEADER  ---------------------------------------------
+*/
+
+SetVector()
+{
+  // default embOS timer interrupt vector is vector 1, PIT interrupt
+  __var vector;
+  __writeMemory32(0x1,0xFFFFFD34,"Memory");      // Set timer int pending flag
+  vector = __readMemory32(0xfffff084,"Memory");
+  __writeMemory32(vector,0xfffff100,"Memory");
+}
+
+execUserSetup()
+{
+  __message "AT91SAM9261_SIM.mac: Simulating embOS timer interrupt";
+  __disableInterrupts();
+  __cancelAllInterrupts();
+  __orderInterrupt ("IRQ", 20000, 10000, 0, 0, 0, 100);
+  __message "embOS: Generating 0x18 every 10000 cycles";
+  __setSimBreak("0xfffff100","R","SetVector()");
+  __enableInterrupts();
+}
+
+execUserReset()
+{
+  __message "AT91SAM9261_SIM.mac: execUserReset, preset PMC status";
+  __writeMemory32(0xF,0xFFFFFC68,"Memory");      // MCKRDY, PLLB_LOCK, PLLA_LOCK, MOSCS
+}
