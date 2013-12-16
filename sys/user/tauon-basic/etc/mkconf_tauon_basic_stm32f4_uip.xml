@@ -11,7 +11,15 @@
 </target>
 
 <kernel>
-        <!-- cpu type and frequency in MHz or Hz-->
+      <target name="win32_lepton">
+         <arch include_absolute_path="c:/tauon/sys/user/tauon-ijinus/src/arch/win32/kernel_mkconf/include/user_kernel_mkconf.h" />
+      </target>
+      
+      <target name="cortexm_lepton">
+         <arch include_absolute_path="c:/tauon/sys/user/tauon-ijinus/src/arch/olimex-stm32-p407/kernel_mkconf/include/user_kernel_mkconf.h" />
+      </target>
+      
+      <!-- cpu type and frequency in MHz or Hz-->
       <target name="win32_lepton">
          <cpu freq="10"/>
       </target>
@@ -95,34 +103,42 @@
 	   <dev name="dev_lm3s_cpu_map"               use="on"/>
 	   <!-- /dev/board -->
 	   <dev name="dev_stm32f4xx_olimex_board_map" use="on"/>
-      <!-- /dev/ttys0 -->
+      <!-- /dev/ttys3 -->
       <dev name="dev_stm32f4xx_uart_s3_map"      use="on"/>
-	  <!-- /dev/itm0 -->
+	   <!-- /dev/itm0 -->
       <dev name="dev_cmsis_itm0_map"             use="on"/>
-	  <!-- /dev/debug -->
+	   <!-- /dev/debug -->
       <dev name="dev_os_debug_map"               use="on"/>
-      <!-- /dev/eth0 -->
-      <dev name="dev_at91sam7x_eth0_map"         use="off"/>
+      <!-- /dev/spi0 -->
+      <dev name="dev_stm32f4xx_spi_3_map"        use="on"/>
+      <!-- /dev/spics -->
+      <dev name="dev_spi_chip_select_map"        use="on"/>
+      <!-- /dev/at45db spi nand flash -->
+      <dev name="dev_flash_nand_at45db_map"      use="on"/>
+      <!-- /dev/m45pe spi nand flash -->
+      <dev name="dev_flash_nand_m45pe_map"       use="on"/>
+       <!-- /dev/eth0 -->
+      <dev name="dev_stm32f4xx_eth_map"          use="on"/>
    </devices>
 </target>
 
 
 <!-- mount device on boot .mount -->
-<mount dest_path="c:/tauon/sys/user/tauon-basic/etc">
+<mount dest_path="c:/tauon/sys/user/tauon-ijinus/etc">
     <!-- mount EEPROM on /etc -->
     <disk type="ufs" dev="/dev/hd/hdb" point="/etc" />
 </mount>
 
 <!-- launch process on boot target path: /usr/etc/.boot-->
 <target name="win32_lepton">
-        <boot dest_path="c:/tauon/sys/user/tauon-basic/etc">
+        <boot dest_path="c:/tauon/sys/user/tauon-ijinus/etc">
                 <command arg="initd -i /dev/ttyp0 -o /dev/ttyp0" />
         </boot>
 </target>
 
 <target name="cortexm_lepton">
-        <boot dest_path="c:/tauon/sys/user/tauon-basic/etc">
-                <command arg="initd -i /dev/ttys3 -o /dev/ttys3" />
+        <boot dest_path="c:/tauon/sys/user/tauon-ijinus/etc">
+            <command arg="initd -i /dev/ttys3 -o /dev/ttys3" />
 				<!--command arg="initd -i /dev/debug -o /dev/debug" /-->
         </boot>
 </target>
@@ -164,10 +180,12 @@
         <bin name="test2"        stack="1024"    priority="10" timeslice="5" />
 </binaries-->
 <binaries src_path="bin" dest_path="bin">
-        <bin name="dhrystone"        stack="1024"    priority="10" timeslice="5" />
-		<bin name="free"        	 stack="1024"     priority="2"  timeslice="5" />
-		<bin name="udpsrvd"        stack="2048"    priority="100" timeslice="5" />
-		<!--bin name="sdramtest"        stack="1024"    priority="100" timeslice="5" /-->
+      <bin name="udpsrvd"        stack="2048"    priority="100" timeslice="5" />
+</binaries>
+
+<!-- /usr/bin -->
+<binaries src_path="bin/tst" dest_path="bin/tst">
+        <bin name="tsteth"        stack="2048"    priority="100"  timeslice="5" />
 </binaries>
 
 <!-- /usr/bin -->
@@ -181,10 +199,15 @@
 
 <files>
    <!-- /usr/etc  (hda internal flash mount on /bin) -->
-   <!--file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init_with_net"               dest_path="etc" /-->
-   <file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init"               dest_path="etc" />
-   <file name=".boot"      src_file="c:/tauon/sys/user/tauon-basic/etc/.boot"               dest_path="etc" />
-   <file name=".mount"     src_file="c:/tauon/sys/user/tauon-basic/etc/.mount"              dest_path="etc" />
+   <!--file name=".init"      src_file="c:/tauon/sys/user/tauon-ijinus/etc/.init_with_net"               dest_path="etc" /-->
+   <target name="win32_lepton">
+      <file name=".init"      src_file="c:/tauon/sys/user/tauon-ijinus/etc/.init_win32"      dest_path="etc" />
+   </target>
+    <target name="cortexm_lepton">
+      <file name=".init"      src_file="c:/tauon/sys/user/tauon-ijinus/etc/.init_olimex"       dest_path="etc" />
+   </target>
+   <file name=".boot"      src_file="c:/tauon/sys/user/tauon-ijinus/etc/.boot"               dest_path="etc" />
+   <file name=".mount"     src_file="c:/tauon/sys/user/tauon-ijinus/etc/.mount"              dest_path="etc" />
 </files>
 
 </mklepton>

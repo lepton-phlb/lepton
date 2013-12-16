@@ -19,7 +19,7 @@
       </member>
       <member>
         <project>tauon_6.21</project>
-        <configuration>lib-debug</configuration>
+        <configuration>tauon-kernel-cortex-m4-debug</configuration>
       </member>
       <member>
         <project>tauon-basic_stm32f4_6.21</project>

@@ -1,0 +1,5 @@
+mount /dev/spics /dev/spi0 /dev/spi0.0 -i 0
+mount /dev/at45db /dev/spi0.0 /dev/hd/at45db.0
+mount /dev/m45pe /dev/spi0.0 /dev/hd/m45pe.0
+mkfs -t effs -d /dev/spi0.0
+mount -t effs /dev/spi0.0 /mnt
