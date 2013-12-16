@@ -25,7 +25,7 @@
 #ifndef MONGOOSE_HEADER_INCLUDED
 #define	MONGOOSE_HEADER_INCLUDED
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 #define EXIT_FAILURE    1
 #define EXIT_SUCCESS    0
 #endif

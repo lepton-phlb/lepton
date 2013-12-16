@@ -37,7 +37,7 @@ Includes
 #include "kernel/core/flock.h"
 #include "kernel/core/stat.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <stdlib.h>
 #endif
 /*===========================================

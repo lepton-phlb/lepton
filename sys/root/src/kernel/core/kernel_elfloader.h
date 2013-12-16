@@ -41,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    #pragma pack(push, 1)
 #endif
 
@@ -670,7 +670,7 @@ typedef struct {
       follow those. */
 } Elf_Hash;
 
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    #pragma pack (pop)
 #endif
 
