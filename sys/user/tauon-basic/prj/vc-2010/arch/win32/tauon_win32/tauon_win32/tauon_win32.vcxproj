@@ -84,7 +84,11 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\tst\tsteth.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\bin_mkconf.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_mkconf.c" />

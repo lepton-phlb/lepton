@@ -52,6 +52,9 @@
     <Filter Include="user\bin\net\cgi-bin">
       <UniqueIdentifier>{9855115e-f5b2-42d3-ad3f-80763bd1b7e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="root\bin\tst">
+      <UniqueIdentifier>{3c4e2ac5-d05c-4e63-ac42-b15926f430dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c">
@@ -74,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstpost.c">
       <Filter>user\bin\net\cgi-bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\tst\tsteth.c">
+      <Filter>root\bin\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c">
+      <Filter>root\bin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

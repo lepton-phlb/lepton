@@ -6,7 +6,8 @@
 mkfs -t effs -d /dev/null
 mount -t effs /dev/null /mnt
 #net/ifconfig addif 14.2.212.244 14.2.10.1
-net/ifconfig addif 192.168.83.32 192.168.83.2
+#net/ifconfig addif 192.168.83.32 192.168.83.2
+net/ifconfig addif 192.168.0.34 192.168.0.1
 bin/net/telnetd&
 #bin/net/shttpd -cgi_interp lsh &
 bin/net/mongoosed -cgi_interp lsh &

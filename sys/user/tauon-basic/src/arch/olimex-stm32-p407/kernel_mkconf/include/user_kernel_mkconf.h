@@ -11,7 +11,7 @@ Compiler Directive
 
 //force EFFS for stm32f407 on olimex-stm32-p407 board
 #define __file_system_profile__  __file_system_profile_classic__
-#define __KERNEL_VFS_SUPPORT_EFFS   1 
+#define __KERNEL_VFS_SUPPORT_EFFS   0
 
 //ip stack
 //#define USE_UIP 
