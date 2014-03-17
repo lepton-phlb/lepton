@@ -19,9 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * $Id: mongoose.c,v 1.8 2010-02-16 12:39:43 phlb Exp $
  */
-
 #ifndef _WIN32_WCE /* Some ANSI #includes are not available on Windows CE */
 /*
    #include <sys/types.h>
