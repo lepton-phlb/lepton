@@ -81,10 +81,6 @@
 
    #define   SHUT_WR                 1
 
-   #if !defined(__GNUC__)
-typedef uint32_t uint64_t;
-   #endif
-
    #define   flockfile(x)
    #define   funlockfile(x)
    #define  fork           vfork
