@@ -34,7 +34,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/core/kernelconf.h"
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    #include <atmel/ioat91sam9261.h>
 #elif defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"

@@ -41,8 +41,9 @@ either the MPL or the [eCos GPL] License."
    #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
-   #include "kernel/core/core_rttimer.h"
 #endif
+
+#include "kernel/core/core_rttimer.h"
 /*============================================
 | Declaration
 ==============================================*/
@@ -105,7 +106,7 @@ typedef struct {
    //VTIME timer in units of 0.1 seconds (posix specification).
 #if defined(__KERNEL_UCORE_EMBOS)
    OS_TIMER timer;
-#elif defined(__KERNEL_UCORE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS) || defined(__KERNEL_UCORE_FREERTOS)
    tmr_t timer;
    rttmr_attr_t timer_attr;
 #endif
