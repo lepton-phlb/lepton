@@ -30,8 +30,9 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include "kernel/core/types.h"
-#include "kernel/core/interrupt.h"
 #include "kernel/core/kernelconf.h"
+#include "kernel/core/kal.h"
+#include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/kernel_pthread.h"
 #define USE_IO_LINUX
@@ -300,6 +301,8 @@ static int media_mode = DM9KS_10MHD;
 static board_info_t g_board_info;
 #if defined(__KERNEL_UCORE_EMBOS)
    #define mdelay(__mdelay__) OS_Delay(__mdelay__)
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   #define mdelay(__mdelay__) __kernel_usleep((__mdelay__*1000))
 #elif defined(__KERNEL_UCORE_ECOS)
    #define mdelay(__mdelay__) cyg_thread_delay(__mdelay__)
 #endif
@@ -952,7 +955,7 @@ static void dmfe_tx_done(board_info_t *db,unsigned long unused){
    }
 
    if(db->tx_pkt_cnt <= 0 && _eth_dm9000a_desc_wr>=0) {
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
       __fire_io_int(ofile_lst[_eth_dm9000a_desc_wr].owner_pthread_ptr_write);
 #elif defined(__KERNEL_UCORE_ECOS)
       __set_flag_fire_o_int();
@@ -1117,7 +1120,7 @@ static void dmfe_packet_receive(board_info_t *db){
 
          //
          if(_eth_dm9000a_desc_rd>=0) {
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
             __fire_io_int(ofile_lst[_eth_dm9000a_desc_rd].owner_pthread_ptr_read);
 #elif defined(__KERNEL_UCORE_ECOS)
             __set_flag_fire_i_int();
@@ -1204,7 +1207,7 @@ static void dmfe_packet_receive(board_info_t *db){
 | Comments:
 | See:
 ----------------------------------------------*/
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
 static void dmfe_interrupt(void) {
 #elif defined(__KERNEL_UCORE_ECOS)
 cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t data) {
@@ -1213,10 +1216,12 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
    board_info_t * db= &g_board_info;         /* Point a board information structure */
    int int_status,i;
    u8 reg_save;
-
+#if defined(__KERNEL_UCORE_FREERTOS)
+   __hw_enter_interrupt();
+#endif
    //OS_EnterNestableInterrupt();see RTOSINIT_ATXXX.c
    //arm7
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
    *AT91C_AIC_IVR = 0; // Debug variant of vector read, protected mode is used.
    *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1; // Clears INT1 interrupt.
 #endif
@@ -1281,6 +1286,8 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
    outb(reg_save, db->io_addr);
 #if defined(__KERNEL_UCORE_EMBOS)
    *AT91C_AIC_EOICR = 0; // Signal end of interrupt to AIC.
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   __hw_leave_interrupt();
 #elif defined(__KERNEL_UCORE_ECOS)
    //spin_unlock(&db->lock);
    //OS_LeaveNestableInterrupt();see RTOSINIT_ATXXX.c
@@ -1288,6 +1295,7 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
    //Informe kernel d'exécuter DSR
    return(CYG_ISR_HANDLED | CYG_ISR_CALL_DSR);
 #endif
+
 }
 
 #if defined(__KERNEL_UCORE_ECOS)
@@ -1356,7 +1364,7 @@ int dev_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
    g_board_info._output_w=0;
    g_board_info._output_r=0;
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
    // IRQ1  interrupt vector.
    AT91C_AIC_SVR[AT91C_ID_IRQ1] = (unsigned long)&dmfe_interrupt;
    // SRCTYPE=3, PRIOR=3. INT1 interrupt positive edge-triggered at prio 3.
@@ -1395,7 +1403,7 @@ int dev_eth_dm9000a_open(desc_t desc, int o_flag){
 
    if(_eth_dm9000a_desc_rd<0 && _eth_dm9000a_desc_wr<0) {
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
       *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1;    // Clears INT1 interrupt.
       *AT91C_AIC_IECR = 1 << AT91C_ID_IRQ1;    // Enable INT1 interrupt.
 #elif defined(__KERNEL_UCORE_ECOS)

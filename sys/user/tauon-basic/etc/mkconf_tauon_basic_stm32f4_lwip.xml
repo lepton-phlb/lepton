@@ -186,7 +186,7 @@
         <!--bin name="shttpd"       stack="31744"   priority="100" timeslice="1" /-->
         <!--bin name="ftpd"         stack="8192"    priority="100" timeslice="1" /-->
         <!--bin name="lftpd"          stack="8192"    priority="100" timeslice="1" /-->
-        <bin name="mongoosed"      stack="8192"   priority="100" timeslice="1" />
+        <!--bin name="mongoosed"      stack="8192"   priority="100" timeslice="1" /-->
 </binaries>
 
 <!-- /usr/bin/net/cgi-bin -->

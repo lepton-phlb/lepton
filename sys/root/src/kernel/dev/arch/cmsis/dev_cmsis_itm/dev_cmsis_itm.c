@@ -256,7 +256,7 @@ int dev_cmsis_itm_x_write(desc_t desc, const char* buf,int size){
 //            ITM_SendChar(*buf++);//(p_cpu_inf_itm->base_address)
         ITMx_SendChar(*buf++,p_cpu_inf_itm->itm_no);
     }
-    __fire_io_int(ofile_lst[p_cpu_inf_itm->desc_w].owner_pthread_ptr_write);
+    __fire_io(ofile_lst[p_cpu_inf_itm->desc_w].owner_pthread_ptr_write);
     return (size-count);
 }
 
