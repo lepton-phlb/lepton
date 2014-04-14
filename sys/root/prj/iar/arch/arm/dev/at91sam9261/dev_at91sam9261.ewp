@@ -295,6 +295,8 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>C:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/include</state>
+          <state>C:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/portable/IAR/AtmelSAM9XE</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7-9_388/inc</state>
           <state>c:/tauon/sys/root/src</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
@@ -302,6 +304,9 @@
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
+          <state>C:\tauon\sys\root\src\kernel\dev\arch\at91\at91lib\boards\at91sam9261-ek</state>
+          <state>C:\tauon\sys\root\src\kernel\dev\arch\at91\at91lib\peripherals</state>
+          <state>C:\tauon\sys\root\src\kernel\dev\arch\at91\at91lib\utility</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
