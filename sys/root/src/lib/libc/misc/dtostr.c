@@ -73,11 +73,7 @@ either the MPL or the [eCos GPL] License."
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
 //#include <string.h>
-#if !defined(__GNUC__)
-   #include <assert.h>
-#else
-   #define  assert(__cond__)
-#endif
+#define  assert(__cond__)
 //#include <float.h>
 
 //extern int fnprintf(FILE * fp, size_t size, const char *fmt, ...);
