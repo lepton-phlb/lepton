@@ -94,7 +94,10 @@ int dev_os_debug_open(desc_t desc, int o_flag){
         p_os_inf_debug->read_tail = 0;
         p_os_inf_debug->input_loss = 0;
         p_os_inf_debug->data_to_read = 0;
-        OS_SetRxCallback(dev_os_debug_isr);
+        #if defined(__KERNEL_UCORE_EMBOS)
+         OS_SetRxCallback(dev_os_debug_isr);
+        #endif
+        
         p_os_inf_debug->desc_r = desc;        
     }
     
@@ -123,7 +126,9 @@ int dev_os_debug_close(desc_t desc){
         return -1;
     if(ofile_lst[desc].oflag & O_RDONLY){
         if(!ofile_lst[desc].nb_reader){
-            OS_SetRxCallback(0);//cancel the call back
+           #if defined(__KERNEL_UCORE_EMBOS)
+               OS_SetRxCallback(0);//cancel the call back
+           #endif 
             p_os_inf_debug->read_head = 0;
             p_os_inf_debug->read_tail = 0;
             p_os_inf_debug->data_to_read = 0;
