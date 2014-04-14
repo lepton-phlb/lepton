@@ -125,7 +125,7 @@ int initd_main(int argc,char* argv[]){
    char * _stdout=(char*)0;
    char * _init_script_path=(char*)0;
    unsigned char opt=0;
-
+  
    //pid=1 ppid=0 pgid=1
    setpgid(0,0);
 

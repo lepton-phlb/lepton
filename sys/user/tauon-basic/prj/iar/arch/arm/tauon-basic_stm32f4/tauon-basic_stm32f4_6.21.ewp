@@ -298,6 +298,8 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/include</state>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/portable/IAR/ARM_CM4F</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
           <state>C:\tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/arch/cmsis/DeviceSupport</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
@@ -308,6 +310,7 @@
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
           <state>c:/tauon/sys/root/src/kernel/core/ucore/cmsis</state>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/cmsis/Device/st/stm32f4xx</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1826,6 +1829,9 @@
           <name>bin</name>
           <group>
             <name>net</name>
+            <excluded>
+              <configuration>Debug</configuration>
+            </excluded>
             <group>
               <name>mongoose</name>
               <file>
@@ -1953,6 +1959,9 @@
                     <name>st</name>
                     <group>
                       <name>stm32f2xx</name>
+                      <excluded>
+                        <configuration>Debug</configuration>
+                      </excluded>
                       <group>
                         <name>startup</name>
                         <file>
@@ -1967,6 +1976,24 @@
                       </file>
                       <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f2xx\system_stm32f2xx.h</name>
+                      </file>
+                    </group>
+                    <group>
+                      <name>stm32f4xx</name>
+                      <group>
+                        <name>startup</name>
+                        <file>
+                          <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\startup\iar\startup_stm32f4xx.s</name>
+                        </file>
+                      </group>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\stm32f4xx.h</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\system_stm32f4xx.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\cmsis\Device\st\stm32f4xx\system_stm32f4xx.h</name>
                       </file>
                     </group>
                   </group>
@@ -2007,6 +2034,60 @@
                     </file>
                   </group>
                 </group>
+              </group>
+              <group>
+                <name>freeRTOS_7-6-0</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
+                <group>
+                  <name>arch</name>
+                  <group>
+                    <name>cortex-m4</name>
+                    <group>
+                      <name>stm32f4</name>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_7-6-0\source\arch\cortex-m4\stm32f4\stm32f4xx_conf.h</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_7-6-0\source\arch\cortex-m4\stm32f4\stm32f4xx_it.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_7-6-0\source\arch\cortex-m4\stm32f4\stm32f4xx_it.h</name>
+                      </file>
+                    </group>
+                  </group>
+                </group>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_7-6-0\source\arch\cortex-m4\stm32f4\main.c</name>
+                </file>
+              </group>
+              <group>
+                <name>freeRTOS_8-0-0</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
+                <group>
+                  <name>arch</name>
+                  <group>
+                    <name>cortex-m4</name>
+                    <group>
+                      <name>stm32f4</name>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\arch\cortex-m4\stm32f4\stm32f4xx_conf.h</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\arch\cortex-m4\stm32f4\stm32f4xx_it.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\arch\cortex-m4\stm32f4\stm32f4xx_it.h</name>
+                      </file>
+                    </group>
+                  </group>
+                </group>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\arch\cortex-m4\stm32f4\main.c</name>
+                </file>
               </group>
             </group>
           </group>
