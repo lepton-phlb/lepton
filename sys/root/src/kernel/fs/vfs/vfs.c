@@ -548,13 +548,13 @@ desc_t _vfs_open(const char* ref, int oflag, mode_t mode){
          if((oflag&O_RDONLY) && !(oflag&O_NONBLOCK)) {
             _desc=desc_fifo_r;
             if(!ofile_lst[_desc].nb_reader) {
-               __fire_io_int(ofile_lst[desc_fifo_w].owner_pthread_ptr_write);
+               __fire_io(ofile_lst[desc_fifo_w].owner_pthread_ptr_write);
             }
 
          }else if((oflag&O_WRONLY) && !(oflag&O_NONBLOCK)) {
             _desc=desc_fifo_w;
             if(!ofile_lst[_desc].nb_writer) {
-               __fire_io_int(ofile_lst[desc_fifo_r].owner_pthread_ptr_read);
+               __fire_io(ofile_lst[desc_fifo_r].owner_pthread_ptr_read);
             }
          }
 
