@@ -30,11 +30,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#if !defined(__GNUC__)
-   #include <assert.h>
-#else
-   #define  assert(__cond__)
-#endif
+
+#define  assert(__cond__)
 
 #include "lib/libc/ctype/ctype.h"
 
