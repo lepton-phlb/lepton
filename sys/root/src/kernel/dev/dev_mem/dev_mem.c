@@ -412,7 +412,7 @@ int dev_mem_write(desc_t desc,const char* buf, int size){
 
             addr_list[i].vector_isset_read|=(0x00000001<<shift);
             //if(!(ofile_lst[shift].oflag&O_NONBLOCK))
-            __fire_io_int(ofile_lst[shift].owner_pthread_ptr_read);
+            __fire_io(ofile_lst[shift].owner_pthread_ptr_read);
             //pthread_fire_event(&ofile_lst[shift].pthread_owner);
          }
 
