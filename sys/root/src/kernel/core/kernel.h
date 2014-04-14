@@ -93,7 +93,7 @@ enum  _syscall_enum_t {
    _SYSCALL_SIGPROCMASK,
    _SYSCALL_SIGPENDING,
    _SYSCALL_SIGACTION,
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_ALARM,
 #endif
    _SYSCALL_PAUSE,
@@ -127,7 +127,7 @@ enum  _syscall_enum_t {
    _SYSCALL_STATVFS,
    _SYSCALL_REMOVE,
    _SYSCALL_GETTIMEOFDAY,
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_ATEXIT,
 #endif
    _SYSCALL_MALLOC,
@@ -150,7 +150,7 @@ enum  _syscall_enum_t {
    _SYSCALL_PTHREAD_CREATE,
    _SYSCALL_PTHREAD_CANCEL,
    _SYSCALL_PTHREAD_EXIT,
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_PTHREAD_KILL,
 #endif
    _SYSCALL_PTHREAD_MUTEX_INIT,
@@ -365,7 +365,7 @@ extern int __g_kernel_static_errno;
 //
 //WARNING __syscall_lock(); unlock by kernel (see kernel.c)
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 //
 /**
  * gnre un appel systme

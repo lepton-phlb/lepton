@@ -308,10 +308,10 @@ int _posix_mqueue_msg_write(desc_t desc,const void* buf,int size,unsigned int pr
    __atomic_in(); //__syscall_lock();
    //fire event to current writer
    if(ofile_lst[desc].owner_pthread_ptr_write)
-      __fire_io_int(ofile_lst[desc].owner_pthread_ptr_write);
+      __fire_io(ofile_lst[desc].owner_pthread_ptr_write);
    //fire event to reader
    if(ofile_lst[desc_next_read].nb_reader>0 && ofile_lst[desc_next_read].owner_pthread_ptr_read)
-      __fire_io_int(ofile_lst[desc_next_read].owner_pthread_ptr_read);
+      __fire_io(ofile_lst[desc_next_read].owner_pthread_ptr_read);
    //
    __atomic_out(); //__syscall_unlock();
 

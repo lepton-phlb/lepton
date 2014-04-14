@@ -62,6 +62,10 @@ typedef struct kernel_timer_st {
    OS_TIMER timer;
 #endif
 
+#ifdef __KERNEL_UCORE_FREERTOS
+   xTimerHandle timer;
+#endif
+
 #ifdef __KERNEL_UCORE_ECOS
    tmr_obj_t timer;
 #endif

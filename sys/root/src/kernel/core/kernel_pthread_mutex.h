@@ -55,6 +55,9 @@ typedef struct {
 #ifdef __KERNEL_UCORE_EMBOS
    OS_RSEMA mutex;
 #endif
+#ifdef __KERNEL_UCORE_FREERTOS
+   xSemaphoreHandle mutex;
+#endif
 #ifdef __KERNEL_UCORE_ECOS
    cyg_mutex_t mutex;
 #endif
