@@ -40,10 +40,15 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#ifdef __KERNEL_UCORE_EMBOS
+#if defined(__KERNEL_UCORE_EMBOS)
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef OS_TIMER tmr_t;
+
+#elif defined(__KERNEL_UCORE_FREERTOS)
+typedef void (*_tmr_func_t)( xTimerHandle);
+typedef _tmr_func_t tmr_func_t;
+typedef xTimerHandle tmr_t;
 
 #elif __KERNEL_UCORE_ECOS
 typedef cyg_handle_t alrm_hdl_t;    //handle sur l'objet alarme

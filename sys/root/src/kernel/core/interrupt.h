@@ -202,15 +202,17 @@ typedef unsigned char kernel_intr_t;
  */
    #if defined(__KERNEL_IO_SEM)
       #define __fire_io_int(__pthread_ptr__){ \
-      if(__pthread_ptr__!=((kernel_pthread_t*)0)) \
-         kernel_sem_post(&__pthread_ptr__->io_sem); \
-}
+         if(__pthread_ptr__!=((kernel_pthread_t*)0)) \
+            kernel_sem_post(&__pthread_ptr__->io_sem); \
+      }
    #elif defined(__KERNEL_IO_EVENT)
       #define __fire_io_int(__pthread_ptr__){ \
-      if(__pthread_ptr__!=((kernel_pthread_t*)0)) \
-         OS_SignalEvent (SYSTEM_IO_INTERRUPT,__pthread_ptr__->tcb); \
-}
+         if(__pthread_ptr__!=((kernel_pthread_t*)0)) \
+            OS_SignalEvent (SYSTEM_IO_INTERRUPT,__pthread_ptr__->tcb); \
+      }
    #endif
+
+   #define __fire_io(__pthread_ptr__) __fire_io_int(__pthread_ptr__)
 
 //if KERNEL_RET_INTERRUPT event then wait wans interrupted by posix signal.
 /**
@@ -279,6 +281,101 @@ typedef unsigned char kernel_intr_t;
    #define __kernel_pthread_suspend(__pthread_ptr__)  OS_Suspend(__pthread_ptr__->tcb)
    #define __kernel_pthread_resume(__pthread_ptr__)   OS_Resume(__pthread_ptr__->tcb)
    #define __kernel_pthread_release(__pthread_ptr__)  OS_Terminate(__pthread_ptr__->tcb)
+
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   #define KERNEL_INTERRUPT_NB         0x80
+   #define KERNEL_NET_INTERRUPT_NB     0x81
+ 
+
+   #define  __kernel_get_timer_ticks() xTaskGetTickCount()
+
+   #define __clr_irq() __disable_interrupt_section_in()
+   #define __set_irq() __disable_interrupt_section_out()
+
+   #define __kernel_usleep(useconds){ \
+      ldiv_t lr =ldiv(useconds,1000); \
+      if(lr.quot) vTaskDelay((lr.quot)/portTICK_RATE_MS); \
+   }
+   
+   //syscall mechanism
+   //
+   #define __kernel_wait_int() xEventGroupWaitBits(kernel_pthread_self()->event_group_handle,KERNEL_INTERRUPT,pdTRUE,pdTRUE,portMAX_DELAY)
+
+   #define __kernel_begin_syscall(__pthread_ptr__) \
+   __pthread_ptr__->stat|=PTHREAD_STATUS_KERNEL;
+
+   #define __kernel_end_syscall(__pthread_ptr__) \
+      __pthread_ptr__->stat&=~PTHREAD_STATUS_KERNEL;
+
+   #define __kernel_ret_int(__pthread_ptr__){ \
+      __pthread_ptr__->irq_nb=0x00; \
+      if(!(__pthread_ptr__->stat&PTHREAD_STATUS_KERNEL)) { \
+           xEventGroupSetBits(__pthread_ptr__->event_group_handle,KERNEL_RET_INTERRUPT );\
+      } \
+   }
+
+   #define __make_interrupt(__pthread_ptr__,irq_nb){ \
+      if(irq_nb==KERNEL_INTERRUPT_NB) { \
+         xEventGroupSetBits(kernel_thread.event_group_handle,KERNEL_INTERRUPT );\
+      } \
+   }
+
+   //
+   #define __wait_ret_int()\
+      xEventGroupWaitBits(kernel_pthread_self()->event_group_handle,KERNEL_RET_INTERRUPT,pdFALSE,pdTRUE,portMAX_DELAY);\
+      xEventGroupClearBits(kernel_pthread_self()->event_group_handle,KERNEL_RET_INTERRUPT);
+  
+   //
+   #if defined(__KERNEL_IO_SEM)
+      #define __fire_io_int(__pthread_ptr__){ \
+         if(__pthread_ptr__!=((kernel_pthread_t*)0)){\
+            kernel_sem_post(&__pthread_ptr__->io_sem);\
+               if(kernel_in_interrupt>0)\
+                  kernel_in_interrupt_higher_priority_task_woken = __pthread_ptr__->io_sem.xHigherPriorityTaskWoken;\
+         }\
+      }
+
+      #define __fire_io(__pthread_ptr__){ \
+         if(__pthread_ptr__!=((kernel_pthread_t*)0)){\
+            kernel_sem_post(&__pthread_ptr__->io_sem);\
+         }\
+      }
+   #endif
+
+   //
+   #if defined(__KERNEL_IO_SEM)
+      #define __wait_io_int(__pthread_ptr__) kernel_sem_wait(&__pthread_ptr__->io_sem)
+   #endif
+
+   #if defined(__KERNEL_IO_SEM)
+      #define __wait_io_int2(__pthread_ptr__,__timeout__)  kernel_sem_timedwait(&__pthread_ptr__->io_sem,0,__timeout__)
+      #define __wait_io_int3(__pthread_ptr__,__timeout__)  kernel_sem_timedwait(&__pthread_ptr__->io_sem,0,__timeout__)
+   #endif
+
+   #if defined(__KERNEL_IO_SEM)
+      #define __wait_io_int_abstime(__pthread_ptr__,__abs_timeout__) kernel_sem_timedwait(&__pthread_ptr__->io_sem,TIMER_ABSTIME,__abs_timeout__)
+   #endif
+
+   //kernel_in_interrupt declared in kernel.c
+   extern volatile int kernel_in_interrupt;
+   extern signed long kernel_in_interrupt_higher_priority_task_woken;
+   
+   #define __hw_enter_interrupt()\
+     kernel_in_interrupt_higher_priority_task_woken=pdFALSE;\
+     kernel_in_interrupt++;
+     
+   #define __hw_leave_interrupt()\
+      kernel_in_interrupt--;\
+      if(!kernel_in_interrupt){\
+         portYIELD_FROM_ISR(kernel_in_interrupt_higher_priority_task_woken);\
+      }
+         
+   #define __hw_is_in_interrupt() ( kernel_in_interrupt>0 ? 1 : 0)
+
+   //for suspend and resume thread  //GD untested
+   #define __kernel_pthread_suspend(__pthread_ptr__) vTaskSuspend((xTaskHandle)__pthread_ptr__->tcb)  
+   #define __kernel_pthread_resume(__pthread_ptr__) vTaskResume((xTaskHandle)__pthread_ptr__->tcb)
+   #define __kernel_pthread_release(__pthread_ptr__) vTaskDelete((xTaskHandle)__pthread_ptr__->tcb)
 
 #elif defined(__KERNEL_UCORE_ECOS) && defined(CPU_GNU32)
 //   extern kernel_sem_t kernel_io_sem;
@@ -351,6 +448,9 @@ extern int cyg_hal_sys_getpid(void);
          core_event_set_flags(__pthread_ptr__,KERNEL_IO_INTERRUPT); \
 }
    #endif
+
+   #define __fire_io(__pthread_ptr__) __fire_io_int(__pthread_ptr__)
+
 //if KERNEL_RET_INTERRUPT event then wait wans interrupted by posix signal.
 /**
  * attente d' une interruption materiel en provenance d'un pilote de périphérique d'e/s(utilisé au niveau processus voir les périphériques d'e/s)
@@ -482,6 +582,8 @@ extern int cyg_hal_sys_getpid(void);
          core_event_set_flags(__pthread_ptr__,KERNEL_IO_INTERRUPT); \
 }
    #endif
+
+   #define __fire_io(__pthread_ptr__) __fire_io_int(__pthread_ptr__)
 
 //get current ticks of timer counter
    #define __get_timer_ticks()             cyg_current_time()
@@ -616,6 +718,8 @@ extern int cyg_hal_sys_getpid(void);
 }
    #endif
 
+   #define __fire_io(__pthread_ptr__) __fire_io_int(__pthread_ptr__)
+
 //get current ticks of timer counter
    #define __get_timer_ticks()             cyg_current_time()
    #define __kernel_get_timer_ticks()      cyg_current_time()
@@ -733,6 +837,8 @@ extern int cyg_hal_sys_getpid(void);
 * \hideinitializer
 */
    #define __fire_io_int(__pthread_ptr__)
+
+   #define __fire_io(__pthread_ptr__) __fire_io_int(__pthread_ptr__)
 //if KERNEL_RET_INTERRUPT event then wait wans interrupted by posix signal.
 /**
  * attente d' une interruption materiel en provenance d'un pilote de périphérique d'e/s(utilisé au niveau processus voir les périphériques d'e/s)

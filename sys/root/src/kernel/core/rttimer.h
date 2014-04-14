@@ -44,6 +44,12 @@ typedef OS_TIMER tmr_t;
 
 #endif
 
+#ifdef __KERNEL_UCORE_FREERTOS
+typedef void (*_tmr_func_t)(void);
+typedef _tmr_func_t tmr_func_t;
+typedef xTimerHandle tmr_t;
+#endif
+
 
 typedef struct rttmr_attr_st {
    time_t tm_msec; //delay

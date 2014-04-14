@@ -168,7 +168,12 @@ typedef struct kernel_pthread_st {
 #ifdef __KERNEL_UCORE_EMBOS
    OS_TASK*  tcb;
 #endif
-
+   
+#ifdef __KERNEL_UCORE_FREERTOS
+   freertos_tcb_t* tcb;
+   EventGroupHandle_t event_group_handle; //used by kernel (KERNEL_INTERRUPT and KERNEL_RET_INTERRUPT).
+#endif
+     
 #ifdef GNU_GCC
    tcb_t * tcb;
    tcb_t * bckup_tcb; //for signal handler

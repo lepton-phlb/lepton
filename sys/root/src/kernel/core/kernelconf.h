@@ -183,6 +183,7 @@ Declaration
    #define __KERNEL_UCORE_EMBOS
 #elif (__tauon_compiler__==__compiler_iar_arm__)
    #define __KERNEL_UCORE_EMBOS
+   //#define __KERNEL_UCORE_FREERTOS
 #elif (__tauon_compiler__==__compiler_keil_arm__)
    #define __KERNEL_UCORE_EMBOS
 #endif
@@ -410,6 +411,14 @@ Declaration
 
 //realtime posix extension
 #if defined(__KERNEL_UCORE_EMBOS)
+   #define ATEXIT_MAX    4
+   #define __KERNEL_POSIX_REALTIME_SIGNALS
+   #define __KERNEL_LOAD_LIB
+   #define __KERNEL_USE_FILE_LOCK
+   #define __KERNEL_IO_SEM
+#endif
+
+#if defined(__KERNEL_UCORE_FREERTOS)
    #define ATEXIT_MAX    4
    #define __KERNEL_POSIX_REALTIME_SIGNALS
    #define __KERNEL_LOAD_LIB

@@ -276,7 +276,7 @@ int _sys_pipe_close(desc_t desc){
 
       //signal to reader process: no writer.
       if(desc_r>=0)
-         __fire_io_int(ofile_lst[desc_r].owner_pthread_ptr_read);
+         __fire_io(ofile_lst[desc_r].owner_pthread_ptr_read);
    }
    //
    if(opipe_lst[pipe_desc].desc_w<0 && opipe_lst[pipe_desc].desc_r<0) {
@@ -376,7 +376,7 @@ int _sys_pipe_read(desc_t desc,char* buffer,int nbyte ){
    }
    //signal to writer process: buffer is empty and ready for write.
    if(desc_w>=0)
-      __fire_io_int(ofile_lst[desc_w].owner_pthread_ptr_write);
+      __fire_io(ofile_lst[desc_w].owner_pthread_ptr_write);
    //
    __syscall_unlock();
    //
@@ -436,10 +436,10 @@ int _sys_pipe_write(desc_t desc,const char* buffer,int nbyte ){
    //printf("pzw:%d\r\n",opipe_lst[pipe_desc].size);
    //signal write until space available in this pipe else wait reader free space.
    if(opipe_lst[pipe_desc].size<__PIPE_SIZE)
-      __fire_io_int(ofile_lst[desc].owner_pthread_ptr_write);
+      __fire_io(ofile_lst[desc].owner_pthread_ptr_write);
    //signal to reader process: buffer is not empty and ready for read.
    if(desc_r>=0)
-      __fire_io_int(ofile_lst[desc_r].owner_pthread_ptr_read);
+      __fire_io(ofile_lst[desc_r].owner_pthread_ptr_read);
    //
    __syscall_unlock();
    //
