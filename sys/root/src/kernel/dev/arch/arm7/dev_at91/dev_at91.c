@@ -84,7 +84,7 @@ static char dump_buffer[64];
    #define NUM_INT_SOURCES  32
 #endif
 
-extern OS_ISR_HANDLER* OS_ARM_InstallISRHandler (int ISRIndex, OS_ISR_HANDLER* pISRHandler);
+//extern OS_ISR_HANDLER* OS_ARM_InstallISRHandler (int ISRIndex, OS_ISR_HANDLER* pISRHandler);
 
 /*============================================
 | Implementation
