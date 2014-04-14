@@ -163,7 +163,7 @@ int dev_null_read(desc_t desc, char* buf,int size){
 | See:
 ---------------------------------------------*/
 int dev_null_write(desc_t desc, const char* buf,int size){
-   __fire_io_int(ofile_lst[desc].owner_pthread_ptr_write);
+   __fire_io(ofile_lst[desc].owner_pthread_ptr_write);
    return size;
 }
 
