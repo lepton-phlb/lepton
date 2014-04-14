@@ -15,7 +15,7 @@ Compiler Directive
 
 //ip stack
 //#define USE_UIP 
-#define USE_LWIP
+//#define USE_LWIP
 #define USE_IF_ETHERNET
 //specific target include for ijinus
 #include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
