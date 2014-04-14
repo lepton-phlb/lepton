@@ -43,7 +43,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    #define DEV_AT91SAM9261_QUARTZ_FREQ  (18432000UL)        //* In Hz
    #define MUL_PLLA                     (109)           // Multiplier //for 200 MHz
    #define DIV_PLLA                     (10)            // Divider

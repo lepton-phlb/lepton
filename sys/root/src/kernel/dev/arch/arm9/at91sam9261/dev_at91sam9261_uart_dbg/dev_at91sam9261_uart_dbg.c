@@ -104,7 +104,7 @@ extern int dev_at91sam9261_uart_dbg_x_ioctl       (desc_t desc,int request,va_li
 extern int dev_at91sam9261_uart_dbg_x_interrupt   (desc_t desc);
 extern int termios2ttys                      (struct termios* termios_p);
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 extern void dev_at91sam9261_uart_dbg_x_timer_callback (board_inf_uart_t * p_board_inf_uart);
 #else
 extern void dev_at91sam9261_uart_dbg_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
@@ -119,7 +119,7 @@ static void dev_at91sam9261_uart_dbg_interrupt  (void);
 
 desc_t desc_uart_dbg=-1;
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 // fct pointer for debug interrupt
 extern void (*g_p_fct_dbg_interrupt)(void);
 
@@ -146,7 +146,7 @@ dev_map_t dev_at91sam9261_uart_dbg_map={
    dev_at91sam9261_uart_dbg_x_ioctl
 };
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 void dev_at91sam9261_uart_dbg_interrupt(void)
 {
    // interrupt for dbg Uart ?
@@ -253,7 +253,7 @@ int dev_at91sam9261_uart_dbg_load (void)
 {
    p_board_inf_uart_dbg                    = (board_inf_uart_t *)malloc(sizeof(board_inf_uart_t));
    memset(p_board_inf_uart_dbg,0,sizeof(board_inf_uart_t));
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    p_board_inf_uart_dbg->f_timer_call_back = dev_at91sam9261_uart_dbg_timer_callback;
 #endif
    p_board_inf_uart_dbg->loaded = 0;
@@ -303,7 +303,7 @@ int dev_at91sam9261_uart_dbg_open(desc_t desc, int o_flag)
    // call uart common Api open
    ret = dev_at91sam9261_uart_dbg_x_open(desc, o_flag);
 
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    // Usart debug interrupt function initialization
    g_p_fct_dbg_interrupt = dev_at91sam9261_uart_dbg_interrupt;
 #elif defined(__KERNEL_UCORE_ECOS)
