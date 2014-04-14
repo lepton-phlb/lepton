@@ -6,6 +6,8 @@ Compiler Directive
 
 //see kernel/core/kernelconf.h
 
+//force definition for at91lib headers
+#define at91sam9261 
 //force definition of cpu device
 #define __tauon_cpu_device__ __tauon_cpu_device_arm9_at91sam9261__
 
@@ -15,8 +17,8 @@ Compiler Directive
 
 //ip stack
 //#define USE_UIP 
-#define USE_LWIP
-#define USE_IF_ETHERNET
+//#define USE_LWIP
+//#define USE_IF_ETHERNET
 
 //initd. ugly config define. 
 #define EVAL_BOARD
