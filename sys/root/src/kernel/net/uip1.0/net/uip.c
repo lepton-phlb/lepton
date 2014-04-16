@@ -1,3 +1,4 @@
+<<<<<<< local
 /*
 The contents of this file are subject to the Mozilla Public License Version 1.1 
 (the "License"); you may not use this file except in compliance with the License.
@@ -25,6 +26,8 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 #define DEBUG_PRINTF //printf(__VA_ARGS__)
+=======
+>>>>>>> other
 
 /**
  * \defgroup uip The uIP TCP/IP stack
