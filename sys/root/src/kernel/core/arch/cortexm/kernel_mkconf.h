@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -24,3 +21,40 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
+#ifndef _KERNEL_MKCONF_H
+#define _KERNEL_MKCONF_H
+
+/*===========================================
+Includes
+=============================================*/
+
+/*===========================================
+Declaration
+=============================================*/
+#include "dev_dskimg.h"
+
+/*===========================================
+Declaration
+=============================================*/
+
+//#define (null)
+
+#define __KERNEL_CPU_FREQ 100000000L
+
+#define __KERNEL_HEAP_SIZE 10000
+
+#define __KERNEL_PTHREAD_MAX 7
+
+#define __KERNEL_PROCESS_MAX 5
+
+#define MAX_OPEN_FILE 16
+
+#define OPEN_MAX 8
+
+#define __KERNEL_ENV_PATH {"/usr","/usr/sbin","/usr/bin"}
+
+#define __KERNEL_NET_IPSTACK
+
+
+#endif
+
