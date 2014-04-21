@@ -3675,6 +3675,7 @@
         <name>core-freertos</name>
         <excluded>
           <configuration>tauon-kernel-cortex-m4-debug</configuration>
+          <configuration>tauon-kernel-arm926ejs-debug</configuration>
           <configuration>tauon-kernel-cortex-m3-debug</configuration>
         </excluded>
         <file>
@@ -3722,9 +3723,6 @@
       </group>
       <group>
         <name>core-segger</name>
-        <excluded>
-          <configuration>tauon-kernel-arm926ejs-debug</configuration>
-        </excluded>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\core-segger\core_rttimer.c</name>
         </file>
@@ -4742,6 +4740,7 @@
           <name>freeRTOS_8-0-0</name>
           <excluded>
             <configuration>tauon-kernel-cortex-m4-debug</configuration>
+            <configuration>tauon-kernel-arm926ejs-debug</configuration>
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
           </excluded>
           <group>
