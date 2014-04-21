@@ -1,0 +1,126 @@
+//*************************************************************************
+// XLINK command file for AT91SAM9261 using internal RAM
+//
+// Usage:  xlink  -f lnkarm  <your_object_file(s)>
+//                -s <program start label>  <C/C++ runtime library>
+//
+//*************************************************************************
+
+//*************************************************************************
+-carm
+
+//*************************************************************************
+// Internal Ram segments mapped to 0 AFTER REMAP
+//*************************************************************************
+
+-DIRAMSTART=00000000
+-DIRAM_SIZE=0x28000
+-DIRAMEND=(IRAMSTART+IRAM_SIZE-1)
+
+-DSDRAMSTART=0x20000000
+-DSDRAM_SIZE=0x4000000
+-DSDRAMEND=(SDRAMSTART+SDRAM_SIZE-1)
+
+//*************************************************************************
+// Read-only segments mapped to internal RAM
+//*************************************************************************
+
+-DROMSTART=IRAMSTART
+-DROMEND=IRAMEND
+
+//*************************************************************************
+// Read/write segments mapped to internal RAM.
+//*************************************************************************
+
+-DRAMSTART=(IRAMSTART+40)  // Ensure that 40 bytes are reserved for INTVEC
+-DRAMEND=IRAMEND
+
+-DEXT_DATA_SIZE=100000 //1 Mbytes
+-DEXT_RAMSTART=SDRAMSTART
+-DEXT_RAMEND=(EXT_RAMSTART+EXT_DATA_SIZE-1)
+
+-DEXT_CODE_SIZE=100000 //1 Mbytes
+-DEXT_ROMSTART=(EXT_RAMEND+1)
+-DEXT_ROMEND=(EXT_ROMSTART+EXT_CODE_SIZE-1)
+
+
+//*************************************************************************
+// Address range for reset and exception
+// vectors (INTVEC).
+// The vector area is 32 bytes,
+// an additional 32 bytes is allocated for the
+// constant table used by ldr PC in cstartup.s79.
+//*************************************************************************
+-Z(CODE)INTVEC=00-3F
+
+//*************************************************************************
+// Startup code and exception routines (ICODE).
+//*************************************************************************
+-Z(CODE)ICODE,DIFUNCT=ROMSTART-ROMEND
+-Z(CODE)SWITAB=ROMSTART-ROMEND
+
+//*************************************************************************
+// Code segments may be placed anywhere.
+//*************************************************************************
+-Z(CODE)CODE=EXT_ROMSTART-EXT_ROMEND
+
+//*************************************************************************
+// Various constants and initializers.
+//*************************************************************************
+-Z(CONST)INITTAB,DATA_ID,DATA_C=EXT_ROMSTART-EXT_ROMEND
+-Z(CONST)CHECKSUM=ROMSTART-ROMEND
+-Z(CONST)PROGRAM_END
+
+//*************************************************************************
+// Data segments.
+//*************************************************************************
+-Z(DATA)DATA_I,DATA_Z,DATA_N=RAMSTART-RAMEND
+
+//*************************************************************************
+// __ramfunc code copied to and executed from RAM.
+//*************************************************************************
+-Z(DATA)CODE_I=RAMSTART-RAMEND
+-Z(CONST)CODE_ID=ROMSTART-ROMEND
+-QCODE_I=CODE_ID
+
+//*************************************************************************
+// ICCARM produces code for __ramfunc functions in
+// CODE_I segments. The -Q XLINK command line
+// option redirects XLINK to emit the code in the
+// debug information associated with the CODE_I
+// segment, where the code will execute.
+//*************************************************************************
+
+//*************************************************************************
+// Stack and heap segments.
+//*************************************************************************
+-D_CSTACK_SIZE=(100*4)
+//-D_IRQ_STACK_SIZE=(8*8*4)  // 8 nesting levels, 8 registers saved, 4 bytes each
+//lepton modif for 512 bytes of irq stack
+-D_IRQ_STACK_SIZE=200
+//lepton modif for 100*1024 bytes (100KBytes) of heap for external SDRAM
+//-D_HEAP_SIZE=19000
+//lepton modif for 512*1024 bytes (512KBytes) of heap for external SDRAM
+-D_HEAP_SIZE=80000
+
+// System and IRQ stack should reside in internal RAM if possible
+-Z(DATA)CSTACK+_CSTACK_SIZE=(IRAMSTART+40)-IRAMEND
+-Z(DATA)IRQ_STACK+_IRQ_STACK_SIZE=(IRAMSTART+40)-IRAMEND
+-Z(DATA)HEAP+_HEAP_SIZE=EXT_RAMSTART-EXT_RAMEND
+
+//*************************************************************************
+// ELF/DWARF support.
+//
+// Uncomment the line "-Felf" below to generate ELF/DWARF output.
+// Available format specifiers are:
+//
+//   "-yn": Suppress DWARF debug output
+//   "-yp": Multiple ELF program sections
+//   "-yas": Format suitable for debuggers from ARM Ltd (also sets -p flag)
+//
+// "-Felf" and the format specifiers can also be supplied directly as
+// command line options, or selected from the Xlink Output tab in the
+// IAR Embedded Workbench.
+//*************************************************************************
+
+// -Felf

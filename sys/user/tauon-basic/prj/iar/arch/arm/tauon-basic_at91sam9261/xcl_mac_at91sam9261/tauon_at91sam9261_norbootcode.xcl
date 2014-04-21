@@ -1,0 +1,129 @@
+//*************************************************************************
+// XLINK command file for AT91SAM9261 using an external NOR flash
+//
+// Usage:  xlink  -f lnkarm  <your_object_file(s)>
+//            	-s <program start label>  <C/C++ runtime library>
+//
+//*************************************************************************
+
+//*************************************************************************
+-carm
+
+//
+// These settings are used for link the application.
+//
+-DROMSTART=00000000
+-DROMEND=00028000
+
+//
+//  Define the internal SRAM.
+//
+-DIRAM_START=00300000
+-DIRAM_SIZE=28000
+-DIRAM_END=(IRAM_START+IRAM_SIZE-1)
+
+//
+//  Define the external SDRAM.
+//
+-DSDRAMSTART=20000000
+-DSDRAM_SIZE=4000000
+-DSDRAMEND=(SDRAMSTART+SDRAM_SIZE-1)
+
+
+//
+//  These defines are used for copying the code from ROM to RAM.
+//  We reserve 1/2 of the SRAM for this. (80kByte)
+//
+-DRAMCODE_START=IRAM_START
+-DRAMCODE_SIZE=14000
+-DRAMCODE_END=(RAMCODE_START+RAMCODE_SIZE-1)
+
+//
+// Read/Write segments are after the reserved "RAMCode segement".
+// You can alternatively use the external SDRAM for this.
+// This will look like this:
+-DRAMSTART=SDRAMSTART
+-DRAMEND=SDRAMEND
+// 
+//-DRAMSTART=(RAMCODE_END+1)
+//-DRAMEND=IRAM_END
+
+
+//*************************************************************************
+// Address range for reset and exception
+// vectors (INTVEC).
+// The vector area is 32 bytes,
+// an additional 32 bytes is allocated for the
+// constant table used by ldr PC in cstartup.s79.
+//*************************************************************************
+-Z(CODE)PROGRAM_START=ROMSTART-ROMEND
+-Z(CODE)INTVEC=ROMSTART-ROMEND
+
+//*************************************************************************
+// Startup code and exception routines (ICODE).
+//*************************************************************************
+-Z(CODE)ICODE,DIFUNCT=ROMSTART-ROMEND
+-Z(CODE)SWITAB=ROMSTART-ROMEND
+
+-Z(CODE)RAMCODE=RAMCODE_START-RAMCODE_END
+
+//*************************************************************************
+// Code segments may be placed anywhere.
+//*************************************************************************
+-Z(CODE)CODE=ROMSTART-ROMEND
+
+//*************************************************************************
+// Various constants and initializers.
+//*************************************************************************
+-Z(CONST)INITTAB,DATA_ID,DATA_C=ROMSTART-ROMEND
+-Z(CONST)CHECKSUM=ROMSTART-ROMEND
+-Z(CONST)PROGRAM_END
+
+//*************************************************************************
+// Data segments.
+//*************************************************************************
+-Z(DATA)DATA_I,DATA_Z,DATA_N=RAMSTART-RAMEND
+
+//*************************************************************************
+// __ramfunc code copied to and executed from RAM.
+//*************************************************************************
+-Z(DATA)CODE_I=RAMSTART-RAMEND
+-Z(CONST)CODE_ID=ROMSTART-ROMEND
+-QCODE_I=CODE_ID
+
+//*************************************************************************
+// ICCARM produces code for __ramfunc functions in
+// CODE_I segments. The -Q XLINK command line
+// option redirects XLINK to emit the code in the
+// debug information associated with the CODE_I
+// segment, where the code will execute.
+//*************************************************************************
+
+//*************************************************************************
+// Stack and heap segments.
+//*************************************************************************
+-D_CSTACK_SIZE=(100*4)
+-D_IRQ_STACK_SIZE=(8*8*4)  // 8 nesting levels, 8 registers saved, 4 bytes each
+-D_HEAP_SIZE=19000
+
+// System and IRQ stack should reside in internal RAM if possible
+-Z(DATA)CSTACK+_CSTACK_SIZE=RAMSTART-RAMEND
+-Z(DATA)IRQ_STACK+_IRQ_STACK_SIZE=RAMSTART-RAMEND
+-Z(DATA)HEAP+_HEAP_SIZE=RAMSTART-RAMEND
+
+//*************************************************************************
+// ELF/DWARF support.
+//
+// Uncomment the line "-Felf" below to generate ELF/DWARF output.
+// Available format specifiers are:
+//
+//   "-yn": Suppress DWARF debug output
+//   "-yp": Multiple ELF program sections
+//   "-yas": Format suitable for debuggers from ARM Ltd (also sets -p flag)
+//
+// "-Felf" and the format specifiers can also be supplied directly as
+// command line options, or selected from the Xlink Output tab in the
+// IAR Embedded Workbench.
+//*************************************************************************
+
+// -Felf

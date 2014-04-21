@@ -1,0 +1,172 @@
+/*********************************************************************
+*               SEGGER MICROCONTROLLER SYSTEME GmbH                  *
+*       Solutions for real time microcontroller applications         *
+**********************************************************************
+*                                                                    *
+*       (C) 2004 - 2006   SEGGER Microcontroller Systeme GmbH        *
+*                                                                    *
+*        www.segger.com   Support: support@segger.com                *
+*                                                                    *
+**********************************************************************
+
+----------------------------------------------------------------------
+File    : AT91SAM9260_SDRAM.mac
+Purpose : Setup file for IAR
+          Feel free to modify this file acc. to your target system.
+--------  END-OF-HEADER  ---------------------------------------------
+*/
+
+__var i;
+__var k;
+
+
+/*********************************************************************
+*
+*       _DisableWatchdog()
+*/
+_DisableWatchdog() {
+  __message "AT91SAM9260_SDRAM.mac: _DisableWatchdog()";
+  __writeMemory32(0x00008000,0xFFFFFD44,"Memory");  //      AT91C_BASE_WDTC->WDTC_WDMR= AT91C_SYSC_WDDIS;
+}
+
+
+/*********************************************************************
+*
+*       _MapRAMAt0()
+*
+* Function description
+*   Maps RAM at 0.
+*
+* Notes
+*   (1) Unfortunately, the mapping can not be assigned, but only toggled.
+*       Therefor we need to check if RAM is at 0 by trying to modify the
+*       data at addr. 0.
+*/
+_MapRAMAt0(){
+  __message "AT91SAM9260_SDRAM.mac: _MapRAMAt0()";
+  i = __readMemory32(0x00000000,"Memory");
+  __writeMemory32(i + 1, 0x00,"Memory");
+  k =__readMemory32(0x00000000,"Memory");
+  __writeMemory32(i, 0x00,"Memory");                  // Restore
+  if (i == k) {
+    __message "Changing mapping: RAM mapped to 0";
+    __writeMemory32(0x00000003,0xFFFFEF00,"Memory");  // Remap internal SRAM0 (INTVEC and Startupcode)
+  }
+}
+
+/*********************************************************************
+*
+*       _InitAIC()
+*/
+_InitAIC() {
+  __message "AT91SAM9260_SDRAM.mac: _InitAIC()";
+  __writeMemory32(0xFFFFFFFF,0xFFFFF124,"Memory");    // Mask All interrupts pAic->AIC_IDCR = 0xFFFFFFFF;
+  for (i = 0; i < 8; i++) {
+    k =  __readMemory32(0xFFFFF130,"Memory");         // AT91C_BASE_AIC->AIC_EOICR
+  }
+}
+
+/*********************************************************************
+*
+*       _InitRSTC()
+*
+* Function description
+*   Initializes the RSTC (Reset controller).
+*   This makes sense since the default is to not allow user resets, which makes it impossible to
+*   apply a second RESET via J-Link
+*/
+_InitRSTC() {
+  __message "AT91SAM9260_SDRAM.mac: _InitRSTC()";
+  __writeMemory32(0xA5000001, 0xFFFFFD08,"Memory");    // Allow user reset
+}
+
+/*********************************************************************
+*
+*       _InitPLL()
+*/
+_InitPLL() {
+  __message "AT91SAM9260_SDRAM.mac: _InitPLL()";
+  __writeMemory32(0x0000601, 0xFFFFFC20, "Memory");    // Enable Main oscillator
+  do {
+    i = __readMemory32(0xFFFFFC68,"Memory");
+    i &= 1;
+  } while (i == 0);                                    // Wait until Oscillator is stable
+  __writeMemory32(0x0000001, 0xFFFFFC30, "Memory");    // Switch master clock to CPU clock, write 1 to PMC_MCKR
+  __sleep(10);
+}
+
+/*********************************************************************
+*
+*       _InitSDRAM()
+*/
+_InitSDRAM() {
+  __message "AT91SAM9260_SDRAM.mac: _InitSDRAM()";
+
+  __writeMemory32(0x00000002, 0xFFFFEF1C, "Memory");    // _MATRIX_EBICSA = (1 << 1);    // Activate CS1 for SDRAM
+  __writeMemory32(0xFFFF0000, 0xFFFFF870, "Memory");    // _PIOC_ASR      = 0xFFFF0000;  // Upper 16 lines are data lines for SDRAM
+  __writeMemory32(0xFFFF0000, 0xFFFFF804, "Memory");    // _PIOC_PDR      = 0xFFFF0000;  // Disable PIO for upper 16 bits
+  //
+  // Initialize SDRAM controller
+  //
+  __writeMemory32(0x0D527259, 0xFFFFEA08, "Memory");    //  _SDRAMC_CR     = 0x01          // 9 Column bits                  = 0x00000001
+                                                        //                 |(0x02 << 2)    // 13 Rows                        = 0x00000008
+                                                        //                 |(0x02 << 5)    // 2 CAS cycles                   = 0x00000040
+                                                        //                 |(0x01 << 4)    // 4 Banks                        = 0x00000010
+                                                        //                 |(0x00 << 7)    // 32 bit Data BUS                = 0x00000000
+                                                        //                 |(0x02 << 8)    // 2 write recovery cycles        = 0x00000200
+                                                        //                 |(0x07 << 12)   // 7 RAS cycles                   = 0x00007000
+                                                        //                 |(0x02 << 16)   // 2 RAS precharge time cycles    = 0x00020000
+                                                        //                 |(0x02 << 20)   // 2 cycles RAS to CAS delay      = 0x00200000
+                                                        //                 |(0x05 << 24)   // 5 cycles RAS active time       = 0x05000000
+                                                        //                 |(0x08 << 28)   // 8 cycles command recovery time = 0x08000000
+                                                        //                 ;                                                => 0x0D527259
+
+  __sleep(1000);                                        // Delay 1 ms
+
+  __writeMemory32(0x00000002, 0xFFFFEA00, "Memory");    // _SDRAMC_MR = _SDRAMC_MODE_PRCGALL_CMD;
+  k = __readMemory32(0x20000000,"Memory");              //  Dummy = *(volatile int*) SDRAM_BASE_ADDR; // Dummy read
+
+  __sleep(1000);                                        // Delay 1 ms
+
+  for (i = 0; i < 8; i++) {      // Auto-Refresh
+    __writeMemory32(0x00000004, 0xFFFFEA00, "Memory");  // _SDRAMC_MR = _SDRAMC_MODE_RFSH_CMD;
+    k = __readMemory32(0x20000000,"Memory");            // Dummy = *(volatile int*) SDRAM_BASE_ADDR;  // Dummy read
+  }
+
+  __writeMemory32(0x00000003, 0xFFFFEA00, "Memory");    // _SDRAMC_MR = _SDRAMC_MODE_LMR_CMD;
+  __writeMemory32(0xcafedede, 0x20000000, "Memory");    // *(volatile int*) (SDRAM_BASE_ADDR+20) = 0xcafedede;
+
+  __writeMemory32(0x000000C8, 0xFFFFEA04, "Memory");    // _SDRAMC_TR = (OS_FSYS * 2) / 2 / 1000000 = 200000000 * 2 / 2 / 1000000 = 200 = 0xC8;
+
+  __writeMemory32(0x00000000, 0xFFFFEA00, "Memory");    // _SDRAMC_MR = _SDRAMC_MODE_NORMAL_CMD;
+  k = __readMemory32(0x20000000,"Memory");              // Dummy = *(volatile int*) SDRAM_BASE_ADDR;  // Dummy read
+}
+
+/*********************************************************************
+*
+*       execUserReset()
+*/
+execUserReset() {
+  __message "AT91SAM9260_SDRAM.mac: execUserReset()";
+  _MapRAMAt0();
+  _InitAIC();
+  _InitRSTC();
+}
+
+/*********************************************************************
+*
+*       execUserPreload()
+*/
+execUserPreload() {
+  __message "AT91SAM9260_SDRAM.mac: execUserPreload()";
+  __emulatorSpeed(5000);     // Slow JTAG speed to be able to communicate with CPU running at 32kHz
+  _DisableWatchdog();
+  _InitPLL();                // Speedup download
+  __emulatorSpeed(2000000);  // Use maximum JTAG speed which works with 18MHz CPU clock
+  _InitSDRAM();
+  _MapRAMAt0();
+  _InitAIC();
+  _InitRSTC();
+}
+
+/**************** End of file ***************************************/
