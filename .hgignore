@@ -1,0 +1,29 @@
+syntax: glob
+
+#ignores backup files
+*~
+
+#ignore .o
+*.o
+
+#ignore scons cache
+*.sconsign.dblite
+
+#ignore tools generated files
+virtual_cpu
+mklepton_gnu
+
+#ignore all generated a, elf and map files
+*.elf
+*.map
+*.a
+
+#ignore all tmp epk
+*.epk
+
+#ignore pyc files
+*.pyc
+
+#ignore generated files by eCos compilation library
+sys/root/lib/arch/arm9/at91sam9261/install
+sys/root/lib/arch/synthetic/x86/install

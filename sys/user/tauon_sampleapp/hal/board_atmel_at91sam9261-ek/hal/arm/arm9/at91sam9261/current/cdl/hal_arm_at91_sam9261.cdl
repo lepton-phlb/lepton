@@ -1,0 +1,493 @@
+# ====================================================================
+#
+#      hal_arm_at91_sam9261.cdl
+#
+#      Atmel AT91SAM9261 HAL package configuration data
+#
+# ====================================================================
+#####ECOSGPLCOPYRIGHTBEGIN####
+## Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
+## Copyright (C) 2003 Nick Garnett <nickg@calivar.com>
+## Copyright (C) 2005 eCosCentric Ltd
+## Copyright (C) 2005 Andrew Lunn
+##
+## eCos is free software; you can redistribute it and/or modify it under
+## the terms of the GNU General Public License as published by the Free
+## Software Foundation; either version 2 or (at your option) any later version.
+##
+## eCos is distributed in the hope that it will be useful, but WITHOUT ANY
+## WARRANTY; without even the implied warranty of MERCHANTABILITY or
+## FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+## for more details.
+##
+## You should have received a copy of the GNU General Public License along
+## with eCos; if not, write to the Free Software Foundation, Inc.,
+## 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+##
+## As a special exception, if other files instantiate templates or use macros
+## or inline functions from this file, or you compile this file and link it
+## with other works to produce a work based on this file, this file does not
+## by itself cause the resulting work to be covered by the GNU General Public
+## License. However the source code for this file must still be made available
+## in accordance with section (3) of the GNU General Public License.
+##
+## This exception does not invalidate any other reasons why a work based on
+## this file might be covered by the GNU General Public License.
+## -------------------------------------------
+#####ECOSGPLCOPYRIGHTEND####
+# ====================================================================
+######DESCRIPTIONBEGIN####
+#
+# Author(s):      jjp
+# Contributors:   
+# Date:           2009-01-19
+#
+#####DESCRIPTIONEND####
+#
+# ====================================================================
+
+cdl_package CYGPKG_HAL_ARM_AT91SAM9261 {
+    display       "Atmel AT91SAM9261 HAL"
+    parent        CYGPKG_HAL_ARM9
+    requires      CYGPKG_HAL_ARM_ARM9_ARM926EJ
+    define_header hal_arm_at91sam9261.h
+    include_dir   cyg/hal
+    hardware
+    description   "
+        The AT91SAM9261 HAL package provides the support needed to run
+        eCos on an Atmel AT91SAM9261 based board."
+
+    compile       at91sam9261_misc.c lib_at91sam9261.c hal_diag.c at91sam9261_mmu.c
+#    compile       at91sam9261_misc.c lib_at91sam9261.c mmu.c cp15_asm.S cp15.c
+    
+    #requires      { CYGHWR_HAL_ARM_AT91SAM9261 == "AT91SAM9261" }
+    #requires      { CYGHWR_HAL_ARM_AT91SAM9261_FIQ     }
+
+    implements    CYGINT_HAL_ARM_AT91SAM9261_SERIAL_DBG_HW
+#    implements    CYGINT_HAL_ARM_AT91SAM9261_PIT_HW
+    implements    CYGINT_HAL_ARM_AT91SAM9261_SYS_INTERRUPT
+    implements	  CYGINT_HAL_ARM_ARCH_ARM9
+#    
+    implements    CYGINT_HAL_DEBUG_GDB_STUBS
+    implements    CYGINT_HAL_DEBUG_GDB_STUBS_BREAK
+    implements    CYGINT_HAL_VIRTUAL_VECTOR_SUPPORT
+    implements    CYGINT_HAL_VIRTUAL_VECTOR_COMM_BAUD_SUPPORT
+    implements    CYGINT_HAL_ARM_ARCH_ARM7
+    implements    CYGINT_HAL_ARM_THUMB_ARCH
+
+
+    define_proc {
+        puts $::cdl_system_header "#define CYGBLD_HAL_TARGET_H   <pkgconf/hal_arm.h>"
+        puts $::cdl_system_header "#define CYGBLD_HAL_VARIANT_H  <pkgconf/hal_arm_arm9.h>"
+        puts $::cdl_system_header "#define CYGBLD_HAL_PLATFORM_H <pkgconf/hal_arm_at91sam9261.h>"
+        puts $::cdl_system_header "#define CYGBLD_HAL_ARM_VAR_IO_H"
+        puts $::cdl_header "#define HAL_PLATFORM_CPU    \"ARM9261EK\""
+        puts $::cdl_header "#define HAL_PLATFORM_BOARD  \"Atmel (SAM9261EK)\""
+        puts $::cdl_header "#define HAL_PLATFORM_EXTRA  \"\""
+    }
+
+    cdl_option CYGHWR_HAL_ARM_AT91SAM9261 {
+        display        "AT91SAM9261 variant used"
+        flavor         data
+        default_value  {"sam9261"}
+        legal_values   {"sam9261" }
+        description    "
+           The Atmel AT91SAM9261 Evaluation Board has several variants,
+           the main differences being the amount of on-chip SDRAM,
+           FLASH, peripherals and their layout. This option allows the
+           platform HALs to select the specific microcontroller
+           being used."
+    }
+
+    cdl_option CYGBLD_HAL_ARM_AT91SAM9261_TIMER_TC {
+        display       "Use Timer Counter for eCos Clock"
+        flavor        bool
+        default_value 0
+        compile       timer_tc.c
+        description   "
+            USELESS (keep to conserve compatibilty)."
+    }
+
+    cdl_component CYGNUM_HAL_RTC_CONSTANTS {
+        display       "Real-time clock constants"
+        flavor        none
+
+        cdl_option CYGNUM_HAL_RTC_NUMERATOR {
+            display       "Real-time clock numerator"
+            flavor        data
+            default_value 1000000000
+        }
+        cdl_option CYGNUM_HAL_RTC_DENOMINATOR {
+            display       "Real-time clock denominator"
+            flavor        data
+            default_value 1000
+        }
+        cdl_option CYGNUM_HAL_RTC_PERIOD {
+            display       "Real-time clock period"
+            flavor        data
+            legal_values  1 to 0xFFFFF 
+            calculated    {((CYGNUM_HAL_RTC_NUMERATOR * CYGNUM_HAL_ARM_AT91SAM9261_CLOCK_SPEED/16) / CYGNUM_HAL_RTC_DENOMINATOR / 1000000000) }
+            #calculated    { CYGNUM_HAL_ARM_AT91SAM9261_CLOCK_SPEED/(1000*16) }
+            description   "Timer value"
+        }
+    }
+    
+    cdl_component CYG_HAL_STARTUP {
+        display       "Startup type"
+        flavor        data
+        default_value {"RAM"}
+        legal_values  {"RAM" "ROM" "ROMRAM"}
+        no_define
+        define -file system.h CYG_HAL_STARTUP
+        description   "
+            When targetting the Atmel AT91SAM9261 eval board it is possible to build
+            the system for either RAM bootstrap or ROM bootstrap(s). Select
+            'ram' when building programs to load into RAM using onboard
+            debug software such as Angel or eCos GDB stubs.  Select 'rom'
+            when building a stand-alone application which will be put
+            into ROM"
+    }
+
+        
+    # Real-time clock/counter specifics
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_CLOCK_OSC_MAIN {
+        display       "Main oscillator frequency"
+        flavor        data
+        legal_values { 1000000 to 32000000} 
+        default_value { 18432000 }
+        description   "
+            What frequency of crystal is clocking the device."
+    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_PLLA_DIVIDER {
+        display       "Divider for PLLA clock"
+        flavor        data
+        legal_values  { 0 to 255 }
+        default_value 13
+        description   "
+            The X-tal clock is divided by this value when generating the PLLA clock"
+    }       
+        
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_PLLA_MULTIPLIER {
+        display       "Multiplier for PLLA clock"
+        flavor        data
+        legal_values  { 0 to 2047 }
+        default_value 141
+        description   "
+           The X-tal clock is multiplied by this value when generating the PLLA clock."
+    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_CPU_CLOCK_SPEED {
+        display       "CPU clock speed"
+        flavor        data
+        calculated    { CYGNUM_HAL_ARM_AT91SAM9261_CLOCK_OSC_MAIN * CYGNUM_HAL_ARM_AT91SAM9261_PLLA_MULTIPLIER /
+                        CYGNUM_HAL_ARM_AT91SAM9261_PLLA_DIVIDER}
+        legal_values  { 80000000 to 240000000 }
+        description   "PLLA is used for the Processor clock." 
+    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_MASTER_CLOCK_DIVISION {
+        display       "Master clock division"
+        flavor        data
+        default_value 2
+        legal_values  { 1 2 4 }
+        description   "Master clock division" 
+    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_CLOCK_SPEED {
+        display       "Master clock speed"
+        flavor        data
+        calculated    { CYGNUM_HAL_ARM_AT91SAM9261_CPU_CLOCK_SPEED / CYGNUM_HAL_ARM_AT91SAM9261_MASTER_CLOCK_DIVISION}
+        legal_values  { 20000000 to 120000000 }
+        description   "Master clock" 
+    }
+
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_PLLB_DIVIDER {
+        display       "Divider for PLLB clock"
+        flavor        data
+        legal_values  { 0 to 255 }
+        default_value 14
+        description   "
+            The X-tal clock is divided by this value when generating the PLLB clock"
+    }       
+        
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_PLLB_MULTIPLIER {
+        display       "Multiplier for PLLB clock"
+        flavor        data
+        legal_values  { 0 to 2047 }
+        default_value 73
+        description   "
+           The X-tal clock is multiplied by this value when generating the PLLB clock."
+    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_USB_CLOCK_DIVISION {
+        display       "USB clock division"
+        flavor        data
+        default_value 2
+        legal_values  { 1 2 4 }
+        description   "USB clock division" 
+    }
+
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_PLLB_CLOCK {
+        display       "PLLB clock speed"
+        flavor        data
+        calculated    { CYGNUM_HAL_ARM_AT91SAM9261_CLOCK_OSC_MAIN * CYGNUM_HAL_ARM_AT91SAM9261_PLLB_MULTIPLIER /
+                        CYGNUM_HAL_ARM_AT91SAM9261_PLLB_DIVIDER}
+		legal_values  { 80000000 to 240000000 }                        
+        description   "PLLB clock" 
+    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_USB_CLOCK_SPEED {
+        display       "USB clock speed"
+        flavor        data
+        calculated    { CYGNUM_HAL_ARM_AT91SAM9261_PLLB_CLOCK / CYGNUM_HAL_ARM_AT91SAM9261_USB_CLOCK_DIVISION }
+        legal_values  { 47880000 to 48120000 }
+        description   "USB clock with 0.25% tolerance" 
+    }
+
+
+#    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_USB_CLOCK_SPEED {
+#        display       "USB clock speed"
+#        flavor        data
+#        default_value 48000000
+#        legal_values  { 48000000 }
+#        description   "PLLB is set to 48MHz for the USB to work correctly." 
+#    }
+
+    cdl_option CYGNUM_HAL_ARM_AT91SAM9261_SLOW_CLOCK {
+        display       "Slow clock frequency"
+        flavor        data
+        default_value { 32768 }
+        description   "
+            The slow clock is an LC oscilator which runs all the
+            time. The accuracy of this clock is not very high and 
+            is temperature dependant"
+    }
+
+    cdl_interface CYGINT_HAL_ARM_AT91_SERIAL_DBG_HW {
+        display     "Platform has the DBG serial port"
+        description "
+            Some varients of the AT91 have a dedicated debug serial
+            port. The HALs of such a varient should implement this interface
+            so allowing the serial driver to the compiled"
+    }
+    
+    cdl_option CYGBLD_HAL_ARM_AT91_SERIAL_UART {
+        display       "Enable the use of the UARTS for debug output"
+        flavor        bool
+        default_value 1
+        compile       hal_diag.c
+        requires      !CYGBLD_HAL_ARM_AT91_SERIAL_DBG
+        description   "        
+            The driver for using the UARTS will be compiled in the
+            varient HAL when this option is enabled."
+    }
+
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS {
+        display       "Number of communication channels on the board"
+        flavor        data
+        default_value 2
+        description   "
+            The Atmel AT91SAM9261 development boards have only two USART serial
+            port connectors even though there are three real serial ports. 
+            Also don't confuse the debug port as a USART serial port. It
+            needs a different driver."
+    }
+ 
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL {
+        display          "Debug serial port"
+        active_if        CYGPRI_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_CONFIGURABLE
+        flavor data
+        legal_values     0 to CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS-1
+        default_value    0
+        description      "
+            The Atmel AT91SAM9261 has two USART serial ports. This option
+            chooses which port will be used to connect to a host
+            running GDB."
+     }
+ 
+     cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL {
+         display          "Diagnostic serial port"
+         active_if        CYGPRI_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_CONFIGURABLE
+         flavor data
+         legal_values     0 to CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS-1
+         default_value    0
+         description      "
+            The Atmel AT91SAM9261 board has two USART serial ports. This option
+            chooses which port will be used for diagnostic output."
+     }
+     
+     cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD {
+        display       "Diagnostic serial port baud rate"
+        flavor        data
+        legal_values  9600 19200 38400 57600 115200
+        default_value 115200
+        description   "
+            This option selects the baud rate used for the diagnostic port."
+    }
+ 
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_BAUD {
+         display       "GDB serial port baud rate"
+         flavor        data
+         legal_values  9600 19200 38400 57600 115200
+         default_value 115200
+         description   "
+            This option controls the baud rate used for the GDB connection."
+     }
+ 
+    cdl_option CYGBLD_HAL_ARM_AT91SAM9261_BAUD_DYNAMIC {
+        display       "Dynamic calculation of baud rate"
+        default_value 0
+        description   "
+             The AT91SAM9261 has a flexiable clock generation mechanism 
+             where the main clock used to drive peripherals can be
+             changed during runtime. Such changes affect the serial port
+             baud rate generaters. Enabling this option includes code 
+             which calculates the baud rate setting dynamically from the
+             current clock settings. Without this option a static
+             calculation is performed which assumes the clock frequency
+             has not been changed."
+    }
+
+    cdl_option CYGSEM_HAL_ROM_MONITOR {
+        display       "Behave as a ROM monitor"
+        flavor        bool
+        default_value 0
+        parent        CYGPKG_HAL_ROM_MONITOR
+#        requires      { CYG_HAL_STARTUP == "ROM" } 
+        description   "
+            Enable this option if this program is to be used as a ROM monitor,
+            i.e. applications will be loaded into RAM on the board, and this
+            ROM monitor may process exceptions or interrupts generated from the
+            application. This enables features such as utilizing a separate
+            interrupt stack when exceptions are generated."
+    }
+
+    cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
+         display       "Work with a ROM monitor"
+         flavor        booldata
+         legal_values  { "Generic" "GDB_stubs" }
+         default_value { CYG_HAL_STARTUP == "RAM" ? "GDB_stubs" : 0 }
+         parent        CYGPKG_HAL_ROM_MONITOR
+         requires      { CYG_HAL_STARTUP == "RAM" }
+         description   "
+             Support can be enabled for different varieties of ROM monitor.
+             This support changes various eCos semantics such as the encoding
+             of diagnostic output, or the overriding of hardware interrupt
+             vectors.
+             Firstly there is \"Generic\" support which prevents the HAL
+             from overriding the hardware vectors that it does not use, to
+             instead allow an installed ROM monitor to handle them. This is
+             the most basic support which is likely to be common to most
+             implementations of ROM monitor.
+             \"GDB_stubs\" provides support when GDB stubs are included in
+             the ROM monitor or boot ROM."
+    }
+
+    cdl_component CYGPKG_REDBOOT_HAL_OPTIONS {
+        display       "Redboot HAL options"
+        flavor        none
+        no_define
+        parent        CYGPKG_REDBOOT
+        active_if     CYGPKG_REDBOOT
+        description   "
+            This option lists the target's requirements for a valid Redboot
+            configuration."
+
+        cdl_option CYGBLD_BUILD_REDBOOT_BIN {
+            display       "Build Redboot ROM binary image"
+            active_if     CYGBLD_BUILD_REDBOOT
+            default_value 1
+            no_define
+            description "This option enables the conversion of the Redboot ELF
+                         image to a binary image suitable for ROM programming."
+    
+            make -priority 325 {
+                <PREFIX>/bin/redboot.bin : <PREFIX>/bin/redboot.elf
+                $(OBJCOPY) --strip-debug $< $(@:.bin=.img) 
+                $(OBJCOPY) -O srec $< $(@:.bin=.srec)
+                $(OBJCOPY) -O binary $< $@
+            }
+        }
+    }
+
+    cdl_component CYGBLD_GLOBAL_OPTIONS {
+        display "Global build options"
+        flavor  none
+        parent  CYGPKG_NONE
+        description   "
+            Global build options including control over
+            compiler flags, linker flags and choice of toolchain."
+
+        cdl_option CYGBLD_GLOBAL_COMMAND_PREFIX {
+            display "Global command prefix"
+            flavor  data
+            no_define
+            default_value { "arm-elf" }
+            description "
+                This option specifies the command prefix used when
+                invoking the build tools."
+        }
+
+        cdl_option CYGBLD_GLOBAL_CFLAGS {
+            display "Global compiler flags"
+            flavor  data
+            no_define
+            default_value { (CYGHWR_THUMB ? "-mthumb " : "") . (CYGBLD_ARM_ENABLE_THUMB_INTERWORK ? "-mthumb-interwork " : "") . "-mcpu=arm9tdmi -Wall -Wpointer-arith -Wstrict-prototypes -Winline -Wundef -Woverloaded-virtual -g -O0 -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -fvtable-gc -finit-priority" }
+            description   "
+                This option controls the global compiler flags which are used to
+                compile all packages by default. Individual packages may define
+                options which override these global flags."
+        }
+
+        cdl_option CYGBLD_GLOBAL_LDFLAGS {
+            display "Global linker flags"
+            flavor  data
+            no_define
+            default_value { (CYGHWR_THUMB ? "-mthumb " : "") . (CYGBLD_ARM_ENABLE_THUMB_INTERWORK ? "-mthumb-interwork " : "") . "-mcpu=arm9tdmi -Wl,--gc-sections -Wl,-static -g -nostdlib" }
+            description   "
+                This option controls the global linker flags. Individual
+                packages may define options which override these global flags."
+        }
+    }
+
+    cdl_component CYGHWR_MEMORY_LAYOUT {
+        display "Memory layout"
+        flavor data
+        no_define
+        calculated { (CYG_HAL_STARTUP == "RAM") ?    "arm_sam9261_ram" :
+                     (CYG_HAL_STARTUP == "ROMRAM") ? "arm_sam9261_romram" :
+                                                     "arm_sam9261_rom" }
+
+        cdl_option CYGHWR_MEMORY_LAYOUT_LDI {
+            display "Memory layout linker script fragment"
+            flavor data
+            no_define
+            define -file system.h CYGHWR_MEMORY_LAYOUT_LDI
+           	calculated { (CYG_HAL_STARTUP == "RAM") ? "<pkgconf/mlt_arm_sam9261_ram.ldi>" :
+                         (CYG_HAL_STARTUP == "ROMRAM") ? "<pkgconf/mlt_arm_sam9261_romram.ldi>" :
+                                                      "<pkgconf/mlt_arm_sam9261_rom.ldi>" }
+        }
+
+        cdl_option CYGHWR_MEMORY_LAYOUT_H {
+            display "Memory layout header file"
+            flavor data
+            no_define
+            define -file system.h CYGHWR_MEMORY_LAYOUT_H
+            calculated { (CYG_HAL_STARTUP == "RAM") ? "<pkgconf/mlt_arm_sam9261_ram.h>" :
+                         (CYG_HAL_STARTUP == "ROMRAM") ? "<pkgconf/mlt_arm_sam9261_romram.h>" :
+                                                      "<pkgconf/mlt_arm_sam9261_rom.h>" }
+        }
+    }
+    cdl_option CYG_HAL_ARM_AT91SAM9261_MMU {
+        display       "Use Memory Management Unit (MMU)"
+        flavor        bool
+        default_value 1
+#		  compile       at91sam9261_mmu.c
+        description   "
+            Use MMU to improve performance.
+            Enable intructions cache (ICACHE) and (DCACHE)."
+    }
+}

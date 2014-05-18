@@ -1,0 +1,293 @@
+How to build a Lepton/Tauon application
+---------------------------------------
+Requirements
+   -. Building and debugging tauon_sampleapp (installation ok)
+   -. user is kvm
+   -. OpenOCD compiled for your JTAG Adaptator
+   -. J-Link JTAG adaptator (test with Amontec tiny-key, Zy1000)
+   -. AT91SAM9261-EK, AT91SAM9260-EK or/and TWR-K60N512 (with MRAM) board ...
+
+An example of Lepton/Tauon : tauon_sampleapp
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The directory tauon/sys/user is the room to store user applications
+using Lepton/Tauon operating system. There is already one sample
+application and it follows this pattern :
+   -. bin. It contains all binaries using for debug or flash mode. There
+   are also hidden files ("disk" files) needed for simulation.
+   
+   -. etc. All configurations files for application are stored here.
+   A configuration is an XML files that describes peripherals, system
+   binaries, files, etc, .. and an init. files. scripts directories
+   contains all files needed for debug. (simulation and target)
+   
+   -. hal. Contains all eCos HAL packages supported by Lepton/Tauon.
+   When you want to add a new board you must add in this tree part.
+   
+   -. obj. All object files of application are stored here.
+   
+   -. prj/scons. This directory stores all build files. SConscript is
+   specific to application. You also have .py per target. A symlink
+   points to a shared SConstruct using by all applications.
+   
+   -. src. All sources for your application.
+   
+   -. all directories you want...
+
+Create a new application
+^^^^^^^^^^^^^^^^^^^^^^^^
+Setup
+'''''
+Create the main directory (tauon_myapp) of your application and all sub-
+directories bin, etc/scripts, hal, obj, prj/scons et src.
+$ mkdir -p dev/tauon_apps/tauon_myapp
+$ cd dev/tauon_apps/tauon_myapp
+$ mkdir -p bin etc/scripts hal obj prj/scons src
+
+In order to not overwrite your application directory when you
+update Lepton/Tauon kernel, a script bin_ln.sh creates a symlink
+in kernel tree.
+$ cd ~/tauon/sys/user
+$ sh bin_ln.sh /home/kvm/dev/tauon_apps/tauon_myapp
+$ ls
+[output]
+bin_ln.sh  build  tauon_myapp  tauon_sampleapp
+
+Lepton/tauon kernel uses scons as build system. We provide a general
+SConstruct and a application must include it. The user can add all
+specific build directives in his SConscript.
+$ cd ~/tauon/sys/user/tauon_myapp/prj/scons
+$ ln -s ~/tauon/sys/user/build/SConstruct
+
+We also provide a set of simple Python classes to compile kernel and
+your application. You have to define the PYTHONPATH environment
+variable to access module facilities.
+$ export PYTHONPATH="$HOME/tauon/sys/root/prj/scons/common/module/"
+
+You can add this line in your .bashrc file.
+
+Application creation (SYNTHETIC target)
+'''''''''''''''''''''''''''''''''''''''
+Copy specific build construction and configuration files for SYNTHETIC
+target from tauon_sampleapp
+$ cd tauon/sys/user/tauon_myapp
+$ cp ~/tauon/sys/user/tauon_sampleapp/prj/scons/SConscript prj/scons
+$ cp ~/tauon/sys/user/tauon_sampleapp/prj/scons/synthetic_opts.py prj/scons
+
+Copy kernel and firmware configuration file from tauon_sampleapp
+$ cp ~/tauon/sys/user/tauon_sampleapp/etc/mkconf_tauon_sampleapp_simple.xml etc
+
+Copy debug file for SYNTHETIC target from tauon_sampleapp
+$ cp ~/tauon/sys/user/tauon_sampleapp/etc/scripts/gdb_script_synth.gdb etc/scripts
+
+Copy test.c source file from tauon_sampleapp
+$ cp ~/tauon/sys/user/tauon_sampleapp/src/test.c src
+
+Application building (SYNTHETIC target)
+'''''''''''''''''''''''''''''''''''''''
+Compile the eCos library for Tauon Synthetic target
+$ cd ~/tauon/sys/root/lib/arch/synthetic/x86
+$ sh script_ecos_synth.sh
+
+Generated specific options for final binary. (configured applications,
+stack, files, ..). You must use the mklepton_gnu.sh script.
+$ cd ~/tauon/tools/bin
+$ ./mklepton_gnu.sh -t gnu32_lepton 
+~/tauon/sys/user/tauon_myapp/etc/mkconf_tauon_sampleapp_gnu_simple.xml
+
+Now you can compile your application and kernel. The default
+configuration file is synthetic_opts.py. You can also get help for
+supported options (scons -h)
+$ scons -c; scons -Q bin
+[scons -c : clean target]
+[scons -Q bin : compile all source files for application and copy final
+ELF image in tauon_myapp/bin]
+
+Your binary is ready to debug. Don't forget installation of simulation
+environment (once per session)
+$ sh ~/tauon/tools/host/debian/scripts/build_fifo.sh
+
+Launch a debug session
+$ cd ~/tauon/sys/user/tauon_myapp/bin/
+$ gdb -x ../etc/scripts/gdb_script_synth.gdb tauon_synthetic.elf
+
+========== IMPORTANT ========== 
+To add a new PSEUDO-binary (like test) you can follow this guidelines :
+   -. add source file wherever in src directory
+   -. add a line in .xml files (priority follow eCos priority scheme)
+   -. add a TauonSource instance in SConscript files
+========== --------- ==========
+
+************************************
+
+Application creation (AT91SAM9261-EK target)
+''''''''''''''''''''''''''''''''''''''''''''
+Copy debug file for AT91SAM9261-EK target from tauon_sampleapp
+$ cd tauon/sys/user/tauon_myapp
+$ cp \
+~/tauon/sys/user/tauon_sampleapp/etc/scripts/gdb_script_at91sam9261_sdram_jlink.gdb \
+etc/scripts
+
+Copy specific only configuration files for AT91SAM9261-EK target 
+from tauon_sampleapp (SConscript is already here)
+$ cp ~/tauon/sys/user/tauon_sampleapp/prj/scons/at91sam9261ek_simple_opts.py  \
+prj/scons
+
+Copy eCos Hardware Abstraction Layer (HAL) from tauon_sampleapp. You can
+add all ARM or CORTEX architecture supported by eCos with some
+modifications and good configuration file (ecos.ecc)
+$ cp -Rf ~/tauon/sys/user/tauon_sampleapp/hal/board_atmel_at91sam9261-ek hal
+
+Application building (AT91SAM9261-EK target)
+''''''''''''''''''''''''''''''''''''''''''''
+Add this HAL in eCos repository
+$ cd /home/kvm/tauon/sys/root/lib/arch/
+$ sh install-ecos-epk.sh
+~/tauon/sys/user/tauon_myapp/hal/board_atmel_at91sam9261-ek
+CYGPKG_HAL_ARM_AT91SAM9261
+
+Compile the eCos library for AT91SAM9261-EK target
+$ sh script_ecos_lib.sh
+~/tauon/sys/user/tauon_myapp/hal/board_atmel_at91sam9261-ek
+./arm9/at91sam9261
+
+========== IMPORTANT ========== 
+When you modify a file in HAL eCos part, you only need to compile eCos
+library for this target.
+========== --------- ==========
+
+Generated specific options for final binary. (configured applications,
+stack, files, ..). You must use the mklepton_gnu.sh script.
+$ cd ~/tauon/tools/bin
+$ ./mklepton_gnu.sh -t arm9_lepton 
+~/tauon/sys/user/tauon_myapp/etc/mkconf_tauon_sampleapp_gnu_simple.xml
+
+Now you can compile your application and kernel for AT91SAM9261-EK
+target
+$ scons -c --targetfile=at91sam9261ek_simple_opts.py;
+scons -Q bin --targetfile=at91sam9261ek_simple_opts.py
+
+Open a new terminal and launch a debug session
+$ gdb -x ../etc/scripts/gdb_script_at91sam9261_sdram_jlink.gdb \
+tauon_at91sam9261.elf
+
+************************************
+
+Application creation (TWR-K60N512 target)
+''''''''''''''''''''''''''''''''''''''''''''
+Copy debug file for TWR-K60N512 target from tauon_sampleapp
+$ cd tauon/sys/user/tauon_myapp
+$ cp \
+~/tauon/sys/user/tauon_sampleapp/etc/scripts/gdb_script_k60_mram.gdb \
+etc/scripts
+$ cp \
+~/tauon/sys/user/tauon_sampleapp/etc/scripts/gdb_k60_regs_map.gdb \
+etc/scripts
+$ cp \
+~/tauon/sys/user/tauon_sampleapp/etc/scripts/jlink_k60* \
+etc/scripts
+$ cp \
+~/tauon/sys/user/tauon_sampleapp/etc/scripts/amontec_k60.cfg \
+etc/scripts
+
+Copy kernel and firmware configuration file from tauon_sampleapp
+$ cp ~/tauon/sys/user/tauon_sampleapp/etc//mkconf_tauon_sampleapp_gnu_k60.xml etc
+
+Copy specific only configuration files for TWR-K60N512 target
+from tauon_sampleapp (SConscript is already here)
+$ cp ~/tauon/sys/user/tauon_sampleapp/prj/scons/k60n512_opts.py \
+prj/scons
+
+Copy eCos Hardware Abstraction Layer (HAL) from tauon_sampleapp. You can
+add all ARM or CORTEX architecture supported by eCos with some
+modifications and good configuration file (ecos.ecc)
+$ cp -Rf ~/tauon/sys/user/tauon_sampleapp/hal/board_freescale_twrk60n512 hal
+
+Copy driver and binary files
+$ mkdir src/dev
+$ cp -rf ~/tauon/sys/user/tauon_sampleapp/src/dev/board_freescale_twrk60n512/ src/dev/
+$ cp ~/tauon/sys/user/tauon_sampleapp/src/tsti2c.c src/
+$ cp ~/tauon/sys/user/tauon_sampleapp/src/tstleds.c src
+
+Application building (TWR-K60N512 target with MRAM)
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+Add this HAL in eCos repository
+$ cd /home/kvm/tauon/sys/root/lib/arch/
+$ sh install-ecos-epk.sh \
+~/tauon/sys/user/tauon_myapp/hal/board_freescale_twrk60n512 \
+CYGPKG_HAL_CORTEXM_KINETIS_TWR_K60N512_MRAM
+
+Compile the eCos library for AT91SAM9261-EK target
+$ sh script_ecos_lib.sh \
+~/tauon/sys/user/tauon_myapp/hal/board_freescale_twrk60n512 \
+./cortexm/k60n512
+
+Generated specific options for final binary. (configured applications,
+stack, files, ..). You must use the mklepton_gnu.sh script.
+$ cd ~/tauon/tools/bin
+$ ./mklepton_gnu.sh -t cortexm_lepton 
+~/tauon/sys/user/tauon_myapp/etc/mkconf_tauon_sampleapp_gnu_k60.xml
+
+Now you can compile your application and kernel for TWR-K60N512
+target
+$ scons -c --targetfile=k60n512_opts.py;
+scons -Q bin --targetfile=k60n512_opts.py
+
+Open a new terminal and lauch OpenOCD
+$ cd ~/tauon/sys/user/tauon_myapp/etc/scripts
+$ openocd -f [amontec_k60.cfg | jlink_k60.cfg]
+
+Open a new terminal and launch a debug session
+$ gdb -x ../etc/scripts/gdb_script_k60_mram.gdb tauon_k60n512.elf
+
+Application flashing (TWR-K60N512 target)
+'''''''''''''''''''''''''''''''''''''''''
+You have to change an option in your eCos configuration file.
+Open it.
+$ configtool /home/kvm/tauon/sys/user/tauon_sampleapp/hal/board_freescale_twrk60n512/lib/ecos.ecc &
+
+You need to expand
+eCos HAL
+> Cortex-M Architecture
+> > Freescale Kinetis Cortex-M4 Variant
+> > > Startup Type
+> > > > By Platform AND choose ROM
+
+Unckeck
+> > > Utilize ".kinetis_misc" section for HAL
+(If you want to have debug with -O0 in flash you need it!)
+
+Save your configuration file and close configtool.
+
+You can follow "Application building (TWR-K60N512 target with MRAM)"
+to build your application as the same.
+
+After building process finishes, you can find the ELF in 
+~/tauon/sys/user/tauon_myapp/bin. You need to convert it .bin in order
+to flash it.
+
+$ cd ~/tauon/sys/user/tauon_myapp/bin
+$ arm-eabi-objcopy -O binary tauon_k60n512.elf tauon_k60n512.bin
+
+========== IMPORTANT ==========
+Before, flashing your application on K60N512, check the ELF section
+to see if you have .flash_conf section at 0x00000400.
+
+$ arm-eabi-readelf -S tauon_k60n512.elf | grep "flash"
+
+If your application haven'it you can damage your board !!!!!
+========== --------- ==========
+
+You can flash your application with OpenOCD or CodeWarrior 10.1
+
+If you want to debug your application in flash, you need to :
+   -. Open a new terminal and launch OpenOCD
+   $ cd ~/tauon/sys/user/tauon_myapp/etc/scripts
+   $ openocd -f jlink_k60_flash.cfg
+   
+   -. Open a new terminal and launch GDB
+   $ arm-eabi-gdb -x ../etc/scripts/gdb_script_k60_flash_jlink.gdb
+   
+   -. At gdb prompt, load symbols
+   (gdb) symbol-file tauon_k60n512.elf
+
+Enjoy!!

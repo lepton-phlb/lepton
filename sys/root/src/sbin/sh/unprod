@@ -1,0 +1,3 @@
+#! lsh 
+rm /etc/.prod
+shutdown -r
