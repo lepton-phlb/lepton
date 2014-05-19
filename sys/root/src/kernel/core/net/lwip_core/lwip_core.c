@@ -61,7 +61,7 @@ either the MPL or the [eCos GPL] License."
 
 //
 #if !defined(GNU_GCC)
-   #define LWIP_CORE_PRIORITY   100
+   #define LWIP_CORE_PRIORITY   120
 
 #else
 

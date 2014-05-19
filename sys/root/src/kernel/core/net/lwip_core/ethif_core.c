@@ -406,33 +406,34 @@ int ethif_core_input(struct netif *netif)
       return -1;
    //
    if(!(r=ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc))) {
-      p = low_level_input(netif);
-      if (p !=NULL) {
-         /* points to packet payload, which starts with an Ethernet header */
-         ethhdr = p->payload;
-         switch (htons(ethhdr->type)) {
-         /* IP or ARP packet? */
-         case ETHTYPE_IP:
-         case ETHTYPE_ARP:
-#if PPPOE_SUPPORT
-         /* PPPoE packet? */
-         case ETHTYPE_PPPOEDISC:
-         case ETHTYPE_PPPOE:
-#endif          /* PPPOE_SUPPORT */
-                /* full packet send to tcpip_thread to process */
-            if (netif->input(p, netif)!=ERR_OK) {
-               LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+      while( (p = low_level_input(netif))!=NULL){
+         if (p !=NULL) {
+            /* points to packet payload, which starts with an Ethernet header */
+            ethhdr = p->payload;
+            switch (htons(ethhdr->type)) {
+            /* IP or ARP packet? */
+            case ETHTYPE_IP:
+            case ETHTYPE_ARP:
+   #if PPPOE_SUPPORT
+            /* PPPoE packet? */
+            case ETHTYPE_PPPOEDISC:
+            case ETHTYPE_PPPOE:
+   #endif          /* PPPOE_SUPPORT */
+                   /* full packet send to tcpip_thread to process */
+               if (netif->input(p, netif)!=ERR_OK) {
+                  LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+                  pbuf_free(p);
+                  p = NULL;
+               }
+               break;
+   
+            default:
                pbuf_free(p);
                p = NULL;
+               break;
             }
-            break;
-
-         default:
-            pbuf_free(p);
-            p = NULL;
-            break;
          }
-      }
+      }//end of while
    }else{
       //profiler
       __io_profiler_start(desc);
