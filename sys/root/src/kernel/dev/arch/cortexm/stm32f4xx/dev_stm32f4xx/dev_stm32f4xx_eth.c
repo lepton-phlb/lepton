@@ -83,17 +83,13 @@ dev_map_t dev_stm32f4xx_eth_map={
 //
 static desc_t desc_eth_r = -1;
 static desc_t desc_eth_w = -1;
+//
 static unsigned int eth_packet_recv_w;
 static unsigned int eth_packet_recv_r;
 
 static unsigned int eth_packet_send_w;
 static unsigned int eth_packet_send_r;
 //
-//
-static unsigned char dev_stm32f4xx_eth_thread_stack[1]={0};
-//
-static kernel_pthread_t dev_stm32f4xx_eth_thread;
-
 extern eth_stm32f4x7_info_t eth_stm32f4x7_info;
 /*===========================================
 Implementation
@@ -117,15 +113,16 @@ void ETH_IRQHandler(void)
 		/* Clear the Eth DMA Rx IT pending bits */  
 		ETH_DMAClearITPendingBit(ETH_DMA_IT_R);
       //lepton: to do: optimzation empty -> not empty
-      if(desc_eth_r!=-1 && eth_packet_recv_r==eth_packet_recv_w){
+      if(desc_eth_r!=-1 /*&& eth_packet_recv_r==eth_packet_recv_w*/){
         eth_packet_recv_w++;
         __fire_io_int(ofile_lst[desc_eth_r].owner_pthread_ptr_read);
          
       }
       //lepton
-
 		/* a frame has been received */
 	}
+   
+   /* Frame sent */
    if ( ETH_GetDMAFlagStatus(ETH_DMA_FLAG_T) == SET) 
 	{
       /* packet transmission */
@@ -146,45 +143,6 @@ void ETH_IRQHandler(void)
    __hw_leave_interrupt();
    //	
 
-}
-/*-------------------------------------------
-| Name:dev_stm32f4xx_eth_thread_routine
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-void * dev_stm32f4xx_eth_thread_routine(void* arg){
-   for(;;){
-     
-   }
-   return (void*)0;
-}
-
-/*-------------------------------------------
-| Name:dev_stm32f4xx_eth_thread_init
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-int dev_stm32f4xx_eth_thread_init(void)
-{
-   //
-   pthread_attr_t thread_attr={0};
-   //
-   thread_attr.stacksize = sizeof(dev_stm32f4xx_eth_thread_stack);
-   thread_attr.stackaddr = (void*)dev_stm32f4xx_eth_thread_stack;
-   thread_attr.priority  = 100;
-   thread_attr.timeslice = 1;
-   //
-   thread_attr.name="ethpoll";
-   //
-   kernel_pthread_create(&dev_stm32f4xx_eth_thread,&thread_attr,(start_routine_t)dev_stm32f4xx_eth_thread_routine,(char*)0);
-
-   return 0;
 }
 
 /*-------------------------------------------
@@ -294,7 +252,7 @@ int dev_stm32f4xx_eth_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_stm32f4xx_eth_isset_read(desc_t desc){
-   if(desc_eth_r!=-1 && eth_packet_recv_r!=eth_packet_recv_w){
+   if(desc_eth_r!=-1 && ETH_CheckFrameReceived()==1){
       return 0;//packet available
    }  
    return -1;
@@ -328,7 +286,8 @@ int dev_stm32f4xx_eth_read(desc_t desc, char* buf,int size){
    //
    cb = eth_packet_read(buf,size);
    //
-   eth_packet_recv_r++;
+   if(cb>0)
+      eth_packet_recv_r++;
    //
    return cb;
 }

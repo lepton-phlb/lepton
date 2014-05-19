@@ -125,6 +125,24 @@ static unsigned int eth_phy_get_addr(void){
  * Description: read packet from MAC/DMA Controller
  *
  *************************************************************************/
+#if 0
+int eth_packet_read_available()
+
+ while (((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET)&&
+         (descriptor_scan_counter<ETH_RXBUFNB))
+  {
+
+      /* Just by security */
+      descriptor_scan_counter++;
+#endif
+/*************************************************************************
+ * Function Name: eth_packet_read
+ * Parameters:
+ * Return:
+ *
+ * Description: read packet from MAC/DMA Controller
+ *
+ *************************************************************************/
 int eth_packet_read(unsigned char* p_to_user_buffer, int size)
 {
 	uint16_t len;
@@ -183,7 +201,9 @@ int eth_packet_read(unsigned char* p_to_user_buffer, int size)
 			/* Resume DMA reception */
 			ETH->DMARPDR = 0;
 		}
-	}
+	}else{
+     len=0;
+   }
    //
 	return len;
 }
@@ -228,13 +248,16 @@ static void eth_nvic_configuration(void)
         NVIC_InitTypeDef NVIC_InitStructure;
         
         /* 2 bit for pre-emption priority, 2 bits for subpriority */
-        NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+        //NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
         /* Enable the Ethernet global Interrupt */
-        NVIC_InitStructure.NVIC_IRQChannel = ETH_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-        NVIC_Init(&NVIC_InitStructure);
+        //NVIC_InitStructure.NVIC_IRQChannel = ETH_IRQn;
+        //NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+        //NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+        //NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+        //NVIC_Init(&NVIC_InitStructure);
+        //
+        NVIC_SetPriority((IRQn_Type)ETH_IRQn, (1 << __NVIC_PRIO_BITS) -4);
+        NVIC_EnableIRQ(ETH_IRQn);
 }
 
 /*************************************************************************
@@ -316,11 +339,11 @@ static int eth_macdma_config(void)
    /*------------------------   MAC   -----------------------------------*/
    ETH_InitStructure.ETH_AutoNegotiation = ETH_AutoNegotiation_Enable;
    //ETH_InitStructure.ETH_AutoNegotiation = ETH_AutoNegotiation_Disable; 
-   //  ETH_InitStructure.ETH_Speed = ETH_Speed_10M;
-   //  ETH_InitStructure.ETH_Mode = ETH_Mode_FullDuplex;   
+   //ETH_InitStructure.ETH_Speed = ETH_Speed_10M;
+   //ETH_InitStructure.ETH_Mode = ETH_Mode_FullDuplex;   
    
    ETH_InitStructure.ETH_LoopbackMode = ETH_LoopbackMode_Disable;
-   ETH_InitStructure.ETH_RetryTransmission = ETH_RetryTransmission_Disable;
+   ETH_InitStructure.ETH_RetryTransmission = ETH_RetryTransmission_Enable;
    ETH_InitStructure.ETH_AutomaticPadCRCStrip = ETH_AutomaticPadCRCStrip_Disable;
    ETH_InitStructure.ETH_ReceiveAll = ETH_ReceiveAll_Disable;
    ETH_InitStructure.ETH_BroadcastFramesReception = ETH_BroadcastFramesReception_Enable;
@@ -348,6 +371,7 @@ static int eth_macdma_config(void)
    ETH_InitStructure.ETH_RxDMABurstLength = ETH_RxDMABurstLength_32Beat;          
    ETH_InitStructure.ETH_TxDMABurstLength = ETH_TxDMABurstLength_32Beat;
    ETH_InitStructure.ETH_DMAArbitration = ETH_DMAArbitration_RoundRobin_RxTx_2_1;
+   
    //
    if((PhyAddr=eth_phy_get_addr())==0){
       return -1;
