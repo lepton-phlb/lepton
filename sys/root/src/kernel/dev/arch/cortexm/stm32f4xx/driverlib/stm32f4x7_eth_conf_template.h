@@ -67,6 +67,8 @@
 #define PHY_RESET_DELAY    ((uint32_t)0x000FFFFF) 
 /* PHY Configuration delay */ 
 #define PHY_CONFIG_DELAY   ((uint32_t)0x00FFFFFF)
+   
+#define ETH_REG_WRITE_DELAY ((uint32_t)0x00000001)
 
 /* The PHY status register value change from a PHY to another, so the user have 
    to update this value depending on the used external PHY */
