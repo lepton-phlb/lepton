@@ -105,6 +105,8 @@ tmr_t kernel_tmr;
 #define KERNEL_PRIORITY    (configMAX_PRIORITIES-1)
 _macro_stack_addr char kernel_stack[KERNEL_STACK_SIZE];
 
+volatile int kernel_in_interrupt;
+signed long kernel_in_interrupt_higher_priority_task_woken;
 
 #ifdef KERNEL_PROFILER
 kernel_profiler_result_t kernel_profiler_result_lst[_SYSCALL_TOTAL_NB]={0};
