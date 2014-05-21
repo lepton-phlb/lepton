@@ -70,7 +70,7 @@ either the MPL or the [eCos GPL] License."
 
 #endif
 
-
+__KERNEL_SRAM_LOCATION
 _macro_stack_addr char lwip_core_stack[LWIP_CORE_STACK_SIZE];
 
 kernel_pthread_t lwip_core_thread;
