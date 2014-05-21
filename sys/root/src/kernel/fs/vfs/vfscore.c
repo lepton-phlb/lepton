@@ -61,12 +61,15 @@ Global Declaration
 inodenb_t current_inodenb=VFS_INODENB_ROOT;
 
 //superblock
+__KERNEL_SRAM_LOCATION
 superblk_t superblk_lst[MAX_SUPER_BLOCK];
 
 //open file list
+__KERNEL_SRAM_LOCATION
 ofile_t ofile_lst[MAX_OPEN_FILE]={-1};
 
 //mounted device list
+__KERNEL_SRAM_LOCATION
 mntdev_t mntdev_lst[MAX_MOUNT_DEVICE];
 
 #if __KERNEL_VFS_SUPPORT_EFFS==1
