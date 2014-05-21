@@ -62,7 +62,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-
+__KERNEL_SRAM_LOCATION
 opipe_t opipe_lst[__MAX_PIPE];
 
 int _sys_pipe_load(void);
