@@ -55,11 +55,9 @@ typedef struct kernel_sigevent_st {
 }kernel_sigevent_t;
 
 //
-#if (__tauon_compiler__==__compiler_keil_arm__) || (__tauon_compiler__==__compiler_gnuc__)
 typedef struct kernel_sigqueue_st kernel_sigqueue_st;
 typedef struct kernel_pthread_st kernel_pthread_st;
 typedef struct kernel_object_st kernel_object_st;
-#endif
 
 typedef int (*pfn_kernel_sigqueue_constructor_t)(struct kernel_object_st** pp_kernel_object_head, struct kernel_sigqueue_st* p);
 typedef int (*pfn_kernel_sigqueue_destructor_t)(struct kernel_sigqueue_st* p);
