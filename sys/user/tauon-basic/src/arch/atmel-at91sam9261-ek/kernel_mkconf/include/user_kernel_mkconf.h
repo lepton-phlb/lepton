@@ -8,6 +8,10 @@ Compiler Directive
 
 //force definition for at91lib headers
 #define at91sam9261 
+
+//free rtos configuration
+#include "kernel/core/ucore/freeRTOS_8-0-0/source/arch/arm9/at91sam9261/FreeRTOSConfig.h"
+
 //force definition of cpu device
 #define __tauon_cpu_device__ __tauon_cpu_device_arm9_at91sam9261__
 
@@ -17,8 +21,8 @@ Compiler Directive
 
 //ip stack
 //#define USE_UIP 
-//#define USE_LWIP
-//#define USE_IF_ETHERNET
+#define USE_LWIP
+#define USE_IF_ETHERNET
 
 //initd. ugly config define. 
 #define EVAL_BOARD

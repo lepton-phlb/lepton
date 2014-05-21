@@ -6,6 +6,7 @@ Compiler Directive
 
 //force ip stack
 #define USE_LWIP
+#define USE_IF_ETHERNET
 
 /*===========================================
 Includes
