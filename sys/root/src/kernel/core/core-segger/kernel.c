@@ -100,6 +100,8 @@ tmr_t kernel_tmr;
 #endif
 
 #define KERNEL_PRIORITY    150
+//
+__KERNEL_SRAM_LOCATION
 _macro_stack_addr char kernel_stack[KERNEL_STACK_SIZE];
 
 
