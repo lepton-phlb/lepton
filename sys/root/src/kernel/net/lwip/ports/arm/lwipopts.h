@@ -90,7 +90,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
    should be set high. */
-#define MEMP_NUM_PBUF           16//64 //(64 lepton modifs) //default 16
+#define MEMP_NUM_PBUF           64 //(64 lepton modifs) //default 16
 /* MEMP_NUM_RAW_PCB: the number of UDP protocol control blocks. One
    per active RAW "connection". */
 #define MEMP_NUM_RAW_PCB        3
@@ -113,14 +113,14 @@ a lot of data that needs to be copied, this should be set high. */
 /* The following four are used only with the sequential API and can be
    set to 0 if the application only will use the raw API. */
 /* MEMP_NUM_NETBUF: the number of struct netbufs. */
-#define MEMP_NUM_NETBUF         32//256  //64 lepton modifs) //default 2
+#define MEMP_NUM_NETBUF         256  //64 lepton modifs) //default 2
 /* MEMP_NUM_NETCONN: the number of struct netconns. */
-#define MEMP_NUM_NETCONN        16//48 //(48 lepton modifs) //default 10
+#define MEMP_NUM_NETCONN        48 //(48 lepton modifs) //default 10
 /* MEMP_NUM_TCPIP_MSG_*: the number of struct tcpip_msg, which is used
    for sequential API communication and incoming packets. Used in
    src/api/tcpip.c. */
-#define MEMP_NUM_TCPIP_MSG_API   16//64 //(24 lepton modifs) //default 16
-#define MEMP_NUM_TCPIP_MSG_INPKT 16//64 //(24 lepton modifs) //default 16
+#define MEMP_NUM_TCPIP_MSG_API   64 //(24 lepton modifs) //default 16
+#define MEMP_NUM_TCPIP_MSG_INPKT 64 //(24 lepton modifs) //default 16
 
 
 /* ---------- Pbuf options ---------- */
