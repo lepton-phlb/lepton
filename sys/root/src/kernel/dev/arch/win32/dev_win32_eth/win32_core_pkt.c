@@ -378,6 +378,20 @@ int win32_eth_disable_interrupt(void){
 }
 
 /*--------------------------------------------
+| Name:        win32_eth_pkt_available
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int win32_eth_pkt_available(void){
+   if(packet_rd!=packet_wr)
+      return 1;
+   return 0;
+}
+
+/*--------------------------------------------
 | Name:        win32_eth_getpkt
 | Description:
 | Parameters:  none

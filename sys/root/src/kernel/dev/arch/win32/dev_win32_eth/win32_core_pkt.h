@@ -44,6 +44,7 @@ int win32_eth_start(void);
 int win32_eth_stop(void);
 int win32_eth_enable_interrupt(void);
 int win32_eth_disable_interrupt(void);
+int win32_eth_pkt_available(void);
 int win32_eth_getpkt(char* buf, int len);
 int win32_eth_putpkt(const char* buf, int len);
 
