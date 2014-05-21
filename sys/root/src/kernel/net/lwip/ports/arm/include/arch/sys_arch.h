@@ -18,6 +18,8 @@ warnings     */
 typedef struct {
 #if defined(__KERNEL_UCORE_EMBOS)
    OS_MAILBOX os_mailbox;
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   xQueueHandle os_mailbox;   
 #else
    long  os_mailbox;
 #endif
@@ -26,22 +28,20 @@ typedef struct {
 }sys_mbox_st;
 
 //
-typedef kernel_pthread_t *    sys_thread_t;
+typedef kernel_pthread_t *     sys_thread_t;
+typedef kernel_pthread_mutex_t* sys_prot_t;
 typedef sys_mbox_st* sys_mbox_t;
 
 //
 #if defined(__KERNEL_UCORE_EMBOS)
    typedef OS_CSEMA* sys_sem_t;
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   typedef xSemaphoreHandle sys_sem_t;
 #else
    typedef void*  sys_sem_t;
 #endif
 
-#if defined(__KERNEL_UCORE_EMBOS)
-   typedef OS_RSEMA* sys_prot_t;
-#else
-   typedef void*  sys_prot_t;
-#endif
-
+   
 //
 #endif
 
