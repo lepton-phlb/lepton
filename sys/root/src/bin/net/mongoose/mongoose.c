@@ -239,13 +239,31 @@ typedef int SOCKET;
 
 #define MONGOOSE_VERSION        "2.6"
 #define PASSWORDS_FILE_NAME     ".htpasswd"
-#define CGI_ENVIRONMENT_SIZE    4096
+
+#ifndef __USER_MONGOOSE_CGI_ENVIRONMENT_SIZE
+   #define CGI_ENVIRONMENT_SIZE    4096
+#else
+   #define CGI_ENVIRONMENT_SIZE    __USER_MONGOOSE_CGI_ENVIRONMENT_SIZE
+#endif
+
 #define MAX_CGI_ENVIR_VARS      64
-#define MAX_REQUEST_SIZE        (8*1024) /*16384*/
+
+#ifndef __USER_MONGOOSE_MAX_REQUEST_SIZE
+   #define MAX_REQUEST_SIZE        (8*1024) /*16384*/
+#else
+   #define MAX_REQUEST_SIZE  __USER_MONGOOSE_MAX_REQUEST_SIZE
+#endif
+
 #define MAX_LISTENING_SOCKETS   10
 #define MAX_CALLBACKS           20
 #define ARRAY_SIZE(array)       (sizeof(array) / sizeof(array[0]))
 #define UNKNOWN_CONTENT_LENGTH  ((uint64_t) ~0UL)
+
+#ifndef __USER_MONGOOSE_PTHREAD_STACK_SIZE
+   #define MONGOOSE_PTHREAD_STACK_SIZE      (31744)
+#else
+   #define MONGOOSE_PTHREAD_STACK_SIZE      __USER_MONGOOSE_PTHREAD_STACK_SIZE
+#endif
 
 #if defined(DEBUG)
    #define DEBUG_TRACE(...) fprintf(stderr, "***Mongoose debug*** \r\n" __VA_ARGS__)
@@ -1126,7 +1144,7 @@ start_thread(void * (*func)(void *), void *param)
    int retval;
 
 
-   attr.stacksize = (31*1024); //m16c 512
+   attr.stacksize = MONGOOSE_PTHREAD_STACK_SIZE; //(31*1024); //m16c 512
    attr.stackaddr = NULL;
    #if !defined(__GNUC__)
    attr.priority  = 100;
@@ -2301,7 +2319,8 @@ send_directory(struct mg_connection *conn, const char *dir)
 
    sort_direction = conn->request_info.query_string != NULL &&
                     conn->request_info.query_string[1] == 'd' ? 'a' : 'd';
-
+  
+   //
    while ((dp = readdir(dirp)) != NULL) {
 
       /* Do not show current dir and passwords file */
