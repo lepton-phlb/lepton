@@ -3035,7 +3035,9 @@ TCB_t *pxNewTCB;
 
 		/* Free up the memory allocated by the scheduler for the task.  It is up to
 		the task to free any memory allocated at the application level. */
-		vPortFreeAligned( pxTCB->pxStack );
+		//lepton bug fix: task stack allocated by lepton. it cannot be free by freeRTOS: must be disabled
+      //vPortFreeAligned( pxTCB->pxStack );
+      //
 		vPortFree( pxTCB );
 	}
 
