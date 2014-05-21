@@ -126,6 +126,8 @@ __arm __interwork void vPortExitCritical( void );
 #define portEXIT_CRITICAL()			vPortExitCritical()
 /*-----------------------------------------------------------*/
 
+#define portYIELD_FROM_ISR( x ) portEND_SWITCHING_ISR( x )
+
 /* Task utilities. */
 #define portEND_SWITCHING_ISR( xSwitchRequired ) 	\
 {													\
