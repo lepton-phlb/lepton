@@ -149,11 +149,16 @@ void dev_at91sam9261_uart_dbg_interrupt(void)
    // interrupt for dbg Uart ?
    board_inf_uart_t *p_inf_uart;
    AT91_REG         *p_adr;
-
+    //
+   __hw_enter_interrupt();
+   //
    p_inf_uart = (board_inf_uart_t *)ofile_lst[desc_uart_dbg].p;
    p_adr      = (AT91_REG *)p_inf_uart->base_adr;
 
    dev_at91sam9261_uart_dbg_x_interrupt(desc_uart_dbg);
+   //
+   __hw_leave_interrupt();
+   //
 }
 
 

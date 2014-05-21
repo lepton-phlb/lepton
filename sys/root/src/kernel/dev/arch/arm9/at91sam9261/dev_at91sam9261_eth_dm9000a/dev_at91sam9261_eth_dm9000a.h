@@ -40,6 +40,8 @@ Declarations
 =============================================*/
 
 extern int dev_at91sam9261_eth_dm9000a_load(dev_io_info_t* p_dev_io_info);
+extern int dev_at91sam9261_eth_dm9000a_open(desc_t desc, int o_flag);
+extern int dev_at91sam9261_eth_dm9000a_close(desc_t desc);
 
 #endif //end of DEV_AT91SAM9261_ETH_DM9000A_H_
 /*============================================

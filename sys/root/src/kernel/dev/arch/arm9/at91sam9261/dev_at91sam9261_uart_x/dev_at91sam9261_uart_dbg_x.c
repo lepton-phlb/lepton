@@ -670,8 +670,10 @@ int dev_at91sam9261_uart_dbg_x_write(desc_t desc, const char* buf,int size)
    p_inf_uart->output_r = 0;
    p_inf_uart->output_w = size;
 
-#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
+#if defined(__KERNEL_UCORE_EMBOS) 
    OS_DI();
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   __clr_irq();
 #elif defined(__KERNEL_UCORE_ECOS)
    __clr_irq();
 #endif
@@ -682,8 +684,10 @@ int dev_at91sam9261_uart_dbg_x_write(desc_t desc, const char* buf,int size)
    *(p_adr+US_THR) = snd_data;
    *(p_adr+US_IER) = 2;
 
-#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
+#if defined(__KERNEL_UCORE_EMBOS) 
    OS_EI();
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   __set_irq();
 #elif defined(__KERNEL_UCORE_ECOS)
    __set_irq();
 #endif
