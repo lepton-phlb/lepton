@@ -1,8 +1,13 @@
 #warning!!!:enable mode xon/xoff.
-net/ifconfig addif 192.168.83.72 192.168.83.1
+#stty ixon
+#stty 57600
+#net/slipd -w /dev/ttys1&
+#mount /dev/sdcard /dev/spi0 /dev/hd/sdhd0
+mkfs -t effs -d /dev/null
+mount -t effs /dev/null /mnt
+net/ifconfig addif 192.168.0.35 192.168.0.1
 bin/net/telnetd&
-#bin/net/shttpd -cgi_interp lsh &
-#bin/net/mongoosed -cgi_interp lsh &
+bin/net/mongoosed -cgi_interp lsh &
 #bin/net/ftpd&
 
 
