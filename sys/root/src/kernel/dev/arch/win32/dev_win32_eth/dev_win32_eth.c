@@ -173,9 +173,9 @@ int dev_win32_eth_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_win32_eth_isset_read(desc_t desc){
-   if(__win32_eth_input_r!=__win32_eth_input_w)
+   if(win32_eth_pkt_available()==1)
       return 0;
-
+   //
    return -1;
 }
 
@@ -202,7 +202,8 @@ int dev_win32_eth_isset_write(desc_t desc){
 int dev_win32_eth_read(desc_t desc, char* buf,int size){
    int cb;
    cb = win32_eth_getpkt(buf,size);
-   __win32_eth_input_r++;
+   if(cb>0)
+      __win32_eth_input_r++;
    return cb;
 }
 
