@@ -88,6 +88,35 @@
 #include "kernel/dev/arch/at91/at91lib/utility/led.h"
 #include "kernel/dev/arch/at91/at91lib/utility/trace.h"
 
+/*      Periodic interval timer */
+#define PIT_BASE_ADDR     (0xFFFFFD30)
+#define PIT_MR        (*(volatile uint32_t*) (PIT_BASE_ADDR + 0x00))
+#define PIT_SR        (*(volatile uint32_t*) (PIT_BASE_ADDR + 0x04))
+#define PIT_PIVR      (*(volatile uint32_t*) (PIT_BASE_ADDR + 0x08))
+#define PIT_PIIR      (*(volatile uint32_t*) (PIT_BASE_ADDR + 0x0C))
+
+/*      Debug unit */
+#define DBGU_BASE_ADDR    (0xFFFFF200)
+#define DBGU_IMR      (*(volatile uint32_t*) (DBGU_BASE_ADDR + 0x10)) /* Interrupt Mask Register */
+#define DBGU_SR       (*(volatile uint32_t*) (DBGU_BASE_ADDR + 0x14)) /* Channel Status Register */
+#define DBGU_COMMRX   (1uL << 31)
+#define DBGU_COMMTX   (1uL << 30)
+#define DBGU_RXBUFF   (1uL << 12)
+#define DBGU_TXBUFE   (1uL << 11)
+#define DBGU_TXEMPTY  (1uL <<  9)
+#define DBGU_PARE     (1uL <<  7)
+#define DBGU_FRAME    (1uL <<  6)
+#define DBGU_OVRE     (1uL <<  5)
+#define DBGU_ENDTX    (1uL <<  4)
+#define DBGU_ENDRX    (1uL <<  3)
+#define DBGU_TXRDY    (1uL <<  1)
+#define DBGU_RXRDY    (1uL <<  0)
+#define DBGU_MASK_ALL (DBGU_COMMRX | DBGU_COMMTX  | DBGU_RXBUFF |  \
+                       DBGU_TXBUFE | DBGU_TXEMPTY | DBGU_PARE   |  \
+                       DBGU_FRAME  | DBGU_OVRE    | DBGU_ENDTX  |  \
+                       DBGU_ENDRX  | DBGU_TXRDY   | DBGU_RXRDY)
+
+
 /*-----------------------------------------------------------*/
 
 /* Constants required to setup the initial stack. */
@@ -224,6 +253,22 @@ void vPortEndScheduler( void )
 }
 /*-----------------------------------------------------------*/
 
+/*********************************************************************
+*
+*       _HandleDbguIrq(), Debug unit interrupt handler
+*       If not used for application, this handler may be removed
+*/
+extern void (*g_p_fct_dbg_interrupt)(void);
+static __arm void vPortDbguISR(void) {
+  uint32_t irq_source;
+  irq_source  = DBGU_IMR;
+  irq_source &= (DBGU_SR & DBGU_MASK_ALL);
+  if (irq_source) { /* Any interrupt pending ? */
+    if(g_p_fct_dbg_interrupt)
+      g_p_fct_dbg_interrupt();
+  }
+}
+
 static __arm void vPortTickISR( void )
 {
 volatile uint32_t ulDummy;
@@ -244,6 +289,17 @@ volatile uint32_t ulDummy;
 	
 	/* The AIC is cleared in the asm wrapper, outside of this function. */
 }
+
+/*-----------------------------------------------------------*/
+static __arm void vPortSystemISR( void ){
+
+   if (PIT_SR & (1uL << 0)) {  /* Timer interupt pending?            */
+      vPortTickISR();         /* Call OS tick handler               */
+   }
+   vPortDbguISR();
+   
+   /* The AIC is cleared in the asm wrapper, outside of this function. */
+}
 /*-----------------------------------------------------------*/
 
 static void prvSetupTimerInterrupt( void )
@@ -255,7 +311,7 @@ const uint32_t ulPeriodIn_uS = ( 1.0 / ( double ) configTICK_RATE_HZ ) * port1SE
 	
 	/* Setup the PIT interrupt. */
 	AIC_DisableIT( AT91C_ID_SYS );
-	AIC_ConfigureIT( AT91C_ID_SYS, AT91C_AIC_PRIOR_LOWEST, vPortTickISR );
+	AIC_ConfigureIT( AT91C_ID_SYS, AT91C_AIC_PRIOR_LOWEST, vPortSystemISR );
 	AIC_EnableIT( AT91C_ID_SYS );
 	PIT_EnableIT();
 }
