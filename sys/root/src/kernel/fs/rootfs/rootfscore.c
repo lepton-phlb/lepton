@@ -53,6 +53,7 @@ Global Declaration
 #if defined (WIN32) || defined(CPU_GNU32)
    rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE]={S_IFNULL};
 #else
+   __KERNEL_SRAM_LOCATION
    rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
 #endif
 
@@ -61,6 +62,7 @@ Global Declaration
 #if defined (WIN32) || defined(CPU_GNU32)
    rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE]={0};
 #else
+   __KERNEL_SRAM_LOCATION
    rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
 #endif
 
@@ -72,6 +74,7 @@ const int rtfs_superblk_size      = RTFS_BLOCK_ALLOC_SIZE;
 #if defined (WIN32) || defined(CPU_GNU32)
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE]={0};
 #else
+__KERNEL_SRAM_LOCATION
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
 #endif
 
