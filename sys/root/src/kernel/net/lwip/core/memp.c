@@ -135,7 +135,8 @@ static const char *memp_desc[MEMP_MAX] = {
 };
 #endif /* LWIP_DEBUG */
 
-/** This is the actual memory used by the pools. */
+/** This is the actual memory used by the pools. */ 
+__KERNEL_SRAM_LOCATION 
 static u8_t memp_memory[MEM_ALIGNMENT - 1 
 #define LWIP_MEMPOOL(name,num,size,desc) + ( (num) * (MEMP_SIZE + MEMP_ALIGN_SIZE(size) ) )
 #include "lwip/memp_std.h"
