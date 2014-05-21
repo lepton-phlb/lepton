@@ -43,8 +43,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-#include "kernel/core/types.h"
 #include "kernel/core/kernelconf.h"
+#include "kernel/core/types.h"
 
 /*============================================
 | Declaration
@@ -1710,13 +1710,12 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       _sys_free(__pthread_ptr__->bckup_stack); \
    }
 
-   #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
-      #define __inline_swap_signal_handler(__pthread_ptr__,__sig_handler__){ \
-         ((cpu_regs_t *)__pthread_ptr__->tcb->pStack)->OS_REG_PC= (uint32_t)(__sig_handler__);\
-      }
    
-   #endif
+   #define __inline_swap_signal_handler(__pthread_ptr__,__sig_handler__){ \
+      ((cpu_regs_t *)__pthread_ptr__->tcb->pStack)->OS_REG_PC= (uint32_t)(__sig_handler__);\
+   }
 
+ 
    /*TS_WAIT_TIME*/
    #define __inline_exit_signal_handler(__pthread_ptr__){ \
       __rstr_context(__pthread_ptr__->bckup_context,__pthread_ptr__); \
