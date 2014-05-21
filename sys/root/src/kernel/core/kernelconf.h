@@ -247,6 +247,22 @@ Declaration
 #endif
 
 //
+//link option: SRAM optimization
+#if (__tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__)
+   #if (__tauon_compiler__==__compiler_iar_arm__)
+      //use internal CCM Core Coupled Memory. warning! cannot be used with DMA.
+      #define CORTEXM4_CCM_RAM _Pragma("section=\"CCM_RAM_SECTION\"")\
+      _Pragma("location=\"CCM_RAM_SECTION\"")
+
+      #define __KERNEL_SRAM_LOCATION CORTEXM4_CCM_RAM
+   #endif
+#endif
+
+#ifndef __KERNEL_SRAM_LOCATION
+   #define __KERNEL_SRAM_LOCATION
+#endif
+
+//features profile
 #define __tauon_kernel_profile_minimal__         0x0001
 #define __tauon_kernel_profile_classic__         0x0002
 #define __tauon_kernel_profile_full__            0x000F
@@ -258,14 +274,13 @@ Declaration
    #define __tauon_kernel_profile__ __tauon_kernel_profile_classic__
 #elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)
    #define __tauon_kernel_profile__ __tauon_kernel_profile_classic__
-#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)
    #define __tauon_kernel_profile__ __tauon_kernel_profile_minimal__
 #endif
 
 #if !defined(__tauon_kernel_profile__)
    #define __tauon_kernel_profile__ __tauon_kernel_profile_minimal__
 #endif 
-
 
 #if (__tauon_kernel_profile__==__tauon_kernel_profile_full__)
    //
@@ -294,10 +309,13 @@ Declaration
       #define __KERNEL_PIPE_SIZE  1024 //256
    #endif
 
-// to do: put this definition in kernel_mkconf.h with mklepton.
-   #define __KERNEL_RTFS_BLOCK_SIZE 32 //default size 16
-// to do: put this definition in kernel_mkconf.h with mklepton.
-   #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
+   #ifndef __KERNEL_RTFS_BLOCK_SIZE
+      #define __KERNEL_RTFS_BLOCK_SIZE 32 //default size 16
+   #endif
+
+   #ifndef __KERNEL_UFS_BLOCK_SIZE_MAX
+      #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
+   #endif
 
 #elif (__tauon_kernel_profile__==__tauon_kernel_profile_minimal__)
    #define __KERNEL_OBJECT_POOL_MAX 8
@@ -548,6 +566,5 @@ Declaration
 #define CONFIG_YAFFS_PROVIDE_DEFS
 #define CONFIG_YAFFSFS_PROVIDE_VALUES
 #define NO_Y_INLINE
-
 
 #endif
