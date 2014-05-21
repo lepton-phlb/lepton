@@ -193,7 +193,10 @@ int low_level_ioctl(desc_t desc, int request, ... ){
 static err_t low_level_output(struct netif *netif, struct pbuf *p){
    struct pbuf *q;
    //gloups bug :'(
+   //
+   __KERNEL_SRAM_LOCATION 
    static unsigned char buffer[1600];
+   //
    unsigned char *ptr;
    int packet_len=0;
 
