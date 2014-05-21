@@ -33,13 +33,13 @@
       <heap size="10000" />
 
       <!-- process max (__KERNEL_PROCESS_MAX: must be strictly less than thread max)-->
-      <process max="10" />
+      <process max="16" />
 
       <!-- max open file (MAX_OPEN_FILE)-->
-      <openfiles max="16" />
+      <openfiles max="32" />
 
       <!-- max descriptor per process (OPEN_MAX)-->
-      <descriptors max="8" />
+      <descriptors max="16" />
 
       <!-- cpu built-in file-system (see fileflash device) -->
       <!-- <cpufs size="16000" /> -->
@@ -141,27 +141,27 @@
 <!-- binaries. see ...-->
 <!-- /usr/bin -->
 <binaries src_path="sbin" dest_path="sbin">
-   <bin name="initd"    stack="2048"    priority="100" timeslice="5" />
-   <bin name="lsh"      stack="2048"    priority="100" timeslice="5" />
-   <bin name="mount"    stack="2048"    priority="100" timeslice="5" />
-   <bin name="umount"   stack="2048"    priority="100" timeslice="5" />
-   <bin name="ls"       stack="2048"    priority="100" timeslice="5" />
-   <bin name="ps"       stack="2048"    priority="100" timeslice="5" />
-   <bin name="kill"     stack="2048"    priority="100" timeslice="5" />
-   <bin name="touch"    stack="2048"    priority="100" timeslice="5" />
-   <bin name="cat"      stack="2048"    priority="100" timeslice="5" />
-   <bin name="more"     stack="2048"    priority="100" timeslice="5" />
-   <bin name="mkfs"     stack="2048"    priority="100" timeslice="5" />
-   <bin name="df"       stack="2048"    priority="100" timeslice="5" />
-   <bin name="uname"    stack="2048"    priority="100" timeslice="5" />
-   <bin name="pwd"      stack="2048"    priority="100" timeslice="5" />
-   <bin name="rmdir"    stack="2048"    priority="100" timeslice="5" />
-   <bin name="mkdir"    stack="2048"    priority="100" timeslice="5" />
-   <bin name="rm"       stack="2048"    priority="100" timeslice="5" />
-   <bin name="od"       stack="2048"    priority="100" timeslice="5" />
-   <bin name="date"     stack="2048"    priority="100" timeslice="5" />
-   <bin name="echo"     stack="2048"    priority="100" timeslice="5" />
-   <bin name="stty"     stack="2048"    priority="100" timeslice="5" />
+   <bin name="initd"    stack="2048"    priority="100" timeslice="1" />
+   <bin name="lsh"      stack="2048"    priority="100" timeslice="1" />
+   <bin name="mount"    stack="2048"    priority="100" timeslice="1" />
+   <bin name="umount"   stack="2048"    priority="100" timeslice="1" />
+   <bin name="ls"       stack="2048"    priority="100" timeslice="1" />
+   <bin name="ps"       stack="2048"    priority="100" timeslice="1" />
+   <bin name="kill"     stack="2048"    priority="100" timeslice="1" />
+   <bin name="touch"    stack="2048"    priority="100" timeslice="1" />
+   <bin name="cat"      stack="2048"    priority="100" timeslice="1" />
+   <bin name="more"     stack="2048"    priority="100" timeslice="1" />
+   <bin name="mkfs"     stack="2048"    priority="100" timeslice="1" />
+   <bin name="df"       stack="2048"    priority="100" timeslice="1" />
+   <bin name="uname"    stack="2048"    priority="100" timeslice="1" />
+   <bin name="pwd"      stack="2048"    priority="100" timeslice="1" />
+   <bin name="rmdir"    stack="2048"    priority="100" timeslice="1" />
+   <bin name="mkdir"    stack="2048"    priority="100" timeslice="1" />
+   <bin name="rm"       stack="2048"    priority="100" timeslice="1" />
+   <bin name="od"       stack="2048"    priority="100" timeslice="1" />
+   <bin name="date"     stack="2048"    priority="100" timeslice="1" />
+   <bin name="echo"     stack="2048"    priority="100" timeslice="1" />
+   <bin name="stty"     stack="2048"    priority="100" timeslice="1" />
 </binaries>
 
 <binaries src_path="sbin/net" dest_path="sbin/net">
@@ -171,22 +171,22 @@
 <!-- user binaries. -->
 <!-- /usr/bin -->
 <binaries src_path="bin" dest_path="bin">
-        <bin name="test2"        stack="1024"    priority="100" timeslice="5" />
-        <!--bin name="udpsrvd"      stack="2048"    priority="10" timeslice="5" /-->
+        <bin name="test2"        stack="2048"    priority="100" timeslice="1" />
+        <!--bin name="udpsrvd"      stack="2048"    priority="10" timeslice="1" /-->
 </binaries>
 
 <!-- /usr/bin -->
 <binaries src_path="bin/tst" dest_path="bin/tst">
-        <bin name="tsteth"        stack="2048"    priority="100"  timeslice="5" />
+        <bin name="tsteth"        stack="2048"    priority="100"  timeslice="1" />
 </binaries>
 
 <!-- /usr/bin -->
 <binaries src_path="bin/net" dest_path="bin/net">
-        <bin name="telnetd"        stack="2048"    priority="100"  timeslice="5" />
+        <bin name="telnetd"        stack="2048"    priority="100"  timeslice="1" />
         <!--bin name="shttpd"       stack="31744"   priority="100" timeslice="1" /-->
-        <!--bin name="ftpd"         stack="8192"    priority="100" timeslice="1" /-->
-        <!--bin name="lftpd"          stack="8192"    priority="100" timeslice="1" /-->
-        <!--bin name="mongoosed"      stack="8192"   priority="100" timeslice="1" /-->
+        <bin name="ftpd"         stack="8192"    priority="100" timeslice="1" />
+        <!--bin name="lftpd"        stack="8192"    priority="100" timeslice="1" /-->
+        <!--bin name="mongoosed"       stack="8192"   priority="100" timeslice="1" /-->
 </binaries>
 
 <!-- /usr/bin/net/cgi-bin -->

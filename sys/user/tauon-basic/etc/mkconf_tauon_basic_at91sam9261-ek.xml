@@ -66,7 +66,7 @@
       <env path="/usr;/usr/sbin;/usr/bin;usr/bin/net;/usr/bin/tst" />
 
       <!-- use ip stack (__KERNEL_NET_UIP)-->
-      <network use="off" />
+      <network use="on" />
    
 </kernel>
 
@@ -84,16 +84,12 @@
    <dev name="dev_pipe_map"            use="on"/>
    <!-- /dev/mqueue -->
    <dev name="dev_posix_mqueue_map"    use="on"/>
-   <!-- /dev/fb -->
-   <dev name="dev_fb_map"              use="on"/>   		
-   <!-- /dev/tty0 -->
-   <dev name="dev_tty_map"             use="on"/>
    <!-- /dev/sock uip-->
    <dev name="dev_sock_map"            use="off"/>
    <!-- /dev/sock lwip-->
-   <dev name="dev_lwip_sock_map"       use="off"/>
+   <dev name="dev_lwip_sock_map"       use="on"/>
    <!-- /dev/ip lwip ip stack-->
-   <dev name="dev_lwip_stack_map"      use="off"/>
+   <dev name="dev_lwip_stack_map"      use="on"/>
 </devices>
 
 <target name="win32_lepton">
@@ -139,6 +135,10 @@
    <devices>
       <!-- /dev/cpu0 -->
       <dev name="dev_at91sam9261_cpu_map"         use="on"/>
+      <!-- /dev/fb -->
+      <dev name="dev_fb_map"              use="on"/>   		
+      <!-- /dev/tty0 -->
+      <dev name="dev_tty_map"             use="on"/>
       <!-- /dev/ttys0 -->
       <!-- <dev name="dev_at91sam9261_uart_0_map"      use="off"/> -->
       <!-- /dev/ttydbgu -->
@@ -183,26 +183,26 @@
 <!-- binaries. see ...-->
 <!-- /usr/bin -->
 <binaries src_path="sbin" dest_path="sbin">
-   <bin name="initd"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="lsh"      stack="2048"    priority="10" timeslice="5" />
-   <bin name="mount"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="umount"   stack="2048"    priority="10" timeslice="5" />
-   <bin name="ls"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="ps"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="kill"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="touch"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="cat"      stack="2048"    priority="10" timeslice="5" />
-   <bin name="more"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="mkfs"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="df"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="uname"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="pwd"      stack="2048"    priority="10" timeslice="5" />
-   <bin name="rmdir"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="mkdir"    stack="2048"    priority="10" timeslice="5" />
-   <bin name="rm"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="od"       stack="2048"    priority="10" timeslice="5" />
-   <bin name="date"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="echo"     stack="2048"    priority="10" timeslice="5" />
+   <bin name="initd"    stack="4096"    priority="100" timeslice="1" />
+   <bin name="lsh"      stack="4096"    priority="100" timeslice="1" />
+   <bin name="mount"    stack="4096"    priority="100" timeslice="1" />
+   <bin name="umount"   stack="4096"    priority="100" timeslice="1" />
+   <bin name="ls"       stack="4096"    priority="100" timeslice="1" />
+   <bin name="ps"       stack="4096"    priority="100" timeslice="1" />
+   <bin name="kill"     stack="4096"    priority="100" timeslice="1" />
+   <bin name="touch"    stack="4096"    priority="100" timeslice="1" />
+   <bin name="cat"      stack="4096"    priority="100" timeslice="1" />
+   <bin name="more"     stack="4096"    priority="100" timeslice="1" />
+   <bin name="mkfs"     stack="4096"    priority="100" timeslice="1" />
+   <bin name="df"       stack="4096"    priority="100" timeslice="1" />
+   <bin name="uname"    stack="4096"    priority="100" timeslice="1" />
+   <bin name="pwd"      stack="4096"    priority="100" timeslice="1" />
+   <bin name="rmdir"    stack="4096"    priority="100" timeslice="1" />
+   <bin name="mkdir"    stack="4096"    priority="100" timeslice="1" />
+   <bin name="rm"       stack="4096"    priority="100" timeslice="1" />
+   <bin name="od"       stack="4096"    priority="100" timeslice="1" />
+   <bin name="date"     stack="4096"    priority="100" timeslice="1" />
+   <bin name="echo"     stack="4096"    priority="100" timeslice="1" />
 </binaries>
 
 <binaries src_path="sbin/net" dest_path="sbin/net">
@@ -212,32 +212,40 @@
 <!-- user binaries. -->
 <!-- /usr/bin -->
 <binaries src_path="bin" dest_path="bin">
-        <bin name="test2"        stack="2048"    priority="10" timeslice="5" />
+        <bin name="test2"        stack="4096"    priority="10" timeslice="1" />
+</binaries>
+
+<!-- /usr/bin/tst -->
+<binaries src_path="bin/tst" dest_path="bin/tst">
+   <!--bin name="verifspi"     stack="4096"    priority="10" timeslice="1" /-->
+   <!--bin name="tstip"        stack="4096"    priority="100" timeslice="1" /-->
+   <bin name="tsteth"        stack="4096"    priority="100"  timeslice="1" />
 </binaries>
 
 <!-- /usr/bin -->
-<!-- binaries src_path="bin/tst" dest_path="bin/tst">
-   <bin name="verifspi"     stack="2048"    priority="10" timeslice="5" />
-   <bin name="tstip"        stack="4096"    priority="100" timeslice="1" />
-</binaries-->
-
-<!-- /usr/bin -->
-<!--binaries src_path="bin/net" dest_path="bin/net">
-        <bin name="telnetd"        stack="1024"    priority="100"  timeslice="5" />
-        <bin name="ftpd"            stack="8192"    priority="100" timeslice="1" />
+<binaries src_path="bin/net" dest_path="bin/net">
+        <bin name="telnetd"        stack="4096"    priority="100"  timeslice="1" />
+        <!--bin name="ftpd"            stack="8192"    priority="100" timeslice="1" /-->
         <bin name="mongoosed"       stack="31744"   priority="100" timeslice="1" />
-</binaries-->
+</binaries>
 
 <!-- /usr/bin/net/cgi-bin -->
 <binaries src_path="bin/net/cgi-bin" dest_path="bin/net/cgi-bin">
-   <bin name="tstpost"        stack="2048"    priority="100"  timeslice="1" />
-   <bin name="tstcgi2"        stack="2048"    priority="100"  timeslice="1" />
+   <bin name="tstpost"        stack="4096"    priority="100"  timeslice="1" />
+   <bin name="tstcgi2"        stack="4096"    priority="100"  timeslice="1" />
 </binaries>
 
 <files>
    <!-- /usr/etc  (hda internal flash mount on /bin) -->
-   <file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init_with_net"      dest_path="etc" />
+   <target name="win32_lepton">
+      <file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init_win32_with_net"      dest_path="etc" />
+   </target>
+    <target name="arm9_lepton">
+      <file name=".init"      src_file="c:/tauon/sys/user/tauon-basic/etc/.init_with_net"      dest_path="etc" />
+   </target>
+   
    <file name=".boot"      src_file="c:/tauon/sys/user/tauon-basic/etc/.boot"               dest_path="etc" />
+   <file name=".mount"     src_file="c:/tauon/sys/user/tauon-basic/etc/.mount"              dest_path="etc" />
    <!-- <file name=".mount"  src_file="~/tauon/tools/etc/.mount"        dest_path="etc" /> -->
 </files>
 
