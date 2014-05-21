@@ -167,6 +167,7 @@
           <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
           <state>OS_LIBMODE_SP</state>
           <state>SDRAM_TARGET=1</state>
+          <state>at91sam9261</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -531,7 +532,7 @@
         </option>
         <option>
           <name>AOutputFile</name>
-          <state>$FILE_BNAME$.r79</state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>AMultibyteSupport</name>
@@ -919,6 +920,27 @@
           <name>arm9</name>
           <group>
             <name>at91sam9261</name>
+            <group>
+              <name>at91lib</name>
+              <group>
+                <name>aic</name>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\at91lib\peripherals\aic\aic.c</name>
+                </file>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\at91lib\peripherals\aic\aic.h</name>
+                </file>
+              </group>
+              <group>
+                <name>pit</name>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\at91lib\peripherals\pit\pit.c</name>
+                </file>
+                <file>
+                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\at91lib\peripherals\pit\pit.h</name>
+                </file>
+              </group>
+            </group>
             <group>
               <name>common</name>
               <file>
