@@ -49,7 +49,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 AT91PS_SYS AT91_SYS = (AT91PS_SYS)AT91C_BASE_SYS;
-#if defined(__KERNEL_UCORE_EMBOS)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    void (*g_p_fct_dbg_interrupt)(void);
 #endif
 
@@ -84,7 +84,8 @@ dev_map_t dev_at91sam9261_cpu_map={
 };
 
 // Watchdog features (with value = see application layer)
-#define        WATCHDOG_KEY            0xA5
+#define WATCHDOG_KEY          (0xA5)
+#define SLOWCLOCK             (32768UL)      //* In Hz
 
 /*===========================================
 Implementation
@@ -125,12 +126,34 @@ __arm void AT91F_SpuriousHandler(void)
 | See:
 ---------------------------------------------*/
 int dev_at91sam9261_cpu_load(void){
-   //unprotected mode (very important for irq management)
-   AT91C_BASE_AIC->AIC_DCR = 0;
+   unsigned long cpu_frequency=0x00L;
+   
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
+   /* Init Chip Select (CS2) for Ethernet controler DM9000A */
+   AT91C_BASE_SMC->SMC_CTRL2 = AT91C_SMC_READMODE | AT91C_SMC_WRITEMODE | AT91C_SMC_NWAITM_NWAIT_DISABLE | AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS;
+   //original settings from EC
+   AT91C_BASE_SMC->SMC_CYCLE2 = 0x000F000F;         // RD cycle = WR cycle = 15 clock
+   AT91C_BASE_SMC->SMC_SETUP2 = 0x03030303;         // RD setup = WR setup = 3 clock
+   AT91C_BASE_SMC->SMC_PULSE2 = 0x03030303;         // RD pulse = WR pulse = 3 clock
+   
+   //settings from linux
+   AT91C_BASE_SMC->SMC_SETUP2 = 0x00020002;
+   AT91C_BASE_SMC->SMC_PULSE2 = 0x08040804;
+   AT91C_BASE_SMC->SMC_CYCLE2 = 0x00100010;
+   
+   // initialize AIC
+   //only for bootstrap mode
+   /*
+   for (int i = 0; i < 32; ++i){
+      AT91F_AIC_DisableIt(AT91C_BASE_AIC, i);
+	   AT91F_AIC_ConfigureIt(AT91C_BASE_AIC, i, AT91C_AIC_PRIOR_LOWEST, AT91C_AIC_SRCTYPE_INT_LEVEL_SENSITIVE, AT91F_UndefHandler);
+	}
+   AT91C_BASE_AIC->AIC_SPU = (unsigned int) AT91F_SpuriousHandler;
+   */
    //
-#if defined(__KERNEL_UCORE_EMBOS)
-   // Pointer initialization
+   //cpu_frequency = AT91F_PMC_GetProcessorClock(AT91C_BASE_PMC,AT91C_BASE_CKGR,SLOWCLOCK);
    g_p_fct_dbg_interrupt =  NULL;
+   // Pointer initialization
 #elif defined(__KERNEL_UCORE_ECOS)
 #endif
 
