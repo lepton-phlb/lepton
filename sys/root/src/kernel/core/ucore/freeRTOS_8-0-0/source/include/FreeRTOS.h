@@ -77,7 +77,11 @@
 #include "projdefs.h"
 
 /* Application specific configuration options. */
-#include "FreeRTOSConfig.h"
+#include "kernel/core/kernelconf.h"
+
+#ifndef FREERTOS_CONFIG_H
+   #include "FreeRTOSConfig.h"
+#endif
 
 /* configUSE_PORT_OPTIMISED_TASK_SELECTION must be defined before portable.h
 is included as it is used by the port layer. */
