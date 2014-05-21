@@ -198,10 +198,10 @@ typedef struct uip_core_if_info_st{
 uip_core_if_info_t uip_core_if_list[IF_LIST_MAX]={
 #if defined(USE_IF_ETHERNET)
   {
-  .name="eth0",
-  .if_no=0,
-  .desc_r=INVALID_DESC,
-  .desc_w=INVALID_DESC
+  "eth0",
+  0,
+  INVALID_DESC,
+  INVALID_DESC
   }
 #elif defined(USE_IF_PPP)
   {
