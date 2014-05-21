@@ -55,6 +55,12 @@
     <Filter Include="root\bin\tst">
       <UniqueIdentifier>{3c4e2ac5-d05c-4e63-ac42-b15926f430dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="root\bin\net">
+      <UniqueIdentifier>{8f7d74d6-81dd-4252-8380-f18de201eef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\bin\net\mongoose">
+      <UniqueIdentifier>{29aca40e-7456-4eef-8fe5-0a2d8c42e788}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c">
@@ -84,6 +90,15 @@
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c">
       <Filter>root\bin</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\telnetd.c">
+      <Filter>root\bin\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoosed.c">
+      <Filter>root\bin\net\mongoose</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.c">
+      <Filter>root\bin\net\mongoose</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\kernel_mkconf.h">
@@ -91,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.h">
       <Filter>root\kernel\core\arch\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.h">
+      <Filter>root\bin\net\mongoose</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
