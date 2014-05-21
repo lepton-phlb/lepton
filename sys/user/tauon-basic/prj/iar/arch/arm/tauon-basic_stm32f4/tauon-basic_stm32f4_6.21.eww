@@ -26,6 +26,21 @@
         <configuration>Debug</configuration>
       </member>
     </batchDefinition>
+    <batchDefinition>
+      <name>all freertos debug</name>
+      <member>
+        <project>dev_stm32f4xx_6.21</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>tauon_6.21</project>
+        <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
+      </member>
+      <member>
+        <project>tauon-basic_stm32f4_6.21</project>
+        <configuration>freertos-debug</configuration>
+      </member>
+    </batchDefinition>
   </batchBuild>
 </workspace>
 
