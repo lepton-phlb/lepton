@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\at91sam9261\dev_at91sam9261.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon_6.21.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\tauon_at91sam9261.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>tauon_at91sam9261</name>
+      <member>
+        <project>dev_at91sam9261</project>
+        <configuration>lib-debug</configuration>
+      </member>
+      <member>
+        <project>tauon_6.21</project>
+        <configuration>tauon-kernel-arm926ejs-debug</configuration>
+      </member>
+      <member>
+        <project>tauon_at91sam9261</project>
+        <configuration>firmware_injector</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>tauon_at91sam9261-freertos</name>
+      <member>
+        <project>dev_at91sam9261</project>
+        <configuration>lib-debug</configuration>
+      </member>
+      <member>
+        <project>tauon_6.21</project>
+        <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+      </member>
+      <member>
+        <project>tauon_at91sam9261</project>
+        <configuration>freertos-firmware_injector</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+
