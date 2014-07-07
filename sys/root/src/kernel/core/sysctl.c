@@ -72,7 +72,7 @@ int _sysctl_ctl_kern(int *name, int namelen, void *oldp, int *oldlenp, void *new
          p_utsname=(utsname_t*)oldp;
 
          memset(p_utsname,0,sizeof(utsname_t));
-         //sprintf(p_utsname->machine,"a0350,a0502,cm100,a0428",)
+         sprintf(p_utsname->machine,__KERNEL_CPU_DEVICE_NAME);
          sprintf(p_utsname->sysname,"lepton-%s-%d",__KERNEL_CPU_NAME,__KERNEL_CPU_ARCH);
          sprintf(p_utsname->release,"%s",__lepton_version__);
          sprintf(p_utsname->version,"%s-%s",__kernel_date__,__kernel_time__);
