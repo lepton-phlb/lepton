@@ -65,8 +65,9 @@ typedef struct {
    struct pthread_condlist_st* list;
    //
    pthread_mutex_t* mutex;
-
-   kernel_sigevent_t kernel_sigevent;
+   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
+      kernel_sigevent_t kernel_sigevent;
+   #endif
 }pthread_cond_t;
 
 #define PTHREAD_COND_UNINITIALIZED  ((unsigned long)0x00000000)
