@@ -390,7 +390,7 @@ int pthread_kill(pthread_t pthread, int sig){
 | See:
 ----------------------------------------------*/
 int sigwaitinfo(sigset_t* set,struct siginfo* info){
-
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    kernel_sigevent_t kernel_sigevent;
    kernel_pthread_t* pthread_ptr = kernel_pthread_self();
 
@@ -408,6 +408,9 @@ int sigwaitinfo(sigset_t* set,struct siginfo* info){
    info->si_errno =   0;
 
    return 0;
+#else
+   return -1;
+#endif
 }
 
 /*--------------------------------------------
@@ -419,7 +422,7 @@ int sigwaitinfo(sigset_t* set,struct siginfo* info){
 | See:
 ----------------------------------------------*/
 int sigtimedwait(sigset_t *set, siginfo_t *info,const struct timespec *timeout){
-
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    kernel_sigevent_t kernel_sigevent;
    kernel_pthread_t* pthread_ptr = kernel_pthread_self();
 
@@ -438,6 +441,9 @@ int sigtimedwait(sigset_t *set, siginfo_t *info,const struct timespec *timeout){
    info->si_errno =   0;
 
    return 0;
+#else
+   return -1;
+#endif
 }
 
 /*===========================================
