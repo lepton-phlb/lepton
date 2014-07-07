@@ -29,15 +29,15 @@
     <batchDefinition>
       <name>tauon_at91sam9261-freertos</name>
       <member>
-        <project>dev_at91sam9261</project>
+        <project>dev_at91sam9261_7.20</project>
         <configuration>lib-debug</configuration>
       </member>
       <member>
-        <project>tauon_6.21</project>
+        <project>tauon_7.20</project>
         <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
       </member>
       <member>
-        <project>tauon_at91sam9261</project>
+        <project>tauon_at91sam9261_7.20</project>
         <configuration>freertos-firmware_injector</configuration>
       </member>
     </batchDefinition>

@@ -1986,7 +1986,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.20.1.7306</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1998,7 +1998,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F207xx	ST STM32F207xx</state>
+          <state>STM32F207ZG	ST STM32F207ZG</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -2867,6 +2867,7 @@
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\stm32f4xx\Debug\Exe\dev_stm32f4xx_6.21.a</name>
         <excluded>
           <configuration>Debug</configuration>
+          <configuration>freertos-debug</configuration>
         </excluded>
       </file>
       <file>
@@ -2889,10 +2890,17 @@
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4f-freertos-debug\Exe\tauon_6.21.a</name>
         <excluded>
           <configuration>Debug</configuration>
+          <configuration>freertos-debug</configuration>
         </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4-debug\Exe\tauon_7.20.a</name>
+        <excluded>
+          <configuration>freertos-debug</configuration>
+        </excluded>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4f-freertos-debug\Exe\tauon_7.20.a</name>
       </file>
     </group>
     <group>
@@ -2903,9 +2911,6 @@
           <name>bin</name>
           <group>
             <name>net</name>
-            <excluded>
-              <configuration>freertos-debug</configuration>
-            </excluded>
             <group>
               <name>ftpd</name>
               <file>
@@ -2923,6 +2928,9 @@
             </group>
             <group>
               <name>mongoose</name>
+              <excluded>
+                <configuration>freertos-debug</configuration>
+              </excluded>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.c</name>
               </file>
