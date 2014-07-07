@@ -62,8 +62,7 @@
 
     1 tab == 4 spaces!
 */
-
-#include <FreeRTOSConfig.h>
+#include <kernel/core/ucore/freeRTOS_8-0-0/source/arch/cortex-m4/FreeRTOSConfig_cortex-m4.h>
 
 	RSEG    CODE:CODE(2)
 	thumb
