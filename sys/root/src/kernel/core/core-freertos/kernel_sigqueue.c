@@ -36,6 +36,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Global Declaration
 ==============================================*/
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
 int kernel_sigqueue_constructor(struct kernel_object_st** kernel_object_head, struct kernel_sigqueue_st* p);
 int kernel_sigqueue_destructor(struct kernel_sigqueue_st* p);
 
@@ -305,7 +306,7 @@ int kernel_sigqueue_timedwait(struct kernel_sigevent_st* kernel_sigevent,int fla
 
    return 0;
 }
-
+#endif
 /*============================================
 | End of Source  : kernel_sigqueue.c
 ==============================================*/
