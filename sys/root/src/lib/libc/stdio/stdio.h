@@ -100,17 +100,22 @@ typedef struct __stdio_file FILE;
 //not thread safe
 //low ram
 
-#ifdef __AS386_16__
-   #define BUFSIZ    (256)
-#elif defined(CPU_WIN32) || defined(CPU_GNU32)
-   #define BUFSIZ    (256)
-#elif defined(CPU_ARM9)
-   #define BUFSIZ (256)    //if you used shttpd and ftpd
-#elif defined(CPU_ARM7) || defined(CPU_M16C62)
-   #define BUFSIZ (64)
-#elif defined(CPU_CORTEXM)
-   #define BUFSIZ (256)    //(64)//(32)
+#ifndef __KERNEL_STDIO_PRINTF_BUFSIZ
+   #ifdef __AS386_16__
+      #define BUFSIZ    (256)
+   #elif defined(CPU_WIN32) || defined(CPU_GNU32)
+      #define BUFSIZ    (256)
+   #elif defined(CPU_ARM9)
+      #define BUFSIZ (256)    //if you used shttpd and ftpd
+   #elif defined(CPU_ARM7) || defined(CPU_M16C62)
+      #define BUFSIZ (64)
+   #elif defined(CPU_CORTEXM)
+      #define BUFSIZ (256)    //(64)//(32)
+   #endif
+#else
+   #define BUFSIZ __KERNEL_STDIO_PRINTF_BUFSIZ
 #endif
+
 
 #if !defined(__KERNEL_LOAD_LIB)
 extern FILE stdin[1];
