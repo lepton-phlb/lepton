@@ -29,15 +29,15 @@
     <batchDefinition>
       <name>all freertos debug</name>
       <member>
-        <project>dev_stm32f4xx_6.21</project>
+        <project>dev_stm32f4xx_7.20</project>
         <configuration>Debug</configuration>
       </member>
       <member>
-        <project>tauon_6.21</project>
+        <project>tauon_7.20</project>
         <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
       </member>
       <member>
-        <project>tauon-basic_stm32f4_6.21</project>
+        <project>tauon-basic_stm32f4_7.20</project>
         <configuration>freertos-debug</configuration>
       </member>
     </batchDefinition>

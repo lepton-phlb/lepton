@@ -2946,7 +2946,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.20.1.7306</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -3831,6 +3831,7 @@
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\at91sam9261\lib-debug\lib\dev_at91sam9261.a</name>
         <excluded>
           <configuration>firmware_injector</configuration>
+          <configuration>freertos-firmware_injector</configuration>
         </excluded>
       </file>
       <file>
@@ -3846,16 +3847,24 @@
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-arm926ejs-freertos-debug\Exe\tauon_6.21.a</name>
         <excluded>
           <configuration>firmware_injector</configuration>
+          <configuration>freertos-firmware_injector</configuration>
         </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-arm926ejs-debug\Exe\tauon_6.21.a</name>
         <excluded>
           <configuration>firmware_injector</configuration>
+          <configuration>freertos-firmware_injector</configuration>
         </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-arm926ejs-debug\Exe\tauon_7.20.a</name>
+        <excluded>
+          <configuration>freertos-firmware_injector</configuration>
+        </excluded>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-arm926ejs-freertos-debug\Exe\tauon_7.20.a</name>
       </file>
     </group>
     <group>

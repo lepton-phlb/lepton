@@ -706,6 +706,8 @@ void lock_test(void){
 | Comments:
 | See:
 ----------------------------------------------*/
+/*static*/extern  unsigned int eth_packet_recv_w;
+/*static*/extern unsigned int eth_packet_recv_r;
 void test_eth(void){
    const static unsigned char _dummy_tcp[64] =
    {0x00,0x02,0xF2,0x00,0xAA,0x55,0x00,0x02,0xF2,0x00,0x03,0x7B,0x08,0x00,0x44,0x45,
@@ -719,7 +721,7 @@ void test_eth(void){
    char buf[512]={0};
    int fd;
    int cb;
-
+   
    fd = open("/dev/eth0",O_RDWR,0);
    for(;; ) {
       printf("wait packet...");
@@ -732,7 +734,7 @@ void test_eth(void){
       //printf("\r\n");
       printf("ok len=%d\r\n",cb);
 
-      write(fd,_dummy_tcp,sizeof(_dummy_tcp));
+      //write(fd,_dummy_tcp,sizeof(_dummy_tcp));
    }
    close(fd);
 }
@@ -1531,7 +1533,7 @@ int test2_main(int argc,char* argv[]){
    //socket_test();
    //socket_client_tcp();
    //file_test();
-   // test_eth();
+   test_eth();
    //write_test();
    //alarm_test();
    //timer_test();
@@ -1541,7 +1543,7 @@ int test2_main(int argc,char* argv[]){
    //test_pthread_cond1();
    //lock_test();
    //test_mqueue();
-   test_stdio();
+   //test_stdio();
    //test_sem();
 
    //test_rs_asyc3_cal();

@@ -5,6 +5,7 @@ Compiler Directive
 #define _USER_KERNEL_MKCONF_H_
 
 //see kernel/core/kernelconf.h
+#include "kernel/core/ucore/freeRTOS_8-0-0/source/arch/cortex-m4/stm32f4/FreeRTOSConfig.h"
 
 //force definition of cpu device
 #define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
@@ -22,7 +23,8 @@ Compiler Directive
 //#define USE_UIP 
 #define USE_LWIP
 #define USE_IF_ETHERNET
-//specific target include for ijinus
+//specific target include for pinout definition
+
 #include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
 
 #define __USER_MONGOOSE_PTHREAD_STACK_SIZE   (8*1024)

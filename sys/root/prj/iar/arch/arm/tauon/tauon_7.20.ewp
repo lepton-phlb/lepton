@@ -1043,7 +1043,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.20.1.7306</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1907,7 +1907,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4-debug\Exe\tauon_6.21.a</state>
+          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4-debug\Exe\tauon_7.20.a</state>
         </option>
       </data>
     </settings>
@@ -3919,7 +3919,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.20.1.7306</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -3931,7 +3931,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -4410,6 +4410,7 @@
           <name>AUserIncludes</name>
           <state>C:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/include</state>
           <state>C:\tauon\sys\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM4F</state>
+          <state>c:/tauon/sys/root/src</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -4783,7 +4784,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4f-freertos-debug\Exe\tauon_6.21.a</state>
+          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4f-freertos-debug\Exe\tauon_7.20.a</state>
         </option>
       </data>
     </settings>
@@ -4878,7 +4879,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.20.1.7306</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -5367,7 +5368,9 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state></state>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/include</state>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/portable/IAR/AtmelSAM9XE</state>
+          <state>c:/tauon/sys/root/src</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -5741,7 +5744,961 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-arm926ejs-freertos-debug\Exe\tauon_6.21.a</state>
+          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-arm926ejs-freertos-debug\Exe\tauon_7.20.a</state>
+        </option>
+      </data>
+    </settings>
+    <settings>
+      <name>BILINK</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
+  </configuration>
+  <configuration>
+    <name>tauon-kernel-cortex-m0+-freertos-debug</name>
+    <toolchain>
+      <name>ARM</name>
+    </toolchain>
+    <debug>1</debug>
+    <settings>
+      <name>General</name>
+      <archiveVersion>3</archiveVersion>
+      <data>
+        <version>22</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>1</debug>
+        <option>
+          <name>ExePath</name>
+          <state>tauon-kernel-cortex-m0+-freertos-debug\Exe</state>
+        </option>
+        <option>
+          <name>ObjPath</name>
+          <state>tauon-kernel-cortex-m0+-freertos-debug\Obj</state>
+        </option>
+        <option>
+          <name>ListPath</name>
+          <state>tauon-kernel-cortex-m0+-freertos-debug\List</state>
+        </option>
+        <option>
+          <name>Variant</name>
+          <version>20</version>
+          <state>35</state>
+        </option>
+        <option>
+          <name>GEndianMode</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>Input variant</name>
+          <version>3</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>Input description</name>
+          <state>Full formatting.</state>
+        </option>
+        <option>
+          <name>Output variant</name>
+          <version>2</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>Output description</name>
+          <state>Full formatting.</state>
+        </option>
+        <option>
+          <name>GOutputBinary</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>FPU</name>
+          <version>2</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OGCoreOrChip</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GRuntimeLibSelect</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>GRuntimeLibSelectSlave</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>RTDescription</name>
+          <state>To be used with the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+        </option>
+        <option>
+          <name>OGProductVersion</name>
+          <state>4.41A</state>
+        </option>
+        <option>
+          <name>OGLastSavedByProductVersion</name>
+          <state>7.20.1.7306</state>
+        </option>
+        <option>
+          <name>GeneralEnableMisra</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GeneralMisraVerbose</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OGChipSelectEditMenu</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>GenLowLevelInterface</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GEndianModeBE</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>OGBufferedTerminalOutput</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenStdoutInterface</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GeneralMisraRules98</name>
+          <version>0</version>
+          <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
+        </option>
+        <option>
+          <name>GeneralMisraVer</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GeneralMisraRules04</name>
+          <version>0</version>
+          <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+        </option>
+        <option>
+          <name>RTConfigPath2</name>
+          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave</name>
+          <version>20</version>
+          <state>35</state>
+        </option>
+        <option>
+          <name>GBECoreSlave</name>
+          <version>20</version>
+          <state>35</state>
+        </option>
+        <option>
+          <name>OGUseCmsis</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>OGUseCmsisDspLib</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GRuntimeLibThreads</name>
+          <state>0</state>
+        </option>
+      </data>
+    </settings>
+    <settings>
+      <name>ICCARM</name>
+      <archiveVersion>2</archiveVersion>
+      <data>
+        <version>31</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>1</debug>
+        <option>
+          <name>CCOptimizationNoSizeConstraints</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCDefines</name>
+          <state>ARM_MATH_CM0=true</state>
+          <state>NDEBUG</state>
+        </option>
+        <option>
+          <name>CCPreprocFile</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCPreprocComments</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCPreprocLine</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCListCFile</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCListCMnemonics</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCListCMessages</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCListAssFile</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCListAssSource</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCEnableRemarks</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCDiagSuppress</name>
+          <state>pe001,pa050,pe375,pe231,pe177,pe550,pe167</state>
+        </option>
+        <option>
+          <name>CCDiagRemark</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CCDiagWarning</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CCDiagError</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CCObjPrefix</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CCAllowList</name>
+          <version>1</version>
+          <state>00000000</state>
+        </option>
+        <option>
+          <name>CCDebugInfo</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IEndianMode</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IProcessor</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IExtraOptionsCheck</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IExtraOptions</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CCLangConformance</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCSignedPlainChar</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CCRequirePrototypes</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCMultibyteSupport</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCDiagWarnAreErr</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCCompilerRuntimeInfo</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IFpuProcessor</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>OutputFile</name>
+          <state>$FILE_BNAME$.o</state>
+        </option>
+        <option>
+          <name>CCLibConfigHeader</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>PreInclude</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CompilerMisraOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCIncludePath2</name>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/include</state>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/portable/IAR/ARM_CM0</state>
+          <state>c:/tauon/sys/root/src</state>
+          <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
+          <state>c:/tauon/sys/root/src/kernel/net/lwip/include</state>
+          <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
+          <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
+          <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
+          <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
+          <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
+          <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+        </option>
+        <option>
+          <name>CCStdIncCheck</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCCodeSection</name>
+          <state>.text</state>
+        </option>
+        <option>
+          <name>IInterwork2</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IProcessorMode2</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CCOptLevel</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptStrategy</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptLevelSlave</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CompilerMisraRules98</name>
+          <version>0</version>
+          <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
+        </option>
+        <option>
+          <name>CompilerMisraRules04</name>
+          <version>0</version>
+          <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+        </option>
+        <option>
+          <name>CCPosIndRopi</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCPosIndRwpi</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCPosIndNoDynInit</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IccLang</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IccCDialect</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IccAllowVLA</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IccCppDialect</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IccExceptions</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IccRTTI</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IccStaticDestr</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IccCppInlineSemantics</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IccCmsis</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IccFloatSemantics</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCNoLiteralPool</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptStrategySlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
+        </option>
+      </data>
+    </settings>
+    <settings>
+      <name>AARM</name>
+      <archiveVersion>2</archiveVersion>
+      <data>
+        <version>9</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>1</debug>
+        <option>
+          <name>AObjPrefix</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>AEndian</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>ACaseSensitivity</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>MacroChars</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AWarnEnable</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AWarnWhat</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AWarnOne</name>
+          <state></state>
+        </option>
+        <option>
+          <name>AWarnRange1</name>
+          <state></state>
+        </option>
+        <option>
+          <name>AWarnRange2</name>
+          <state></state>
+        </option>
+        <option>
+          <name>ADebug</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>AltRegisterNames</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>ADefines</name>
+          <state>ARM_MATH_CM0=true</state>
+        </option>
+        <option>
+          <name>AList</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AListHeader</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>AListing</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>Includes</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>MacDefs</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>MacExps</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>MacExec</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OnlyAssed</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>MultiLine</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>PageLengthCheck</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>PageLength</name>
+          <state>80</state>
+        </option>
+        <option>
+          <name>TabSpacing</name>
+          <state>8</state>
+        </option>
+        <option>
+          <name>AXRef</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AXRefDefines</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AXRefInternal</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AXRefDual</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AProcessor</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>AFpuProcessor</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>AOutputFile</name>
+          <state>$FILE_BNAME$.o</state>
+        </option>
+        <option>
+          <name>AMultibyteSupport</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>ALimitErrorsCheck</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>ALimitErrorsEdit</name>
+          <state>100</state>
+        </option>
+        <option>
+          <name>AIgnoreStdInclude</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AUserIncludes</name>
+          <state>c:/tauon/sys/root/src/kernel/core/ucore/freeRTOS_8-0-0/source/include</state>
+          <state>c:/tauon/sys/root/src/kernel/core\ucore\freeRTOS_8-0-0/source/portable/IAR/ARM_CM0</state>
+          <state>c:/tauon/sys/root/src</state>
+        </option>
+        <option>
+          <name>AExtraOptionsCheckV2</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>AExtraOptionsV2</name>
+          <state></state>
+        </option>
+        <option>
+          <name>AsmNoLiteralPool</name>
+          <state>0</state>
+        </option>
+      </data>
+    </settings>
+    <settings>
+      <name>OBJCOPY</name>
+      <archiveVersion>0</archiveVersion>
+      <data>
+        <version>1</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>1</debug>
+        <option>
+          <name>OOCOutputFormat</name>
+          <version>2</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OCOutputOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OOCOutputFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>OOCCommandLineProducer</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>OOCObjCopyEnable</name>
+          <state>0</state>
+        </option>
+      </data>
+    </settings>
+    <settings>
+      <name>CUSTOM</name>
+      <archiveVersion>3</archiveVersion>
+      <data>
+        <extensions></extensions>
+        <cmdline></cmdline>
+      </data>
+    </settings>
+    <settings>
+      <name>BICOMP</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
+    <settings>
+      <name>BUILDACTION</name>
+      <archiveVersion>1</archiveVersion>
+      <data>
+        <prebuild></prebuild>
+        <postbuild></postbuild>
+      </data>
+    </settings>
+    <settings>
+      <name>ILINK</name>
+      <archiveVersion>0</archiveVersion>
+      <data>
+        <version>16</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>1</debug>
+        <option>
+          <name>IlinkLibIOConfig</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>XLinkMisraHandler</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkInputFileSlave</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkOutputFile</name>
+          <state>tauon.out</state>
+        </option>
+        <option>
+          <name>IlinkDebugInfoEnable</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkKeepSymbols</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkRawBinaryFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkRawBinarySymbol</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkRawBinarySegment</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkRawBinaryAlign</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkDefines</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkConfigDefines</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkMapFile</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogFile</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogInitialization</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogModule</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogSection</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogVeneer</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile</name>
+          <state>lnk0t.icf</state>
+        </option>
+        <option>
+          <name>IlinkIcfFileSlave</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkEnableRemarks</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkSuppressDiags</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkTreatAsRem</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkTreatAsWarn</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkTreatAsErr</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkWarningsAreErrors</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkUseExtraOptions</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkExtraOptions</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkLowLevelInterfaceSlave</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkAutoLibEnable</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkAdditionalLibs</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkOverrideProgramEntryLabel</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkProgramEntryLabelSelect</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkProgramEntryLabel</name>
+          <state></state>
+        </option>
+        <option>
+          <name>DoFill</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>FillerByte</name>
+          <state>0xFF</state>
+        </option>
+        <option>
+          <name>FillerStart</name>
+          <state>0x0</state>
+        </option>
+        <option>
+          <name>FillerEnd</name>
+          <state>0x0</state>
+        </option>
+        <option>
+          <name>CrcSize</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcAlign</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcPoly</name>
+          <state>0x11021</state>
+        </option>
+        <option>
+          <name>CrcCompl</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CrcBitOrder</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CrcInitialValue</name>
+          <state>0x0</state>
+        </option>
+        <option>
+          <name>DoCrc</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkBE8Slave</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkBufferedTerminalOutput</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkStdoutInterfaceSlave</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcFullSize</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIElfToolPostProcess</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogAutoLibSelect</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogRedirSymbols</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkLogUnusedFragments</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkCrcReverseByteOrder</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkCrcUseAsInput</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkOptInline</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkOptExceptionsAllow</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkOptExceptionsForce</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkCmsis</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkOptMergeDuplSections</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkOptUseVfe</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkOptForceVfe</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkStackAnalysisEnable</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkStackControlFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkStackCallGraphFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CrcAlgorithm</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcUnitSize</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkThreadsSlave</name>
+          <state>1</state>
+        </option>
+      </data>
+    </settings>
+    <settings>
+      <name>IARCHIVE</name>
+      <archiveVersion>0</archiveVersion>
+      <data>
+        <version>0</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>1</debug>
+        <option>
+          <name>IarchiveInputs</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IarchiveOverride</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IarchiveOutput</name>
+          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m0+-freertos-debug\Exe\tauon_7.20.a</state>
         </option>
       </data>
     </settings>
@@ -5831,6 +6788,7 @@
         <excluded>
           <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
           <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+          <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
         </excluded>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\core-segger\core_rttimer.c</name>
@@ -5847,6 +6805,7 @@
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
             <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
             <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+            <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
           </excluded>
         </file>
         <file>
@@ -5892,7 +6851,6 @@
           <name>lwip_core</name>
           <excluded>
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
-            <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
           </excluded>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c</name>
@@ -5973,6 +6931,7 @@
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
             <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
             <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+            <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
           </excluded>
           <group>
             <name>src</name>
@@ -6338,6 +7297,7 @@
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
             <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
             <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+            <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
           </excluded>
           <group>
             <name>src</name>
@@ -6360,6 +7320,7 @@
                     <configuration>tauon-kernel-cortex-m3-debug</configuration>
                     <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
                     <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+                    <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
                   </excluded>
                 </file>
               </group>
@@ -6738,6 +7699,7 @@
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
             <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
             <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+            <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
           </excluded>
           <group>
             <name>lib</name>
@@ -6750,6 +7712,7 @@
                 <configuration>tauon-kernel-cortex-m3-debug</configuration>
                 <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
                 <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+                <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
               </excluded>
             </file>
           </group>
@@ -6765,6 +7728,7 @@
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
             <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
             <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+            <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
           </excluded>
           <group>
             <name>lib</name>
@@ -6832,6 +7796,7 @@
                   <name>arm_926ejs</name>
                   <excluded>
                     <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
+                    <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
                   </excluded>
                   <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\AtmelSAM9XE\ISR_Support.h</name>
@@ -6847,10 +7812,27 @@
                   </file>
                 </group>
                 <group>
+                  <name>arm_cm0</name>
+                  <excluded>
+                    <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
+                    <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+                  </excluded>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM0\port.c</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM0\portasm.s</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM0\portmacro.h</name>
+                  </file>
+                </group>
+                <group>
                   <name>arm_cm4f</name>
                   <excluded>
                     <configuration>tauon-kernel-arm926ejs-debug</configuration>
                     <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+                    <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
                   </excluded>
                   <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM4F\port.c</name>
@@ -6872,6 +7854,10 @@
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\MemMang\heap_2.c</name>
+              <excluded>
+                <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
+                <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
+              </excluded>
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\MemMang\heap_3.c</name>
@@ -7128,6 +8114,7 @@
                   <configuration>tauon-kernel-cortex-m4-debug</configuration>
                   <configuration>tauon-kernel-cortex-m3-debug</configuration>
                   <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
+                  <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
                 </excluded>
                 <configuration>
                   <name>lib-debug</name>
@@ -8181,6 +9168,270 @@
                     </data>
                   </settings>
                 </configuration>
+                <configuration>
+                  <name>tauon-kernel-cortex-m0+-freertos-debug</name>
+                  <settings>
+                    <name>ICCARM</name>
+                    <data>
+                      <version>31</version>
+                      <wantNonLocal>1</wantNonLocal>
+                      <debug>1</debug>
+                      <option>
+                        <name>CCOptimizationNoSizeConstraints</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCDefines</name>
+                        <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
+                        <state>OS_LIBMODE_SP</state>
+                      </option>
+                      <option>
+                        <name>CCPreprocFile</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCPreprocComments</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCPreprocLine</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCListCFile</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCListCMnemonics</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCListCMessages</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCListAssFile</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCListAssSource</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCEnableRemarks</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCDiagSuppress</name>
+                        <state>pe001,pa050,pe375,pe231,pe177,pe550,pe167</state>
+                      </option>
+                      <option>
+                        <name>CCDiagRemark</name>
+                        <state></state>
+                      </option>
+                      <option>
+                        <name>CCDiagWarning</name>
+                        <state></state>
+                      </option>
+                      <option>
+                        <name>CCDiagError</name>
+                        <state></state>
+                      </option>
+                      <option>
+                        <name>CCObjPrefix</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>CCAllowList</name>
+                        <version>1</version>
+                        <state>00000000</state>
+                      </option>
+                      <option>
+                        <name>CCDebugInfo</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IEndianMode</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IProcessor</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IExtraOptionsCheck</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>IExtraOptions</name>
+                        <state></state>
+                      </option>
+                      <option>
+                        <name>CCLangConformance</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCSignedPlainChar</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>CCRequirePrototypes</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCMultibyteSupport</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCDiagWarnAreErr</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCCompilerRuntimeInfo</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>IFpuProcessor</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>OutputFile</name>
+                        <state>$FILE_BNAME$.o</state>
+                      </option>
+                      <option>
+                        <name>CCLibConfigHeader</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>PreInclude</name>
+                        <state></state>
+                      </option>
+                      <option>
+                        <name>CompilerMisraOverride</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCIncludePath2</name>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSCXM3_380/inc</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSARM7_360</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/core/ucore/embOSARM7_360/src/generic</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/include</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/ports/arm</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/ports/arm/include</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/net/lwip/include/ipv4</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/fs/yaffs/core</state>
+                        <state>$PROJ_DIR$\..\..\..\..\../src/kernel/fs/yaffs/core/direct</state>
+                      </option>
+                      <option>
+                        <name>CCStdIncCheck</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCCodeSection</name>
+                        <state>.text</state>
+                      </option>
+                      <option>
+                        <name>IInterwork2</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>IProcessorMode2</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>CCOptLevel</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCOptStrategy</name>
+                        <version>0</version>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCOptLevelSlave</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CompilerMisraRules98</name>
+                        <version>0</version>
+                        <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
+                      </option>
+                      <option>
+                        <name>CompilerMisraRules04</name>
+                        <version>0</version>
+                        <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+                      </option>
+                      <option>
+                        <name>CCPosIndRopi</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCPosIndRwpi</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCPosIndNoDynInit</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>IccLang</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>IccCDialect</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccAllowVLA</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>IccCppDialect</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccExceptions</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccRTTI</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccStaticDestr</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccCppInlineSemantics</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccCmsis</name>
+                        <state>1</state>
+                      </option>
+                      <option>
+                        <name>IccFloatSemantics</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCNoLiteralPool</name>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCOptStrategySlave</name>
+                        <version>0</version>
+                        <state>0</state>
+                      </option>
+                      <option>
+                        <name>CCGuardCalls</name>
+                        <state>1</state>
+                      </option>
+                    </data>
+                  </settings>
+                </configuration>
               </file>
             </group>
           </group>
@@ -8304,6 +9555,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\sdcard\dev_sdcard.c</name>
@@ -8334,6 +9586,7 @@
             <configuration>tauon-kernel-cortex-m4-debug</configuration>
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
             <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
+            <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
           </excluded>
           <group>
             <name>dev_at91</name>
@@ -8625,6 +9878,7 @@
           <configuration>tauon-kernel-cortex-m3-debug</configuration>
           <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
           <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+          <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
         </excluded>
         <group>
           <name>core</name>
@@ -8745,7 +9999,6 @@
         <name>lwip</name>
         <excluded>
           <configuration>tauon-kernel-cortex-m3-debug</configuration>
-          <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
         </excluded>
         <group>
           <name>api</name>
@@ -8900,6 +10153,7 @@
           <configuration>tauon-kernel-arm926ejs-debug</configuration>
           <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
           <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+          <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
         </excluded>
         <group>
           <name>lib</name>
@@ -8933,6 +10187,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -8965,6 +10220,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -8985,6 +10241,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -8999,6 +10256,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9019,6 +10277,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9036,6 +10295,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9059,6 +10319,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9073,6 +10334,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9087,6 +10349,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9116,6 +10379,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9142,6 +10406,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9180,6 +10445,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9194,6 +10460,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9208,6 +10475,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9267,6 +10535,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
@@ -9314,6 +10583,7 @@
               <configuration>tauon-kernel-cortex-m3-debug</configuration>
               <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
               <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
+              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
             </excluded>
           </file>
           <file>
