@@ -34,8 +34,17 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#define RTFS_NODETBL_SIZE   50//128 //50//40//30//20
-#define RTFS_BLKTBL_SIZE    120//256 //120//100//80//60
+#ifndef __KERNEL_RTFS_NODETBL_SIZE
+   #define RTFS_NODETBL_SIZE   50//128 //50//40//30//20
+#else
+   #define RTFS_NODETBL_SIZE   __KERNEL_RTFS_NODETBL_SIZE
+#endif
+
+#ifndef __KERNEL_RTFS_BLKTBL_SIZE
+   #define RTFS_BLKTBL_SIZE    120//256 //120//100//80//60
+#else
+   #define RTFS_BLKTBL_SIZE  __KERNEL_RTFS_BLKTBL_SIZE
+#endif
 
 #define RTFS_BLOCK_ALLOC_SIZE   (RTFS_BLKTBL_SIZE/8)+1 //1 bits: free(0|1);
 
@@ -72,7 +81,12 @@ typedef union {
 }rtfs_block_data_t;
 
 //
-#define MAX_RTFS_BLOCK   32
+#ifndef __KERNEL_RTFS_NODE_BLOCK_NB_MAX
+   #define MAX_RTFS_BLOCK   32
+#else
+   #define MAX_RTFS_BLOCK   __KERNEL_RTFS_NODE_BLOCK_NB_MAX
+#endif
+
 typedef struct {
    rtfs_attr_t attr;
    rtfs_size_t size;
