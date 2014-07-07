@@ -70,7 +70,6 @@ static const struct sigevent default_timer_sigevent={
 | Comments:
 | See:
 ----------------------------------------------*/
-
 void kernel_timer_generic_callback(xTimerHandle pxTimer ){
    kernel_timer_t* p_kernel_timer   = (kernel_timer_t*)0;
    kernel_pthread_t* pthread_ptr    = (kernel_pthread_t*)0;
