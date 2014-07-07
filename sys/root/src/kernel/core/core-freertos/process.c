@@ -1582,7 +1582,7 @@ int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic){
       pthread_ptr->sig_mask.std|= (1 << (sig-1));
    }else if(sig>=SIGRTMIN && sig<SIGRTMAX) {
       //realtime signal
-
+   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
       //sig ignore?
       if((unsigned long)(pthread_ptr->sigaction_lst[sig].sa_handler)==SIG_IGN)
          return 0;
@@ -1610,12 +1610,12 @@ int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic){
       }
 
       //BEGIN OF ATOMIC SECTION
-#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+      #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
       if(atomic) {
          __clr_irq();
       }
-#endif
-
+      #endif
+   #endif //__KERNEL_POSIX_REALTIME_SIGNALS
    }else{
       return -1;
    }
