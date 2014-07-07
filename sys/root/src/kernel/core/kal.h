@@ -1574,6 +1574,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
  && defined (__KERNEL_UCORE_FREERTOS)\
  &&((__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)\
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM0__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))
 
@@ -1603,7 +1604,27 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
 
    #define __va_list_copy(__dest_va_list__,__src_va_list__) memcpy(&__dest_va_list__,&__src_va_list__,sizeof(__dest_va_list__))
 
-   #if ( (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM4__) )
+   #if ( (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM0__) )
+      typedef struct cpu_regs_st {
+           uint32_t  OS_REG_R4;
+           uint32_t  OS_REG_R5;
+           uint32_t  OS_REG_R6;
+           uint32_t  OS_REG_R7;
+           uint32_t  OS_REG_R8;
+           uint32_t  OS_REG_R9;
+           uint32_t  OS_REG_R10;
+           uint32_t  OS_REG_R11;
+           //uint32_t  OS_REG_LR;
+           uint32_t  OS_REG_R0;
+           uint32_t  OS_REG_R1;
+           uint32_t  OS_REG_R2;
+           uint32_t  OS_REG_R3;
+           uint32_t  OS_REG_R12;
+           uint32_t  OS_REG_R14;
+           uint32_t  OS_REG_PC;
+           uint32_t  OS_REG_XPSR;
+         } cpu_regs_t;
+   #elif ( (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM4__) )
       typedef struct cpu_regs_st {
            uint32_t  OS_REG_R4;
            uint32_t  OS_REG_R5;
@@ -1746,7 +1767,8 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
    #endif
 
    //GD all Cortex-M3 and cortex M4 MCUs have the same systick registers
-   #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
+   #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM0__)\
+       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
        ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
       #define __LEPTON_KAL_PIT_BASE    (0xE000E010)
       #define __LEPTON_KAL_PIT_MR      (*(volatile uint32_t*)(__LEPTON_KAL_PIT_BASE + 0x00))
