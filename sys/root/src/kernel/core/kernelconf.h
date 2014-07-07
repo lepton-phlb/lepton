@@ -28,7 +28,6 @@ Compiler Directive
 #ifndef __KERNELCONF_H__
 #define __KERNELCONF_H__
 
-
 /*===========================================
 Includes
 =============================================*/
@@ -46,21 +45,24 @@ Includes
 #define __tauon_cpu_core_m16c__              (0x0003)
 #define __tauon_cpu_core_arm_arm7tdmi__      (0x0004)
 #define __tauon_cpu_core_arm_arm926ejs__     (0x0005)
-#define __tauon_cpu_core_arm_cortexM3__      (0x0006)
-#define __tauon_cpu_core_arm_cortexM4__      (0x0007)
+#define __tauon_cpu_core_arm_cortexM0__      (0x0007)
+#define __tauon_cpu_core_arm_cortexM3__      (0x0008)
+#define __tauon_cpu_core_arm_cortexM4__      (0x0009)
 
-#define __tauon_cpu_device_win32_simulation__   (0x0001)
-#define __tauon_cpu_device_gnu_synthetic__      (0x0002)
-#define __tauon_cpu_device_arm7_at91m55800a__   (0x0702)
-#define __tauon_cpu_device_arm7_at91sam7se__    (0x0703)
-#define __tauon_cpu_device_arm7_at91sam7x__     (0x0704)
-#define __tauon_cpu_device_arm9_at91sam9260__   (0x0905)
-#define __tauon_cpu_device_arm9_at91sam9261__   (0x0906)
-#define __tauon_cpu_device_cortexM3_trifecta__  (0x0301)
-#define __tauon_cpu_device_cortexM3_LM3S__      (0x0302)
-#define __tauon_cpu_device_cortexM3_stm32f1__   (0x0303)
-#define __tauon_cpu_device_cortexm_k60n512__    (0x0402)
-#define __tauon_cpu_device_cortexM4_stm32f4__   (0x0401)
+#define __tauon_cpu_device_win32_simulation__      (0x0001)
+#define __tauon_cpu_device_gnu_synthetic__         (0x0002)
+#define __tauon_cpu_device_arm7_at91m55800a__      (0x1702)
+#define __tauon_cpu_device_arm7_at91sam7se__       (0x1703)
+#define __tauon_cpu_device_arm7_at91sam7x__        (0x1704)
+#define __tauon_cpu_device_arm9_at91sam9260__      (0x1905)
+#define __tauon_cpu_device_arm9_at91sam9261__      (0x1906)
+#define __tauon_cpu_device_cortexM0_at91samd20__   (0x1001)
+#define __tauon_cpu_device_cortexM3_trifecta__     (0x1301)
+#define __tauon_cpu_device_cortexM3_LM3S__         (0x1302)
+#define __tauon_cpu_device_cortexM3_stm32f1__      (0x1303)
+#define __tauon_cpu_device_cortexm_k60n512__       (0x1402)
+#define __tauon_cpu_device_cortexM4_stm32f4__      (0x1401)
+
 
 #if defined(WIN32)
    #define __tauon_compiler__ __compiler_win32__
@@ -136,6 +138,10 @@ Includes
    #define __KERNEL_CPU_DEVICE_NAME "arm9-at91sam9261"
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm926ejs__
 
+#elif __tauon_cpu_device__==__tauon_cpu_device_cortexM0_at91samd20__
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM0+-at91samd20"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM0__
+
 #elif __tauon_cpu_device__==__tauon_cpu_device_cortexM3_trifecta__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM3-trifecta"
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM3__
@@ -153,7 +159,7 @@ Includes
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
 
 #elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__
-   #define __KERNEL_CPU_DEVICE_NAME "cortexM4-stm32-f4"
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM4-stm32f4"
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
 #endif
 
@@ -179,8 +185,8 @@ Declaration
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
    #define __KERNEL_UCORE_EMBOS
 #elif (__tauon_compiler__==__compiler_iar_arm__)
-   #define __KERNEL_UCORE_EMBOS
-   //#define __KERNEL_UCORE_FREERTOS
+   //#define __KERNEL_UCORE_EMBOS
+   #define __KERNEL_UCORE_FREERTOS
 #elif (__tauon_compiler__==__compiler_keil_arm__)
    #define __KERNEL_UCORE_EMBOS
 #endif
@@ -222,6 +228,9 @@ Declaration
 #elif (__tauon_cpu_core__==__tauon_cpu_core_m16c__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_16
    #define __KERNEL_CPU_NAME "m16c62"
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM0__)
+   #define __KERNEL_CPU_ARCH CPU_ARCH_32
+   #define __KERNEL_CPU_NAME "cortexm0"
 #elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
    #define __KERNEL_CPU_NAME "cortexm3"
@@ -318,7 +327,9 @@ Declaration
    #endif
 
 #elif (__tauon_kernel_profile__==__tauon_kernel_profile_minimal__)
-   #define __KERNEL_OBJECT_POOL_MAX 8
+   #ifndef __KERNEL_OBJECT_POOL_MAX
+      #define __KERNEL_OBJECT_POOL_MAX 8
+   #endif
 
    #ifndef __KERNEL_MAX_PIPE
       #define __KERNEL_MAX_PIPE 1
@@ -435,7 +446,9 @@ Declaration
 
 #if defined(__KERNEL_UCORE_FREERTOS)
    #define ATEXIT_MAX    4
-   #define __KERNEL_POSIX_REALTIME_SIGNALS
+   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
+      #define __KERNEL_POSIX_REALTIME_SIGNALS
+   #endif
    #define __KERNEL_LOAD_LIB
    #define __KERNEL_USE_FILE_LOCK
    #define __KERNEL_IO_SEM
