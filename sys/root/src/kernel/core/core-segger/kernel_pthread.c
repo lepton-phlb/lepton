@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -233,25 +230,19 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
 __begin_pthread(pthread_routine){
 
    kernel_pthread_t* pthread;
+   pthread_exit_t pthread_exit_dt;
 
+   //
    pthread=kernel_pthread_self();
    pthread->exit=pthread->start_routine(pthread->arg);
 
-   //to do: call kernel. signal thread termination
-
-   //if
-   if(pthread->pid<1) {
-      kernel_pthread_cancel(pthread); //native kernel pthread: no process container
-   }else{
-      //pthread in process container
-      //use syscall
-      pthread_exit_t pthread_exit_dt;
-      pthread_exit_dt.kernel_pthread = pthread;
-      pthread_exit_dt.value_ptr = (void*)0;
-      //to do check if it's the main thread call exit
-      __mk_syscall(_SYSCALL_PTHREAD_EXIT,pthread_exit_dt);
-   }
-
+   //call kernel. signal thread termination
+   //pthread in process container
+   //use syscall
+   pthread_exit_dt.kernel_pthread = pthread;
+   pthread_exit_dt.value_ptr = (void*)0;
+   //to do check if it's the main thread call exit
+   __mk_syscall(_SYSCALL_PTHREAD_EXIT,pthread_exit_dt);
 }
 __end_pthread()
 
@@ -263,9 +254,7 @@ __end_pthread()
 | Comments:
 | See:
 ---------------------------------------------*/
-int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,
-                            start_routine_t start_routine,
-                            void *arg){
+int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,start_routine_t start_routine, void *arg){
 
    if(!thread)
       return -EINVAL;
@@ -303,7 +292,7 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
    if( kernel_get_pthread_id(thread)==-EAGAIN)
       return -EAGAIN;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    {
       char* name = (char*)thread->attr.name;
       pid_t pid = thread->pid;
@@ -399,11 +388,10 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
          ofile_lst[desc].owner_pthread_ptr_write   =(kernel_pthread_t*)0;
    }
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    {
       OS_TASK* whois_lock_kernel_mutex = OS_GetResourceOwner(&kernel_mutex.mutex);
       OS_TASK* this_task = thread->tcb;
-
 
       //warning!!!: preprocessor OS_SUPPORT_CLEANUP_ON_TERMINATE only supported for embos ver<=3.32 for all target arm7 and m16c.
    #ifndef OS_SUPPORT_CLEANUP_ON_TERMINATE

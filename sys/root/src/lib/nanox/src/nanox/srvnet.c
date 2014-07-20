@@ -1806,7 +1806,7 @@ GsOpenSocket(void)
 #endif
 #elif __ECOS
 	struct sockaddr_in sckt;
-#elif USE_ECOS
+#elif __KERNEL_UCORE_ECOS
 	struct sockaddr_in sckt;
 #ifndef SUN_LEN
 #define SUN_LEN(ptr)	(sizeof(sckt))
@@ -1837,7 +1837,7 @@ GsOpenSocket(void)
 	sckt.sin_port = htons(6600);
 	sckt.sin_addr.s_addr = INADDR_ANY;
 
-#elif USE_ECOS
+#elif __KERNEL_UCORE_ECOS
    /* Create the socket */
    if((un_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
        return -1;

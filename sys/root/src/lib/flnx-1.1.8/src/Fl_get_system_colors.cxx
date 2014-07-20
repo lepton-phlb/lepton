@@ -47,7 +47,7 @@ extern "C" int putenv(const char*);
 #  define putenv _putenv
 #endif // WIN32 && !__CYGWIN__
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 #define putenv
 #endif
 

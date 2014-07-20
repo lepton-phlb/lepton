@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /Zp1 /MDd /W3 /Gm /GX /ZI /Od /I "c:/tauon/sys/root/src" /I "c:/tauon/sys/root/src/net/lwip" /I "c:/tauon/sys/root/src/kernel/net/lwip/include" /I "c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4" /I "c:/tauon/sys/root/src/kernel/net/lwip/ports/win32" /I "c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include" /D "_LIB" /D "WIN32" /D "_DEBUG" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /Zp1 /MDd /W3 /Gm /GX /ZI /Od /I "c:/tauon/sys/root/src" /I "c:/tauon/sys/root/src/net/lwip" /I "c:/tauon/sys/root/src/kernel/net/lwip/include" /I "c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4" /I "c:/tauon/sys/root/src/kernel/net/lwip/ports/win32" /I "c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include" /I "C:/tauon/sys/root/src/kernel/net/uip2.5" /D "_LIB" /D "WIN32" /D "_DEBUG" /D "_MBCS" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
 # ADD RSC /l 0x40c /d "_DEBUG"
 BSC32=bscmake.exe
@@ -111,22 +111,67 @@ SOURCE=..\..\..\src\kernel\core\arch\win32\kernel_mkconf.h
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\lwip_core\ethif_core.c
+
+!IF  "$(CFG)" == "kernel - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "kernel - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\lwip_core\lwip_core.c
+
+!IF  "$(CFG)" == "kernel - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "kernel - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\lwip_core\lwip_core.h
+
+!IF  "$(CFG)" == "kernel - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "kernel - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c
+
+!IF  "$(CFG)" == "kernel - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "kernel - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h
+
+!IF  "$(CFG)" == "kernel - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "kernel - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "uip_core"
@@ -139,6 +184,14 @@ SOURCE=..\..\..\src\kernel\core\net\uip_core\uip_core.c
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\uip_core\uip_core.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h
 # End Source File
 # Begin Source File
 
@@ -165,6 +218,10 @@ SOURCE=..\..\..\src\kernel\core\net\uip_core\uip_socket.c
 SOURCE=..\..\..\src\kernel\core\net\uip_core\uip_socket.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\src\kernel\core\net\socket.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\kernel\core\net\socks.h

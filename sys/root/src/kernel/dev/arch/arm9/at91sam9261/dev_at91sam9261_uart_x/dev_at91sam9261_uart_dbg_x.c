@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -72,8 +69,7 @@ Includes
 #include "kernel/dev/arch/arm9/at91sam9261/common/dev_at91sam9261_common_uart.h"
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
 #endif
@@ -97,7 +93,7 @@ int dev_at91sam9261_uart_dbg_x_ioctl      (desc_t, int, va_list ap);
 void dev_at91sam9261_uart_dbg_x_snd       (desc_t);
 void dev_at91sam9261_uart_dbg_x_fifo_rcv  (desc_t desc);
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 void dev_at91sam9261_uart_dbg_x_interrupt (desc_t);
 void  dev_at91sam9261_uart_dbg_x_timer_callback (board_inf_uart_t * p_board_inf_uart);
 #else
@@ -108,9 +104,9 @@ void dev_at91sam9261_uart_dbg_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addr
 static int termios2ttys              (desc_t, struct termios *);
 
 //termios
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 static struct termios ttys_termios;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 struct termios ttys_termios;
 #endif
 
@@ -137,7 +133,7 @@ static s2s_t const s2s[] = {
    { B460800,      460800 }
 };
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 extern cyg_uint32 hal_at91sam9261_us_baud(cyg_uint32 baud_rate);
 extern int rcv_flag;
 #endif
@@ -172,7 +168,7 @@ void dev_at91sam9261_uart_dbg_x_fifo_rcv (desc_t desc)
         (p_inf_uart->input_r == p_inf_uart->input_w))
    {
       //empty to not empty
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
       __fire_io_int(ofile_lst[p_inf_uart->desc_rd].owner_pthread_ptr_read);
 #else
       rcv_flag = 1;
@@ -222,7 +218,7 @@ void dev_at91sam9261_uart_dbg_x_snd (desc_t desc)
       while (!(*(p_adr+US_CSR) & (0x00000200))) ;  // Wait until TX shift register empty
 
       // There are not characters anymore to be sent -> Prevent the calling thread
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
       __fire_io_int(ofile_lst[p_inf_uart->desc_wr].owner_pthread_ptr_write);
 #endif
       *(p_adr+US_IDR)   = 2;
@@ -238,9 +234,9 @@ void dev_at91sam9261_uart_dbg_x_snd (desc_t desc)
 | Comments   : -
 | See        : -
 ---------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 void  dev_at91sam9261_uart_dbg_x_timer_callback(board_inf_uart_t * p_board_inf_uart){
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 void dev_at91sam9261_uart_dbg_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data){
    board_inf_uart_t *p_board_inf_uart = (board_inf_uart_t *)data;
 #endif
@@ -269,7 +265,7 @@ void dev_at91sam9261_uart_dbg_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addr
 | Comments   : -
 | See        : -
 ----------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 void dev_at91sam9261_uart_dbg_x_interrupt(desc_t desc)
 {
    unsigned int usart_csr;
@@ -355,11 +351,11 @@ int dev_at91sam9261_uart_dbg_x_load (board_inf_uart_t *p_board_inf_uart)
    ttys_termios.c_cc[VTIME]   = 0;        // no timeout, blocking call
 
    //VTIME timer in units of 0.1 seconds (posix specification)
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
    OS_CreateTimer (&p_board_inf_uart->timer,
                    p_board_inf_uart->f_timer_call_back,
                    100);  // 100ms
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    p_board_inf_uart->timer_attr.tm_msec = 100;
    p_board_inf_uart->timer_attr.func = dev_at91sam9261_uart_dbg_x_timer_callback;
 
@@ -433,7 +429,7 @@ int dev_at91sam9261_uart_dbg_x_open (desc_t desc, int o_flag)
                          AT91C_US_PAR_NONE      |   /* No Parity   */
                          AT91C_US_NBSTOP_1_BIT;     /* 1 Stop Bit  */
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
       // Set baud rate.
       //*(p_adr+US_BRGR)  = __KERNEL_CPU_FREQ / OS_RS232_BAUDRATE / 16;
       baud_value = ((__KERNEL_PERIPHERAL_FREQ*10)/(OS_RS232_BAUDRATE * 16));
@@ -442,7 +438,7 @@ int dev_at91sam9261_uart_dbg_x_open (desc_t desc, int o_flag)
          baud_value = (baud_value / 10) + 1;
       else
          baud_value /= 10;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       baud_value = hal_at91sam9261_us_baud(OS_RS232_BAUDRATE); //see hal/arm/at91/at91sam9261-ek/current/src/at91sam9261_misc.c
 #endif
 
@@ -674,9 +670,11 @@ int dev_at91sam9261_uart_dbg_x_write(desc_t desc, const char* buf,int size)
    p_inf_uart->output_r = 0;
    p_inf_uart->output_w = size;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) 
    OS_DI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   __clr_irq();
+#elif defined(__KERNEL_UCORE_ECOS)
    __clr_irq();
 #endif
 
@@ -686,9 +684,11 @@ int dev_at91sam9261_uart_dbg_x_write(desc_t desc, const char* buf,int size)
    *(p_adr+US_THR) = snd_data;
    *(p_adr+US_IER) = 2;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) 
    OS_EI();
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   __set_irq();
+#elif defined(__KERNEL_UCORE_ECOS)
    __set_irq();
 #endif
 
@@ -741,9 +741,9 @@ static int termios2ttys(desc_t desc, struct termios* termios_p)
       {
          n_speed = sp->ns;
          // Set baud rate
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
          *(p_adr+US_BRGR) = (__KERNEL_CPU_FREQ / n_speed / 16);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
          speed = hal_at91sam9261_us_baud(n_speed);
          *(p_adr+US_BRGR) = speed;
 #endif
@@ -800,9 +800,9 @@ int dev_at91sam9261_uart_dbg_x_ioctl(desc_t desc, int request, va_list ap)
       unsigned long speed = va_arg( ap, unsigned long);
       if (speed==0) return -1;
       // Set baud rate.
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
       *(p_adr+US_BRGR) = (__KERNEL_CPU_FREQ / speed / 16);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       *(p_adr+US_BRGR) = hal_at91sam9261_us_baud(speed);
 #endif
 

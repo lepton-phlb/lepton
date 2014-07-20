@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{8be41046-23cd-4ec0-8006-8db78a11634d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev">
+      <UniqueIdentifier>{f3b1a90d-6bb9-483b-86c5-b8361124bca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\dev_cpufs">
+      <UniqueIdentifier>{847574ae-3353-4b9f-bbe4-4887c7738644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\dev_null">
+      <UniqueIdentifier>{74d2b2da-eddc-43e1-ae5b-3a13c8d81a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\dev_proc">
+      <UniqueIdentifier>{2e0d2969-c6c4-48a2-b9cc-ad1c1ed2aab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\dev_tty">
+      <UniqueIdentifier>{6a78cf16-7145-4eb4-a741-b47a1684403c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\dev_head">
+      <UniqueIdentifier>{b467427b-1dba-4e38-977a-85e63fdd888d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch">
+      <UniqueIdentifier>{fff54f2a-a81a-49a8-9bc9-72eaaff51699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all">
+      <UniqueIdentifier>{c7046650-8623-4843-a307-448ce055f17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\flash">
+      <UniqueIdentifier>{64e04c9e-c957-4252-9be4-b3b9e73efcfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\i2c">
+      <UniqueIdentifier>{5c549d45-5dff-4ba8-94b7-d05dbaae15b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\lcd">
+      <UniqueIdentifier>{b3a1fdcd-bd9e-4162-8875-97cce77d1813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\sdcard">
+      <UniqueIdentifier>{d176d414-d8b9-49bd-a404-ada4a225d22b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\slip">
+      <UniqueIdentifier>{74fd7c8f-483b-4ace-af6e-aef0ac1ed030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\eth">
+      <UniqueIdentifier>{2bb7085d-09df-4dae-b37f-df6b1ad82173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\ppp">
+      <UniqueIdentifier>{ac591742-45be-4876-9875-b7a95fe4dfe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32">
+      <UniqueIdentifier>{dac54665-5e72-4605-8787-da4a459e1fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\flash\amd">
+      <UniqueIdentifier>{5be13b4e-6fbe-4bf5-85e2-e9d17f246555}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\flash\dev_ftl">
+      <UniqueIdentifier>{1f3f550a-07f5-4f95-aae4-ca2ea3a27572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\flash\amd\lldapi">
+      <UniqueIdentifier>{30253a5c-2ae1-4e69-ab8d-a63451acbf8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\ppp\dev_ppp_uip">
+      <UniqueIdentifier>{af9dbcc1-1f39-4b5b-9a40-ef8d61e05d60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_board">
+      <UniqueIdentifier>{ad719565-4456-4366-93b7-782b8f7a9c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_com0">
+      <UniqueIdentifier>{c2dd833d-f978-40a2-9a20-5ce27732da9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_com1">
+      <UniqueIdentifier>{c9cbbb31-49d9-4156-9b3a-1b36759db32d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_com2">
+      <UniqueIdentifier>{da57bc48-0b44-41f7-b394-a224ce6ab440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_eth">
+      <UniqueIdentifier>{5ba1932d-3310-4cd0-bf3d-aba7ba0bea32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_fileflash">
+      <UniqueIdentifier>{de8333a0-98eb-4c7d-a451-3c2fa7ccd165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_filerom">
+      <UniqueIdentifier>{0997d890-a586-47a8-b7c5-a4fb3c573af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_flash">
+      <UniqueIdentifier>{c5a4b211-74e2-4917-a12e-e03ef721e38d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_kb">
+      <UniqueIdentifier>{9473f9d1-28c6-4857-8008-abfe6ef5a8e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_lcd">
+      <UniqueIdentifier>{d797ede2-c0f7-4dd8-8358-7c7f71c8bce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_lcd_vga">
+      <UniqueIdentifier>{537903b8-109d-460c-bef4-ab524f4b7f6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_rtc">
+      <UniqueIdentifier>{e0e5b1ef-010d-4393-808f-0b9a1325eff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_sdcard">
+      <UniqueIdentifier>{e244281e-e030-4a28-8afb-e26598d0f64e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\dev\dev_cpufs\dev_cpufs.h">
+      <Filter>kernel\dev\dev_cpufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\dev_proc\dev_proc.h">
+      <Filter>kernel\dev\dev_proc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\flash.h">
+      <Filter>kernel\dev\arch\all\flash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_nor_amd.h">
+      <Filter>kernel\dev\arch\all\flash\amd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\trace.h">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld.h">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld_bdsxxx_asp.h">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld_target_specific.h">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ppp.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ahdlc.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\dev_ppp_uip.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipcp.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipv6cp.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\lcp.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\pap.h">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com0\dev_socketsrv_0.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_com0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com1\dev_win32uart2.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_com1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com2\dev_win32uart.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_com2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_cpufs\dev_cpufs.c">
+      <Filter>kernel\dev\dev_cpufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_head\dev_head.c">
+      <Filter>kernel\dev\dev_head</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_null\dev_null.c">
+      <Filter>kernel\dev\dev_null</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_proc\dev_proc.c">
+      <Filter>kernel\dev\dev_proc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\tty_font-8x16.c">
+      <Filter>kernel\dev\dev_tty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\dev_tty.c">
+      <Filter>kernel\dev\dev_tty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\flash.c">
+      <Filter>kernel\dev\arch\all\flash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\dev_ftl\dev_ftl.c">
+      <Filter>kernel\dev\arch\all\flash\dev_ftl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_am29dlxxxx_1.c">
+      <Filter>kernel\dev\arch\all\flash\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_am29dlxxxx_2.c">
+      <Filter>kernel\dev\arch\all\flash\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_am29dlxxxx_3.c">
+      <Filter>kernel\dev\arch\all\flash\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_nor_amd.c">
+      <Filter>kernel\dev\arch\all\flash\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld.c">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld_bdsxxx_asp.c">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\trace.c">
+      <Filter>kernel\dev\arch\all\flash\amd\lldapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ahdlc.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\dev_ppp_uip.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipcp.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ipv6cp.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\lcp.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\pap.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\ppp\dev_ppp_uip\ppp.c">
+      <Filter>kernel\dev\arch\all\ppp\dev_ppp_uip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\all\slip\dev_slip.c">
+      <Filter>kernel\dev\arch\all\slip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_board\dev_win32_board.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com0\dev_win32_com0.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_com0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com0\dev_socketsrv_0.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_com0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com1\dev_win32_com1.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_com1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com1\dev_win32uart2.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_com1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com2\dev_win32_com2.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_com2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_com2\dev_win32uart.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_com2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\dev_win32_fileflash.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_fileflash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\dev_win32_filerom.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_filerom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_flash\dev_win32_flash.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_flash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_kb\dev_win32_kb.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_kb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_lcd\dev_win32_lcd.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_lcd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_lcd_vga\dev_win32_lcd_vga.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_lcd_vga</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rtc\dev_win32_rtc.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_rtc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_sdcard\dev_win32_sdcard.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_sdcard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\dev_win32_eth.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_3_1\WpdPack\Lib\Packet.lib" />
+    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_4_1_2\WpdPack\Lib\Packet.lib" />
+  </ItemGroup>
+</Project>

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -48,19 +45,14 @@ either the MPL or the [eCos GPL] License."
 
 #define LIB_INVALID_OFFSET 0xffffffff
 
-#define __declare_lib_data_offset(__lib_name__) lib_data_offset_t __lib_name__ ## \
-   lib_data_offset =LIB_INVALID_OFFSET
-#define __extern_lib_data_offset(__lib_name__) extern lib_data_offset_t __lib_name__ ## \
-   lib_data_offset
+   #define __declare_lib_data_offset(__lib_name__) lib_data_offset_t __lib_name__##lib_data_offset =LIB_INVALID_OFFSET
+   #define __extern_lib_data_offset(__lib_name__) extern lib_data_offset_t __lib_name__##lib_data_offset
 #define __implement_lib_data_offset(__lib_name__) __lib_name__ ## lib_data_offset
 
-#define __lib_data_alloc(__pthread_ptr__, \
-                         __size__) (kernel_pthread_alloca(__pthread_ptr__,__size__))
-#define __lib_data(__lib_name__) (void*)((char*)kernel_pthread_self()->attr.stackaddr+ \
-                                         __implement_lib_data_offset(libc))
+   #define __lib_data_alloc(__pthread_ptr__,__size__) (kernel_pthread_alloca(__pthread_ptr__,__size__))
+   #define __lib_data(__lib_name__) (void*)((char*)kernel_pthread_self()->attr.stackaddr+__implement_lib_data_offset(libc))
 
-#define __declare_fct_lib_entrypoint(__lib_name__) extern __lib_name__ ## _lib_entrypoint( \
-      kernel_pthread_t* pthread_ptr)
+   #define __declare_fct_lib_entrypoint(__lib_name__) extern int __lib_name__##_lib_entrypoint(kernel_pthread_t* pthread_ptr) //GD-TODO fix type ?
 #define __implement_fct_lib_entrypoint(__lib_name__) __lib_name__ ## _lib_entrypoint
 
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<ProjectWorkspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_mpw.xsd">
+
+  <SchemaVersion>1.0</SchemaVersion>
+
+  <Header>### uVision Project, (C) Keil Software</Header>
+
+  <WorkspaceName>WorkSpace</WorkspaceName>
+
+  <project>
+    <PathAndName>.\kernel.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>..\fs\fs.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>..\lib\lib.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>..\dev\dev.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>..\net-uip\net-uip.uvproj</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+  </project>
+
+  <project>
+    <PathAndName>..\sbin\sbin.uvproj</PathAndName>
+  </project>
+
+</ProjectWorkspace>

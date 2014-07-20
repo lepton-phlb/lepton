@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -426,8 +423,7 @@ struct tm *__localtime_r(const time_t *timep, struct tm *tmb){
 ---------------------------------------------*/
 time_t __mktime(struct tm *timeptr)
 {
-   static const unsigned char vals[] =
-   {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, /* non-leap */ 29,};
+static const unsigned char vals[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, /* non-leap */29,};
    long days, secs;
    time_t t;
    struct tm x;
@@ -473,7 +469,7 @@ time_t __mktime(struct tm *timeptr)
       days -= 1389;
    }
    if ( ((unsigned long)(days + secs/86400L)) > 49710L) {
-      return -1;
+      return (time_t)-1;
    }
    secs += (days * 86400L);
 
@@ -498,7 +494,7 @@ time_t __mktime(struct tm *timeptr)
 
 double __difftime(time_t time1, time_t time0)
 {
-#if defined(__IAR_SYSTEMS_ICC__)
+#if defined(__IAR_SYSTEMS_ICC__) || defined(__ARMCC_VERSION) 
    return ((double) time1) - time0;
 #else
    #if ((LONG_MAX >> DBL_MANT_DIG) == 0)

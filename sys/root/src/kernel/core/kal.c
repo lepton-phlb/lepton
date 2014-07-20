@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -50,8 +47,7 @@ either the MPL or the [eCos GPL] License."
 | See:
 ----------------------------------------------*/
 #ifdef CPU_WIN32
-void _debug_bckup_thread_start_context(CONTEXT* __context__,
-                                       struct kernel_pthread_st *__pthread_ptr__){
+void _debug_bckup_thread_start_context(CONTEXT* __context__,struct kernel_pthread_st *__pthread_ptr__){
    CONTEXT __local_context__;
    __local_context__.ContextFlags=PTHREAD_CONTEXT_DUMP;
    GetThreadContext(__pthread_ptr__->tcb->hTask,&__local_context__);
@@ -103,16 +99,13 @@ void _debug_rstr_context(CONTEXT* __context__,kernel_pthread_t *__pthread_ptr__)
 int _debug_bckup_stack(kernel_pthread_t *__pthread_ptr__){
    int offsetEsp;
    void* src_stack_ptr;
-   _dbg_printf("backup.Esp=0x%08x  start_context.Esp=0x%08x\r\n",__pthread_ptr__->bckup_context.Esp,
-               __pthread_ptr__->start_context.Esp);
+   _dbg_printf("backup.Esp=0x%08x  start_context.Esp=0x%08x\r\n",__pthread_ptr__->bckup_context.Esp,__pthread_ptr__->start_context.Esp);
    offsetEsp = __pthread_ptr__->bckup_context.Esp - __pthread_ptr__->start_context.Esp;
    src_stack_ptr = (PDWORD)(__pthread_ptr__->start_context.Esp+offsetEsp);
    __pthread_ptr__->bckup_stack = (char*)malloc( abs(offsetEsp) );
    if(!__pthread_ptr__->bckup_stack)
       return -1;
-   _dbg_printf("bckup_stack:0x%08x src_stack_ptr:0x%08x , offsetEsp=%d \r\n",
-               __pthread_ptr__->bckup_stack,src_stack_ptr,
-               offsetEsp);
+   _dbg_printf("bckup_stack:0x%08x src_stack_ptr:0x%08x , offsetEsp=%d \r\n",__pthread_ptr__->bckup_stack,src_stack_ptr,offsetEsp);
    memcpy(__pthread_ptr__->bckup_stack,src_stack_ptr,abs(offsetEsp));
    return 0;
 }

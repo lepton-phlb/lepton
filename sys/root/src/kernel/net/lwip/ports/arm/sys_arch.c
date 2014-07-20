@@ -1,29 +1,3 @@
-/*
-The contents of this file are subject to the Mozilla Public License Version 1.1
-(the "License"); you may not use this file except in compliance with the License.
-You may obtain a copy of the License at http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS" basis,
-WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
-specific language governing rights and limitations under the License.
-
-The Original Code is ______________________________________.
-
-The Initial Developer of the Original Code is ________________________.
-Portions created by ______________________ are Copyright (C) ______ _______________________.
-All Rights Reserved.
-
-Contributor(s): ______________________________________.
-
-Alternatively, the contents of this file may be used under the terms of the eCos GPL license
-(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
-instead of those above. If you wish to allow use of your version of this file only under the
-terms of the [eCos GPL] License and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting  the provisions above and replace
-them with the notice and other provisions required by the [eCos GPL] License.
-If you do not delete the provisions above, a recipient may use your version of this file under
-either the MPL or the [eCos GPL] License."
-*/
 
 /*
 Author: Adam Dunkels
@@ -243,7 +217,7 @@ cyg_mempool_var_create(memvar, sizeof(memvar), &var_mempool_h, &var_mempool);
 
 sys_prot_t sys_arch_protect(void){
    kernel_pthread_mutex_lock(&kernel_mutex_lwip_protect);
-   return 0;
+   return &kernel_mutex_lwip_protect;
 }
 
 /*
@@ -273,14 +247,19 @@ sys_mbox_t sys_mbox_new(int size){
    //
    if(!size)
       size=100;
-   //alloc mailbox buffer
-   p_sys_mbox->p_buf = _sys_malloc(size*sizeof(void*));
-   /* out of memory? */
-   if(!p_sys_mbox->p_buf) {
-      return SYS_MBOX_NULL;
-   }
    //
-   OS_CreateMB(&p_sys_mbox->os_mailbox,sizeof(void*),size,p_sys_mbox->p_buf);
+   #if defined(__KERNEL_UCORE_EMBOS)
+      //alloc mailbox buffer
+      p_sys_mbox->p_buf = _sys_malloc(size*sizeof(void*));
+      /* out of memory? */
+      if(!p_sys_mbox->p_buf) {
+         return SYS_MBOX_NULL;
+      }
+      //
+      OS_CreateMB(&p_sys_mbox->os_mailbox,sizeof(void*),size,p_sys_mbox->p_buf);
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      p_sys_mbox->os_mailbox = xQueueCreate( size, sizeof( void * ) );
+   #endif
    //
    return p_sys_mbox;
 }
@@ -289,11 +268,16 @@ sys_mbox_t sys_mbox_new(int size){
  * Destroy the mbox and release the space it took up in the pool
  */
 void sys_mbox_free(sys_mbox_t mbox){
-   OS_DeleteMB(&mbox->os_mailbox);
+   #if defined(__KERNEL_UCORE_EMBOS)
+      OS_DeleteMB(&mbox->os_mailbox);
+      //
+      _sys_free(mbox->p_buf);
+      //
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      vQueueDelete(mbox->os_mailbox);
+   #endif 
    //
-   _sys_free(mbox->p_buf);
-   //
-   _sys_free(mbox);
+      _sys_free(mbox);
    //
 }
 
@@ -316,14 +300,18 @@ void sys_mbox_post(sys_mbox_t mbox, void *data)
       data = &dummy_msg;
 
    //printf("post mbox:0x%x = 0x%x\r\n",mbox,addr);
-
-   OS_PutMail(&mbox->os_mailbox,&addr);
+   #if defined(__KERNEL_UCORE_EMBOS)
+      OS_PutMail(&mbox->os_mailbox,&addr);
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      xQueueSend( mbox->os_mailbox, &addr, portMAX_DELAY);
+   #endif 
 }
 
 
 /*
  * Try post data to a mbox. new since lwip 1.3.0
  */
+
 err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
 {
    long addr = (long)data;
@@ -331,9 +319,13 @@ err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
       data = &dummy_msg;
 
    //printf("post mbox:0x%x = 0x%x\r\n",mbox,addr);
-
-   if(OS_PutMailCond(&mbox->os_mailbox,&addr))
-      return ERR_MEM;
+   #if defined(__KERNEL_UCORE_EMBOS)
+      if(OS_PutMailCond(&mbox->os_mailbox,&addr))
+         return ERR_MEM;
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      if( xQueueSend( mbox->os_mailbox, &addr, (portTickType)(0))!=pdTRUE )
+        return ERR_MEM;
+   #endif
 
    return ERR_OK;
 }
@@ -342,41 +334,77 @@ err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
  * Fetch data from a mbox.Wait for at most timeout millisecs
  * Return -1 if timed out otherwise time spent waiting.
  */
-u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **data, u32_t timeout)
-{
-   long addr=0L;
-   u32_t end_time = 0, start_time = 0;
-   int err=0;
-
-   if (timeout) {
-      start_time = OS_GetTime();
-      if(OS_GetMailTimed (&mbox->os_mailbox, &addr,timeout)) {
-         *data = NULL;
-         return SYS_ARCH_TIMEOUT;
+#if defined(__KERNEL_UCORE_EMBOS)
+   u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **data, u32_t timeout)
+   {
+      long addr=0L;
+      u32_t end_time = 0, start_time = 0;
+      int err=0;
+   
+      if (timeout) {
+         start_time = OS_GetTime();
+         if(OS_GetMailTimed (&mbox->os_mailbox, &addr,timeout)) {
+            *data = NULL;
+            return SYS_ARCH_TIMEOUT;
+         }
+         end_time = OS_GetTime();
+   
+      } else {
+         OS_GetMail(&mbox->os_mailbox,&addr);
       }
-      end_time = OS_GetTime();
-
-   } else {
-      OS_GetMail(&mbox->os_mailbox,&addr);
+      //
+      if(data) {
+         if (addr == (long)&dummy_msg)
+            *data = NULL;
+         else
+            *data=(void*)addr;
+      }else{
+      }
+      //
+      if((end_time - start_time)<0)
+         return 0;
+   
+      return (end_time - start_time);
    }
-
-   if(data) {
-      if (addr == (long)&dummy_msg)
-         *data = NULL;
-      else
-         *data=(void*)addr;
-
-      //printf("fetch mbox:0x%x = 0x%x\r\n",mbox,*data);
-   }else{
-      //printf("fetch mbox:0x%x\r\n",mbox);
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **msg, u32_t timeout){
+      void *dummyptr;
+      portTickType StartTime, EndTime, Elapsed;
+      //
+      StartTime = xTaskGetTickCount();
+      //
+      if( msg == NULL ){
+         msg = &dummyptr;
+      }
+      //
+      if(	timeout != 0 ){
+         if(pdTRUE == xQueueReceive( mbox->os_mailbox, &(*msg), (portTickType)(timeout/portTICK_RATE_MS) ) ){
+            EndTime = xTaskGetTickCount();
+            Elapsed = EndTime - StartTime;
+            if( Elapsed == 0 )
+            {
+               Elapsed = 1;
+            }
+            return ( Elapsed );
+         }
+         else {
+            // timed out blocking for message
+            *msg = NULL;
+            return SYS_ARCH_TIMEOUT;
+         }
+      }else{
+         // block forever for a message.
+         xQueueReceive( mbox->os_mailbox, &(*msg), portMAX_DELAY ); 
+         //
+         EndTime = xTaskGetTickCount();
+         Elapsed = EndTime - StartTime;
+         if( Elapsed == 0 ){
+            Elapsed = 1;
+         }
+         return ( Elapsed ); // return time blocked TBD test
+      }
    }
-
-
-   if((end_time - start_time)<0)
-      return 0;
-
-   return (end_time - start_time);
-}
+#endif
 
 /*
  * Try fetch data from a mbox. new since lwip 1.3.0
@@ -385,12 +413,18 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data){
    long addr=0L;
    int err=0;
 
-   if(OS_GetMailCond(&mbox->os_mailbox,&addr)) {
-      *data = NULL;
-      //return SYS_MBOX_EMPTY;
-      return SYS_ARCH_TIMEOUT;
-   }
-
+   #if defined(__KERNEL_UCORE_EMBOS)
+      if(OS_GetMailCond(&mbox->os_mailbox,&addr)) {
+         *data = NULL;
+         return SYS_ARCH_TIMEOUT;/*return SYS_MBOX_EMPTY;*/
+      }
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+       if(pdTRUE != xQueueReceive( mbox->os_mailbox, &addr, (portTickType)(0))  ){
+         *data = NULL;
+         return SYS_ARCH_TIMEOUT;/*return SYS_MBOX_EMPTY;*/
+       }
+   #endif
+   //
    if(data) {
       if (addr == (long)&dummy_msg)
          *data = NULL;
@@ -408,13 +442,19 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data){
 sys_sem_t sys_sem_new(u8_t count)
 {
    //
-   OS_CSEMA* p_sem = (OS_CSEMA*)_sys_malloc(sizeof(OS_CSEMA));
-   /* out of memory? */
-   if(!p_sem) {
-      return SYS_SEM_NULL;
-   }
-   //
-   OS_CreateCSema(p_sem,count);
+   #if defined(__KERNEL_UCORE_EMBOS)
+      OS_CSEMA* p_sem = (OS_CSEMA*)_sys_malloc(sizeof(OS_CSEMA));
+      /* out of memory? */
+      if(!p_sem) {
+         return SYS_SEM_NULL;
+      }
+      //
+      OS_CreateCSema(p_sem,count);
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      sys_sem_t p_sem;
+      p_sem = xSemaphoreCreateCounting( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) count);
+   #endif
+     
    return p_sem;
 }
 
@@ -423,7 +463,6 @@ void
 sys_sem_wait(sys_sem_t sem)
 {
    OS_WaitCSema(sem);
-
 }
 
 void
@@ -435,6 +474,7 @@ sys_timeout(u16_t msecs, sys_timeout_handler h, void *arg)
  * Wait on a semaphore for at most timeout millisecs
  * Return -1 if timed out otherwise time spent waiting.
  */
+#if defined(__KERNEL_UCORE_EMBOS)
 u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout)
 {
    u32_t end_time = 0, start_time = 0;
@@ -455,13 +495,49 @@ u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout)
 
    return (end_time - start_time);
 }
+#elif defined(__KERNEL_UCORE_FREERTOS)
+u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout) {
+   portTickType StartTime, EndTime, Elapsed;
+   //
+	StartTime = xTaskGetTickCount();
+   //
+	if(	timeout != 0){
+		if( xSemaphoreTake( sem, (portTickType)(timeout/portTICK_RATE_MS) ) == pdTRUE ){
+			EndTime = xTaskGetTickCount();
+			Elapsed = EndTime - StartTime;
+			if( Elapsed == 0 ){
+				Elapsed = 1;
+			}
+			return (Elapsed); // return time blocked TBD test
+		}
+		else{
+			return SYS_ARCH_TIMEOUT;
+		}
+	} else {
+      // must block without a timeout
+		xSemaphoreTake( sem, portMAX_DELAY );
+      //
+		EndTime = xTaskGetTickCount();
+		Elapsed = EndTime - StartTime;
+		if( Elapsed == 0 ){
+			Elapsed = 1;
+		}
+      //
+		return ( Elapsed ); // return time blocked
+	}
+}
+#endif
 
 /*
  * Signal a semaphore
  */
 void sys_sem_signal(sys_sem_t sem)
 {
-   OS_SignalCSema(sem);
+   #if defined(__KERNEL_UCORE_EMBOS)
+      OS_SignalCSema(sem);
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      xSemaphoreGive(sem);
+   #endif
 }
 
 /*
@@ -469,10 +545,14 @@ void sys_sem_signal(sys_sem_t sem)
  */
 void sys_sem_free(sys_sem_t sem)
 {
-   OS_DeleteCSema(sem);
-   //
-   _sys_free(sem);
-   //
+   #if defined(__KERNEL_UCORE_EMBOS)
+      OS_DeleteCSema(sem);
+      //
+      _sys_free(sem);
+      //
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+       vSemaphoreDelete(sem);
+   #endif
 }
 
 /*
@@ -504,7 +584,11 @@ sys_thread_t sys_thread_new(char *name, void (*function)(
 
    thread_attr.stacksize = stacksize;
    thread_attr.stackaddr = (void*)pstack;
-   thread_attr.priority  = 100;
+   #if defined(__KERNEL_UCORE_EMBOS)
+      thread_attr.priority  = 110; //to do: fix prirority value in valid range
+   #elif defined(__KERNEL_UCORE_FREERTOS)
+      thread_attr.priority  = 5;//to do: fix prirority value in valid range
+   #endif
    thread_attr.timeslice = 1;
 
    if(!name)

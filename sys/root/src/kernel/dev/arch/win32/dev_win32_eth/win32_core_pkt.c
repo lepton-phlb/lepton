@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -31,13 +28,13 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 #define WIN32_LEAN_AND_MEAN
 /* get the windows definitions of the following 4 functions out of the way */
-#include <stdlib.h>
-#include <stdio.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 #include <windows.h>
+//#include "kernel\core\ucore\embOSW32_100\win32\windows.h"
 
-
-#include <commdlg.h>
-#include <string.h>
+//#include <commdlg.h>
+//#include <string.h>
 #include <stdio.h>
 #include <conio.h>
 #include <io.h>
@@ -46,8 +43,10 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ucore/embOSW32_100/segger_intr.h"
 
 
-#include "WpdPack_3_1/WpdPack/Include/packet32.h"
-#include "WpdPack_3_1/WpdPack/Include/ntddndis.h"
+//#include "WpdPack_3_1/WpdPack/Include/packet32.h"
+//#include "WpdPack_3_1/WpdPack/Include/ntddndis.h"
+#include "WpdPack_4_1_2/WpdPack/Include/packet32.h"
+#include <ntddndis.h>
 
 /*============================================
 | Global Declaration
@@ -171,7 +170,7 @@ int init_adapter(int adapter_num)
       return -1;
 
    ppacket_oid_data=malloc(sizeof(PACKET_OID_DATA)+6);
-   lpAdapter=PacketOpenAdapter(AdapterList[/*adapter_num*//*1*/ 1]);
+   lpAdapter=PacketOpenAdapter(AdapterList[/*adapter_num*/ 1 /*2*/]);
 
    if (!lpAdapter || (lpAdapter->hFile == INVALID_HANDLE_VALUE))
       return -1;
@@ -184,9 +183,7 @@ int init_adapter(int adapter_num)
 
    memcpy(&lwip_ethaddr,ppacket_oid_data->Data,6);
    free(ppacket_oid_data);
-   printf("MAC: %2X%2X%2X%2X%2X%2X\n", lwip_ethaddr[0], lwip_ethaddr[1], lwip_ethaddr[2],
-          lwip_ethaddr[3], lwip_ethaddr[4],
-          lwip_ethaddr[5]);
+   printf("MAC address of selected ethernet card: %02X-%02X-%02X-%2X-%2X-%2X\n", lwip_ethaddr[0], lwip_ethaddr[1], lwip_ethaddr[2], lwip_ethaddr[3], lwip_ethaddr[4], lwip_ethaddr[5]);
    PacketSetBuff(lpAdapter,512000);
    PacketSetReadTimeout(lpAdapter,1);
    PacketSetHwFilter(lpAdapter,NDIS_PACKET_TYPE_ALL_LOCAL|NDIS_PACKET_TYPE_PROMISCUOUS);
@@ -200,8 +197,7 @@ int init_adapter(int adapter_num)
    //
    PacketInitPacket(lpPacket,(char*)buffer,256000);
 
-   hPacketTask = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)update_adapter_thread, NULL, 0,
-                              &PacketTaskId );
+   hPacketTask = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)update_adapter_thread, NULL, 0, &PacketTaskId ); 
 
    return 0;
 }
@@ -306,7 +302,7 @@ static void process_packets(LPPACKET lpPacket)
          packet_wr=0;
 
       //fire interrupt to cpu
-      //printf("packet_wr=%d _input_w=%d _input_r=%d\r\n",packet_wr,__win32_eth_input_w,__win32_eth_input_r);
+      printf("packet_wr=%d _input_w=%d _input_r=%d\r\n",packet_wr,__win32_eth_input_w,__win32_eth_input_r);
       emuFireInterrupt(120);
       //process_input();//remove use signal event
    }
@@ -378,6 +374,20 @@ int win32_eth_enable_interrupt(void){
 ----------------------------------------------*/
 int win32_eth_disable_interrupt(void){
    adapter_interrupt =0;
+   return 0;
+}
+
+/*--------------------------------------------
+| Name:        win32_eth_pkt_available
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int win32_eth_pkt_available(void){
+   if(packet_rd!=packet_wr)
+      return 1;
    return 0;
 }
 

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -106,7 +103,7 @@ int dev_linux_fileflash_load(void){
 | See:
 ---------------------------------------------*/
 int dev_linux_fileflash_open(desc_t desc, int o_flag){
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    if(fh==-1) {
 
       if( (fh =
@@ -179,7 +176,7 @@ int dev_linux_fileflash_close(desc_t desc){
 
    if(instance_counter<0) {
       instance_counter=0;
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
       cyg_hal_sys_close(fh);
 #else
       _sys_close(fh);
@@ -227,7 +224,7 @@ int dev_linux_fileflash_read(desc_t desc, char* buf,int size){
    if(ofile_lst[desc].offset>memory_size)
       return -1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_hal_sys_lseek( fh, ofile_lst[desc].offset, SEEK_SET);
    r= cyg_hal_sys_read( fh,buf,size);
    ofile_lst[desc].offset = cyg_hal_sys_lseek( fh, 0, SEEK_CUR);
@@ -252,7 +249,7 @@ int dev_linux_fileflash_write(desc_t desc, const char* buf,int size){
    if(ofile_lst[desc].offset>memory_size)
       return -1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    cyg_hal_sys_lseek( fh, ofile_lst[desc].offset, SEEK_SET);
    w = cyg_hal_sys_write( fh,buf,size);
    cyg_hal_sys_fsync(fh);
@@ -279,7 +276,7 @@ int dev_linux_fileflash_seek(desc_t desc,int offset,int origin){
    if(ofile_lst[desc].offset>memory_size)
       return -1;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    ofile_lst[desc].offset = cyg_hal_sys_lseek( fh, offset, origin);
 #else
    ofile_lst[desc].offset = _sys_lseek( fh, offset, origin);
@@ -317,7 +314,7 @@ int dev_linux_fileflash_ioctl(desc_t desc,int request,va_list ap){
       //
       memory_size = hdsz;
       //
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
       if(memory_size<current_memory_size) {
          //file must be truncate
          cyg_hal_sys_close(fh);

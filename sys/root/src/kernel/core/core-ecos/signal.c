@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -37,11 +34,11 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include <cyg/hal/hal_io.h>
 #endif
 
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 extern void _system_exit(int status);
 #endif
 
@@ -367,7 +364,7 @@ int pthread_kill(pthread_t pthread, int sig){
    pthread_kill_dt.sig = sig;
    pthread_kill_dt.atomic = 1;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    if(((kernel_pthread_t*)pthread)==kernel_pthread_self()) {
       __mk_syscall0(_SYSCALL_PTHREAD_KILL,pthread_kill_dt);
    }else{

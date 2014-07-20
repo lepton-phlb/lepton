@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstpost.sh">
+      <Filter>user\bin\net\cgi-bin</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstcgi2.sh">
+      <Filter>user\bin\net\cgi-bin</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstcgi.sh">
+      <Filter>user\bin\net\cgi-bin</Filter>
+    </None>
+    <None Include="lepton_com.conf">
+      <Filter>user</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="root">
+      <UniqueIdentifier>{d738653d-e370-4910-9167-77e8f914cdd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user">
+      <UniqueIdentifier>{f87212f3-e95d-492f-beff-af0ad0283e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\kernel">
+      <UniqueIdentifier>{2f4e74c6-7af3-4a5b-bc94-061bfde45825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\kernel\core">
+      <UniqueIdentifier>{8dd9e3d1-052d-4ac2-97d8-424ea6936b1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\kernel\core\ucore">
+      <UniqueIdentifier>{534dfaf2-d293-4655-906b-8a8deffa4c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\kernel\core\ucore\embOSWIN32_100">
+      <UniqueIdentifier>{e44608ea-8a5d-4aef-8e50-1cd71d69fedc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\kernel\core\arch">
+      <UniqueIdentifier>{b0d8a991-0134-475a-8672-7a6049ffec96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\kernel\core\arch\win32">
+      <UniqueIdentifier>{c43821de-781d-41f4-896d-2cc0e1dd85e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\bin">
+      <UniqueIdentifier>{439e4ec2-b2ae-444d-8121-3045eabf35ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user\bin">
+      <UniqueIdentifier>{1ac186b9-abeb-4137-9898-0a02967911aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user\bin\net">
+      <UniqueIdentifier>{117969e5-1ba7-444a-b7e0-ec7c95bd649b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user\bin\net\cgi-bin">
+      <UniqueIdentifier>{9855115e-f5b2-42d3-ad3f-80763bd1b7e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\bin\tst">
+      <UniqueIdentifier>{3c4e2ac5-d05c-4e63-ac42-b15926f430dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\bin\net">
+      <UniqueIdentifier>{8f7d74d6-81dd-4252-8380-f18de201eef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="root\bin\net\mongoose">
+      <UniqueIdentifier>{29aca40e-7456-4eef-8fe5-0a2d8c42e788}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c">
+      <Filter>root\bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSW32_100\main.c">
+      <Filter>root\kernel\core\ucore\embOSWIN32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\bin_mkconf.c">
+      <Filter>root\kernel\core\arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.c">
+      <Filter>root\kernel\core\arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_mkconf.c">
+      <Filter>root\kernel\core\arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstcgi2.c">
+      <Filter>user\bin\net\cgi-bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstpost.c">
+      <Filter>user\bin\net\cgi-bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\tst\tsteth.c">
+      <Filter>root\bin\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c">
+      <Filter>root\bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\telnetd.c">
+      <Filter>root\bin\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoosed.c">
+      <Filter>root\bin\net\mongoose</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.c">
+      <Filter>root\bin\net\mongoose</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\kernel_mkconf.h">
+      <Filter>root\kernel\core\arch\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.h">
+      <Filter>root\kernel\core\arch\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.h">
+      <Filter>root\bin\net\mongoose</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\..\..\..\..\root\prj\vc-2010\kernel\Debug\kernel.lib" />
+  </ItemGroup>
+</Project>

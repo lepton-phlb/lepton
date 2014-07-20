@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -50,7 +47,7 @@ Implementation
 ---------------------------------------------*/
 int rttmr_create(tmr_t* tmr,rttmr_attr_t* rttmr_attr)
 {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    {
       cyg_handle_t counter_hdl;
       cyg_handle_t sys_clk;
@@ -86,7 +83,7 @@ int rttmr_start(tmr_t* tmr)
    if(!tmr)
       return -1;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_alarm_enable(tmr->alarm_hdl);
 #endif
    return 0;
@@ -105,7 +102,7 @@ int rttmr_stop(tmr_t* tmr)
    if(!tmr)
       return -1;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_alarm_disable(tmr->alarm_hdl);
 #endif
    return 0;
@@ -124,7 +121,7 @@ int rttmr_restart(tmr_t* tmr)
    if(!tmr)
       return -1;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_alarm_enable(tmr->alarm_hdl);
 #endif
    return 0;
@@ -143,7 +140,7 @@ int rttmr_reload(tmr_t* tmr, time_t delay)
    if (!tmr)
       return -1;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    //stop timer
    cyg_alarm_disable(tmr->alarm_hdl);
    //change delay
@@ -165,7 +162,7 @@ int rttmr_delete(tmr_t* tmr)
    if(!tmr)
       return -1;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_alarm_delete(tmr->alarm_hdl);
 #endif
    return 0;

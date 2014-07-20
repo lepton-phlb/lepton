@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -36,8 +33,17 @@ Includes
 //#include "kernel/net/uip1.0/net/uip.h"
 //#include "net/uip.h"
 
+#if USE_UIP_VER == 1000 
 #pragma message ("uip 1.0")
 #include "kernel/net/uip1.0/net/uip.h"
+#include "kernel/net/uip1.0/net/uip_arch.h"
+#endif
+#if USE_UIP_VER == 2500 
+#pragma message ("uip 2.5")
+#include "kernel/net/uip2.5/contiki-conf.h"
+#include "kernel/net/uip2.5/net/uip.h"
+#include "kernel/net/uip2.5/net/uip_arch.h"
+#endif
 
 /*===========================================
 Global Declaration

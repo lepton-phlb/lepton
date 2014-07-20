@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * $Id: mongoose.c,v 1.8 2010-02-16 12:39:43 phlb Exp $
  */
 
 #ifndef _WIN32_WCE /* Some ANSI #includes are not available on Windows CE */
@@ -240,13 +239,31 @@ typedef int SOCKET;
 
 #define MONGOOSE_VERSION        "2.6"
 #define PASSWORDS_FILE_NAME     ".htpasswd"
-#define CGI_ENVIRONMENT_SIZE    4096
+
+#ifndef __USER_MONGOOSE_CGI_ENVIRONMENT_SIZE
+   #define CGI_ENVIRONMENT_SIZE    4096
+#else
+   #define CGI_ENVIRONMENT_SIZE    __USER_MONGOOSE_CGI_ENVIRONMENT_SIZE
+#endif
+
 #define MAX_CGI_ENVIR_VARS      64
-#define MAX_REQUEST_SIZE        (8*1024) /*16384*/
+
+#ifndef __USER_MONGOOSE_MAX_REQUEST_SIZE
+   #define MAX_REQUEST_SIZE        (8*1024) /*16384*/
+#else
+   #define MAX_REQUEST_SIZE  __USER_MONGOOSE_MAX_REQUEST_SIZE
+#endif
+
 #define MAX_LISTENING_SOCKETS   10
 #define MAX_CALLBACKS           20
 #define ARRAY_SIZE(array)       (sizeof(array) / sizeof(array[0]))
 #define UNKNOWN_CONTENT_LENGTH  ((uint64_t) ~0UL)
+
+#ifndef __USER_MONGOOSE_PTHREAD_STACK_SIZE
+   #define MONGOOSE_PTHREAD_STACK_SIZE      (31744)
+#else
+   #define MONGOOSE_PTHREAD_STACK_SIZE      __USER_MONGOOSE_PTHREAD_STACK_SIZE
+#endif
 
 #if defined(DEBUG)
    #define DEBUG_TRACE(...) fprintf(stderr, "***Mongoose debug*** \r\n" __VA_ARGS__)
@@ -308,11 +325,9 @@ struct ssl_func {
 #define SSLv23_server_method()  (*(SSL_METHOD * (*)(void))FUNC(9))()
 #define SSL_library_init() (*(int (*)(void))FUNC(10))()
 #define SSL_CTX_use_PrivateKey_file(x,y,z)      (*(int (*)(SSL_CTX *, \
-                                                           const char *, \
-                                                           int))FUNC(11))((x), (y), (z))
+		const char *, int)) FUNC(11))((x), (y), (z))
 #define SSL_CTX_use_certificate_file(x,y,z)     (*(int (*)(SSL_CTX *, \
-                                                           const char *, \
-                                                           int))FUNC(12))((x), (y), (z))
+		const char *, int)) FUNC(12))((x), (y), (z))
 #define SSL_CTX_set_default_passwd_cb(x,y) \
    (*(void (*)(SSL_CTX *, mg_spcb_t))FUNC(13))((x),(y))
 #define SSL_CTX_free(x) (*(void (*)(SSL_CTX *))FUNC(14))(x)
@@ -709,8 +724,7 @@ find_callback(const struct mg_context *ctx, bool_t is_auth,
       if ((uri != NULL && cb->uri_regex != NULL &&
            ((is_auth && cb->is_auth) || (!is_auth && !cb->is_auth)) &&
            match_regex(uri, cb->uri_regex)) || (uri == NULL &&
-                                                (cb->status_code == 0 || cb->status_code ==
-                                                 status_code)))
+		     (cb->status_code == 0 || cb->status_code == status_code)))
          return (cb);
    }
 
@@ -1130,7 +1144,7 @@ start_thread(void * (*func)(void *), void *param)
    int retval;
 
 
-   attr.stacksize = (31*1024); //m16c 512
+   attr.stacksize = MONGOOSE_PTHREAD_STACK_SIZE; //(31*1024); //m16c 512
    attr.stackaddr = NULL;
    #if !defined(__GNUC__)
    attr.priority  = 100;
@@ -2305,7 +2319,8 @@ send_directory(struct mg_connection *conn, const char *dir)
 
    sort_direction = conn->request_info.query_string != NULL &&
                     conn->request_info.query_string[1] == 'd' ? 'a' : 'd';
-
+  
+   //
    while ((dp = readdir(dirp)) != NULL) {
 
       /* Do not show current dir and passwords file */

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -37,8 +34,17 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#define RTFS_NODETBL_SIZE   128 //50//40//30//20
-#define RTFS_BLKTBL_SIZE    256 //120//100//80//60
+#ifndef __KERNEL_RTFS_NODETBL_SIZE
+   #define RTFS_NODETBL_SIZE   50//128 //50//40//30//20
+#else
+   #define RTFS_NODETBL_SIZE   __KERNEL_RTFS_NODETBL_SIZE
+#endif
+
+#ifndef __KERNEL_RTFS_BLKTBL_SIZE
+   #define RTFS_BLKTBL_SIZE    120//256 //120//100//80//60
+#else
+   #define RTFS_BLKTBL_SIZE  __KERNEL_RTFS_BLKTBL_SIZE
+#endif
 
 #define RTFS_BLOCK_ALLOC_SIZE   (RTFS_BLKTBL_SIZE/8)+1 //1 bits: free(0|1);
 
@@ -75,7 +81,12 @@ typedef union {
 }rtfs_block_data_t;
 
 //
-#define MAX_RTFS_BLOCK   32 //10
+#ifndef __KERNEL_RTFS_NODE_BLOCK_NB_MAX
+   #define MAX_RTFS_BLOCK   32
+#else
+   #define MAX_RTFS_BLOCK   __KERNEL_RTFS_NODE_BLOCK_NB_MAX
+#endif
+
 typedef struct {
    rtfs_attr_t attr;
    rtfs_size_t size;
@@ -91,7 +102,7 @@ extern rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
 
 extern volatile int _rtfs_offset;
 
-#define __rtfsinode_lst(inode) rtfsinode_lst[inode-_rtfs_offset]
+#define __rtfsinode_lst(__inode__) rtfsinode_lst[(__inode__-_rtfs_offset)]
 
 
 //

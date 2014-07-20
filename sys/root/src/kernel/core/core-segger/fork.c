@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -185,16 +182,13 @@ pid_t _sys_vfork(kernel_pthread_t* pthread_ptr){
    //to do: reinit sigqueue struct
    //thread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
-          sizeof(kernel_sigqueue_t));
-   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(
-      &process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
+   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
+   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
 #endif
 
    //profiler
    __kernel_profiler_stop(backup_parent_pthread_ptr);
-   __profiler_add_result(backup_parent_pthread_ptr,_SYSCALL_VFORK,
-                         __kernel_profiler_get_counter(backup_parent_pthread_ptr));
+   __profiler_add_result(backup_parent_pthread_ptr,_SYSCALL_VFORK,__kernel_profiler_get_counter(backup_parent_pthread_ptr));
    //
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();

@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0A0EE0ED-DEC0-4F69-AEA0-5082F9EF6158}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>lib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\lib\libc\ctype\ctype.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\libc.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\crc.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\ftoa.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\ltostr.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\misc\prsopt.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\stdint.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\stdio\stdio.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\string\string.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\termios\termios.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\unistd\getopt.h" />
+    <ClInclude Include="..\..\..\..\src\lib\librt\mqueue.h" />
+    <ClInclude Include="..\..\..\..\src\lib\librt\semaphore.h" />
+    <ClInclude Include="..\..\..\..\src\lib\pthread\pthread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\lib\libc\ctype\ctype.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\libc.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\crc.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\dtostr.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\ftoa.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\itoa.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\ltostr.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\prsopt.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\strto_l.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\misc\strto_ll.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\stdio\printf.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\stdio\scanf.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\stdio\stdio.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\string\string.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\termios\tcgetattr.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\termios\tcsetattr.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\termios\termios.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\unistd\getopt.c" />
+    <ClCompile Include="..\..\..\..\src\lib\libc\unistd\unistd.c" />
+    <ClCompile Include="..\..\..\..\src\lib\librt\mq.c" />
+    <ClCompile Include="..\..\..\..\src\lib\librt\sem.c" />
+    <ClCompile Include="..\..\..\..\src\lib\pthread\pthread.c" />
+    <ClCompile Include="..\..\..\..\src\lib\pthread\pthread_cond.c" />
+    <ClCompile Include="..\..\..\..\src\lib\pthread\pthread_mutex.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

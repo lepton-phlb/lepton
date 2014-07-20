@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{451D1981-7437-4EEB-9F19-D3EF1A679411}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>fs</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/kernel/fs/yaffs/core;c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fat16.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore_msdos.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore_vfat.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatinfo.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\kofs\kofs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\rootfs\rootfs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\rootfs\rootfscore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufscore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_3.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_4.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_5.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsinfo.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsx.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfscore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfsdev.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfskernel.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfstypes.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\devextras.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_malloc.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramdisk.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffsinterface.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_getblockinfo.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nandemul2k.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_trace.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yportenv.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffs.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffscore.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsinfo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_msdos.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_vfat.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fatcore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fatcore_msdos.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fatcore_vfat.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\kofs\kofs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\rootfs\rootfs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\rootfs\rootfscore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufscore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_3.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_4.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_5.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsx.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfscore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfsdev.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfskernel.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramdisk.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramem2k.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffs.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffscore.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

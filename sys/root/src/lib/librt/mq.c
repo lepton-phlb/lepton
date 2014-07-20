@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -40,6 +37,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/stat.h"
 #include "kernel/core/devio.h"
 #include "kernel/core/stropts.h"
+#include "kernel/core/timer.h"
 
 #include "kernel/core/sys/mqueue.h"
 #include "kernel/core/posix_mqueue.h"
@@ -86,7 +84,7 @@ mqd_t _mq_open(const char* name,int oflag,...){
 
       va_start(ap, oflag);
 
-#if !defined(__GNUC__)
+#if !defined(GNU_GCC)
       mode     = va_arg(ap, mode_t);
 #else
       mode     = va_arg(ap, int);

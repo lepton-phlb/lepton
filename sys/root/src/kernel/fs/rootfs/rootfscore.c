@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -30,13 +27,20 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include "kernel/core/errno.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/dirent.h"
 #include "kernel/core/system.h"
-#include "kernel/core/statvfs.h"
+#include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
+
 #include "kernel/fs/vfs/vfstypes.h"
+#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/core/statvfs.h"
+
 #include "kernel/fs/rootfs/rootfscore.h"
 
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
    #include <string.h>
 #endif
 
@@ -47,21 +51,19 @@ Global Declaration
 //
 //patch: optimization for code memory occupation.
 #if defined (WIN32) || defined(CPU_GNU32)
-rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE]={S_IFNULL};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
-rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
-#elif defined(__GNUC__)
-rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
+   rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE]={S_IFNULL};
+#else
+   __KERNEL_SRAM_LOCATION
+   rtfs_block_node_t rtfsinode_lst[RTFS_NODETBL_SIZE];
 #endif
 
 //
 //patch: optimization for code memory occupation.
 #if defined (WIN32) || defined(CPU_GNU32)
-rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE]={0};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
-rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
-#elif defined(__GNUC__)
-rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
+   rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE]={0};
+#else
+   __KERNEL_SRAM_LOCATION
+   rtfs_block_data_t rtfsblk_lst[RTFS_BLKTBL_SIZE];
 #endif
 
 //
@@ -71,9 +73,8 @@ const int rtfs_superblk_size      = RTFS_BLOCK_ALLOC_SIZE;
 //patch: optimization for code memory occupation.
 #if defined (WIN32) || defined(CPU_GNU32)
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE]={0};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
-char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
-#elif defined(__GNUC__)
+#else
+__KERNEL_SRAM_LOCATION
 char rtfs_superblk[RTFS_BLOCK_ALLOC_SIZE];
 #endif
 
@@ -165,9 +166,11 @@ void _rtfs_freeblk(rtfs_blocknb_t block){
 inodenb_t _rtfs_allocnode(void)
 {
    int inode;
+   rtfs_attr_t attr;
    for(inode=_rtfs_offset; inode<(RTFS_NODETBL_SIZE+_rtfs_offset); inode++)
    {
-      if(__rtfsinode_lst(inode).attr==S_IFNULL) {
+      attr=rtfsinode_lst[inode].attr;
+      if(attr==0x0000) {
          return inode; //nodeoffset
       }
    }

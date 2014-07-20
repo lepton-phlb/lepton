@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -47,6 +44,7 @@ int win32_eth_start(void);
 int win32_eth_stop(void);
 int win32_eth_enable_interrupt(void);
 int win32_eth_disable_interrupt(void);
+int win32_eth_pkt_available(void);
 int win32_eth_getpkt(char* buf, int len);
 int win32_eth_putpkt(const char* buf, int len);
 

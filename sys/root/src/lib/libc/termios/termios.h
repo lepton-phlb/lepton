@@ -347,3 +347,4 @@ int cfsetspeed    (struct termios *termios_p, speed_t speed);
 void cfmakeraw    (struct termios *termios_p);
 
 #endif
+

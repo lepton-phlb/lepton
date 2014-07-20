@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{149aa83e-f539-4c15-8b64-fabcab8a9a76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net">
+      <UniqueIdentifier>{8458a826-61ba-44e3-afe6-7d79fde6011d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip-2.5">
+      <UniqueIdentifier>{2416727b-d4d6-485b-92aa-ed51d4719ff5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip-1.0">
+      <UniqueIdentifier>{3e787983-bf45-48e1-bd64-e1164e751780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip-2.5\lib">
+      <UniqueIdentifier>{17bfc9cd-21d9-4011-a6a7-c35f0afa6d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip-2.5\sys">
+      <UniqueIdentifier>{06892865-06aa-42fb-aaed-c9604789432d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip-2.5\net">
+      <UniqueIdentifier>{9595f8e3-6786-42c2-beab-539c277997ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\random.h">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\list.h">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\memb.h">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\lib\mmem.h">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uiplib.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\dhcpc.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\hc.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-info.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\netstack.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\packetbuf.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\packetqueue.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\psock.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\queuebuf.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\rawpacket.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\resolv.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\rime.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\sicslowpan.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\simple-udp.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\slipdev.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\tcpdump.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\tcpip.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uaodv.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uaodv-def.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip_arch.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip_arp.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-debug.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-ds6.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\cc.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\clock.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\ctimer.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\etimer.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\lc.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\lc-addrlabels.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\lc-switch.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\process.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\pt.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\rtimer.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\stimer.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\sys\timer.h">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-nd6.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uipopt.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\net\uip-split.h">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\rtimer-arch.h">
+      <Filter>kernel\net\uip-2.5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki.h">
+      <Filter>kernel\net\uip-2.5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-conf.h">
+      <Filter>kernel\net\uip-2.5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-lib.h">
+      <Filter>kernel\net\uip-2.5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-net.h">
+      <Filter>kernel\net\uip-2.5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip2.5\contiki-version.h">
+      <Filter>kernel\net\uip-2.5</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\list.c">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\memb.c">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\mmem.c">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\lib\random.c">
+      <Filter>kernel\net\uip-2.5\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\dhcpc.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\hc.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\neighbor-info.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\packetbuf.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\packetqueue.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\psock.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\queuebuf.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\resolv.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\sicslowpan.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\simple-udp.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\slipdev.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\tcpdump.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\tcpip.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uaodv.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip6.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip_arp.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-debug.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-ds6.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uiplib.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\timer_ip.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\clock.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\ctimer.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\etimer.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\rtimer.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\stimer.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\sys\timer.c">
+      <Filter>kernel\net\uip-2.5\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\netstack.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-nd6.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-split.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.c">
+      <Filter>kernel\net\uip-2.5\net</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

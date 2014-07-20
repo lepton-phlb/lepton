@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -43,9 +40,9 @@ either the MPL or the [eCos GPL] License."
 #include "at91sam9261_lcd_lut.h"
 #include "at91sam9261_lcd.h"
 
-#if defined(USE_SEGGER)
-   #include <ioat91sam9261.h>
-   #include "kernel/core/ucore/embOSARM7_332/arch/cpu_at91sam9261/at91sam9261_init.h"
+#if defined(__KERNEL_UCORE_EMBOS)
+   #include <atmel/ioat91sam9261.h>
+   //#include "kernel/core/ucore/embOSARM7-9_388/arch/cpu_at91sam9261/at91sam9261_init.h"
 #endif
 
 #include "kernel/dev/arch/arm9/at91sam9261/dev_at91sam9261_cpu/dev_at91sam9261_cpu.h"

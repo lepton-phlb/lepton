@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -165,7 +162,7 @@ static s2s_t const s2s[] = {
 };
 
 //inter character timer
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
 //VTIME timer in units of 0.1 seconds (posix specification).
 OS_TIMER dev_win32_com1_timer;
 static volatile char inter_char_timer=0;
@@ -321,7 +318,7 @@ int dev_win32_com1_load(void){
    ttys_termios.c_cc[VTIME]=0; // no timeout, blocking call
    inter_char_timer = 0;
 
-#if defined (USE_SEGGER)
+#if defined (__KERNEL_UCORE_EMBOS)
    //VTIME timer in units of 0.1 seconds (posix specification).
    OS_CreateTimer(&dev_win32_com1_timer,dev_win32_com1_timer_callback,100);  // 100ms
 #endif
@@ -423,6 +420,10 @@ int dev_win32_com1_isset_read(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_win32_com1_isset_write(desc_t desc){
+   if(_output_w==0){
+      //ready to sent data
+      return 0;
+   } 
    if(_output_w==_output_r) {
       _output_r=-1;
       return 0;

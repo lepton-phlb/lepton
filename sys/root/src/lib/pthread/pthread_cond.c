@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -97,6 +94,7 @@ int pthread_condlist_remove(pthread_cond_t* cond, pthread_condlist_t* p){
 | See:
 ----------------------------------------------*/
 int pthread_cond_init(pthread_cond_t* cond,  const pthread_condattr_t *attr){
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    pthread_cond_init_t pthread_cond_init_dt;
    const pthread_cond_t default_pthread_cond = PTHREAD_COND_INITIALIZER;
 
@@ -121,6 +119,9 @@ int pthread_cond_init(pthread_cond_t* cond,  const pthread_condattr_t *attr){
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //
    return pthread_cond_init_dt.ret;
+#else
+   return -1;
+#endif
 }
 
 /*--------------------------------------------
@@ -132,6 +133,7 @@ int pthread_cond_init(pthread_cond_t* cond,  const pthread_condattr_t *attr){
 | See:
 ----------------------------------------------*/
 int pthread_cond_destroy(pthread_cond_t* cond){
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    pthread_cond_destroy_t pthread_cond_destroy_dt;
 
    if(!cond)
@@ -145,6 +147,9 @@ int pthread_cond_destroy(pthread_cond_t* cond){
    __mk_syscall(_SYSCALL_PTHREAD_COND_DESTROY,pthread_cond_destroy_dt);
 
    return pthread_cond_destroy_dt.ret;
+#else
+   return -1;
+#endif
 }
 
 /*--------------------------------------------
@@ -156,6 +161,7 @@ int pthread_cond_destroy(pthread_cond_t* cond){
 | See:
 ----------------------------------------------*/
 int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    pthread_condlist_t pthread_condlist;
 
    kernel_sigevent_t kernel_sigevent;
@@ -168,8 +174,7 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
       return -1;
 
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) add this thread in cond
    pthread_condlist.pthread_ptr = kernel_pthread_self();
    pthread_condlist_insert(cond,&pthread_condlist);
@@ -178,8 +183,7 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
       cond->mutex=mutex;
    pthread_mutex_unlock(cond->mutex);
    //4) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //5) init sigevent filter
    kernel_sigevent.si_code=SI_SYSTEM;
    kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
@@ -187,15 +191,16 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
    //6) wait on thread sigqueue
    pthread_condlist.pthread_ptr->kernel_sigqueue.wait(&kernel_sigevent);
    //7) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //8) lock cond mutex
    pthread_mutex_lock(cond->mutex);
    //9) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
 
    return 0;
+#else
+   return -1;
+#endif
 }
 
 /*--------------------------------------------
@@ -207,7 +212,7 @@ int pthread_cond_wait(pthread_cond_t* cond,  pthread_mutex_t *mutex){
 | See:
 ----------------------------------------------*/
 int pthread_cond_signal(pthread_cond_t* cond){
-
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    pthread_condlist_t*  condlist;
 
    if(!cond)
@@ -224,20 +229,20 @@ int pthread_cond_signal(pthread_cond_t* cond){
    cond->kernel_sigevent.si_code = SI_SYSTEM;
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) loop walk cond thread until first pthread in the fifo list
    while(condlist->next) condlist = condlist->next;
    //3) signal queue cond thread
-   cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,
-                                                 &cond->kernel_sigevent);
+   cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,&cond->kernel_sigevent);
    //4) remove cond thread
    pthread_condlist_remove(cond,cond->list);
    //5) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return 0;
+#else
+   return -1;
+#endif
 }
 
 /*--------------------------------------------
@@ -249,6 +254,7 @@ int pthread_cond_signal(pthread_cond_t* cond){
 | See:
 ----------------------------------------------*/
 int pthread_cond_broadcast(pthread_cond_t* cond){
+#ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    if(!cond)
       return -1;
    if(!cond->mutex)
@@ -260,21 +266,21 @@ int pthread_cond_broadcast(pthread_cond_t* cond){
    cond->kernel_sigevent.si_code = SI_SYSTEM;
    cond->kernel_sigevent._sigevent.sigev_signo=SIGNO_SYSTEM_PTHREAD_COND;
    //1) kernel pthread mutex lock
-   kernel_pthread_mutex_lock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_lock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //2) loop walk cond thread{
    while(cond->list) {
       //3)     signal queue cond thread
-      cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,
-                                                    &cond->kernel_sigevent);
+      cond->list->pthread_ptr->kernel_sigqueue.send((kernel_pthread_t*)cond->list->pthread_ptr,&cond->kernel_sigevent);
       //4)     remove cond thread
       pthread_condlist_remove(cond,cond->list);
    }
    //5) kernel pthread mutex unlock
-   kernel_pthread_mutex_unlock(
-      &cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+   kernel_pthread_mutex_unlock(&cond->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    //
    return 0;
+#else
+   return -1;
+#endif
 }
 
 

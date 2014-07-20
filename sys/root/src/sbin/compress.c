@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -98,7 +95,9 @@ either the MPL or the [eCos GPL] License."
 #define REGISTER register
 #define DOTZ ".Z"
 
-#define INT_MAX 32767
+#ifndef INT_MAX	
+   #define INT_MAX 32767
+#endif
 
 /* The default for Minix is -b13, but we can do -b16 if the machine can. */
 #define DEFAULTBITS 13
@@ -529,8 +528,8 @@ nextarg: continue;
             if (nomagic == 0)
             {
                unsigned magic1, magic2;
-               if (((magic1 = getc(stdin)) != (magic_header[0] & 0xFF))
-                   || ((magic2 = getc(stdin)) != (magic_header[1] & 0xFF)))
+                                    if (((magic1 = getc(stdin)) != (unsigned)(magic_header[0] & 0xFF))
+                                     || ((magic2 = getc(stdin)) != (unsigned)(magic_header[1] & 0xFF))) 
                {
                   fprintf(stderr,
                           "%s: not in compressed format %x %x\n",
@@ -1192,7 +1191,7 @@ getcode()
 
    if ( clear_flg > 0 || offset >= size || free_ent > maxcode )
    {
-      int i;
+        int i=0;
       /*
        * If the next entry will be too big for the current code
        * size, then we must increase the size.  This implies reading
@@ -1396,8 +1395,7 @@ REGISTER int c, stack_top;
    return stack_top;
 }
       #else
-dump_tab() {
-}
+ dump_tab() {}
       #endif /* DEBUG2 */
    #endif /* DEBUG */
 #endif  /* METAWARE */

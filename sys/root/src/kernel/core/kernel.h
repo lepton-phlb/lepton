@@ -24,6 +24,10 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
+
+/*===========================================
+Compiler Directive
+=============================================*/
 #ifndef _KERNEL_H
 #define _KERNEL_H
 
@@ -93,7 +97,7 @@ enum  _syscall_enum_t {
    _SYSCALL_SIGPROCMASK,
    _SYSCALL_SIGPENDING,
    _SYSCALL_SIGACTION,
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_ALARM,
 #endif
    _SYSCALL_PAUSE,
@@ -127,7 +131,7 @@ enum  _syscall_enum_t {
    _SYSCALL_STATVFS,
    _SYSCALL_REMOVE,
    _SYSCALL_GETTIMEOFDAY,
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_ATEXIT,
 #endif
    _SYSCALL_MALLOC,
@@ -150,7 +154,7 @@ enum  _syscall_enum_t {
    _SYSCALL_PTHREAD_CREATE,
    _SYSCALL_PTHREAD_CANCEL,
    _SYSCALL_PTHREAD_EXIT,
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_PTHREAD_KILL,
 #endif
    _SYSCALL_PTHREAD_MUTEX_INIT,
@@ -264,8 +268,7 @@ typedef struct {
    #define __profiler_add_result(__pthread_ptr__,__syscall_nb__,__counter__) \
    kernel_profiler_result_lst[__syscall_nb__].pid = __pthread_ptr__->pid; \
    kernel_profiler_result_lst[__syscall_nb__].counter = __counter__; \
-   kernel_profiler_result_lst[__syscall_nb__].pname = \
-      kernel_syscall_lst[__syscall_nb__].p_syscall_name;
+      kernel_profiler_result_lst[__syscall_nb__].pname = kernel_syscall_lst[__syscall_nb__].p_syscall_name;
 
    #define __io_profiler_add_result(__desc__,__mode__,__size__,__counter__){ \
    int __dev_nb__ = ofile_lst[__desc__].ext.dev; \
@@ -286,8 +289,7 @@ typedef struct {
       io_profiler_result_lst[__dev_nb__].nbacces[__mode__]++; \
       io_profiler_result_lst[__dev_nb__].size[__mode__]=__size__; \
       io_profiler_result_lst[__dev_nb__].counter[__mode__]= __counter__; \
-      io_profiler_result_lst[__dev_nb__].avg[__mode__]= \
-         (float)((io_profiler_result_lst[__dev_nb__].avg[__mode__]+__rate__)/(float)2.0); \
+         io_profiler_result_lst[__dev_nb__].avg[__mode__]=(float)((io_profiler_result_lst[__dev_nb__].avg[__mode__]+__rate__)/(float)2.0);\
       io_profiler_result_lst[__dev_nb__].pname=ofile_lst[__desc__].pfsop->fdev.dev_name; \
    } \
 }
@@ -333,8 +335,7 @@ extern kernel_pthread_t* _syscall_owner_pthread_ptr;
  * \param pid du processus
  * \hideinitializer
  */
-#define __set_syscall_owner_pthread_ptr(__pthread_ptr__) _syscall_owner_pthread_ptr = \
-   __pthread_ptr__
+#define __set_syscall_owner_pthread_ptr(__pthread_ptr__) _syscall_owner_pthread_ptr = __pthread_ptr__
 
 /**
  * obtention du pointeur sur pthread qui a gnr l'appel systme
@@ -348,8 +349,7 @@ extern int __g_kernel_static_errno;
 
 #define __kernel_set_errno(__errno__) \
    if(!__kernel_is_in_static_mode()) { \
-      if(_syscall_owner_pthread_ptr && \
-         !_syscall_owner_pthread_ptr->_errno) _syscall_owner_pthread_ptr->_errno=__errno__; \
+      if(_syscall_owner_pthread_ptr && !_syscall_owner_pthread_ptr->_errno) _syscall_owner_pthread_ptr->_errno=__errno__;\
    }else{ \
       __g_kernel_static_errno=__g_kernel_static_errno; \
    }
@@ -369,7 +369,7 @@ extern int __g_kernel_static_errno;
 //
 //WARNING __syscall_lock(); unlock by kernel (see kernel.c)
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 //
 /**
  * gnre un appel systme
@@ -395,8 +395,7 @@ extern int __g_kernel_static_errno;
    __atomic_out(); \
    __wait_ret_int(); \
    __kernel_profiler_stop(__pthread_ptr__); \
-   __profiler_add_result(__pthread_ptr__,__syscall_nb__, \
-                         __kernel_profiler_get_counter(__pthread_ptr__)); \
+   __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
 }
 
 //no blocking call
@@ -416,8 +415,7 @@ extern int __g_kernel_static_errno;
    __atomic_out(); \
    __wait_ret_int(); /*to remove????*/ \
    __kernel_profiler_stop(__pthread_ptr__); \
-   __profiler_add_result(__pthread_ptr__,__syscall_nb__, \
-                         __kernel_profiler_get_counter(__pthread_ptr__)); \
+__profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
 }
 
 /**
@@ -443,7 +441,7 @@ extern int __g_kernel_static_errno;
    __wait_ret_int(); \
 }
 
-#elif defined(__GNUC__) && (defined(CPU_ARM7) || defined(CPU_ARM9) || defined(CPU_GNU32))
+#elif defined(GNU_GCC) && (defined(CPU_ARM7) || defined(CPU_ARM9) || defined(CPU_GNU32))
 //
    #define __mk_syscall(__syscall_nb__,__pdata__){ \
    kernel_pthread_t* __pthread_ptr__; \
@@ -484,7 +482,7 @@ extern int __g_kernel_static_errno;
    __set_irq(); \
 }
 
-#elif defined(__GNUC__) && defined(CPU_CORTEXM)
+#elif defined(GNU_GCC) && defined(CPU_CORTEXM)
 //
    #define __mk_syscall(__syscall_nb__,__pdata__){ \
    kernel_pthread_t* __pthread_ptr__; \
@@ -531,7 +529,11 @@ extern int __g_kernel_static_errno;
 }
 
 #define __K_IS_SYSCALL(__INTR) ((__INTR) &KERNEL_INTERRUPT)
+#ifdef __KERNEL_IO_EVENT
 #define __K_IS_IOINTR(__INTR) ((__INTR) &SYSTEM_IO_INTERRUPT)
+#else
+   #define __K_IS_IOINTR(__INTR) 1
+#endif
 
 #define _SYSCALL_NET_SND         100
 
@@ -552,8 +554,7 @@ extern desc_t __g_kernel_desc_if_i2c_master;
 #define __set_if_i2c_master(__p_if_i2c_master__) __g_kernel_if_i2c_master = __p_if_i2c_master__
 #define __get_if_i2c_master() __g_kernel_if_i2c_master
 
-#define __set_if_i2c_master_desc(__desc_if_i2c_master__) __g_kernel_desc_if_i2c_master = \
-   __desc_if_i2c_master__
+#define __set_if_i2c_master_desc(__desc_if_i2c_master__) __g_kernel_desc_if_i2c_master = __desc_if_i2c_master__
 #define __get_if_i2c_master_desc() __g_kernel_desc_if_i2c_master
 
 extern kernel_pthread_mutex_t _i2c_core_mutex;
@@ -568,8 +569,7 @@ extern desc_t __g_kernel_desc_if_spi_master;
 #define __set_if_spi_master(__p_if_spi_master__) __g_kernel_if_spi_master = __p_if_spi_master__
 #define __get_if_spi_master() __g_kernel_if_spi_master
 
-#define __set_if_spi_master_desc(__desc_if_spi_master__) __g_kernel_desc_if_spi_master = \
-   __desc_if_spi_master__
+#define __set_if_spi_master_desc(__desc_if_spi_master__) __g_kernel_desc_if_spi_master = __desc_if_spi_master__
 #define __get_if_spi_master_desc() __g_kernel_desc_if_spi_master
 
 extern kernel_pthread_mutex_t _spi_core_mutex;
@@ -577,13 +577,13 @@ extern kernel_pthread_mutex_t _spi_core_mutex;
 #define _spi_lock()   kernel_pthread_mutex_lock  (&_spi_core_mutex);
 #define _spi_unlock() kernel_pthread_mutex_unlock(&_spi_core_mutex);
 
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 //gestion des syscall sous synthetic
 void _init_syscall(void);
 void _kernel_routine(void* arg);
 
 //wrapper for external call
-   #ifndef USE_ECOS
+   #ifndef __KERNEL_UCORE_ECOS
 void __wrpr_kernel_dev_gettime(desc_t __desc, char * __buf, int __size);
    #endif
 
@@ -617,4 +617,3 @@ extern _kernel_syscall_trace_t _g_kernel_syscall_trace;
 /** @} */
 
 #endif
-

@@ -1,0 +1,286 @@
+;*********************************************************************
+;*                SEGGER MICROCONTROLLER SYSTEME GmbH                *
+;*        Solutions for real time microcontroller applications       *
+;*********************************************************************
+;*                                                                   *
+;*      (C) 2002-2004    SEGGER Microcontroller Systeme GmbH         *
+;*                       www.segger.com                              *
+;*                                                                   *
+;*********************************************************************
+;
+;---------------------------------------------------------------------
+;File   : at91M55_cstartup_V4.c
+;Purpose: startup file for AT91M55 and embOS
+;-------- END-OF-HEADER ----------------------------------------------
+;
+
+#pragma message("BOOT LOADER!!!!")
+
+;*********************************************************************
+;*
+;*      Configuration
+;*
+;*********************************************************************
+#if   defined (TARGET_JTAG)      // Used for debugging.
+  #pragma message("TARGET_JTAG")
+  #define COPY_CODE_TO_RAM   0   // Code is already in RAM
+  #define REMAP              0   // Already done via JTAG
+#elif defined (TARGET_ROM)       // Code runs from ROM (a bit slower typically)
+ #pragma message("TARGET_ROM")
+  #define COPY_CODE_TO_RAM   0
+  #define REMAP              1
+#elif defined (TARGET_RAM)       // Code runs from RAM (faster)
+  #pragma message("TARGET_RAM")
+  #define COPY_CODE_TO_RAM   1
+  #define REMAP              1
+#else
+  #error TARGET selection define missing
+#endif
+
+;*********************************************************************
+;*
+;*      Configuration check
+;*
+;*********************************************************************
+
+#ifndef COPY_CODE_TO_RAM
+  #error COPY_CODE_TO_RAM not defined
+#endif
+
+#ifndef REMAP
+  #error REMAP not defined
+#endif
+
+;*********************************************************************
+;*
+;*      Macros and definitions for the whole file
+;*
+;*********************************************************************
+
+; Mode, correspords to bits 0-5 in CPSR
+MODE_BITS   DEFINE  0x1F        ; Bit mask for mode bits in CPSR
+USR_MODE    DEFINE  0x10        ; User mode
+FIQ_MODE    DEFINE  0x11        ; Fast Interrupt Request mode
+IRQ_MODE    DEFINE  0x12        ; Interrupt Request mode
+SVC_MODE    DEFINE  0x13        ; Supervisor mode
+ABT_MODE    DEFINE  0x17        ; Abort mode
+UND_MODE    DEFINE  0x1B        ; Undefined Instruction mode
+SYS_MODE    DEFINE  0x1F        ; System mode
+
+;*********************************************************************
+; ?RESET
+; Reset Vector.
+; Normally, segment INTVEC is linked at address 0.
+; For debugging purposes, INTVEC may be placed at other
+; addresses.
+; A debugger that honors the entry point will start the
+; program in a normal way even if INTVEC is not at address 0.
+;*********************************************************************
+
+        MODULE  ?RESET
+        COMMON  INTVEC:CODE:NOROOT(2)
+        PUBLIC  __program_start
+        PUBLIC  __vector_end
+        EXTERN  ?cstartup
+        EXTERN  OS_IRQ_SERVICE
+        CODE32  ; Always ARM mode after reset
+
+        org 0x00
+__program_start
+                     b   ?cstartup
+undef_handler:       ldr pc,=undef_handler
+swi_handler:         ldr pc,=swi_handler
+prefetch_handler:    ldr pc,=prefetch_handler
+data_handler:        ldr pc,=data_handler
+        org 0x18
+                     ldr pc,=OS_IRQ_SERVICE      ; embOS IRQ handler in RTOSVECT.asm
+fiq_handler:         ldr pc,=fiq_handler
+
+        ; Constant table entries (for ldr pc) will be placed at 0x20
+        org 0x20
+        LTORG
+
+__vector_end:
+        ENDMOD
+
+
+;*********************************************************************
+; ?CSTARTUP
+;*********************************************************************
+        MODULE  ?CSTARTUP
+
+        RSEG    IRQ_STACK:DATA(2)
+        RSEG    SVC_STACK:DATA:NOROOT(2)
+        RSEG    CSTACK:DATA(2)
+        RSEG    ICODE:CODE:NOROOT(2)
+        PUBLIC  ?cstartup
+        EXTERN  ?main
+        EXTERN  OS_InitPLL  ; defined as "C" source in RTOSINIT
+
+; Execution starts here.
+; After a reset, the mode is ARM, Supervisor, interrupts disabled.
+
+        CODE32
+?cstartup
+
+        EXTERN  ROMSTART, ROMEND, ROM_BASE_ADDR, RAM_BASE_ADDR, ROM_CODE_OFFSET
+        EXTERN  __program_start
+        EXTERN  __vector_end
+
+
+#if REMAP
+; Addresses required for remap and reload have to be defined in link file
+
+; The memory controller is initialized ROM_CODE_OFFSETimmediately before the remap
+; to make everything position independend, calculate address of EBI init table
+        mov     r10, pc                 ;
+        add     r10, r10, #(EBI_init_table-boot_1)      ; points to init-Table
+boot_1:
+
+        ; Load the address where to jump (in ROM)
+        ldr     r11, =ROM_BASE_ADDR     ; final target base address (depends on physical ROM address after remap !)
+        mov     r12, pc                 ; To be position independent, calculate address offset
+        add     r12, r12, #(after_remap-boot_2)
+boot_2:
+        mov     r12, r12, LSL #12       ; mask the top 12 bits
+        mov     r12, r12, LSR #12       ; mask the top 12 bits
+        add     r12, r12, r11           ; calculate final absolute address in ROM!!!
+
+        ; Copy chip select register image to memory controller and command remap
+        ldmia   r10!, {r0-r9,r11}       ; load the complete image and the EBI base
+        stmia   r11!, {r0-r9}           ; store the complete image with the remap command
+
+        ; jump to ROM at its new address
+        ; this instruction was loaded into the pipeline before the remap was done
+        mov     pc, r12                 ; jump and break the pipeline
+
+        ; Put constant table here.
+        LTORG
+
+        ; EBI initialization table
+        ; 32,768 MHz master clock assumed for timing
+
+EBI_init_table:
+      ; __writeMemory32(0x06003525,0xffe00000,"Memory"); // Set CS0 (flash 1 0x00000000 to 0x007FFFFF  16Mo 2 wait states, 2 TDF cycles)
+      ; __writeMemory32(0x01003525,0xffe00004,"Memory"); // Set CS1 (flash 2 0x01000000 to 0x017FFFFF  16Mo 2 wait states, 2 TDF cycles)
+      ; __writeMemory32(0x02003525,0xffe00008,"Memory"); // Set CS2 (flash 3 0x02000000 to 0x027FFFFF  16Mo 2 wait states, 2 TDF cycles)
+      ; __writeMemory32(0x030034A5,0xffe0000C,"Memory"); // Set CS3 (RAM   1 0x03000000 to 0x030FFFFF   1Mo 1 wait state,  0 TDF cycle)
+      ; __writeMemory32(0x03103431,0xffe00010,"Memory"); // Set CS4 (RAM   2 0x03100000 to 0x031FFFFF   1Mo 1 wait state,  0 TDF cycle)
+      ; __writeMemory32(0x04002429,0xffe00014,"Memory"); // Set CS5 (LCD-Controller 0x040000000 to 0x040FFFFF   1Mo)
+      ; __writeMemory32(0x05002429,0xffe00018,"Memory"); // Set CS6 (BQ2018 0x050000000 to 0x050FFFFF   1Mo)
+        dc32    0x06003525              ; CS0: (flash 1 0x00000000 to 0x007FFFFF  16Mo 2 wait states, 2 TDF cycles)
+        dc32    0x01003525              ; CS1: (flash 2 0x01000000 to 0x017FFFFF  16Mo 2 wait states, 2 TDF cycles)
+        dc32    0x02003525              ; CS2: (flash 3 0x02000000 to 0x027FFFFF  16Mo 2 wait states, 2 TDF cycles)
+        ;dc32    0x03003421              ; CS3: (RAM   1 0x03000000 to 0x030FFFFF   1Mo 0 wait state,  0 TDF cycle)
+        ;dc32    0x03003425              ; CS3: (RAM   1 0x03000000 to 0x030FFFFF   1Mo 1 wait state,  0 TDF cycle)
+        dc32    0x03003429              ; CS3: (RAM   1 0x03000000 to 0x030FFFFF   1Mo 2 wait state,  0 TDF cycle)
+        ;dc32    0x0300342D              ; CS3: (RAM   1 0x03000000 to 0x030FFFFF   1Mo 3 wait state,  0 TDF cycle)
+        ;dc32    0x0310342D              ; CS4: (RAM   2 0x03100000 to 0x031FFFFF   1Mo 2 wait state,  0 TDF cycle)
+        dc32    0x70000000              ; CS4: unused
+        dc32    0x04002429              ; CS5: (LCD-Controller 0x040000000 to 0x040FFFFF   1Mo)
+        dc32    0x05002429              ; CS6: (BQ2018 0x050000000 to 0x050FFFFF   1Mo)
+        ;dc32    0x70000000              ; CS7: unused
+        dc32    0x03103429              ; CS7: (RAM   2 0x03100000 to 0x031FFFFF   1Mo 2 wait state,  0 TDF cycle)
+        dc32    0x00000001              ; REMAP command
+        ;dc32    0x00000010              ; early read (must be enabled else read on sram could be corrupted);
+        dc32    0x00000017              ; early read (must be enabled else read on sram could be corrupted);
+        dc32    0xFFE00000              ; EBI Base address
+
+#endif  // REMAP
+
+after_remap:
+
+; Execute normal C startup code.
+
+; Add initialization nedded before setup of stackpointers here
+
+; Initialize the stack pointers.
+; The pattern below can be used for any of the exception stacks:
+; FIQ, IRQ, SVC, ABT, UND, SYS.
+; The USR mode uses the same stack as SYS.
+; The stack segments must be defined in the linker command file,
+; and be declared above.
+        mrs     r0,cpsr                             ; Original PSR value
+        bic     r0,r0,#MODE_BITS                    ; Clear the mode bits
+        orr     r0,r0,#IRQ_MODE                     ; Set IRQ mode bits
+        msr     cpsr_c,r0                           ; Change the mode
+        ldr     sp,=SFE(IRQ_STACK) & 0xFFFFFFF8     ; End of IRQ_STACK
+
+        bic     r0,r0,#MODE_BITS                    ; Clear the mode bits
+        orr     r0,r0,#SYS_MODE                     ; Set System mode bits
+        msr     cpsr_c,r0                           ; Change the mode
+        ldr     sp,=SFE(CSTACK) & 0xFFFFFFF8        ; End of CSTACK
+
+#ifdef __ARMVFP__
+; Enable the VFP coprocessor.
+        mov     r0, #0x40000000                     ; Set EN bit in VFP
+        fmxr    fpexc, r0                           ; FPEXC, clear others.
+
+; Disable underflow exceptions by setting flush to zero mode.
+; For full IEEE 754 underflow compliance this code should be removed
+; and the appropriate exception handler installed.
+        mov     r0, #0x01000000                     ; Set FZ bit in VFP
+        fmxr    fpscr, r0                           ; FPSCR, clear others.
+#endif
+
+; Init PLL
+        ldr     r0,=OS_InitPLL + ROM_CODE_OFFSET
+#if COPY_CODE_TO_RAM
+        ldr     r1,=ROM_BASE_ADDR - RAM_BASE_ADDR
+        add     r0, r0, r1
+#endif
+        mov     lr, pc
+        bx      r0
+; Add more initialization here if required
+
+#if COPY_CODE_TO_RAM
+;
+; Copy application from ROM to RAM
+;       r0 = (int*) pSrc
+;       r1 = (int*) pDest ; Has to be defined as ROMSTART in link file
+;       r2 = len (32 bit words!)
+        ldr     r0, = (ROM_BASE_ADDR + ROM_CODE_OFFSET)
+        ldr     r1, = ROMSTART
+        ldr     r2, = (ROMEND-ROMSTART)/4
+copy_loop:
+        ldr     r3,[r0], #+4
+        str     r3,[R1], #+4
+        subs    r2,r2,#+0x1
+        bne     copy_loop
+
+; Jump into RAM
+        ldr     r12, =after_copy                    ; target address was calculated by linker
+        mov     pc, r12                             ; jump to new location in RAM
+
+after_copy:                                         ; This code runs in RAM
+#endif // COPY_CODE_TO_RAM
+
+
+; Copy INTVEC section from ROM to internal RAM
+;       r0 = (int*) pSrc
+;       r1 = (int*) pDest ; Always 0x00 after remapping
+;       r2 = len (32 bit words!)
+
+        ldr     r0, = __program_start
+        ldr     r1, = 0x00000
+        ldr     r2, = (__vector_end - __program_start)/4 ; Copy words
+copy_vector_loop:
+        ldr     r3,[r0], #+4
+        str     r3,[R1], #+4
+        subs    r2,r2,#+0x1
+        bne     copy_vector_loop
+
+; Continue to ?main for more IAR specific system startup
+
+        ldr     r0,=?main
+        bx      r0
+
+        LTORG
+
+; ********************************************************************
+
+        ENDMOD
+
+        END
+
+; ***** EOF **********************************************************

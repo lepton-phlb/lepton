@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -129,8 +126,7 @@ int _is_locked(inodenb_t inodenb){
 | Comments:
 | See:
 ----------------------------------------------*/
-int _sys_lock(kernel_pthread_t* pthread_ptr, unsigned int fd, unsigned int cmd,
-              struct flock* p_flock){
+int _sys_lock(kernel_pthread_t* pthread_ptr, unsigned int fd, unsigned int cmd, struct flock* p_flock){
    desc_t desc;
    inodenb_t inodenb;
    int i;

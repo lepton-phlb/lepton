@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -48,12 +45,8 @@ either the MPL or the [eCos GPL] License."
 
 int _system_sysctl(int *name, int namelen, void *oldp, int *oldlenp, void *newp,int newlen);
 
-#define sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__, \
-               __sysctl_newp__, \
-               __sysctl_newlen__) \
-   _system_sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__, \
-                  __sysctl_newp__, \
-                  __sysctl_newlen__)
+#define sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__,__sysctl_newp__,__sysctl_newlen__)\
+         _system_sysctl(__sysctl_name__,__sysctl_namelen__,__sysctl_oldp__,__sysctl_oldlenp__,__sysctl_newp__,__sysctl_newlen__)
 
 
 

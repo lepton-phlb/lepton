@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{6392be54-e22e-4917-9438-13e39c462542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core">
+      <UniqueIdentifier>{503f7cab-4f4f-4c7c-bcce-895a9f265478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\arch">
+      <UniqueIdentifier>{5d1f1b72-a076-4e65-8a25-f0d1e5c46ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\net">
+      <UniqueIdentifier>{ad4ff31d-db81-4902-a6a9-eba715e4944a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\sys">
+      <UniqueIdentifier>{30566bbc-6e8a-4f59-a26a-f3fe46d4d96f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\ucore">
+      <UniqueIdentifier>{21c09295-b225-409d-95cd-1e4e2816e843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\core-segger">
+      <UniqueIdentifier>{ac113a0e-23d9-46d1-8e80-90e0ba072a07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\arch\win32">
+      <UniqueIdentifier>{063d8531-a3e4-4af5-8f03-3e769f8acde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\ucore\embOSW32_100">
+      <UniqueIdentifier>{ebce44f4-a1ce-4bdf-9992-304b2bf9446f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\net\uip_core">
+      <UniqueIdentifier>{b5352a33-8d16-4560-aac4-c44e2a84e983}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\net\lwip_core">
+      <UniqueIdentifier>{5563a71d-925c-4dc7-bccb-a2edd58172f5}</UniqueIdentifier>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\..\..\src\kernel\core\net\net.txt">
+      <Filter>kernel\core\net</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\syscall.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\core_rttimer.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\fork.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\heap.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_clock.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_elfloader.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_object.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_pthread.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_pthread_mutex.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_sem.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_sigqueue.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\kernel_timer.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\process.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\signal.c">
+      <Filter>kernel\core\core-segger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\main.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\segger_intr.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggercsemaphore.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerevent.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerinterrupt.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggermailbox.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggersemaphore.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggersofttimer.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggertask.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerwin32.c">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.c">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.c">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.c">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.c">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\bin.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\cpu.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\devio.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\dirent.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\env.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\fcntl.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\flock.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\heap.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\kal.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\lib.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\malloc.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\net.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\pipe.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\posix_mqueue.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\select.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\stat.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\statvfs.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\sysctl.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\system.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\systime.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\time.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\timer.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\truncate.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\wait.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerwin32.h">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\segger_intr.h">
+      <Filter>kernel\core\ucore\embOSW32_100</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\arch\win32\dev_dskimg.h">
+      <Filter>kernel\core\arch\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\arch\win32\kernel_mkconf.h">
+      <Filter>kernel\core\arch\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\utsname.h">
+      <Filter>kernel\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\mqueue.h">
+      <Filter>kernel\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\pthread.h">
+      <Filter>kernel\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\semaphore.h">
+      <Filter>kernel\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\siginfo.h">
+      <Filter>kernel\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sys\sysctl.h">
+      <Filter>kernel\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\socks.h">
+      <Filter>kernel\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net\socket.h">
+      <Filter>kernel\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\wait.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\assert.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\bin.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\board.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\core_event.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\core_rttimer.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\cpu.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\devconf.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\devio.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\dirent.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\env.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\errno.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\etypes.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\fcntl.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\flock.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\fork.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\interrupt.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\io.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_board.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_cpu.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_eth.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_fb.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_hd.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_if.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_keyb.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_lcd.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_proc.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_pwr.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_usb.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kal.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_clock.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_elfloader.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_object.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_pthread.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_pthread_mutex.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_sem.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_sigqueue.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_timer.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernelconf.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\lib.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\libstd.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\malloc.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\net.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\pipe.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\posix_mqueue.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\process.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\rttimer.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\select.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\signal.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\stat.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\statvfs.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\stropts.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\syscall.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\sysctl.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\system.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\systime.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\time.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\timer.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\types.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ver.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_spi.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Debug\sbin.lib" />
+    <Library Include="..\Debug\dev.lib" />
+    <Library Include="..\Debug\fs.lib" />
+    <Library Include="..\Debug\lib.lib" />
+    <Library Include="..\Debug\net-lwip.lib" />
+    <Library Include="..\Debug\net-uip.lib" />
+  </ItemGroup>
+</Project>

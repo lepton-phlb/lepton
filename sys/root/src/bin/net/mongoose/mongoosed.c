@@ -19,9 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * $Id: mongoosed.c,v 1.6 2010-02-11 11:07:16 phlb Exp $
  */
-
 /*
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,10 +78,6 @@
    #define __func__ "not-avail"
 
    #define   SHUT_WR                 1
-
-   #if !defined(__GNUC__)
-typedef uint32_t uint64_t;
-   #endif
 
    #define   flockfile(x)
    #define   funlockfile(x)

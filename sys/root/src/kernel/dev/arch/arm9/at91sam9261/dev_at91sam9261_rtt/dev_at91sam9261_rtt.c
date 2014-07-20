@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -75,10 +72,17 @@ dev_map_t dev_at91sam9261_rtt_map={
    __fdev_not_implemented, //ioctl
 };
 
-static board_inf_rtt_t g_inf_board_rtt __attribute__ ((section (".no_cache"))) = {
-   base_addr : (volatile unsigned int *)0xfffffd20,
-   bckup_reg_addr : (volatile unsigned int *)0xfffffd50
-};
+#if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
+    static board_inf_rtt_t g_inf_board_rtt __attribute__ ((section (".no_cache"))) = {
+      .base_addr = (volatile unsigned int *)0xfffffd20,
+      .bckup_reg_addr = (volatile unsigned int *)0xfffffd50
+   };
+#else
+   static board_inf_rtt_t g_inf_board_rtt __attribute__ ((section (".no_cache"))) = {
+      base_addr : (volatile unsigned int *)0xfffffd20,
+      bckup_reg_addr : (volatile unsigned int *)0xfffffd50
+   };
+#endif
 
 /*===========================================
 Implementation

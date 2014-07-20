@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\..\src\sbin\sh\unprod">
+      <Filter>sbin\sh</Filter>
+    </None>
+    <None Include="..\..\..\src\sbin\sh\mkhd">
+      <Filter>sbin\sh</Filter>
+    </None>
+    <None Include="..\..\..\src\sbin\sh\mkhdb">
+      <Filter>sbin\sh</Filter>
+    </None>
+    <None Include="..\..\..\src\sbin\sh\mkhdc">
+      <Filter>sbin\sh</Filter>
+    </None>
+    <None Include="..\..\..\src\sbin\sh\prod">
+      <Filter>sbin\sh</Filter>
+    </None>
+    <None Include="..\..\..\src\sbin\sh\shutdown">
+      <Filter>sbin\sh</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sbin">
+      <UniqueIdentifier>{5848aeca-a0aa-475b-a917-fd63e07466bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sbin\sh">
+      <UniqueIdentifier>{f27e0d95-3d72-435f-804d-6c614cbc549e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sbin\net">
+      <UniqueIdentifier>{f9e1dd12-310b-47d7-a337-a7ec505a07d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sbin\lp">
+      <UniqueIdentifier>{46382d7a-8ab8-4617-bdd6-04f28c8d50c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\sbin\xmodem.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\btb.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\cat.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\compress.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\cp.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\date.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\df.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\ecat.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\echo.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\initd.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\kill.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\lprintf.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\ls.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\lsh.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\mkdir.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\mkfifo.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\mkfs.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\more.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\mount.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\mv.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\od.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\ps.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\pwd.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\rm.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\rmdir.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\shutdown.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\sleep.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\stty.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\sync.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\touch.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\umount.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\uname.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\wrapr.c">
+      <Filter>sbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\net\slipd.c">
+      <Filter>sbin\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\net\ifconfig.c">
+      <Filter>sbin\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\net\inetd.c">
+      <Filter>sbin\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\lp\lpr.c">
+      <Filter>sbin\lp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sbin\lp\lpd.c">
+      <Filter>sbin\lp</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

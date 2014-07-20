@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -38,8 +35,8 @@ either the MPL or the [eCos GPL] License."
 
 #include "lib/libc/stdio/stdio.h"
 
-#include <ioat91m55800.h>
-#include <intrinsic.h>
+//#include <ioat91m55800.h> //GD
+//#include <intrinsic.h> //GD
 
 #include <string.h>     // memcpy
 
@@ -84,7 +81,7 @@ static char dump_buffer[64];
    #define NUM_INT_SOURCES  32
 #endif
 
-extern OS_ISR_HANDLER* OS_ARM_InstallISRHandler (int ISRIndex, OS_ISR_HANDLER* pISRHandler);
+//extern OS_ISR_HANDLER* OS_ARM_InstallISRHandler (int ISRIndex, OS_ISR_HANDLER* pISRHandler);
 
 /*============================================
 | Implementation
@@ -112,7 +109,7 @@ void _kernel_print( char * p){
 ----------------------------------------------*/
 void _kernel_dump_kernel(void){
    unsigned int sz;
-   char* p;
+   unsigned char* p;
 #if OS_CHECKSTACK
    _kernel_print("\r\n--------------------\r\n");
    _kernel_print("lepton kernel");
@@ -122,7 +119,7 @@ void _kernel_dump_kernel(void){
    sprintf(dump_buffer,"kernel stack end addr= 0x%x\r\n",kernel_thread.tcb->pStackBot);
    _kernel_print(dump_buffer);
 
-   for(p=kernel_thread.tcb->pStack;
+   for(p=(unsigned char*)kernel_thread.tcb->pStack;
        p!=kernel_thread.tcb->pStackBot; p--) {
       if(!((sz++)%16)) {
          sprintf(dump_buffer,"\r\n0x%x   ",p);
@@ -155,7 +152,7 @@ void _kernel_dump_process(pid_t _pid){
    sprintf(dump_buffer,"stack end addr= 0x%x\r\n",process_lst[_pid]->pthread_ptr->tcb->pStackBot);
    _kernel_print(dump_buffer);
 
-   for(p=process_lst[_pid]->pthread_ptr->tcb->pStack;
+   for(p=(unsigned char*)process_lst[_pid]->pthread_ptr->tcb->pStack;
        p!=process_lst[_pid]->pthread_ptr->tcb->pStackBot; p--) {
       if(!((sz++)%16)) {
          sprintf(dump_buffer,"\r\n0x%x   ",p);

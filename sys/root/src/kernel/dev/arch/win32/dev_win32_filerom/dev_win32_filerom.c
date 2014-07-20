@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -111,8 +108,7 @@ int dev_win32_filerom_open(desc_t desc, int o_flag){
 
    if(fh==-1) {
 
-      if( (fh =
-              _open( ".\\fsrom.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ) {
+      if( (fh = _open( ".\\fsrom.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
          DWORD dwError=GetLastError();
 
          if(dwError!=ERROR_FILE_EXISTS)
@@ -127,8 +123,7 @@ int dev_win32_filerom_open(desc_t desc, int o_flag){
          int w=0;
 
          close(fh);
-         if( (fh =
-                 _open( ".\\fsrom.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 )
+         if( (fh = _open( ".\\fsrom.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 )
             return -1;
 
 

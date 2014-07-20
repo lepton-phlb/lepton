@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -196,7 +193,10 @@ int low_level_ioctl(desc_t desc, int request, ... ){
 static err_t low_level_output(struct netif *netif, struct pbuf *p){
    struct pbuf *q;
    //gloups bug :'(
+   //
+   __KERNEL_SRAM_LOCATION 
    static unsigned char buffer[1600];
+   //
    unsigned char *ptr;
    int packet_len=0;
 
@@ -226,10 +226,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
          variable. */
       /* send data from(q->payload, q->len); */
 #ifdef NETIF_DEBUG
-      LWIP_DEBUGF(NETIF_DEBUG,
-                  ("netif: send ptr %p q->payload %p q->len %i q->next %p\n", ptr, q->payload,
-                   (int)q->len,
-                   q->next));
+		   LWIP_DEBUGF(NETIF_DEBUG, ("netif: send ptr %p q->payload %p q->len %i q->next %p\n", ptr, q->payload, (int)q->len, q->next));
 #endif
 
       //profiler
@@ -337,10 +334,7 @@ static struct pbuf *low_level_input(struct netif *netif){
             variable. */
          /* read data into(q->payload, q->len); */
 #ifdef NETIF_DEBUG
-         LWIP_DEBUGF(NETIF_DEBUG,
-                     ("netif: recv start %i length %i q->payload %p q->len %i q->next %p\n", start,
-                      length,
-                      q->payload, (int)q->len, q->next));
+	         LWIP_DEBUGF(NETIF_DEBUG, ("netif: recv start %i length %i q->payload %p q->len %i q->next %p\n", start, length, q->payload, (int)q->len, q->next));
 #endif
          memcpy(q->payload,&buffer[start],q->len);
          start+=q->len;
@@ -415,33 +409,34 @@ int ethif_core_input(struct netif *netif)
       return -1;
    //
    if(!(r=ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc))) {
-      p = low_level_input(netif);
-      if (p !=NULL) {
-         /* points to packet payload, which starts with an Ethernet header */
-         ethhdr = p->payload;
-         switch (htons(ethhdr->type)) {
-         /* IP or ARP packet? */
-         case ETHTYPE_IP:
-         case ETHTYPE_ARP:
-#if PPPOE_SUPPORT
-         /* PPPoE packet? */
-         case ETHTYPE_PPPOEDISC:
-         case ETHTYPE_PPPOE:
-#endif          /* PPPOE_SUPPORT */
-                /* full packet send to tcpip_thread to process */
-            if (netif->input(p, netif)!=ERR_OK) {
-               LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+      while( (p = low_level_input(netif))!=NULL){
+         if (p !=NULL) {
+            /* points to packet payload, which starts with an Ethernet header */
+            ethhdr = p->payload;
+            switch (htons(ethhdr->type)) {
+            /* IP or ARP packet? */
+            case ETHTYPE_IP:
+            case ETHTYPE_ARP:
+   #if PPPOE_SUPPORT
+            /* PPPoE packet? */
+            case ETHTYPE_PPPOEDISC:
+            case ETHTYPE_PPPOE:
+   #endif          /* PPPOE_SUPPORT */
+                   /* full packet send to tcpip_thread to process */
+               if (netif->input(p, netif)!=ERR_OK) {
+                  LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+                  pbuf_free(p);
+                  p = NULL;
+               }
+               break;
+   
+            default:
                pbuf_free(p);
                p = NULL;
+               break;
             }
-            break;
-
-         default:
-            pbuf_free(p);
-            p = NULL;
-            break;
          }
-      }
+      }//end of while
    }else{
       //profiler
       __io_profiler_start(desc);

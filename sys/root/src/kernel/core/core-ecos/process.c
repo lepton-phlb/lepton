@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -56,7 +53,7 @@ Includes
 //#include <stdio.h>
 #endif
 
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 extern void _system_exit(int status);
 #endif
 
@@ -89,7 +86,7 @@ char env_path[PATH_MAX]={0};
 void invoke_app_ctr(void);
 static char invoke_app_ctr_ok=0;
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
 typedef void (*pfunc)(void);
 //EABI or ELF
    #ifdef CYGBLD_HAL_ARM_EABI
@@ -875,7 +872,7 @@ void* process_routine(void* arg){
 | See:
 ---------------------------------------------*/
 void invoke_app_ctr(void) {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    pfunc *p;
    char ok=0;
 
@@ -1095,7 +1092,7 @@ pid_t _sys_krnl_exec(const char* path,
 #endif
 
    //load static library
-#if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
+#if defined(__KERNEL_LOAD_LIB) && defined(__KERNEL_UCORE_ECOS)
    load_lib(process_lst[_pid]->pthread_ptr);
 #endif
 
@@ -1296,7 +1293,7 @@ pid_t _sys_exec(const char* path,
 #endif
 
    //load static library
-#if defined(__KERNEL_LOAD_LIB) && defined(USE_ECOS)
+#if defined(__KERNEL_LOAD_LIB) && defined(__KERNEL_UCORE_ECOS)
    load_lib(process_lst[pid]->pthread_ptr);
 #endif
 

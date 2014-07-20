@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{2b882fc0-66cb-4501-9178-b7655efc1e3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net">
+      <UniqueIdentifier>{2a8a2fd9-d1d1-4294-8420-bd5e731149a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip">
+      <UniqueIdentifier>{515b1835-01dd-4676-8cb9-d325e3907a67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\api">
+      <UniqueIdentifier>{fed0b336-a909-4a8a-8de7-06b539d98dfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\core">
+      <UniqueIdentifier>{a9b21447-76a0-4a87-91b2-ba057ac725d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\core\ipv4">
+      <UniqueIdentifier>{1b19f016-c4fa-41d5-b655-950396622370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\core\ipv6">
+      <UniqueIdentifier>{7942f7a8-20be-4590-8604-be09c3450d4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\core\snmp">
+      <UniqueIdentifier>{f56be51a-bccc-4e7f-a4c0-bc9aa2da1af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\ethif">
+      <UniqueIdentifier>{415de207-271a-4b73-9e80-9a0aa2ee2690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\netif">
+      <UniqueIdentifier>{9aec765b-38b9-49d8-9ba7-8536b77d5147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\netif\ppp">
+      <UniqueIdentifier>{7f41c873-cc1c-4915-ab7b-459710e853cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\ports">
+      <UniqueIdentifier>{8c4026e1-9290-4849-80df-306ce3c55b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\ports\win32">
+      <UniqueIdentifier>{2d600b84-6eb9-4854-add4-fba22e487269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\ports\win32\include">
+      <UniqueIdentifier>{f25d6a26-4ff7-431c-b1f1-c283668e01e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\ports\win32\include\arch">
+      <UniqueIdentifier>{6854048a-df9b-4a76-a3da-ff246e555229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\include">
+      <UniqueIdentifier>{487ff9f1-187a-48fb-87ff-43fb8507212e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\include\ipv4">
+      <UniqueIdentifier>{959ce277-2d13-46de-a061-91aad16bd92a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\include\ipv6">
+      <UniqueIdentifier>{402461dc-ad74-4f54-91e7-3b8d1bcaca75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\lwip\include\netif">
+      <UniqueIdentifier>{84ddb66d-1eff-4459-af0d-cd7deda6d35b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\..\src\kernel\net\lwip\core\ipv6\README">
+      <Filter>kernel\net\lwip\core\ipv6</Filter>
+    </None>
+    <None Include="..\..\..\src\kernel\net\lwip\netif\FILES">
+      <Filter>kernel\net\lwip\netif</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\tcpip.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\api_lib.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\api_msg.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\err.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netbuf.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netdb.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netifapi.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\sockets.c">
+      <Filter>kernel\net\lwip\api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\udp.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\dhcp.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\dns.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\inet6.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\inet.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\init.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\mem.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\memp.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\netif.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\pbuf.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\raw.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\stats.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\sys.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp_in.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp_out.c">
+      <Filter>kernel\net\lwip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip_frag.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\autoip.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\icmp.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\igmp.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\inet.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\inet_chksum.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip_addr.c">
+      <Filter>kernel\net\lwip\core\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\icmp6.c">
+      <Filter>kernel\net\lwip\core\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\inet6.c">
+      <Filter>kernel\net\lwip\core\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\ip6.c">
+      <Filter>kernel\net\lwip\core\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\ip6_addr.c">
+      <Filter>kernel\net\lwip\core\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\msg_out.c">
+      <Filter>kernel\net\lwip\core\snmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\asn1_dec.c">
+      <Filter>kernel\net\lwip\core\snmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\asn1_enc.c">
+      <Filter>kernel\net\lwip\core\snmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\mib2.c">
+      <Filter>kernel\net\lwip\core\snmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\mib_structs.c">
+      <Filter>kernel\net\lwip\core\snmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\msg_in.c">
+      <Filter>kernel\net\lwip\core\snmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\slipif.c">
+      <Filter>kernel\net\lwip\netif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\etharp.c">
+      <Filter>kernel\net\lwip\netif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ethernetif.c">
+      <Filter>kernel\net\lwip\netif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\loopif.c">
+      <Filter>kernel\net\lwip\netif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\auth.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\chap.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\chpms.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\fsm.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ipcp.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\lcp.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\magic.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\md5.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\pap.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp_oe.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\randm.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\vj.c">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\ports\win32\sys_arch.c">
+      <Filter>kernel\net\lwip\ports\win32</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\vjbsdhdr.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\auth.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\chap.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\chpms.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\fsm.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\ipcp.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\lcp.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\magic.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\md5.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\pap.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\pppdebug.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\randm.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\vj.h">
+      <Filter>kernel\net\lwip\netif\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\lwipopts.h">
+      <Filter>kernel\net\lwip\ports\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\lwipopts_1.2.1.h">
+      <Filter>kernel\net\lwip\ports\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\sys_arch.h">
+      <Filter>kernel\net\lwip\ports\win32\include\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\bpstruct.h">
+      <Filter>kernel\net\lwip\ports\win32\include\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\cc.h">
+      <Filter>kernel\net\lwip\ports\win32\include\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\epstruct.h">
+      <Filter>kernel\net\lwip\ports\win32\include\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\perf.h">
+      <Filter>kernel\net\lwip\ports\win32\include\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\autoip.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip_frag.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\icmp.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\igmp.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\inet.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\inet_chksum.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip_addr.h">
+      <Filter>kernel\net\lwip\include\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\ip_addr.h">
+      <Filter>kernel\net\lwip\include\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\icmp.h">
+      <Filter>kernel\net\lwip\include\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\inet.h">
+      <Filter>kernel\net\lwip\include\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\ip.h">
+      <Filter>kernel\net\lwip\include\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\slipif.h">
+      <Filter>kernel\net\lwip\include\netif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\etharp.h">
+      <Filter>kernel\net\lwip\include\netif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\loopif.h">
+      <Filter>kernel\net\lwip\include\netif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\ppp_oe.h">
+      <Filter>kernel\net\lwip\include\netif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\udp.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\api.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\api_msg.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\arch.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\debug.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\def.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\dhcp.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\dns.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\err.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\init.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\mem.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\memp.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\memp_std.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netbuf.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netdb.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netif.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netifapi.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\opt.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\pbuf.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\raw.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sio.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_asn1.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_msg.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_structs.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sockets.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\stats.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sys.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\tcp.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\tcpip.h">
+      <Filter>kernel\net\lwip\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

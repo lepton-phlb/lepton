@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -63,8 +60,8 @@ either the MPL or the [eCos GPL] License."
 //#define LWIP_CORE_STACK_SIZE 1000
 
 //
-#if !defined(__GNUC__)
-   #define LWIP_CORE_PRIORITY   100
+#if !defined(GNU_GCC)
+   #define LWIP_CORE_PRIORITY   120
 
 #else
 
@@ -73,7 +70,7 @@ either the MPL or the [eCos GPL] License."
 
 #endif
 
-
+__KERNEL_SRAM_LOCATION
 _macro_stack_addr char lwip_core_stack[LWIP_CORE_STACK_SIZE];
 
 kernel_pthread_t lwip_core_thread;
@@ -284,8 +281,7 @@ int config_lwip_if(lwip_if_t* p_lwip_if){
    p_lwip_if->if_config.if_no = g_if_no;
 
    //add interface
-   netif_add(&p_lwip_if->netif, &if_ipaddr, &if_netmask, &if_gw, p_lwip_if, ethif_core_init,
-             tcpip_input);
+   netif_add(&p_lwip_if->netif, &if_ipaddr, &if_netmask, &if_gw, p_lwip_if, ethif_core_init, tcpip_input);
 
    if(g_if_no==1)
       netif_set_default(&p_lwip_if->netif);

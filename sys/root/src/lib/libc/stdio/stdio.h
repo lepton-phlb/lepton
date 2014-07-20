@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -103,17 +100,22 @@ typedef struct __stdio_file FILE;
 //not thread safe
 //low ram
 
-#ifdef __AS386_16__
-   #define BUFSIZ    (256)
-#elif defined(CPU_WIN32) || defined(CPU_GNU32)
-   #define BUFSIZ    (256)
-#elif defined(CPU_ARM9)
-   #define BUFSIZ (256)    //if you used shttpd and ftpd
-#elif defined(CPU_ARM7) || defined(CPU_M16C62)
-   #define BUFSIZ (64)
-#elif defined(CPU_CORTEXM)
-   #define BUFSIZ (256)    //(64)//(32)
+#ifndef __KERNEL_STDIO_PRINTF_BUFSIZ
+   #ifdef __AS386_16__
+      #define BUFSIZ    (256)
+   #elif defined(CPU_WIN32) || defined(CPU_GNU32)
+      #define BUFSIZ    (256)
+   #elif defined(CPU_ARM9)
+      #define BUFSIZ (256)    //if you used shttpd and ftpd
+   #elif defined(CPU_ARM7) || defined(CPU_M16C62)
+      #define BUFSIZ (64)
+   #elif defined(CPU_CORTEXM)
+      #define BUFSIZ (256)    //(64)//(32)
+   #endif
+#else
+   #define BUFSIZ __KERNEL_STDIO_PRINTF_BUFSIZ
 #endif
+
 
 #if !defined(__KERNEL_LOAD_LIB)
 extern FILE stdin[1];
@@ -165,9 +167,9 @@ int __vsscanf(char * sp,const char *fmt, va_list ap);
 //int __vfscanf(register FILE *fp,register char *fmt,va_list ap);
 int __vfscanf(FILE *fp,const char *fmt,va_list ap);
 
-void     __stdio_init();
+void     __stdio_init(void);
 void     __stdio_close_all(pid_t pid);
-void     __io_init_vars();
+void     __io_init_vars(void);
 
 int      __fputc(int ch, FILE *fp);
 int      __fgetc(FILE *fp);
@@ -199,10 +201,9 @@ int      __ungetc(int c,FILE *fp);
 #define vsprintf     __vsprintf
 #define vsnprintf    __vsnprintf
 
-#if USE_FULL_STDIO_PRINTF
+#ifdef USE_FULL_STDIO_PRINTF
    #define vfprintf(__op__,__fmt__,__ap__) __vfnprintf(__op__,(-1),__fmt__,__ap__)
-   #define vfnprintf(__op__,__max_size__,__fmt__,__ap__) __vfnprintf(__op__,__max_size__,__fmt__, \
-                                                                     __ap__)
+   #define vfnprintf(__op__,__max_size__,__fmt__,__ap__) __vfnprintf(__op__,__max_size__,__fmt__,__ap__)
 #else
    #define vfprintf(__op__,__fmt__,__ap__) __vfprintf(__op__,__fmt__,__ap__)
    #define vfnprintf(__op__,__max_size__,__fmt__,__ap__) (-1)

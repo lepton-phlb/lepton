@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -45,7 +42,31 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-static const char* fstype_list[]={"rootfs","ufs","ufsx","","msdos","vfat"};
+
+static const char* fstype_list[]={
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1 
+   "rootfs",
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1 
+   "ufs",
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1 
+   "ufsx",
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
+   "kofs",
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
+   "msdos",
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
+   "vfat",
+#endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   "effs"
+#endif
+};
+
 static const int fstype_list_size=sizeof(fstype_list)/sizeof(char*);
 
 /*===========================================
@@ -108,7 +129,7 @@ int mount_main(int argc,char* argv[]){
          return -1;
       }
       //
-      if(ioctl(fd[0],I_LINK,fd[1])<0) {
+      if(ioctl(fd[0],I_LINK,fd[1],argc,argv)<0) {
          printf("error: cannot link %s with %s\r\n",argv[1],argv[2]);
          return -1;
       }

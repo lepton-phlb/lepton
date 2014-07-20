@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -117,8 +114,7 @@ int pthread_mutex_lock(pthread_mutex_t *mutex){
    }
    //
    if(mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_lock(
-                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_lock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
@@ -141,8 +137,7 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex){
    }
    //
    if(mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_trylock(
-                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_trylock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 
@@ -156,8 +151,7 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex){
 ----------------------------------------------*/
 int pthread_mutex_unlock(pthread_mutex_t *mutex){
    if(mutex && mutex->kernel_object!=PTHREAD_MUTEX_UNINITIALIZED)
-      return kernel_pthread_mutex_unlock(
-                &mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
+      return kernel_pthread_mutex_unlock(&mutex->kernel_object->object.kernel_object_pthread_mutex.kernel_pthread_mutex);
    return -1;
 }
 

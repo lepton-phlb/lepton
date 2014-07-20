@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -192,8 +189,7 @@ int _sys_fcntl(pid_t pid,unsigned int fd, unsigned int cmd, unsigned int argc,vo
 
 
 pid_t _sys_krnl_exec(const char *path, const char* argv[], const char* envp, pid_t ppid,pid_t pid);
-pid_t _sys_exec(const char *path, const char* argv[], const char* envp,
-                kernel_pthread_t* pthread_ptr);
+pid_t _sys_exec(const char *path, const char* argv[], const char* envp,kernel_pthread_t* pthread_ptr);
 
 #ifdef __cplusplus
 extern "C" {
@@ -215,8 +211,7 @@ pid_t _sys_waitpid(pid_t pid,pid_t child_pid,int options,int* status);
 //signal system call
 int _sys_sigprocmask (kernel_pthread_t* pthread_ptr, int how,sigset_t* set,sigset_t* oset);
 int _sys_sigpending  (kernel_pthread_t* pthread_ptr, sigset_t* set);
-int _sys_sigaction   (kernel_pthread_t* pthread_ptr, int sig,struct sigaction* act,
-                      struct sigaction* oact);
+int _sys_sigaction   (kernel_pthread_t* pthread_ptr, int sig,struct sigaction* act,struct sigaction* oact);
 //send signal system call
 int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic);
 int _sys_kill_exit(kernel_pthread_t* pthread_ptr);

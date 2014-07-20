@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -30,8 +27,9 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include "kernel/core/types.h"
-#include "kernel/core/interrupt.h"
 #include "kernel/core/kernelconf.h"
+#include "kernel/core/kal.h"
+#include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/kernel_pthread.h"
 #define USE_IO_LINUX
@@ -50,8 +48,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_eth.h"
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
    #include <string.h>
@@ -210,6 +207,12 @@ enum DM9KS_PHY_mode {
 desc_t _eth_dm9000a_desc_rd=-1;
 desc_t _eth_dm9000a_desc_wr=-1;
 
+typedef struct stats_st{
+  u32 rx_fifo_errors;
+  u32 rx_crc_errors;
+  u32 rx_length_errors;
+  u32 phy_layer_errors;
+}stats_t;
 // Structure/enum
 typedef struct board_info {
 
@@ -257,7 +260,8 @@ typedef struct board_info {
 
    //ethernet status
    eth_stat_t eth_stat;
-
+   //
+   stats_t stats;
 } board_info_t;
 
 #define ETH_DM9000_INPUT_BUFFER_SZ     (32*1024) /*8192*/ //(2048) //warning!!!! must be 2^N
@@ -299,9 +303,11 @@ static int media_mode = DM9KS_10MHD;
 #define DMFE_DBUG(dbug_now, msg, vaule)
 
 static board_info_t g_board_info;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #define mdelay(__mdelay__) OS_Delay(__mdelay__)
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_FREERTOS)
+   #define mdelay(__mdelay__) __kernel_usleep((__mdelay__*1000))
+#elif defined(__KERNEL_UCORE_ECOS)
    #define mdelay(__mdelay__) cyg_thread_delay(__mdelay__)
 #endif
 
@@ -319,7 +325,7 @@ static board_info_t g_board_info;
       (__eth_status__)|=((__value__)&ETH_STAT_LINK_MASK); \
 }
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 
 static int flag_i_int=0;
 static int flag_o_int=0;
@@ -333,8 +339,6 @@ static int flag_o_int=0;
    #define __is_set_flag_fire_i_int() (flag_i_int)
    #define __is_set_flag_fire_o_int() (flag_o_int)
 
-static cyg_handle_t _eth_dm9000_handle;
-static cyg_interrupt _eth_dm9000_it;
 #endif
 
 /*===========================================
@@ -703,6 +707,11 @@ static int dmfe_open(board_info_t *db){
    db->reset_counter       = 0;
    db->reset_tx_timeout    = 0;
    db->cont_rx_pkt_cnt     = 0;
+   
+   db->stats.rx_fifo_errors   = 0;
+   db->stats.rx_crc_errors          = 0;
+   db->stats.rx_length_errors       = 0;
+   db->stats.phy_layer_errors       = 0;
 
    /* check link state and media speed */
    __set_eth_status(db->eth_stat,ETH_STAT_LINK_DOWN);
@@ -772,7 +781,12 @@ static void dmfe_reset(board_info_t *db){
 
    db->reset_counter++;
    dmfe_init_dm9000(db);
-
+   //
+   db->stats.rx_fifo_errors   = 0;
+   db->stats.rx_crc_errors          = 0;
+   db->stats.rx_length_errors       = 0;
+   db->stats.phy_layer_errors       = 0;
+   //
    db->Speed =10;
    __set_eth_status(db->eth_stat,ETH_STAT_LINK_DOWN);
    for(i=0; i<1000; i++)      /*wait link OK, waiting time=1 second */
@@ -953,9 +967,9 @@ static void dmfe_tx_done(board_info_t *db,unsigned long unused){
    }
 
    if(db->tx_pkt_cnt <= 0 && _eth_dm9000a_desc_wr>=0) {
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
       __fire_io_int(ofile_lst[_eth_dm9000a_desc_wr].owner_pthread_ptr_write);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       __set_flag_fire_o_int();
 #endif
    }
@@ -996,6 +1010,7 @@ static void dmfe_packet_receive(board_info_t *db){
    u8 rxbyte, val;
    u32 i, GoodPacket, tmplen = 0, MDRAH, MDRAL;
    u32 tmpdata;
+   u32 _data=0;
 
    rx_t rx;
 
@@ -1047,25 +1062,24 @@ static void dmfe_packet_receive(board_info_t *db){
       if (rx.desc.status & 0xbf)
       {
          GoodPacket = FALSE;
-         /*
-                        if (rx.desc.status & 0x01)
-                        {
-                                db->stats.rx_fifo_errors++;
-                                printk("<RX FIFO error>\n");
-                        }
-                        if (rx.desc.status & 0x02)
-                        {
-                                db->stats.rx_crc_errors++;
-                                printk("<RX CRC error>\n");
-                        }
-                        if (rx.desc.status & 0x80)
-                        {
-                                db->stats.rx_length_errors++;
-                                printk("<RX Length error>\n");
-                        }
-                        if (rx.desc.status & 0x08)
-                                printk("<Physical Layer error>\n");
-         */
+         //
+         if (rx.desc.status & 0x01){
+            db->stats.rx_fifo_errors++;
+                 //printk("<RX FIFO error>\n");
+         }
+         if (rx.desc.status & 0x02){
+                 db->stats.rx_crc_errors++;
+                 //printk("<RX CRC error>\n");
+         }
+         if (rx.desc.status & 0x80){
+                 db->stats.rx_length_errors++;
+                 //printk("<RX Length error>\n");
+         }
+         if (rx.desc.status & 0x08){
+                 db->stats.phy_layer_errors++;
+                 //printk("<Physical Layer error>\n");
+         }
+         
       }
 
       if (!GoodPacket
@@ -1073,7 +1087,7 @@ static void dmfe_packet_receive(board_info_t *db){
           || ( (_eth_dm9000a_desc_rd>=0) && (ofile_lst[_eth_dm9000a_desc_rd].nb_reader<=0) ) ) {
          // drop this packet!!!
          switch (db->io_mode) {
-            u32 _data=0;
+          
          case DM9KS_BYTE_MODE:
             for (i=0; i<rx.desc.length; i++) {
                _data = inb(db->io_data);
@@ -1117,9 +1131,9 @@ static void dmfe_packet_receive(board_info_t *db){
 
          //
          if(_eth_dm9000a_desc_rd>=0) {
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
             __fire_io_int(ofile_lst[_eth_dm9000a_desc_rd].owner_pthread_ptr_read);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
             __set_flag_fire_i_int();
 #endif
          }
@@ -1204,22 +1218,15 @@ static void dmfe_packet_receive(board_info_t *db){
 | Comments:
 | See:
 ----------------------------------------------*/
-#if defined(USE_SEGGER)
-static void dmfe_interrupt(void) {
-#elif defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_EMBOS) ||defined(__KERNEL_UCORE_FREERTOS)
+void dev_eth_dm9000a_interrupt_isr(void) {
+#elif defined(__KERNEL_UCORE_ECOS)
 cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t data) {
    cyg_interrupt_mask(vector);
 #endif
    board_info_t * db= &g_board_info;         /* Point a board information structure */
    int int_status,i;
    u8 reg_save;
-
-   //OS_EnterNestableInterrupt();see RTOSINIT_ATXXX.c
-   //arm7
-#if defined(USE_SEGGER)
-   *AT91C_AIC_IVR = 0; // Debug variant of vector read, protected mode is used.
-   *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1; // Clears INT1 interrupt.
-#endif
 
    DMFE_DBUG(0, "dmfe_interrupt()", 0);
 
@@ -1279,18 +1286,15 @@ cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t dat
 
    /* Restore previous register address */
    outb(reg_save, db->io_addr);
-#if defined(USE_SEGGER)
-   *AT91C_AIC_EOICR = 0; // Signal end of interrupt to AIC.
-#elif defined(USE_ECOS)
-   //spin_unlock(&db->lock);
-   //OS_LeaveNestableInterrupt();see RTOSINIT_ATXXX.c
-   cyg_interrupt_acknowledge(vector);
-   //Informe kernel d'exécuter DSR
-   return(CYG_ISR_HANDLED | CYG_ISR_CALL_DSR);
-#endif
+   //
+   #if defined(__KERNEL_UCORE_ECOS)
+      cyg_interrupt_acknowledge(vector);
+      //Informe kernel d'exécuter DSR
+      return(CYG_ISR_HANDLED | CYG_ISR_CALL_DSR);
+   #endif
 }
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 void dev_eth_dm9000a_interrupt_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data) {
    board_info_t * db= &g_board_info;    /* Point a board information structure */
    //
@@ -1356,30 +1360,6 @@ int dev_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
    g_board_info._output_w=0;
    g_board_info._output_r=0;
 
-#if defined(USE_SEGGER)
-   // IRQ1  interrupt vector.
-   AT91C_AIC_SVR[AT91C_ID_IRQ1] = (unsigned long)&dmfe_interrupt;
-   // SRCTYPE=3, PRIOR=3. INT1 interrupt positive edge-triggered at prio 3.
-   AT91C_AIC_SMR[AT91C_ID_IRQ1] = 0x63;
-
-   //phlb modif 02/12/2008: now in device open driver interface
-   //*AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1; // Clears INT1 interrupt.
-   //*AT91C_AIC_IECR = 1 << AT91C_ID_IRQ1; // Enable INT1 interrupt.
-#elif defined(USE_ECOS)
-   {
-      cyg_interrupt_create(
-         (cyg_vector_t)g_board_info.irq_no, (cyg_priority_t)g_board_info.irq_prio, 0,
-         (p_dev_io_info->p_fct_isr ? p_dev_io_info->p_fct_isr : &
-          dev_eth_dm9000a_interrupt_isr),
-         &dev_eth_dm9000a_interrupt_dsr,
-         &_eth_dm9000_handle, &_eth_dm9000_it);
-      //
-      cyg_interrupt_configure(g_board_info.irq_no, 0 /*edge*/, 1 /*rising*/ );
-      //Liaison entre l'IT crée et le vecteur d'IT
-      cyg_interrupt_attach(_eth_dm9000_handle);
-   }
-#endif
-
    return 0;
 }
 
@@ -1393,22 +1373,11 @@ int dev_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
 ---------------------------------------------*/
 int dev_eth_dm9000a_open(desc_t desc, int o_flag){
 
+   //
    if(_eth_dm9000a_desc_rd<0 && _eth_dm9000a_desc_wr<0) {
-
-#if defined(USE_SEGGER)
-      *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1;    // Clears INT1 interrupt.
-      *AT91C_AIC_IECR = 1 << AT91C_ID_IRQ1;    // Enable INT1 interrupt.
-#elif defined(USE_ECOS)
-      cyg_vector_t _ecos_vector = g_board_info.irq_no;
-      cyg_interrupt_acknowledge(_ecos_vector);
-      cyg_interrupt_unmask(_ecos_vector);
-#endif
-
       if(dmfe_open(&g_board_info)<0)
          return -1;
-
    }
-
    //
    if(o_flag & O_RDONLY) {
       if(_eth_dm9000a_desc_rd<0)
@@ -1422,7 +1391,7 @@ int dev_eth_dm9000a_open(desc_t desc, int o_flag){
       if(!ofile_lst[desc].p)
          ofile_lst[desc].p=&g_board_info;
    }
-
+   //
    if(o_flag & O_WRONLY) {
       if(_eth_dm9000a_desc_wr<0)
          _eth_dm9000a_desc_wr = desc;
@@ -1453,18 +1422,16 @@ int dev_eth_dm9000a_close(desc_t desc){
          _eth_dm9000a_desc_rd = -1;
       }
    }
-
+   //
    if(ofile_lst[desc].oflag & O_WRONLY) {
       if(!ofile_lst[desc].nb_writer) {
          _eth_dm9000a_desc_wr = -1;
       }
    }
-
+   //
    if(!ofile_lst[desc].nb_writer
       &&!ofile_lst[desc].nb_reader) {
       dmfe_stop(&g_board_info);
-      *AT91C_AIC_IDCR = 1 << AT91C_ID_IRQ1; // Disable INT1 interrupt.
-      *AT91C_AIC_ICCR = 1 << AT91C_ID_IRQ1; // Clears INT1 interrupt.
    }
    return 0;
 }

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -75,25 +72,21 @@ void kernel_timer_generic_callback(void){
    kernel_pthread_t* pthread_ptr    = (kernel_pthread_t*)0;
    pid_t pid;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    if((p_kernel_timer =  (kernel_timer_t*)OS_GetpCurrentTimer())==(kernel_timer_t*)0)
       return;
 #endif
    p_kernel_timer->interval=!p_kernel_timer->interval;
    if(p_kernel_timer->interval && p_kernel_timer->itimerspec.it_interval.tv_nsec) {
       //rcv KERNEL_TIMER_VALUE_PERIOD  and set KERNEL_TIMER_INTERVAL_PERIOD
-#ifdef USE_SEGGER
-      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,
-                        (__timer_s_to_ms(p_kernel_timer->itimerspec.it_interval.tv_sec)+
-                         __timer_ns_to_ms(p_kernel_timer->itimerspec.it_interval.tv_nsec)));
+#ifdef __KERNEL_UCORE_EMBOS
+      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(p_kernel_timer->itimerspec.it_interval.tv_sec)+__timer_ns_to_ms(p_kernel_timer->itimerspec.it_interval.tv_nsec)));
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);
 #endif
    }else if(!p_kernel_timer->interval && p_kernel_timer->itimerspec.it_interval.tv_nsec) {
       //rcv KERNEL_TIMER_INTERVAL_PERIOD  and set KERNEL_TIMER_VALUE_PERIOD
-#ifdef USE_SEGGER
-      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,
-                        (__timer_s_to_ms(p_kernel_timer->itimerspec.it_value.tv_sec)+
-                         __timer_ns_to_ms(p_kernel_timer->itimerspec.it_value.tv_nsec)));
+#ifdef __KERNEL_UCORE_EMBOS
+      OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(p_kernel_timer->itimerspec.it_value.tv_sec)+__timer_ns_to_ms(p_kernel_timer->itimerspec.it_value.tv_nsec)));
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);
 #endif
       //don't send signal
@@ -131,8 +124,7 @@ void kernel_timer_generic_callback(void){
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_timer_create(clockid_t clockid, struct sigevent * p_sigevent,
-                        kernel_timer_t* p_kernel_timer){
+int kernel_timer_create(clockid_t clockid, struct sigevent * p_sigevent,kernel_timer_t* p_kernel_timer){
    if(!p_kernel_timer)
       return -1;
    switch(clockid) {
@@ -175,7 +167,7 @@ int kernel_timer_delete(kernel_timer_t* p_kernel_timer){
       return -1;
    if(!p_kernel_timer->created)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_DeleteTimer((OS_TIMER*)p_kernel_timer);
    p_kernel_timer->created=KERNEL_TIMER_NOT_CREATED;
 #endif
@@ -226,8 +218,7 @@ int kernel_timer_getoverrun(kernel_timer_t* p_kernel_timer){
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct itimerspec* value,
-                         struct itimerspec* ovalue){
+int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct itimerspec* value,struct itimerspec* ovalue){
 
    switch(flags) {
    case 0:   //relative time
@@ -239,7 +230,7 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
    }
 
    //
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    if(ovalue) {
       int elsapse_time_ms = OS_GetTimerValue((OS_TIMER*)p_kernel_timer);
       ovalue->it_value.tv_sec= elsapse_time_ms/1000;
@@ -257,19 +248,14 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
    //
    if(!p_kernel_timer->created) {
       p_kernel_timer->created=KERNEL_TIMER_CREATED;
-      OS_CreateTimer((OS_TIMER*)p_kernel_timer,kernel_timer_generic_callback,
-                     (__timer_s_to_ms(value->it_value.tv_sec)+
-                      __timer_ns_to_ms(value->it_value.tv_nsec)));
+      OS_CreateTimer((OS_TIMER*)p_kernel_timer,kernel_timer_generic_callback,(__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec)));
    }else{
       OS_StopTimer((OS_TIMER*)p_kernel_timer); //disarm timer
    }
    //
-   OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,
-                     (__timer_s_to_ms(value->it_value.tv_sec)+
-                      __timer_ns_to_ms(value->it_value.tv_nsec)));
+   OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec)));
    //
-   if(p_kernel_timer->itimerspec.it_value.tv_nsec!=0 ||
-      p_kernel_timer->itimerspec.it_value.tv_sec!=0)
+   if(p_kernel_timer->itimerspec.it_value.tv_nsec!=0 || p_kernel_timer->itimerspec.it_value.tv_sec!=0)
 //      OS_StartTimer((OS_TIMER*)p_kernel_timer);//arm timer
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);  //RETRIGGER timer // PATCH $BM
 

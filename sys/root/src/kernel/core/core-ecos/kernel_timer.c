@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -59,7 +56,7 @@ static const struct sigevent default_timer_sigevent={
    (struct pthread_attr_st*)0
 };
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 void kernel_timer_generic_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
 kernel_timer_t * kernel_timer_find_timer(pid_t pid, cyg_handle_t hdl);
 #endif
@@ -72,7 +69,7 @@ kernel_timer_t * kernel_timer_find_timer(pid_t pid, cyg_handle_t hdl);
 | Comments:
 | See:
 ----------------------------------------------*/
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 kernel_timer_t * kernel_timer_find_timer(pid_t pid, cyg_handle_t hdl)
 {
    kernel_object_t *k_object_ptr;
@@ -202,7 +199,7 @@ int kernel_timer_delete(kernel_timer_t* p_kernel_timer)
       return -1;
 
    //disable and delete
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_alarm_disable(p_kernel_timer->timer.alarm_hdl);
    cyg_alarm_delete(p_kernel_timer->timer.alarm_hdl);
 #endif
@@ -230,7 +227,7 @@ int kernel_timer_gettime(kernel_timer_t* p_kernel_timer, struct itimerspec* valu
    if(!p_kernel_timer->created)
       return -1;
 
-#if defined (USE_ECOS)
+#if defined (__KERNEL_UCORE_ECOS)
    elsapse_time_ms = cyg_counter_current_value(p_kernel_timer->timer.cnt_obj);
 #endif
 
@@ -276,7 +273,7 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
    if(ovalue) {
       int elsapse_time_ms = 1000;           //dummy value
       //
-#if defined (USE_ECOS)
+#if defined (__KERNEL_UCORE_ECOS)
       elsapse_time_ms = cyg_counter_current_value(p_kernel_timer->timer.cnt_obj);
 #endif
       //
@@ -294,7 +291,7 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
 
    //
    if(!p_kernel_timer->created) {
-#if defined (USE_ECOS)
+#if defined (__KERNEL_UCORE_ECOS)
       cyg_clock_to_counter(cyg_real_time_clock(), &p_kernel_timer->timer.cnt_obj);
 
       p_kernel_timer->created=KERNEL_TIMER_CREATED;
@@ -305,14 +302,14 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
                         &p_kernel_timer->timer.alarm_obj);
 #endif
    }else{
-#if defined (USE_ECOS)
+#if defined (__KERNEL_UCORE_ECOS)
       cyg_alarm_disable(p_kernel_timer->timer.alarm_hdl);
 #endif
    }
    //
    if(p_kernel_timer->itimerspec.it_value.tv_nsec!=0 ||
       p_kernel_timer->itimerspec.it_value.tv_sec!=0) {
-#if defined (USE_ECOS)
+#if defined (__KERNEL_UCORE_ECOS)
       cyg_alarm_initialize(p_kernel_timer->timer.alarm_hdl,
                            __get_timer_ticks() +
                            msec_to_tick((__timer_s_to_ms(value->it_value.tv_sec)+
@@ -335,7 +332,7 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
 | Authors     | Date     | Comments
 | $Log: not supported by cvs2svn $
 | Revision 1.5  2010/02/12 14:32:13  jjp
-| add USE_ECOS macro to compile for libkernel.so
+| add __KERNEL_UCORE_ECOS macro to compile for libkernel.so
 |
 | Revision 1.4  2010/01/07 14:12:42  jjp
 | bug fix on kernel_timer_generic_callback and clean source

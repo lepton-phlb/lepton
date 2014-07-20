@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -412,7 +409,7 @@ int dev_mem_write(desc_t desc,const char* buf, int size){
 
             addr_list[i].vector_isset_read|=(0x00000001<<shift);
             //if(!(ofile_lst[shift].oflag&O_NONBLOCK))
-            __fire_io_int(ofile_lst[shift].owner_pthread_ptr_read);
+            __fire_io(ofile_lst[shift].owner_pthread_ptr_read);
             //pthread_fire_event(&ofile_lst[shift].pthread_owner);
          }
 

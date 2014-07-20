@@ -29,7 +29,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include "kernel/core/windows.h"
+#include "kernel/core/ucore/embOSW32_100/win32/windows.h"
 #include <stdio.h>
 #include <conio.h>
 #include <io.h>
@@ -44,7 +44,8 @@ Includes
 #include "kernel/core/bin.h"
 #include "kernel/core/statvfs.h"
 #include "lib/libc/misc/prsopt.h"
-#include "expat-tools/include/expat.h"
+//#include "expat-tools/include/expat.h"
+#include "expat.h"
 #include "kernel/core/systime.h"
 #include "kernel/core/time.h"
 
@@ -92,6 +93,7 @@ char* mk_current_target=(char*)0;
 #define XML_TAG_ATTR_SRCPATH     "src_path"
 #define XML_TAG_ATTR_SRCFILE     "src_file"
 #define XML_TAG_ATTR_DESTPATH    "dest_path"
+#define XML_TAG_ATTR_INCABSPATH  "include_absolute_path"
 #define XML_TAG_ATTR_DEV         "dev"
 #define XML_TAG_ATTR_DELAY       "delay"
 #define XML_TAG_ATTR_NAME        "name"
@@ -160,6 +162,11 @@ struct kernel_conf_t g_kernel_conf={0};
 const char dflt_kernel_conf_filepath[] = "kernel_mkconf.h";
 #define MK_KERNELCONF_FILEPATH   kernel_conf_filepath
 char * kernel_conf_filepath = (char*)dflt_kernel_conf_filepath; //see xml_elmt_mklepton()
+
+#define MK_KERNELCONF_INCABSPATH   kernel_conf_incabspath
+char * kernel_conf_incabspath = (char*)0; //see xml_elmt_mklepton()
+
+
 const char kernelconf_top_header[]=
    "/*===========================================\n\
 Compiler Directive\n\
@@ -498,9 +505,11 @@ int xml_elmt_end_kernel(void){
    char buf[255]={0};
 
    //include
+   //#include my_kerneconf.h
+   if(MK_KERNELCONF_INCABSPATH!=(char*)0)
+      fprintf(f_kernelconf,"#include \"%s\" \n",MK_KERNELCONF_INCABSPATH);
    //#include dev_diskimg.h
    fprintf(f_kernelconf,"#include \"%s\" \n",MK_DSKIMG_HEADER_FILEPATH);
-
 
    //declaration header
    fwrite(kernelconf_decl_header,sizeof(char),strlen(kernelconf_decl_header),f_kernelconf);
@@ -1437,6 +1446,18 @@ int xml_elmt_arch(const char **attr){
          sprintf(path,"%s/%s",attr_val,dskimg_conf_header_filepath);
          dskimg_conf_header_filepath = strdup(path);
       }
+      if(!stricmp(attr_name,XML_TAG_ATTR_INCABSPATH)) {
+         char* path;
+         //user kernel conf header files with specific project definition
+         if(kernel_conf_incabspath==(char*)0){
+            path =malloc(strlen(attr_val)+1);
+            sprintf(path,"%s",attr_val);
+            kernel_conf_incabspath = path;
+         }else{
+            printf("error! include_absolute_path already defined:%s\n",kernel_conf_incabspath);
+            return -1;
+         }
+      }  
    }
 
    return 0;
@@ -2328,12 +2349,11 @@ int _mk_rtc(void){
 
    if(desc<0)
       return -1;
-
    //
    memset(&_tm,0,sizeof(struct tm));
    //
-
    __kernel_dev_gettime(desc,buf,6);
+   //
    _tm.tm_sec  = buf[0];
    _tm.tm_min  = buf[1];
    _tm.tm_hour = buf[2];
