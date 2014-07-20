@@ -53,7 +53,7 @@ Includes
 //#include <stdio.h>
 #endif
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 extern void _system_exit(int status);
 #endif
 

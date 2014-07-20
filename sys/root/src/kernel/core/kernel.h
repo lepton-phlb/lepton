@@ -441,7 +441,7 @@ __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_count
    __wait_ret_int(); \
 }
 
-#elif defined(GNU_GCC) && (defined(CPU_ARM7) || defined(CPU_ARM9) || defined(CPU_GNU32))
+#elif defined(__GNUC__) && (defined(CPU_ARM7) || defined(CPU_ARM9) || defined(CPU_GNU32))
 //
    #define __mk_syscall(__syscall_nb__,__pdata__){ \
    kernel_pthread_t* __pthread_ptr__; \
@@ -482,7 +482,7 @@ __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_count
    __set_irq(); \
 }
 
-#elif defined(GNU_GCC) && defined(CPU_CORTEXM)
+#elif defined(__GNUC__) && defined(CPU_CORTEXM)
 //
    #define __mk_syscall(__syscall_nb__,__pdata__){ \
    kernel_pthread_t* __pthread_ptr__; \
@@ -577,7 +577,7 @@ extern kernel_pthread_mutex_t _spi_core_mutex;
 #define _spi_lock()   kernel_pthread_mutex_lock  (&_spi_core_mutex);
 #define _spi_unlock() kernel_pthread_mutex_unlock(&_spi_core_mutex);
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
 //gestion des syscall sous synthetic
 void _init_syscall(void);
 void _kernel_routine(void* arg);

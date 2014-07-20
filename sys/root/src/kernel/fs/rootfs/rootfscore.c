@@ -40,7 +40,7 @@ Includes
 
 #include "kernel/fs/rootfs/rootfscore.h"
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #include <string.h>
 #endif
 
