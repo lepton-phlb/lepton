@@ -37,7 +37,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/fs/vfs/vfsdev.h"
 
 //fb test
-//#if defined(GNU_GCC)
+//#if defined(__GNUC__)
    #define USE_FRAMEBUFFER
    #include "kernel/core/ioctl_fb.h"
 //#endif
@@ -71,7 +71,7 @@ dev_map_t dev_tty_map={
    dev_tty_ioctl //ioctl
 };
 
-//#if defined(GNU_GCC)
+//#if defined(__GNUC__)
    #define SZ_FONT_X       8
    #define SZ_FONT_Y       16
 //#endif

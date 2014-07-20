@@ -454,7 +454,7 @@ Declaration
    #define __KERNEL_IO_SEM
 #endif
 
-#if defined(GNU_GCC)
+#if defined(__GNUC__)
    #define __KERNEL_LOAD_LIB
    #define __KERNEL_POSIX_REALTIME_SIGNALS
    #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
@@ -557,7 +557,7 @@ Declaration
 #endif 
 
 //file system ufs
-#if !defined(GNU_GCC)
+#if !defined(__GNUC__)
    #define __KERNEL_SUPPORT_UFS_DRIVER_1_3 13 //only 16 bits file size support
 #endif
 #define __KERNEL_SUPPORT_UFS_DRIVER_1_4 14  //16/32 bits file size support
