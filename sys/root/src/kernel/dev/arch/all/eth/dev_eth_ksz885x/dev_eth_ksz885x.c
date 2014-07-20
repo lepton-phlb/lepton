@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -44,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/dev/arch/all/eth/common/dev_eth_common.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
    #include <string.h>
    #include <stdlib.h>
@@ -126,7 +123,7 @@ static board_ksz885x_net_info_t g_net_ksz885x_inf __attribute((section(".no_cach
 static unsigned char dev_eth_ksz885x_mac_addr[] = {0x00, 0x10, 0xA1, 0x86, 0x95, 0x11};
 
 //
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 static cyg_uint32 dev_eth_ksz885x_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void dev_eth_ksz885x_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 static int dev_eth_ksz885x_isr_send(board_ksz885x_net_info_t * p_net_info);
@@ -774,7 +771,7 @@ int dev_eth_ksz885x_load(dev_io_info_t* p_dev_io_info) {
    _ksz885x_clear_wol_event(&g_net_ksz885x_inf.ksz885x_info, WAKEUP_EVENT_MASK);
    _ksz885x_setup_irq(&g_net_ksz885x_inf.ksz885x_info);
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_interrupt_create((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no,
                         (cyg_priority_t)g_net_ksz885x_inf.dev_info.irq_prio,
                         (cyg_addrword_t)&g_net_ksz885x_inf,
@@ -833,7 +830,7 @@ int dev_eth_ksz885x_open(desc_t desc, int o_flag) {
 
    //unmask IRQ and enable ksz
    if(g_net_ksz885x_inf._eth_ksz885x_desc_rd>0 && g_net_ksz885x_inf._eth_ksz885x_desc_wr>0) {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
       cyg_interrupt_acknowledge((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no);
       cyg_interrupt_unmask((cyg_vector_t)g_net_ksz885x_inf.dev_info.irq_no);
 #endif

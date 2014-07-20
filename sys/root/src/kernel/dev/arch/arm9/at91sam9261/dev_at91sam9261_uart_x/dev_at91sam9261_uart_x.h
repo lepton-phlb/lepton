@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _DEV_AT91SAM9261_UART_X_H
-#define _DEV_AT91SAM9261_UART_X_H
+#ifndef _DEV_AT91SAM9261_UART_X_H_
+#define _DEV_AT91SAM9261_UART_X_H_
 
 #include "kernel/dev/arch/arm9/at91sam9261/common/dev_at91sam9261_common_uart.h"
 
@@ -38,12 +38,12 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
-   #include "kernel/core/core_rttimer.h"
 #endif
+
+#include "kernel/core/core_rttimer.h"
 /*============================================
 | Declaration
 ==============================================*/
@@ -104,9 +104,9 @@ typedef struct {
    desc_t desc_wr;
 
    //VTIME timer in units of 0.1 seconds (posix specification).
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    OS_TIMER timer;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS) || defined(__KERNEL_UCORE_FREERTOS)
    tmr_t timer;
    rttmr_attr_t timer_attr;
 #endif

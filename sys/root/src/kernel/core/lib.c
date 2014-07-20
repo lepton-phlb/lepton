@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -75,8 +72,7 @@ int load_lib(kernel_pthread_t* pthread_ptr){
       //only of first library loaded
       if((*lib_lst[i].p_lib_data_offset)==LIB_INVALID_OFFSET) {
          //calc data offset
-         lib_data_offset = (unsigned long)(pthread_ptr->heap_top) -
-                           (unsigned long)(pthread_ptr->attr.stackaddr);
+         lib_data_offset = (unsigned long)(pthread_ptr->heap_top) - (unsigned long)(pthread_ptr->attr.stackaddr);
          *lib_lst[i].p_lib_data_offset=lib_data_offset;
       }
       lib_lst[i].lib_entry_point(pthread_ptr);

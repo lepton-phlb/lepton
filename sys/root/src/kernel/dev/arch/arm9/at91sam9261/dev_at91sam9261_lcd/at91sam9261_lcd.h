@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -40,7 +37,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 #include "kernel/core/etypes.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    #include "cyg/hal/at91sam9261.h"
 #endif
 /*============================================
@@ -65,7 +62,7 @@ either the MPL or the [eCos GPL] License."
 #define MEMO_ECRAN            0x22100000L    // Adresse de la recopie d'cran ds la SDRAM
 
 /*   Frame buffer memory information    */
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
 extern char *lcd_base;               // Start of framebuffer memory
 extern char *lcd_console_address;       // Start of console buffer
 extern short console_col;

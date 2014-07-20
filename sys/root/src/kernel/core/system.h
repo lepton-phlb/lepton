@@ -24,10 +24,12 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _SYSTEM_H
-#define _SYSTEM_H
 
-
+/*===========================================
+Compiler Directive
+=============================================*/
+#ifndef _SYSTEM_H_
+#define _SYSTEM_H_
 
 /*===========================================
 Includes
@@ -36,8 +38,9 @@ Includes
 #include "kernel/core/kernelconf.h"
 
 #if defined (CPU_WIN32)
-   #include "kernel/core/windows.h"
-#elif ( defined(__IAR_SYSTEMS_ICC) && defined (USE_SEGGER) && defined(CPU_M16C62))
+   //#include "kernel/core/windows.h"
+   #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
+#elif ( defined(__IAR_SYSTEMS_ICC) && defined (__KERNEL_UCORE_EMBOS) && defined(CPU_M16C62))
    #include <icclbutl.h>
    #include <intrm16c.h>
 //#include "iom16c62.h"
@@ -127,7 +130,6 @@ Declaration
 
 //see fcntl.h FD_CLOEXEC 0x8000
 
-
 //file descriptor
 #define INVALID_DESC             -1
 
@@ -135,6 +137,5 @@ Declaration
 #define SEEK_SET   0
 #define SEEK_CUR   1
 #define SEEK_END   2
-
 
 #endif

@@ -213,7 +213,7 @@ void Fl::awake(void* msg) {
 // POSIX threading...
 #elif HAVE_PTHREAD
 
-//#ifdef USE_ECOS
+//#ifdef __KERNEL_UCORE_ECOS
 //#  include <unistd.h>
 #include <stdlib.h>
 

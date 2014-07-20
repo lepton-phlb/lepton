@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -49,8 +46,7 @@ typedef struct {
 }pthread_mutex_t;
 
 #define PTHREAD_MUTEX_UNINITIALIZED  ((unsigned long)0x00000000)
-#define PTHREAD_MUTEX_INITIALIZER {(kernel_object_t*)PTHREAD_MUTEX_UNINITIALIZED, \
-                                   (pthread_mutexattr_t)0}
+#define PTHREAD_MUTEX_INITIALIZER {(kernel_object_t*)PTHREAD_MUTEX_UNINITIALIZED,(pthread_mutexattr_t)0}
 
 
 //pthread cond
@@ -69,13 +65,13 @@ typedef struct {
    struct pthread_condlist_st* list;
    //
    pthread_mutex_t* mutex;
-
-   kernel_sigevent_t kernel_sigevent;
+   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
+      kernel_sigevent_t kernel_sigevent;
+   #endif
 }pthread_cond_t;
 
 #define PTHREAD_COND_UNINITIALIZED  ((unsigned long)0x00000000)
-#define PTHREAD_COND_INITIALIZER {(kernel_object_t*)PTHREAD_COND_UNINITIALIZED, \
-                                  (pthread_condattr_t)0,(pthread_condlist_t*)0,(pthread_mutex_t*)0}
+#define PTHREAD_COND_INITIALIZER {(kernel_object_t*)PTHREAD_COND_UNINITIALIZED,(pthread_condattr_t)0,(pthread_condlist_t*)0,(pthread_mutex_t*)0}
 
 
 

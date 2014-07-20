@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -40,12 +37,17 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#ifdef USE_SEGGER
+#if defined(__KERNEL_UCORE_EMBOS)
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef OS_TIMER tmr_t;
 
-#elif USE_ECOS
+#elif defined(__KERNEL_UCORE_FREERTOS)
+typedef void (*_tmr_func_t)( xTimerHandle);
+typedef _tmr_func_t tmr_func_t;
+typedef xTimerHandle tmr_t;
+
+#elif __KERNEL_UCORE_ECOS
 typedef cyg_handle_t alrm_hdl_t;    //handle sur l'objet alarme
 typedef cyg_alarm alrm_t;    //objet alarme
 typedef void (*_tmr_func_t)(alrm_hdl_t alarm_handle, cyg_addrword_t data );
@@ -64,7 +66,7 @@ typedef int tmr_t;
 typedef struct rttmr_attr_st {
    time_t tm_msec; //delay
    tmr_func_t func;
-#if defined USE_ECOS
+#if defined __KERNEL_UCORE_ECOS
    cyg_addrword_t data;
 #endif
 }rttmr_attr_t;

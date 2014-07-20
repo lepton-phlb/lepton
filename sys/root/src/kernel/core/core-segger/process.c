@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -59,7 +56,7 @@ pid_t pid_counter;
 //patch: optimization for code memory occupation.
 #if defined (CPU_WIN32)
 process_t* __process_lst[PROCESS_MAX]={0};
-#elif defined (__IAR_SYSTEMS_ICC) || defined (__IAR_SYSTEMS_ICC__)
+#else
 process_t* __process_lst[PROCESS_MAX];
 #endif
 
@@ -79,8 +76,7 @@ void display_stack(HANDLE h, char* title)
 
    CONTEXT context;
 
-   context.ContextFlags = CONTEXT_FULL|CONTEXT_DEBUG_REGISTERS|CONTEXT_FLOATING_POINT|
-                          CONTEXT_EXTENDED_REGISTERS;
+   context.ContextFlags = CONTEXT_FULL|CONTEXT_DEBUG_REGISTERS|CONTEXT_FLOATING_POINT|CONTEXT_EXTENDED_REGISTERS;
 
    GetThreadContext( h,&context);
 
@@ -699,8 +695,7 @@ int _sys_pthread_create(kernel_pthread_t** new_kernel_pthread,
    //pthread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
    memcpy(&pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
-   pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head,
-                                            &pthread_ptr->kernel_sigqueue);
+   pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &pthread_ptr->kernel_sigqueue);
 #endif
 
    //load static library
@@ -713,8 +708,7 @@ int _sys_pthread_create(kernel_pthread_t** new_kernel_pthread,
    //backup pthread start context (see vfork() backup stack operation
    __bckup_thread_start_context(pthread_ptr->start_context,pthread_ptr);
    //
-   _dbg_printf("process(%d) create thread id=%d\n",(*new_kernel_pthread)->pid,
-               (*new_kernel_pthread)->id);
+   _dbg_printf("process(%d) create thread id=%d\n",(*new_kernel_pthread)->pid,(*new_kernel_pthread)->id);
    //enable context switch
    __atomic_out();
    return 0;
@@ -736,28 +730,31 @@ int _sys_pthread_cancel(kernel_pthread_t* kernel_pthread,pid_t pid){
 
    //disable context switch
    __atomic_in();
-
-   _dbg_printf("process(%d) cancel thread id=%d\n",kernel_pthread->pid,kernel_pthread->id);
-
-   //unlock io desc if needed
-   if(kernel_pthread->io_desc!=-1) {
-      //kernel_pthread_mutex_owner_destroy(kernel_pthread,&ofile_lst[kernel_pthread->io_desc].mutex);
-      //to do: check if another procress took the sem and take the value to reinit the sem with this value
-      kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_read);
-      kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_write);
-      kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_read,0,1);
-      kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_write,0,1);
+   if(pid>0){
+      _dbg_printf("process(%d) cancel thread id=%d\n",kernel_pthread->pid,kernel_pthread->id);
+      //unlock io desc if needed
+      if(kernel_pthread->io_desc!=-1) {
+         //kernel_pthread_mutex_owner_destroy(kernel_pthread,&ofile_lst[kernel_pthread->io_desc].mutex);
+         //to do: check if another procress took the sem and take the value to reinit the sem with this value
+         kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_read);
+         kernel_sem_destroy(&ofile_lst[kernel_pthread->io_desc].sem_write);
+         kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_read,0,1);
+         kernel_sem_init(&ofile_lst[kernel_pthread->io_desc].sem_write,0,1);
+      }
+      //cancel
+      kernel_pthread_cancel(kernel_pthread);
+      //remove from process container
+      _sys_process_remove_pthread(process_lst[pid],kernel_pthread);
+      //free stack
+      _sys_free(kernel_pthread->attr.stackaddr);
+      //detach pthread
+      kernel_pthread->pid=(pid_t)-1;
+      //free kernel_pthread_t
+      _sys_free(kernel_pthread);
+   }else{
+      //native kernel:stack and pthread tcb not allocated by the kernel.
+      kernel_pthread_cancel(kernel_pthread);
    }
-   //cancel
-   kernel_pthread_cancel(kernel_pthread);
-   //remove from process container
-   _sys_process_remove_pthread(process_lst[pid],kernel_pthread);
-   //free stack
-   _sys_free(kernel_pthread->attr.stackaddr);
-   //detach pthread
-   kernel_pthread->pid=(pid_t)-1;
-   //free kernel_pthread_t
-   _sys_free(kernel_pthread);
    //enable context switch
    __atomic_out();
    return 0;
@@ -808,8 +805,7 @@ void* process_routine(void* arg){
 
    pid=_sys_getpid();
 
-   process_lst[pid]->status =
-      process_lst[pid]->process_routine(process_lst[pid]->argc,process_lst[pid]->argv);
+   process_lst[pid]->status = process_lst[pid]->process_routine(process_lst[pid]->argc,process_lst[pid]->argv);
    process_lst[pid]->pthread_ptr->exit=NULL;
 
    _dbg_printf("__exit(%d)\n",pid);
@@ -1002,16 +998,13 @@ pid_t _sys_krnl_exec(const char* path,
 
    //thread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[_pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
-          sizeof(kernel_sigqueue_t));
-   process_lst[_pid]->pthread_ptr->kernel_sigqueue.constructor(
-      &process_lst[_pid]->kernel_object_head, &process_lst[_pid]->pthread_ptr->kernel_sigqueue);
+   memcpy(&process_lst[_pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
+   process_lst[_pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[_pid]->kernel_object_head, &process_lst[_pid]->pthread_ptr->kernel_sigqueue);
 #endif
 
    //atexit registred functions
 #if ATEXIT_MAX>0
-   process_lst[_pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca(
-      process_lst[_pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
+      process_lst[_pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca( process_lst[_pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
 #endif
 
    //load static library
@@ -1023,8 +1016,7 @@ pid_t _sys_krnl_exec(const char* path,
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __clr_irq();
 #endif
-   __bckup_thread_start_context(process_lst[_pid]->pthread_ptr->start_context,
-                                process_lst[_pid]->pthread_ptr);
+   __bckup_thread_start_context(process_lst[_pid]->pthread_ptr->start_context,process_lst[_pid]->pthread_ptr);
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();
 #endif
@@ -1115,15 +1107,13 @@ pid_t _sys_exec(const char* path,
    //see kernel/syscall.c
    //minimize suspended time of scheduler
    __atomic_in();
-   __stop_sched()
+   __stop_sched();
 
    //destroy previous process
-   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr &&
-      process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK) {
+   if(process_lst[pid]->pthread_ptr->parent_pthread_ptr && process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK){
       //
       kernel_pthread_t* pthread_ptr = process_lst[pid]->pthread_ptr;
-      kernel_pthread_t* backup_parent_pthread_ptr =
-         process_lst[pid]->pthread_ptr->parent_pthread_ptr;
+      kernel_pthread_t* backup_parent_pthread_ptr = process_lst[pid]->pthread_ptr->parent_pthread_ptr;
 
       //put all kernel object from chained list (see _sys_vfork() and _sys_vfork_exit() )
       //must be use before all pthreads stack destroyed and local variable too.
@@ -1220,16 +1210,13 @@ pid_t _sys_exec(const char* path,
 
    //thread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,
-          sizeof(kernel_sigqueue_t));
-   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(
-      &process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
+   memcpy(&process_lst[pid]->pthread_ptr->kernel_sigqueue,&_kernel_sigqueue_initializer,sizeof(kernel_sigqueue_t));
+   process_lst[pid]->pthread_ptr->kernel_sigqueue.constructor(&process_lst[pid]->kernel_object_head, &process_lst[pid]->pthread_ptr->kernel_sigqueue);
 #endif
 
    //atexit registred functions
 #if ATEXIT_MAX>0
-   process_lst[pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca(
-      process_lst[pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
+      process_lst[pid]->p_atexit_func  = (atexit_func_t*) kernel_pthread_alloca( process_lst[pid]->pthread_ptr,(ATEXIT_MAX+1)*sizeof(atexit_func_t));
 #endif
 
    //load static library
@@ -1241,17 +1228,14 @@ pid_t _sys_exec(const char* path,
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __clr_irq();
 #endif
-   __bckup_thread_start_context(process_lst[pid]->pthread_ptr->start_context,
-                                process_lst[pid]->pthread_ptr);
+   __bckup_thread_start_context(process_lst[pid]->pthread_ptr->start_context,process_lst[pid]->pthread_ptr);
 #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
    __set_irq();
 #endif
 
    //profiler
    __kernel_profiler_stop(process_lst[pid]->pthread_ptr);
-   __profiler_add_result(process_lst[pid]->pthread_ptr,_SYSCALL_EXECVE,
-                         __kernel_profiler_get_counter(
-                            process_lst[pid]->pthread_ptr));
+   __profiler_add_result(process_lst[pid]->pthread_ptr,_SYSCALL_EXECVE,__kernel_profiler_get_counter(process_lst[pid]->pthread_ptr));
 
    return pid;
 }
@@ -1373,8 +1357,7 @@ pid_t _sys_waitpid(pid_t pid,pid_t child_pid,int options,int* status){
             || process_lst[_pid]->pgid!=process_lst[pid]->pgid
             || process_lst[_pid]->ppid!=pid) continue;
 
-         if( (process_lst[_pid]->pthread_ptr) &&
-             (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)) {
+         if( (process_lst[_pid]->pthread_ptr) && (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)){
             *(((char*)status)+1) = (char)(process_lst[_pid]->status);
             //see _sys_vfork_exit() and _sys_exit()
             //free main pthread of cureent process
@@ -1400,8 +1383,7 @@ pid_t _sys_waitpid(pid_t pid,pid_t child_pid,int options,int* status){
          if(!process_lst[_pid]
             || process_lst[_pid]->ppid!=pid ) continue;
 
-         if( (process_lst[_pid]->pthread_ptr) &&
-             (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)) {
+         if( (process_lst[_pid]->pthread_ptr) && (process_lst[_pid]->pthread_ptr->stat&PTHREAD_STATUS_ZOMBI)){
             *(((char*)status)+1) = (char)(process_lst[_pid]->status);
             //see _sys_vfork_exit() and _sys_exit()
             //free main pthread of cureent process
@@ -1534,8 +1516,7 @@ int _sys_sigpending(kernel_pthread_t* pthread_ptr,sigset_t* set){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sys_sigaction(kernel_pthread_t* pthread_ptr,int sig,struct sigaction* act,
-                   struct sigaction* oact){
+int _sys_sigaction(kernel_pthread_t* pthread_ptr,int sig,struct sigaction* act,struct sigaction* oact){
 
    if(!sig || (sig>NSIG && sig<SIGRTMIN) || sig>SIGRTMAX ) return -EINVAL;
 

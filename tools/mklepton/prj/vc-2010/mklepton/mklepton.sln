@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mklepton", "mklepton.vcxproj", "{1F75F311-2CD1-4DA9-B995-D087A30C78E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{719DB5E3-3551-4AD5-83A4-533B8C18B41E} = {719DB5E3-3551-4AD5-83A4-533B8C18B41E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "expat_static", "..\expat_static\expat_static.vcxproj", "{719DB5E3-3551-4AD5-83A4-533B8C18B41E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1F75F311-2CD1-4DA9-B995-D087A30C78E6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1F75F311-2CD1-4DA9-B995-D087A30C78E6}.Debug|Win32.Build.0 = Debug|Win32
+		{1F75F311-2CD1-4DA9-B995-D087A30C78E6}.Release|Win32.ActiveCfg = Release|Win32
+		{1F75F311-2CD1-4DA9-B995-D087A30C78E6}.Release|Win32.Build.0 = Release|Win32
+		{719DB5E3-3551-4AD5-83A4-533B8C18B41E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{719DB5E3-3551-4AD5-83A4-533B8C18B41E}.Debug|Win32.Build.0 = Debug|Win32
+		{719DB5E3-3551-4AD5-83A4-533B8C18B41E}.Release|Win32.ActiveCfg = Release|Win32
+		{719DB5E3-3551-4AD5-83A4-533B8C18B41E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

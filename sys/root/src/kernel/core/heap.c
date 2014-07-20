@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -25,29 +22,51 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-#include "memstruc.i"
-#include "kernel/kernelconf.h"
+#include "kernel/core/kernelconf.h"
 
-#ifndef MALLOC_BUFSIZE
-   #define MALLOC_BUFSIZE __KERNEL_HEAP_SIZE
+#if (__tauon_compiler__==__compiler_iar_m16c__)
+   #include "memstruc.i"
+   
+
+   #ifndef MALLOC_BUFSIZE
+      #define MALLOC_BUFSIZE __KERNEL_HEAP_SIZE
+   #endif
+
+   /* Get number of align buckets from number of bytes */
+   #define __NR_ELEMENTS__ (__HEAP_SIZE__(MALLOC_BUFSIZE))
+
+   /* Allocate the actual heap, */
+   static MEM_ATTRIBUTE __align_union__ bulk_storage[__NR_ELEMENTS__];
+
+   /* a pointer to the first byte */
+   char PTR_ATTRIBUTE *const _heap_of_memory = (char PTR_ATTRIBUTE *)
+                                               bulk_storage;
+
+   /* a pointer to still free heap memory, */
+   char PTR_ATTRIBUTE *_last_heap_object = (char PTR_ATTRIBUTE *) bulk_storage;
+
+   /* and a pointer to last byte in the heap */
+   char PTR_ATTRIBUTE *const _top_of_heap = (char PTR_ATTRIBUTE *)
+                                            (bulk_storage + __NR_ELEMENTS__ - 1);
+   //                                         
+   int kernel_warmup_heap (void) {
+      return 0;
+   }
+
+#elif (__tauon_compiler__==__compiler_keil_arm__)
+
+   #include <stdlib.h>
+
+   static unsigned int heap_mempool [__KERNEL_HEAP_SIZE];  //memory pool
+
+   int kernel_warmup_heap (void) {
+     init_mempool(&heap_mempool, sizeof(heap_mempool));
+     return 0;
+    
+   }
+#else
+   int kernel_warmup_heap (void) {
+      return 0;
+   }
 #endif
-
-/* Get number of align buckets from number of bytes */
-#define __NR_ELEMENTS__ (__HEAP_SIZE__(MALLOC_BUFSIZE))
-
-/* Allocate the actual heap, */
-static MEM_ATTRIBUTE __align_union__ bulk_storage[__NR_ELEMENTS__];
-
-/* a pointer to the first byte */
-char PTR_ATTRIBUTE *const _heap_of_memory = (char PTR_ATTRIBUTE *)
-                                            bulk_storage;
-
-/* a pointer to still free heap memory, */
-char PTR_ATTRIBUTE *_last_heap_object = (char PTR_ATTRIBUTE *) bulk_storage;
-
-/* and a pointer to last byte in the heap */
-char PTR_ATTRIBUTE *const _top_of_heap = (char PTR_ATTRIBUTE *)
-                                         (bulk_storage + __NR_ELEMENTS__ - 1);
-
-
 

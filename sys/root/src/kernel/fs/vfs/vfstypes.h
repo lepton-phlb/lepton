@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -44,6 +41,7 @@ Includes
 #include "kernel/core/kernel_pthread.h"
 
 #include "kernel/fs/ufs/ufsinfo.h"
+#include "kernel/fs/yaffs/yaffsinfo.h"
 #include "kernel/fs/fat/fatinfo.h"
 
 /*===========================================
@@ -58,14 +56,31 @@ Declaration
 
 //File system type
 typedef enum {
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1
    fs_rootfs,   //0
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1
    fs_ufs,
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1
    fs_ufsx,
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
    fs_kofs,
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
    fs_msdos,
-   fs_vfat
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
+   fs_vfat,
+#endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   fs_effs,
+#endif
+   fs_null
 }fstype;
 
+//
 #define UFS_ALIGNEMENT  4
 
 struct statvfs {
@@ -127,7 +142,11 @@ typedef struct {
  * nombre maximum de de superblock (voir MAX_MOUNT_DEVICE).
  *
  */
+#if !defined(CPU_CORTEXM)
 #define MAX_SUPER_BLOCK 8 //6//4 //4
+#else
+#define MAX_SUPER_BLOCK 4
+#endif
 
 extern superblk_t superblk_lst[MAX_SUPER_BLOCK];
 
@@ -138,6 +157,7 @@ extern superblk_t superblk_lst[MAX_SUPER_BLOCK];
  */
 typedef union {
    ufs_info_t ufs_info;
+   yaffs_info_t   yaffs_info;
    fat_info_t fat_info;
 }fsinfo_t;
 
@@ -305,7 +325,11 @@ typedef union {
    uint16_t rwxrwxrwx;
 }ino_mod_t;
 
+#if !defined(CPU_CORTEXM)
 #define MAX_FILESYSTEM  7 //rootfs, ufs, ufsx, kofs, msdos, vfat, (null)
+#else
+#define MAX_FILESYSTEM  7 //rootfs, ufs, ufsx, kofs, msdos, vfat, (null)
+#endif
 extern pfsop_t const fsop_lst[MAX_FILESYSTEM];
 
 //

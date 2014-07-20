@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -73,8 +70,7 @@ Includes
 
 
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
-   #include <ioat91sam9261.h>
-   #include <intrinsic.h>
+   #include <atmel/ioat91sam9261.h>
 #else
    #include "cyg/hal/at91sam9261.h"
    #include <string.h>
@@ -105,7 +101,7 @@ extern int dev_at91sam9261_uart_dbg_x_ioctl       (desc_t desc,int request,va_li
 extern int dev_at91sam9261_uart_dbg_x_interrupt   (desc_t desc);
 extern int termios2ttys                      (struct termios* termios_p);
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 extern void dev_at91sam9261_uart_dbg_x_timer_callback (board_inf_uart_t * p_board_inf_uart);
 #else
 extern void dev_at91sam9261_uart_dbg_x_timer_callback(alrm_hdl_t alarm_handle, cyg_addrword_t data);
@@ -120,11 +116,11 @@ static void dev_at91sam9261_uart_dbg_interrupt  (void);
 
 desc_t desc_uart_dbg=-1;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 // fct pointer for debug interrupt
 extern void (*g_p_fct_dbg_interrupt)(void);
 
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 static cyg_handle_t _at91sam9261_uart_dbg_handle;
 static cyg_interrupt _at91sam9261_uart_dbg_it;
 int rcv_flag=0;
@@ -147,17 +143,22 @@ dev_map_t dev_at91sam9261_uart_dbg_map={
    dev_at91sam9261_uart_dbg_x_ioctl
 };
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
 void dev_at91sam9261_uart_dbg_interrupt(void)
 {
    // interrupt for dbg Uart ?
    board_inf_uart_t *p_inf_uart;
    AT91_REG         *p_adr;
-
+    //
+   __hw_enter_interrupt();
+   //
    p_inf_uart = (board_inf_uart_t *)ofile_lst[desc_uart_dbg].p;
    p_adr      = (AT91_REG *)p_inf_uart->base_adr;
 
    dev_at91sam9261_uart_dbg_x_interrupt(desc_uart_dbg);
+   //
+   __hw_leave_interrupt();
+   //
 }
 
 
@@ -165,7 +166,7 @@ void dev_at91sam9261_uart_dbg_timer_callback(void)
 {
    dev_at91sam9261_uart_dbg_x_timer_callback(p_board_inf_uart_dbg);
 }
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
 cyg_uint32 dev_at91sam9261_uart_dbg_isr(cyg_vector_t vector, cyg_addrword_t data) {
    cyg_interrupt_mask(vector);
    unsigned int usart_csr;
@@ -254,7 +255,7 @@ int dev_at91sam9261_uart_dbg_load (void)
 {
    p_board_inf_uart_dbg                    = (board_inf_uart_t *)malloc(sizeof(board_inf_uart_t));
    memset(p_board_inf_uart_dbg,0,sizeof(board_inf_uart_t));
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    p_board_inf_uart_dbg->f_timer_call_back = dev_at91sam9261_uart_dbg_timer_callback;
 #endif
    p_board_inf_uart_dbg->loaded = 0;
@@ -272,7 +273,7 @@ int dev_at91sam9261_uart_dbg_load (void)
 ---------------------------------------------*/
 int dev_at91sam9261_uart_dbg_open(desc_t desc, int o_flag)
 {
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_vector_t serial_vector = CYGNUM_HAL_INT_SERIAL;
    cyg_priority_t serial_prior = CYGNUM_HAL_H_PRIOR;
 #endif
@@ -304,10 +305,10 @@ int dev_at91sam9261_uart_dbg_open(desc_t desc, int o_flag)
    // call uart common Api open
    ret = dev_at91sam9261_uart_dbg_x_open(desc, o_flag);
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    // Usart debug interrupt function initialization
    g_p_fct_dbg_interrupt = dev_at91sam9261_uart_dbg_interrupt;
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    //Primitive de creation de l'IT au chargement du driver
    cyg_interrupt_create(serial_vector, serial_prior, 0,
                         &dev_at91sam9261_uart_dbg_isr, &dev_at91sam9261_uart_dbg_dsr,

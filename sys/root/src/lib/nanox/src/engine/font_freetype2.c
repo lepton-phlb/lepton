@@ -39,7 +39,7 @@
 
 #include "devfont.h"
 
-#if (UNIX | DOS_DJGPP | USE_ECOS)
+#if (UNIX | DOS_DJGPP | __KERNEL_UCORE_ECOS)
 #define strcmpi strcasecmp
 #endif
 

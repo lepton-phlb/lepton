@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -118,8 +115,7 @@ int kernel_object_constructor_pthread_mutex(kernel_object_t* p,va_list ap){
 
    pthread_mutexattr_t mutex_attr=0;
 
-   if(kernel_pthread_mutex_init(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,
-                                &mutex_attr)<0)
+   if(kernel_pthread_mutex_init(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,&mutex_attr)<0)
       return -1;
 
    p->type = KERNEL_OBJECT_PTRHEAD_MUTEX;
@@ -143,8 +139,7 @@ int kernel_object_destructor_pthread_mutex(kernel_object_t* p){
 #ifndef CPU_M16C62
    p->type = KERNEL_OBJECT_FREE; //could be reused for any kernel object type
    //
-   memset(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,0,
-          sizeof(kernel_pthread_mutex_t));
+   memset(&p->object.kernel_object_pthread_mutex.kernel_pthread_mutex,0,sizeof(kernel_pthread_mutex_t));
 #endif
 
    return 0;
@@ -165,8 +160,7 @@ int kernel_object_constructor_sem(kernel_object_t* p,va_list ap){
    //
    p->object.kernel_object_sem.init_count = init_count;
    //
-   if(kernel_sem_init(&p->object.kernel_object_sem.kernel_sem,0,
-                      p->object.kernel_object_sem.init_count)<0)
+   if(kernel_sem_init(&p->object.kernel_object_sem.kernel_sem,0,p->object.kernel_object_sem.init_count)<0)
       return -1;
    //
    p->type = KERNEL_OBJECT_SEM;
@@ -493,8 +487,7 @@ kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_he
 | Comments:
 | See:
 ----------------------------------------------*/
-kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,
-                                           kernel_object_t* p){
+kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,kernel_object_t* p){
    *pp_kernel_object_head = kernel_object_remove(*pp_kernel_object_head,p);
 
    if(kernel_object_op[p->type].kernel_object_destructor)

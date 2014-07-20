@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -56,6 +53,12 @@ Includes
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 
+#if defined (__KERNEL_NET_IPSTACK)
+   #if defined(USE_UIP)
+      #include "kernel/core/net/uip_core/uip_core.h"
+   #endif
+#endif
+
 /*===========================================
 Global Declaration
 =============================================*/
@@ -78,17 +81,27 @@ kernel_pthread_t kernel_thread;
 tmr_t kernel_tmr;
 
 //
-#if ( defined(__IAR_SYSTEMS_ICC) && defined (USE_SEGGER) && defined(CPU_M16C62))
+#if ( (__tauon_compiler__==__compiler_iar_m16c__))
    #define KERNEL_STACK_SIZE  1024 //1024//512 M16C
-#elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && defined(CPU_ARM7))
-   #define KERNEL_STACK_SIZE  2048 //2048//ARM7
-#elif ( defined(__IAR_SYSTEMS_ICC__) && defined (USE_SEGGER) && defined(CPU_ARM9))
-   #define KERNEL_STACK_SIZE  2048 //2048//ARM9
-#elif WIN32
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__))
+   #define KERNEL_STACK_SIZE  2048 //ARM7TDMI
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM3__))
+   #define KERNEL_STACK_SIZE  2048 //CORTEXM3
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM4__))
+   #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM4
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__))
+   #define KERNEL_STACK_SIZE  2048 //ARM926EJS
+#elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__))
+   #define KERNEL_STACK_SIZE  2048 //CORTEXM3
+#elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))
+   #define KERNEL_STACK_SIZE  2048 //CORTEXM4
+#elif ( (__tauon_compiler__==__compiler_win32__)      && (__tauon_cpu_core__ == __tauon_cpu_core_win32_simulation__))
    #define KERNEL_STACK_SIZE  1024
 #endif
 
 #define KERNEL_PRIORITY    150
+//
+__KERNEL_SRAM_LOCATION
 _macro_stack_addr char kernel_stack[KERNEL_STACK_SIZE];
 
 
@@ -211,7 +224,7 @@ int _kernel_syscall(void){
    kernel_pthread_t* pthread_ptr = g_pthread_lst;
 
    while(pthread_ptr) {
-      if( (pthread_ptr->pid<=0) || (pthread_ptr->irq_nb!=KERNEL_INTERRUPT_NB) ) {
+      if( /*(pthread_ptr->pid<=0) ||*/ (pthread_ptr->irq_nb!=KERNEL_INTERRUPT_NB) ) {
          pthread_ptr=pthread_ptr->gnext;
          continue;
       }
@@ -259,7 +272,7 @@ int _kernel_syscall(void){
 ---------------------------------------------*/
 int _kernel_mount(const char* argv[]){
    static const char* fstype_list[]={"rootfs","ufs","ufsx"};
-   static const fstype_list_size=sizeof(fstype_list)/sizeof(char*);
+   static const int fstype_list_size=sizeof(fstype_list)/sizeof(char*);
    fstype_t i;
    fstype_t fstype = -1;
 
@@ -323,8 +336,11 @@ void _kernel_warmup_rootfs(void){
 
    //kernel
    _vfs_mkdir("/kernel",0);
-   _vfs_mount(fs_kofs,(char*)0,"/kernel");
-
+   
+   //kernel objects file system
+   #if __KERNEL_VFS_SUPPORT_KOFS==1
+      _vfs_mount(fs_kofs,(char*)0,"/kernel");
+   #endif
    //
 
    //binary
@@ -469,14 +485,14 @@ void _kernel_warmup_spi(void){
          strcpy(ref,"/dev/");
          strcat(ref,pdev_lst[dev]->dev_name);
          _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
-         __set_if_spi_master((fdev_map_t*)pdev_lst[dev]);
+         //__set_if_spi_master((fdev_map_t*)pdev_lst[dev]);
       }
    }
    //spi master interface
-   if( (desc = _vfs_open("/dev/spi0",O_RDWR,0))<0)
-      return;  //spi interface not available
+   //if( (desc = _vfs_open("/dev/spi0",O_RDWR,0))<0)
+   //return;  //spi interface not available
 
-   __set_if_spi_master_desc(desc);
+   //__set_if_spi_master_desc(desc);
 }
 
 /*--------------------------------------------
@@ -532,12 +548,12 @@ void _kernel_warmup_dev(void){
                && pdev_lst[dev]->dev_name[2]=='c'
                && pdev_lst[dev]->dev_name[3]=='0') {
          //already mount see _kernel_warmup_i2c
-      }/*else if(pdev_lst[dev]->dev_name[0]=='s'
+      }else if(pdev_lst[dev]->dev_name[0]=='s'
          && pdev_lst[dev]->dev_name[1]=='p'
          && pdev_lst[dev]->dev_name[2]=='i'
          && pdev_lst[dev]->dev_name[3]=='0'){
          //already mount see _kernel_warmup_spi
-      }*/else if(pdev_lst[dev]->dev_name[0]=='c'
+      }else if(pdev_lst[dev]->dev_name[0]=='c'
               && pdev_lst[dev]->dev_name[1]=='p'
               && pdev_lst[dev]->dev_name[2]=='u'
               && pdev_lst[dev]->dev_name[3]=='0') {
@@ -1059,7 +1075,7 @@ void _start_kernel(char* arg){
    //
    _kernel_warmup_i2c();
    //
-   //_kernel_warmup_spi();
+   _kernel_warmup_spi();
    //
    _kernel_warmup_dev();
    //
@@ -1076,6 +1092,12 @@ void _start_kernel(char* arg){
    _kernel_warmup_boot();
    //only in bootstrap configuration
    //_kernel_warmup_elfloader();
+   //
+   #if defined (__KERNEL_NET_IPSTACK)
+      #if defined(USE_UIP)
+         uip_core_run();
+      #endif
+   #endif
    //
    __kernel_static_mode_out();
 }

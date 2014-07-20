@@ -7,13 +7,10 @@ Software distributed under the License is distributed on an "AS IS" basis,
 WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
 specific language governing rights and limitations under the License.
 
-The Original Code is ______________________________________.
+The Original Code is Lepton.
 
-The Initial Developer of the Original Code is ________________________.
-Portions created by ______________________ are Copyright (C) ______ _______________________.
-All Rights Reserved.
-
-Contributor(s): ______________________________________.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -73,11 +70,7 @@ either the MPL or the [eCos GPL] License."
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
 //#include <string.h>
-#if !defined(__GNUC__)
-   #include <assert.h>
-#else
-   #define  assert(__cond__)
-#endif
+#define  assert(__cond__)
 //#include <float.h>
 
 //extern int fnprintf(FILE * fp, size_t size, const char *fmt, ...);

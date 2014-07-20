@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -94,11 +91,8 @@ typedef struct kernel_object_st {
 
 //
 int kernel_object_manager_pool(int kernel_object_no);
-kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head,
-                                           kernel_object_type_t type, kernel_object_src_t src,
-                                           ...);
-kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,
-                                           kernel_object_t* p);
+kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head, kernel_object_type_t type, kernel_object_src_t src,...);
+kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,kernel_object_t* p);
 kernel_object_t* kernel_object_manager_put_all(kernel_object_t** pp_kernel_object_head);
 
 #endif

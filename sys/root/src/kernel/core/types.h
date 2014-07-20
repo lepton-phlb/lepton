@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -24,8 +21,11 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _TYPE_H
-#define _TYPE_H
+
+
+#ifndef __TYPE_H__
+#define __TYPE_H__
+
 
 /*===========================================
 Includes
@@ -74,7 +74,7 @@ typedef uint32_t fsfilcnt_t;
 //ugly patch for compatiblity IAR ARM7 Compiler :-(
 #if __IAR_SYSTEMS_ICC__> 1
    #if !defined(__SIZE_T_TYPE__) || !defined(_SIZE_T) || !defined(_SIZET)
-typedef int size_t;
+   typedef unsigned int size_t;
 //#define __SIZE_T_TYPE__
       #define _SIZE_T
       #define _SIZET
@@ -82,9 +82,10 @@ typedef int size_t;
    #endif
 
 #else
-   #if !defined(_SIZE_T_DEFINED_)
-typedef int size_t;
+   #if !defined(_SIZE_T_DEFINED_) && !defined(__size_t)
+      typedef unsigned int size_t;
       #define _SIZE_T_DEFINED_
+      #define __size_t 1
    #endif
 #endif
 
@@ -99,9 +100,29 @@ typedef int __off_t;
 #endif
 
 #ifndef _TIME_T_DEFINED
-typedef uint32_t __time_t;
+#ifdef USE_COMPILER_TRACE_DEBUG
+   #pragma message ("note: use lepton time_t definition")
+#endif
+   #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
+       //to do time64 bits
+      //typedef uint64_t __time_t;
+      typedef uint32_t __time_t;
+   #else
+      typedef uint32_t __time_t;
+   #endif
+
    #define time_t __time_t
    #define _TIME_T_DEFINED
+#else 
+   #ifdef _USE_32BIT_TIME_T
+	 #ifdef USE_COMPILER_TRACE_DEBUG
+      #pragma message ("note: use windows time_t definition")
+	 #endif
+   #else 
+	    #ifdef USE_COMPILER_TRACE_DEBUG
+      #pragma message ("warning! use windows time_t definition with 64 bits format")
+			#endif
+   #endif
 #endif
 
 typedef uint32_t jiff_t;

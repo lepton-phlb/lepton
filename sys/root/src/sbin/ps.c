@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -76,7 +73,7 @@ int ps_main(int argc,char* argv[]){
    int cb;
    int i;
    unsigned int opt=0;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    int pid, ppid, pgid;
 #endif
    //get option
@@ -120,7 +117,7 @@ int ps_main(int argc,char* argv[]){
       char cbuf[26];
       if(!cb) continue;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
       pid = (int)process_info.pid;
       ppid = (int)process_info.ppid;
       pgid = (int)process_info.pgid;
@@ -131,8 +128,7 @@ int ps_main(int argc,char* argv[]){
              ctime_r(&process_info.start_time,cbuf)+ 11,
              process_info.argv[0]);
 #else
-      printf("%c %4d %4d %4d  %.8s   %.32s\r\n",
-             ((process_info.pthread_ptr->stat & PTHREAD_STATUS_ZOMBI) ? 'Z' : ' '),
+      printf("%c %4d %4d %4d  %.8s   %.32s\r\n", ((process_info.pthread_ptr->stat & PTHREAD_STATUS_ZOMBI)? 'Z' : ' '),
              process_info.pid,
              process_info.ppid,
              process_info.pgid,
@@ -154,18 +150,15 @@ int ps_main(int argc,char* argv[]){
 
    #if defined(EVAL_BOARD)
       printf("%-12s %-5s\r\n","syscall name","time (s)");
-      while( nb_syscall-- &&
-             (cb=read(fd,&kernel_profiler_result,sizeof(kernel_profiler_result_t)))>=0) {
+      while( nb_syscall-- &&(cb=read(fd,&kernel_profiler_result,sizeof(kernel_profiler_result_t)))>=0){
          unsigned int counter =kernel_profiler_result.counter;
-         printf("%-12s %10f\r\n",kernel_profiler_result.pname,
-                (float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
+      	printf("%-12s %10f\r\n",kernel_profiler_result.pname,(float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
       }
    #else
       printf("%-24s %-10s\r\n","syscall name","time (s)");
       while( (cb=read(fd,&kernel_profiler_result,sizeof(kernel_profiler_result_t)))>=0) {
          unsigned int counter =kernel_profiler_result.counter;
-         printf("%-24s %10f\r\n",kernel_profiler_result.pname,
-                (float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
+            printf("%-24s %10f\r\n",kernel_profiler_result.pname,(float)(kernel_profiler_result.counter)*PROFILER_PERIOD);
       }
    #endif
    }
@@ -177,9 +170,7 @@ int ps_main(int argc,char* argv[]){
 
       printf("\r\nio statistics\r\n");
 
-      printf("%-8s io %10s %-6s %-10s %-10s %-10s %-10s\r\n","dev","nb","size","time (s)",
-             "rate avg","rate max ",
-             "rate min");
+      printf("%-8s io %10s %-6s %-10s %-10s %-10s %-10s\r\n","dev","nb","size","time (s)","rate avg","rate max ","rate min");
       while( (cb=read(fd,&io_profiler_result,sizeof(io_profiler_result_t)))>=0) {
          int l = (sizeof(int)==sizeof(long));
 

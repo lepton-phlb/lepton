@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -41,6 +38,15 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
+#define IF_LIST_MAX 1
+typedef struct uip_core_statistics_st
+{
+    unsigned int sock_drop_packet;
+    unsigned int sock_rcv_buffer_free_size;
+    unsigned int uart_tx_free_size;
+    unsigned int uart_rx_used_size;
+}uip_core_statistics_t;
+extern uip_core_statistics_t _uip_core_statistics;
 
 extern kernel_pthread_t uip_core_thread;
 
@@ -68,10 +74,13 @@ extern kernel_pthread_t uip_core_thread;
       __wait_ret_int(); \
 }
 
+int uip_core_queue_put(uint8_t uip_flag, desc_t desc, void* buf, int size);
+
 unsigned char _uip_core_recv_char(desc_t desc);
 void _uip_core_send_char(desc_t desc,unsigned char c);
 
 int uip_core_run(void);
+extern unsigned int uip_core_if_nametoindex(const char *ifname);
 
 
 #endif

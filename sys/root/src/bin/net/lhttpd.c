@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -69,8 +66,7 @@ Global Declaration
 
 
 //#define _INDEX_HTML "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\r\n<html><head><title>HELLO</title></head><body bgcolor=white><center><h3><font face=\"Helvetica\"><P>WEB SERVER ON M16C</P></h3><a href=\"copyr.html\">Copyright</a>&copy; 2002<a href=\"about.html\">about A0380 project</a></center></body></html>"
-#define _INDEX_HTML \
-   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>welco</title></head><body bgcolor=white><center><h3><font face=\"Helvetica\"><P>lepton httpd server</P></h3><a href=\"copyr.html\">Copyright</a>&copy; 2003<a href=\"about.html\">about A0383 project</a></center></body></html>"
+#define _INDEX_HTML "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>welco</title></head><body bgcolor=white><center><h3><font face=\"Helvetica\"><P>lepton httpd server</P></h3><a href=\"copyr.html\">Copyright</a>&copy; 2003<a href=\"about.html\">about A0383 project</a></center></body></html>"
 
 char index_html[]=_INDEX_HTML;
 

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -65,7 +62,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-
+__KERNEL_SRAM_LOCATION
 opipe_t opipe_lst[__MAX_PIPE];
 
 int _sys_pipe_load(void);
@@ -276,7 +273,7 @@ int _sys_pipe_close(desc_t desc){
 
       //signal to reader process: no writer.
       if(desc_r>=0)
-         __fire_io_int(ofile_lst[desc_r].owner_pthread_ptr_read);
+         __fire_io(ofile_lst[desc_r].owner_pthread_ptr_read);
    }
    //
    if(opipe_lst[pipe_desc].desc_w<0 && opipe_lst[pipe_desc].desc_r<0) {
@@ -376,7 +373,7 @@ int _sys_pipe_read(desc_t desc,char* buffer,int nbyte ){
    }
    //signal to writer process: buffer is empty and ready for write.
    if(desc_w>=0)
-      __fire_io_int(ofile_lst[desc_w].owner_pthread_ptr_write);
+      __fire_io(ofile_lst[desc_w].owner_pthread_ptr_write);
    //
    __syscall_unlock();
    //
@@ -436,10 +433,10 @@ int _sys_pipe_write(desc_t desc,const char* buffer,int nbyte ){
    //printf("pzw:%d\r\n",opipe_lst[pipe_desc].size);
    //signal write until space available in this pipe else wait reader free space.
    if(opipe_lst[pipe_desc].size<__PIPE_SIZE)
-      __fire_io_int(ofile_lst[desc].owner_pthread_ptr_write);
+      __fire_io(ofile_lst[desc].owner_pthread_ptr_write);
    //signal to reader process: buffer is not empty and ready for read.
    if(desc_r>=0)
-      __fire_io_int(ofile_lst[desc_r].owner_pthread_ptr_read);
+      __fire_io(ofile_lst[desc_r].owner_pthread_ptr_read);
    //
    __syscall_unlock();
    //

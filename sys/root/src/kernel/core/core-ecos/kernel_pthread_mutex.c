@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -54,7 +51,7 @@ either the MPL or the [eCos GPL] License."
 | See:
 ---------------------------------------------*/
 int   kernel_pthread_mutex_init(kernel_pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_mutex_init(&mutex->mutex);
 #endif
 
@@ -74,7 +71,7 @@ int   kernel_pthread_mutex_destroy(kernel_pthread_mutex_t *mutex){
    //
    __atomic_in();
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    //release all threads waiting on the mutex
    cyg_mutex_release(&mutex->mutex);
    //destroy mutex
@@ -100,7 +97,7 @@ int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,
    //
    __atomic_in();
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    //no equivalent for eCos for the moment
    //just destroy it for the moment
    kernel_pthread_mutex_destroy(mutex);
@@ -123,7 +120,7 @@ int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,
 int   kernel_pthread_mutex_lock(kernel_pthread_mutex_t *mutex){
 
    ////
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    if(!cyg_mutex_lock(&mutex->mutex)) {
       __kernel_set_errno(-EINTR);
       return -1;
@@ -142,7 +139,7 @@ int   kernel_pthread_mutex_lock(kernel_pthread_mutex_t *mutex){
 ---------------------------------------------*/
 int   kernel_pthread_mutex_trylock(kernel_pthread_mutex_t *mutex){
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    if(!cyg_mutex_trylock(&mutex->mutex)) {
       __kernel_set_errno(-EBUSY);
       return -1;
@@ -162,7 +159,7 @@ int   kernel_pthread_mutex_trylock(kernel_pthread_mutex_t *mutex){
 ---------------------------------------------*/
 int   kernel_pthread_mutex_unlock(kernel_pthread_mutex_t *mutex){
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_mutex_unlock(&mutex->mutex);
 #endif
 

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -49,13 +46,9 @@ either the MPL or the [eCos GPL] License."
 #define __unix_inb(__unix_port__)   *((unsigned char*)__unix_port__)
 #define __unix_inw(__unix_port__)   *((unsigned short*)__unix_port__)
 #define __unix_inl(__unix_port__)   *((unsigned long*)__unix_port__)
-#define __unix_outb(__unix_port__, \
-                    __unix_value__) *((unsigned char*)__unix_port__)=((unsigned char)__unix_value__)
-#define __unix_outw(__unix_port__, \
-                    __unix_value__) *((unsigned short*)__unix_port__)= \
-   ((unsigned short)__unix_value__)
-#define __unix_outl(__unix_port__, \
-                    __unix_value__) *((unsigned long*)__unix_port__)=((unsigned long)__unix_value__)
+#define __unix_outb(__unix_port__,__unix_value__) *((unsigned char*)__unix_port__)=((unsigned char)__unix_value__)
+#define __unix_outw(__unix_port__,__unix_value__) *((unsigned short*)__unix_port__)=((unsigned short)__unix_value__)
+#define __unix_outl(__unix_port__,__unix_value__) *((unsigned long*)__unix_port__)=((unsigned long)__unix_value__)
 
 #define inb(__port__) __unix_inb(__port__)
 #define inw(__port__) __unix_inw(__port__)

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -33,17 +30,18 @@ Includes
 
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
-#include "lib/libc/ctype/ctype.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/devio.h"
 #include "kernel/core/process.h"
 #include "kernel/core/systime.h"
 #include "kernel/fs/vfs/vfs.h"
 
+#include "lib/libc/ctype/ctype.h"
+
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef USE_ECOS
+#ifdef __KERNEL_UCORE_ECOS
    #include <ctype.h>
 #endif
 
@@ -122,7 +120,6 @@ int _sys_settimeofday(struct __timeval *tv, register struct timezone *tz)
 
    if(desc>=0) {
       char buf[8]={0};
-      time_t t=0;
       struct tm _tm={ 0, 0, 12, 28, 0, 103 }; //init for test
 
       /* tmb.tm_isdst = ? */

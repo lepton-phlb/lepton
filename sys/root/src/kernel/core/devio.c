@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -128,7 +125,7 @@ int creat(const char *path, mode_t mode){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 int __attribute__ ((visibility("hidden")))
 open(const char *path, int oflag, mode_t mode){
 #else
@@ -174,7 +171,7 @@ int open(const char *path, int oflag, mode_t mode){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 int __attribute__ ((visibility("hidden")))
 close(int fildes) {
 #else
@@ -204,7 +201,7 @@ int close(int fildes){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 ssize_t __attribute__ ((visibility("hidden")))
 read(int fildes, void *buf, size_t nbyte){
 #else
@@ -324,7 +321,8 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(__GNUC__)
+int dev_ioflag;
+#if defined(GNU_GCC)
 ssize_t __attribute__ ((visibility("hidden")))
 write(int fildes, const void *buf, size_t nbyte){
 #else
@@ -401,6 +399,7 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
       //profiler
       __io_profiler_start(desc);
       //
+      dev_ioflag=1;
       if((nbyte = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte))<0) {
          //profiler
          __io_profiler_stop(desc);
@@ -409,12 +408,14 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
          __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
          return -1;
       }
-
       do {
+        dev_ioflag=2;
          __wait_io_int(pthread_ptr); //wait all data are transmitted
+         dev_ioflag=3;
       } while(ofile_lst[desc].pfsop->fdev.fdev_isset_write
               && ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc));
       //profiler
+      dev_ioflag=4;
       __io_profiler_stop(desc);
       __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
       //
@@ -451,7 +452,7 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
 off_t __attribute__ ((visibility("hidden")))
 lseek(int fildes, off_t offset, int whence){
 #else

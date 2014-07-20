@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B9FF8C6E-4B5C-4AF3-8860-573B0CF79B00}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>netlwip</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\kernel\net\lwip\core\ipv6\README">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\src\kernel\net\lwip\netif\FILES" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\api_lib.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\api_msg.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\err.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netbuf.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netdb.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netifapi.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\sockets.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\tcpip.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\dhcp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\dns.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\inet.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\inet6.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\init.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\autoip.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\icmp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\igmp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\inet.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\inet_chksum.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip_addr.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip_frag.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\icmp6.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\inet6.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\ip6.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\ip6_addr.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\mem.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\memp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\netif.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\pbuf.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\raw.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\asn1_dec.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\asn1_enc.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\mib2.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\mib_structs.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\msg_in.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\msg_out.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\stats.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\sys.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp_in.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp_out.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\udp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\etharp.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ethernetif.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\loopif.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\auth.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\chap.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\chpms.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\fsm.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ipcp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\lcp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\magic.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\md5.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\pap.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp_oe.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\randm.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\vj.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\slipif.c" />
+    <ClCompile Include="..\..\..\src\kernel\net\lwip\ports\win32\sys_arch.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\autoip.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\icmp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\igmp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\inet.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\inet_chksum.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip_addr.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip_frag.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\icmp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\inet.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\ip.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\ip_addr.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\api.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\api_msg.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\arch.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\debug.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\def.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\dhcp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\dns.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\err.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\init.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\mem.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\memp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\memp_std.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netbuf.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netdb.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netif.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netifapi.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\opt.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\pbuf.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\raw.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sio.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_asn1.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_msg.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_structs.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sockets.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\stats.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sys.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\tcp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\tcpip.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\udp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\etharp.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\loopif.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\ppp_oe.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\slipif.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\auth.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\chap.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\chpms.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\fsm.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\ipcp.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\lcp.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\magic.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\md5.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\pap.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\pppdebug.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\randm.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\vj.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\vjbsdhdr.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\bpstruct.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\cc.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\epstruct.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\perf.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\sys_arch.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\lwipopts.h" />
+    <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\lwipopts_1.2.1.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

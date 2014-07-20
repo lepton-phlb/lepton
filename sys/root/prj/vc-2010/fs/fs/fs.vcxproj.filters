@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{99d16c00-c16a-46e7-9418-1329d84960ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs">
+      <UniqueIdentifier>{a587df44-f5d1-4d67-9997-a2707265dc68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\vfs">
+      <UniqueIdentifier>{a2f19c00-69f1-49a4-9650-d4319614f241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\rootfs">
+      <UniqueIdentifier>{8cd266c1-0b9e-4af3-a756-1de3f7c7dbbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\ufs">
+      <UniqueIdentifier>{a18ba9ef-6da8-477b-9b6e-bf698542830b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\kofs">
+      <UniqueIdentifier>{98c8d194-c209-4b16-b8e5-1f5f09cb3b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\yaffs">
+      <UniqueIdentifier>{923a2eda-f3f8-4be1-a68d-63e06390e627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\yaffs\core">
+      <UniqueIdentifier>{4d8521a3-53f3-4570-b558-fe985f7b2ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\yaffs\core\direct">
+      <UniqueIdentifier>{d6a7614c-0b01-48df-bcce-5815b1d19f7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\fat">
+      <UniqueIdentifier>{c6ab913e-366a-4212-8961-d7396be4f0d0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfstypes.h">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfs.h">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfscore.h">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfsdev.h">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\vfs\vfskernel.h">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\rootfs\rootfscore.h">
+      <Filter>kernel\fs\rootfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\rootfs\rootfs.h">
+      <Filter>kernel\fs\rootfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsx.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufs.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufscore.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_3.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_4.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_5.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\ufs\ufsinfo.h">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatinfo.h">
+      <Filter>kernel\fs\fat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fat16.h">
+      <Filter>kernel\fs\fat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore.h">
+      <Filter>kernel\fs\fat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore_msdos.h">
+      <Filter>kernel\fs\fat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore_vfat.h">
+      <Filter>kernel\fs\fat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\kofs\kofs.h">
+      <Filter>kernel\fs\kofs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsinfo.h">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffs.h">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffscore.h">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.h">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yportenv.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\devextras.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_getblockinfo.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nandemul2k.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_trace.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffsinterface.h">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif2.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_malloc.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramdisk.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfs.c">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfscore.c">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfsdev.c">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfskernel.c">
+      <Filter>kernel\fs\vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\rootfs\rootfs.c">
+      <Filter>kernel\fs\rootfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\rootfs\rootfscore.c">
+      <Filter>kernel\fs\rootfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufs.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufscore.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_3.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_4.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsdriver_1_5.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\ufs\ufsx.c">
+      <Filter>kernel\fs\ufs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16.c">
+      <Filter>kernel\fs\fat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_msdos.c">
+      <Filter>kernel\fs\fat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_vfat.c">
+      <Filter>kernel\fs\fat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fatcore.c">
+      <Filter>kernel\fs\fat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fatcore_msdos.c">
+      <Filter>kernel\fs\fat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fatcore_vfat.c">
+      <Filter>kernel\fs\fat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\kofs\kofs.c">
+      <Filter>kernel\fs\kofs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffs.c">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffscore.c">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\yaffsdriver_nor_flash.c">
+      <Filter>kernel\fs\yaffs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_checkptrw.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_ecc.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_guts.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_nand.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags1.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_packedtags2.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_qsort.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagscompat.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\yaffs_tagsvalidity.c">
+      <Filter>kernel\fs\yaffs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_flashif.c">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_nandif.c">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_norif1.c">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramdisk.c">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\yaffs_ramem2k.c">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.c">
+      <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

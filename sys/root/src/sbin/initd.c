@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -71,8 +68,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-static const char banner[] =
-   "\
+static const char banner[] = "\
 lepton (tauon) posix os\r\n\
 $Revision: 1.3 $ $Date: 2009-06-18 13:43:22 $\r\n\
 ";
@@ -126,7 +122,7 @@ int initd_main(int argc,char* argv[]){
    char * _stdout=(char*)0;
    char * _init_script_path=(char*)0;
    unsigned char opt=0;
-
+  
    //pid=1 ppid=0 pgid=1
    setpgid(0,0);
 
@@ -209,7 +205,6 @@ int initd_main(int argc,char* argv[]){
 
    //be aware like jcvd ;)!!!! test console system
 #if (defined(EVAL_BOARD) || defined(CPU_GNU32)) && !defined(USE_KERNEL_STATIC)
-
    #if defined(USE_NANOX)
    {
       int fd_fb=-1;
@@ -276,8 +271,7 @@ int initd_main(int argc,char* argv[]){
 
    //print kernel information
    printf(banner);
-   printf("\r\n\nversion %s kernel compilation date: %s - %s\r\n",__LEPTON_VERSION,__KERNEL_DATE,
-          __KERNEL_TIME);
+   printf("\r\n\nversion %s kernel compilation date: %s - %s\r\n",__LEPTON_VERSION,__KERNEL_DATE,__KERNEL_TIME);
    cur_time = time(&cur_time);
    printf("\r\n%s\r\n\r\n",ctime(&cur_time));
 

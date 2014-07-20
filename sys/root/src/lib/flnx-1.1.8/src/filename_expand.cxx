@@ -65,7 +65,7 @@ int fl_filename_expand(char *to,int tolen, const char *from) {
         value = fl_getenv("HOME");
 //tauon
 //#ifndef WIN32
-#if /*!defined(WIN32) || */!defined(USE_ECOS)
+#if /*!defined(WIN32) || */!defined(__KERNEL_UCORE_ECOS)
       } else {	// another user's directory
 	struct passwd *pwd;
 	char t = *e; *(char *)e = 0;

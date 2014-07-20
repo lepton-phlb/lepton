@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -131,7 +128,7 @@ typedef struct _sdhc_stat_st {
 
 _sdhc_stat_t g_kinetis_sdhc_stat;
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 
    #define SDHC_CLK CYGHWR_HAL_KINETIS_PIN(E, 2, 4, (PORT_PCR_DSE_MASK))
    #define SDHC_CMD CYGHWR_HAL_KINETIS_PIN(E, 3, 4, \
@@ -447,7 +444,7 @@ int dev_k60n512_sdhc_seek(desc_t desc,int offset,int origin){
 int dev_k60n512_sdhc_ioctl(desc_t desc,int request,va_list ap) {
    switch(request) {
    case HDSD_SENDCOMMAND: {
-      mci_cmd_t * command = va_arg(ap, mci_cmd_t *);
+      mci_cmd_t * command = (mci_cmd_t *)ap;
       board_kinetis_sdhc_info_t * p_inf_sdhc = (board_kinetis_sdhc_info_t *)ofile_lst[desc].p;
 
       if(!p_inf_sdhc)

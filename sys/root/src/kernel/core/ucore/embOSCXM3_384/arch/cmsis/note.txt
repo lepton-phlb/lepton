@@ -1,0 +1,6 @@
+"cpu" is a copy of
+embOS_CortexM_IAR_V6_Trial_V382u\Start\BoardSupport\CMSIS\Setup
+
+"main.c" is based on (forced reset was added for LM3S9D96 MCU)
+embOS_CortexM_IAR_V6_Trial_V382u\Start\BoardSupport\CMSIS\Application
+

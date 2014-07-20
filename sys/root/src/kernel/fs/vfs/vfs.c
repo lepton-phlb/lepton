@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -42,7 +39,7 @@ Includes
 #include "kernel/fs/vfs/vfs.h"
 
 
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
    #include <string.h>
    #include <stdlib.h>
 #endif
@@ -548,13 +545,13 @@ desc_t _vfs_open(const char* ref, int oflag, mode_t mode){
          if((oflag&O_RDONLY) && !(oflag&O_NONBLOCK)) {
             _desc=desc_fifo_r;
             if(!ofile_lst[_desc].nb_reader) {
-               __fire_io_int(ofile_lst[desc_fifo_w].owner_pthread_ptr_write);
+               __fire_io(ofile_lst[desc_fifo_w].owner_pthread_ptr_write);
             }
 
          }else if((oflag&O_WRONLY) && !(oflag&O_NONBLOCK)) {
             _desc=desc_fifo_w;
             if(!ofile_lst[_desc].nb_writer) {
-               __fire_io_int(ofile_lst[desc_fifo_r].owner_pthread_ptr_read);
+               __fire_io(ofile_lst[desc_fifo_r].owner_pthread_ptr_read);
             }
          }
 
@@ -748,7 +745,7 @@ int _vfs_ioctl2(desc_t desc, int request, va_list ap){
    switch(request) {
    case I_LINK: {
       desc_t desc_link;
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
       desc_link = va_arg(_ap, int);
 #else
       desc_link = va_arg(_ap, desc_t);
@@ -1583,7 +1580,7 @@ int _vfs(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    #include <stdio.h>
 #endif
 
@@ -1591,9 +1588,9 @@ int _vfs_ls(char* ref){
    desc_t desc;
    struct dirent dirent;
 
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    printf("ls %s\n",ref);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
    int i=0;
 #endif
 
@@ -1601,9 +1598,9 @@ int _vfs_ls(char* ref){
       return -1;
 
    while(_vfs_readdir(desc,&dirent)) {
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
       printf("[%d] %s\n",dirent.inodenb,dirent.d_name);
-#elif defined(USE_ECOS)
+#elif defined(__KERNEL_UCORE_ECOS)
       i++;
 #endif
    }

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -29,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _STRING_H
-#define _STRING_H
+#ifndef __STRING_H__
+#define __STRING_H__
 
 
 /*============================================
@@ -46,8 +43,12 @@ either the MPL or the [eCos GPL] License."
 int __l_strcasecmp(const char *s1, const char *s2);
 int __l_strncasecmp(const char *s1, const char *s2, size_t n);
 
-#define strcasecmp   __l_strcasecmp
-#define strncasecmp  __l_strncasecmp
+char * __l_strtok_r(char *s, const char *delim, char **last);
+char * __l_strtok(char *s, const char *delim);
+
+#define strcasecmp(__s1__,__s2__) __l_strcasecmp(__s1__,__s2__)
+#define strncasecmp(__s1__,__s2__,__n__)  __l_strncasecmp(__s1__,__s2__,__n__)
+#define strtok_r(__s__,__delim__,__last__) __l_strtok_r(__s__,__delim__,__last__)
 
 
 #endif

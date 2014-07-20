@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -40,9 +37,9 @@ either the MPL or the [eCos GPL] License."
 #if defined (__KERNEL_NET_IPSTACK) && defined(USE_LWIP)
    #include "kernel/core/net/lwip_core/lwip_socket.h"
 #elif defined (__KERNEL_NET_IPSTACK) && defined(USE_UIP)
-   #include "kernel/net/uip_core/socket.h"
+#include "kernel/core/net/uip_core/uip_socket.h"
 #else
-   #include "kernel/net/uip_core/socket.h"
+#include "kernel/core/net/uip_core/uip_socket.h"
 #endif
 
 /*============================================

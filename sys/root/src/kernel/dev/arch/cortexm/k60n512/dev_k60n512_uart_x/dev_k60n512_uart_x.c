@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -41,7 +38,7 @@ Includes
 #include "lib/libc/termios/termios.h"
 #include "dev_k60n512_uart_x.h"
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 #endif
 /*===========================================
 Global Declaration
@@ -59,7 +56,7 @@ int dev_k60n512_uart_x_write(desc_t desc, const char* buf,int cb);
 int dev_k60n512_uart_x_ioctl(desc_t desc,int request,va_list ap);
 int dev_k60n512_uart_x_seek(desc_t desc,int offset,int origin);
 
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
 static cyg_uint32 _kinetis_uart_x_isr(cyg_vector_t vector, cyg_addrword_t data);
 static void _kinetis_uart_x_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 #endif

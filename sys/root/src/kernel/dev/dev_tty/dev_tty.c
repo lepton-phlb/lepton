@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -40,10 +37,10 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/fs/vfs/vfsdev.h"
 
 //fb test
-#if defined(__GNUC__)
+//#if defined(GNU_GCC)
    #define USE_FRAMEBUFFER
    #include "kernel/core/ioctl_fb.h"
-#endif
+//#endif
 
 /*============================================
 | Global Declaration
@@ -74,10 +71,10 @@ dev_map_t dev_tty_map={
    dev_tty_ioctl //ioctl
 };
 
-#if defined(__GNUC__)
+//#if defined(GNU_GCC)
    #define SZ_FONT_X       8
    #define SZ_FONT_Y       16
-#endif
+//#endif
 
 static uint32_t g_loc_X;
 static uint32_t g_loc_Y;
@@ -297,20 +294,15 @@ static void draw_byte(unsigned char c, uint32_t locX, uint32_t locY){
 static void scrollscreen(void)
 {
    boot_infos_t* bi             = &disp_bi;
-   uint32_t *src           = (uint32_t *)calc_base(bi,0,16);
+   uint32_t *src           = (uint32_t *)calc_base(bi,0,SZ_FONT_Y);
    uint32_t *dst           = (uint32_t *)calc_base(bi,0,0);
    uint32_t width               = 0;
    uint32_t vram_sz  = 0;
 
-   #if defined(__GNUC__)
    //nb lignes affichables * nb caracteres par lignes * taille un caractere (font_x*font_y) * profondeur (en octects)
    vram_sz = ((bi->dispDeviceRect[3]/SZ_FONT_Y)-1)*(bi->dispDeviceRect[2]/SZ_FONT_X)*
              SZ_FONT_X*SZ_FONT_Y*bi->dispDeviceDepth/8; //19*30*16*8;
-   #else
-   vram_sz =
-      ((bi->dispDeviceRect[2] /*width*/ *
-        (bi->dispDeviceRect[3] /*height*/-16)) >> ((bi->dispDeviceDepth-1)))>>3;
-   #endif
+   //
    memcpy(dst,src,vram_sz);
 }
 #endif /* ndef NO_SCROLL */

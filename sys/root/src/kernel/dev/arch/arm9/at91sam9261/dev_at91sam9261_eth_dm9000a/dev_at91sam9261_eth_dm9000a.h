@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -43,6 +40,8 @@ Declarations
 =============================================*/
 
 extern int dev_at91sam9261_eth_dm9000a_load(dev_io_info_t* p_dev_io_info);
+extern int dev_at91sam9261_eth_dm9000a_open(desc_t desc, int o_flag);
+extern int dev_at91sam9261_eth_dm9000a_close(desc_t desc);
 
 #endif //end of DEV_AT91SAM9261_ETH_DM9000A_H_
 /*============================================

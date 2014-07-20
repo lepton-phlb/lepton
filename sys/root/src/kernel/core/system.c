@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -60,7 +57,6 @@ Implementation
 pid_t execl(const char* path, const char* arg,...){
    char* argv[ARG_MAX]={0};
    int argc=0;
-   int i=1;
    execve_t execve_dt;
    va_list ptr;
 
@@ -157,7 +153,7 @@ int pause(void){
 unsigned int alarm(unsigned int seconds){
    alarm_t alarm_dt;
    alarm_dt.seconds = seconds;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __mk_syscall(_SYSCALL_ALARM,alarm_dt)
 #endif
    return alarm_dt.seconds = seconds;
@@ -298,7 +294,7 @@ int _system_atexit(void (*func)(void)){
    //process_lst[pid].atexit_func = func;
    atexit_t atexit_dt;
    atexit_dt.func=func;
-#if defined(USE_SEGGER)
+#if defined(__KERNEL_UCORE_EMBOS)
    __mk_syscall(_SYSCALL_ATEXIT,atexit_dt);
 #endif
    return 0;

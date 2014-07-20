@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -53,7 +50,7 @@ either the MPL or the [eCos GPL] License."
 int   kernel_pthread_mutex_init(kernel_pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){
    //attr not used. preserved POSIX compatibility
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_CreateRSema(&mutex->mutex);
 #endif
 
@@ -73,7 +70,7 @@ int   kernel_pthread_mutex_destroy(kernel_pthread_mutex_t *mutex){
    //
    __atomic_in();
    //
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    count = OS_GetSemaValue(&mutex->mutex);
    if(!count) {
    #ifndef CPU_M16C62       //not supported on m16c embos architecture (embos version is too old for m16c)
@@ -111,13 +108,12 @@ int   kernel_pthread_mutex_destroy(kernel_pthread_mutex_t *mutex){
 | Comments:
 | See:
 ----------------------------------------------*/
-int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,
-                                         kernel_pthread_mutex_t *mutex){
+int   kernel_pthread_mutex_owner_destroy(kernel_pthread_t* thread_ptr,kernel_pthread_mutex_t *mutex){
    int count;
    //
    __atomic_in();
    //
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    {
       OS_TASK *p = thread_ptr->tcb;
       count = OS_GetSemaValue(&mutex->mutex);
@@ -158,7 +154,7 @@ int   kernel_pthread_mutex_lock(kernel_pthread_mutex_t *mutex){
    if(__kernel_is_in_static_mode())
       return 0;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_Use(&mutex->mutex);
 #endif
 
@@ -178,7 +174,7 @@ int   kernel_pthread_mutex_trylock(kernel_pthread_mutex_t *mutex){
    if(__kernel_is_in_static_mode())
       return 0;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    if(!OS_Request(&mutex->mutex))
       return -EBUSY;
 #endif
@@ -199,7 +195,7 @@ int   kernel_pthread_mutex_unlock(kernel_pthread_mutex_t *mutex){
    if(__kernel_is_in_static_mode())
       return 0;
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_Unuse(&mutex->mutex);
 #endif
 

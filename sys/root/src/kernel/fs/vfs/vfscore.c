@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -40,6 +37,7 @@ Includes
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"
+
 #include "kernel/fs/rootfs/rootfs.h"
 #include "kernel/fs/kofs/kofs.h"
 #include "kernel/fs/ufs/ufs.h"
@@ -63,22 +61,44 @@ Global Declaration
 inodenb_t current_inodenb=VFS_INODENB_ROOT;
 
 //superblock
+__KERNEL_SRAM_LOCATION
 superblk_t superblk_lst[MAX_SUPER_BLOCK];
 
 //open file list
+__KERNEL_SRAM_LOCATION
 ofile_t ofile_lst[MAX_OPEN_FILE]={-1};
 
 //mounted device list
+__KERNEL_SRAM_LOCATION
 mntdev_t mntdev_lst[MAX_MOUNT_DEVICE];
+
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   extern fsop_t effs_op;
+#endif
 
 //file system supported
 pfsop_t const fsop_lst[MAX_FILESYSTEM]={
+#if __KERNEL_VFS_SUPPORT_ROOTFS==1 
    &rootfs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_UFS==1 
    &ufs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_UFSX==1 
    &ufsx_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_KOFS==1
    &kofs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_MSDOS==1
    &fat_msdos_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_VFAT==1
    &fat_vfat_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_EFFS==1
+   &effs_op,
+#endif
    0
 };
 
@@ -391,6 +411,7 @@ desc_t _vfs_getdesc(inodenb_t inodenb,desc_t ancestor_desc){
          ofile_lst[desc].offset       = 0;
          ofile_lst[desc].pmntdev      = _vfs_getmnt(ancestor_desc,desc);
          ofile_lst[desc].pfsop        = _vfs_mntdev2fsop(ofile_lst[desc].pmntdev);
+         ofile_lst[desc].oflag        = 0;
 
          //printf("get desc[%d]\n",_desc);
          return desc;

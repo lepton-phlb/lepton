@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -24,8 +21,12 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _KERNEL_PTHREAD_H
-#define _KERNEL_PTHREAD_H
+
+/*===========================================
+Compiler Directive
+=============================================*/
+#ifndef _KERNEL_PTHREAD_H_
+#define _KERNEL_PTHREAD_H_
 
 /**
  * \addtogroup lepton_kernel
@@ -48,7 +49,7 @@ Includes
 #include "kernel/core/kernel_sigqueue.h"
 #include "kernel/core/signal.h"
 
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
    #include "kernel/core/kernel_sem.h"
 #endif
 /*===========================================
@@ -100,7 +101,7 @@ typedef struct pthread_attr_st {
 
 //
 typedef unsigned char syscall_t;
-typedef unsigned char irq_prior_t;
+typedef signed char irq_prior_t;
 
 //
 typedef struct {
@@ -165,11 +166,16 @@ typedef struct kernel_pthread_st {
    unsigned short _profile_counter;
 #endif
 
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_TASK*  tcb;
 #endif
-
-#ifdef __GNUC__
+   
+#ifdef __KERNEL_UCORE_FREERTOS
+   freertos_tcb_t* tcb;
+   EventGroupHandle_t event_group_handle; //used by kernel (KERNEL_INTERRUPT and KERNEL_RET_INTERRUPT).
+#endif
+     
+#ifdef GNU_GCC
    tcb_t * tcb;
    tcb_t * bckup_tcb; //for signal handler
    thr_id_t thr_id;
@@ -177,7 +183,7 @@ typedef struct kernel_pthread_st {
 
    kernel_sem_t sem_wait; //sem for waitpid
 
-   #ifdef USE_ECOS
+   #ifdef __KERNEL_UCORE_ECOS
    cyg_flag_t io_flag; //flag pour les I/O
    #endif
 #endif
@@ -234,9 +240,7 @@ extern int g_pthread_id;
 int kernel_get_pthread_id(kernel_pthread_t *p);
 int kernel_put_pthread_id(kernel_pthread_t *p);
 //
-int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,
-                            start_routine_t start_routine,
-                            void *arg);
+int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr,start_routine_t start_routine, void *arg);
 int   kernel_pthread_cancel(kernel_pthread_t* thread);
 //
 #ifndef __cplusplus
@@ -262,7 +266,7 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size);
 #endif
 
 //size of kernel stack
-#if defined(__GNUC__)
+#if defined(GNU_GCC)
    #if defined(CPU_ARM7) || defined(CPU_ARM9)
       #define KERNEL_STACK 4096   //2048
    #elif defined(CPU_CORTEXM)

@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -58,7 +55,7 @@ either the MPL or the [eCos GPL] License."
 int kernel_sem_init(kernel_sem_t* kernel_sem, int pshared, unsigned int value){
    if(!kernel_sem)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_CreateCSema(&kernel_sem->sem,(char)value);
 #endif
    return 0;
@@ -75,7 +72,7 @@ int kernel_sem_init(kernel_sem_t* kernel_sem, int pshared, unsigned int value){
 int kernel_sem_destroy(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_DeleteCSema(&kernel_sem->sem);
 #endif
    return 0;
@@ -92,7 +89,7 @@ int kernel_sem_destroy(kernel_sem_t* kernel_sem){
 int kernel_sem_getvalue(kernel_sem_t* kernel_sem, int *value){
    if(!kernel_sem)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    *value = OS_GetCSemaValue(&kernel_sem->sem);
 #endif
    return 0;
@@ -109,7 +106,7 @@ int kernel_sem_getvalue(kernel_sem_t* kernel_sem, int *value){
 int kernel_sem_post(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_SignalCSema(&kernel_sem->sem);
 #endif
    return 0;
@@ -138,7 +135,7 @@ int kernel_sem_timedwait(kernel_sem_t* kernel_sem, int flag, const struct timesp
       timeout = __time_s_to_ms(abs_timeout->tv_sec)+__time_ns_to_ms(abs_timeout->tv_nsec);
    }
    //
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    if(abs_timeout && timeout) {
       if(!OS_WaitCSemaTimed(&kernel_sem->sem, timeout)) {
          return -1;
@@ -165,7 +162,7 @@ int kernel_sem_timedwait(kernel_sem_t* kernel_sem, int flag, const struct timesp
 int kernel_sem_trywait(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    if(!OS_WaitCSemaTimed(&kernel_sem->sem, 0))
       return -EBUSY;
 #endif
@@ -183,7 +180,7 @@ int kernel_sem_trywait(kernel_sem_t* kernel_sem){
 int kernel_sem_wait(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
    OS_WaitCSema(&kernel_sem->sem);
 #endif
    return 0;

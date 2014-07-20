@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -75,9 +72,7 @@ int slipd_windows_synchro(int fdin,int fdout, int verbose){
       int i;
 
       for(i=0; i<cb; i++) {
-         if( (j=
-                 (rcv_buf[i]==
-                  str_synchro_from_pc[j] ? (j+1) : 0))==(sizeof(str_synchro_from_pc)-1) ) {
+         if( (j=(rcv_buf[i]==str_synchro_from_pc[j]?(j+1):0))==(sizeof(str_synchro_from_pc)-1) ){
             return ((write(fdout,str_synchro_to_pc,(sizeof(str_synchro_to_pc)-1))>0 ? 0 : -1));
          }
       }

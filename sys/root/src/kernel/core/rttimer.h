@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -24,8 +21,12 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _RTTIMER_H
-#define _RTTIMER_H
+
+/*===========================================
+Compiler Directive
+=============================================*/
+#ifndef _RTTIMER_H_
+#define _RTTIMER_H_
 
 
 /*===========================================
@@ -37,11 +38,17 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#ifdef USE_SEGGER
+#ifdef __KERNEL_UCORE_EMBOS
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef OS_TIMER tmr_t;
 
+#endif
+
+#ifdef __KERNEL_UCORE_FREERTOS
+typedef void (*_tmr_func_t)(void);
+typedef _tmr_func_t tmr_func_t;
+typedef xTimerHandle tmr_t;
 #endif
 
 
@@ -55,7 +62,5 @@ int rttmr_start(tmr_t* tmr);
 int rttmr_stop(tmr_t* tmr);
 int rttmr_restart(tmr_t* tmr);
 int rttmr_delete(tmr_t* tmr);
-
-
 
 #endif

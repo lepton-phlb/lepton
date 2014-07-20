@@ -1,0 +1,67 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v1_0.xml" */
+/*-Specials-*/
+define symbol __ICFEDIT_intvec_start__ = 0x00000000;
+/*-Memory Regions-*/
+define symbol __ICFEDIT_region_ROM_start__ = 0x00000000;
+define symbol __ICFEDIT_region_ROM_end__   = 0x0007FFFF;
+define symbol __ICFEDIT_region_RAM_start__ = 0x20000000;
+define symbol __ICFEDIT_region_RAM_end__   = 0x20017fff;
+/*-Sizes-*/
+define symbol __ICFEDIT_size_cstack__ = 0x400;
+//define symbol __ICFEDIT_size_heap__     = 0x800;
+// 20 Kbytes of heap for tauon
+define symbol __ICFEDIT_size_heap__ = 0x6400;
+/**** End of ICF editor section. ###ICF###*/
+
+define symbol __EXT_RAM_size__       = 4M;			//GD
+/*-External RAM Area-*/
+define exported symbol __EXT_RAM_start__ = 0x60000000;//GD
+define exported symbol __EXT_RAM_end__   = (__EXT_RAM_start__ + __EXT_RAM_size__ - 1 );//GD
+
+define memory mem with size = 4G;
+define region __EXT_RAM_region__         = mem:[from __EXT_RAM_start__   to __EXT_RAM_end__];//GD
+define region ROM_region   = mem:[from __ICFEDIT_region_ROM_start__   to __ICFEDIT_region_ROM_end__];
+define region RAM_region   = mem:[from __ICFEDIT_region_RAM_start__   to __ICFEDIT_region_RAM_end__];
+
+define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };
+define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };
+
+initialize by copy { readwrite };
+//initialize by copy with packing = none { section __DLIB_PERTHREAD }; // Required in a multi-threaded application
+do not initialize  { section .noinit };
+
+place at address mem:__ICFEDIT_intvec_start__ { readonly section .intvec };
+
+//define symbol FORCE_EXTERNAL = 1;
+//if(!FORCE_EXTERNAL)
+//{
+//	place in ROM_region   { readonly };
+//	place in RAM_region   { readwrite,
+//							block CSTACK, block HEAP };
+//	place in __EXT_RAM_region__         { section EXT_RAM };
+//}
+//else
+//{
+	place in ROM_region   	{ readonly };
+	place in RAM_region  	{ readwrite, block CSTACK };
+	place in __EXT_RAM_region__ {  section EXT_RAM,
+                                   block HEAP };
+                                   
+//    place in __EXT_RAM_region__		{ readwrite object tauon.a, 
+//                                      readwrite object dhry21a.o, 
+//                                      readwrite object dhry21b.o,
+//                                      readwrite object dev_lm3s.a };
+////    place in __EXT_CODE_region__	{ readonly object tauon.a }; //, object LuxsoftStack.a };
+//    //Let's copy all objects Flash data and code into EXT RAM at startup
+//    //see http://supp.iar.com/Support/?note=11578&from=note+17934
+//    initialize by copy { readonly object tauon.a, 
+//                         readonly object dhry21a.o,
+//                         readonly object dhry21b.o,
+//                         readonly object dev_lm3s.a };
+//}
+
+////place at address mem: __EXT_RAM_start__  { block ZBDATA_EXT };
+////place in __EXT_RAM_region__              { block SAVED_EXT_DATA };
+

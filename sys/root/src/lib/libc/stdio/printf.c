@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -393,7 +390,7 @@ enum {
 
    #define WANT_DOUBLE 1
 
-   #if (__KERNEL_CPU_ARCH_SUPPORT_FORMAT>32)
+#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
       #define WANT_LONG_LONG 1
       #define WANT_LONG_LONG_ERROR 1
    #else
@@ -1092,7 +1089,7 @@ fini:
 | Comments:
 | See:
 ---------------------------------------------*/
-int __vfprintf(FILE *op,register const char *fmt,register va_list ap){
+int __vfprintf(FILE *op,register const char *fmt,/*register*/ va_list ap){
    register int i, cnt = 0, ljustf, lval;
    int preci, dpoint, width;
    char pad, sign, radix, hash;
@@ -1178,7 +1175,7 @@ fmtnxt:
 
          case 'd':              /* Signed decimal */
          case 'i':
-   #if defined(__GNUC__)
+   #if defined(GNU_GCC)
             ptmp = ltostr(buf,32,(long) ((lval)
                                          ? va_arg(ap, long)
                                          : va_arg(ap, int)),
@@ -1213,7 +1210,7 @@ fmtnxt:
 
          case 'u':              /* Unsigned decimal */
 usproc:
-   #if defined(__GNUC__)
+   #if defined(GNU_GCC)
             ptmp = ultostr(buf,32,(unsigned long) ((lval)
                                                    ? va_arg(ap, unsigned long)
                                                    : va_arg(ap, unsigned int)),

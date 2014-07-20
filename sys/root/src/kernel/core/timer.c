@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -110,8 +107,7 @@ int timer_getoverrun(timer_t* timerid){
 | Comments:
 | See:
 ----------------------------------------------*/
-int timer_settime(timer_t* timerid, int flags, const struct itimerspec * value,
-                  struct itimerspec *ovalue){
+int timer_settime(timer_t* timerid, int flags, const struct itimerspec * value,struct itimerspec *ovalue){
    kernel_object_t* kernel_object=(kernel_object_t*)(*timerid);
    if(!kernel_object)
       return -1;
@@ -119,8 +115,7 @@ int timer_settime(timer_t* timerid, int flags, const struct itimerspec * value,
       return -1;
    //
    kernel_object->object.kernel_object_timer.kernel_timer.kernel_pthread=kernel_pthread_self();
-   return kernel_timer_settime(&kernel_object->object.kernel_object_timer.kernel_timer,flags,value,
-                               ovalue);
+   return kernel_timer_settime(&kernel_object->object.kernel_object_timer.kernel_timer,flags,value,ovalue);
 }
 
 

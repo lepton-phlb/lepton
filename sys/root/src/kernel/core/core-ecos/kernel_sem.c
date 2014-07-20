@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -58,7 +55,7 @@ either the MPL or the [eCos GPL] License."
 int kernel_sem_init(kernel_sem_t* kernel_sem, int pshared, unsigned int value){
    if(!kernel_sem)
       return -1;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_semaphore_init(&kernel_sem->sem, (char)value);
 #endif
 
@@ -76,7 +73,7 @@ int kernel_sem_init(kernel_sem_t* kernel_sem, int pshared, unsigned int value){
 int kernel_sem_destroy(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_semaphore_destroy(&kernel_sem->sem);
 #endif
    return 0;
@@ -93,7 +90,7 @@ int kernel_sem_destroy(kernel_sem_t* kernel_sem){
 int kernel_sem_getvalue(kernel_sem_t* kernel_sem, int *value){
    if(!kernel_sem)
       return -1;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_semaphore_peek(&kernel_sem->sem, (cyg_count32 *)value);
 #endif
    return 0;
@@ -110,7 +107,7 @@ int kernel_sem_getvalue(kernel_sem_t* kernel_sem, int *value){
 int kernel_sem_post(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    cyg_semaphore_post(&kernel_sem->sem);
 #endif
    return 0;
@@ -138,7 +135,7 @@ int kernel_sem_timedwait(kernel_sem_t* kernel_sem, int flag, const struct timesp
       timeout = __time_s_to_ms(abs_timeout->tv_sec)+__time_ns_to_ms(abs_timeout->tv_nsec);
    }
    //
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    if(abs_timeout && timeout) {
       if(!cyg_semaphore_timed_wait(&kernel_sem->sem, __kernel_get_timer_ticks()+timeout)) {
          __kernel_set_errno(-EBUSY);
@@ -173,7 +170,7 @@ int kernel_sem_timedwait(kernel_sem_t* kernel_sem, int flag, const struct timesp
 int kernel_sem_trywait(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    if(!cyg_semaphore_trywait(&kernel_sem->sem)) {
       __kernel_set_errno(-EBUSY);
       return -1;
@@ -194,7 +191,7 @@ int kernel_sem_trywait(kernel_sem_t* kernel_sem){
 int kernel_sem_wait(kernel_sem_t* kernel_sem){
    if(!kernel_sem)
       return -1;
-#if defined(USE_ECOS)
+#if defined(__KERNEL_UCORE_ECOS)
    if(!cyg_semaphore_wait(&kernel_sem->sem)) {
       __kernel_set_errno(-EINTR);
       return -1;

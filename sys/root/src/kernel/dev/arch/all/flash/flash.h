@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -42,7 +39,7 @@ either the MPL or the [eCos GPL] License."
 | Declaration
 ==============================================*/
 
-
+//NOR FLASH
 #define FLASH_AM29DL640D   0
 #define FLASH_AM29LV320DT  1
 #define FLASH_S29Gl256P    2
@@ -63,8 +60,32 @@ typedef struct {
    flash_type_t* p_flash_type;
 }dev_flash_t;
 
-
 extern const flash_type_t flash_type_lst[];
 
+//NAND SPI FLASH
+//#if __tauon_cpu_device__!=__tauon_cpu_device_win32_simulation__
+   typedef __compiler_directive__packed union
+   {
+     char tab[3];
+     __compiler_directive__packed struct
+     {
+       uchar8_t manufacturer_id;
+       uchar8_t device_Id[2];
+     };
+   } flash_jedec_did_u;
+   
+   //
+   typedef __compiler_directive__packed struct
+   {
+     flash_jedec_did_u did;
+     uint32_t flash_size;
+     uint16_t page_size;
+     uchar8_t sector_count;
+     uchar8_t firmware_from_sector;
+     uchar8_t firmware_sector_count;
+     uint32_t firmware_address;
+     const char *device_name;
+   } dev_flash_nand_spi_t;
+//#endif
 
 #endif

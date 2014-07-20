@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<mklepton>
+
+   <target name="gnu32_lepton">
+      <arch dest_path="~/tauon/src/kernel/core/arch/synthetic/x86"/>
+   </target>
+
+   <target name="arm9_lepton">
+      <arch dest_path="~/tauon/src/kernel/core/arch/arm9/at91sam9260"/>
+   </target>
+
+   <!-- kernel specific -->
+   <kernel>
+      <!-- cpu type and frequency in MHz or in Hz-->
+      <target name="arm9_lepton">
+         <cpu type="cpu_arm9" freq="200908800"/>
+      </target>
+      <target name="win32_lepton">
+         <cpu freq="10"/>
+      </target>
+      
+      <!-- total heap size (__KERNEL_HEAP_SIZE ) for all processes stack  -->
+      <heap size="10000"/>
+
+      <!-- process max (__KERNEL_PROCESS_MAX: must be strictly less than thread max)-->
+      <process max="10"/>
+
+      <!-- max open file (MAX_OPEN_FILE)-->
+      <openfiles max="30"/>
+
+      <!-- max descriptor per process (OPEN_MAX)-->
+      <descriptors max="30"/>
+
+      <!-- cpu built-in file-system (see fileflash device) -->
+      <cpufs size="32000" node="150" blocksz="64"/>
+
+      <!-- bin path (__KERNEL_ENV_PATH)-->
+      <env path="/usr;/usr/sbin;/usr/bin;/usr/bin/msr;/usr/bin/mgr;/usr/bin/tst"/>
+
+      <!-- use ip stack (__KERNEL_NET_UIP)-->
+      <network use="on"/>
+   
+   </kernel>
+
+   <!-- devices drivers. see ~/tauon/src/kernel/core/arch/xx/xx/dev_mkconf.c -->
+   <devices>
+      <!-- /dev/pipe -->
+      <dev name="dev_pipe_map" use="on"/>
+      <!-- /dev/sock uip-->
+      <dev name="dev_sock_map" use="off"/>
+      <!-- /dev/net/sock lwip-->
+      <dev name="dev_lwip_sock_map" use="on"/>
+      <!-- /dev/net/ip lwip ip stack-->
+      <dev name="dev_lwip_stack_map" use="on"/>
+      <!-- /dev/null -->
+      <dev name="dev_null_map" use="on"/>
+      <!-- /dev/proc -->
+      <dev name="dev_proc_map" use="on"/>
+      <!-- /dev/hd/hda -->
+      <dev name="dev_cpufs_map" use="on"/>
+      <!-- /dev/synd -->
+      <dev name="dev_mem_map" use="on"/>
+      <!-- /dev/tty0 -->
+      <dev name="dev_tty_map" use="on"/>
+       <!-- /dev/slip -->
+      <dev name="dev_slip_map" use="on"/>
+   </devices>
+
+   <target name="gnu32_lepton">
+      <devices>
+         <!-- /dev/board -->
+         <dev name="dev_win32_board_map" use="on"/>
+         <!-- /dev/hd/hd(x) -->
+         <dev name="dev_win32_filerom_map" use="on"/>
+         <!-- /dev/hd/hd(x) -->
+         <dev name="dev_win32_fileflash_map" use="on"/>
+         <!-- /dev/ttyp0 -->
+         <dev name="dev_win32_com0_map" use="on"/>
+         <!-- /dev/ttys1 -->
+         <dev name="dev_win32_com1_map" use="on"/>
+         <!-- /dev/ttys0 -->
+         <dev name="dev_win32_com2_map" use="off"/>
+         <!-- /dev/lcdw32 -->
+         <dev name="dev_win32_lcd_vga_map" use="off"/>
+         <!-- /dev/rtc0 -->
+         <dev name="dev_win32_rtc_map" use="on"/>
+         <!-- /dev/kb0 -->
+         <dev name="dev_win32_kb_map" use="off"/>
+         <!-- /dev/eth0 -->
+         <dev name="dev_win32_eth_map" use="on"/>
+      </devices>
+   </target>
+   
+   <target name="arm9_lepton">
+      <devices>
+         <!-- /dev/cpu0 -->
+         <dev name="dev_at91sam9261_cpu_map" use="on"/>
+         <!-- /dev/ttys0 -->
+         <dev name="dev_at91sam9261_uart_1_map" use="off"/>
+         <!-- /dev/ttydbgu -->
+         <dev name="dev_at91sam9261_uart_dbg_map" use="on"/>
+	 <!-- /dev/rtt0 -->
+         <dev name="dev_at91sam9261_rtt_map" use="on"/>
+         <!-- /dev/rtu0 -->
+         <dev name="dev_at91sam9261_rtu0_map" use="on"/>
+         <!-- /dev/rtu1 -->
+         <dev name="dev_at91sam9261_rtu1_map" use="on"/>
+	 <!-- /dev/rtu2 -->
+         <dev name="dev_at91sam9261_rtu2_map" use="on"/>
+         <!-- /dev/eth0 -->
+         <dev name="dev_eth_dm9000a_map" use="on"/>
+	 <!-- /dev/lcd -->
+         <dev name="dev_at91sam9261_lcd_map" use="on"/>
+         <!-- /dev/i2c0 -->
+         <dev name="dev_at91sam9261_twi_io_map" use="on"/>
+         <!-- /dev/spi0 -->
+         <dev name="dev_at91sam9261_spi_map" use="off"/>
+         <!-- /dev/hd/hdb -->
+         <dev name="dev_eeprom_24xxx_0_map" use="on"/>
+         <!-- /dev/hd/hdc -->
+         <dev name="dev_sdcard_map" use="off"/>
+	 <!-- /dev/kb0 -->
+         <dev name="dev_a25400_kb_map" use="on"/>
+      </devices>
+   </target>
+   
+   <!-- mount device on boot .mount -->
+   <mount dest_path="~/tauon/tools/etc">
+      <disk type="ufs" dev="/dev/hd/hdb" point="/etc"/>
+   </mount>
+   
+   <!-- launch process on boot target path: /usr/etc/.boot-->
+   <target name="gnu32_lepton">
+      <boot dev="/dev/kb0" delay="500" dest_path="~/tauon/tools/etc">
+         <command value="0x00" arg="initd -t 1000 -i /dev/ttyp0 -o /dev/ttyp0"/>
+         <!--command value="0x00" arg="login" /-->
+         <!--command value="0x00" arg="net/slipd /dev/ttys1"/-->
+         <!--command value="0x61" arg="init -t 8000 -i /dev/ttyp0 -o /dev/ttyp0" /-->
+         <!--command value="0x62" arg="init -t 1000 -i /dev/ttyp0 -o /dev/ttyp0" /-->
+      </boot>
+   </target>
+
+   <target name="arm9_lepton">
+      <boot dest_path="~/tauon/tools/etc">
+         <!--command value="0x00" arg="initd -t 1000 -i /dev/ttydbgu -o /dev/ttydbgu"/-->
+         <command value="0x00" arg="initd -i /dev/null -o /dev/null"/>
+         <!--command value="0x00" arg="initd -t 1000 -i /dev/ttys1 -o /dev/ttys1" /-->
+         <!--command value="0x00" arg="login" /-->
+      </boot>
+   </target>
+
+   <!-- binaries. see ~/tauon/src/kernel/core/arch/xx/xx/dev_mkconf.c -->
+   <!-- system binaries. -->
+   <!-- /usr/sbin -->
+   <binaries src_path="sbin" dest_path="sbin">
+      <bin name="initd" stack="1024" priority="10" timeslice="5"/>
+      <bin name="lsh" stack="2048" priority="10" timeslice="5"/>
+      <bin name="mkdir" stack="1024" priority="10" timeslice="5"/>
+      <bin name="rmdir" stack="1024" priority="10" timeslice="5"/>
+      <bin name="rm" stack="1024" priority="10" timeslice="5"/>
+      <bin name="mount" stack="1024" priority="10" timeslice="5"/>
+      <bin name="umount" stack="1024" priority="10" timeslice="5"/>
+      <bin name="ls" stack="2048" priority="10" timeslice="5"/>
+      <bin name="pwd" stack="1024" priority="10" timeslice="5"/>
+      <bin name="ps" stack="2048" priority="10" timeslice="5"/>
+      <bin name="kill" stack="1024" priority="10" timeslice="5"/>
+      <bin name="touch" stack="1024" priority="10" timeslice="5"/>
+      <bin name="cat" stack="1024" priority="10" timeslice="5"/>
+      <bin name="ecat" stack="1024" priority="10" timeslice="5"/>
+      <bin name="more" stack="1024" priority="10" timeslice="5"/>
+      <bin name="mkfs" stack="1024" priority="10" timeslice="5"/>
+      <bin name="df" stack="1024" priority="10" timeslice="5"/>
+      <bin name="date" stack="2048" priority="10" timeslice="5"/>
+      <bin name="od" stack="2048" priority="10" timeslice="5"/>
+      <bin name="stty" stack="3000" priority="10" timeslice="5"/>
+      <bin name="cp" stack="1024" priority="10" timeslice="5"/>
+      <bin name="sleep" stack="512" priority="10" timeslice="5"/>
+      <bin name="sync" stack="512" priority="10" timeslice="5"/>
+      <bin name="wrapr" stack="2500" priority="10" timeslice="5"/>
+      <bin name="xmodem" stack="3072" priority="10" timeslice="5"/>
+      <bin name="login" stack="2048" priority="10" timeslice="5"/>
+      <bin name="uname" stack="2048" priority="10" timeslice="5"/>
+   </binaries>
+
+   <!-- user binaries. -->
+   <!-- /usr/bin -->
+   <binaries src_path="bin" dest_path="bin">
+      <bin name="bmp" stack="2048" priority="10" timeslice="5"/>
+      <bin name="screen" stack="4096" priority="10" timeslice="5"/>      
+   </binaries>
+   
+   <binaries src_path="bin/tst" dest_path="bin/tst">
+      <!--bin name="tstrel"  stack="4096"  priority="10" timeslice="5" /-->
+      <!--bin name="readspi"  stack="4096"  priority="10" timeslice="5" /-->
+      <!--bin name="writespi" stack="4096"  priority="10" timeslice="5" /-->            
+      <!--bin name="tsteth"   stack="2048"  priority="10" timeslice="5" -->      
+      <!--bin name="tstmcast" stack="4096"  priority="10" timeslice="5" -->
+      <!--bin name="tstmcast_w" stack="4096"  priority="10" timeslice="5" -->
+      <bin name="writetwi" stack="2048" priority="10" timeslice="5"/>
+      <bin name="readtwi" stack="2048" priority="10" timeslice="5"/>
+      <!--bin name="tstnmea"  stack="4096"  priority="10" timeslice="5" /-->
+      <!--bin name="tstrtu"  stack="8192"  priority="10" timeslice="5" /-->
+      <!--bin name="writespec"  stack="5096"  priority="10" timeslice="5" /-->
+   </binaries>
+   
+   <binaries src_path="bin/net" dest_path="bin/net">
+      <bin name="slipd" stack="3000" priority="10" timeslice="5"/>
+      <bin name="ifconfig" stack="3000" priority="10" timeslice="5"/>
+   </binaries>
+   
+   <binaries src_path="bin/app" dest_path="bin/app">
+	<bin name="mmulti" stack="8192" priority="125" timeslice="1"/>
+	<bin name="guid" stack="18360" priority="10" timeslice="5"/>	
+   </binaries>
+   
+   <files>
+      <!-- /usr/etc  (hda internal flash mount on /bin) -->
+      <file name=".init" src_file="~/tauon/tools/etc/.init_sam9261" dest_path="etc"/>
+      <file name=".boot" src_file="~/tauon/tools/etc/.boot" dest_path="etc"/>
+      <file name=".mount" src_file="~/tauon/tools/etc/.mount" dest_path="etc"/>
+   </files>
+     
+   <files>
+      <!-- /usr/sbin/sh -->
+      <file name="mkhdb" src_file="~/tauon/src/sbin/sh/mkhdb" dest_path="sbin/sh"/>
+      <file name="shutdown" src_file="~/tauon/src/sbin/sh/shutdown" dest_path="sbin/sh"/>
+   </files>
+   
+   <files>
+      <!-- /usr/etc/bmp -->
+   </files>
+   
+
+</mklepton>

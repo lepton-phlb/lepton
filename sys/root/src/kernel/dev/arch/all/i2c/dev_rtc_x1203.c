@@ -9,11 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
-All Rights Reserved.
-
-Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+The Initial Developer of the Original Code is Chauvin-Arnoux.
+Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -290,8 +287,7 @@ int dev_rtc_x1203_write(desc_t desc, const char* buf,int cb){
       //data
       dev_rtc_x1203_buffer[4] = buf[a];
 
-      if (_l_kernel_if_i2c_master->fdev_write(__get_if_i2c_master_desc(),dev_rtc_x1203_buffer,
-                                              1+4)<0)
+      if (_l_kernel_if_i2c_master->fdev_write(__get_if_i2c_master_desc(),dev_rtc_x1203_buffer,1+4)<0)
          return -1;
       /*
       if(_i2c_core_write(dev_rtc_x1203_addr,dev_rtc_x1203_buffer,(unsigned char)1,(unsigned char)2)<0)
