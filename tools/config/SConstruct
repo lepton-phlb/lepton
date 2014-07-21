@@ -345,8 +345,7 @@ def build_ecos_lib(script_dir, epk_lst_name, epk_lst_path, app_epk_lst, app_path
             Exit(1)
 
 #
-def build_default_app(mklepton_path, app_dir, app_config, target_list, target_opts_file):
-   
+def build_lepton_conf_file(mklepton_path, app_config, target_list):
    for i in range(len(target_list)):
       #parse configuration file and build application
       os.chdir(mklepton_path)
@@ -355,19 +354,22 @@ def build_default_app(mklepton_path, app_dir, app_config, target_list, target_op
       if subprocess.call(shlex.split(cmd)) > 0:
          print "(EE) parse application config file : " + target_list[i]
          Exit(1)
-      
+
+#
+def build_default_app(app_dir, target_opts_file):
+   for i in range(len(target_opts_file)):
       os.chdir(app_dir + '/prj/scons')
-      
+
       cmd = "scons -c --targetfile=" + target_opts_file[i]
       if subprocess.call(shlex.split(cmd)) > 0:
          print "(EE) clean application : " + target_opts_file[i]
          Exit(1)
-      
+
       cmd = "scons -Q bin --targetfile=" + target_opts_file[i]
       if subprocess.call(shlex.split(cmd)) > 0:
          print "(EE) build application : " + target_opts_file[i]
          Exit(1)
-   
+
 
 build_toolchain(tauon_configure_env['BUILD_BINUTILS'], tauon_configure_env['BUILD_GCC'], \
 tauon_configure_env['BUILD_GDB'], host_tools_install_dir)
@@ -383,10 +385,10 @@ if tauon_configure_env['BUILD_VIRTUALCPU']:
 if tauon_configure_env['BUILD_SAMPLEAPP']:
    install_default_epk(epk_default_dir, epk_list, epk_list_name, ecos_admin_cmd)
    build_ecos_lib(scripts_default_dir, epk_list_name, epk_list_path, app_default_list_epk, app_default_dir)
-   
+
    #prepare all things to build application
    os.chdir(app_default_dir + '/prj/scons')
    subprocess.call(["ln", "-s", tauon_user_path + "/build/SConstruct"])
+   build_lepton_conf_file(host_tools_base_dir + '/bin', app_config_file, app_default_target)
    os.environ['PYTHONPATH'] = tauon_python_module_dir
-   build_default_app(host_tools_base_dir + '/bin', app_default_dir, \
-   app_config_file, app_default_target, app_default_target_file)
+   build_default_app(app_default_dir, app_default_target_file)
