@@ -62,6 +62,10 @@ if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('k60n512')>=0:
    TauonSource(tauon_sampleapp_src_dir+'tstleds.c'),
    ])
 
+#add general option for LWIP
+if tauon_build_envs.envs_map['DEFAULT']['LWIP']:
+   tauon_build_envs.envs_map['DEFAULT'].Append(CPPDEFINES='USE_LWIP')
+
 ####name generated map file
 tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS = '-Wl,--Map -Wl,'+ tauon_sampleapp_bin_dir +tauon_binary_prefix+ tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'] +'.map')
 
