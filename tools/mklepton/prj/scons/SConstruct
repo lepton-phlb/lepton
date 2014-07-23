@@ -46,14 +46,10 @@ bin_install_dir = base_dir + 'tools/bin/'
 tuple_uname = os.uname()
 arch = tuple_uname[len(tuple_uname)-1]
 
-if arch.find('64') > 0:
-   mklepton_env = Environment(ENV = os.environ, CC='i386-lenny-gcc')
+if platform.dist()[2] == "oneiric":
+   mklepton_env = Environment(ENV = os.environ, CC='gcc-4.4')
 else:
-   #link problem
-   if platform.dist()[2] == "oneiric":
-      mklepton_env = Environment(ENV = os.environ, CC='gcc-4.4')
-   else:
-      mklepton_env = Environment(ENV = os.environ, CC='gcc')
+   mklepton_env = Environment(ENV = os.environ, CC='gcc')
 
 #add CFLAGS options
 mklepton_env.Append(CCFLAGS = '-g -O0 -Wall -gdwarf-2 -g3')
