@@ -81,10 +81,8 @@ static cyg_uint32 dev_at91sam9261_eth_dm9000a_interrupt_isr(cyg_vector_t vector,
    //
    return(CYG_ISR_HANDLED);
 }
-#endif
 
-//
-//#if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS) 
+#elif defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS) 
 static void dev_at91sam9261_eth_dm9000a_interrupt_isr(void){
    // 
    __hw_enter_interrupt();
@@ -107,7 +105,7 @@ static void dev_at91sam9261_eth_dm9000a_interrupt_isr(void){
    //
    __hw_leave_interrupt();
 }
-//#endif
+#endif
 
 /*--------------------------------------------
 | Name:        dev_at91sam9261_eth_dm9000a_load
@@ -145,7 +143,7 @@ int dev_at91sam9261_eth_dm9000a_load(dev_io_info_t* p_dev_io_info){
    cyg_interrupt_create(
       (cyg_vector_t)p_dev_io_info->irq_no, (cyg_priority_t)p_dev_io_info->irq_prio, 0,
       (p_dev_io_info->p_fct_isr ? p_dev_io_info->p_fct_isr : &
-       dev_eth_dm9000a_interrupt_isr),
+       dev_at91sam9261_eth_dm9000a_interrupt_isr),
       &dev_eth_dm9000a_interrupt_dsr,
       &_eth_dm9000_handle, &_eth_dm9000_it);
    //
