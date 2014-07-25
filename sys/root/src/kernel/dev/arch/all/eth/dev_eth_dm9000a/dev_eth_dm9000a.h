@@ -42,6 +42,7 @@ Declarations
    extern void dev_eth_dm9000a_interrupt_isr(void);
 #elif defined(__KERNEL_UCORE_ECOS)
    extern cyg_uint32 dev_eth_dm9000a_interrupt_isr(cyg_vector_t vector, cyg_addrword_t data);
+   extern void dev_eth_dm9000a_interrupt_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t data);
 #endif   
 
 extern const char dev_eth_dm9000a_name[];
