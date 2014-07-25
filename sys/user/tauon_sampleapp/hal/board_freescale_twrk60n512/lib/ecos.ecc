@@ -49,6 +49,7 @@ cdl_configuration eCos {
     package CYGPKG_LIBC_I18N current ;
     package CYGPKG_LIBC_STDLIB current ;
     package CYGPKG_LIBM current ;
+    package CYGPKG_LIBC current ;
 };
 
 # ---- conflicts -------------------------------------------------------
@@ -3759,757 +3760,6 @@ cdl_component CYGDAT_IO_SERIAL_TERMIOS_ADD_INL {
     # Current_value: <cyg/io/ser_freescale_uart_termiostty_add.inl>
 };
 
-# <
-# ISO C library string functions
-# doc: ref/libc.html
-# This package provides string functions specified by the
-# ISO C standard - ISO/IEC 9899:1990.
-#
-cdl_package CYGPKG_LIBC_STRING {
-    # Packages cannot be added or removed, nor can their version be changed,
-    # simply by editing their value. Instead the appropriate configuration
-    # should be used to perform these actions.
-
-    # This value cannot be modified here.
-    # Flavor: booldata
-    # Current value: 1 current
-    # Requires:  CYGBLD_ISO_STRING_LOCALE_FUNCS_HEADER ==  "<cyg/libc/string/string.h>" 
-    #     CYGBLD_ISO_STRING_LOCALE_FUNCS_HEADER == <cyg/libc/string/string.h>
-    #   --> 1
-    # Requires:  CYGBLD_ISO_STRING_MEMFUNCS_HEADER ==  "<cyg/libc/string/string.h>" 
-    #     CYGBLD_ISO_STRING_MEMFUNCS_HEADER == <cyg/libc/string/string.h>
-    #   --> 1
-    # Requires:  CYGBLD_ISO_STRING_STRFUNCS_HEADER ==  "<cyg/libc/string/string.h>" 
-    #     CYGBLD_ISO_STRING_STRFUNCS_HEADER == <cyg/libc/string/string.h>
-    #   --> 1
-    # Requires:  CYGBLD_ISO_STRTOK_R_HEADER ==  "<cyg/libc/string/string.h>" 
-    #     CYGBLD_ISO_STRTOK_R_HEADER == <cyg/libc/string/string.h>
-    #   --> 1
-    # Requires: CYGPKG_ISOINFRA
-    #     CYGPKG_ISOINFRA == current
-    #   --> 1
-};
-
-# >
-# Inline versions of <string.h> functions
-# This option chooses whether some of the
-# particularly simple string functions from
-# <string.h> are available as inline
-# functions. This may improve performance, and as
-# the functions are small, may even improve code
-# size.
-#
-cdl_option CYGIMP_LIBC_STRING_INLINES {
-    # Flavor: bool
-    user_value 0
-    # value_source user
-    # Default value: 1
-};
-
-# Optimize string functions for code size
-# This option tries to reduce string function
-# code size at the expense of execution speed. The
-# same effect can be produced if the code is
-# compiled with the -Os option to the compiler.
-#
-cdl_option CYGIMP_LIBC_STRING_PREFER_SMALL_TO_FAST {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-};
-
-# Provide BSD compatibility functions
-# Enabling this option causes various compatibility functions
-# commonly found in the BSD UNIX operating system to be included.
-# These are functions such as bzero, bcmp, bcopy, bzero, strcasecmp,
-# strncasecmp, index, rindex and swab.
-#
-cdl_option CYGFUN_LIBC_STRING_BSD_FUNCS {
-    # Flavor: bool
-    user_value 1
-    # The inferred value should not be edited directly.
-    inferred_value 0
-    # value_source user
-    # Default value: 1
-    # Requires:  CYGBLD_ISO_STRING_BSD_FUNCS_HEADER ==  "<cyg/libc/string/bsdstring.h>" 
-    #     CYGBLD_ISO_STRING_BSD_FUNCS_HEADER == <cyg/libc/string/bsdstring.h>
-    #   --> 1
-    # Requires: CYGINT_ISO_CTYPE
-    #     CYGINT_ISO_CTYPE == 1
-    #   --> 1
-};
-
-# strtok
-# These options control the behaviour of the
-# strtok() and strtok_r() string tokenization
-# functions.
-#
-cdl_component CYGPKG_LIBC_STRING_STRTOK {
-    # There is no associated value.
-};
-
-# >
-# Per-thread strtok()
-# This option controls whether the string function
-# strtok() has its state recorded on a per-thread
-# basis rather than global. If this option is
-# disabled, some per-thread space can be saved.
-# Note there is also a POSIX-standard strtok_r()
-# function to achieve a similar effect with user
-# support. Enabling this option will use one slot
-# of kernel per-thread data. You should ensure you
-# have enough slots configured for all your
-# per-thread data.
-#
-cdl_option CYGSEM_LIBC_STRING_PER_THREAD_STRTOK {
-    # ActiveIf constraint: CYGPKG_KERNEL
-    #     CYGPKG_KERNEL == current
-    #   --> 1
-
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
-    # Default value: CYGVAR_KERNEL_THREADS_DATA
-    #     CYGVAR_KERNEL_THREADS_DATA == 1
-    #   --> 1
-    # Requires: CYGVAR_KERNEL_THREADS_DATA
-    #     CYGVAR_KERNEL_THREADS_DATA == 1
-    #   --> 1
-};
-
-# Tracing level
-# Trace verbosity level for debugging the <string.h>
-# functions strtok() and strtok_r(). Increase this
-# value to get additional trace output.
-#
-cdl_option CYGNUM_LIBC_STRING_STRTOK_TRACE_LEVEL {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Legal values: 0 to 1
-};
-
-# <
-# strdup
-# This option indicates whether strdup() is to be supported.
-#
-cdl_option CYGFUN_LIBC_STRING_STRDUP {
-    # ActiveIf constraint: CYGINT_ISO_MALLOC
-    #     CYGINT_ISO_MALLOC == 1
-    #   --> 1
-
-    # Calculated value: 1
-    # Flavor: bool
-    # Current value: 1
-};
-
-# Provide strnlen() GNU extension
-# This option controls support for the strnlen() function.
-# (This is a GNU extension, not part of ANSI C.)
-#
-cdl_option CYGFUN_LIBC_STRING_GNU_STRNLEN {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
-    # Default value: 1
-};
-
-# C library string functions build options
-# Package specific build options including control over
-# compiler flags used only in building this package,
-# and details of which tests are built.
-#
-cdl_component CYGPKG_LIBC_STRING_OPTIONS {
-    # There is no associated value.
-};
-
-# >
-# Additional compiler flags
-# This option modifies the set of compiler flags for
-# building the C library. These flags are used in addition
-# to the set of global flags.
-#
-cdl_option CYGPKG_LIBC_STRING_CFLAGS_ADD {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ""
-    # value_source default
-    # Default value: ""
-};
-
-# Suppressed compiler flags
-# This option modifies the set of compiler flags for
-# building the C library. These flags are removed from
-# the set of global flags if present.
-#
-cdl_option CYGPKG_LIBC_STRING_CFLAGS_REMOVE {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ""
-    # value_source default
-    # Default value: ""
-};
-
-# C library string function tests
-# This option specifies the set of tests for the C library
-# string functions.
-#
-cdl_option CYGPKG_LIBC_STRING_TESTS {
-    # Calculated value:  "tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2 tests/strnlen" 
-    # Flavor: data
-    # Current_value: tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2 tests/strnlen
-};
-
-# <
-# <
-# ISO C library internationalization functions
-# doc: ref/libc.html
-# This package provides internationalization functions specified by the
-# ISO C standard - ISO/IEC 9899:1990. These include locale-related
-# functionality and <ctype.h> functionality.
-#
-cdl_package CYGPKG_LIBC_I18N {
-    # Packages cannot be added or removed, nor can their version be changed,
-    # simply by editing their value. Instead the appropriate configuration
-    # should be used to perform these actions.
-
-    # This value cannot be modified here.
-    # Flavor: booldata
-    # Current value: 1 current
-    # Requires: CYGPKG_ISOINFRA
-    #     CYGPKG_ISOINFRA == current
-    #   --> 1
-};
-
-# >
-# Supported locales
-# These options determine which locales other than the "C" locale
-# are supported and hence contribute to the size of the executable.
-#
-cdl_component CYGPKG_LIBC_I18N_LOCALES {
-    # There is no associated value.
-};
-
-# >
-# Support for multiple locales required
-#
-cdl_interface CYGINT_LIBC_I18N_MB_REQUIRED {
-    # Implemented by CYGFUN_LIBC_I18N_LOCALE_C_SJIS, active, disabled
-    # Implemented by CYGFUN_LIBC_I18N_LOCALE_C_JIS, active, disabled
-    # Implemented by CYGFUN_LIBC_I18N_LOCALE_C_EUCJP, active, disabled
-    # This value cannot be modified here.
-    # Flavor: booldata
-    # Current value: 0 0
-    # Requires:  CYGBLD_ISO_STDLIB_MB_CUR_MAX_HEADER ==  "<cyg/libc/i18n/mb.h>" 
-    #     CYGBLD_ISO_STDLIB_MB_CUR_MAX_HEADER == 0
-    #   --> 0
-
-    # The following properties are affected by this value
-};
-
-# C-SJIS locale support
-# This option controls if the "C-SJIS" locale will be
-# supported by setlocale().  The locale is a hybrid locale
-# that is mostly the "C" locale with Japanese SJIS multibyte
-# support added.
-#
-cdl_option CYGFUN_LIBC_I18N_LOCALE_C_SJIS {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-
-    # The following properties are affected by this value
-    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
-    #     LegalValues:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
-    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
-    #     DefaultValue:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
-};
-
-# C-JIS locale support
-# This option controls if the "C-JIS" locale will be
-# supported by setlocale().  The locale is a hybrid locale
-# that is mostly the "C" locale with Japanese JIS multibyte
-# support added.
-#
-cdl_option CYGFUN_LIBC_I18N_LOCALE_C_JIS {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-
-    # The following properties are affected by this value
-    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
-    #     LegalValues:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
-    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
-    #     DefaultValue:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
-};
-
-# C-EUCJP locale support
-# This option controls if the "C-EUCJP" locale will be
-# supported by setlocale().  The locale is a hybrid locale
-# that is mostly the "C" locale with Japanese EUCJP multibyte
-# support added.
-#
-cdl_option CYGFUN_LIBC_I18N_LOCALE_C_EUCJP {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-
-    # The following properties are affected by this value
-    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
-    #     LegalValues:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
-    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
-    #     DefaultValue:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
-};
-
-# <
-# Newlib's ctype implementation
-# This option enables the implementation of the ctype functions
-# that comes with newlib. It is table driven and therefore
-# exhibits different performance characteristics. It also offers
-# a limited amount of binary compatibility
-# with newlib so that programs linked against newlib ctype/locale
-# do not need to be recompiled when linked with eCos.
-#
-cdl_option CYGPKG_LIBC_I18N_NEWLIB_CTYPE {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Requires:  CYGBLD_ISO_CTYPE_HEADER ==  "<cyg/libc/i18n/newlibctype.h>" 
-    #     CYGBLD_ISO_CTYPE_HEADER == 0
-    #   --> 0
-};
-
-# Per-thread multibyte state
-# This option controls whether the multibyte character
-# handling functions mblen(), mbtowc(), and wctomb(),
-# have their state recorded on a per-thread
-# basis rather than global. If this option is
-# disabled, some per-thread space can be saved.
-# Enabling this option will use three slots
-# of kernel per-thread data. You should ensure you
-# have enough slots configured for all your
-# per-thread data.
-#
-cdl_option CYGSEM_LIBC_I18N_PER_THREAD_MB {
-    # ActiveIf constraint: CYGPKG_KERNEL
-    #     CYGPKG_KERNEL == current
-    #   --> 1
-
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
-    # Default value:  CYGVAR_KERNEL_THREADS_DATA != 0 
-    #     CYGVAR_KERNEL_THREADS_DATA == 1
-    #   --> 1
-    # Requires: CYGVAR_KERNEL_THREADS_DATA
-    #     CYGVAR_KERNEL_THREADS_DATA == 1
-    #   --> 1
-};
-
-# Size of locale name strings
-# This option controls the maximum size of
-# locale names and is used, among other things
-# to instantiate a static string used
-# as a return value from the
-# setlocale() function. When requesting the
-# current locale settings with LC_ALL, a string
-# must be constructed to contain this data, rather
-# than just returning a constant string. This
-# string data is stored in the static string.
-# This depends on the length of locale names,
-# hence this option. If just the C locale is
-# present, this option can be set as low as 2.
-#
-cdl_option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 2
-    # value_source default
-    # Default value:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
-    #     CYGFUN_LIBC_I18N_LOCALE_C_EUCJP == 0
-    #     CYGFUN_LIBC_I18N_LOCALE_C_SJIS == 0
-    #     CYGFUN_LIBC_I18N_LOCALE_C_JIS == 0
-    #   --> 2
-    # Legal values:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
-    #     CYGFUN_LIBC_I18N_LOCALE_C_EUCJP == 0
-    #     CYGFUN_LIBC_I18N_LOCALE_C_SJIS == 0
-    #     CYGFUN_LIBC_I18N_LOCALE_C_JIS == 0
-};
-
-# Inline versions of <ctype.h> functions
-# This option chooses whether the simple character
-# classification and conversion functions (e.g.
-# isupper(), isalpha(), toupper(), etc.)
-# from <ctype.h> are available as inline
-# functions. This may improve performance and as
-# the functions are small, may even improve code
-# size.
-#
-cdl_option CYGIMP_LIBC_I18N_CTYPE_INLINES {
-    # Flavor: bool
-    user_value 0
-    # value_source user
-    # Default value: 1
-    # Requires:  CYGBLD_ISO_CTYPE_HEADER ==  "<cyg/libc/i18n/ctype.inl>" 
-    #     CYGBLD_ISO_CTYPE_HEADER == 0
-    #   --> 0
-};
-
-# C library i18n functions build options
-# Package specific build options including control over
-# compiler flags used only in building this package,
-# and details of which tests are built.
-#
-cdl_component CYGPKG_LIBC_I18N_OPTIONS {
-    # There is no associated value.
-};
-
-# >
-# Additional compiler flags
-# This option modifies the set of compiler flags for
-# building the C library. These flags are used in addition
-# to the set of global flags.
-#
-cdl_option CYGPKG_LIBC_I18N_CFLAGS_ADD {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ""
-    # value_source default
-    # Default value: ""
-};
-
-# Suppressed compiler flags
-# This option modifies the set of compiler flags for
-# building the C library. These flags are removed from
-# the set of global flags if present.
-#
-cdl_option CYGPKG_LIBC_I18N_CFLAGS_REMOVE {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ""
-    # value_source default
-    # Default value: ""
-};
-
-# C library i18n function tests
-# This option specifies the set of tests for the C library
-# i18n functions.
-#
-cdl_option CYGPKG_LIBC_I18N_TESTS {
-    # Calculated value:  "tests/ctype tests/setlocale tests/i18nmb" 
-    # Flavor: data
-    # Current_value: tests/ctype tests/setlocale tests/i18nmb
-};
-
-# <
-# <
-# ISO C library general utility functions
-# doc: ref/libc.html
-# This package provides general utility functions in <stdlib.h>
-# as specified by the ISO C standard - ISO/IEC 9899:1990.
-#
-cdl_package CYGPKG_LIBC_STDLIB {
-    # Packages cannot be added or removed, nor can their version be changed,
-    # simply by editing their value. Instead the appropriate configuration
-    # should be used to perform these actions.
-
-    # This value cannot be modified here.
-    # Flavor: booldata
-    # Current value: 1 current
-    # Requires: CYGPKG_ISOINFRA
-    #     CYGPKG_ISOINFRA == current
-    #   --> 1
-    # Requires: CYGINT_ISO_CTYPE
-    #     CYGINT_ISO_CTYPE == 1
-    #   --> 1
-    # Requires: CYGINT_ISO_STRING_STRFUNCS
-    #     CYGINT_ISO_STRING_STRFUNCS == 1
-    #   --> 1
-};
-
-# >
-# Inline versions of <stdlib.h> functions
-# This option chooses whether some of the
-# particularly simple standard utility functions
-# from <stdlib.h> are available as inline
-# functions. This may improve performance, and as
-# the functions are small, may even improve code
-# size.
-#
-cdl_component CYGIMP_LIBC_STDLIB_INLINES {
-    # There is no associated value.
-};
-
-# >
-# abs() / labs()
-#
-cdl_option CYGIMP_LIBC_STDLIB_INLINE_ABS {
-    # Flavor: bool
-    user_value 0
-    # value_source user
-    # Default value: 1
-    # Requires:  CYGBLD_ISO_STDLIB_ABS_HEADER ==  "<cyg/libc/stdlib/abs.inl>" 
-    #     CYGBLD_ISO_STDLIB_ABS_HEADER == 0
-    #   --> 0
-};
-
-# div() / ldiv()
-#
-cdl_option CYGIMP_LIBC_STDLIB_INLINE_DIV {
-    # Flavor: bool
-    user_value 0
-    # value_source user
-    # Default value: 1
-    # Requires:  CYGBLD_ISO_STDLIB_DIV_HEADER ==  "<cyg/libc/stdlib/div.inl>" 
-    #     CYGBLD_ISO_STDLIB_DIV_HEADER == 0
-    #   --> 0
-};
-
-# atof() / atoi() / atol()
-#
-cdl_option CYGIMP_LIBC_STDLIB_INLINE_ATOX {
-    # Flavor: bool
-    user_value 0
-    # value_source user
-    # Default value: 1
-    # Requires:  CYGBLD_ISO_STDLIB_STRCONV_HEADER ==  "<cyg/libc/stdlib/atox.inl>" 
-    #     CYGBLD_ISO_STDLIB_STRCONV_HEADER == 0
-    #   --> 0
-};
-
-# <
-# Random number generation
-# These options control the behaviour of the
-# functions rand(), srand() and rand_r()
-#
-cdl_component CYGPKG_LIBC_RAND {
-    # There is no associated value.
-};
-
-# >
-# Per-thread random seed
-# doc: ref/libc-thread-safety.html
-# This option controls whether the pseudo-random
-# number generation functions rand() and srand()
-# have their state recorded on a per-thread
-# basis rather than global. If this option is
-# disabled, some per-thread space can be saved.
-# Note there is also a POSIX-standard rand_r()
-# function to achieve a similar effect with user
-# support. Enabling this option will use one slot
-# of kernel per-thread data. You should ensure you
-# have enough slots configured for all your
-# per-thread data.
-#
-cdl_option CYGSEM_LIBC_PER_THREAD_RAND {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Requires: CYGVAR_KERNEL_THREADS_DATA
-    #     CYGVAR_KERNEL_THREADS_DATA == 1
-    #   --> 1
-};
-
-# Random number seed
-# This selects the initial random number seed for
-# rand()'s pseudo-random number generator. For
-# strict ISO standard compliance, this should be 1,
-# as per section 7.10.2.2 of the standard.
-#
-cdl_option CYGNUM_LIBC_RAND_SEED {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
-    # Default value: 1
-    # Legal values: 0 to 0x7fffffff
-};
-
-# Tracing level
-# Trace verbosity level for debugging the rand(),
-# srand() and rand_r() functions. Increase this
-# value to get additional trace output.
-#
-cdl_option CYGNUM_LIBC_RAND_TRACE_LEVEL {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Legal values: 0 to 1
-};
-
-# Simplest implementation
-# This provides a very simple implementation of rand()
-# that does not perform well with randomness in the
-# lower significant bits. However it is exceptionally
-# fast. It uses the sample algorithm from the ISO C
-# standard itself.
-#
-cdl_option CYGIMP_LIBC_RAND_SIMPLEST {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-};
-
-# Simple implementation #1
-# This provides a very simple implementation of rand()
-# based on the simplest implementation above. However
-# it does try to work around the lack of randomness
-# in the lower significant bits, at the expense of a
-# little speed.
-#
-cdl_option CYGIMP_LIBC_RAND_SIMPLE1 {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
-    # Default value: 1
-};
-
-# Knuth implementation #1
-# This implements a slightly more complex algorithm
-# published in Donald E. Knuth's Art of Computer
-# Programming Vol.2 section 3.6 (p.185 in the 3rd ed.).
-# This produces better random numbers than the
-# simplest approach but is slower.
-#
-cdl_option CYGIMP_LIBC_RAND_KNUTH1 {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-};
-
-# <
-# Provides strtod()
-# This option allows use of the utility function
-# strtod() (and consequently atof()) to convert
-# from string to double precision floating point
-# numbers. Disabling this option removes the
-# dependency on the math library package.
-#
-cdl_option CYGFUN_LIBC_strtod {
-    # Flavor: bool
-    user_value 1
-    # value_source user
-    # Default value:  0 != CYGPKG_LIBM 
-    #     CYGPKG_LIBM == current
-    #   --> 1
-    # Requires: CYGPKG_LIBM
-    #     CYGPKG_LIBM == current
-    #   --> 1
-};
-
-# Provides long long conversion functions
-# Enabling this option will provide support for the strtoll(),
-# strtoull() and atoll() conversion functions, which are
-# the long long variants of the standard versions of these
-# functions. Supporting this requires extra code and compile
-# time.
-#
-cdl_option CYGFUN_LIBC_STDLIB_CONV_LONGLONG {
-    # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
-    # Default value: 1
-};
-
-# bsearch() tracing level
-# Trace verbosity level for debugging the <stdlib.h>
-# binary search function bsearch(). Increase this
-# value to get additional trace output.
-#
-cdl_option CYGNUM_LIBC_BSEARCH_TRACE_LEVEL {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Legal values: 0 to 1
-};
-
-# qsort() tracing level
-# Trace verbosity level for debugging the <stdlib.h>
-# quicksort function qsort(). Increase this value
-# to get additional trace output.
-#
-cdl_option CYGNUM_LIBC_QSORT_TRACE_LEVEL {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value 0
-    # value_source default
-    # Default value: 0
-    # Legal values: 0 to 1
-};
-
-# C library stdlib build options
-# Package specific build options including control over
-# compiler flags used only in building this package,
-# and details of which tests are built.
-#
-cdl_component CYGPKG_LIBC_STDLIB_OPTIONS {
-    # There is no associated value.
-};
-
-# >
-# Additional compiler flags
-# This option modifies the set of compiler flags for
-# building this package. These flags are used in addition
-# to the set of global flags.
-#
-cdl_option CYGPKG_LIBC_STDLIB_CFLAGS_ADD {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ""
-    # value_source default
-    # Default value: ""
-};
-
-# Suppressed compiler flags
-# This option modifies the set of compiler flags for
-# building this package. These flags are removed from
-# the set of global flags if present.
-#
-cdl_option CYGPKG_LIBC_STDLIB_CFLAGS_REMOVE {
-    # Flavor: data
-    # No user value, uncomment the following line to provide one.
-    # user_value ""
-    # value_source default
-    # Default value: ""
-};
-
-# C library stdlib tests
-# This option specifies the set of tests for this package.
-#
-cdl_option CYGPKG_LIBC_STDLIB_TESTS {
-    # Calculated value:  "tests/abs tests/atoi tests/atol tests/bsearch tests/div tests/getenv tests/labs tests/ldiv tests/qsort tests/rand1 tests/rand2 tests/rand3 tests/rand4 tests/srand tests/strtol tests/strtoul" 
-    # Flavor: data
-    # Current_value: tests/abs tests/atoi tests/atol tests/bsearch tests/div tests/getenv tests/labs tests/ldiv tests/qsort tests/rand1 tests/rand2 tests/rand3 tests/rand4 tests/srand tests/strtol tests/strtoul
-};
-
-# <
 # <
 # <
 # Freescale UART header
@@ -19406,8 +18656,8 @@ cdl_component CYGNUM_LIBM_COMPATIBILITY {
     # Default value: 1 POSIX
     # Legal values:  "POSIX" "IEEE" "XOPEN" "SVID" 
     # Requires: CYGPKG_LIBC
-    #     CYGPKG_LIBC (unknown) == 0
-    #   --> 0
+    #     CYGPKG_LIBC == current
+    #   --> 1
 
     # The following properties are affected by this value
     # option CYGNUM_LIBM_COMPAT_DEFAULT
@@ -19720,6 +18970,781 @@ cdl_option CYGPKG_LIBM_TESTS {
     # Current_value: tests/vectors/acos tests/vectors/asin              tests/vectors/cos tests/vectors/cosh                         tests/vectors/sin tests/vectors/sinh                         tests/vectors/atan tests/vectors/atan2                       tests/vectors/tan tests/vectors/tanh                         tests/vectors/sqrt tests/vectors/pow                         tests/vectors/ceil tests/vectors/floor                       tests/vectors/fabs tests/vectors/fmod                        tests/vectors/frexp tests/vectors/ldexp                      tests/vectors/exp tests/vectors/log tests/vectors/log10       tests/vectors/acosf tests/vectors/asinf                      tests/vectors/cosf tests/vectors/coshf                       tests/vectors/sinf tests/vectors/sinhf                       tests/vectors/atanf tests/vectors/atan2f                     tests/vectors/tanf tests/vectors/tanhf                       tests/vectors/hypotf tests/vectors/sqrtf tests/vectors/powf  tests/vectors/floorf tests/vectors/ceilf                     tests/vectors/fabsf tests/vectors/fmodf                      tests/vectors/frexpf tests/vectors/ldexpf                    tests/vectors/expf tests/vectors/logf tests/vectors/log10f 
 };
 
+# <
+# <
+# ISO C library
+# doc: ref/libc.html
+# The packages under this package enable compatibility with the ISO C
+# standard - ISO/IEC 9899:1990. This allows the user application to use
+# well known standard C library functions, and in eCos starts a thread
+# to invoke the user function main(). This package is a top-level placeholder
+# to contain the implementations.
+#
+cdl_package CYGPKG_LIBC {
+    # Packages cannot be added or removed, nor can their version be changed,
+    # simply by editing their value. Instead the appropriate configuration
+    # should be used to perform these actions.
+
+    # This value cannot be modified here.
+    # Flavor: booldata
+    # Current value: 1 current
+
+    # The following properties are affected by this value
+    # component CYGNUM_LIBM_COMPATIBILITY
+    #     Requires: CYGPKG_LIBC
+};
+
+# >
+# ISO C library string functions
+# doc: ref/libc.html
+# This package provides string functions specified by the
+# ISO C standard - ISO/IEC 9899:1990.
+#
+cdl_package CYGPKG_LIBC_STRING {
+    # Packages cannot be added or removed, nor can their version be changed,
+    # simply by editing their value. Instead the appropriate configuration
+    # should be used to perform these actions.
+
+    # This value cannot be modified here.
+    # Flavor: booldata
+    # Current value: 1 current
+    # Requires:  CYGBLD_ISO_STRING_LOCALE_FUNCS_HEADER ==  "<cyg/libc/string/string.h>" 
+    #     CYGBLD_ISO_STRING_LOCALE_FUNCS_HEADER == <cyg/libc/string/string.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_STRING_MEMFUNCS_HEADER ==  "<cyg/libc/string/string.h>" 
+    #     CYGBLD_ISO_STRING_MEMFUNCS_HEADER == <cyg/libc/string/string.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_STRING_STRFUNCS_HEADER ==  "<cyg/libc/string/string.h>" 
+    #     CYGBLD_ISO_STRING_STRFUNCS_HEADER == <cyg/libc/string/string.h>
+    #   --> 1
+    # Requires:  CYGBLD_ISO_STRTOK_R_HEADER ==  "<cyg/libc/string/string.h>" 
+    #     CYGBLD_ISO_STRTOK_R_HEADER == <cyg/libc/string/string.h>
+    #   --> 1
+    # Requires: CYGPKG_ISOINFRA
+    #     CYGPKG_ISOINFRA == current
+    #   --> 1
+};
+
+# >
+# Inline versions of <string.h> functions
+# This option chooses whether some of the
+# particularly simple string functions from
+# <string.h> are available as inline
+# functions. This may improve performance, and as
+# the functions are small, may even improve code
+# size.
+#
+cdl_option CYGIMP_LIBC_STRING_INLINES {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+};
+
+# Optimize string functions for code size
+# This option tries to reduce string function
+# code size at the expense of execution speed. The
+# same effect can be produced if the code is
+# compiled with the -Os option to the compiler.
+#
+cdl_option CYGIMP_LIBC_STRING_PREFER_SMALL_TO_FAST {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# Provide BSD compatibility functions
+# Enabling this option causes various compatibility functions
+# commonly found in the BSD UNIX operating system to be included.
+# These are functions such as bzero, bcmp, bcopy, bzero, strcasecmp,
+# strncasecmp, index, rindex and swab.
+#
+cdl_option CYGFUN_LIBC_STRING_BSD_FUNCS {
+    # Flavor: bool
+    user_value 1
+    # The inferred value should not be edited directly.
+    inferred_value 0
+    # value_source user
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_STRING_BSD_FUNCS_HEADER ==  "<cyg/libc/string/bsdstring.h>" 
+    #     CYGBLD_ISO_STRING_BSD_FUNCS_HEADER == <cyg/libc/string/bsdstring.h>
+    #   --> 1
+    # Requires: CYGINT_ISO_CTYPE
+    #     CYGINT_ISO_CTYPE == 1
+    #   --> 1
+};
+
+# strtok
+# These options control the behaviour of the
+# strtok() and strtok_r() string tokenization
+# functions.
+#
+cdl_component CYGPKG_LIBC_STRING_STRTOK {
+    # There is no associated value.
+};
+
+# >
+# Per-thread strtok()
+# This option controls whether the string function
+# strtok() has its state recorded on a per-thread
+# basis rather than global. If this option is
+# disabled, some per-thread space can be saved.
+# Note there is also a POSIX-standard strtok_r()
+# function to achieve a similar effect with user
+# support. Enabling this option will use one slot
+# of kernel per-thread data. You should ensure you
+# have enough slots configured for all your
+# per-thread data.
+#
+cdl_option CYGSEM_LIBC_STRING_PER_THREAD_STRTOK {
+    # ActiveIf constraint: CYGPKG_KERNEL
+    #     CYGPKG_KERNEL == current
+    #   --> 1
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: CYGVAR_KERNEL_THREADS_DATA
+    #     CYGVAR_KERNEL_THREADS_DATA == 1
+    #   --> 1
+    # Requires: CYGVAR_KERNEL_THREADS_DATA
+    #     CYGVAR_KERNEL_THREADS_DATA == 1
+    #   --> 1
+};
+
+# Tracing level
+# Trace verbosity level for debugging the <string.h>
+# functions strtok() and strtok_r(). Increase this
+# value to get additional trace output.
+#
+cdl_option CYGNUM_LIBC_STRING_STRTOK_TRACE_LEVEL {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Legal values: 0 to 1
+};
+
+# <
+# strdup
+# This option indicates whether strdup() is to be supported.
+#
+cdl_option CYGFUN_LIBC_STRING_STRDUP {
+    # ActiveIf constraint: CYGINT_ISO_MALLOC
+    #     CYGINT_ISO_MALLOC == 1
+    #   --> 1
+
+    # Calculated value: 1
+    # Flavor: bool
+    # Current value: 1
+};
+
+# Provide strnlen() GNU extension
+# This option controls support for the strnlen() function.
+# (This is a GNU extension, not part of ANSI C.)
+#
+cdl_option CYGFUN_LIBC_STRING_GNU_STRNLEN {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
+# C library string functions build options
+# Package specific build options including control over
+# compiler flags used only in building this package,
+# and details of which tests are built.
+#
+cdl_component CYGPKG_LIBC_STRING_OPTIONS {
+    # There is no associated value.
+};
+
+# >
+# Additional compiler flags
+# This option modifies the set of compiler flags for
+# building the C library. These flags are used in addition
+# to the set of global flags.
+#
+cdl_option CYGPKG_LIBC_STRING_CFLAGS_ADD {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ""
+    # value_source default
+    # Default value: ""
+};
+
+# Suppressed compiler flags
+# This option modifies the set of compiler flags for
+# building the C library. These flags are removed from
+# the set of global flags if present.
+#
+cdl_option CYGPKG_LIBC_STRING_CFLAGS_REMOVE {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ""
+    # value_source default
+    # Default value: ""
+};
+
+# C library string function tests
+# This option specifies the set of tests for the C library
+# string functions.
+#
+cdl_option CYGPKG_LIBC_STRING_TESTS {
+    # Calculated value:  "tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2 tests/strnlen" 
+    # Flavor: data
+    # Current_value: tests/memchr tests/memcmp1 tests/memcmp2 tests/memcpy1 tests/memcpy2 tests/memmove1 tests/memmove2 tests/memset tests/strcat1 tests/strcat2 tests/strchr tests/strcmp1 tests/strcmp2 tests/strcoll1 tests/strcoll2 tests/strcpy1 tests/strcpy2 tests/strcspn tests/strcspn tests/strlen tests/strncat1 tests/strncat2 tests/strncpy1 tests/strncpy2 tests/strpbrk tests/strrchr tests/strspn tests/strstr tests/strtok tests/strxfrm1 tests/strxfrm2 tests/strnlen
+};
+
+# <
+# <
+# ISO C library internationalization functions
+# doc: ref/libc.html
+# This package provides internationalization functions specified by the
+# ISO C standard - ISO/IEC 9899:1990. These include locale-related
+# functionality and <ctype.h> functionality.
+#
+cdl_package CYGPKG_LIBC_I18N {
+    # Packages cannot be added or removed, nor can their version be changed,
+    # simply by editing their value. Instead the appropriate configuration
+    # should be used to perform these actions.
+
+    # This value cannot be modified here.
+    # Flavor: booldata
+    # Current value: 1 current
+    # Requires: CYGPKG_ISOINFRA
+    #     CYGPKG_ISOINFRA == current
+    #   --> 1
+};
+
+# >
+# Supported locales
+# These options determine which locales other than the "C" locale
+# are supported and hence contribute to the size of the executable.
+#
+cdl_component CYGPKG_LIBC_I18N_LOCALES {
+    # There is no associated value.
+};
+
+# >
+# Support for multiple locales required
+#
+cdl_interface CYGINT_LIBC_I18N_MB_REQUIRED {
+    # Implemented by CYGFUN_LIBC_I18N_LOCALE_C_SJIS, active, disabled
+    # Implemented by CYGFUN_LIBC_I18N_LOCALE_C_JIS, active, disabled
+    # Implemented by CYGFUN_LIBC_I18N_LOCALE_C_EUCJP, active, disabled
+    # This value cannot be modified here.
+    # Flavor: booldata
+    # Current value: 0 0
+    # Requires:  CYGBLD_ISO_STDLIB_MB_CUR_MAX_HEADER ==  "<cyg/libc/i18n/mb.h>" 
+    #     CYGBLD_ISO_STDLIB_MB_CUR_MAX_HEADER == 0
+    #   --> 0
+
+    # The following properties are affected by this value
+};
+
+# C-SJIS locale support
+# This option controls if the "C-SJIS" locale will be
+# supported by setlocale().  The locale is a hybrid locale
+# that is mostly the "C" locale with Japanese SJIS multibyte
+# support added.
+#
+cdl_option CYGFUN_LIBC_I18N_LOCALE_C_SJIS {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
+    #     LegalValues:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
+    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
+    #     DefaultValue:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
+};
+
+# C-JIS locale support
+# This option controls if the "C-JIS" locale will be
+# supported by setlocale().  The locale is a hybrid locale
+# that is mostly the "C" locale with Japanese JIS multibyte
+# support added.
+#
+cdl_option CYGFUN_LIBC_I18N_LOCALE_C_JIS {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
+    #     LegalValues:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
+    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
+    #     DefaultValue:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
+};
+
+# C-EUCJP locale support
+# This option controls if the "C-EUCJP" locale will be
+# supported by setlocale().  The locale is a hybrid locale
+# that is mostly the "C" locale with Japanese EUCJP multibyte
+# support added.
+#
+cdl_option CYGFUN_LIBC_I18N_LOCALE_C_EUCJP {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+
+    # The following properties are affected by this value
+    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
+    #     LegalValues:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
+    # option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE
+    #     DefaultValue:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
+};
+
+# <
+# Newlib's ctype implementation
+# This option enables the implementation of the ctype functions
+# that comes with newlib. It is table driven and therefore
+# exhibits different performance characteristics. It also offers
+# a limited amount of binary compatibility
+# with newlib so that programs linked against newlib ctype/locale
+# do not need to be recompiled when linked with eCos.
+#
+cdl_option CYGPKG_LIBC_I18N_NEWLIB_CTYPE {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Requires:  CYGBLD_ISO_CTYPE_HEADER ==  "<cyg/libc/i18n/newlibctype.h>" 
+    #     CYGBLD_ISO_CTYPE_HEADER == 0
+    #   --> 0
+};
+
+# Per-thread multibyte state
+# This option controls whether the multibyte character
+# handling functions mblen(), mbtowc(), and wctomb(),
+# have their state recorded on a per-thread
+# basis rather than global. If this option is
+# disabled, some per-thread space can be saved.
+# Enabling this option will use three slots
+# of kernel per-thread data. You should ensure you
+# have enough slots configured for all your
+# per-thread data.
+#
+cdl_option CYGSEM_LIBC_I18N_PER_THREAD_MB {
+    # ActiveIf constraint: CYGPKG_KERNEL
+    #     CYGPKG_KERNEL == current
+    #   --> 1
+
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value:  CYGVAR_KERNEL_THREADS_DATA != 0 
+    #     CYGVAR_KERNEL_THREADS_DATA == 1
+    #   --> 1
+    # Requires: CYGVAR_KERNEL_THREADS_DATA
+    #     CYGVAR_KERNEL_THREADS_DATA == 1
+    #   --> 1
+};
+
+# Size of locale name strings
+# This option controls the maximum size of
+# locale names and is used, among other things
+# to instantiate a static string used
+# as a return value from the
+# setlocale() function. When requesting the
+# current locale settings with LC_ALL, a string
+# must be constructed to contain this data, rather
+# than just returning a constant string. This
+# string data is stored in the static string.
+# This depends on the length of locale names,
+# hence this option. If just the C locale is
+# present, this option can be set as low as 2.
+#
+cdl_option CYGNUM_LIBC_I18N_MAX_LOCALE_NAME_SIZE {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 2
+    # value_source default
+    # Default value:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2)))  
+    #     CYGFUN_LIBC_I18N_LOCALE_C_EUCJP == 0
+    #     CYGFUN_LIBC_I18N_LOCALE_C_SJIS == 0
+    #     CYGFUN_LIBC_I18N_LOCALE_C_JIS == 0
+    #   --> 2
+    # Legal values:  (CYGFUN_LIBC_I18N_LOCALE_C_EUCJP ? 8 :  (CYGFUN_LIBC_I18N_LOCALE_C_SJIS ? 7 :   (CYGFUN_LIBC_I18N_LOCALE_C_JIS ? 6 : 2))) to 0x7fffffff 
+    #     CYGFUN_LIBC_I18N_LOCALE_C_EUCJP == 0
+    #     CYGFUN_LIBC_I18N_LOCALE_C_SJIS == 0
+    #     CYGFUN_LIBC_I18N_LOCALE_C_JIS == 0
+};
+
+# Inline versions of <ctype.h> functions
+# This option chooses whether the simple character
+# classification and conversion functions (e.g.
+# isupper(), isalpha(), toupper(), etc.)
+# from <ctype.h> are available as inline
+# functions. This may improve performance and as
+# the functions are small, may even improve code
+# size.
+#
+cdl_option CYGIMP_LIBC_I18N_CTYPE_INLINES {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_CTYPE_HEADER ==  "<cyg/libc/i18n/ctype.inl>" 
+    #     CYGBLD_ISO_CTYPE_HEADER == 0
+    #   --> 0
+};
+
+# C library i18n functions build options
+# Package specific build options including control over
+# compiler flags used only in building this package,
+# and details of which tests are built.
+#
+cdl_component CYGPKG_LIBC_I18N_OPTIONS {
+    # There is no associated value.
+};
+
+# >
+# Additional compiler flags
+# This option modifies the set of compiler flags for
+# building the C library. These flags are used in addition
+# to the set of global flags.
+#
+cdl_option CYGPKG_LIBC_I18N_CFLAGS_ADD {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ""
+    # value_source default
+    # Default value: ""
+};
+
+# Suppressed compiler flags
+# This option modifies the set of compiler flags for
+# building the C library. These flags are removed from
+# the set of global flags if present.
+#
+cdl_option CYGPKG_LIBC_I18N_CFLAGS_REMOVE {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ""
+    # value_source default
+    # Default value: ""
+};
+
+# C library i18n function tests
+# This option specifies the set of tests for the C library
+# i18n functions.
+#
+cdl_option CYGPKG_LIBC_I18N_TESTS {
+    # Calculated value:  "tests/ctype tests/setlocale tests/i18nmb" 
+    # Flavor: data
+    # Current_value: tests/ctype tests/setlocale tests/i18nmb
+};
+
+# <
+# <
+# ISO C library general utility functions
+# doc: ref/libc.html
+# This package provides general utility functions in <stdlib.h>
+# as specified by the ISO C standard - ISO/IEC 9899:1990.
+#
+cdl_package CYGPKG_LIBC_STDLIB {
+    # Packages cannot be added or removed, nor can their version be changed,
+    # simply by editing their value. Instead the appropriate configuration
+    # should be used to perform these actions.
+
+    # This value cannot be modified here.
+    # Flavor: booldata
+    # Current value: 1 current
+    # Requires: CYGPKG_ISOINFRA
+    #     CYGPKG_ISOINFRA == current
+    #   --> 1
+    # Requires: CYGINT_ISO_CTYPE
+    #     CYGINT_ISO_CTYPE == 1
+    #   --> 1
+    # Requires: CYGINT_ISO_STRING_STRFUNCS
+    #     CYGINT_ISO_STRING_STRFUNCS == 1
+    #   --> 1
+};
+
+# >
+# Inline versions of <stdlib.h> functions
+# This option chooses whether some of the
+# particularly simple standard utility functions
+# from <stdlib.h> are available as inline
+# functions. This may improve performance, and as
+# the functions are small, may even improve code
+# size.
+#
+cdl_component CYGIMP_LIBC_STDLIB_INLINES {
+    # There is no associated value.
+};
+
+# >
+# abs() / labs()
+#
+cdl_option CYGIMP_LIBC_STDLIB_INLINE_ABS {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_STDLIB_ABS_HEADER ==  "<cyg/libc/stdlib/abs.inl>" 
+    #     CYGBLD_ISO_STDLIB_ABS_HEADER == 0
+    #   --> 0
+};
+
+# div() / ldiv()
+#
+cdl_option CYGIMP_LIBC_STDLIB_INLINE_DIV {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_STDLIB_DIV_HEADER ==  "<cyg/libc/stdlib/div.inl>" 
+    #     CYGBLD_ISO_STDLIB_DIV_HEADER == 0
+    #   --> 0
+};
+
+# atof() / atoi() / atol()
+#
+cdl_option CYGIMP_LIBC_STDLIB_INLINE_ATOX {
+    # Flavor: bool
+    user_value 0
+    # value_source user
+    # Default value: 1
+    # Requires:  CYGBLD_ISO_STDLIB_STRCONV_HEADER ==  "<cyg/libc/stdlib/atox.inl>" 
+    #     CYGBLD_ISO_STDLIB_STRCONV_HEADER == 0
+    #   --> 0
+};
+
+# <
+# Random number generation
+# These options control the behaviour of the
+# functions rand(), srand() and rand_r()
+#
+cdl_component CYGPKG_LIBC_RAND {
+    # There is no associated value.
+};
+
+# >
+# Per-thread random seed
+# doc: ref/libc-thread-safety.html
+# This option controls whether the pseudo-random
+# number generation functions rand() and srand()
+# have their state recorded on a per-thread
+# basis rather than global. If this option is
+# disabled, some per-thread space can be saved.
+# Note there is also a POSIX-standard rand_r()
+# function to achieve a similar effect with user
+# support. Enabling this option will use one slot
+# of kernel per-thread data. You should ensure you
+# have enough slots configured for all your
+# per-thread data.
+#
+cdl_option CYGSEM_LIBC_PER_THREAD_RAND {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Requires: CYGVAR_KERNEL_THREADS_DATA
+    #     CYGVAR_KERNEL_THREADS_DATA == 1
+    #   --> 1
+};
+
+# Random number seed
+# This selects the initial random number seed for
+# rand()'s pseudo-random number generator. For
+# strict ISO standard compliance, this should be 1,
+# as per section 7.10.2.2 of the standard.
+#
+cdl_option CYGNUM_LIBC_RAND_SEED {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+    # Legal values: 0 to 0x7fffffff
+};
+
+# Tracing level
+# Trace verbosity level for debugging the rand(),
+# srand() and rand_r() functions. Increase this
+# value to get additional trace output.
+#
+cdl_option CYGNUM_LIBC_RAND_TRACE_LEVEL {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Legal values: 0 to 1
+};
+
+# Simplest implementation
+# This provides a very simple implementation of rand()
+# that does not perform well with randomness in the
+# lower significant bits. However it is exceptionally
+# fast. It uses the sample algorithm from the ISO C
+# standard itself.
+#
+cdl_option CYGIMP_LIBC_RAND_SIMPLEST {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# Simple implementation #1
+# This provides a very simple implementation of rand()
+# based on the simplest implementation above. However
+# it does try to work around the lack of randomness
+# in the lower significant bits, at the expense of a
+# little speed.
+#
+cdl_option CYGIMP_LIBC_RAND_SIMPLE1 {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
+# Knuth implementation #1
+# This implements a slightly more complex algorithm
+# published in Donald E. Knuth's Art of Computer
+# Programming Vol.2 section 3.6 (p.185 in the 3rd ed.).
+# This produces better random numbers than the
+# simplest approach but is slower.
+#
+cdl_option CYGIMP_LIBC_RAND_KNUTH1 {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+};
+
+# <
+# Provides strtod()
+# This option allows use of the utility function
+# strtod() (and consequently atof()) to convert
+# from string to double precision floating point
+# numbers. Disabling this option removes the
+# dependency on the math library package.
+#
+cdl_option CYGFUN_LIBC_strtod {
+    # Flavor: bool
+    user_value 1
+    # value_source user
+    # Default value:  0 != CYGPKG_LIBM 
+    #     CYGPKG_LIBM == current
+    #   --> 1
+    # Requires: CYGPKG_LIBM
+    #     CYGPKG_LIBM == current
+    #   --> 1
+};
+
+# Provides long long conversion functions
+# Enabling this option will provide support for the strtoll(),
+# strtoull() and atoll() conversion functions, which are
+# the long long variants of the standard versions of these
+# functions. Supporting this requires extra code and compile
+# time.
+#
+cdl_option CYGFUN_LIBC_STDLIB_CONV_LONGLONG {
+    # Flavor: bool
+    # No user value, uncomment the following line to provide one.
+    # user_value 1
+    # value_source default
+    # Default value: 1
+};
+
+# bsearch() tracing level
+# Trace verbosity level for debugging the <stdlib.h>
+# binary search function bsearch(). Increase this
+# value to get additional trace output.
+#
+cdl_option CYGNUM_LIBC_BSEARCH_TRACE_LEVEL {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Legal values: 0 to 1
+};
+
+# qsort() tracing level
+# Trace verbosity level for debugging the <stdlib.h>
+# quicksort function qsort(). Increase this value
+# to get additional trace output.
+#
+cdl_option CYGNUM_LIBC_QSORT_TRACE_LEVEL {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value 0
+    # value_source default
+    # Default value: 0
+    # Legal values: 0 to 1
+};
+
+# C library stdlib build options
+# Package specific build options including control over
+# compiler flags used only in building this package,
+# and details of which tests are built.
+#
+cdl_component CYGPKG_LIBC_STDLIB_OPTIONS {
+    # There is no associated value.
+};
+
+# >
+# Additional compiler flags
+# This option modifies the set of compiler flags for
+# building this package. These flags are used in addition
+# to the set of global flags.
+#
+cdl_option CYGPKG_LIBC_STDLIB_CFLAGS_ADD {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ""
+    # value_source default
+    # Default value: ""
+};
+
+# Suppressed compiler flags
+# This option modifies the set of compiler flags for
+# building this package. These flags are removed from
+# the set of global flags if present.
+#
+cdl_option CYGPKG_LIBC_STDLIB_CFLAGS_REMOVE {
+    # Flavor: data
+    # No user value, uncomment the following line to provide one.
+    # user_value ""
+    # value_source default
+    # Default value: ""
+};
+
+# C library stdlib tests
+# This option specifies the set of tests for this package.
+#
+cdl_option CYGPKG_LIBC_STDLIB_TESTS {
+    # Calculated value:  "tests/abs tests/atoi tests/atol tests/bsearch tests/div tests/getenv tests/labs tests/ldiv tests/qsort tests/rand1 tests/rand2 tests/rand3 tests/rand4 tests/srand tests/strtol tests/strtoul" 
+    # Flavor: data
+    # Current_value: tests/abs tests/atoi tests/atol tests/bsearch tests/div tests/getenv tests/labs tests/ldiv tests/qsort tests/rand1 tests/rand2 tests/rand3 tests/rand4 tests/srand tests/strtol tests/strtoul
+};
+
+# <
 # <
 # <
 # <
