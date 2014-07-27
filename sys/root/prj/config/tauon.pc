@@ -56,7 +56,7 @@ cflags_for_flnx=-fno-builtin-execv -fno-builtin-execve -fno-builtin-execl -fno-b
 includedir_tinyGL=${includedir_base}/lib/TinyGL/include
 
 #define for tauon
-define_for_tauon=-DUSE_ECOS -D__tauon_compiler_cpu_target__=__compiler_cpu_target_gnuc__
+define_for_tauon=-D__KERNEL_UCORE_ECOS -D__tauon_compiler_cpu_target__=__compiler_cpu_target_gnuc__
 cflags_for_tauon=-fdata-sections -ffunction-sections -fno-builtin
 
 #general variables to use for Cflags
