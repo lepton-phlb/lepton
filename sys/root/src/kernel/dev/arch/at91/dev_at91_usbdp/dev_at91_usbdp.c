@@ -492,7 +492,7 @@ int dev_at91_usbdp_ioctl(desc_t desc,int request,va_list ap) {
 
    //put class handler
    case USB_SET_CLASS_HANDLER: {
-      void * class_control_fn = (void *)ap;
+      void * class_control_fn = va_arg(ap, void *);
       if(class_control_fn) {
          at91_usbdp_ep0->class_control_fn = class_control_fn;
          return 0;
@@ -502,7 +502,7 @@ int dev_at91_usbdp_ioctl(desc_t desc,int request,va_list ap) {
 
    //set endpoint table
    case USB_SET_ENDPOINT_TABLE: {
-      unsigned char ** endpoint_table = (unsigned char **)ap;
+      unsigned char ** endpoint_table = va_arg(ap, unsigned char **);
       //
       if(endpoint_table) {
          p_g_board_usb->class_ep_tbl = (unsigned char **)endpoint_table;
@@ -525,7 +525,7 @@ int dev_at91_usbdp_ioctl(desc_t desc,int request,va_list ap) {
 
    //get endpoint state
    case USB_GET_CONTROL_ENDPOINT_STATE: {
-      int *usb_state =  (int *)ap;
+      int *usb_state =  va_arg(ap, int *);
       //maybe mutex
       *usb_state = at91_usbdp_ep0->state;
       return 0;
@@ -546,7 +546,8 @@ int dev_at91_usbdp_ioctl(desc_t desc,int request,va_list ap) {
 
    //is halt endpoint
    case USB_IS_HALTED_ENDPOINT: {
-      usbs_data_endpoint_halted_req * ep_req= (usbs_data_endpoint_halted_req *)ap;
+      usbs_data_endpoint_halted_req * ep_req=
+        va_arg(ap, usbs_data_endpoint_halted_req *);
       usbs_data_endpoint * pep = NULL;
 
       if(ep_req->epn<0 || ep_req->epn>p_g_board_usb->ep_no)
@@ -562,7 +563,7 @@ int dev_at91_usbdp_ioctl(desc_t desc,int request,va_list ap) {
 
    //
    case USB_SET_CLEAR_FEATURE_FN: {
-      void * clear_feature_fn = (void *)ap;
+      void * clear_feature_fn = va_arg(ap, void *);
       if(clear_feature_fn) {
          at91_usbdp_ep0->class_clear_feature_fn = clear_feature_fn;
          return 0;
