@@ -38,23 +38,40 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#ifdef __KERNEL_UCORE_EMBOS
+#if defined(__KERNEL_UCORE_EMBOS)
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef OS_TIMER tmr_t;
 
-#endif
-
-#ifdef __KERNEL_UCORE_FREERTOS
+#elif defined(__KERNEL_UCORE_FREERTOS)
 typedef void (*_tmr_func_t)(void);
 typedef _tmr_func_t tmr_func_t;
 typedef xTimerHandle tmr_t;
+
+#elif defined(__KERNEL_UCORE_ECOS)
+typedef cyg_handle_t alrm_hdl_t;
+typedef cyg_alarm alrm_t;
+typedef void (*_tmr_func_t)(alrm_hdl_t alarm_handle, cyg_addrword_t data );
+typedef _tmr_func_t tmr_func_t;
+typedef struct tmr_st {
+   alrm_hdl_t alarm_hdl;
+   alrm_t alarm_obj;
+}tmr_t;
+
+#elif defined(USE_KERNEL_STATIC)
+typedef void (*_tmr_func_t)(void);
+typedef _tmr_func_t tmr_func_t;
+typedef int tmr_t;
+
 #endif
 
 
 typedef struct rttmr_attr_st {
    time_t tm_msec; //delay
    tmr_func_t func;
+#if defined __KERNEL_UCORE_ECOS
+   cyg_addrword_t data;
+#endif
 }rttmr_attr_t;
 
 int rttmr_create(tmr_t* tmr,rttmr_attr_t* rttmr_attr);
