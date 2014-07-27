@@ -15629,9 +15629,8 @@ cdl_option CYGNUM_ERROR_ERRNO_TRACE_LEVEL {
 #
 cdl_option CYGPKG_ERROR_STRERROR {
     # Flavor: bool
-    # No user value, uncomment the following line to provide one.
-    # user_value 1
-    # value_source default
+    user_value 0
+    # value_source user
     # Default value: 1
     # Requires:  CYGBLD_ISO_STRERROR_HEADER == "<cyg/error/strerror.h>" 
     #     CYGBLD_ISO_STRERROR_HEADER == <cyg/error/strerror.h>
@@ -17066,12 +17065,12 @@ cdl_component CYGPKG_ISO_STRING {
 # Number of implementations of strerror() function
 #
 cdl_interface CYGINT_ISO_STRERROR {
-    # Implemented by CYGPKG_ERROR_STRERROR, active, enabled
+    # Implemented by CYGPKG_ERROR_STRERROR, active, disabled
     # This value cannot be modified here.
     # Flavor: booldata
-    # Current value: 1 1
+    # Current value: 0 0
     # Requires:  1 >= CYGINT_ISO_STRERROR 
-    #     CYGINT_ISO_STRERROR == 1
+    #     CYGINT_ISO_STRERROR == 0
     #   --> 1
 
     # The following properties are affected by this value
