@@ -395,7 +395,7 @@ int dev_at91_mci_seek(desc_t desc,int offset,int origin){
 int dev_at91_mci_ioctl(desc_t desc,int request,va_list ap) {
    switch(request) {
       case HDSD_SENDCOMMAND: {
-         mci_cmd_t * command = (mci_cmd_t *)ap;
+         mci_cmd_t * command = va_arg(ap, mci_cmd_t *);
          board_inf_mci_t * p_inf_mci = (board_inf_mci_t *)ofile_lst[desc].p;
          int sem_val;
          p_inf_mci->command = command;
