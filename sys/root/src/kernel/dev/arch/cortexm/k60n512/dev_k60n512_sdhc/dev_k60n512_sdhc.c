@@ -444,7 +444,7 @@ int dev_k60n512_sdhc_seek(desc_t desc,int offset,int origin){
 int dev_k60n512_sdhc_ioctl(desc_t desc,int request,va_list ap) {
    switch(request) {
    case HDSD_SENDCOMMAND: {
-      mci_cmd_t * command = (mci_cmd_t *)ap;
+      mci_cmd_t * command = va_arg(ap, mci_cmd_t *);
       board_kinetis_sdhc_info_t * p_inf_sdhc = (board_kinetis_sdhc_info_t *)ofile_lst[desc].p;
 
       if(!p_inf_sdhc)
