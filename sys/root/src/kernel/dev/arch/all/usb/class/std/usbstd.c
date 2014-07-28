@@ -286,23 +286,30 @@ static int dev_usbstd_ioctl(desc_t desc,int request,va_list ap) {
    //
    case I_LINK: {
       int desc_usbdp = va_arg(ap, int);
+      va_list va_ioctl;
+
       if(ofile_lst[desc].p)   //already set.
          return 0;
 
       //fill endpoint table
       usb_std_virtual_ep_tbl[0] = 0x0;
+
+      memcpy((void *)&va_ioctl, &usb_std_virtual_ep_tbl, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_ENDPOINT_TABLE,
-                                                                    &usb_std_virtual_ep_tbl);
+                                                                    va_ioctl);
 
       //set usb_enumeration pointer
       ofile_lst[desc].p = (void *)pusb_std;
+
       //set usb enumeration to driver
+      memcpy((void *)&va_ioctl, &pusb_std, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_ENUMERATION_DATA,
-                                                                    &pusb_std);
+                                                                    va_ioctl);
 
       //
+      bzero(&va_ioctl, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_START_CONTROL_ENDPOINT,
-                                                                    0);
+                                                                    va_ioctl);
       return 0;
    }
    break;

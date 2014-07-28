@@ -452,6 +452,7 @@ int dev_usbmsd_ioctl(desc_t desc,int request,va_list ap) {
       usbs_completefn_endpoint tmp;
       int desc_dev = va_arg(ap, int);
       char * msd_dev = va_arg(ap, char *);
+      va_list va_ioctl;
 
       if(!msd_dev)
          return -1;
@@ -465,35 +466,42 @@ int dev_usbmsd_ioctl(desc_t desc,int request,va_list ap) {
 
       //fill endpoint table for driver
       fill_virtual_endpoint_table();
+      memcpy((void *)&va_ioctl, &usb_mass_virtual_ep_tbl, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_ENDPOINT_TABLE,
-                                                                    &usb_mass_virtual_ep_tbl);
+                                                                    va_ioctl);
 
       //set usb enumeration to driver
+      memcpy((void *)&va_ioctl, &pusb_mass, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_ENUMERATION_DATA,
-                                                                    &pusb_mass);
+                                                                    va_ioctl);
 
       //set usb special class function
+      memcpy((void *)&va_ioctl, &usbs_mass_acm_class_handler, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_CLASS_HANDLER,
-                                                                    &usbs_mass_acm_class_handler);
+                                                                    va_ioctl);
+      memcpy((void *)&va_ioctl, &usbs_mass_clear_feature, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_CLEAR_FEATURE_FN,
-                                                                    &usbs_mass_clear_feature);
+                                                                    va_ioctl);
 
       //set complete function for all desire endpoints read and write
       tmp.complete_fn = usbmsd_complete_fn_write;
       tmp.epn = USB_ENDPOINT_DESCRIPTOR_DC_TX_NO;
+      memcpy((void *)&va_ioctl, &tmp, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_SET_COMPLETION_FUNCTION,
-                                                                    &tmp);
+                                                                    va_ioctl);
       //
       tmp.complete_fn = usbmsd_complete_fn_read;
       tmp.epn = USB_ENDPOINT_DESCRIPTOR_DC_RX_NO;
+      memcpy((void *)&va_ioctl, &tmp, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_SET_COMPLETION_FUNCTION,
-                                                                    &tmp);
+                                                                    va_ioctl);
 
       //start control endpoint and enable IRQ on EP3, EP4 and EP5
+      bzero(&va_ioctl, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_START_CONTROL_ENDPOINT,
-                                                                    0);
+                                                                    va_ioctl);
 
       //
       g_inf_usb_mass.desc_rd = ofile_lst[desc].desc_nxt[0];
@@ -512,10 +520,9 @@ int dev_usbmsd_ioctl(desc_t desc,int request,va_list ap) {
       break;
 
    case USB_GET_CONTROL_ENDPOINT_STATE: {
-      int *usb_serial_state = va_arg(ap, int *);
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_GET_CONTROL_ENDPOINT_STATE,
-                                                                    usb_serial_state);
+                                                                    ap);
       return 0;
    }
    break;
@@ -624,11 +631,14 @@ void usb_mass_init_machine_state(void) {
 ---------------------------------------------*/
 int usb_mass_read_payload(int desc, char* buf,int cb) {
    usbs_data_endpoint_halted_req ep_state_req={desc,-1};
+   va_list va_ioctl;
+
+   memcpy((void *)&va_ioctl, &ep_state_req, sizeof(va_list));
 
    //is endpoint halted now?
    do {
       ofile_lst[g_inf_usb_mass.desc_rd].pfsop->fdev.fdev_ioctl(desc,USB_IS_HALTED_ENDPOINT,
-                                                               &ep_state_req);
+                                                               va_ioctl);
    } while(ep_state_req.halted);
 
    kernel_sem_wait(&g_usb_mass_machine_state.sem_read);
@@ -646,11 +656,14 @@ int usb_mass_read_payload(int desc, char* buf,int cb) {
 int usb_mass_write_payload(int desc, char* buf,int cb) {
    int w = 0;
    usbs_data_endpoint_halted_req ep_state_req={desc,-1};
+   va_list va_ioctl;
+
+   memcpy((void *)&va_ioctl, &ep_state_req, sizeof(va_list));
 
    //is endpoint halted now?
    do {
       ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_ioctl(desc,USB_IS_HALTED_ENDPOINT,
-                                                               &ep_state_req);
+                                                               va_ioctl);
    } while(ep_state_req.halted);
 
    w=ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_write(desc,buf,cb);
@@ -693,21 +706,24 @@ void usb_mass_get_cmd_info(MSCbw *cbw, unsigned int  *length, unsigned char *typ
 ---------------------------------------------*/
 void usb_mass_postprocess_cmd(void) {
    MSCsw *pcsw = &(g_usb_mass_machine_state.csw);
+   va_list va_ioctl;
 
    // STALL Bulk IN endpoint ?
    if ((g_usb_mass_machine_state.post_process & MSDD_CASE_STALL_IN) != 0) {
       //MSDD_Halt(MSDD_CASE_STALL_IN);
+      memcpy((void *)&va_ioctl, &g_inf_usb_mass.tx_endpoint, sizeof(va_list));
       ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_wr,
                                                                USB_HALT_ENDPOINT,
-                                                               &g_inf_usb_mass.tx_endpoint);
+                                                               va_ioctl);
    }
 
    // STALL Bulk OUT endpoint ?
    if ((g_usb_mass_machine_state.post_process & MSDD_CASE_STALL_OUT) != 0) {
       //MSDD_Halt(MSDD_CASE_STALL_OUT);
+      memcpy((void *)&va_ioctl, &g_inf_usb_mass.rx_endpoint, sizeof(va_list));
       ofile_lst[g_inf_usb_mass.desc_rd].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_rd,
                                                                USB_HALT_ENDPOINT,
-                                                               &g_inf_usb_mass.rx_endpoint);
+                                                               va_ioctl);
    }
 
    // Set CSW status code to phase error ?
@@ -731,6 +747,7 @@ static unsigned char usb_mass_process_cmd(void) {
    MSCsw           *pcsw = &(g_usb_mass_machine_state.csw);
    MSDLun          *plun = &(g_usb_mass_machine_state.luns[(unsigned char) pcbw->bCBWLUN]);
    unsigned char isCommandComplete = 0;
+   va_list va_ioctl;
 
    // Check if LUN is valid
    if (pcbw->bCBWLUN > USBS_MSD_MAX_LUN) {
@@ -758,15 +775,17 @@ static unsigned char usb_mass_process_cmd(void) {
       if (((pcbw->bmCBWFlags & MSD_CBW_DEVICE_TO_HOST) == 0)
           && (pcbw->dCBWDataTransferLength > 0)) {
          // Stall the OUT endpoint : host to device
+         memcpy((void *)&va_ioctl, &g_inf_usb_mass.rx_endpoint, sizeof(va_list));
          ofile_lst[g_inf_usb_mass.desc_rd].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_rd,
                                                                   USB_HALT_ENDPOINT,
-                                                                  &g_inf_usb_mass.rx_endpoint);
+                                                                  va_ioctl);
       }
       else {
          // Stall the IN endpoint : device to host
+         memcpy((void *)&va_ioctl, &g_inf_usb_mass.tx_endpoint, sizeof(va_list));
          ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_wr,
                                                                   USB_HALT_ENDPOINT,
-                                                                  &g_inf_usb_mass.tx_endpoint);
+                                                                  va_ioctl);
       }
    }
 
@@ -804,15 +823,17 @@ static unsigned char usb_mass_process_cmd(void) {
          // STALL the endpoint waiting for data
          if ((pcbw->bmCBWFlags & MSD_CBW_DEVICE_TO_HOST) == 0) {
             // Stall the OUT endpoint : host to device
+            memcpy((void *)&va_ioctl, &g_inf_usb_mass.rx_endpoint, sizeof(va_list));
             ofile_lst[g_inf_usb_mass.desc_rd].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_rd,
                                                                      USB_HALT_ENDPOINT,
-                                                                     &g_inf_usb_mass.rx_endpoint);
+                                                                     va_ioctl);
          }
          else {
             // Stall the IN endpoint : device to host
+            memcpy((void *)&va_ioctl, &g_inf_usb_mass.tx_endpoint, sizeof(va_list));
             ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_wr,
                                                                      USB_HALT_ENDPOINT,
-                                                                     &g_inf_usb_mass.tx_endpoint);
+                                                                     va_ioctl);
          }
       }
 
@@ -969,6 +990,7 @@ void usb_mass_machine_state(void) {
    volatile MSCbw * pcbw = NULL;
    volatile MSCsw * pcsw = NULL;
    usb_mass_init_machine_state();
+   va_list va_ioctl;
 
    for(;; ) {
       pcbw = &g_usb_mass_machine_state.cbw;
@@ -1000,12 +1022,14 @@ void usb_mass_machine_state(void) {
             g_usb_mass_machine_state.wait_reset_recovery = 1;
 
             // Halt the Bulk-IN and Bulk-OUT pipes
+            memcpy((void *)&va_ioctl, &g_inf_usb_mass.rx_endpoint, sizeof(va_list));
             ofile_lst[g_inf_usb_mass.desc_rd].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_rd,
                                                                      USB_HALT_ENDPOINT,
-                                                                     &g_inf_usb_mass.rx_endpoint);
+                                                                     va_ioctl);
+            memcpy((void *)&va_ioctl, &g_inf_usb_mass.tx_endpoint, sizeof(va_list));
             ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_wr,
                                                                      USB_HALT_ENDPOINT,
-                                                                     &g_inf_usb_mass.tx_endpoint);
+                                                                     va_ioctl);
             pcsw->bCSWStatus = MSD_CSW_COMMAND_FAILED;
          }
       }
@@ -1024,12 +1048,14 @@ void usb_mass_machine_state(void) {
                g_usb_mass_machine_state.wait_reset_recovery = 1;
 
                // Halt the Bulk-IN and Bulk-OUT pipes
+               memcpy((void *)&va_ioctl, &g_inf_usb_mass.rx_endpoint, sizeof(va_list));
                ofile_lst[g_inf_usb_mass.desc_rd].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_rd,
                                                                         USB_HALT_ENDPOINT,
-                                                                        &g_inf_usb_mass.rx_endpoint);
+                                                                        va_ioctl);
+               memcpy((void *)&va_ioctl, &g_inf_usb_mass.tx_endpoint, sizeof(va_list));
                ofile_lst[g_inf_usb_mass.desc_wr].pfsop->fdev.fdev_ioctl(g_inf_usb_mass.desc_wr,
                                                                         USB_HALT_ENDPOINT,
-                                                                        &g_inf_usb_mass.tx_endpoint);
+                                                                        va_ioctl);
 
                pcsw->bCSWStatus = MSD_CSW_COMMAND_FAILED;
                g_usb_mass_machine_state.state = MSDD_STATE_READ_CBW;
