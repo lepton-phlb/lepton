@@ -154,6 +154,9 @@ if tauon_build_envs.envs_map['DEFAULT']['VERBOSE'] == 0:
 	tauon_build_envs.envs_map['DEFAULT'].Append(ARCOMSTR = '[AR] $TARGET')
 	tauon_build_envs.envs_map['DEFAULT'].Append(RANLIBCOMSTR = '[INDEX] $TARGET')
 	tauon_build_envs.envs_map['DEFAULT'].Append(LINKCOMSTR = '[LINK] $TARGET')
+else :
+#print pragma
+	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DVERBOSE')
 
 #striping
 if tauon_build_envs.envs_map['DEFAULT']['STRIP']:
