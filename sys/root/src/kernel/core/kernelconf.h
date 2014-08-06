@@ -185,8 +185,9 @@ Declaration
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
    #define __KERNEL_UCORE_EMBOS
 #elif (__tauon_compiler__==__compiler_iar_arm__)
-   //#define __KERNEL_UCORE_EMBOS
-   #define __KERNEL_UCORE_FREERTOS
+   #if !defined(__KERNEL_UCORE_EMBOS) && !defined(__KERNEL_UCORE_FREERTOS)
+      #define __KERNEL_UCORE_EMBOS
+   #endif
 #elif (__tauon_compiler__==__compiler_keil_arm__)
    #define __KERNEL_UCORE_EMBOS
 #endif
