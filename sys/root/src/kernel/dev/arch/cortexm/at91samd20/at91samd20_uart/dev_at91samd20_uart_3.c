@@ -47,8 +47,8 @@ Global Declaration
 =============================================*/
 const char dev_at91samd20_uart_3_name[]="ttys3\0";
 
-int dev_at91samd20_uart_3_load(void);
-int dev_at91samd20_uart_3_open(desc_t desc, int o_flag);
+static int dev_at91samd20_uart_3_load(void);
+static int dev_at91samd20_uart_3_open(desc_t desc, int o_flag);
 
 extern int dev_at91samd20_uart_x_load(board_at91samd20_uart_info_t * uart_info);
 extern int dev_at91samd20_uart_x_open(desc_t desc, int o_flag, board_at91samd20_uart_info_t * uart_info);
