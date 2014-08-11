@@ -1399,7 +1399,7 @@ typedef struct {
       #define __io_profiler_get_counter(__desc__)
    #endif
 
-#elif (defined(__GNUC__)) && defined(CPU_CORTEXM)
+#elif (defined(__GNUC__)) && defined(CPU_CORTEXM) && defined(__KERNEL_UCORE_ECOS)
    #include <cyg/kernel/kapi.h>
    #include <cyg/hal/hal_arch.h>
    #include <string.h>
@@ -1570,7 +1570,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       #define __io_profiler_get_counter(__desc__)     0
    #endif
 
-#elif ( (__tauon_compiler__ == __compiler_iar_arm__) || (__tauon_compiler__ == __compiler_keil_arm__) )\
+#elif ( (__tauon_compiler__ == __compiler_iar_arm__) || (__tauon_compiler__ == __compiler_keil_arm__) || (__tauon_compiler__ == __compiler_gnuc__) )\
  && defined (__KERNEL_UCORE_FREERTOS)\
  &&((__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)\
