@@ -1,0 +1,94 @@
+#
+#The contents of this file are subject to the Mozilla Public License Version 1.1 
+#(the "License"); you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at http://www.mozilla.org/MPL/
+#
+#Software distributed under the License is distributed on an "AS IS" basis, 
+#WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+#specific language governing rights and limitations under the License.
+#
+#The Original Code is Lepton.
+#
+#The Initial Developer of the Original Code is Philippe Le Boulanger.
+#Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+#All Rights Reserved.
+#
+#Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+#
+#Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+#(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+#instead of those above. If you wish to allow use of your version of this file only under the
+#terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+#the MPL, indicate your decision by deleting  the provisions above and replace 
+#them with the notice and other provisions required by the [eCos GPL] License. 
+#If you do not delete the provisions above, a recipient may use your version of this file under 
+#either the MPL or the [eCos GPL] License."
+#
+prefix=$HOME/tauon/sys/root 
+includedir_base=${prefix}/src
+
+#include dir for flash
+includedir_flash=${includedir_base}/kernel/dev/arch/all/flash
+includedir_flash_amd=${includedir_flash}/amd
+includedir_flash_amd_lldapi=${includedir_flash_amd}/lldapi
+
+#include dir for lwip
+includedir_lwip=${includedir_base}/kernel/net/lwip
+includedir_lwip_include=${includedir_lwip}/include
+includedir_lwip_include_ipv4=${includedir_lwip_include}/ipv4
+includedir_lwip_gnu=${includedir_lwip}/ports/gnu
+includedir_lwip_gnu_include=${includedir_lwip_gnu}/include
+
+#include dir for nanox
+includedir_nanox=${includedir_base}/lib/nanox/src
+includedir_nanox_include=${includedir_nanox}/include
+includedir_nanox_drivers=${includedir_nanox}/drivers
+define_for_nanox=-DNONETWORK -DHAVE_TIMER_SUPPORT
+
+#include dir for flnx
+includedir_flnx=${includedir_base}/lib/flnx-1.1.8
+includedir_flnx_FL=${includedir_flnx}/FL
+define_for_flnx=-DNANO_X
+cflags_for_flnx=-fno-builtin-execv -fno-builtin-execve -fno-builtin-execl -fno-builtin-exit \
+	-fno-builtin-isinf -fno-builtin-isnan
+
+#include dir for libc
+includedir_libc=${includedir_base}/lib/libc
+includedir_libc_stdio=${includedir_base}/lib/libc/stdio
+includedir_libc_string=${includedir_base}/lib/libc/string
+includedir_libc_stdlib=${includedir_base}/lib/libc/stdlib
+
+#include for tinyGL
+includedir_tinyGL=${includedir_base}/lib/TinyGL/include
+
+#define for tauon
+define_for_tauon=-D__KERNEL_UCORE_FREERTOS -D__tauon_compiler_cpu_target__=__compiler_cpu_target_gnuc__
+cflags_for_tauon=
+#-fdata-sections -ffunction-sections -fno-builtin
+#-Wundef
+
+#general variables to use for Cflags
+includedir_global_include=-I${includedir_base} -I${includedir_nanox_include} -I${includedir_flnx} -I${includedir_flnx_FL} \
+	-I${includedir_libc} -I${includedir_libc_stdio} -I${includedir_libc_string} -I${includedir_libc_stdlib}
+
+includedir_global_include_iquote=-iquote${includedir_base} \
+	-iquote${includedir_flash} -iquote${includedir_flash_amd} -iquote${includedir_flash_amd_lldapi} \
+	-iquote${includedir_lwip_include} -iquote${includedir_lwip_include_ipv4} -iquote${includedir_lwip_gnu} -iquote${includedir_lwip_gnu_include} \
+	-iquote${includedir_nanox_include} -iquote${includedir_nanox_drivers} -I${includedir_tinyGL}
+
+cflags_global = ${define_for_tauon} ${cflags_for_tauon} \
+	${define_for_flnx} ${cflags_for_flnx} ${define_for_nanox}
+
+#for lib directory
+#new definition must be done
+ldflags_global = -nostartfiles -static -lgcc -specs=nosys.specs
+# -Wl,--verbose 
+#-nostartfiles -nostdlib -static -lgcc 
+#-Wl,--gc-sections
+#-Ttarget_freertos.ld
+
+Name: tauon
+Description: flags for Tauon library
+Version: 0.0.1
+Cflags: ${includedir_global_include} ${includedir_global_include_iquote} ${cflags_global}
+Libs: ${ldflags_global}
