@@ -1,6 +1,6 @@
 /**************************************************************************//**
- * @file     core_cm3.h
- * @brief    CMSIS Cortex-M3 Core Peripheral Access Layer Header File
+ * @file     core_sc300.h
+ * @brief    CMSIS SC300 Core Peripheral Access Layer Header File
  * @version  V3.30
  * @date     24. February 2014
  *
@@ -39,8 +39,8 @@
  #pragma system_include  /* treat file as system include file for MISRA check */
 #endif
 
-#ifndef __CORE_CM3_H_GENERIC
-#define __CORE_CM3_H_GENERIC
+#ifndef __CORE_SC300_H_GENERIC
+#define __CORE_SC300_H_GENERIC
 
 #ifdef __cplusplus
  extern "C" {
@@ -63,17 +63,17 @@
 /*******************************************************************************
  *                 CMSIS definitions
  ******************************************************************************/
-/** \ingroup Cortex_M3
+/** \ingroup SC3000
   @{
  */
 
-/*  CMSIS CM3 definitions */
-#define __CM3_CMSIS_VERSION_MAIN  (0x03)                                   /*!< [31:16] CMSIS HAL main version   */
-#define __CM3_CMSIS_VERSION_SUB   (0x20)                                   /*!< [15:0]  CMSIS HAL sub version    */
-#define __CM3_CMSIS_VERSION       ((__CM3_CMSIS_VERSION_MAIN << 16) | \
-                                    __CM3_CMSIS_VERSION_SUB          )     /*!< CMSIS HAL version number         */
+/*  CMSIS SC300 definitions */
+#define __SC300_CMSIS_VERSION_MAIN  (0x03)                                   /*!< [31:16] CMSIS HAL main version */
+#define __SC300_CMSIS_VERSION_SUB   (0x20)                                   /*!< [15:0]  CMSIS HAL sub version  */
+#define __SC300_CMSIS_VERSION       ((__SC300_CMSIS_VERSION_MAIN << 16) | \
+                                      __SC300_CMSIS_VERSION_SUB          )   /*!< CMSIS HAL version number       */
 
-#define __CORTEX_M                (0x03)                                   /*!< Cortex-M Core                    */
+#define __CORTEX_SC                 (300)                                     /*!< Cortex secure core             */
 
 
 #if   defined ( __CC_ARM )
@@ -87,8 +87,8 @@
   #define __STATIC_INLINE  static inline
 
 #elif defined ( __ICCARM__ )
-  #define __ASM            __asm                                      /*!< asm keyword for IAR Compiler          */
-  #define __INLINE         inline                                     /*!< inline keyword for IAR Compiler. Only available in High optimization mode! */
+  #define __ASM           __asm                                       /*!< asm keyword for IAR Compiler          */
+  #define __INLINE        inline                                      /*!< inline keyword for IAR Compiler. Only available in High optimization mode! */
   #define __STATIC_INLINE  static inline
 
 #elif defined ( __TMS470__ )
@@ -147,18 +147,18 @@
 #include <core_cmInstr.h>                /* Core Instruction Access                         */
 #include <core_cmFunc.h>                 /* Core Function Access                            */
 
-#endif /* __CORE_CM3_H_GENERIC */
+#endif /* __CORE_SC300_H_GENERIC */
 
 #ifndef __CMSIS_GENERIC
 
-#ifndef __CORE_CM3_H_DEPENDANT
-#define __CORE_CM3_H_DEPENDANT
+#ifndef __CORE_SC300_H_DEPENDANT
+#define __CORE_SC300_H_DEPENDANT
 
 /* check device defines and use defaults */
 #if defined __CHECK_DEVICE_DEFINES
-  #ifndef __CM3_REV
-    #define __CM3_REV               0x0200
-    #warning "__CM3_REV not defined in device header file; using default!"
+  #ifndef __SC300_REV
+    #define __SC300_REV               0x0000
+    #warning "__SC300_REV not defined in device header file; using default!"
   #endif
 
   #ifndef __MPU_PRESENT
@@ -193,7 +193,7 @@
 #define     __O     volatile             /*!< Defines 'write only' permissions                */
 #define     __IO    volatile             /*!< Defines 'read / write' permissions              */
 
-/*@} end of group Cortex_M3 */
+/*@} end of group SC300 */
 
 
 
@@ -409,16 +409,11 @@ typedef struct
 #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL << SCB_ICSR_VECTACTIVE_Pos)           /*!< SCB ICSR: VECTACTIVE Mask */
 
 /* SCB Vector Table Offset Register Definitions */
-#if (__CM3_REV < 0x0201)                   /* core r2p1 */
 #define SCB_VTOR_TBLBASE_Pos               29                                             /*!< SCB VTOR: TBLBASE Position */
 #define SCB_VTOR_TBLBASE_Msk               (1UL << SCB_VTOR_TBLBASE_Pos)                  /*!< SCB VTOR: TBLBASE Mask */
 
 #define SCB_VTOR_TBLOFF_Pos                 7                                             /*!< SCB VTOR: TBLOFF Position */
 #define SCB_VTOR_TBLOFF_Msk                (0x3FFFFFUL << SCB_VTOR_TBLOFF_Pos)            /*!< SCB VTOR: TBLOFF Mask */
-#else
-#define SCB_VTOR_TBLOFF_Pos                 7                                             /*!< SCB VTOR: TBLOFF Position */
-#define SCB_VTOR_TBLOFF_Msk                (0x1FFFFFFUL << SCB_VTOR_TBLOFF_Pos)           /*!< SCB VTOR: TBLOFF Mask */
-#endif
 
 /* SCB Application Interrupt and Reset Control Register Definitions */
 #define SCB_AIRCR_VECTKEY_Pos              16                                             /*!< SCB AIRCR: VECTKEY Position */
@@ -565,27 +560,12 @@ typedef struct
 {
        uint32_t RESERVED0[1];
   __I  uint32_t ICTR;                    /*!< Offset: 0x004 (R/ )  Interrupt Controller Type Register      */
-#if ((defined __CM3_REV) && (__CM3_REV >= 0x200))
-  __IO uint32_t ACTLR;                   /*!< Offset: 0x008 (R/W)  Auxiliary Control Register      */
-#else
        uint32_t RESERVED1[1];
-#endif
 } SCnSCB_Type;
 
 /* Interrupt Controller Type Register Definitions */
 #define SCnSCB_ICTR_INTLINESNUM_Pos         0                                          /*!< ICTR: INTLINESNUM Position */
 #define SCnSCB_ICTR_INTLINESNUM_Msk        (0xFUL << SCnSCB_ICTR_INTLINESNUM_Pos)      /*!< ICTR: INTLINESNUM Mask */
-
-/* Auxiliary Control Register Definitions */
-
-#define SCnSCB_ACTLR_DISFOLD_Pos            2                                          /*!< ACTLR: DISFOLD Position */
-#define SCnSCB_ACTLR_DISFOLD_Msk           (1UL << SCnSCB_ACTLR_DISFOLD_Pos)           /*!< ACTLR: DISFOLD Mask */
-
-#define SCnSCB_ACTLR_DISDEFWBUF_Pos         1                                          /*!< ACTLR: DISDEFWBUF Position */
-#define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: DISDEFWBUF Mask */
-
-#define SCnSCB_ACTLR_DISMCYCINT_Pos         0                                          /*!< ACTLR: DISMCYCINT Position */
-#define SCnSCB_ACTLR_DISMCYCINT_Msk        (1UL << SCnSCB_ACTLR_DISMCYCINT_Pos)        /*!< ACTLR: DISMCYCINT Mask */
 
 /*@} end of group CMSIS_SCnotSCB */
 
@@ -1629,7 +1609,7 @@ __STATIC_INLINE int32_t ITM_CheckChar (void) {
 
 /*@} end of CMSIS_core_DebugFunctions */
 
-#endif /* __CORE_CM3_H_DEPENDANT */
+#endif /* __CORE_SC300_H_DEPENDANT */
 
 #ifdef __cplusplus
 }
