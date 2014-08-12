@@ -27,43 +27,90 @@
 import os
 from tauon import *
 
+# Import env to choose between eCos and freeRTOS
+Import('tauon_build_envs')
+
 #define common files for all architecture
 common_base_dir = os.getenv('HOME') + '/tauon/sys/root/src/'
 
 common_kernel_dir = common_base_dir + 'kernel/'
 common_kernel_core_dir = common_kernel_dir + 'core/'
+
+# 2 or more differents ucore to manage...
 common_kernel_core_ecos_dir = common_kernel_core_dir + 'core-ecos/'
 
+common_kernel_core_freertos_dir = common_kernel_core_dir + 'core-freertos/'
+common_kernel_microcore_freertos_dir = common_kernel_core_dir + 'ucore/freeRTOS_8-0-0/source/'
+
+# fs
 common_kernel_fs_vfs_dir = common_kernel_dir + 'fs/vfs/'
 common_kernel_fs_rootfs_dir = common_kernel_dir + 'fs/rootfs/'
 common_kernel_fs_ufs_dir = common_kernel_dir + 'fs/ufs/'
 common_kernel_fs_kofs_dir = common_kernel_dir + 'fs/kofs/'
 
+# generic dev
 common_kernel_dev_dir = common_kernel_dir + 'dev/'
 
+# lib
 common_libc_dir = common_base_dir + 'lib/libc/'
 common_libpthread_dir = common_base_dir + 'lib/pthread/'
 common_librt_dir = common_base_dir + 'lib/librt/'
+
+# binaries
 common_sbin_dir = common_base_dir + 'sbin/'
 
 #list of files to compile
+if tauon_build_envs.envs_map['DEFAULT']['UCORE'].find('ECOS')>=0:
 #core-ecos files
-common_tauon_src_list = [TauonSource(common_kernel_core_ecos_dir+'tauon.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel.c'),
-TauonSource(common_kernel_core_ecos_dir+'fork.c'),
-TauonSource(common_kernel_core_ecos_dir+'process.c'),
-TauonSource(common_kernel_core_ecos_dir+'syscall.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_pthread_mutex.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_pthread.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_sem.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_object.c'),
-TauonSource(common_kernel_core_ecos_dir+'signal.c'),
-TauonSource(common_kernel_core_ecos_dir+'core_rttimer.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_timer.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_sigqueue.c'),
-TauonSource(common_kernel_core_ecos_dir+'kernel_clock.c'),
-TauonSource(common_kernel_core_ecos_dir+'core_event.c')
-]
+    common_tauon_src_list = [TauonSource(common_kernel_core_ecos_dir+'tauon.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'fork.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'process.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'syscall.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_pthread_mutex.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_pthread.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_sem.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_object.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'signal.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'core_rttimer.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_timer.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_sigqueue.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'kernel_clock.c'),
+                             TauonSource(common_kernel_core_ecos_dir+'core_event.c')
+                             ]
+else:
+#core-freertos files not right place
+    common_tauon_src_list = [TauonSource(common_kernel_core_freertos_dir+'core_rttimer.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'fork.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_clock.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'process.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'syscall.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'signal.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_elfloader.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_object.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_pthread.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_pthread_mutex.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_sem.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_timer.c'),
+                             TauonSource(common_kernel_core_freertos_dir+'kernel_sigqueue.c'),
+                             ]
+# for now just compile freertos file at this time
+# In fact, we need to build a library for it....
+    common_tauon_src_list.extend([TauonSource(common_kernel_microcore_freertos_dir+'croutine.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'event_groups.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'lepton_test.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'list.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'queue.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'tasks.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'timers.c'),
+                              TauonSource(common_kernel_microcore_freertos_dir+'portable/MemMang/heap_3.c'),
+                              ])
+
+# special file that is linked to arch not right place here
+#common_tauon_src_list.extend([TauonSource(common_kernel_microcore_freertos_dir+'portable/GCC/ARM_CM0/port.c'),
+#                         TauonSource(common_kernel_microcore_freertos_dir+'arch/cortex-m0+/at91samd20/main.c')
+#])
 
 #core files
 common_tauon_src_list.extend([TauonSource(common_kernel_core_dir+'system.c'),
@@ -128,7 +175,8 @@ TauonSource(common_libc_dir+'ctype/ctype.c'),
 TauonSource(common_libc_dir+'misc/strto_l.c'),
 TauonSource(common_libc_dir+'misc/strto_ll.c'),
 TauonSource(common_libc_dir+'misc/dtostr.c'),
-TauonSource(common_libc_dir+'string/string.c')
+TauonSource(common_libc_dir+'string/string.c'),
+TauonSource(common_libc_dir+'stdlib/stdlib.c')
 ])
 
 #libpthread file
@@ -173,8 +221,10 @@ TauonSource(common_kernel_dev_dir+'dev_cpufs/dev_cpufs.c'),
 TauonSource(common_kernel_dev_dir+'dev_null/dev_null.c'),
 TauonSource(common_kernel_dev_dir+'dev_head/dev_head.c'),
 TauonSource(common_kernel_dev_dir+'dev_part/dev_part.c'),
-TauonSource(common_kernel_dev_dir+'dev_loadavg/dev_loadavg.c')
 ])
+
+if tauon_build_envs.envs_map['DEFAULT']['UCORE'].find('ECOS')>=0:
+    common_tauon_src_list.extend([TauonSource(common_kernel_dev_dir+'dev_loadavg/dev_loadavg.c')])
 
 #export it
 Export('common_tauon_src_list') 
