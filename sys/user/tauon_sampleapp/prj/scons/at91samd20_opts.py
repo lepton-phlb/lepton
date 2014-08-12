@@ -1,0 +1,24 @@
+#variable for user project
+COMPILER_CC='arm-none-eabi-gcc'
+COMPILER_CXX='arm-none-eabi-g++'
+ARCHIVER='arm-none-eabi-ar'
+ARCHIVE_INDEXER='arm-none-eabi-ranlib'
+#COMPILER_CC='arm-eabi-gcc'
+#COMPILER_CXX='arm-eabi-g++'
+#ARCHIVER='arm-eabi-ar'
+#ARCHIVE_INDEXER='arm-eabi-ranlib'
+ARCH='CPU_CORTEXM'
+PLATEFORME='cortexm/at91samd20/'
+TARGET_SUFFIX='at91samd20'
+OPTS_KERNEL='-Os'
+OPTS_APP='-Os'
+DEBUG_LEVEL='-gdwarf-2 -g3'
+NANOX=0
+FONTS_NANOX=''
+LWIP=0
+LWIP_OPTS='-Os'
+VERBOSE=0
+STRIP=0
+TINYGL=0
+FULL_STDIO=1
+UCORE='FREERTOS'

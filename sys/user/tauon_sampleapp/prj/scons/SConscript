@@ -26,15 +26,18 @@ tauon_sampleapp_src_kernel_dev_at91sam9261_dir = tauon_sampleapp_src_kernel_dev_
 ####source files
 #simple test
 tauon_sampleapp_src_list = [TauonSource(tauon_sampleapp_src_dir+'test.c')]
-tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dir+'tstsd.c')])
+if tauon_build_envs.envs_map['DEFAULT']['TARGET_SUFFIX'].find('at91samd20')<0:
+   tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_dir+'tstsd.c')])
+   #network utilities
+   tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/telnetd.c'),
+   TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoose.c'),
+   TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoosed.c'),
+   TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ftpd.c'),
+   TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ls.c')
+   ])
+#else:
+#   tauon_sampleapp_src_list = []
 
-#network utilities
-tauon_sampleapp_src_list.extend([TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/telnetd.c'),
-TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoose.c'),
-TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/mongoose/mongoosed.c'),
-TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ftpd.c'),
-TauonSource(tauon_sampleapp_src_kernel_bin_dir+'net/ftpd/ls.c')
-])
 
 #nanox/flnx utilities and demo programm
 if tauon_build_envs.envs_map['DEFAULT']['NANOX']:
