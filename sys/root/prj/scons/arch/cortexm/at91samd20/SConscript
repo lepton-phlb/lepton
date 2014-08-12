@@ -1,0 +1,150 @@
+#
+#The contents of this file are subject to the Mozilla Public License Version 1.1 
+#(the "License"); you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at http://www.mozilla.org/MPL/
+#
+#Software distributed under the License is distributed on an "AS IS" basis, 
+#WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the 
+#specific language governing rights and limitations under the License.
+#
+#The Original Code is Lepton.
+#
+#The Initial Developer of the Original Code is Philippe Le Boulanger.
+#Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+#All Rights Reserved.
+#
+#Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
+#
+#Alternatively, the contents of this file may be used under the terms of the eCos GPL license 
+#(the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable 
+#instead of those above. If you wish to allow use of your version of this file only under the
+#terms of the [eCos GPL] License and not to allow others to use your version of this file under 
+#the MPL, indicate your decision by deleting  the provisions above and replace 
+#them with the notice and other provisions required by the [eCos GPL] License. 
+#If you do not delete the provisions above, a recipient may use your version of this file under 
+#either the MPL or the [eCos GPL] License."
+#
+#python module
+import os
+from tauon import *
+
+#We need common file
+#directories
+at91samd20_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
+at91samd20_prj_dir = at91samd20_base_dir + 'prj/scons/'
+
+#import common scons script
+Import('tauon_build_envs')
+SConscript([at91samd20_prj_dir + 'common/SConscript'], exports='tauon_build_envs')
+
+#import common src list files
+Import('common_tauon_src_list')
+
+#directories of source file
+tauon_src_dir = at91samd20_base_dir + 'src/'
+tauon_kernel_dir = tauon_src_dir + 'kernel/'
+tauon_kernel_microcore_freertos_dir = tauon_kernel_dir + 'core/ucore/freeRTOS_8-0-0/source/'
+tauon_kernel_arch_dir = tauon_kernel_dir + 'core/arch/cortexm/'
+tauon_kernel_dev_dir = tauon_kernel_dir + 'dev/'
+tauon_kernel_dev_at91samd20_dir = tauon_kernel_dev_dir + 'arch/cortexm/at91samd20/'
+tauon_kernel_dev_at91_dir = tauon_kernel_dev_dir + 'arch/at91/asf/'
+tauon_sbin_dir = tauon_src_dir + 'sbin/'
+tauon_libc_dir =  tauon_src_dir + 'lib/Baselibc/'
+
+#get previous files
+tauon_kernel_src_list = common_tauon_src_list
+
+#sbin special case for init
+tauon_kernel_src_list.extend([TauonSource(tauon_sbin_dir+'initd.c')])
+
+#arch config files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_arch_dir+'dev_mkconf.c'),
+TauonSource(tauon_kernel_arch_dir+'bin_mkconf.c'),
+TauonSource(tauon_kernel_arch_dir+'dev_dskimg.c')
+])
+
+# freeRTOS arch files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_microcore_freertos_dir+'portable/GCC/ARM_CM0/port.c'),
+TauonSource(tauon_kernel_microcore_freertos_dir+'arch/cortex-m0+/at91samd20/main.c')
+])
+
+#device lib file
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_at91_dir + 'common/utils/interrupt/interrupt_sam_nvic.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/system/clock/clock_samd20/gclk.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/system/system_init.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/sercom/usart/usart_interrupt.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/sercom/usart/usart.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/sercom/sercom.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/sercom/sercom_interrupt.c'),
+TauonSource(tauon_kernel_dev_at91_dir + 'sam0/drivers/system/pinmux/pinmux.c')
+])
+
+#device files
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_dev_at91samd20_dir+'at91samd20_uart/dev_at91samd20_uart_3.c'),
+TauonSource(tauon_kernel_dev_at91samd20_dir+'at91samd20_uart/dev_at91samd20_uart_x.c'),
+TauonSource(tauon_kernel_dev_at91samd20_dir+'at91samd20_xplained_pro_board/at91samd20_xplained_pro_board_clock.c'),
+TauonSource(tauon_kernel_dev_at91samd20_dir+'at91samd20_xplained_pro_board/at91samd20_xplained_pro_board_init.c'),
+TauonSource(tauon_kernel_dev_at91samd20_dir+'at91samd20_xplained_pro_board/dev_at91samd20_xplained_pro_board.c')
+])
+
+#custom libc
+tauon_kernel_src_list.extend([TauonSource(tauon_libc_dir + 'src/memset.c'),
+TauonSource(tauon_libc_dir + 'src/memcpy.c'),
+TauonSource(tauon_libc_dir + 'src/memmove.c'),
+TauonSource(tauon_libc_dir + 'src/memcmp.c'),
+TauonSource(tauon_libc_dir + 'src/strcpy.c'),
+TauonSource(tauon_libc_dir + 'src/strcmp.c'),
+TauonSource(tauon_libc_dir + 'src/strtok.c'),
+TauonSource(tauon_libc_dir + 'src/strlen.c'),
+TauonSource(tauon_libc_dir + 'src/strchr.c'),
+TauonSource(tauon_libc_dir + 'src/strncmp.c'),
+TauonSource(tauon_libc_dir + 'src/strcat.c'),
+])
+
+# base directory for freeRTOS and directories for header files
+tauon_freertos_source_dir = at91samd20_base_dir + 'src/kernel/core/ucore/freeRTOS_8-0-0/source/'
+tauon_freertos_arch_dir = tauon_kernel_dev_at91_dir
+tauon_freertos_cmsis_dir = tauon_kernel_dir + 'core/ucore/cmsis/'
+
+tauon_freertos_install_dir = [tauon_freertos_source_dir + 'include',
+tauon_freertos_source_dir + 'arch/cortex-m0+',
+tauon_freertos_source_dir + 'arch/cortex-m0+/at91samd20',
+tauon_freertos_source_dir + 'portable/GCC/ARM_CM0/',
+tauon_freertos_arch_dir    + 'common/utils',
+tauon_freertos_arch_dir    + 'common/boards',
+tauon_freertos_arch_dir    + 'sam0/utils',
+tauon_freertos_arch_dir    + 'sam0/utils/preprocessor',
+tauon_freertos_arch_dir    + 'sam0/utils/header_files',
+tauon_freertos_arch_dir    + 'sam0/drivers/sercom/',
+tauon_freertos_arch_dir    + 'sam0/drivers/port',
+tauon_freertos_arch_dir    + 'sam0/drivers/system/',
+tauon_freertos_arch_dir    + 'sam0/drivers/system/clock',
+tauon_freertos_arch_dir    + 'sam0/drivers/system/clock/clock_samd20/',
+tauon_freertos_arch_dir    + 'sam0/drivers/system/pinmux',
+tauon_freertos_arch_dir    + 'sam0/drivers/system/interrupt',
+tauon_freertos_arch_dir    + 'sam0/drivers/system/interrupt/system_interrupt_samd20/',
+tauon_freertos_cmsis_dir   + 'CMSIS/Include',
+tauon_freertos_cmsis_dir   + 'Device/ARM/ARMCM0/Include/',
+tauon_freertos_cmsis_dir   + 'Device/atmel/samd20/include',
+tauon_freertos_cmsis_dir   + 'Device/atmel/samd20/source'
+]
+
+# custom macro for samd20
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__SAMD20J18__')
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DUSART_CALLBACK_MODE=true')
+
+# custom lib path for samd20
+tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS ='-L' + at91samd20_base_dir + 'lib/freertos/arch/at91samd20')
+
+# directories to strore generated lib and objects
+tauon_freertos_lib_dir = at91samd20_base_dir + 'lib/arch/cortexm/at91samd20/'
+tauon_kernel_lib_dir = tauon_freertos_lib_dir + 'bin/'
+tauon_kernel_obj_dir = at91samd20_prj_dir + 'arch/cortexm/at91samd20/obj/'
+
+#export source files
+Export('tauon_kernel_src_list')
+Export('tauon_kernel_lib_dir')
+Export('tauon_kernel_obj_dir')
+
+#export header directories
+Export('tauon_freertos_install_dir')
