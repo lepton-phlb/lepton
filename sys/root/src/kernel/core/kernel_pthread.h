@@ -174,8 +174,8 @@ typedef struct kernel_pthread_st {
    freertos_tcb_t* tcb;
    EventGroupHandle_t event_group_handle; //used by kernel (KERNEL_INTERRUPT and KERNEL_RET_INTERRUPT).
 #endif
-     
-#ifdef __GNUC__
+
+#ifdef __KERNEL_UCORE_ECOS
    tcb_t * tcb;
    tcb_t * bckup_tcb; //for signal handler
    thr_id_t thr_id;
@@ -183,9 +183,7 @@ typedef struct kernel_pthread_st {
 
    kernel_sem_t sem_wait; //sem for waitpid
 
-   #ifdef __KERNEL_UCORE_ECOS
    cyg_flag_t io_flag; //flag pour les I/O
-   #endif
 #endif
 
    struct kernel_pthread_st* parent_pthread_ptr;
