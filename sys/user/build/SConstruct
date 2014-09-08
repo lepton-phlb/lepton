@@ -187,7 +187,7 @@ if tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('arm') >= 0:
 	tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS = '-mhard-float -Wl,--no-enum-size-warning')
 	tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mthumb-interwork -mabi=aapcs-linux')
 elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('cortexm') >= 0:
-    tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS = '-mhard-float -Wl,--no-enum-size-warning -mthumb')
+    tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS = '-Wl,--no-enum-size-warning -mthumb')
     tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mthumb -mabi=aapcs-linux')
 
 if tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('at91m55800a') >= 0:
@@ -199,11 +199,11 @@ elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('at91sam9260') >= 0
 elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('k60n512') >= 0:
 	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_cortexm_k60n512__')
 	tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mcpu=cortex-m3')
-	tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=cortex-m3')
+	tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=cortex-m3 -mhard-float')
 elif tauon_build_envs.envs_map['DEFAULT']['PLATEFORME'].find('samd20') >= 0:
 	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_cortexM0_at91samd20__')
-	tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mcpu=cortex-m0')
-	tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=cortex-m0')
+	tauon_build_envs.envs_map['DEFAULT'].Prepend(CCFLAGS ='-mcpu=cortex-m0plus')
+	tauon_build_envs.envs_map['DEFAULT'].Prepend(LINKFLAGS ='-mcpu=cortex-m0plus')
 else:
 	tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__tauon_cpu_device__=__tauon_cpu_device_gnu_synthetic__')
 
