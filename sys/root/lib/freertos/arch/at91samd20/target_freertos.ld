@@ -44,7 +44,13 @@
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
-SEARCH_DIR(.)
+
+/*
+ * Get startup file from relative path to force address of exception_table to 0x0
+ */
+SEARCH_DIR(../../../../root/prj/scons/arch/cortexm/at91samd20/obj/)
+STARTUP(startup_samd20.o)
+ENTRY(Reset_Handler)
 
 /* Memory Spaces Definitions */
 MEMORY
@@ -135,11 +141,13 @@ SECTIONS
         . = ALIGN(4);
         _sbss = . ;
         _szero = .;
+        __bss_start__ = .;
         *(.bss .bss.*)
         *(COMMON)
         . = ALIGN(4);
         _ebss = . ;
         _ezero = .;
+        __bss_end__ = .;
     } > ram
 
     /* stack section */
