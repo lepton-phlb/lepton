@@ -81,7 +81,7 @@ cflags_global = ${define_for_tauon} ${cflags_for_tauon} \
 
 #for lib directory
 #new definition must be done
-ldflags_global = -nostartfiles -static -lgcc -specs=nosys.specs -Ttarget_freertos.ld
+ldflags_global = -static -lgcc -specs=nosys.specs -Ttarget_freertos.ld
 
 Name: tauon
 Description: flags for Tauon library

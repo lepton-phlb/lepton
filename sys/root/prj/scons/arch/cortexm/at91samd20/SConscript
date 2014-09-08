@@ -48,6 +48,8 @@ tauon_kernel_arch_dir = tauon_kernel_dir + 'core/arch/cortexm/'
 tauon_kernel_dev_dir = tauon_kernel_dir + 'dev/'
 tauon_kernel_dev_at91samd20_dir = tauon_kernel_dev_dir + 'arch/cortexm/at91samd20/'
 tauon_kernel_dev_at91_dir = tauon_kernel_dev_dir + 'arch/at91/asf/'
+tauon_kernel_cmsis_dir = tauon_kernel_dir + 'core/ucore/cmsis/Device/atmel/'
+tauon_kernel_cmsis_at91samd20_dir = tauon_kernel_cmsis_dir + 'samd20/'
 tauon_sbin_dir = tauon_src_dir + 'sbin/'
 tauon_libc_dir =  tauon_src_dir + 'lib/Baselibc/'
 
@@ -62,6 +64,9 @@ tauon_kernel_src_list.extend([TauonSource(tauon_kernel_arch_dir+'dev_mkconf.c'),
 TauonSource(tauon_kernel_arch_dir+'bin_mkconf.c'),
 TauonSource(tauon_kernel_arch_dir+'dev_dskimg.c')
 ])
+
+# freeRTOS startup file
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_cmsis_at91samd20_dir+'source/gcc/startup_samd20.c')])
 
 # freeRTOS arch files
 tauon_kernel_src_list.extend([TauonSource(tauon_kernel_microcore_freertos_dir+'portable/GCC/ARM_CM0/port.c'),
