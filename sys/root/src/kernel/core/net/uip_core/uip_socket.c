@@ -148,6 +148,7 @@ char* _uip_inet_ntoa(char*cp, struct _in_addr in){
  * \callgraph
  */
 int _sys_sock_socket(int af,int type,int protocol){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    int fd;
@@ -221,6 +222,9 @@ int _sys_sock_socket(int af,int type,int protocol){
    __set_kernel_pthread_errno (0);
    //
    return fd;
+#else
+   return -1;
+#endif
 } //end of _sys_sock_socket()
 
 /**
@@ -233,6 +237,7 @@ int _sys_sock_socket(int af,int type,int protocol){
  * \callgraph
  */
 int _sys_sock_bind(int fd, struct _sockaddr *address,int len){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    hsock_t hsock  = 0;
@@ -322,6 +327,9 @@ int _sys_sock_bind(int fd, struct _sockaddr *address,int len){
    __set_kernel_pthread_errno (0);
    //
    return 0;
+#else
+   return -1;
+#endif
 } //end of _sys_sock_bind()
 
 /**
@@ -334,6 +342,7 @@ int _sys_sock_bind(int fd, struct _sockaddr *address,int len){
  * \callgraph
  */
 int _sys_sock_connect(int fd, struct _sockaddr *address,int len){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    struct uip_conn * uip_conn;
@@ -435,6 +444,9 @@ int _sys_sock_connect(int fd, struct _sockaddr *address,int len){
    __set_kernel_pthread_errno (0);
    //
    return 0;
+#else
+   return -1;
+#endif
 } //end of _sys_sock_connect()
 
 /**
@@ -449,6 +461,7 @@ int _sys_sock_connect(int fd, struct _sockaddr *address,int len){
  * \callgraph
  */
 int _sys_sock_listen(int fd,int maxcon){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    hsock_t hsock  = 0;
@@ -503,6 +516,9 @@ int _sys_sock_listen(int fd,int maxcon){
    __set_kernel_pthread_errno (0);
    //
    return 0;
+#else
+   return -1;
+#endif
 } //end of _sys_sock_listen()
 
 /**
@@ -519,6 +535,7 @@ int _sys_sock_listen(int fd,int maxcon){
  * \callgraph
  */
 int _sys_sock_accept(int fd, struct _sockaddr *address,int* len){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    hsock_t hsock  = 0;
@@ -605,6 +622,9 @@ int _sys_sock_accept(int fd, struct _sockaddr *address,int* len){
    __set_kernel_pthread_errno (0);
    //
    return ((socket_t*)hcsock)->fd;
+#else
+   return -1;
+#endif
 } //end of _sys_sock_accept()
 
 
@@ -629,6 +649,7 @@ int _sys_sock_accept(int fd, struct _sockaddr *address,int* len){
  * \callgraph
  */
 int _sys_sock_recvfrom(int fd, void *buf, int length, int flags, struct sockaddr *address,socklen_t* address_len){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    hsock_t hsock  = 0;
@@ -749,6 +770,9 @@ int _sys_sock_recvfrom(int fd, void *buf, int length, int flags, struct sockaddr
    __unlock_io(ofile_lst[desc].owner_pthread_ptr_read,desc,O_RDONLY);
    //
    return r;  
+#else
+   return -1;
+#endif
 } // end of _sys_sock_recvfrom()
 
 /**
@@ -766,6 +790,7 @@ int _sys_sock_recvfrom(int fd, void *buf, int length, int flags, struct sockaddr
  * \callgraph
  */
 int _sys_sock_sendto(int fd, const void *buf, int length, int flags, const struct sockaddr *dest_addr,socklen_t dest_len){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    hsock_t hsock  = 0;
@@ -863,6 +888,9 @@ int _sys_sock_sendto(int fd, const void *buf, int length, int flags, const struc
        __set_kernel_pthread_errno(0);
    }
    return r;
+#else
+   return -1;
+#endif
 } //end of _sys_sock_sendto()
 
 
@@ -873,6 +901,7 @@ int _sys_sock_sendto(int fd, const void *buf, int length, int flags, const struc
  * \callgraph
  */
 int _sys_sock_close(int fd){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    pid_t pid;
    kernel_pthread_t* pthread_ptr;
    hsock_t hsock  = 0;
@@ -959,6 +988,9 @@ int _sys_sock_close(int fd){
      __set_kernel_pthread_errno(0);
    //
    return r;
+#else
+   return -1;
+#endif
 } //end of '_sys_sock_close'
 
 /**
@@ -971,6 +1003,7 @@ int _sys_sock_close(int fd){
  * \callgraph
  */
 int _sys_sock_shutdown(int fd, int how){
+#if defined (__KERNEL_NET_IPSTACK) && defined (USE_UIP_CORE)
    kernel_pthread_t* pthread_ptr;
    //
    if(!(pthread_ptr = kernel_pthread_self())){
@@ -984,6 +1017,9 @@ int _sys_sock_shutdown(int fd, int how){
    }
    //
    return(_sys_sock_close(fd));
+#else
+   return -1;
+#endif
 } //end of _sys_sock_shutdown()
 
 
