@@ -52,6 +52,8 @@ tauon_kernel_cmsis_dir = tauon_kernel_dir + 'core/ucore/cmsis/Device/atmel/'
 tauon_kernel_cmsis_at91samd20_dir = tauon_kernel_cmsis_dir + 'samd20/'
 tauon_sbin_dir = tauon_src_dir + 'sbin/'
 tauon_libc_dir =  tauon_src_dir + 'lib/Baselibc/'
+tauon_stdlib_libc_dir = tauon_src_dir + 'lib/libc/stdlib/'
+tauon_ctype_libc_dir = tauon_src_dir + 'lib/libc/ctype/'
 
 #get previous files
 tauon_kernel_src_list = common_tauon_src_list
@@ -99,12 +101,22 @@ TauonSource(tauon_libc_dir + 'src/memmove.c'),
 TauonSource(tauon_libc_dir + 'src/memcmp.c'),
 TauonSource(tauon_libc_dir + 'src/strcpy.c'),
 TauonSource(tauon_libc_dir + 'src/strcmp.c'),
-TauonSource(tauon_libc_dir + 'src/strtok.c'),
 TauonSource(tauon_libc_dir + 'src/strlen.c'),
 TauonSource(tauon_libc_dir + 'src/strchr.c'),
 TauonSource(tauon_libc_dir + 'src/strncmp.c'),
 TauonSource(tauon_libc_dir + 'src/strcat.c'),
+TauonSource(tauon_libc_dir + 'src/atoi.c'),
+TauonSource(tauon_libc_dir + 'src/strntoumax.c'),
+TauonSource(tauon_libc_dir + 'src/strrchr.c'),
+TauonSource(tauon_libc_dir + 'src/strtok_r.c'),
+TauonSource(tauon_libc_dir + 'src/strtok.c'),
+TauonSource(tauon_libc_dir + 'src/strsep.c'),
+TauonSource(tauon_libc_dir + 'src/strpbrk.c'),
 ])
+
+# custom stdlib with ldiv
+tauon_kernel_src_list.extend([TauonSource(tauon_stdlib_libc_dir + 'stdlib.c'),
+TauonSource(tauon_ctype_libc_dir + 'ctype.c')])
 
 # base directory for freeRTOS and directories for header files
 tauon_freertos_source_dir = at91samd20_base_dir + 'src/kernel/core/ucore/freeRTOS_8-0-0/source/'
@@ -112,9 +124,9 @@ tauon_freertos_arch_dir = tauon_kernel_dev_at91_dir
 tauon_freertos_cmsis_dir = tauon_kernel_dir + 'core/ucore/cmsis/'
 
 tauon_freertos_install_dir = [tauon_freertos_source_dir + 'include',
-tauon_freertos_source_dir + 'arch/cortex-m0+',
-tauon_freertos_source_dir + 'arch/cortex-m0+/at91samd20',
-tauon_freertos_source_dir + 'portable/GCC/ARM_CM0/',
+tauon_freertos_source_dir  + 'arch/cortex-m0+',
+tauon_freertos_source_dir  + 'arch/cortex-m0+/at91samd20',
+tauon_freertos_source_dir  + 'portable/GCC/ARM_CM0/',
 tauon_freertos_arch_dir    + 'common/utils',
 tauon_freertos_arch_dir    + 'common/boards',
 tauon_freertos_arch_dir    + 'sam0/utils',
@@ -131,7 +143,11 @@ tauon_freertos_arch_dir    + 'sam0/drivers/system/interrupt/system_interrupt_sam
 tauon_freertos_cmsis_dir   + 'CMSIS/Include',
 tauon_freertos_cmsis_dir   + 'Device/ARM/ARMCM0/Include/',
 tauon_freertos_cmsis_dir   + 'Device/atmel/samd20/include',
-tauon_freertos_cmsis_dir   + 'Device/atmel/samd20/source'
+tauon_freertos_cmsis_dir   + 'Device/atmel/samd20/source',
+tauon_libc_dir             + 'include',
+tauon_libc_dir             + 'src/templates',
+tauon_stdlib_libc_dir,
+tauon_ctype_libc_dir
 ]
 
 # custom macro for samd20
