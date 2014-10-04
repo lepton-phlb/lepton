@@ -36,3 +36,8 @@ ldiv_t ldiv(long num, long den) {
 
     return ret;
 }
+
+void abort(void)
+{
+    for(;;);
+}
