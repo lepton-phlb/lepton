@@ -7,14 +7,9 @@
 </target>
 
 <kernel>
-      <!--target name="cortexm_lepton"-->
-         <!--arch include_absolute_path="c:/tauon/sys/user/tauon_sampleapp/src/arch/atmel-at91samd20-xplained-pro/kernel_mkconf/include/user_kernel_mkconf.h" /-->
-      <!--/target-->
-      
       <target name="cortexm_lepton">
          <cpu type="cpu_arm7" freq="80000000"/>
       </target>
-      
       
       <!-- total heap size (__KERNEL_HEAP_SIZE ) for all processes stack  (only for m16C arch)-->
       <heap size="10000" />
@@ -23,18 +18,15 @@
       <process max="4" />
 
       <!-- max open file (MAX_OPEN_FILE)-->
-      <openfiles max="16" />
+      <openfiles max="8" />
 
       <!-- max descriptor per process (OPEN_MAX)-->
       <descriptors max="8" />
 
       <!-- cpu built-in file-system (see fileflash device) -->
-      <!-- <cpufs size="16000" /> -->
       <target name="cortexm_lepton">
-         <cpufs size="8000" node="128" blocksz="64"/>
-         <!--cpufs size="64000" node="256" blocksz="256"/--> 
-         <!--cpufs size="73000" node="128" blocksz="64"/-->
-         <!--cpufs size="128000" node="128" blocksz="64"/-->
+         <cpufs size="2048" node="48" blocksz="64"/>
+         <!--cpufs size="4096" node="64" blocksz="64"/-->
       </target>
 
       <!-- bin path (__KERNEL_ENV_PATH)-->
@@ -95,7 +87,6 @@
 <target name="cortexm_lepton">
         <boot dest_path="$(HOME)/tauon/sys/user/tauon_sampleapp/etc">
             <command arg="initd -i /dev/ttys3 -o /dev/ttys3" />
-				<!--command arg="initd -i /dev/debug -o /dev/debug" /-->
         </boot>
 </target>
 
@@ -109,42 +100,12 @@
    <bin name="umount"   stack="1024"    priority="100" timeslice="1" />
    <bin name="ls"       stack="1024"    priority="100" timeslice="1" />
    <bin name="ps"       stack="1024"    priority="100" timeslice="1" />
-   <bin name="kill"     stack="1024"    priority="100" timeslice="1" />
-   <bin name="touch"    stack="1024"    priority="100" timeslice="1" />
-   <bin name="cat"      stack="1024"    priority="100" timeslice="1" />
-   <bin name="more"     stack="1024"    priority="100" timeslice="1" />
-   <bin name="mkfs"     stack="1024"    priority="100" timeslice="1" />
-   <bin name="df"       stack="1024"    priority="100" timeslice="1" />
-   <bin name="uname"    stack="1024"    priority="100" timeslice="1" />
-   <bin name="pwd"      stack="1024"    priority="100" timeslice="1" />
-   <bin name="rmdir"    stack="1024"    priority="100" timeslice="1" />
-   <bin name="mkdir"    stack="1024"    priority="100" timeslice="1" />
-   <bin name="rm"       stack="1024"    priority="100" timeslice="1" />
-   <bin name="od"       stack="1024"    priority="100" timeslice="1" />
-   <bin name="date"     stack="1024"    priority="100" timeslice="1" />
-   <bin name="echo"     stack="1024"    priority="100" timeslice="1" />
-   <!--bin name="stty"     stack="1024"    priority="100" timeslice="1" /-->
-</binaries>
-
-<binaries src_path="sbin/net" dest_path="sbin/net">
-      <bin name="ifconfig" stack="4096"  priority="100" timeslice="1" />
-</binaries>
-
-<!-- user binaries. -->
-<!-- /usr/bin -->
-<binaries src_path="bin" dest_path="bin">
-        <bin name="test2"        stack="1024"    priority="100" timeslice="1" />
-        <!--bin name="udpsrvd"      stack="1024"    priority="10" timeslice="1" /-->
 </binaries>
 
 <files>
    <!-- /usr/etc  (hda internal flash mount on /bin) -->
-    <target name="cortexm_lepton">
-      <file name=".init_a"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.init"  dest_path="etc" />
-   </target>
-   <file name=".boot"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.boot"               dest_path="etc" />
-   <file name=".mount"     src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.mount"              dest_path="etc" />
+   <file name=".init"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.init" dest_path="etc" />
+   <file name=".boot"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.boot" dest_path="etc" />
 </files>
-
 
 </mklepton>
