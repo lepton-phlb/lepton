@@ -23,4 +23,5 @@ div_t div(int num, int den);
 ldiv_t ldiv(long num, long den);
 /*__attribute__((__const__));*/
 
+void abort(void);
 #endif /*__CUSTOM_STDLIB_H__*/
