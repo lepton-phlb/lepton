@@ -51,6 +51,7 @@ OUTPUT_ARCH(arm)
 SEARCH_DIR(../../../../root/prj/scons/arch/cortexm/at91samd20/obj/)
 STARTUP(startup_samd20.o)
 ENTRY(Reset_Handler)
+GROUP(libgcc.a)
 
 /* Memory Spaces Definitions */
 MEMORY
@@ -60,7 +61,7 @@ MEMORY
 }
 
 /* The stack size used by the application. NOTE: you need to adjust according to your application. */
-STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : 0x400;
+STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : 0x5dc;
 
 /* Section Definitions */
 SECTIONS
@@ -125,7 +126,7 @@ SECTIONS
     . = ALIGN(4);
     _etext = .;
 
-    .relocate : AT (_etext)
+    .relocate 0x20000000 : AT (_etext)
     {
         . = ALIGN(4);
         _srelocate = .;
