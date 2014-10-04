@@ -34,6 +34,9 @@ Includes
 #include "kernel/core/bin.h"
 #include "kernel/fs/vfs/vfs.h"
 
+#if defined(__KERNEL_UCORE_FREERTOS)
+#include "FreeRTOS.h"
+#endif
 /*===========================================
 Global Declaration
 =============================================*/
@@ -59,7 +62,11 @@ void* _sys_malloc(size_t size){
    __disable_interrupt_section_in();
 #endif
 
+#if defined(__KERNEL_UCORE_FREERTOS)
+   p=pvPortMalloc(size);
+#else
    p=malloc(size);
+#endif
    if(!p)
       p=(void*)0;
 
@@ -86,7 +93,12 @@ void *_sys_calloc(size_t nelem, size_t elsize){
    __disable_interrupt_section_in();
 #endif
 
+#if defined(__KERNEL_UCORE_FREERTOS)
+   p=_sys_malloc(nelem*elsize);
+#else
    p=calloc(nelem,elsize);
+#endif
+
    if(!p)
       p=(void*)0;
 
@@ -113,7 +125,11 @@ void *_sys_realloc(void *p, size_t size){
    __disable_interrupt_section_in();
 #endif
 
+#if defined(__KERNEL_UCORE_FREERTOS)
+	  //need to be stub
+#else
    p=realloc(p,size);
+#endif
    if(!p)
       p=(void*)0;
 
@@ -140,7 +156,11 @@ void _sys_free (void* p){
    __disable_interrupt_section_in();
 #endif
 
+#if defined(__KERNEL_UCORE_FREERTOS)
+	vPortFree(p);
+#else
    free(p);
+#endif
 
 #if !defined(__GNUC__)
    __disable_interrupt_section_out();
