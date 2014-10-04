@@ -175,14 +175,20 @@ void Reset_Handler(void)
         pSrc = (uint32_t *) & _sfixed;
         SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
 
+#if !defined(__GNUC__)
         /* Initialize the C library */
         __libc_init_array();
+#endif
 
         /* Branch to main function */
         main();
 
         /* Infinite loop */
         while (1);
+}
+
+void _exit(void)
+{
 }
 
 /**
