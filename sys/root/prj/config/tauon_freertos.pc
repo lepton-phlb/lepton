@@ -63,7 +63,7 @@ includedir_tinyGL=${includedir_base}/lib/TinyGL/include
 
 #define for tauon
 define_for_tauon=-D__KERNEL_UCORE_FREERTOS -D__tauon_compiler_cpu_target__=__compiler_cpu_target_gnuc__
-cflags_for_tauon=
+cflags_for_tauon=-fdata-sections -ffunction-sections
 #-fdata-sections -ffunction-sections -fno-builtin
 #-Wundef
 
@@ -81,7 +81,7 @@ cflags_global = ${define_for_tauon} ${cflags_for_tauon} \
 
 #for lib directory
 #new definition must be done
-ldflags_global = -static -lgcc -specs=nosys.specs -Ttarget_freertos.ld
+ldflags_global = -nostartfiles -nostdlib -static -lgcc -Wl,--gc-sections -Ttarget_freertos.ld
 
 Name: tauon
 Description: flags for Tauon library
