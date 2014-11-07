@@ -4,8 +4,16 @@ Compiler Directive
 #ifndef _USER_KERNEL_MKCONF_H_
 #define _USER_KERNEL_MKCONF_H_
 
+
+//force definition of realtime kernel
+#define __KERNEL_UCORE_FREERTOS
+//#define __KERNEL_UCORE_EMBOS
+
 //see kernel/core/kernelconf.h
-#include "kernel/core/ucore/freeRTOS_8-0-0/source/arch/cortex-m4/stm32f4/FreeRTOSConfig.h"
+#ifdef __KERNEL_UCORE_FREERTOS
+   #include "kernel/core/ucore/freeRTOS_8-0-0/source/arch/cortex-m4/stm32f4/FreeRTOSConfig.h"
+#endif 
+
 
 //force definition of cpu device
 #define __tauon_cpu_device__ __tauon_cpu_device_cortexM4_stm32f4__
