@@ -34,6 +34,16 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
+/*
+ * special case for samd20 to reduce rootfs size
+ * see if it can be a default settings
+ */
+#if __tauon_cpu_device__==__tauon_cpu_device_cortexM0_at91samd20__
+#define __KERNEL_RTFS_NODETBL_SIZE 32
+#define __KERNEL_RTFS_BLOCK_SIZE 16
+#define __KERNEL_RTFS_NODE_BLOCK_NB_MAX 10
+#endif
+
 #ifndef __KERNEL_RTFS_NODETBL_SIZE
    #define RTFS_NODETBL_SIZE   50//128 //50//40//30//20
 #else
