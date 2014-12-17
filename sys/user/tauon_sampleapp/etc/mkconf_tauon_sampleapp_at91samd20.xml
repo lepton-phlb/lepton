@@ -94,12 +94,12 @@
 <!-- binaries. see ...-->
 <!-- /usr/bin -->
 <binaries src_path="sbin" dest_path="sbin">
-   <bin name="initd"    stack="1024"    priority="100" timeslice="1" />
-   <bin name="lsh"      stack="1024"    priority="100" timeslice="1" />
-   <bin name="mount"    stack="1024"    priority="100" timeslice="1" />
-   <bin name="umount"   stack="1024"    priority="100" timeslice="1" />
-   <bin name="ls"       stack="1024"    priority="100" timeslice="1" />
-   <bin name="ps"       stack="1024"    priority="100" timeslice="1" />
+   <bin name="initd"    stack="1280"    priority="100" timeslice="1" />
+   <bin name="lsh"      stack="1280"    priority="100" timeslice="1" />
+   <bin name="mount"    stack="1280"    priority="100" timeslice="1" />
+   <bin name="umount"   stack="1280"    priority="100" timeslice="1" />
+   <bin name="ls"       stack="1280"    priority="100" timeslice="1" />
+   <bin name="ps"       stack="1280"    priority="100" timeslice="1" />
 </binaries>
 
 <files>
