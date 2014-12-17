@@ -155,6 +155,10 @@ tauon_ctype_libc_dir
 # custom macro for samd20
 tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D__SAMD20J18__')
 tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DUSART_CALLBACK_MODE=true')
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DARM_MATH_CM0')
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-D_BOARD=SAMD20_XPLAINED_PRO')
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DEVENTS_INTERRUPT_HOOKS_MODE=true')
+tauon_build_envs.envs_map['DEFAULT'].Append(CCFLAGS = '-DTC_ASYNC=true')
 
 # custom lib path for samd20
 tauon_build_envs.envs_map['DEFAULT'].Append(LINKFLAGS ='-L' + at91samd20_base_dir + 'lib/freertos/arch/at91samd20')
