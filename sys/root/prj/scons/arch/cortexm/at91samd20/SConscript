@@ -68,7 +68,9 @@ TauonSource(tauon_kernel_arch_dir+'dev_dskimg.c')
 ])
 
 # freeRTOS startup file
-tauon_kernel_src_list.extend([TauonSource(tauon_kernel_cmsis_at91samd20_dir+'source/gcc/startup_samd20.c')])
+tauon_kernel_src_list.extend([TauonSource(tauon_kernel_cmsis_at91samd20_dir+'source/gcc/startup_samd20.c'),
+TauonSource(tauon_kernel_cmsis_at91samd20_dir+'source/system_samd20.c')
+])
 
 # freeRTOS arch files
 tauon_kernel_src_list.extend([TauonSource(tauon_kernel_microcore_freertos_dir+'portable/GCC/ARM_CM0/port.c'),
