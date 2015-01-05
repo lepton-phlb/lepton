@@ -457,7 +457,10 @@ Declaration
 
 #if defined(__GNUC__)
    #define __KERNEL_LOAD_LIB
+#if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
    #define __KERNEL_POSIX_REALTIME_SIGNALS
+#endif
+
    #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
       #define __KERNEL_USE_FILE_LOCK
    #endif
