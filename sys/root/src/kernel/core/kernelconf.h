@@ -195,7 +195,7 @@ Declaration
 #define __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE 64
 
 #if (__tauon_compiler__==__compiler_gnuc__)
-   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE 
 #elif (__tauon_compiler__==__compiler_win32__)
     #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
