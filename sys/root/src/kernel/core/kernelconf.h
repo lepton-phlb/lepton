@@ -455,7 +455,6 @@ Declaration
       #define __KERNEL_POSIX_REALTIME_SIGNALS
    #endif
    #define __KERNEL_LOAD_LIB
-   #define __KERNEL_USE_FILE_LOCK
    #define __KERNEL_IO_SEM
 #endif
 
@@ -465,7 +464,7 @@ Declaration
    #define __KERNEL_POSIX_REALTIME_SIGNALS
 #endif
 
-   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
+   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
       #define __KERNEL_USE_FILE_LOCK
    #endif
    //#define __KERNEL_IO_EVENT
