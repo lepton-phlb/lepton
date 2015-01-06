@@ -95,7 +95,13 @@ Includes
       //for lepton as bootloader (no scheduler, static)
        #include "kernel/core/arch/synthetic/x86_static/kernel_mkconf.h"
    #else
-      #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
+      #if defined(CPU_CORTEXM)
+         #include "kernel/core/arch/cortexm/kernel_mkconf.h"
+      #elif defined(CPU_ARM7) || defined(CPU_ARM9)
+         #include "kernel/core/arch/arm/kernel_mkconf.h"
+      #else
+         #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
+      #endif
    #endif
 #endif
 
