@@ -34,7 +34,8 @@ synth_x86_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
 synth_x86_prj_dir = synth_x86_base_dir + 'prj/scons/'
 
 #import common scons script
-SConscript([synth_x86_prj_dir + 'common/SConscript'])
+Import('tauon_build_envs')
+SConscript([ synth_x86_prj_dir + 'common/SConscript'], exports='tauon_build_envs')
 
 #import common src list files
 Import('common_tauon_src_list')
