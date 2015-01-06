@@ -34,7 +34,8 @@ at91sam9261_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
 at91sam9261_prj_dir = at91sam9261_base_dir + 'prj/scons/'
 
 #import common scons script
-SConscript([at91sam9261_prj_dir + 'common/SConscript'])
+Import('tauon_build_envs')
+SConscript([at91sam9261_prj_dir + 'common/SConscript'], exports='tauon_build_envs')
 
 #import common src list files
 Import('common_tauon_src_list')
