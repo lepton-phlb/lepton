@@ -86,7 +86,7 @@
 #define configUSE_TICK_HOOK				1
 #define configCPU_CLOCK_HZ				( dev_at91samd20_xplained_pro_board_clock_source_get_hz() )
 #define configTICK_RATE_HZ				( ( portTickType ) 1000 )
-#define configMAX_PRIORITIES			( ( unsigned portBASE_TYPE ) 16 )
+#define configMAX_PRIORITIES			( ( unsigned portBASE_TYPE ) 8 )
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 70 )
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 16*1024 ) )
 #define configMAX_TASK_NAME_LEN			( 5 )
