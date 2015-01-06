@@ -25,8 +25,7 @@
 
       <!-- cpu built-in file-system (see fileflash device) -->
       <target name="cortexm_lepton">
-         <cpufs size="2048" node="48" blocksz="64"/>
-         <!--cpufs size="4096" node="64" blocksz="64"/-->
+         <cpufs size="3072" node="64" blocksz="64"/>
       </target>
 
       <!-- bin path (__KERNEL_ENV_PATH)-->
@@ -99,6 +98,9 @@
    <bin name="ls"       stack="1536"    priority="100" timeslice="1" />
    <bin name="ps"       stack="1536"    priority="100" timeslice="1" />
    <bin name="uname"    stack="1280"    priority="100" timeslice="1" />
+   <bin name="df"       stack="1280"    priority="100" timeslice="1" />
+   <bin name="date"     stack="1280"    priority="100" timeslice="1" />
+   <bin name="cat"      stack="1280"    priority="100" timeslice="1" />
 </binaries>
 
 <files>
