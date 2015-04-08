@@ -105,7 +105,7 @@
 
 <files>
    <!-- /usr/etc  (hda internal flash mount on /bin) -->
-   <file name=".init"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.init" dest_path="etc" />
+   <file name=".init"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.init_simple" dest_path="etc" />
    <file name=".boot"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.boot" dest_path="etc" />
 </files>
 
