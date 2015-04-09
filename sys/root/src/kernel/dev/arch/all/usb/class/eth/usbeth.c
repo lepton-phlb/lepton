@@ -503,6 +503,8 @@ int dev_usbeth_ioctl(desc_t desc,int request,va_list ap) {
    //
    case I_LINK: {
       usbs_completefn_endpoint tmp;
+      va_list va_ioctl;
+
       if(ofile_lst[desc].p)   //already set.
          return 0;
 
@@ -511,39 +513,44 @@ int dev_usbeth_ioctl(desc_t desc,int request,va_list ap) {
 
       //fill endpoint table for driver
       fill_virtual_endpoint_table();
+      memcpy((void *)&va_ioctl, &usb_eth_virtual_ep_tbl, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_ENDPOINT_TABLE,
-                                                                    &usb_eth_virtual_ep_tbl);
+                                                                    va_ioctl);
 
       //set usb enumeration to driver
+      memcpy((void *)&va_ioctl, &pusb_eth, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_ENUMERATION_DATA,
-                                                                    &pusb_eth);
+                                                                    va_ioctl);
 
       //set usb special class function
+      memcpy((void *)&va_ioctl, &usbs_eth_class_handler, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_SET_CLASS_HANDLER,
-                                                                    &usbs_eth_class_handler);
+                                                                    va_ioctl);
 
       //set complete function for all desire endpoints read and write
       tmp.complete_fn = usbeth_complete_fn_write;
       tmp.epn = USB_ENDPOINT_DESCRIPTOR_ETH_TX_NO;
+      memcpy((void *)&va_ioctl, &tmp, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_SET_COMPLETION_FUNCTION,
-                                                                    &tmp);
+                                                                    va_ioctl);
       //
       tmp.complete_fn = usbeth_complete_fn_read;
       tmp.epn = USB_ENDPOINT_DESCRIPTOR_ETH_RX_NO;
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_SET_COMPLETION_FUNCTION,
-                                                                    &tmp);
+                                                                    va_ioctl);
       //
       tmp.complete_fn = usbeth_complete_fn_interrupt;
       tmp.epn = USB_ENDPOINT_DESCRIPTOR_ETH_NO;
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_SET_COMPLETION_FUNCTION,
-                                                                    &tmp);
+                                                                    va_ioctl);
 
       //start control endpoint and enable IRQ on EP1, EP2
+      bzero(&va_ioctl, sizeof(va_list));
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,USB_START_CONTROL_ENDPOINT,
-                                                                    0);
+                                                                    va_ioctl);
 
       ///dummy BUG no reset of ofile_lst[ofile_lst[desc].desc_nxt[0]].desc_nxt[0|1]
       /*ofile_lst[ofile_lst[desc].desc_nxt[0]].desc_nxt[0]=-1;
@@ -558,10 +565,9 @@ int dev_usbeth_ioctl(desc_t desc,int request,va_list ap) {
       break;
 
    case USB_GET_CONTROL_ENDPOINT_STATE: {
-      int *usb_eth_state = va_arg(ap, int *);
       ofile_lst[ofile_lst[desc].desc_nxt[0]].pfsop->fdev.fdev_ioctl(desc,
                                                                     USB_GET_CONTROL_ENDPOINT_STATE,
-                                                                    usb_eth_state);
+                                                                    ap);
       return 0;
    }
    break;

@@ -95,7 +95,13 @@ Includes
       //for lepton as bootloader (no scheduler, static)
        #include "kernel/core/arch/synthetic/x86_static/kernel_mkconf.h"
    #else
-      #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
+      #if defined(CPU_CORTEXM)
+         #include "kernel/core/arch/cortexm/kernel_mkconf.h"
+      #elif defined(CPU_ARM7) || defined(CPU_ARM9)
+         #include "kernel/core/arch/arm/kernel_mkconf.h"
+      #else
+         #include "kernel/core/arch/synthetic/x86/kernel_mkconf.h"
+      #endif
    #endif
 #endif
 
@@ -196,7 +202,11 @@ Declaration
 #define __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE 64
 
 #if (__tauon_compiler__==__compiler_gnuc__)
-   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
+#if (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM0__)
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_64_BITS_TYPE
+#else
+   #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE
+#endif
 #elif (__tauon_compiler__==__compiler_win32__)
     #define __KERNEL_COMPILER_SUPPORT_TYPE __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 
 #elif (__tauon_compiler__==__compiler_iar_m16c__)
@@ -451,14 +461,16 @@ Declaration
       #define __KERNEL_POSIX_REALTIME_SIGNALS
    #endif
    #define __KERNEL_LOAD_LIB
-   #define __KERNEL_USE_FILE_LOCK
    #define __KERNEL_IO_SEM
 #endif
 
 #if defined(__GNUC__)
    #define __KERNEL_LOAD_LIB
+#if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
    #define __KERNEL_POSIX_REALTIME_SIGNALS
-   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
+#endif
+
+   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
       #define __KERNEL_USE_FILE_LOCK
    #endif
    //#define __KERNEL_IO_EVENT

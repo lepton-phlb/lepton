@@ -1,0 +1,112 @@
+<?xml version='1.0'?>
+<!-- $Revision: 1.4 $ $Date: 2009/07/15 14:38:42 $ -->
+
+<mklepton>
+<target name="cortexm_lepton">
+      <arch dest_path="$(HOME)/tauon/sys/root/src/kernel/core/arch/cortexm" /><!--/cortexm or /arm-->
+</target>
+
+<kernel>
+      <target name="cortexm_lepton">
+         <cpu type="cpu_arm7" freq="80000000"/>
+      </target>
+      
+      <!-- total heap size (__KERNEL_HEAP_SIZE ) for all processes stack  (only for m16C arch)-->
+      <heap size="10000" />
+
+      <!-- process max (__KERNEL_PROCESS_MAX: must be strictly less than thread max)-->
+      <process max="4" />
+
+      <!-- max open file (MAX_OPEN_FILE)-->
+      <openfiles max="8" />
+
+      <!-- max descriptor per process (OPEN_MAX)-->
+      <descriptors max="8" />
+
+      <!-- cpu built-in file-system (see fileflash device) -->
+      <target name="cortexm_lepton">
+         <cpufs size="3072" node="64" blocksz="64"/>
+      </target>
+
+      <!-- bin path (__KERNEL_ENV_PATH)-->
+      <env path="/usr;/usr/sbin;/usr/bin;usr/bin/net" />
+
+      <!-- use ip stack (__KERNEL_NET_UIP)-->
+      <network use="off" />
+   
+</kernel>
+
+<!-- devices drivers-->
+<devices>
+   <!-- /dev/null -->
+   <dev name="dev_null_map"     use="on"/>
+   <!-- /dev/proc -->
+   <dev name="dev_proc_map"     use="on"/>
+   <!-- /dev/hd/hda -->
+   <dev name="dev_cpufs_map"    use="on"/>
+    <!-- /dev/pipe -->
+   <dev name="dev_pipe_map"     use="on"/>
+   <!-- /dev/ppp -->
+   <dev name="dev_ppp_uip_map"  use="off"/>
+   <!-- /dev/tty0 -->
+   <dev name="dev_tty_map"      use="off"/>
+   <!-- /dev/sock uip-->
+   <dev name="dev_sock_map"     use="off"/>
+   <!-- /dev/sock lwip-->
+   <dev name="dev_lwip_sock_map"    use="off"/>
+   <!-- /dev/ip lwip ip stack-->
+   <dev name="dev_lwip_stack_map"   use="off"/>
+</devices>
+
+<target name="cortexm_lepton">
+   <devices>
+      <!-- /dev/cpu0 cortexM0+ cpu device -->
+      <dev name="dev_at91_map"                   use="off"/>
+      <!-- /dev/cpu0 -->
+	   <dev name="dev_lm3s_cpu_map"               use="off"/>
+	   <!-- /dev/board -->
+	   <dev name="dev_at91samd20_xplained_pro_board_map" use="on"/>
+      <!-- /dev/ttys3 -->
+      <dev name="dev_at91samd20_uart_s3_map"      use="on"/>
+	   <!-- /dev/itm0 -->
+      <dev name="dev_cmsis_itm0_map"             use="off"/>
+	   <!-- /dev/debug -->
+      <dev name="dev_os_debug_map"               use="off"/>
+   </devices>
+</target>
+
+
+<!-- mount device on boot .mount -->
+<mount dest_path="$(HOME)/tauon/sys/user/tauon_sampleapp/etc">
+    <!-- mount EEPROM on /etc -->
+    <disk type="ufs" dev="/dev/hd/hdb" point="/etc" />
+</mount>
+
+<!-- launch process on boot target path: /usr/etc/.boot-->
+<target name="cortexm_lepton">
+        <boot dest_path="$(HOME)/tauon/sys/user/tauon_sampleapp/etc">
+            <command arg="initd -i /dev/ttys3 -o /dev/ttys3" />
+        </boot>
+</target>
+
+
+<!-- binaries. see ...-->
+<!-- /usr/bin -->
+<binaries src_path="sbin" dest_path="sbin">
+   <bin name="initd"    stack="1280"    priority="100" timeslice="1" />
+   <bin name="lsh"      stack="1280"    priority="100" timeslice="1" />
+   <bin name="ls"       stack="1536"    priority="100" timeslice="1" />
+   <bin name="ps"       stack="1536"    priority="100" timeslice="1" />
+   <bin name="uname"    stack="1280"    priority="100" timeslice="1" />
+   <bin name="df"       stack="1280"    priority="100" timeslice="1" />
+   <bin name="date"     stack="1280"    priority="100" timeslice="1" />
+   <bin name="cat"      stack="1280"    priority="100" timeslice="1" />
+</binaries>
+
+<files>
+   <!-- /usr/etc  (hda internal flash mount on /bin) -->
+   <file name=".init"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.init_simple" dest_path="etc" />
+   <file name=".boot"      src_file="$(HOME)/tauon/sys/user/tauon_sampleapp/etc/.boot" dest_path="etc" />
+</files>
+
+</mklepton>

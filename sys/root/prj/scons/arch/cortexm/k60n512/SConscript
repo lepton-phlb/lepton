@@ -34,7 +34,8 @@ k60n512_base_dir = os.getenv('HOME') + '/tauon/sys/root/'
 k60n512_prj_dir = k60n512_base_dir + 'prj/scons/'
 
 #import common scons script
-SConscript([k60n512_prj_dir + 'common/SConscript'])
+Import('tauon_build_envs')
+SConscript([k60n512_prj_dir + 'common/SConscript'], exports='tauon_build_envs')
 
 #import common src list files
 Import('common_tauon_src_list')

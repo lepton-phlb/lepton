@@ -35,6 +35,11 @@ Declaration
 =============================================*/
 
 
+#if defined(__KERNEL_UCORE_FREERTOS)
+#define malloc(__p__)  pvPortMalloc(__p__)
+#define free(__p__)  vPortFree(__p__)
+#endif
+
 void* _sys_malloc(size_t size);
 void* _sys_calloc(size_t nelem, size_t elsize);
 void* _sys_realloc(void *p, size_t size);
